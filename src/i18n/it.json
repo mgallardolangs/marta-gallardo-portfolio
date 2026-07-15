@@ -1,0 +1,21 @@
+{
+  "nav": { "home": "Home", "ugc": "UGC", "translationSeo": "Traduzione + SEO", "blog": "Blog", "contact": "Contatto" },
+  "hero": { "name": "Marta Gallardo", "age": "23 anni", "city": "Elche, Spagna", "ugcLabel": "Creatrice di UGC", "seoLabel": "Traduzione Multilingue & Localizzazione + SEO" },
+  "about": { "title": "Chi sono", "text": "Sono Marta, creatrice di contenuti UGC e specialista in traduzione e SEO. Parlo spagnolo, francese, tedesco, italiano e inglese. Sono appassionata di creare contenuti autentici per i brand e aiutare le aziende a comunicare a livello globale." },
+  "ugc": { "title": "Portfolio UGC", "subtitle": "Contenuti che connettono con il tuo pubblico", "niches": { "travel": "Viaggi", "languages": "Lingue", "art": "Arte" }, "cta": "Vedi di più" },
+  "translation": {
+    "title": "Traduzione + SEO", "education": "Formazione", "experience": "Esperienza", "skills": "Competenze", "services": "Servizi che offro",
+    "process": "Il mio metodo di lavoro", "processSteps": { "briefing": "Briefing", "translation": "Traduzione / Scrittura", "review": "Revisione", "delivery": "Consegna" },
+    "servicesList": ["Traduzione di siti web", "Localizzazione di contenuti", "SEO copywriting multilingue", "Correzione e editing di testi"],
+    "whyMe": "Perché lavorare con me?", "whyMeText": "Lingue, esperienza reale (assistenza clienti, au pair, studi a Parigi) e impegno in ogni progetto."
+  },
+  "blog": { "title": "Blog", "readMore": "Leggi di più", "backToList": "← Torna al blog" },
+  "contact": {
+    "title": "Collaboriamo", "subtitle": "Hai un progetto in mente? Mi piacerebbe sentire da te.",
+    "ugcForm": { "title": "Collaborazione UGC", "company": "Azienda", "email": "Email", "budget": "Budget", "description": "Descrizione del progetto" },
+    "seoForm": { "title": "Traduzione + SEO", "company": "Azienda", "email": "Email", "budget": "Budget", "description": "Descrizione del lavoro" },
+    "send": "Invia"
+  },
+  "footer": { "rights": "Tutti i diritti riservati" },
+  "language": { "label": "Lingua", "es": "Español", "en": "English", "fr": "Français", "de": "Deutsch", "it": "Italiano", "ca": "Català" }
+}

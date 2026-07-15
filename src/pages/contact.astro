@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ScrollReveal from '../components/ScrollReveal';
+import PageTransition from '../components/PageTransition';
+import { getLangFromUrl, t } from '../i18n';
+
+const lang = getLangFromUrl(Astro.url);
+const i = t(lang);
+
+const fieldClass =
+  'w-full rounded-2xl border border-blush-100 bg-cream px-4 py-3 font-body text-base text-charcoal outline-none transition focus:border-blush-200 focus:ring-2 focus:ring-blush-100/80';
+const labelClass = 'mb-2 block font-body text-sm tracking-wide text-warm-gray';
+const cardClass = 'rounded-[2rem] border border-blush-100 p-6 shadow-sm md:p-8';
+---
+
+<BaseLayout title={`${i.contact.title} — ${i.hero.name}`} description={i.contact.subtitle}>
+  <PageTransition client:load>
+    <section class="bg-cream pt-24 text-charcoal">
+      <div class="mx-auto max-w-6xl px-6 py-12 md:py-16">
+        <ScrollReveal client:visible>
+          <div class="mx-auto max-w-3xl text-center">
+            <p class="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold">Contact</p>
+            <h1 class="mt-4 font-heading text-4xl font-semibold tracking-tight md:text-6xl">{i.contact.title}</h1>
+            <p class="mt-4 font-body text-lg leading-relaxed text-warm-gray md:text-xl">{i.contact.subtitle}</p>
+          </div>
+        </ScrollReveal>
+
+        <div class="mt-12 grid gap-8 lg:grid-cols-2">
+          <ScrollReveal client:visible className="h-full">
+            <div class={`${cardClass} h-full bg-blush-50`}>
+              <div class="mb-6 inline-flex rounded-full bg-blush-100 px-4 py-2 font-accent text-sm tracking-[0.2em] text-rose-gold">
+                UGC
+              </div>
+              <h2 class="font-heading text-3xl font-semibold text-charcoal">{i.contact.ugcForm.title}</h2>
+
+              <form name="ugc-contact" method="POST" data-netlify="true" class="mt-8 space-y-5">
+                <input type="hidden" name="form-name" value="ugc-contact" />
+
+                <div>
+                  <label for="ugc-company" class={labelClass}>{i.contact.ugcForm.company}</label>
+                  <input id="ugc-company" name="company" type="text" required class={fieldClass} />
+                </div>
+
+                <div>
+                  <label for="ugc-email" class={labelClass}>{i.contact.ugcForm.email}</label>
+                  <input id="ugc-email" name="email" type="email" required class={fieldClass} />
+                </div>
+
+                <div>
+                  <label for="ugc-budget" class={labelClass}>{i.contact.ugcForm.budget}</label>
+                  <input id="ugc-budget" name="budget" type="text" required class={fieldClass} />
+                </div>
+
+                <div>
+                  <label for="ugc-description" class={labelClass}>{i.contact.ugcForm.description}</label>
+                  <textarea id="ugc-description" name="project-description" rows="6" required class={`${fieldClass} resize-y`}></textarea>
+                </div>
+
+                <button
+                  type="submit"
+                  class="inline-flex w-full items-center justify-center rounded-full bg-rose-gold px-6 py-3 font-body text-sm font-semibold uppercase tracking-[0.2em] text-cream transition hover:bg-blush-200 hover:text-charcoal"
+                >
+                  {i.contact.send}
+                </button>
+              </form>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal client:visible className="h-full" delay={0.15}>
+            <div class={`${cardClass} h-full bg-blush-100/70`}>
+              <div class="mb-6 inline-flex rounded-full bg-cream px-4 py-2 font-accent text-sm tracking-[0.2em] text-rose-gold">
+                Translation + SEO
+              </div>
+              <h2 class="font-heading text-3xl font-semibold text-charcoal">{i.contact.seoForm.title}</h2>
+
+              <form name="seo-contact" method="POST" data-netlify="true" class="mt-8 space-y-5">
+                <input type="hidden" name="form-name" value="seo-contact" />
+
+                <div>
+                  <label for="seo-company" class={labelClass}>{i.contact.seoForm.company}</label>
+                  <input id="seo-company" name="company" type="text" required class={fieldClass} />
+                </div>
+
+                <div>
+                  <label for="seo-email" class={labelClass}>{i.contact.seoForm.email}</label>
+                  <input id="seo-email" name="email" type="email" required class={fieldClass} />
+                </div>
+
+                <div>
+                  <label for="seo-budget" class={labelClass}>{i.contact.seoForm.budget}</label>
+                  <input id="seo-budget" name="budget" type="text" required class={fieldClass} />
+                </div>
+
+                <div>
+                  <label for="seo-description" class={labelClass}>{i.contact.seoForm.description}</label>
+                  <textarea id="seo-description" name="work-description" rows="6" required class={`${fieldClass} resize-y`}></textarea>
+                </div>
+
+                <button
+                  type="submit"
+                  class="inline-flex w-full items-center justify-center rounded-full border border-blush-200 bg-cream px-6 py-3 font-body text-sm font-semibold uppercase tracking-[0.2em] text-rose-gold transition hover:bg-blush-200 hover:text-charcoal"
+                >
+                  {i.contact.send}
+                </button>
+              </form>
+            </div>
+          </ScrollReveal>
+        </div>
+      </div>
+    </section>
+  </PageTransition>
+</BaseLayout>

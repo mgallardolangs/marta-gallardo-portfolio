@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+/* ponytail: Tailwind v4 uses CSS-based config. Theme tokens here, Marta edits this file for colors/fonts */
+
+@theme {
+  /* Color palette — blush pink aesthetic */
+  --color-blush-50: #FFF5F5;
+  --color-blush-100: #F9E4E4;
+  --color-blush-200: #F2C4C4;
+  --color-blush-300: #E8A0A0;
+  --color-blush-400: #D4787A;
+  --color-rose-gold: #B76E79;
+  --color-charcoal: #2D2D2D;
+  --color-warm-gray: #6B6B6B;
+  --color-cream: #FFFAF8;
+  --color-white: #FFFFFF;
+
+  /* Fonts — editorial aesthetic */
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'Lora', serif;
+  --font-accent: 'Playfair Display', serif;
+
+  /* Spacing scale extras */
+  --spacing-128: 32rem;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Base styles */
+body {
+  font-family: var(--font-body);
+  color: var(--color-charcoal);
+  background-color: var(--color-cream);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  letter-spacing: 0.02em;
+}
+
+/* Scroll-driven animation utilities (Josh W Comeau approach) */
+@supports (animation-timeline: scroll()) {
+  .scroll-fade-in {
+    animation: scrollFadeIn linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+
+  @keyframes scrollFadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .scroll-progress-bar {
+    animation: scrollProgress linear;
+    animation-timeline: scroll();
+    transform-origin: left;
+  }
+
+  @keyframes scrollProgress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+}

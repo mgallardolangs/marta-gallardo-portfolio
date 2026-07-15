@@ -1,0 +1,27 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# ponytail: Decap CMS config. Marta uses /admin to write blog posts.
+# To switch to GitHub auth instead of Netlify Identity, change backend to:
+#   name: github
+#   repo: berengueradrian/marta-gallardo-portfolio
+
+media_folder: "public/images/blog"
+public_folder: "/images/blog"
+
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Featured Image", name: "image", widget: "image", required: false }
+      - { label: "Tags", name: "tags", widget: "list", default: [] }
+      - { label: "Language", name: "lang", widget: "select", options: ["es", "en", "fr", "de", "it", "ca"], default: "es" }
+      - { label: "Body", name: "body", widget: "markdown" }

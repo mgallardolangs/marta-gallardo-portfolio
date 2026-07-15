@@ -1,0 +1,88 @@
+{
+  "nav": {
+    "home": "Home",
+    "ugc": "UGC",
+    "translationSeo": "Translation + SEO",
+    "blog": "Blog",
+    "contact": "Contact"
+  },
+  "hero": {
+    "name": "Marta Gallardo",
+    "age": "23 years old",
+    "city": "Elche, Spain",
+    "ugcLabel": "UGC Creator",
+    "seoLabel": "Multilingual Translation & Localization + SEO"
+  },
+  "about": {
+    "title": "About me",
+    "text": "I'm Marta, a UGC content creator and translation & SEO specialist. I speak Spanish, French, German, Italian, and English. I'm passionate about creating authentic content for brands and helping businesses communicate globally."
+  },
+  "ugc": {
+    "title": "UGC Portfolio",
+    "subtitle": "Content that connects with your audience",
+    "niches": {
+      "travel": "Travel",
+      "languages": "Languages",
+      "art": "Art"
+    },
+    "cta": "See more"
+  },
+  "translation": {
+    "title": "Translation + SEO",
+    "education": "Education",
+    "experience": "Experience",
+    "skills": "Skills",
+    "services": "Services I offer",
+    "process": "How I work",
+    "processSteps": {
+      "briefing": "Briefing",
+      "translation": "Translation / Writing",
+      "review": "Review",
+      "delivery": "Delivery"
+    },
+    "servicesList": [
+      "Website translation",
+      "Content localization",
+      "Multilingual SEO copywriting",
+      "Text proofreading & editing"
+    ],
+    "whyMe": "Why work with me?",
+    "whyMeText": "Languages, real-world experience (customer service, au pair, studies in Paris), and commitment to every project."
+  },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Read more",
+    "backToList": "← Back to blog"
+  },
+  "contact": {
+    "title": "Let's collaborate",
+    "subtitle": "Have a project in mind? I'd love to hear from you.",
+    "ugcForm": {
+      "title": "UGC Collaboration",
+      "company": "Company",
+      "email": "Email",
+      "budget": "Budget",
+      "description": "Project description"
+    },
+    "seoForm": {
+      "title": "Translation + SEO",
+      "company": "Company",
+      "email": "Email",
+      "budget": "Budget",
+      "description": "Work description"
+    },
+    "send": "Send"
+  },
+  "footer": {
+    "rights": "All rights reserved"
+  },
+  "language": {
+    "label": "Language",
+    "es": "Español",
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "it": "Italiano",
+    "ca": "Català"
+  }
+}

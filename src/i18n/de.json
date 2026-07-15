@@ -1,0 +1,21 @@
+{
+  "nav": { "home": "Startseite", "ugc": "UGC", "translationSeo": "Übersetzung + SEO", "blog": "Blog", "contact": "Kontakt" },
+  "hero": { "name": "Marta Gallardo", "age": "23 Jahre alt", "city": "Elche, Spanien", "ugcLabel": "UGC-Erstellerin", "seoLabel": "Mehrsprachige Übersetzung & Lokalisierung + SEO" },
+  "about": { "title": "Über mich", "text": "Ich bin Marta, UGC-Content-Erstellerin und Spezialistin für Übersetzung und SEO. Ich spreche Spanisch, Französisch, Deutsch, Italienisch und Englisch. Ich bin leidenschaftlich dabei, authentische Inhalte für Marken zu erstellen und Unternehmen bei der globalen Kommunikation zu unterstützen." },
+  "ugc": { "title": "UGC Portfolio", "subtitle": "Inhalte, die Ihr Publikum ansprechen", "niches": { "travel": "Reisen", "languages": "Sprachen", "art": "Kunst" }, "cta": "Mehr sehen" },
+  "translation": {
+    "title": "Übersetzung + SEO", "education": "Ausbildung", "experience": "Erfahrung", "skills": "Fähigkeiten", "services": "Meine Dienstleistungen",
+    "process": "Mein Arbeitsprozess", "processSteps": { "briefing": "Briefing", "translation": "Übersetzung / Texterstellung", "review": "Überprüfung", "delivery": "Lieferung" },
+    "servicesList": ["Website-Übersetzung", "Inhaltslokalisierung", "Mehrsprachiges SEO-Copywriting", "Korrekturlesen und Textbearbeitung"],
+    "whyMe": "Warum mit mir arbeiten?", "whyMeText": "Sprachen, praktische Erfahrung (Kundenservice, Au-pair, Studium in Paris) und Engagement für jedes Projekt."
+  },
+  "blog": { "title": "Blog", "readMore": "Weiterlesen", "backToList": "← Zurück zum Blog" },
+  "contact": {
+    "title": "Zusammenarbeiten", "subtitle": "Haben Sie ein Projekt? Ich würde mich freuen, von Ihnen zu hören.",
+    "ugcForm": { "title": "UGC-Zusammenarbeit", "company": "Unternehmen", "email": "E-Mail", "budget": "Budget", "description": "Projektbeschreibung" },
+    "seoForm": { "title": "Übersetzung + SEO", "company": "Unternehmen", "email": "E-Mail", "budget": "Budget", "description": "Arbeitsbeschreibung" },
+    "send": "Senden"
+  },
+  "footer": { "rights": "Alle Rechte vorbehalten" },
+  "language": { "label": "Sprache", "es": "Español", "en": "English", "fr": "Français", "de": "Deutsch", "it": "Italiano", "ca": "Català" }
+}

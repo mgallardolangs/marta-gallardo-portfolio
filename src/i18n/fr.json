@@ -1,0 +1,48 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "ugc": "UGC",
+    "translationSeo": "Traduction + SEO",
+    "blog": "Blog",
+    "contact": "Contact"
+  },
+  "hero": {
+    "name": "Marta Gallardo",
+    "age": "23 ans",
+    "city": "Elche, Espagne",
+    "ugcLabel": "Créatrice de UGC",
+    "seoLabel": "Traduction Multilingue & Localisation + SEO"
+  },
+  "about": {
+    "title": "À propos de moi",
+    "text": "Je suis Marta, créatrice de contenu UGC et spécialiste en traduction et SEO. Je parle espagnol, français, allemand, italien et anglais. Je suis passionnée par la création de contenu authentique pour les marques et j'aide les entreprises à communiquer globalement."
+  },
+  "ugc": {
+    "title": "Portfolio UGC",
+    "subtitle": "Du contenu qui connecte avec votre audience",
+    "niches": { "travel": "Voyages", "languages": "Langues", "art": "Art" },
+    "cta": "Voir plus"
+  },
+  "translation": {
+    "title": "Traduction + SEO",
+    "education": "Formation",
+    "experience": "Expérience",
+    "skills": "Compétences",
+    "services": "Services que j'offre",
+    "process": "Ma méthode de travail",
+    "processSteps": { "briefing": "Briefing", "translation": "Traduction / Rédaction", "review": "Révision", "delivery": "Livraison" },
+    "servicesList": ["Traduction de sites web", "Localisation de contenu", "SEO copywriting multilingue", "Correction et édition de textes"],
+    "whyMe": "Pourquoi travailler avec moi ?",
+    "whyMeText": "Langues, expérience réelle (service client, au pair, études à Paris) et engagement dans chaque projet."
+  },
+  "blog": { "title": "Blog", "readMore": "Lire la suite", "backToList": "← Retour au blog" },
+  "contact": {
+    "title": "Collaborons",
+    "subtitle": "Vous avez un projet en tête ? J'aimerais avoir de vos nouvelles.",
+    "ugcForm": { "title": "Collaboration UGC", "company": "Entreprise", "email": "Email", "budget": "Budget", "description": "Description du projet" },
+    "seoForm": { "title": "Traduction + SEO", "company": "Entreprise", "email": "Email", "budget": "Budget", "description": "Description du travail" },
+    "send": "Envoyer"
+  },
+  "footer": { "rights": "Tous droits réservés" },
+  "language": { "label": "Langue", "es": "Español", "en": "English", "fr": "Français", "de": "Deutsch", "it": "Italiano", "ca": "Català" }
+}

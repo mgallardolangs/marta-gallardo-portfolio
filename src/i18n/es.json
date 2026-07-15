@@ -1,0 +1,88 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "ugc": "UGC",
+    "translationSeo": "Traducción + SEO",
+    "blog": "Blog",
+    "contact": "Contacto"
+  },
+  "hero": {
+    "name": "Marta Gallardo",
+    "age": "23 años",
+    "city": "Elche, España",
+    "ugcLabel": "Creadora de UGC",
+    "seoLabel": "Traducción Multilingüe & Localización + SEO"
+  },
+  "about": {
+    "title": "Sobre mí",
+    "text": "Soy Marta, creadora de contenido UGC y especialista en traducción y SEO. Hablo español, francés, alemán, italiano e inglés. Me apasiona crear contenido auténtico para marcas y ayudar a empresas a comunicarse globalmente."
+  },
+  "ugc": {
+    "title": "UGC Portfolio",
+    "subtitle": "Contenido que conecta con tu audiencia",
+    "niches": {
+      "travel": "Viajes",
+      "languages": "Idiomas",
+      "art": "Arte"
+    },
+    "cta": "Ver más"
+  },
+  "translation": {
+    "title": "Traducción + SEO",
+    "education": "Formación",
+    "experience": "Experiencia",
+    "skills": "Habilidades",
+    "services": "Servicios que ofrezco",
+    "process": "Mi proceso de trabajo",
+    "processSteps": {
+      "briefing": "Briefing",
+      "translation": "Traducción / Redacción",
+      "review": "Revisión",
+      "delivery": "Entrega"
+    },
+    "servicesList": [
+      "Traducción de sitios web",
+      "Localización de contenido",
+      "SEO copywriting multilingüe",
+      "Corrección y edición de textos"
+    ],
+    "whyMe": "¿Por qué trabajar conmigo?",
+    "whyMeText": "Idiomas, experiencia real (atención al cliente, au pair, estudios en París) y compromiso con cada proyecto."
+  },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Leer más",
+    "backToList": "← Volver al blog"
+  },
+  "contact": {
+    "title": "Colaboremos",
+    "subtitle": "¿Tienes un proyecto en mente? Me encantaría saber de ti.",
+    "ugcForm": {
+      "title": "Colaboración UGC",
+      "company": "Empresa",
+      "email": "Email",
+      "budget": "Presupuesto",
+      "description": "Descripción del proyecto"
+    },
+    "seoForm": {
+      "title": "Traducción + SEO",
+      "company": "Empresa",
+      "email": "Email",
+      "budget": "Presupuesto",
+      "description": "Descripción del trabajo"
+    },
+    "send": "Enviar"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados"
+  },
+  "language": {
+    "label": "Idioma",
+    "es": "Español",
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "it": "Italiano",
+    "ca": "Català"
+  }
+}
