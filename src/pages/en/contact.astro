@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ScrollReveal from '../components/ScrollReveal';
-import PageTransition from '../components/PageTransition';
-import { getLangFromUrl, t } from '../i18n';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ScrollReveal from '../../components/ScrollReveal';
+import PageTransition from '../../components/PageTransition';
+import { getLangFromUrl, t } from '../../i18n';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);

@@ -20,7 +20,11 @@
   "ugc": {
     "title": "Portfolio UGC",
     "subtitle": "Du contenu qui connecte avec votre audience",
-    "niches": { "travel": "Voyages", "languages": "Langues", "art": "Art" },
+    "niches": {
+      "travel": "Voyages",
+      "languages": "Langues",
+      "art": "Art"
+    },
     "cta": "Voir plus"
   },
   "translation": {
@@ -30,19 +34,89 @@
     "skills": "Compétences",
     "services": "Services que j'offre",
     "process": "Ma méthode de travail",
-    "processSteps": { "briefing": "Briefing", "translation": "Traduction / Rédaction", "review": "Révision", "delivery": "Livraison" },
-    "servicesList": ["Traduction de sites web", "Localisation de contenu", "SEO copywriting multilingue", "Correction et édition de textes"],
+    "processSteps": {
+      "briefing": "Briefing",
+      "translation": "Traduction / Rédaction",
+      "review": "Révision",
+      "delivery": "Livraison"
+    },
+    "servicesList": [
+      "Traduction de sites web",
+      "Localisation de contenu",
+      "SEO copywriting multilingue",
+      "Correction et édition de textes"
+    ],
     "whyMe": "Pourquoi travailler avec moi ?",
     "whyMeText": "Langues, expérience réelle (service client, au pair, études à Paris) et engagement dans chaque projet."
   },
-  "blog": { "title": "Blog", "readMore": "Lire la suite", "backToList": "← Retour au blog" },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Lire la suite",
+    "backToList": "← Retour au blog"
+  },
   "contact": {
     "title": "Collaborons",
     "subtitle": "Vous avez un projet en tête ? J'aimerais avoir de vos nouvelles.",
-    "ugcForm": { "title": "Collaboration UGC", "company": "Entreprise", "email": "Email", "budget": "Budget", "description": "Description du projet" },
-    "seoForm": { "title": "Traduction + SEO", "company": "Entreprise", "email": "Email", "budget": "Budget", "description": "Description du travail" },
+    "ugcForm": {
+      "title": "Collaboration UGC",
+      "company": "Entreprise",
+      "email": "Email",
+      "budget": "Budget",
+      "description": "Description du projet"
+    },
+    "seoForm": {
+      "title": "Traduction + SEO",
+      "company": "Entreprise",
+      "email": "Email",
+      "budget": "Budget",
+      "description": "Description du travail"
+    },
     "send": "Envoyer"
   },
-  "footer": { "rights": "Tous droits réservés" },
-  "language": { "label": "Langue", "es": "Español", "en": "English", "fr": "Français", "de": "Deutsch", "it": "Italiano", "ca": "Català" }
+  "footer": {
+    "rights": "Tous droits réservés"
+  },
+  "language": {
+    "label": "Langue",
+    "es": "Español",
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "it": "Italiano",
+    "ca": "Català"
+  },
+  "home": {
+    "hero": {
+      "kicker": "UGC · Traduction · SEO",
+      "description": "Je crée des images, des mots et des expériences digitales avec une sensibilité éditoriale pensée pour les marques lifestyle, beauté, voyage et les projets internationaux.",
+      "mainPhoto": "Photo principale",
+      "scrollCue": "Faites défiler pour découvrir",
+      "coverLabel": "Couverture éditoriale"
+    },
+    "about": {
+      "eyebrow": "Profil éditorial",
+      "highlight": "Un regard créatif avec une précision stratégique.",
+      "languagesLabel": "Langues avec lesquelles je travaille",
+      "languages": [
+        "Espagnol",
+        "Français",
+        "Allemand",
+        "Italien",
+        "Anglais"
+      ]
+    },
+    "video": {
+      "eyebrow": "Vidéo de présentation",
+      "title": "Une première impression en mouvement",
+      "description": "Cet espace peut accueillir la vidéo d’introduction de Marta : naturelle, élégante et pensée pour transmettre sa personnalité, sa présence face caméra et son univers visuel.",
+      "placeholder": "Vidéo intro",
+      "note": "Format placeholder pour reel / présentation"
+    },
+    "gallery": {
+      "shotOne": "Cutout Lifestyle",
+      "shotTwo": "Cutout Beauty",
+      "shotThree": "Cutout Travel",
+      "shotFour": "Behind the scenes"
+    }
+  }
 }

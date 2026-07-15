@@ -84,5 +84,39 @@
     "de": "Deutsch",
     "it": "Italiano",
     "ca": "Català"
+  },
+  "home": {
+    "hero": {
+      "kicker": "UGC · Translation · SEO",
+      "description": "I create imagery, words, and digital experiences with an editorial sensibility for lifestyle, beauty, travel, and international brands.",
+      "mainPhoto": "Main Photo",
+      "scrollCue": "Scroll to discover",
+      "coverLabel": "Cover Story"
+    },
+    "about": {
+      "eyebrow": "Editorial profile",
+      "highlight": "A creative eye with strategic precision.",
+      "languagesLabel": "Languages I work in",
+      "languages": [
+        "Spanish",
+        "French",
+        "German",
+        "Italian",
+        "English"
+      ]
+    },
+    "video": {
+      "eyebrow": "Intro video",
+      "title": "A first impression in motion",
+      "description": "This space can feature Marta’s introduction video: natural, elegant, and designed to express personality, on-camera presence, and a refined visual universe.",
+      "placeholder": "Intro Video",
+      "note": "Placeholder format for reel / introduction"
+    },
+    "gallery": {
+      "shotOne": "Lifestyle Cutout",
+      "shotTwo": "Beauty Cutout",
+      "shotThree": "Travel Cutout",
+      "shotFour": "Behind the scenes"
+    }
   }
 }

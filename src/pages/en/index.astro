@@ -1,12 +1,12 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PageTransition from '../components/PageTransition';
-import ScrollReveal from '../components/ScrollReveal';
-import ParallaxLayer from '../components/ParallaxLayer';
-import FloatingIcon from '../components/FloatingIcon';
-import { ArrowCurved, ArrowWavy } from '../components/DoodleArrows';
-import StaggerContainer, { StaggerItem } from '../components/StaggerContainer';
-import { getLangFromUrl, t } from '../i18n';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageTransition from '../../components/PageTransition';
+import ScrollReveal from '../../components/ScrollReveal';
+import ParallaxLayer from '../../components/ParallaxLayer';
+import FloatingIcon from '../../components/FloatingIcon';
+import { ArrowCurved, ArrowWavy } from '../../components/DoodleArrows';
+import StaggerContainer, { StaggerItem } from '../../components/StaggerContainer';
+import { getLangFromUrl, t } from '../../i18n';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);

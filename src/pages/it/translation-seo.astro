@@ -1,0 +1,470 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ScrollReveal from '../../components/ScrollReveal';
+import PageTransition from '../../components/PageTransition';
+import StaggerContainer, { StaggerItem } from '../../components/StaggerContainer';
+import { getLangFromUrl, t } from '../../i18n';
+
+const lang = getLangFromUrl(Astro.url);
+const i = t(lang);
+const isSpanish = lang === 'es';
+
+const copy = isSpanish
+  ? {
+      eyebrow: 'Traducción, localización y redacción SEO',
+      headline: 'Servicios lingüísticos con enfoque profesional y visión internacional.',
+      intro:
+        'Ayudo a marcas, estudios y negocios digitales a adaptar su mensaje con precisión, naturalidad y sensibilidad cultural para que cada texto suene convincente en el mercado adecuado.',
+      summary:
+        'Mi perfil combina formación lingüística, experiencia real en atención al cliente en francés, trabajo internacional como au pair y una etapa viviendo en París. Eso me permite trabajar los textos no solo desde la corrección, sino también desde el contexto cultural y la intención comercial.',
+      availability: 'Disponible para proyectos freelance, colaboraciones puntuales y apoyo editorial continuo.',
+      educationTitle: 'Formación y perfil lingüístico',
+      educationIntro:
+        'Base académica orientada a idiomas, comunicación intercultural y redacción, reforzada con inmersión práctica en entornos internacionales.',
+      studies: [
+        'Formación centrada en idiomas, comunicación escrita y adaptación de contenidos para públicos internacionales.',
+        'Perfeccionamiento del francés a través de estancia prolongada en París y contacto diario con entornos francófonos.',
+        'Interés continuo por la escritura clara, la terminología y la optimización de contenidos para entornos digitales.',
+      ],
+      languagesTitle: 'Idiomas',
+      experienceIntro:
+        'Experiencia aplicada a la comunicación real, el trato directo con personas y la adaptación del lenguaje a distintos contextos.',
+      experience: [
+        {
+          title: 'Atención al cliente en francés',
+          text: 'Comunicación diaria con clientes francófonos, resolución de incidencias y cuidado del tono de marca en situaciones reales.',
+        },
+        {
+          title: 'Experiencia internacional como au pair',
+          text: 'Convivencia y trabajo en un entorno multicultural, desarrollando adaptabilidad, empatía y fluidez comunicativa.',
+        },
+        {
+          title: 'Etapa viviendo en París',
+          text: 'Inmersión lingüística y cultural que fortaleció el francés, la escucha activa y la comprensión de matices locales.',
+        },
+      ],
+      skillsIntro:
+        'Un enfoque de trabajo pensado para textos que necesitan sonar naturales, alineados con la marca y listos para funcionar online.',
+      skills: [
+        'Traducción y adaptación de contenidos',
+        'Localización web y cultural',
+        'SEO copywriting multilingüe',
+        'Corrección, edición y mejora de estilo',
+        'Investigación terminológica y consistencia de voz',
+        'Gestión de glosarios, briefs y guías de estilo',
+      ],
+      tools: ['Google Docs y Word', 'Hojas de cálculo y control de cambios', 'CMS y editores web', 'Glosarios, guías de estilo y checklists de revisión'],
+      processDescriptions: [
+        'Analizo objetivos, público, tono, idioma de destino y necesidades SEO antes de empezar.',
+        'Traduzco o redacto con foco en claridad, intención comercial y naturalidad.',
+        'Reviso terminología, coherencia, fluidez y detalles formales para pulir el resultado.',
+        'Entrego el texto listo para publicar, con observaciones o ajustes si el proyecto lo requiere.',
+      ],
+      whyMeCards: [
+        {
+          title: 'Idiomas con criterio profesional',
+          text: 'Trabajo con varios idiomas y sé adaptar el mensaje para que mantenga sentido, tono y credibilidad.',
+        },
+        {
+          title: 'Experiencia real, no solo académica',
+          text: 'He utilizado el francés en atención al cliente, he vivido en París y he trabajado en entornos multiculturales.',
+        },
+        {
+          title: 'Compromiso con cada entrega',
+          text: 'Priorizo la claridad, el detalle y una comunicación seria durante todo el proceso.',
+        },
+      ],
+      samplesTitle: 'Muestras de adaptación',
+      samples: [
+        {
+          label: 'FR → ES · mensaje web',
+          sourceLabel: 'Original',
+          source: 'Découvrez une expérience authentique pensée pour les voyageurs qui recherchent confort, charme et simplicité.',
+          targetLabel: 'Adaptación',
+          target: 'Descubre una experiencia auténtica pensada para viajeros que buscan comodidad, encanto y sencillez.',
+        },
+        {
+          label: 'EN → ES · copy SEO',
+          sourceLabel: 'Original',
+          source: 'Natural skincare for busy routines: lightweight formulas, visible results and everyday comfort.',
+          targetLabel: 'Adaptación',
+          target: 'Cosmética natural para rutinas dinámicas: fórmulas ligeras, resultados visibles y bienestar diario.',
+        },
+      ],
+    }
+  : {
+      eyebrow: 'Translation, localization and SEO copywriting',
+      headline: 'Professional language services shaped by international experience.',
+      intro:
+        'I help brands, studios and digital businesses adapt their message with accuracy, natural phrasing and cultural awareness so every text feels convincing in the right market.',
+      summary:
+        'My profile combines language-focused studies, real French-language customer service experience, international au pair work and time living in Paris. That means I approach every text with linguistic precision, cultural context and commercial intent.',
+      availability: 'Available for freelance projects, one-off collaborations and ongoing editorial support.',
+      educationTitle: 'Education and language background',
+      educationIntro:
+        'A language-led academic foundation strengthened by practical immersion in international and multilingual environments.',
+      studies: [
+        'Studies focused on languages, written communication and content adaptation for international audiences.',
+        'Advanced French developed through time living in Paris and sustained contact with francophone environments.',
+        'Ongoing interest in clear writing, terminology management and content optimization for digital channels.',
+      ],
+      languagesTitle: 'Languages',
+      experienceIntro:
+        'Hands-on experience in real communication settings, people-facing roles and cross-cultural environments.',
+      experience: [
+        {
+          title: 'French-language customer service',
+          text: 'Daily communication with francophone clients, issue resolution and careful handling of tone in real brand interactions.',
+        },
+        {
+          title: 'International au pair experience',
+          text: 'Living and working in a multicultural environment, strengthening adaptability, empathy and confident communication.',
+        },
+        {
+          title: 'Time living in Paris',
+          text: 'Linguistic and cultural immersion that deepened my French fluency and understanding of local nuance.',
+        },
+      ],
+      skillsIntro:
+        'A practical service profile designed for texts that must read naturally, reflect the brand and perform online.',
+      skills: [
+        'Translation and content adaptation',
+        'Website and cultural localization',
+        'Multilingual SEO copywriting',
+        'Proofreading, editing and style refinement',
+        'Terminology research and tone consistency',
+        'Glossary, brief and style-guide management',
+      ],
+      tools: ['Google Docs and Word', 'Spreadsheets and tracked changes', 'CMS workflows and web editors', 'Glossaries, style guides and QA review checklists'],
+      processDescriptions: [
+        'I review goals, audience, tone, target language and SEO needs before any drafting begins.',
+        'I translate or write with clarity, search intent and natural phrasing in mind.',
+        'I check terminology, consistency, flow and formal details to refine the final version.',
+        'I deliver copy that is ready to publish, with notes or revisions when the project needs them.',
+      ],
+      whyMeCards: [
+        {
+          title: 'Languages handled with precision',
+          text: 'I work across several languages and adapt the message so it preserves meaning, tone and credibility.',
+        },
+        {
+          title: 'Real-world international experience',
+          text: 'My background includes French customer service, time living in Paris and work in multicultural settings.',
+        },
+        {
+          title: 'Reliable commitment to quality',
+          text: 'I value clarity, detail and professional communication throughout the whole process.',
+        },
+      ],
+      samplesTitle: 'Sample adaptations',
+      samples: [
+        {
+          label: 'FR → EN · website message',
+          sourceLabel: 'Original',
+          source: 'Découvrez une expérience authentique pensée pour les voyageurs qui recherchent confort, charme et simplicité.',
+          targetLabel: 'Adapted version',
+          target: 'Discover an authentic experience designed for travellers seeking comfort, charm and simplicity.',
+        },
+        {
+          label: 'EN → ES · SEO copy',
+          sourceLabel: 'Original',
+          source: 'Natural skincare for busy routines: lightweight formulas, visible results and everyday comfort.',
+          targetLabel: 'Adapted version',
+          target: 'Cosmética natural para rutinas dinámicas: fórmulas ligeras, resultados visibles y bienestar diario.',
+        },
+      ],
+    };
+
+const ui = isSpanish
+  ? {
+      badgeLanguages: '5 idiomas',
+      badgeCustomerService: 'Atención al cliente en francés',
+      badgeParis: 'Experiencia en París',
+      profile: 'Perfil profesional',
+      coreServices: 'Servicios principales',
+      focus: 'Enfoque',
+      focusText: 'Precisión de traducción, adaptación cultural, tono cuidado y textos pensados para buscadores.',
+      languagesHeading: 'Idiomas',
+      experienceLabel: 'Experiencia',
+      core: 'Base',
+      editorial: 'Editorial',
+      tools: 'Herramientas',
+      servicesIntro: 'Apoyo personalizado para negocios que necesitan que sus textos funcionen entre idiomas, plataformas y contextos de búsqueda.',
+      processIntro: 'Un flujo claro y estructurado mantiene cada proyecto eficiente, alineado y listo para su publicación.',
+      step: 'Paso',
+      samplesIntro: 'Ejemplos breves de cómo se preservan el sentido, el tono y la legibilidad durante la adaptación.',
+    }
+  : {
+      badgeLanguages: '5 languages',
+      badgeCustomerService: 'French customer service',
+      badgeParis: 'Paris experience',
+      profile: 'Professional profile',
+      coreServices: 'Core services',
+      focus: 'Focus',
+      focusText: 'Translation accuracy, cultural adaptation, polished tone and search-aware copy.',
+      languagesHeading: 'Languages',
+      experienceLabel: 'Experience',
+      core: 'Core',
+      editorial: 'Editorial',
+      tools: 'Tools',
+      servicesIntro: 'Tailored support for businesses that need texts to travel well across languages, platforms and search contexts.',
+      processIntro: 'A clear, structured workflow keeps each project efficient, aligned and ready for publication.',
+      step: 'Step',
+      samplesIntro: 'Short examples showing how meaning, tone and readability are preserved through adaptation.',
+    };
+
+const languages = [
+  { name: isSpanish ? 'Español' : 'Spanish', level: isSpanish ? 'Nativo' : 'Native' },
+  { name: 'Français', level: isSpanish ? 'Avanzado · C1' : 'Advanced · C1' },
+  { name: 'English', level: isSpanish ? 'Profesional · B2/C1' : 'Professional · B2/C1' },
+  { name: 'Deutsch', level: isSpanish ? 'Intermedio · B1' : 'Intermediate · B1' },
+  { name: 'Italiano', level: isSpanish ? 'Intermedio · B1' : 'Intermediate · B1' },
+];
+
+const serviceCards = i.translation.servicesList;
+const processSteps = [
+  i.translation.processSteps.briefing,
+  i.translation.processSteps.translation,
+  i.translation.processSteps.review,
+  i.translation.processSteps.delivery,
+];
+
+const pageTitle = `${i.hero.name} — ${i.translation.title}`;
+const pageDescription = copy.summary;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <PageTransition client:load className="pt-24">
+    <section class="relative overflow-hidden border-b border-blush-100 bg-gradient-to-b from-blush-50 via-cream to-cream">
+      <div class="absolute inset-x-0 top-0 h-64 bg-blush-100/35 blur-3xl"></div>
+      <div class="relative mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-20">
+        <div class="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+          <div class="space-y-6">
+            <p class="font-accent text-sm uppercase tracking-[0.28em] text-rose-gold">{copy.eyebrow}</p>
+            <h1 class="max-w-3xl font-heading text-5xl font-semibold leading-tight text-charcoal md:text-6xl">
+              {copy.headline}
+            </h1>
+            <p class="max-w-2xl text-lg leading-8 text-warm-gray">{copy.intro}</p>
+            <p class="max-w-2xl text-base leading-8 text-warm-gray">{copy.summary}</p>
+            <div class="flex flex-wrap gap-3 pt-2">
+              <span class="rounded-full border border-blush-200 bg-white/80 px-4 py-2 text-sm text-charcoal">{ui.badgeLanguages}</span>
+              <span class="rounded-full border border-blush-200 bg-white/80 px-4 py-2 text-sm text-charcoal">{ui.badgeCustomerService}</span>
+              <span class="rounded-full border border-blush-200 bg-white/80 px-4 py-2 text-sm text-charcoal">{ui.badgeParis}</span>
+            </div>
+          </div>
+
+          <aside class="rounded-[2rem] border border-blush-100 bg-white/80 p-8 shadow-[0_20px_60px_rgba(183,110,121,0.12)] backdrop-blur-sm">
+            <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{ui.profile}</p>
+            <div class="mt-6 space-y-5 text-sm leading-7 text-warm-gray">
+              <div class="border-b border-blush-100 pb-5">
+                <p class="font-heading text-2xl text-charcoal">{i.hero.name}</p>
+                <p>{copy.availability}</p>
+              </div>
+              <div>
+                <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{ui.coreServices}</p>
+                <ul class="mt-3 space-y-2 text-charcoal">
+                  {serviceCards.map((service) => <li>• {service}</li>)}
+                </ul>
+              </div>
+              <div>
+                <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{ui.focus}</p>
+                <p class="mt-3">{ui.focusText}</p>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </PageTransition>
+
+  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-16 md:px-10">
+    <section class="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+      <div class="rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm">
+        <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{copy.educationTitle}</p>
+        <h2 class="mt-4 font-heading text-4xl text-charcoal">{i.translation.education}</h2>
+        <p class="mt-4 text-base leading-8 text-warm-gray">{copy.educationIntro}</p>
+        <ul class="mt-6 space-y-4 text-base leading-8 text-charcoal">
+          {copy.studies.map((study) => (
+            <li class="flex gap-3">
+              <span class="mt-2 h-2.5 w-2.5 rounded-full bg-rose-gold"></span>
+              <span>{study}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="rounded-[2rem] border border-blush-100 bg-blush-50 p-8 shadow-sm">
+        <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{copy.languagesTitle}</p>
+        <h2 class="mt-4 font-heading text-4xl text-charcoal">{ui.languagesHeading}</h2>
+        <div class="mt-6 space-y-4">
+          {languages.map((language) => (
+            <div class="rounded-2xl border border-blush-100 bg-white px-5 py-4">
+              <div class="flex items-center justify-between gap-4">
+                <span class="font-heading text-2xl text-charcoal">{language.name}</span>
+                <span class="rounded-full bg-blush-100 px-3 py-1 text-sm text-charcoal">{language.level}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </ScrollReveal>
+
+  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-4 md:px-10 md:py-8">
+    <section class="rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm md:p-10">
+      <div class="max-w-3xl">
+        <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{i.translation.experience}</p>
+        <h2 class="mt-4 font-heading text-4xl text-charcoal">{i.translation.experience}</h2>
+        <p class="mt-4 text-base leading-8 text-warm-gray">{copy.experienceIntro}</p>
+      </div>
+      <div class="mt-8 grid gap-6 md:grid-cols-3">
+        {copy.experience.map((item) => (
+          <article class="rounded-[1.5rem] border border-blush-100 bg-blush-50 p-6">
+            <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{ui.experienceLabel}</p>
+            <h3 class="mt-3 font-heading text-2xl text-charcoal">{item.title}</h3>
+            <p class="mt-3 text-sm leading-7 text-warm-gray">{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  </ScrollReveal>
+
+  <StaggerContainer client:visible className="mx-auto grid max-w-6xl gap-6 px-6 py-12 md:grid-cols-2 md:px-10 xl:grid-cols-4" staggerDelay={0.12}>
+    <StaggerItem className="md:col-span-2 xl:col-span-1">
+      <section class="h-full rounded-[2rem] border border-blush-100 bg-charcoal p-8 text-cream shadow-sm">
+        <p class="font-accent text-sm uppercase tracking-[0.22em] text-blush-200">{i.translation.skills}</p>
+        <h2 class="mt-4 font-heading text-4xl text-white">{i.translation.skills}</h2>
+        <p class="mt-4 text-sm leading-7 text-blush-50/90">{copy.skillsIntro}</p>
+      </section>
+    </StaggerItem>
+
+    <StaggerItem className="xl:col-span-1">
+      <article class="h-full rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm">
+        <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{ui.core}</p>
+        <ul class="mt-4 space-y-3 text-sm leading-7 text-charcoal">
+          {copy.skills.slice(0, 3).map((skill) => <li>• {skill}</li>)}
+        </ul>
+      </article>
+    </StaggerItem>
+
+    <StaggerItem className="xl:col-span-1">
+      <article class="h-full rounded-[2rem] border border-blush-100 bg-blush-50 p-8 shadow-sm">
+        <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{ui.editorial}</p>
+        <ul class="mt-4 space-y-3 text-sm leading-7 text-charcoal">
+          {copy.skills.slice(3).map((skill) => <li>• {skill}</li>)}
+        </ul>
+      </article>
+    </StaggerItem>
+
+    <StaggerItem className="xl:col-span-1">
+      <article class="h-full rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm">
+        <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{ui.tools}</p>
+        <ul class="mt-4 space-y-3 text-sm leading-7 text-charcoal">
+          {copy.tools.map((tool) => <li>• {tool}</li>)}
+        </ul>
+      </article>
+    </StaggerItem>
+  </StaggerContainer>
+
+  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-4 md:px-10 md:py-8">
+    <section class="rounded-[2rem] border border-blush-100 bg-blush-50 p-8 shadow-sm md:p-10">
+      <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div class="max-w-3xl">
+          <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{i.translation.services}</p>
+          <h2 class="mt-4 font-heading text-4xl text-charcoal">{i.translation.services}</h2>
+        </div>
+        <p class="max-w-xl text-sm leading-7 text-warm-gray">
+          {ui.servicesIntro}
+        </p>
+      </div>
+      <div class="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        {serviceCards.map((service, index) => (
+          <article class="rounded-[1.5rem] border border-blush-100 bg-white p-6 shadow-sm">
+            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-blush-100 font-accent text-lg text-rose-gold">
+              0{index + 1}
+            </div>
+            <h3 class="mt-5 font-heading text-2xl text-charcoal">{service}</h3>
+          </article>
+        ))}
+      </div>
+    </section>
+  </ScrollReveal>
+
+  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-12 md:px-10">
+    <section class="rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm md:p-10">
+      <div class="max-w-3xl">
+        <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{i.translation.process}</p>
+        <h2 class="mt-4 font-heading text-4xl text-charcoal">{i.translation.process}</h2>
+        <p class="mt-4 text-base leading-8 text-warm-gray">
+          {ui.processIntro}
+        </p>
+      </div>
+
+      <div class="relative mt-10">
+        <div class="absolute left-[1.45rem] top-6 bottom-6 w-px bg-blush-200 md:left-10 md:right-10 md:top-10 md:h-px md:w-auto"></div>
+        <div class="grid gap-6 md:grid-cols-4">
+          {processSteps.map((step, index) => (
+            <article class="relative pl-14 md:pl-0">
+              <div class="absolute left-0 top-0 flex h-12 w-12 items-center justify-center rounded-full border border-blush-200 bg-cream font-accent text-lg text-rose-gold md:relative md:mx-auto">
+                {index + 1}
+              </div>
+              <div class="rounded-[1.5rem] border border-blush-100 bg-blush-50 p-6 md:mt-6">
+                <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{ui.step} 0{index + 1}</p>
+                <h3 class="mt-3 font-heading text-2xl text-charcoal">{step}</h3>
+                <p class="mt-3 text-sm leading-7 text-warm-gray">{copy.processDescriptions[index]}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  </ScrollReveal>
+
+  <StaggerContainer client:visible className="mx-auto grid max-w-6xl gap-6 px-6 py-4 md:grid-cols-3 md:px-10 md:py-8" staggerDelay={0.14}>
+    <StaggerItem className="md:col-span-3">
+      <section class="rounded-[2rem] border border-blush-100 bg-charcoal p-8 text-cream shadow-sm md:p-10">
+        <p class="font-accent text-sm uppercase tracking-[0.22em] text-blush-200">{i.translation.whyMe}</p>
+        <h2 class="mt-4 font-heading text-4xl text-white">{i.translation.whyMe}</h2>
+        <p class="mt-4 max-w-3xl text-base leading-8 text-blush-50/90">{i.translation.whyMeText}</p>
+      </section>
+    </StaggerItem>
+
+    {copy.whyMeCards.map((card) => (
+      <StaggerItem>
+        <article class="h-full rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm">
+          <h3 class="font-heading text-3xl text-charcoal">{card.title}</h3>
+          <p class="mt-4 text-sm leading-7 text-warm-gray">{card.text}</p>
+        </article>
+      </StaggerItem>
+    ))}
+  </StaggerContainer>
+
+  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-12 md:px-10">
+    <section class="rounded-[2rem] border border-blush-100 bg-blush-50 p-8 shadow-sm md:p-10">
+      <div class="max-w-3xl">
+        <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{copy.samplesTitle}</p>
+        <h2 class="mt-4 font-heading text-4xl text-charcoal">{copy.samplesTitle}</h2>
+        <p class="mt-4 text-base leading-8 text-warm-gray">
+          {ui.samplesIntro}
+        </p>
+      </div>
+      <div class="mt-8 grid gap-6 lg:grid-cols-2">
+        {copy.samples.map((sample) => (
+          <article class="rounded-[1.75rem] border border-blush-100 bg-white p-6 shadow-sm">
+            <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{sample.label}</p>
+            <div class="mt-5 grid gap-4 md:grid-cols-2">
+              <div class="rounded-2xl bg-blush-50 p-5">
+                <p class="font-accent text-xs uppercase tracking-[0.22em] text-rose-gold">{sample.sourceLabel}</p>
+                <p class="mt-3 text-sm leading-7 text-charcoal">“{sample.source}”</p>
+              </div>
+              <div class="rounded-2xl bg-charcoal p-5 text-cream">
+                <p class="font-accent text-xs uppercase tracking-[0.22em] text-blush-200">{sample.targetLabel}</p>
+                <p class="mt-3 text-sm leading-7">“{sample.target}”</p>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  </ScrollReveal>
+</BaseLayout>

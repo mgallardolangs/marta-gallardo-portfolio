@@ -1,21 +1,122 @@
 {
-  "nav": { "home": "Inici", "ugc": "UGC", "translationSeo": "Traducció + SEO", "blog": "Blog", "contact": "Contacte" },
-  "hero": { "name": "Marta Gallardo", "age": "23 anys", "city": "Elx, Espanya", "ugcLabel": "Creadora de UGC", "seoLabel": "Traducció Multilingüe & Localització + SEO" },
-  "about": { "title": "Sobre mi", "text": "Soc Marta, creadora de contingut UGC i especialista en traducció i SEO. Parlo espanyol, francès, alemany, italià i anglès. M'apassiona crear contingut autèntic per a marques i ajudar empreses a comunicar-se globalment." },
-  "ugc": { "title": "Portfolio UGC", "subtitle": "Contingut que connecta amb la teua audiència", "niches": { "travel": "Viatges", "languages": "Idiomes", "art": "Art" }, "cta": "Veure més" },
-  "translation": {
-    "title": "Traducció + SEO", "education": "Formació", "experience": "Experiència", "skills": "Habilitats", "services": "Serveis que ofereixo",
-    "process": "El meu procés de treball", "processSteps": { "briefing": "Briefing", "translation": "Traducció / Redacció", "review": "Revisió", "delivery": "Lliurament" },
-    "servicesList": ["Traducció de llocs web", "Localització de contingut", "SEO copywriting multilingüe", "Correcció i edició de textos"],
-    "whyMe": "Per què treballar amb mi?", "whyMeText": "Idiomes, experiència real (atenció al client, au pair, estudis a París) i compromís amb cada projecte."
+  "nav": {
+    "home": "Inici",
+    "ugc": "UGC",
+    "translationSeo": "Traducció + SEO",
+    "blog": "Blog",
+    "contact": "Contacte"
   },
-  "blog": { "title": "Blog", "readMore": "Llegir més", "backToList": "← Tornar al blog" },
+  "hero": {
+    "name": "Marta Gallardo",
+    "age": "23 anys",
+    "city": "Elx, Espanya",
+    "ugcLabel": "Creadora de UGC",
+    "seoLabel": "Traducció Multilingüe & Localització + SEO"
+  },
+  "about": {
+    "title": "Sobre mi",
+    "text": "Soc Marta, creadora de contingut UGC i especialista en traducció i SEO. Parlo espanyol, francès, alemany, italià i anglès. M'apassiona crear contingut autèntic per a marques i ajudar empreses a comunicar-se globalment."
+  },
+  "ugc": {
+    "title": "Portfolio UGC",
+    "subtitle": "Contingut que connecta amb la teua audiència",
+    "niches": {
+      "travel": "Viatges",
+      "languages": "Idiomes",
+      "art": "Art"
+    },
+    "cta": "Veure més"
+  },
+  "translation": {
+    "title": "Traducció + SEO",
+    "education": "Formació",
+    "experience": "Experiència",
+    "skills": "Habilitats",
+    "services": "Serveis que ofereixo",
+    "process": "El meu procés de treball",
+    "processSteps": {
+      "briefing": "Briefing",
+      "translation": "Traducció / Redacció",
+      "review": "Revisió",
+      "delivery": "Lliurament"
+    },
+    "servicesList": [
+      "Traducció de llocs web",
+      "Localització de contingut",
+      "SEO copywriting multilingüe",
+      "Correcció i edició de textos"
+    ],
+    "whyMe": "Per què treballar amb mi?",
+    "whyMeText": "Idiomes, experiència real (atenció al client, au pair, estudis a París) i compromís amb cada projecte."
+  },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Llegir més",
+    "backToList": "← Tornar al blog"
+  },
   "contact": {
-    "title": "Col·laborem", "subtitle": "Tens un projecte en ment? M'encantaria saber de tu.",
-    "ugcForm": { "title": "Col·laboració UGC", "company": "Empresa", "email": "Email", "budget": "Pressupost", "description": "Descripció del projecte" },
-    "seoForm": { "title": "Traducció + SEO", "company": "Empresa", "email": "Email", "budget": "Pressupost", "description": "Descripció del treball" },
+    "title": "Col·laborem",
+    "subtitle": "Tens un projecte en ment? M'encantaria saber de tu.",
+    "ugcForm": {
+      "title": "Col·laboració UGC",
+      "company": "Empresa",
+      "email": "Email",
+      "budget": "Pressupost",
+      "description": "Descripció del projecte"
+    },
+    "seoForm": {
+      "title": "Traducció + SEO",
+      "company": "Empresa",
+      "email": "Email",
+      "budget": "Pressupost",
+      "description": "Descripció del treball"
+    },
     "send": "Enviar"
   },
-  "footer": { "rights": "Tots els drets reservats" },
-  "language": { "label": "Idioma", "es": "Español", "en": "English", "fr": "Français", "de": "Deutsch", "it": "Italiano", "ca": "Català" }
+  "footer": {
+    "rights": "Tots els drets reservats"
+  },
+  "language": {
+    "label": "Idioma",
+    "es": "Español",
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "it": "Italiano",
+    "ca": "Català"
+  },
+  "home": {
+    "hero": {
+      "kicker": "UGC · Traducció · SEO",
+      "description": "Creo imatges, paraules i experiències digitals amb una sensibilitat editorial pensada per a marques lifestyle, beauty, travel i projectes internacionals.",
+      "mainPhoto": "Foto principal",
+      "scrollCue": "Desplaça per descobrir",
+      "coverLabel": "Portada editorial"
+    },
+    "about": {
+      "eyebrow": "Perfil editorial",
+      "highlight": "Una mirada creativa amb precisió estratègica.",
+      "languagesLabel": "Idiomes amb què treballo",
+      "languages": [
+        "Espanyol",
+        "Francès",
+        "Alemany",
+        "Italià",
+        "Anglès"
+      ]
+    },
+    "video": {
+      "eyebrow": "Vídeo de presentació",
+      "title": "Una primera impressió en moviment",
+      "description": "Aquest espai pot presentar el vídeo d’introducció de Marta: natural, elegant i pensat per transmetre personalitat, presència davant de càmera i un univers visual refinat.",
+      "placeholder": "Vídeo intro",
+      "note": "Format placeholder per a reel / presentació"
+    },
+    "gallery": {
+      "shotOne": "Cutout Lifestyle",
+      "shotTwo": "Cutout Beauty",
+      "shotThree": "Cutout Travel",
+      "shotFour": "Behind the scenes"
+    }
+  }
 }
