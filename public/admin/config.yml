@@ -4033,6 +4033,22 @@ collections:
         name: art
         widget: image
         required: false
+    - label: "Iconos de nicho (imágenes 3D)"
+      name: nicheIcons
+      widget: object
+      fields:
+      - label: "✈️ Icono Viajes"
+        name: travel
+        widget: image
+        required: false
+      - label: "🌍 Icono Idiomas"
+        name: languages
+        widget: image
+        required: false
+      - label: "🎨 Icono Arte"
+        name: art
+        widget: image
+        required: false
     - label: 📱 Captura de Instagram
       name: instagramScreenshot
       widget: image
