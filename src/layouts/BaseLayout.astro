@@ -23,6 +23,8 @@ const { title = `${i.hero.name} — UGC & SEO`, description = i.about.text } = A
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <!-- Netlify Identity widget (needed for CMS login redirects) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <!-- Scroll progress bar -->
   <style>
     .scroll-progress {
@@ -54,5 +56,15 @@ const { title = `${i.hero.name} — UGC & SEO`, description = i.about.text } = A
     <slot />
   </main>
   <Footer lang={lang} />
+  <!-- ponytail: redirect to /admin after Netlify Identity login confirmation -->
+  <script is:inline>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      });
+    }
+  </script>
 </body>
 </html>

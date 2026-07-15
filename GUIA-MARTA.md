@@ -23,7 +23,7 @@ Tu blog tiene un editor visual (como WordPress) que se llama **Decap CMS**. No n
 
 1. **Abre el editor del blog**
    - Ve a tu web y añade `/admin` al final de la dirección
-   - Ejemplo: `https://tu-web.netlify.app/admin`
+   - Ejemplo: `https://marttelier.netlify.app/admin`
 
 2. **Inicia sesión**
    - Usa tu cuenta de Netlify Identity (la misma que se configuró cuando se lanzó la web)
