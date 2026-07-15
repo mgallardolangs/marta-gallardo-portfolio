@@ -71,7 +71,9 @@
       "budget": "Budget",
       "description": "Work description"
     },
-    "send": "Send"
+    "send": "Send",
+    "successTitle": "Message sent!",
+    "successMessage": "Thanks for reaching out. I'll get back to you as soon as possible."
   },
   "footer": {
     "rights": "All rights reserved"
