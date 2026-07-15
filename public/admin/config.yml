@@ -4017,6 +4017,90 @@ collections:
       name: ugcHeaderImage
       widget: image
       required: false
+    - label: Fondos de nicho
+      name: nicheBackgrounds
+      widget: object
+      fields:
+      - label: ✈️ Fondo Viajes
+        name: travel
+        widget: image
+        required: false
+      - label: 🌍 Fondo Idiomas
+        name: languages
+        widget: image
+        required: false
+      - label: 🎨 Fondo Arte
+        name: art
+        widget: image
+        required: false
+    - label: 📱 Captura de Instagram
+      name: instagramScreenshot
+      widget: image
+      required: false
+    - label: Vídeos UGC
+      name: ugcVideos
+      widget: object
+      fields:
+      - label: ✈️ Vídeos Viajes
+        name: travel
+        widget: list
+        field:
+          label: URL
+          name: item
+          widget: file
+        required: false
+      - label: 🌍 Vídeos Idiomas
+        name: languages
+        widget: list
+        field:
+          label: URL
+          name: item
+          widget: file
+        required: false
+      - label: 🎨 Vídeos Arte
+        name: art
+        widget: list
+        field:
+          label: URL
+          name: item
+          widget: file
+        required: false
+    - label: Fotos UGC
+      name: ugcPhotos
+      widget: object
+      fields:
+      - label: ✈️ Fotos Viajes
+        name: travel
+        widget: list
+        field:
+          label: Foto
+          name: item
+          widget: image
+        required: false
+      - label: 🌍 Fotos Idiomas
+        name: languages
+        widget: list
+        field:
+          label: Foto
+          name: item
+          widget: image
+        required: false
+      - label: 🎨 Fotos Arte
+        name: art
+        widget: list
+        field:
+          label: Foto
+          name: item
+          widget: image
+        required: false
+      - label: 📸 Todas las fotos
+        name: all
+        widget: list
+        field:
+          label: Foto
+          name: item
+          widget: image
+        required: false
     format: json
 - name: blog
   label: Blog Posts
