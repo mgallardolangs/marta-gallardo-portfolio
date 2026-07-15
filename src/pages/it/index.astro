@@ -7,6 +7,7 @@ import FloatingIcon from '../../components/FloatingIcon';
 import { ArrowCurved, ArrowWavy } from '../../components/DoodleArrows';
 import StaggerContainer, { StaggerItem } from '../../components/StaggerContainer';
 import { getLangFromUrl, t } from '../../i18n';
+import imagesData from '../../data/images.json';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
@@ -77,14 +78,15 @@ const i = t(lang);
 
             <div class="absolute inset-0 flex items-center justify-center">
               <div class="photo-frame relative flex h-[29rem] w-full max-w-[24rem] items-center justify-center overflow-hidden rounded-[2.8rem] border border-blush-200/80 bg-blush-100 shadow-[0_35px_120px_rgba(183,110,121,0.18)] md:h-[35rem] md:max-w-[27rem]">
-                <div class="absolute inset-6 rounded-[2.2rem] border border-white/60"></div>
-                <div class="absolute inset-x-[20%] top-10 h-24 rounded-full bg-white/40 blur-3xl"></div>
-                <div class="absolute bottom-12 left-10 h-24 w-24 rounded-full border border-white/50"></div>
-                <div class="absolute right-10 top-24 h-16 w-16 rounded-full bg-white/35"></div>
-                <div class="relative z-10 text-center">
-                  <p class="font-accent text-sm uppercase tracking-[0.36em] text-rose-gold">{i.home.hero.coverLabel}</p>
-                  <p class="mt-4 font-heading text-4xl text-charcoal md:text-5xl">{i.home.hero.mainPhoto}</p>
-                </div>
+                {imagesData.heroMainPhoto && !imagesData.heroMainPhoto.includes('placeholder') ? (
+                  <img src={imagesData.heroMainPhoto} alt={i.hero.name} class="absolute inset-0 h-full w-full object-cover rounded-[2.8rem]" />
+                ) : (
+                  <div class="relative z-10 text-center">
+                    <p class="font-accent text-sm uppercase tracking-[0.36em] text-rose-gold">{i.home.hero.coverLabel}</p>
+                    <p class="mt-4 font-heading text-4xl text-charcoal md:text-5xl">{i.home.hero.mainPhoto}</p>
+                  </div>
+                )}
+                <div class="absolute inset-6 rounded-[2.2rem] border border-white/60 pointer-events-none"></div>
               </div>
             </div>
           </div>

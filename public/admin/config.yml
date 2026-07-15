@@ -1,8 +1,8 @@
 backend:
   name: git-gateway
   branch: main
-media_folder: public/images/blog
-public_folder: /images/blog
+media_folder: public/images
+public_folder: /images
 collections:
 - name: locale_es
   label: 🌐 Textos del sitio · Español
