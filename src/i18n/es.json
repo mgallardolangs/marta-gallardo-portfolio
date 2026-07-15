@@ -1,59 +1,4 @@
 {
-  "nav": {
-    "home": "Inicio",
-    "ugc": "UGC",
-    "translationSeo": "Traducción + SEO",
-    "blog": "Blog",
-    "contact": "Contacto"
-  },
-  "hero": {
-    "name": "Marta Gallardo",
-    "age": "23 años",
-    "city": "Elche, España",
-    "ugcLabel": "Creadora de UGC",
-    "seoLabel": "Traducción Multilingüe & Localización + SEO"
-  },
-  "about": {
-    "title": "Sobre mí",
-    "text": "Soy Marta, creadora de contenido UGC y especialista en traducción y SEO. Hablo español, francés, alemán, italiano e inglés. Me apasiona crear contenido auténtico para marcas y ayudar a empresas a comunicarse globalmente."
-  },
-  "ugc": {
-    "title": "UGC Portfolio",
-    "subtitle": "Contenido que conecta con tu audiencia",
-    "niches": {
-      "travel": "Viajes",
-      "languages": "Idiomas",
-      "art": "Arte"
-    },
-    "cta": "Ver más"
-  },
-  "translation": {
-    "title": "Traducción + SEO",
-    "education": "Formación",
-    "experience": "Experiencia",
-    "skills": "Habilidades",
-    "services": "Servicios que ofrezco",
-    "process": "Mi proceso de trabajo",
-    "processSteps": {
-      "briefing": "Briefing",
-      "translation": "Traducción / Redacción",
-      "review": "Revisión",
-      "delivery": "Entrega"
-    },
-    "servicesList": [
-      "Traducción de sitios web",
-      "Localización de contenido",
-      "SEO copywriting multilingüe",
-      "Corrección y edición de textos"
-    ],
-    "whyMe": "¿Por qué trabajar conmigo?",
-    "whyMeText": "Idiomas, experiencia real (atención al cliente, au pair, programa Erasmus+ en París) y compromiso con cada proyecto."
-  },
-  "blog": {
-    "title": "Blog",
-    "readMore": "Leer más",
-    "backToList": "← Volver al blog"
-  },
   "contact": {
     "title": "Colaboremos",
     "subtitle": "¿Tienes un proyecto en mente? Me encantaría saber de ti.",
@@ -75,67 +20,117 @@
     "successTitle": "¡Mensaje enviado!",
     "successMessage": "Gracias por contactarme. Te responderé lo antes posible."
   },
-  "footer": {
-    "rights": "Todos los derechos reservados"
-  },
-  "language": {
-    "label": "Idioma",
-    "es": "Español",
-    "en": "English",
-    "fr": "Français",
-    "de": "Deutsch",
-    "it": "Italiano",
-    "ca": "Català"
-  },
-  "home": {
-    "hero": {
-      "kicker": "UGC · Traducción · SEO",
-      "description": "Creo imágenes, palabras y experiencias digitales con una sensibilidad editorial pensada para marcas lifestyle, beauty, viajes y proyectos internacionales.",
-      "mainPhoto": "Foto principal",
-      "scrollCue": "Desliza para descubrir",
-      "coverLabel": "Portada editorial"
+  "translationPage": {
+    "copy": {
+      "skills": [
+        "Traducción y adaptación de contenidos",
+        "Localización web y cultural",
+        "SEO copywriting multilingüe",
+        "Corrección, edición y mejora de estilo",
+        "Investigación terminológica y consistencia de voz",
+        "Gestión de glosarios, briefs y guías de estilo"
+      ],
+      "experienceIntro": "Experiencia aplicada a la comunicación real, el trato directo con personas y la adaptación del lenguaje a distintos contextos.",
+      "whyMeCards": [
+        {
+          "title": "Idiomas con criterio profesional",
+          "text": "Trabajo con varios idiomas y sé adaptar el mensaje para que mantenga sentido, tono y credibilidad."
+        },
+        {
+          "title": "Experiencia real, no solo académica",
+          "text": "He utilizado el francés en atención al cliente, he realizado un Erasmus+ en París y he trabajado en entornos multiculturales."
+        },
+        {
+          "title": "Compromiso con cada entrega",
+          "text": "Priorizo la claridad, el detalle y una comunicación seria durante todo el proceso."
+        }
+      ],
+      "educationIntro": "Base académica orientada a idiomas, comunicación intercultural y redacción, reforzada con inmersión práctica en entornos internacionales.",
+      "processDescriptions": [
+        "Analizo objetivos, público, tono, idioma de destino y necesidades SEO antes de empezar.",
+        "Traduzco o redacto con foco en claridad, intención comercial y naturalidad.",
+        "Reviso terminología, coherencia, fluidez y detalles formales para pulir el resultado.",
+        "Entrego el texto listo para publicar, con observaciones o ajustes si el proyecto lo requiere."
+      ],
+      "summary": "Mi perfil combina formación lingüística, experiencia real en atención al cliente en francés, trabajo internacional como au pair y un programa Erasmus+ de 6 meses en París. Eso me permite trabajar los textos no solo desde la corrección, sino también desde el contexto cultural y la intención comercial.",
+      "studies": [
+        "Formación centrada en idiomas, comunicación escrita y adaptación de contenidos para públicos internacionales.",
+        "Perfeccionamiento del francés a través de un programa Erasmus+ de 6 meses en París y contacto diario con entornos francófonos.",
+        "Interés continuo por la escritura clara, la terminología y la optimización de contenidos para entornos digitales."
+      ],
+      "samples": [
+        {
+          "label": "FR → ES · mensaje web",
+          "sourceLabel": "Original",
+          "source": "Découvrez une expérience authentique pensée pour les voyageurs qui recherchent confort, charme et simplicité.",
+          "targetLabel": "Adaptación",
+          "target": "Descubre una experiencia auténtica pensada para viajeros que buscan comodidad, encanto y sencillez."
+        },
+        {
+          "label": "EN → ES · copy SEO",
+          "sourceLabel": "Original",
+          "source": "Natural skincare for busy routines: lightweight formulas, visible results and everyday comfort.",
+          "targetLabel": "Adaptación",
+          "target": "Cosmética natural para rutinas dinámicas: fórmulas ligeras, resultados visibles y bienestar diario."
+        }
+      ],
+      "eyebrow": "Traducción, localización y redacción SEO",
+      "experience": [
+        {
+          "title": "Atención al cliente en francés",
+          "text": "Comunicación diaria con clientes francófonos, resolución de incidencias y cuidado del tono de marca en situaciones reales."
+        },
+        {
+          "title": "Experiencia internacional como au pair",
+          "text": "Convivencia y trabajo en un entorno multicultural, desarrollando adaptabilidad, empatía y fluidez comunicativa."
+        },
+        {
+          "title": "Programa Erasmus+ en París",
+          "text": "Estancia de 6 meses en París a través del programa Erasmus+, que fortaleció el francés, la escucha activa y la comprensión de matices culturales."
+        }
+      ],
+      "skillsIntro": "Un enfoque de trabajo pensado para textos que necesitan sonar naturales, alineados con la marca y listos para funcionar online.",
+      "intro": "Ayudo a marcas, estudios y negocios digitales a adaptar su mensaje con precisión, naturalidad y sensibilidad cultural para que cada texto suene convincente en el mercado adecuado.",
+      "samplesTitle": "Muestras de adaptación",
+      "educationTitle": "Formación y perfil lingüístico",
+      "headline": "Servicios lingüísticos con enfoque profesional y visión internacional.",
+      "availability": "Disponible para proyectos freelance, colaboraciones puntuales y apoyo editorial continuo.",
+      "tools": [
+        "Google Docs y Word",
+        "Hojas de cálculo y control de cambios",
+        "CMS y editores web",
+        "Glosarios, guías de estilo y checklists de revisión"
+      ],
+      "languagesTitle": "Idiomas"
     },
-    "about": {
-      "eyebrow": "Perfil editorial",
-      "highlight": "Una mirada creativa con precisión estratégica.",
-      "languagesLabel": "Idiomas con los que trabajo",
-      "languages": [
-        "Español",
-        "Francés",
-        "Catalán",
-        "Alemán",
-        "Italiano",
-        "Inglés"
-      ]
+    "ui": {
+      "samplesIntro": "Ejemplos breves de cómo se preservan el sentido, el tono y la legibilidad durante la adaptación.",
+      "focusText": "Precisión de traducción, adaptación cultural, tono cuidado y textos pensados para buscadores.",
+      "languagesHeading": "Idiomas",
+      "editorial": "Editorial",
+      "badgeParis": "Erasmus+ París",
+      "profile": "Perfil profesional",
+      "experienceLabel": "Experiencia",
+      "step": "Paso",
+      "servicesIntro": "Apoyo personalizado para negocios que necesitan que sus textos funcionen entre idiomas, plataformas y contextos de búsqueda.",
+      "badgeCustomerService": "Atención al cliente en francés",
+      "focus": "Enfoque",
+      "badgeLanguages": "6 idiomas",
+      "tools": "Herramientas",
+      "coreServices": "Servicios principales",
+      "processIntro": "Un flujo claro y estructurado mantiene cada proyecto eficiente, alineado y listo para su publicación.",
+      "core": "Base"
     },
-    "video": {
-      "eyebrow": "Vídeo de presentación",
-      "title": "Una primera impresión en movimiento",
-      "description": "Este espacio puede presentar el vídeo de introducción de Marta: natural, elegante y pensado para transmitir personalidad, presencia ante cámara y universo visual.",
-      "placeholder": "Vídeo intro",
-      "note": "Formato 9:16 · placeholder para reel / presentación"
-    },
-    "gallery": {
-      "shotOne": "Foto lifestyle",
-      "shotTwo": "Foto beauty",
-      "shotThree": "Foto viajes",
-      "shotFour": "Making of"
+    "levels": {
+      "native": "Nativo",
+      "advancedC1": "Avanzado · C1",
+      "advanced": "Avanzado",
+      "intermediateB1": "Intermedio · B1",
+      "basicA2": "Básico · A2"
     }
   },
   "ugcPage": {
-    "hero": {
-      "backgroundLabel": "PORTFOLIO DE MARCA",
-      "eyebrow": "UGC · conceptos de anuncios nativos",
-      "headline": "Conceptos de UGC limpios y editoriales creados para marcas, no para diarios de influencer.",
-      "description": "Un portfolio conceptual curado para Marta Gallardo con conceptos de campaña centrados en viajes, idiomas y arte. Cada tarjeta está pensada para simular creatividad lista para paid social: creíble, ordenada y orientada a la conversión."
-    },
     "pageDescription": "Portfolio profesional de UGC de Marta Gallardo con campañas editoriales conceptuales de viajes, idiomas y arte.",
-    "nicheLabel": "Nicho",
-    "backToTop": "Volver arriba",
-    "placeholder": "Maqueta",
-    "ugcDemo": "Demo UGC",
-    "creativeDirection": "Dirección creativa",
-    "nativeAdStyle": "Estilo de anuncio nativo",
     "niches": {
       "travel": {
         "label": "Viajes",
@@ -233,115 +228,120 @@
           }
         ]
       }
+    },
+    "nicheLabel": "Nicho",
+    "creativeDirection": "Dirección creativa",
+    "backToTop": "Volver arriba",
+    "placeholder": "Maqueta",
+    "ugcDemo": "Demo UGC",
+    "nativeAdStyle": "Estilo de anuncio nativo",
+    "hero": {
+      "backgroundLabel": "PORTFOLIO DE MARCA",
+      "eyebrow": "UGC · conceptos de anuncios nativos",
+      "headline": "Conceptos de UGC limpios y editoriales creados para marcas, no para diarios de influencer.",
+      "description": "Un portfolio conceptual curado para Marta Gallardo con conceptos de campaña centrados en viajes, idiomas y arte. Cada tarjeta está pensada para simular creatividad lista para paid social: creíble, ordenada y orientada a la conversión."
     }
   },
-  "translationPage": {
-    "copy": {
-      "eyebrow": "Traducción, localización y redacción SEO",
-      "headline": "Servicios lingüísticos con enfoque profesional y visión internacional.",
-      "intro": "Ayudo a marcas, estudios y negocios digitales a adaptar su mensaje con precisión, naturalidad y sensibilidad cultural para que cada texto suene convincente en el mercado adecuado.",
-      "summary": "Mi perfil combina formación lingüística, experiencia real en atención al cliente en francés, trabajo internacional como au pair y un programa Erasmus+ de 6 meses en París. Eso me permite trabajar los textos no solo desde la corrección, sino también desde el contexto cultural y la intención comercial.",
-      "availability": "Disponible para proyectos freelance, colaboraciones puntuales y apoyo editorial continuo.",
-      "educationTitle": "Formación y perfil lingüístico",
-      "educationIntro": "Base académica orientada a idiomas, comunicación intercultural y redacción, reforzada con inmersión práctica en entornos internacionales.",
-      "studies": [
-        "Formación centrada en idiomas, comunicación escrita y adaptación de contenidos para públicos internacionales.",
-        "Perfeccionamiento del francés a través de un programa Erasmus+ de 6 meses en París y contacto diario con entornos francófonos.",
-        "Interés continuo por la escritura clara, la terminología y la optimización de contenidos para entornos digitales."
-      ],
-      "languagesTitle": "Idiomas",
-      "experienceIntro": "Experiencia aplicada a la comunicación real, el trato directo con personas y la adaptación del lenguaje a distintos contextos.",
-      "experience": [
-        {
-          "title": "Atención al cliente en francés",
-          "text": "Comunicación diaria con clientes francófonos, resolución de incidencias y cuidado del tono de marca en situaciones reales."
-        },
-        {
-          "title": "Experiencia internacional como au pair",
-          "text": "Convivencia y trabajo en un entorno multicultural, desarrollando adaptabilidad, empatía y fluidez comunicativa."
-        },
-        {
-          "title": "Programa Erasmus+ en París",
-          "text": "Estancia de 6 meses en París a través del programa Erasmus+, que fortaleció el francés, la escucha activa y la comprensión de matices culturales."
-        }
-      ],
-      "skillsIntro": "Un enfoque de trabajo pensado para textos que necesitan sonar naturales, alineados con la marca y listos para funcionar online.",
-      "skills": [
-        "Traducción y adaptación de contenidos",
-        "Localización web y cultural",
-        "SEO copywriting multilingüe",
-        "Corrección, edición y mejora de estilo",
-        "Investigación terminológica y consistencia de voz",
-        "Gestión de glosarios, briefs y guías de estilo"
-      ],
-      "tools": [
-        "Google Docs y Word",
-        "Hojas de cálculo y control de cambios",
-        "CMS y editores web",
-        "Glosarios, guías de estilo y checklists de revisión"
-      ],
-      "processDescriptions": [
-        "Analizo objetivos, público, tono, idioma de destino y necesidades SEO antes de empezar.",
-        "Traduzco o redacto con foco en claridad, intención comercial y naturalidad.",
-        "Reviso terminología, coherencia, fluidez y detalles formales para pulir el resultado.",
-        "Entrego el texto listo para publicar, con observaciones o ajustes si el proyecto lo requiere."
-      ],
-      "whyMeCards": [
-        {
-          "title": "Idiomas con criterio profesional",
-          "text": "Trabajo con varios idiomas y sé adaptar el mensaje para que mantenga sentido, tono y credibilidad."
-        },
-        {
-          "title": "Experiencia real, no solo académica",
-          "text": "He utilizado el francés en atención al cliente, he realizado un Erasmus+ en París y he trabajado en entornos multiculturales."
-        },
-        {
-          "title": "Compromiso con cada entrega",
-          "text": "Priorizo la claridad, el detalle y una comunicación seria durante todo el proceso."
-        }
-      ],
-      "samplesTitle": "Muestras de adaptación",
-      "samples": [
-        {
-          "label": "FR → ES · mensaje web",
-          "sourceLabel": "Original",
-          "source": "Découvrez une expérience authentique pensée pour les voyageurs qui recherchent confort, charme et simplicité.",
-          "targetLabel": "Adaptación",
-          "target": "Descubre una experiencia auténtica pensada para viajeros que buscan comodidad, encanto y sencillez."
-        },
-        {
-          "label": "EN → ES · copy SEO",
-          "sourceLabel": "Original",
-          "source": "Natural skincare for busy routines: lightweight formulas, visible results and everyday comfort.",
-          "targetLabel": "Adaptación",
-          "target": "Cosmética natural para rutinas dinámicas: fórmulas ligeras, resultados visibles y bienestar diario."
-        }
+  "blog": {
+    "title": "Blog",
+    "readMore": "Leer más",
+    "backToList": "← Volver al blog"
+  },
+  "nav": {
+    "home": "Inicio",
+    "ugc": "UGC",
+    "translationSeo": "Traducción + SEO",
+    "blog": "Blog",
+    "contact": "Contacto"
+  },
+  "about": {
+    "title": "Sobre mí",
+    "text": "Soy Marta, creadora de contenido UGC y especialista en traducción y SEO. Hablo español, francés, alemán, italiano e inglés. Me apasiona crear contenido auténtico para marcas y ayudar a empresas a comunicarse globalmente."
+  },
+  "ugc": {
+    "title": "UGC Portfolio",
+    "subtitle": "Contenido que conecta con tu audiencia",
+    "niches": {
+      "travel": "Viajes",
+      "languages": "Idiomas",
+      "art": "Arte"
+    },
+    "cta": "Ver más"
+  },
+  "translation": {
+    "whyMe": "¿Por qué trabajar conmigo?",
+    "skills": "Habilidades",
+    "education": "Formación",
+    "experience": "Experiencia",
+    "whyMeText": "Idiomas, experiencia real (atención al cliente, au pair, programa Erasmus+ en París) y compromiso con cada proyecto.",
+    "process": "Mi proceso de trabajo",
+    "processSteps": {
+      "briefing": "Briefing",
+      "translation": "Traducción / Redacción",
+      "review": "Revisión",
+      "delivery": "Entrega"
+    },
+    "title": "Traducción + SEO",
+    "servicesList": [
+      "Traducción de sitios web",
+      "Localización de contenido",
+      "SEO copywriting multilingüe",
+      "Corrección y edición de textos"
+    ],
+    "services": "Servicios que ofrezco"
+  },
+  "language": {
+    "label": "Idioma",
+    "es": "Español",
+    "en": "English",
+    "fr": "Français",
+    "de": "Deutsch",
+    "it": "Italiano",
+    "ca": "Català"
+  },
+  "hero": {
+    "name": "Marta Gallar",
+    "age": "23 años",
+    "city": "Elche, España",
+    "ugcLabel": "Creadora de UGC",
+    "seoLabel": "Traducción Multilingüe & Localización + SEO"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados"
+  },
+  "home": {
+    "hero": {
+      "kicker": "UGC · Traducción · SEO",
+      "description": "Creo imágenes, palabras y experiencias digitales con una sensibilidad editorial pensada para marcas lifestyle, beauty, viajes y proyectos internacionales.",
+      "mainPhoto": "Foto principal",
+      "scrollCue": "Desliza para descubrir",
+      "coverLabel": "Portada editorial"
+    },
+    "about": {
+      "eyebrow": "Perfil editorial",
+      "highlight": "Una mirada creativa con precisión estratégica.",
+      "languagesLabel": "Idiomas con los que trabajo",
+      "languages": [
+        "Español",
+        "Francés",
+        "Catalán",
+        "Alemán",
+        "Italiano",
+        "Inglés"
       ]
     },
-    "ui": {
-      "badgeLanguages": "6 idiomas",
-      "badgeCustomerService": "Atención al cliente en francés",
-      "badgeParis": "Erasmus+ París",
-      "profile": "Perfil profesional",
-      "coreServices": "Servicios principales",
-      "focus": "Enfoque",
-      "focusText": "Precisión de traducción, adaptación cultural, tono cuidado y textos pensados para buscadores.",
-      "languagesHeading": "Idiomas",
-      "experienceLabel": "Experiencia",
-      "core": "Base",
-      "editorial": "Editorial",
-      "tools": "Herramientas",
-      "servicesIntro": "Apoyo personalizado para negocios que necesitan que sus textos funcionen entre idiomas, plataformas y contextos de búsqueda.",
-      "processIntro": "Un flujo claro y estructurado mantiene cada proyecto eficiente, alineado y listo para su publicación.",
-      "step": "Paso",
-      "samplesIntro": "Ejemplos breves de cómo se preservan el sentido, el tono y la legibilidad durante la adaptación."
+    "video": {
+      "eyebrow": "Vídeo de presentación",
+      "title": "Una primera impresión en movimiento",
+      "description": "Este espacio puede presentar el vídeo de introducción de Marta: natural, elegante y pensado para transmitir personalidad, presencia ante cámara y universo visual.",
+      "placeholder": "Vídeo intro",
+      "note": "Formato 9:16 · placeholder para reel / presentación"
     },
-    "levels": {
-      "native": "Nativo",
-      "advancedC1": "Avanzado · C1",
-      "advanced": "Avanzado",
-      "intermediateB1": "Intermedio · B1",
-      "basicA2": "Básico · A2"
+    "gallery": {
+      "shotOne": "Foto lifestyle",
+      "shotTwo": "Foto beauty",
+      "shotThree": "Foto viajes",
+      "shotFour": "Making of"
     }
   }
 }
