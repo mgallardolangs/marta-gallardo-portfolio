@@ -22,7 +22,7 @@ You do not need to understand the code to update the blog and basic content.
 
 The blog is managed through **Decap CMS**.
 
-1. Go to **`https://yoursite.netlify.app/admin`**
+1. Go to **`https://marttelier.netlify.app/admin`**
 2. Log in with **Netlify Identity**
 3. Click **“New Blog Post”**
 4. Fill in:
