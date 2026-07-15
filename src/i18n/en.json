@@ -47,7 +47,7 @@
       "Text proofreading & editing"
     ],
     "whyMe": "Why work with me?",
-    "whyMeText": "Languages, real-world experience (customer service, au pair, studies in Paris), and commitment to every project."
+    "whyMeText": "Languages, real-world experience (customer service, au pair, Erasmus+ program in Paris), and commitment to every project."
   },
   "blog": {
     "title": "Blog",
@@ -231,6 +231,115 @@
           }
         ]
       }
+    }
+  },
+  "translationPage": {
+    "copy": {
+      "eyebrow": "Translation, localization and SEO copywriting",
+      "headline": "Professional language services shaped by international experience.",
+      "intro": "I help brands, studios and digital businesses adapt their message with accuracy, natural phrasing and cultural awareness so every text feels convincing in the right market.",
+      "summary": "My profile combines language-focused studies, real French-language customer service experience, international au pair work and a six-month Erasmus+ program in Paris. That means I approach every text with linguistic precision, cultural context and commercial intent.",
+      "availability": "Available for freelance projects, one-off collaborations and ongoing editorial support.",
+      "educationTitle": "Education and language background",
+      "educationIntro": "A language-led academic foundation strengthened by practical immersion in international and multilingual environments.",
+      "studies": [
+        "Studies focused on languages, written communication and content adaptation for international audiences.",
+        "Advanced French developed through a six-month Erasmus+ program in Paris and sustained contact with francophone environments.",
+        "Ongoing interest in clear writing, terminology management and content optimization for digital channels."
+      ],
+      "languagesTitle": "Languages",
+      "experienceIntro": "Hands-on experience in real communication settings, people-facing roles and cross-cultural environments.",
+      "experience": [
+        {
+          "title": "French-language customer service",
+          "text": "Daily communication with francophone clients, issue resolution and careful handling of tone in real brand interactions."
+        },
+        {
+          "title": "International au pair experience",
+          "text": "Living and working in a multicultural environment, strengthening adaptability, empathy and confident communication."
+        },
+        {
+          "title": "Erasmus+ program in Paris",
+          "text": "Six-month Erasmus+ exchange in Paris that deepened French fluency, active listening and understanding of cultural nuances."
+        }
+      ],
+      "skillsIntro": "A practical service profile designed for texts that must read naturally, reflect the brand and perform online.",
+      "skills": [
+        "Translation and content adaptation",
+        "Website and cultural localization",
+        "Multilingual SEO copywriting",
+        "Proofreading, editing and style refinement",
+        "Terminology research and tone consistency",
+        "Glossary, brief and style-guide management"
+      ],
+      "tools": [
+        "Google Docs and Word",
+        "Spreadsheets and tracked changes",
+        "CMS workflows and web editors",
+        "Glossaries, style guides and QA review checklists"
+      ],
+      "processDescriptions": [
+        "I review goals, audience, tone, target language and SEO needs before any drafting begins.",
+        "I translate or write with clarity, search intent and natural phrasing in mind.",
+        "I check terminology, consistency, flow and formal details to refine the final version.",
+        "I deliver copy that is ready to publish, with notes or revisions when the project needs them."
+      ],
+      "whyMeCards": [
+        {
+          "title": "Languages handled with precision",
+          "text": "I work across several languages and adapt the message so it preserves meaning, tone and credibility."
+        },
+        {
+          "title": "Real-world international experience",
+          "text": "My background includes French customer service, an Erasmus+ program in Paris and work in multicultural settings."
+        },
+        {
+          "title": "Reliable commitment to quality",
+          "text": "I value clarity, detail and professional communication throughout the whole process."
+        }
+      ],
+      "samplesTitle": "Sample adaptations",
+      "samples": [
+        {
+          "label": "FR → EN · website message",
+          "sourceLabel": "Original",
+          "source": "Découvrez une expérience authentique pensée pour les voyageurs qui recherchent confort, charme et simplicité.",
+          "targetLabel": "Adapted version",
+          "target": "Discover an authentic experience designed for travellers seeking comfort, charm and simplicity."
+        },
+        {
+          "label": "ES → EN · SEO copy",
+          "sourceLabel": "Original",
+          "source": "Cosmética natural para rutinas dinámicas: fórmulas ligeras, resultados visibles y bienestar diario.",
+          "targetLabel": "Adapted version",
+          "target": "Natural skincare for busy routines: lightweight formulas, visible results and everyday comfort."
+        }
+      ]
+    },
+    "ui": {
+      "badgeLanguages": "6 languages",
+      "badgeCustomerService": "French customer service",
+      "badgeParis": "Erasmus+ Paris",
+      "profile": "Professional profile",
+      "coreServices": "Core services",
+      "focus": "Focus",
+      "focusText": "Translation accuracy, cultural adaptation, polished tone and search-aware copy.",
+      "languagesHeading": "Languages",
+      "experienceLabel": "Experience",
+      "core": "Core",
+      "editorial": "Editorial",
+      "tools": "Tools",
+      "servicesIntro": "Tailored support for businesses that need texts to travel well across languages, platforms and search contexts.",
+      "processIntro": "A clear, structured workflow keeps each project efficient, aligned and ready for publication.",
+      "step": "Step",
+      "samplesIntro": "Short examples showing how meaning, tone and readability are preserved through adaptation."
+    },
+    "levels": {
+      "native": "Native",
+      "advancedC1": "Advanced · C1",
+      "advanced": "Advanced",
+      "intermediateB1": "Intermediate · B1",
+      "basicA2": "Basic · A2"
     }
   }
 }

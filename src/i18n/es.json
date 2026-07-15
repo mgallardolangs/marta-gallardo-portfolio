@@ -47,7 +47,7 @@
       "Corrección y edición de textos"
     ],
     "whyMe": "¿Por qué trabajar conmigo?",
-    "whyMeText": "Idiomas, experiencia real (atención al cliente, au pair, estudios en París) y compromiso con cada proyecto."
+    "whyMeText": "Idiomas, experiencia real (atención al cliente, au pair, programa Erasmus+ en París) y compromiso con cada proyecto."
   },
   "blog": {
     "title": "Blog",
@@ -231,6 +231,115 @@
           }
         ]
       }
+    }
+  },
+  "translationPage": {
+    "copy": {
+      "eyebrow": "Traducción, localización y redacción SEO",
+      "headline": "Servicios lingüísticos con enfoque profesional y visión internacional.",
+      "intro": "Ayudo a marcas, estudios y negocios digitales a adaptar su mensaje con precisión, naturalidad y sensibilidad cultural para que cada texto suene convincente en el mercado adecuado.",
+      "summary": "Mi perfil combina formación lingüística, experiencia real en atención al cliente en francés, trabajo internacional como au pair y un programa Erasmus+ de 6 meses en París. Eso me permite trabajar los textos no solo desde la corrección, sino también desde el contexto cultural y la intención comercial.",
+      "availability": "Disponible para proyectos freelance, colaboraciones puntuales y apoyo editorial continuo.",
+      "educationTitle": "Formación y perfil lingüístico",
+      "educationIntro": "Base académica orientada a idiomas, comunicación intercultural y redacción, reforzada con inmersión práctica en entornos internacionales.",
+      "studies": [
+        "Formación centrada en idiomas, comunicación escrita y adaptación de contenidos para públicos internacionales.",
+        "Perfeccionamiento del francés a través de un programa Erasmus+ de 6 meses en París y contacto diario con entornos francófonos.",
+        "Interés continuo por la escritura clara, la terminología y la optimización de contenidos para entornos digitales."
+      ],
+      "languagesTitle": "Idiomas",
+      "experienceIntro": "Experiencia aplicada a la comunicación real, el trato directo con personas y la adaptación del lenguaje a distintos contextos.",
+      "experience": [
+        {
+          "title": "Atención al cliente en francés",
+          "text": "Comunicación diaria con clientes francófonos, resolución de incidencias y cuidado del tono de marca en situaciones reales."
+        },
+        {
+          "title": "Experiencia internacional como au pair",
+          "text": "Convivencia y trabajo en un entorno multicultural, desarrollando adaptabilidad, empatía y fluidez comunicativa."
+        },
+        {
+          "title": "Programa Erasmus+ en París",
+          "text": "Estancia de 6 meses en París a través del programa Erasmus+, que fortaleció el francés, la escucha activa y la comprensión de matices culturales."
+        }
+      ],
+      "skillsIntro": "Un enfoque de trabajo pensado para textos que necesitan sonar naturales, alineados con la marca y listos para funcionar online.",
+      "skills": [
+        "Traducción y adaptación de contenidos",
+        "Localización web y cultural",
+        "SEO copywriting multilingüe",
+        "Corrección, edición y mejora de estilo",
+        "Investigación terminológica y consistencia de voz",
+        "Gestión de glosarios, briefs y guías de estilo"
+      ],
+      "tools": [
+        "Google Docs y Word",
+        "Hojas de cálculo y control de cambios",
+        "CMS y editores web",
+        "Glosarios, guías de estilo y checklists de revisión"
+      ],
+      "processDescriptions": [
+        "Analizo objetivos, público, tono, idioma de destino y necesidades SEO antes de empezar.",
+        "Traduzco o redacto con foco en claridad, intención comercial y naturalidad.",
+        "Reviso terminología, coherencia, fluidez y detalles formales para pulir el resultado.",
+        "Entrego el texto listo para publicar, con observaciones o ajustes si el proyecto lo requiere."
+      ],
+      "whyMeCards": [
+        {
+          "title": "Idiomas con criterio profesional",
+          "text": "Trabajo con varios idiomas y sé adaptar el mensaje para que mantenga sentido, tono y credibilidad."
+        },
+        {
+          "title": "Experiencia real, no solo académica",
+          "text": "He utilizado el francés en atención al cliente, he realizado un Erasmus+ en París y he trabajado en entornos multiculturales."
+        },
+        {
+          "title": "Compromiso con cada entrega",
+          "text": "Priorizo la claridad, el detalle y una comunicación seria durante todo el proceso."
+        }
+      ],
+      "samplesTitle": "Muestras de adaptación",
+      "samples": [
+        {
+          "label": "FR → ES · mensaje web",
+          "sourceLabel": "Original",
+          "source": "Découvrez une expérience authentique pensée pour les voyageurs qui recherchent confort, charme et simplicité.",
+          "targetLabel": "Adaptación",
+          "target": "Descubre una experiencia auténtica pensada para viajeros que buscan comodidad, encanto y sencillez."
+        },
+        {
+          "label": "EN → ES · copy SEO",
+          "sourceLabel": "Original",
+          "source": "Natural skincare for busy routines: lightweight formulas, visible results and everyday comfort.",
+          "targetLabel": "Adaptación",
+          "target": "Cosmética natural para rutinas dinámicas: fórmulas ligeras, resultados visibles y bienestar diario."
+        }
+      ]
+    },
+    "ui": {
+      "badgeLanguages": "6 idiomas",
+      "badgeCustomerService": "Atención al cliente en francés",
+      "badgeParis": "Erasmus+ París",
+      "profile": "Perfil profesional",
+      "coreServices": "Servicios principales",
+      "focus": "Enfoque",
+      "focusText": "Precisión de traducción, adaptación cultural, tono cuidado y textos pensados para buscadores.",
+      "languagesHeading": "Idiomas",
+      "experienceLabel": "Experiencia",
+      "core": "Base",
+      "editorial": "Editorial",
+      "tools": "Herramientas",
+      "servicesIntro": "Apoyo personalizado para negocios que necesitan que sus textos funcionen entre idiomas, plataformas y contextos de búsqueda.",
+      "processIntro": "Un flujo claro y estructurado mantiene cada proyecto eficiente, alineado y listo para su publicación.",
+      "step": "Paso",
+      "samplesIntro": "Ejemplos breves de cómo se preservan el sentido, el tono y la legibilidad durante la adaptación."
+    },
+    "levels": {
+      "native": "Nativo",
+      "advancedC1": "Avanzado · C1",
+      "advanced": "Avanzado",
+      "intermediateB1": "Intermedio · B1",
+      "basicA2": "Básico · A2"
     }
   }
 }

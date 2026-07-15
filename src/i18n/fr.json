@@ -47,7 +47,7 @@
       "Correction et édition de textes"
     ],
     "whyMe": "Pourquoi travailler avec moi ?",
-    "whyMeText": "Langues, expérience réelle (service client, au pair, études à Paris) et engagement dans chaque projet."
+    "whyMeText": "Langues, expérience réelle (service client, au pair, programme Erasmus+ à Paris) et engagement dans chaque projet."
   },
   "blog": {
     "title": "Blog",
@@ -231,6 +231,115 @@
           }
         ]
       }
+    }
+  },
+  "translationPage": {
+    "copy": {
+      "eyebrow": "Traduction, localisation et rédaction SEO",
+      "headline": "Des services linguistiques à l’approche professionnelle et à la vision internationale.",
+      "intro": "J’aide les marques, les studios et les entreprises digitales à adapter leur message avec précision, naturel et sensibilité culturelle pour que chaque texte convainque sur le bon marché.",
+      "summary": "Mon profil associe une formation linguistique, une expérience concrète en service client en français, un parcours international comme au pair et un programme Erasmus+ de six mois à Paris. J’aborde ainsi chaque texte avec rigueur linguistique, compréhension culturelle et sens du résultat.",
+      "availability": "Disponible pour des projets freelance, des collaborations ponctuelles et un accompagnement éditorial continu.",
+      "educationTitle": "Formation et profil linguistique",
+      "educationIntro": "Une base académique tournée vers les langues, la communication interculturelle et la rédaction, renforcée par une immersion concrète dans des environnements internationaux.",
+      "studies": [
+        "Formation axée sur les langues, la communication écrite et l’adaptation de contenus pour des publics internationaux.",
+        "Perfectionnement du français grâce à un programme Erasmus+ de six mois à Paris et à un contact régulier avec des environnements francophones.",
+        "Intérêt constant pour l’écriture claire, la terminologie et l’optimisation de contenus pour les supports digitaux."
+      ],
+      "languagesTitle": "Langues",
+      "experienceIntro": "Une expérience appliquée à la communication réelle, au contact direct avec le public et à l’adaptation du langage selon chaque contexte.",
+      "experience": [
+        {
+          "title": "Service client en français",
+          "text": "Communication quotidienne avec des clients francophones, gestion des demandes et attention portée au ton de marque dans des situations réelles."
+        },
+        {
+          "title": "Expérience internationale comme au pair",
+          "text": "Vie et travail dans un environnement multiculturel, avec le développement de l’adaptabilité, de l’empathie et de l’aisance relationnelle."
+        },
+        {
+          "title": "Programme Erasmus+ à Paris",
+          "text": "Séjour de six mois à Paris dans le cadre d’un programme Erasmus+, qui a renforcé mon français, mon écoute active et ma compréhension des nuances culturelles."
+        }
+      ],
+      "skillsIntro": "Une approche pensée pour des textes qui doivent sonner juste, respecter la marque et performer en ligne.",
+      "skills": [
+        "Traduction et adaptation de contenus",
+        "Localisation web et culturelle",
+        "Rédaction SEO multilingue",
+        "Correction, édition et optimisation du style",
+        "Recherche terminologique et cohérence de ton",
+        "Gestion de glossaires, briefs et chartes éditoriales"
+      ],
+      "tools": [
+        "Google Docs et Word",
+        "Tableurs et suivi des modifications",
+        "CMS et éditeurs web",
+        "Glossaires, chartes de style et check-lists qualité"
+      ],
+      "processDescriptions": [
+        "J’analyse les objectifs, le public, le ton, la langue cible et les besoins SEO avant de commencer.",
+        "Je traduis ou je rédige avec une attention particulière à la clarté, à l’intention commerciale et au naturel.",
+        "Je vérifie la terminologie, la cohérence, la fluidité et les détails formels pour affiner la version finale.",
+        "Je livre un texte prêt à être publié, avec remarques ou ajustements si le projet en a besoin."
+      ],
+      "whyMeCards": [
+        {
+          "title": "Des langues maîtrisées avec exigence",
+          "text": "Je travaille dans plusieurs langues et j’adapte le message pour qu’il conserve son sens, son ton et sa crédibilité."
+        },
+        {
+          "title": "Une expérience internationale concrète",
+          "text": "Mon parcours réunit service client en français, programme Erasmus+ à Paris et travail dans des environnements multiculturels."
+        },
+        {
+          "title": "Un vrai sens du détail à chaque livraison",
+          "text": "Je privilégie la clarté, la précision et une communication professionnelle tout au long du projet."
+        }
+      ],
+      "samplesTitle": "Exemples d’adaptation",
+      "samples": [
+        {
+          "label": "EN → FR · copy SEO",
+          "sourceLabel": "Original",
+          "source": "Natural skincare for busy routines: lightweight formulas, visible results and everyday comfort.",
+          "targetLabel": "Adaptation",
+          "target": "Des soins naturels pour les rythmes soutenus : des formules légères, des résultats visibles et un confort au quotidien."
+        },
+        {
+          "label": "ES → FR · message web",
+          "sourceLabel": "Original",
+          "source": "Descubre una experiencia auténtica pensada para viajeros que buscan comodidad, encanto y sencillez.",
+          "targetLabel": "Adaptation",
+          "target": "Découvrez une expérience authentique pensée pour les voyageurs qui recherchent confort, charme et simplicité."
+        }
+      ]
+    },
+    "ui": {
+      "badgeLanguages": "6 langues",
+      "badgeCustomerService": "Service client en français",
+      "badgeParis": "Erasmus+ Paris",
+      "profile": "Profil professionnel",
+      "coreServices": "Services principaux",
+      "focus": "Approche",
+      "focusText": "Précision de traduction, adaptation culturelle, ton soigné et contenus pensés pour la recherche.",
+      "languagesHeading": "Langues",
+      "experienceLabel": "Expérience",
+      "core": "Fondamentaux",
+      "editorial": "Éditorial",
+      "tools": "Outils",
+      "servicesIntro": "Un accompagnement sur mesure pour les entreprises qui ont besoin de textes efficaces d’une langue à l’autre, d’une plateforme à l’autre et d’un contexte de recherche à l’autre.",
+      "processIntro": "Un flux de travail clair et structuré permet à chaque projet d’avancer efficacement, dans l’alignement et avec un rendu prêt à publier.",
+      "step": "Étape",
+      "samplesIntro": "De courts exemples pour montrer comment le sens, le ton et la lisibilité restent intacts lors de l’adaptation."
+    },
+    "levels": {
+      "native": "Natif",
+      "advancedC1": "Avancé · C1",
+      "advanced": "Avancé",
+      "intermediateB1": "Intermédiaire · B1",
+      "basicA2": "Élémentaire · A2"
     }
   }
 }
