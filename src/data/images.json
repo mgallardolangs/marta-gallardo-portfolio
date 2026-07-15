@@ -7,5 +7,6 @@
     "shotFour": "/images/site/gallery-shot-four.jpg"
   },
   "videoPlaceholderOrEmbedUrl": "https://example.com/embed/video",
-  "ugcHeaderImage": ""
+  "ugcHeaderImage": "",
+  "instagramScreenshot": ""
 }
