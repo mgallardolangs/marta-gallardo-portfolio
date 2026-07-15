@@ -100,6 +100,7 @@
       "languages": [
         "Español",
         "Francés",
+        "Catalán",
         "Alemán",
         "Italiano",
         "Inglés"
@@ -110,13 +111,126 @@
       "title": "Una primera impresión en movimiento",
       "description": "Este espacio puede presentar el vídeo de introducción de Marta: natural, elegante y pensado para transmitir personalidad, presencia ante cámara y universo visual.",
       "placeholder": "Vídeo intro",
-      "note": "Formato placeholder para reel / presentación"
+      "note": "Formato 9:16 · placeholder para reel / presentación"
     },
     "gallery": {
-      "shotOne": "Cutout Lifestyle",
-      "shotTwo": "Cutout Beauty",
-      "shotThree": "Cutout Travel",
-      "shotFour": "Behind the scenes"
+      "shotOne": "Foto lifestyle",
+      "shotTwo": "Foto beauty",
+      "shotThree": "Foto viajes",
+      "shotFour": "Making of"
+    }
+  },
+  "ugcPage": {
+    "hero": {
+      "backgroundLabel": "PORTFOLIO DE MARCA",
+      "eyebrow": "UGC · conceptos de anuncios nativos",
+      "headline": "Conceptos de UGC limpios y editoriales creados para marcas, no para diarios de influencer.",
+      "description": "Un portfolio conceptual curado para Marta Gallardo con conceptos de campaña centrados en viajes, idiomas y arte. Cada tarjeta está pensada para simular creatividad lista para paid social: creíble, ordenada y orientada a la conversión."
+    },
+    "pageDescription": "Portfolio profesional de UGC de Marta Gallardo con campañas editoriales conceptuales de viajes, idiomas y arte.",
+    "nicheLabel": "Nicho",
+    "backToTop": "Volver arriba",
+    "placeholder": "Maqueta",
+    "ugcDemo": "Demo UGC",
+    "creativeDirection": "Dirección creativa",
+    "nativeAdStyle": "Estilo de anuncio nativo",
+    "niches": {
+      "travel": {
+        "label": "Viajes",
+        "accent": "Storytelling para hoteles y destinos",
+        "eyebrow": "Hostelería, equipaje, reservas y contenido centrado en la experiencia",
+        "intro": "Una mezcla cuidada de recorridos guiados de check-in, ediciones de itinerario y piezas de viaje centradas en producto, diseñadas para integrarse de forma natural en campañas de paid social.",
+        "cards": [
+          {
+            "title": "Storyboard de check-in en hotel boutique",
+            "description": "Una secuencia de llegada serena que destaca la facilidad de la reserva, los detalles de la habitación y la experiencia del huésped mediante una locución útil.",
+            "format": "Testimonio",
+            "media": "Reel de tour de habitación de 15 s"
+          },
+          {
+            "title": "Edición de producto sobre básicos de equipaje de mano",
+            "description": "Una pieza visual de estilo nativo que presenta accesorios de viaje como soluciones prácticas para escapadas cortas de fin de semana.",
+            "format": "Unboxing",
+            "media": "Concepto de carrusel fotográfico"
+          },
+          {
+            "title": "Recorrido guiado de app para itinerarios de fin de semana",
+            "description": "Demo guiada por pantalla que muestra cómo una app de planificación de viajes simplifica reservas, mapas y organización del viaje en un solo flujo.",
+            "format": "Tutorial",
+            "media": "Interfaz móvil + locución"
+          },
+          {
+            "title": "Reseña de servicio de traslado al aeropuerto",
+            "description": "Pieza testimonial de baja fricción centrada en la comodidad, la puntualidad y la confianza al reservar para quienes visitan el destino por primera vez.",
+            "format": "Testimonio",
+            "media": "Maqueta de anuncio vertical"
+          }
+        ]
+      },
+      "languages": {
+        "label": "Idiomas",
+        "accent": "Anuncios educativos, útiles y multilingües",
+        "eyebrow": "Apps de idiomas, servicios internacionales y herramientas de aprendizaje",
+        "intro": "Conceptos de muestra pensados para marcas que necesitan una comunicación clara y creíble; ideales para campañas multilingües, flujos de onboarding y piezas explicativas de producto.",
+        "cards": [
+          {
+            "title": "Demo de primera lección en app de idiomas",
+            "description": "Recorrido guiado amable del producto que presenta la plataforma como un hábito diario sencillo, en lugar de una pieza centrada en la personalidad de una influencer.",
+            "format": "Tutorial",
+            "media": "Demo en pantalla"
+          },
+          {
+            "title": "Anuncio de prueba social para servicio de traducción",
+            "description": "Concepto testimonial limpio que muestra cómo un copy localizado mejora la confianza de audiencias internacionales y lanzamientos transfronterizos.",
+            "format": "Testimonio",
+            "media": "Vídeo talking head estilo fundadora"
+          },
+          {
+            "title": "Presentación de kit de estudio para empezar",
+            "description": "Secuencia editorial de unboxing con flashcards, cuadernos y recursos digitales posicionados como un pack práctico de aprendizaje.",
+            "format": "Unboxing",
+            "media": "Composición cenital de escritorio"
+          },
+          {
+            "title": "Explicación de flujo de reserva multilingüe",
+            "description": "Una demo breve para plataformas globales que pone el foco en el cambio de idioma, la claridad y la confianza durante el checkout.",
+            "format": "Tutorial",
+            "media": "Recorrido orientado a la conversión"
+          }
+        ]
+      },
+      "art": {
+        "label": "Arte",
+        "accent": "Demos editoriales de producto para marcas creativas",
+        "eyebrow": "Herramientas creativas, talleres, galerías y productos con enfoque de diseño",
+        "intro": "Conceptos de UGC con sensibilidad editorial para marcas de arte y diseño, equilibrando visuales táctiles con hooks informativos que funcionan muy bien en campañas de pago.",
+        "cards": [
+          {
+            "title": "Presentación de materiales de cuaderno de bocetos",
+            "description": "Concepto de unboxing suave y táctil centrado en la textura del papel, los detalles del packaging y la sensación premium del kit creativo.",
+            "format": "Unboxing",
+            "media": "Plano cenital de mesa"
+          },
+          {
+            "title": "Tutorial de set de acuarela para principiantes",
+            "description": "Concepto publicitario paso a paso que muestra qué incluye el set, cómo empezar y por qué el pack resulta accesible para usuarios nuevos.",
+            "format": "Tutorial",
+            "media": "Clip demo centrado en el proceso"
+          },
+          {
+            "title": "Reseña de audioguía de museo",
+            "description": "Enfoque testimonial refinado que presenta la guía como una forma más rica e inmersiva de vivir las exposiciones in situ.",
+            "format": "Testimonio",
+            "media": "Foto lifestyle + cita"
+          },
+          {
+            "title": "Antes / después de un servicio de enmarcado",
+            "description": "Tratamiento de anuncio nativo que muestra cómo el enmarcado a medida eleva la presentación de obras para audiencias interesadas en decoración y regalos.",
+            "format": "Tutorial",
+            "media": "Carrusel de transformación"
+          }
+        ]
+      }
     }
   }
 }

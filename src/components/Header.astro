@@ -8,6 +8,18 @@ interface Props {
 const { lang } = Astro.props;
 const i = t(lang);
 const allLangs = Object.keys(langNames) as Lang[];
+
+// ponytail: derive active page from URL pathname
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+const strippedPath = pathname.replace(`/${lang}`, '') || '/';
+
+function isActive(path: string): boolean {
+  if (path === '/') return strippedPath === '/' || strippedPath === '';
+  return strippedPath.startsWith(path);
+}
+
+const navClass = (path: string) =>
+  `transition-colors hover:text-rose-gold ${isActive(path) ? 'text-rose-gold font-medium border-b-2 border-rose-gold pb-0.5' : ''}`;
 ---
 <header class="fixed top-0 left-0 right-0 z-50 bg-cream/80 backdrop-blur-md border-b border-blush-100">
   <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -18,11 +30,11 @@ const allLangs = Object.keys(langNames) as Lang[];
 
     <!-- Desktop Nav -->
     <ul class="hidden md:flex items-center gap-8 font-body text-sm tracking-wide">
-      <li><a href={getLocalizedPath('/', lang)} class="hover:text-rose-gold transition-colors">{i.nav.home}</a></li>
-      <li><a href={getLocalizedPath('/ugc', lang)} class="hover:text-rose-gold transition-colors">{i.nav.ugc}</a></li>
-      <li><a href={getLocalizedPath('/translation-seo', lang)} class="hover:text-rose-gold transition-colors">{i.nav.translationSeo}</a></li>
-      <li><a href={getLocalizedPath('/blog', lang)} class="hover:text-rose-gold transition-colors">{i.nav.blog}</a></li>
-      <li><a href={getLocalizedPath('/contact', lang)} class="hover:text-rose-gold transition-colors">{i.nav.contact}</a></li>
+      <li><a href={getLocalizedPath('/', lang)} class={navClass('/')}>{i.nav.home}</a></li>
+      <li><a href={getLocalizedPath('/ugc', lang)} class={navClass('/ugc')}>{i.nav.ugc}</a></li>
+      <li><a href={getLocalizedPath('/translation-seo', lang)} class={navClass('/translation-seo')}>{i.nav.translationSeo}</a></li>
+      <li><a href={getLocalizedPath('/blog', lang)} class={navClass('/blog')}>{i.nav.blog}</a></li>
+      <li><a href={getLocalizedPath('/contact', lang)} class={navClass('/contact')}>{i.nav.contact}</a></li>
     </ul>
 
     <!-- Right side: social + lang switcher -->
@@ -61,11 +73,11 @@ const allLangs = Object.keys(langNames) as Lang[];
   <!-- Mobile menu -->
   <div id="mobile-menu" class="hidden md:hidden bg-cream border-t border-blush-100 px-6 py-4">
     <ul class="flex flex-col gap-4 font-body text-sm">
-      <li><a href={getLocalizedPath('/', lang)} class="block hover:text-rose-gold">{i.nav.home}</a></li>
-      <li><a href={getLocalizedPath('/ugc', lang)} class="block hover:text-rose-gold">{i.nav.ugc}</a></li>
-      <li><a href={getLocalizedPath('/translation-seo', lang)} class="block hover:text-rose-gold">{i.nav.translationSeo}</a></li>
-      <li><a href={getLocalizedPath('/blog', lang)} class="block hover:text-rose-gold">{i.nav.blog}</a></li>
-      <li><a href={getLocalizedPath('/contact', lang)} class="block hover:text-rose-gold">{i.nav.contact}</a></li>
+      <li><a href={getLocalizedPath('/', lang)} class={`block ${navClass('/')}`}>{i.nav.home}</a></li>
+      <li><a href={getLocalizedPath('/ugc', lang)} class={`block ${navClass('/ugc')}`}>{i.nav.ugc}</a></li>
+      <li><a href={getLocalizedPath('/translation-seo', lang)} class={`block ${navClass('/translation-seo')}`}>{i.nav.translationSeo}</a></li>
+      <li><a href={getLocalizedPath('/blog', lang)} class={`block ${navClass('/blog')}`}>{i.nav.blog}</a></li>
+      <li><a href={getLocalizedPath('/contact', lang)} class={`block ${navClass('/contact')}`}>{i.nav.contact}</a></li>
     </ul>
   </div>
 </header>

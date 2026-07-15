@@ -100,6 +100,7 @@
       "languages": [
         "Spanisch",
         "Französisch",
+        "Katalanisch",
         "Deutsch",
         "Italienisch",
         "Englisch"
@@ -110,13 +111,126 @@
       "title": "Ein erster Eindruck in Bewegung",
       "description": "Dieser Bereich kann Martas Intro-Video zeigen: natürlich, elegant und darauf ausgelegt, Persönlichkeit, Kamerapräsenz und eine klare visuelle Welt zu vermitteln.",
       "placeholder": "Intro-Video",
-      "note": "Placeholder für Reel / Vorstellung"
+      "note": "9:16-Format · Platzhalter für Reel / Vorstellung"
     },
     "gallery": {
-      "shotOne": "Lifestyle Cutout",
-      "shotTwo": "Beauty Cutout",
-      "shotThree": "Travel Cutout",
-      "shotFour": "Behind the scenes"
+      "shotOne": "Lifestyle-Foto",
+      "shotTwo": "Beauty-Foto",
+      "shotThree": "Reisefoto",
+      "shotFour": "Blick hinter die Kulissen"
+    }
+  },
+  "ugcPage": {
+    "hero": {
+      "backgroundLabel": "MARKENPORTFOLIO",
+      "eyebrow": "UGC · Native-Ad-Konzepte",
+      "headline": "Klare, editoriale UGC-Konzepte für Marken — nicht für Influencer-Tagebücher.",
+      "description": "Ein kuratiertes Placeholder-Portfolio für Marta Gallardo mit Kampagnenkonzepten rund um Reisen, Sprachen und Kunst. Jede Karte ist so angelegt, dass sie Paid-Social-ready Creative simuliert: glaubwürdig, strukturiert und auf Conversion ausgerichtet."
+    },
+    "pageDescription": "Professionelles UGC-Portfolio von Marta Gallardo mit editorialen Konzeptkampagnen zu Reisen, Sprachen und Kunst.",
+    "nicheLabel": "Nische",
+    "backToTop": "Zurück nach oben",
+    "placeholder": "Platzhalter",
+    "ugcDemo": "UGC-Demo",
+    "creativeDirection": "Kreative Leitung",
+    "nativeAdStyle": "Native-Ad-Stil",
+    "niches": {
+      "travel": {
+        "label": "Reisen",
+        "accent": "Storytelling für Hotels und Destinationen",
+        "eyebrow": "Hotellerie, Gepäck, Buchung und erlebnisorientierter Content",
+        "intro": "Eine durchdachte Mischung aus Check-in-Walkthroughs, Itinerary-Edits und produktfokussierten Travel-Assets, die sich natürlich in Paid-Social-Feeds einfügen.",
+        "cards": [
+          {
+            "title": "Check-in-Storyboard für Boutique-Hotels",
+            "description": "Eine ruhige Ankunftssequenz, die Buchungskomfort, Zimmereigenschaften und das Gästeerlebnis mit hilfreichen Voiceover-Hinweisen hervorhebt.",
+            "format": "Testimonial",
+            "media": "15-Sek.-Room-Tour-Reel"
+          },
+          {
+            "title": "Produkte-Edit für Handgepäck-Essentials",
+            "description": "Ein Native-Style-Packing-Visual, das Reiseaccessoires als praktische Lösung für kurze Wochenendtrips positioniert.",
+            "format": "Unboxing",
+            "media": "Foto-Karussell-Konzept"
+          },
+          {
+            "title": "Walkthrough einer Wochenend-Itinerary-App",
+            "description": "Eine screenbasierte Demo, die zeigt, wie eine Reiseplanungs-App Reservierungen, Karten und Reiseorganisation in einem Ablauf vereinfacht.",
+            "format": "Tutorial",
+            "media": "Mobile UI + Voiceover"
+          },
+          {
+            "title": "Bewertung eines Flughafentransfer-Services",
+            "description": "Ein unkompliziertes Testimonial-Asset mit Fokus auf Komfort, Pünktlichkeit und Buchungssicherheit für Erstbesucher.",
+            "format": "Testimonial",
+            "media": "Vertikales Ad-Mockup"
+          }
+        ]
+      },
+      "languages": {
+        "label": "Sprachen",
+        "accent": "Lehrreiche, nützliche und mehrsprachige Ads",
+        "eyebrow": "Sprach-Apps, internationale Services und Lerntools",
+        "intro": "Beispielkonzepte für Marken, die klare und glaubwürdige Kommunikation brauchen — ideal für mehrsprachige Kampagnen, Onboarding-Flows und Produkt-Erklärformate.",
+        "cards": [
+          {
+            "title": "Demo einer ersten Lektion in einer Sprach-App",
+            "description": "Ein sympathischer Produkt-Rundgang, der die Plattform als einfache tägliche Gewohnheit statt als persönlichkeitgetriebenen Influencer-Post inszeniert.",
+            "format": "Tutorial",
+            "media": "Screen-Demo-Placeholder"
+          },
+          {
+            "title": "Social-Proof-Ad für einen Übersetzungsservice",
+            "description": "Ein klares Testimonial-Konzept, das zeigt, wie lokalisierter Copy das Vertrauen internationaler Zielgruppen und grenzüberschreitender Launches stärkt.",
+            "format": "Testimonial",
+            "media": "Founder-Style Talking Head"
+          },
+          {
+            "title": "Starter-Pack-Showcase für ein Study Kit",
+            "description": "Eine editoriale Unboxing-Sequenz mit Flashcards, Notizbüchern und digitalen Ressourcen, positioniert als praktisches Lernbundle.",
+            "format": "Unboxing",
+            "media": "Desk-Flatlay-Konzept"
+          },
+          {
+            "title": "Erklärstück für einen mehrsprachigen Buchungsflow",
+            "description": "Ein kompaktes Demo-Asset für globale Plattformen, das Sprachwechsel, Klarheit und Sicherheit im Checkout hervorhebt.",
+            "format": "Tutorial",
+            "media": "Conversion-orientierter Walkthrough"
+          }
+        ]
+      },
+      "art": {
+        "label": "Kunst",
+        "accent": "Editoriale Produktdemos für kreative Marken",
+        "eyebrow": "Kreativtools, Workshops, Galerien und designorientierte Produkte",
+        "intro": "UGC-Konzepte mit editorialem Gefühl für Kunst- und Designmarken, die haptische Visuals mit informativen Hooks verbinden und im Paid-Bereich gut funktionieren.",
+        "cards": [
+          {
+            "title": "Material-Reveal für ein Sketchbook",
+            "description": "Ein weiches, haptisches Unboxing-Konzept mit Fokus auf Papierstruktur, Packaging-Details und dem hochwertigen Eindruck des Kreativ-Kits.",
+            "format": "Unboxing",
+            "media": "Overhead-Tischaufnahme"
+          },
+          {
+            "title": "Tutorial für ein Anfänger-Aquarellset",
+            "description": "Ein Schritt-für-Schritt-Ad-Konzept, das zeigt, was im Set enthalten ist, wie man startet und warum sich das Bundle für Einsteiger zugänglich anfühlt.",
+            "format": "Tutorial",
+            "media": "Prozessorientierter Demo-Clip"
+          },
+          {
+            "title": "Bewertung eines Museums-Audioguides",
+            "description": "Ein raffiniertes Testimonial, das den Guide als intensivere und immersivere Möglichkeit präsentiert, Ausstellungen vor Ort zu erleben.",
+            "format": "Testimonial",
+            "media": "Lifestyle-Still + Zitat"
+          },
+          {
+            "title": "Vorher / nachher für einen Rahmenservice",
+            "description": "Ein Native-Ad-Ansatz, der zeigt, wie individuelle Rahmung die Präsentation von Kunstwerken für Wohn- und Geschenkzielgruppen aufwertet.",
+            "format": "Tutorial",
+            "media": "Transformations-Karussell"
+          }
+        ]
+      }
     }
   }
 }
