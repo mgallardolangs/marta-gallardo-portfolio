@@ -33,27 +33,27 @@ const cardClass = 'rounded-[2rem] border border-blush-100 p-6 shadow-sm md:p-8';
               </div>
               <h2 class="font-heading text-3xl font-semibold text-charcoal">{i.contact.ugcForm.title}</h2>
 
-              <form name="ugc-contact" method="POST" data-netlify="true" class="mt-8 space-y-5">
+              <form name="ugc-contact" method="POST" data-netlify="true" class="contact-form mt-8 space-y-5">
                 <input type="hidden" name="form-name" value="ugc-contact" />
 
                 <div>
                   <label for="ugc-company" class={labelClass}>{i.contact.ugcForm.company}</label>
-                  <input id="ugc-company" name="company" type="text" required class={fieldClass} />
+                  <input id="ugc-company" name="Company" type="text" required class={fieldClass} />
                 </div>
 
                 <div>
                   <label for="ugc-email" class={labelClass}>{i.contact.ugcForm.email}</label>
-                  <input id="ugc-email" name="email" type="email" required class={fieldClass} />
+                  <input id="ugc-email" name="Email" type="email" required class={fieldClass} />
                 </div>
 
                 <div>
                   <label for="ugc-budget" class={labelClass}>{i.contact.ugcForm.budget}</label>
-                  <input id="ugc-budget" name="budget" type="text" required class={fieldClass} />
+                  <input id="ugc-budget" name="Budget" type="text" required class={fieldClass} />
                 </div>
 
                 <div>
                   <label for="ugc-description" class={labelClass}>{i.contact.ugcForm.description}</label>
-                  <textarea id="ugc-description" name="project-description" rows="6" required class={`${fieldClass} resize-y`}></textarea>
+                  <textarea id="ugc-description" name="Project Description" rows="6" required class={`${fieldClass} resize-y`}></textarea>
                 </div>
 
                 <button
@@ -63,6 +63,17 @@ const cardClass = 'rounded-[2rem] border border-blush-100 p-6 shadow-sm md:p-8';
                   {i.contact.send}
                 </button>
               </form>
+
+              <!-- Success message (hidden by default) -->
+              <div class="contact-success hidden mt-8 rounded-2xl border border-green-200 bg-green-50 p-6 text-center">
+                <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                  <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <p class="font-heading text-2xl text-charcoal">{i.contact.successTitle}</p>
+                <p class="mt-2 font-body text-sm text-warm-gray">{i.contact.successMessage}</p>
+              </div>
             </div>
           </ScrollReveal>
 
@@ -73,27 +84,27 @@ const cardClass = 'rounded-[2rem] border border-blush-100 p-6 shadow-sm md:p-8';
               </div>
               <h2 class="font-heading text-3xl font-semibold text-charcoal">{i.contact.seoForm.title}</h2>
 
-              <form name="seo-contact" method="POST" data-netlify="true" class="mt-8 space-y-5">
+              <form name="seo-contact" method="POST" data-netlify="true" class="contact-form mt-8 space-y-5">
                 <input type="hidden" name="form-name" value="seo-contact" />
 
                 <div>
                   <label for="seo-company" class={labelClass}>{i.contact.seoForm.company}</label>
-                  <input id="seo-company" name="company" type="text" required class={fieldClass} />
+                  <input id="seo-company" name="Company" type="text" required class={fieldClass} />
                 </div>
 
                 <div>
                   <label for="seo-email" class={labelClass}>{i.contact.seoForm.email}</label>
-                  <input id="seo-email" name="email" type="email" required class={fieldClass} />
+                  <input id="seo-email" name="Email" type="email" required class={fieldClass} />
                 </div>
 
                 <div>
                   <label for="seo-budget" class={labelClass}>{i.contact.seoForm.budget}</label>
-                  <input id="seo-budget" name="budget" type="text" required class={fieldClass} />
+                  <input id="seo-budget" name="Budget" type="text" required class={fieldClass} />
                 </div>
 
                 <div>
                   <label for="seo-description" class={labelClass}>{i.contact.seoForm.description}</label>
-                  <textarea id="seo-description" name="work-description" rows="6" required class={`${fieldClass} resize-y`}></textarea>
+                  <textarea id="seo-description" name="Work Description" rows="6" required class={`${fieldClass} resize-y`}></textarea>
                 </div>
 
                 <button
@@ -103,6 +114,17 @@ const cardClass = 'rounded-[2rem] border border-blush-100 p-6 shadow-sm md:p-8';
                   {i.contact.send}
                 </button>
               </form>
+
+              <!-- Success message (hidden by default) -->
+              <div class="contact-success hidden mt-8 rounded-2xl border border-green-200 bg-green-50 p-6 text-center">
+                <div class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                  <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <p class="font-heading text-2xl text-charcoal">{i.contact.successTitle}</p>
+                <p class="mt-2 font-body text-sm text-warm-gray">{i.contact.successMessage}</p>
+              </div>
             </div>
           </ScrollReveal>
         </div>
@@ -110,3 +132,29 @@ const cardClass = 'rounded-[2rem] border border-blush-100 p-6 shadow-sm md:p-8';
     </section>
   </PageTransition>
 </BaseLayout>
+
+<script>
+  // ponytail: intercept form submit, post via fetch, show inline success
+  document.querySelectorAll('.contact-form').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formEl = e.target as HTMLFormElement;
+      const data = new FormData(formEl);
+
+      try {
+        await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(data as any).toString(),
+        });
+        // Hide form, show success
+        formEl.classList.add('hidden');
+        const success = formEl.parentElement?.querySelector('.contact-success');
+        success?.classList.remove('hidden');
+      } catch {
+        // Fallback: submit normally
+        formEl.submit();
+      }
+    });
+  });
+</script>

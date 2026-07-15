@@ -71,7 +71,9 @@
       "budget": "Pressupost",
       "description": "Descripció del treball"
     },
-    "send": "Enviar"
+    "send": "Enviar",
+    "successTitle": "Missatge enviat!",
+    "successMessage": "Gràcies per contactar-me. Et respondré el més aviat possible."
   },
   "footer": {
     "rights": "Tots els drets reservats"

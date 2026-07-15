@@ -71,7 +71,9 @@
       "budget": "Budget",
       "description": "Description du travail"
     },
-    "send": "Envoyer"
+    "send": "Envoyer",
+    "successTitle": "Message envoyé !",
+    "successMessage": "Merci de m'avoir contactée. Je vous répondrai dès que possible."
   },
   "footer": {
     "rights": "Tous droits réservés"

@@ -71,7 +71,9 @@
       "budget": "Budget",
       "description": "Arbeitsbeschreibung"
     },
-    "send": "Senden"
+    "send": "Senden",
+    "successTitle": "Nachricht gesendet!",
+    "successMessage": "Vielen Dank für Ihre Nachricht. Ich melde mich so schnell wie möglich."
   },
   "footer": {
     "rights": "Alle Rechte vorbehalten"
