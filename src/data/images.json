@@ -12,5 +12,26 @@
   "socialLinks": {
     "linkedin": "https://linkedin.com",
     "instagram": "https://instagram.com"
+  },
+  "nicheBackgrounds": {
+    "travel": "",
+    "languages": "",
+    "art": ""
+  },
+  "ugcVideos": {
+    "travel": [],
+    "languages": [],
+    "art": []
+  },
+  "ugcPhotos": {
+    "travel": [],
+    "languages": [],
+    "art": [],
+    "all": []
+  },
+  "nicheIcons": {
+    "travel": "",
+    "languages": "",
+    "art": ""
   }
 }
