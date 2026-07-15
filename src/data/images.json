@@ -1,0 +1,11 @@
+{
+  "heroMainPhoto": "/images/site/hero-main-photo.jpg",
+  "galleryCutouts": {
+    "shotOne": "/images/site/gallery-shot-one.jpg",
+    "shotTwo": "/images/site/gallery-shot-two.jpg",
+    "shotThree": "/images/site/gallery-shot-three.jpg",
+    "shotFour": "/images/site/gallery-shot-four.jpg"
+  },
+  "videoPlaceholderOrEmbedUrl": "https://example.com/embed/video",
+  "ugcHeaderImage": ""
+}
