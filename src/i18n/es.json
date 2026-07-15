@@ -237,7 +237,7 @@
     "nativeAdStyle": "Estilo de anuncio nativo",
     "hero": {
       "backgroundLabel": "PORTFOLIO DE MARCA",
-      "eyebrow": "UGC",
+      "eyebrow": "UGC · conceptos de anuncios nativos",
       "headline": "Conceptos de UGC limpios y editoriales creados para marcas, no para diarios de influencer.",
       "description": "Un portfolio conceptual curado para Marta Gallardo con conceptos de campaña centrados en viajes, idiomas y arte. Cada tarjeta está pensada para simular creatividad lista para paid social: creíble, ordenada y orientada a la conversión."
     }
@@ -256,7 +256,7 @@
   },
   "about": {
     "title": "¡ENCANTADA Me presento!",
-    "text": "Soy Marta, creadora de contenido UGC y especialista en traducción y SEO. Hablo español, francés, alemán, italiano e inglés. Me apasiona crear contenido auténtico para marcas y ayudar a empresas a comunicarse globalmente."
+    "text": "Soy Marta, tengo 23 años, vivo en Elche y soy creadora de contenido UGC y especialista en traducción y SEO. \n\nHablo español y francés a la perfección, además de saber catalán, inglés, alemán e italiano. Me apasiona crear contenido auténtico para marcas y ayudar a empresas a comunicarse globalmente."
   },
   "ugc": {
     "title": "UGC Portfolio",
@@ -312,7 +312,7 @@
   "home": {
     "hero": {
       "kicker": "UGC · Traducción · SEO",
-      "description": "Creo imágenes, palabras y experiencias digitales con una sensibilidad editorial pensada para marcas lifestyle, beauty, viajes y proyectos internacionales.",
+      "description": "Creo imágenes, palabras y experiencias digitales con una sensibilidad editorial pensada para marcas lifestyle, viajes y proyectos internacionales.\n\nTraductora de formación, viajera de vocación.\n\nAmante de lo estético y lo auténtico. Me apasiona el arte, la naturaleza y crear contenido que se sienta real, cuidado y cercano. ",
       "mainPhoto": "Foto principal",
       "scrollCue": "Desliza para descubrir",
       "coverLabel": "Portada editorial"
@@ -331,8 +331,8 @@
       ]
     },
     "video": {
-      "eyebrow": "Identidad de marca",
-      "title": "Marca personal",
+      "eyebrow": "Vídeo de presentación",
+      "title": "Una primera impresión en movimiento",
       "description": "Este espacio puede presentar el vídeo de introducción de Marta: natural, elegante y pensado para transmitir personalidad, presencia ante cámara y universo visual.",
       "placeholder": "Vídeo intro",
       "note": "Formato 9:16 · placeholder para reel / presentación"
