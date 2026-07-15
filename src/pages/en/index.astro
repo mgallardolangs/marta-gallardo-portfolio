@@ -2,11 +2,13 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageTransition from '../../components/PageTransition';
 import ScrollReveal from '../../components/ScrollReveal';
+import AnimatedScrollText from '../../components/AnimatedScrollText';
+import AestheticGlobe from '../../components/AestheticGlobe';
 import ParallaxLayer from '../../components/ParallaxLayer';
 import FloatingIcon from '../../components/FloatingIcon';
-import { ArrowCurved, ArrowWavy } from '../../components/DoodleArrows';
+import { ArrowWavy } from '../../components/DoodleArrows';
 import StaggerContainer, { StaggerItem } from '../../components/StaggerContainer';
-import { getLangFromUrl, t } from '../../i18n';
+import { getLangFromUrl, getLocalizedPath, t } from '../../i18n';
 import imagesData from '../../data/images.json';
 
 const lang = getLangFromUrl(Astro.url);
@@ -46,12 +48,9 @@ const i = t(lang);
               </StaggerItem>
             </StaggerContainer>
 
-            <ScrollReveal client:visible delay={0.15}>
-              <div class="inline-flex items-center gap-4 rounded-full border border-blush-200 bg-white/70 px-5 py-3 shadow-[0_20px_60px_rgba(183,110,121,0.08)] backdrop-blur-sm">
-                <span class="h-2.5 w-2.5 rounded-full bg-rose-gold"></span>
-                <span class="font-body text-xs uppercase tracking-[0.32em] text-warm-gray">{i.home.hero.scrollCue}</span>
-              </div>
-            </ScrollReveal>
+            <div class="pt-6 flex justify-center lg:justify-start">
+              <AnimatedScrollText client:load text={i.home.hero.scrollCue} className="max-w-xs" />
+            </div>
           </div>
 
           <div class="relative min-h-[36rem] lg:min-h-[42rem]">
@@ -61,19 +60,21 @@ const i = t(lang);
             </FloatingIcon>
 
             <ScrollReveal client:visible delay={0.1} direction="left" className="absolute inset-x-5 top-6 z-20 md:left-auto md:right-[56%] md:top-[10%] md:w-64">
-              <div class="space-y-3 rounded-[2rem] border border-blush-200 bg-white/80 p-5 shadow-[0_30px_70px_rgba(183,110,121,0.12)] backdrop-blur-sm">
-                <p class="font-accent text-sm uppercase tracking-[0.3em] text-rose-gold">01</p>
-                <p class="font-heading text-2xl leading-tight text-charcoal">{i.hero.ugcLabel}</p>
-                <ArrowCurved client:visible className="h-auto w-28 text-rose-gold" />
-              </div>
+              <a
+                href={getLocalizedPath('/ugc', lang)}
+                class="block rounded-[1.6rem] border border-blush-200 bg-white/50 px-4 py-3 shadow-[0_30px_70px_rgba(183,110,121,0.12)] backdrop-blur-sm transition hover:bg-white/65"
+              >
+                <p class="font-heading text-lg leading-tight text-charcoal">{i.hero.ugcLabel}</p>
+              </a>
             </ScrollReveal>
 
             <ScrollReveal client:visible delay={0.2} direction="right" className="absolute bottom-2 left-6 z-20 md:bottom-[8%] md:left-[58%] md:w-72">
-              <div class="space-y-3 rounded-[2rem] border border-blush-200 bg-white/80 p-5 shadow-[0_30px_70px_rgba(183,110,121,0.12)] backdrop-blur-sm">
-                <p class="font-accent text-sm uppercase tracking-[0.3em] text-rose-gold">02</p>
-                <p class="font-heading text-xl leading-tight text-charcoal md:text-2xl">{i.hero.seoLabel}</p>
-                <ArrowCurved client:visible className="h-auto w-28 -scale-x-100 text-rose-gold" />
-              </div>
+              <a
+                href={getLocalizedPath('/translation-seo', lang)}
+                class="block rounded-[1.6rem] border border-blush-200 bg-white/50 px-4 py-3 shadow-[0_30px_70px_rgba(183,110,121,0.12)] backdrop-blur-sm transition hover:bg-white/65"
+              >
+                <p class="font-heading text-lg leading-tight text-charcoal">{i.hero.seoLabel}</p>
+              </a>
             </ScrollReveal>
 
             <div class="absolute inset-0 flex items-center justify-center">
@@ -93,31 +94,33 @@ const i = t(lang);
         </div>
       </section>
 
-      <section class="px-6 pb-24 md:pb-32">
-        <ScrollReveal client:visible className="mx-auto max-w-6xl rounded-[2.5rem] border border-blush-100 bg-white/80 p-8 shadow-[0_30px_90px_rgba(183,110,121,0.08)] backdrop-blur-sm md:p-12 lg:p-16">
-          <div class="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-            <div class="space-y-5">
-              <p class="font-accent text-sm uppercase tracking-[0.36em] text-rose-gold">{i.home.about.eyebrow}</p>
-              <h2 class="font-heading text-5xl leading-none text-charcoal md:text-6xl">{i.about.title}</h2>
-              <p class="max-w-sm font-body text-xl leading-8 text-warm-gray">{i.home.about.highlight}</p>
-            </div>
+      <section class="relative px-6 pb-24 md:pb-32">
+        <div class="relative mx-auto max-w-6xl">
+          <AestheticGlobe client:visible />
+          <ScrollReveal client:visible className="relative z-10 rounded-[2.5rem] border border-blush-100 bg-white/80 p-8 shadow-[0_30px_90px_rgba(183,110,121,0.08)] backdrop-blur-sm md:p-12 lg:p-16">
+            <div class="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+              <div class="space-y-5">
+                <h2 class="font-heading text-5xl leading-none text-charcoal md:text-6xl">{i.about.title}</h2>
+                <p class="max-w-sm font-body text-xl leading-8 text-warm-gray">{i.home.about.highlight}</p>
+              </div>
 
-            <div class="space-y-8">
-              <p class="max-w-2xl font-body text-lg leading-8 text-warm-gray md:text-xl">{i.about.text}</p>
+              <div class="space-y-8">
+                <p class="max-w-2xl font-body text-lg leading-8 text-warm-gray md:text-xl">{i.about.text}</p>
 
-              <div class="space-y-4">
-                <p class="font-accent text-sm uppercase tracking-[0.3em] text-rose-gold">{i.home.about.languagesLabel}</p>
-                <StaggerContainer client:visible className="flex flex-wrap gap-3" staggerDelay={0.08}>
-                  {i.home.about.languages.map((language) => (
-                    <StaggerItem className="inline-flex">
-                      <span class="rounded-full bg-blush-50 px-4 py-2 text-sm text-charcoal">{language}</span>
-                    </StaggerItem>
-                  ))}
-                </StaggerContainer>
+                <div class="space-y-4">
+                  <p class="font-accent text-sm uppercase tracking-[0.3em] text-rose-gold">{i.home.about.languagesLabel}</p>
+                  <StaggerContainer client:visible className="flex flex-wrap gap-3" staggerDelay={0.08}>
+                    {i.home.about.languages.map((language) => (
+                      <StaggerItem className="inline-flex">
+                        <span class="rounded-full bg-blush-50 px-4 py-2 text-sm text-charcoal">{language}</span>
+                      </StaggerItem>
+                    ))}
+                  </StaggerContainer>
+                </div>
               </div>
             </div>
-          </div>
-        </ScrollReveal>
+          </ScrollReveal>
+        </div>
       </section>
 
       <section class="relative px-6 pb-24 md:pb-36">
@@ -171,6 +174,16 @@ const i = t(lang);
             <p class="font-accent text-sm uppercase tracking-[0.36em] text-rose-gold">{i.home.video.eyebrow}</p>
             <h2 class="font-heading text-5xl leading-none text-charcoal md:text-6xl">{i.home.video.title}</h2>
             <p class="max-w-xl font-body text-lg leading-8 text-warm-gray md:text-xl">{i.home.video.description}</p>
+            <!-- Instagram profile screenshot -->
+            {imagesData.instagramScreenshot ? (
+              <div class="mt-6 overflow-hidden rounded-2xl border border-blush-100 shadow-sm">
+                <img src={imagesData.instagramScreenshot} alt="Instagram" class="w-full" />
+              </div>
+            ) : (
+              <div class="mt-6 flex aspect-[4/3] items-center justify-center rounded-2xl border-2 border-dashed border-blush-200 bg-blush-50/50">
+                <p class="font-body text-sm text-warm-gray">📱 Instagram screenshot</p>
+              </div>
+            )}
           </ScrollReveal>
         </div>
       </section>
