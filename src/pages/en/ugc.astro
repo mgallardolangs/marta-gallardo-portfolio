@@ -4,121 +4,22 @@ import ScrollReveal from '../../components/ScrollReveal';
 import PageTransition from '../../components/PageTransition';
 import ParallaxLayer from '../../components/ParallaxLayer';
 import StaggerContainer, { StaggerItem } from '../../components/StaggerContainer';
+import NicheIcon from '../../components/NicheIcon';
 import { getLangFromUrl, t } from '../../i18n';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
 
-const nicheLinks = [
-  { id: 'travel', label: i.ugc.niches.travel, accent: 'Hotel & destination storytelling' },
-  { id: 'languages', label: i.ugc.niches.languages, accent: 'Educational, useful, multilingual ads' },
-  { id: 'art', label: i.ugc.niches.art, accent: 'Editorial product demos for creative brands' },
+const niches = [
+  { id: 'travel', ...i.ugcPage.niches.travel },
+  { id: 'languages', ...i.ugcPage.niches.languages },
+  { id: 'art', ...i.ugcPage.niches.art },
 ];
 
-const niches = [
-  {
-    id: 'travel',
-    label: i.ugc.niches.travel,
-    eyebrow: 'Hospitality, luggage, booking, and experience-led content',
-    intro:
-      'A polished mix of check-in walkthroughs, itinerary edits, and product-first travel assets designed to feel native inside paid social feeds.',
-    cards: [
-      {
-        title: 'Boutique Stay Check-In Storyboard',
-        description: 'A calm arrival sequence highlighting booking ease, room details, and the guest experience through helpful voiceover cues.',
-        format: 'Testimonial',
-        media: '15s room-tour reel',
-      },
-      {
-        title: 'Carry-On Essentials Product Edit',
-        description: 'Native-style packing visual that frames travel accessories as practical solutions for short-haul weekend trips.',
-        format: 'Unboxing',
-        media: 'Photo carousel concept',
-      },
-      {
-        title: 'Weekend Itinerary App Walkthrough',
-        description: 'Screen-led demo showing how a travel planning app simplifies reservations, maps, and trip organization in one flow.',
-        format: 'Tutorial',
-        media: 'Mobile UI + voiceover',
-      },
-      {
-        title: 'Airport Transfer Service Review',
-        description: 'Low-friction testimonial asset focused on convenience, punctuality, and booking confidence for first-time visitors.',
-        format: 'Testimonial',
-        media: 'Vertical ad mockup',
-      },
-    ],
-  },
-  {
-    id: 'languages',
-    label: i.ugc.niches.languages,
-    eyebrow: 'Language apps, international services, and learning tools',
-    intro:
-      'Sample concepts tailored for brands that need clear, credible communication — ideal for multilingual campaigns, onboarding flows, and product explainers.',
-    cards: [
-      {
-        title: 'Language App First-Lesson Demo',
-        description: 'Friendly product walk-through presenting the platform as a simple daily habit builder rather than a personality-driven influencer post.',
-        format: 'Tutorial',
-        media: 'Screen demo placeholder',
-      },
-      {
-        title: 'Translation Service Social Proof Ad',
-        description: 'Clean testimonial concept showing how localized copy improves trust for international audiences and cross-border launches.',
-        format: 'Testimonial',
-        media: 'Founder-style talking head',
-      },
-      {
-        title: 'Study Kit Starter Pack Showcase',
-        description: 'Editorial unboxing sequence with flashcards, notebooks, and digital resources positioned as a practical learning bundle.',
-        format: 'Unboxing',
-        media: 'Desk flatlay concept',
-      },
-      {
-        title: 'Multilingual Booking Flow Explainer',
-        description: 'A concise demo asset for global platforms, spotlighting language switching, clarity, and confidence during checkout.',
-        format: 'Tutorial',
-        media: 'Conversion-focused walkthrough',
-      },
-    ],
-  },
-  {
-    id: 'art',
-    label: i.ugc.niches.art,
-    eyebrow: 'Creative tools, workshops, galleries, and design-led products',
-    intro:
-      'Editorial-feeling UGC concepts for art and design brands, balancing tactile visuals with informative hooks that work well for paid campaigns.',
-    cards: [
-      {
-        title: 'Sketchbook Materials Reveal',
-        description: 'Soft, tactile unboxing concept centered on paper texture, packaging details, and the premium feel of the creative kit.',
-        format: 'Unboxing',
-        media: 'Overhead tabletop frame',
-      },
-      {
-        title: 'Beginner Watercolor Set Tutorial',
-        description: 'Step-by-step ad concept showing what comes in the set, how to start, and why the bundle feels approachable for new users.',
-        format: 'Tutorial',
-        media: 'Process-led demo clip',
-      },
-      {
-        title: 'Museum Audio Guide Review',
-        description: 'Refined testimonial angle presenting the guide as a richer, more immersive way to experience exhibitions on-site.',
-        format: 'Testimonial',
-        media: 'Lifestyle still + quote',
-      },
-      {
-        title: 'Framing Service Before / After',
-        description: 'Native ad treatment showing how custom framing elevates artwork presentation for home décor and gifting audiences.',
-        format: 'Tutorial',
-        media: 'Transformation carousel',
-      },
-    ],
-  },
-];
+const nicheLinks = niches.map(({ id, label, accent }) => ({ id, label, accent }));
 
 const pageTitle = `${i.hero.name} | ${i.ugc.title}`;
-const pageDescription = 'Professional UGC portfolio for Marta Gallardo featuring editorial placeholder campaigns across travel, languages, and art.';
+const pageDescription = i.ugcPage.pageDescription;
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
@@ -127,18 +28,18 @@ const pageDescription = 'Professional UGC portfolio for Marta Gallardo featuring
       <section class="relative overflow-hidden border-b border-blush-100 bg-gradient-to-b from-blush-50 via-cream to-cream">
         <ParallaxLayer client:visible className="pointer-events-none absolute inset-x-0 top-14 hidden md:block" speed={-0.12}>
           <div class="mx-auto max-w-6xl px-6 text-right font-accent text-7xl italic tracking-[0.18em] text-rose-gold/10">
-            BRAND PORTFOLIO
+            {i.ugcPage.hero.backgroundLabel}
           </div>
         </ParallaxLayer>
 
         <div class="relative mx-auto max-w-6xl px-6 py-16 md:py-24">
           <ScrollReveal client:visible className="max-w-3xl">
-            <p class="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold">UGC · native ad concepts</p>
+            <p class="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold">{i.ugcPage.hero.eyebrow}</p>
             <h1 class="mt-4 font-heading text-5xl leading-none text-charcoal md:text-7xl">
-              Clean, editorial UGC concepts built for brands — not influencer diaries.
+              {i.ugcPage.hero.headline}
             </h1>
             <p class="mt-6 max-w-2xl font-body text-lg leading-8 text-warm-gray md:text-xl">
-              A curated placeholder portfolio for Marta Gallardo featuring travel, language, and art-focused campaign concepts. Each card is designed to simulate paid-social ready creative: credible, organized, and conversion-aware.
+              {i.ugcPage.hero.description}
             </p>
           </ScrollReveal>
 
@@ -149,7 +50,10 @@ const pageDescription = 'Professional UGC portfolio for Marta Gallardo featuring
                   href={`#${link.id}`}
                   class="group rounded-3xl border border-blush-200 bg-blush-50 p-6 transition duration-300 hover:-translate-y-1 hover:border-rose-gold hover:bg-white hover:shadow-[0_24px_60px_rgba(183,110,121,0.12)]"
                 >
-                  <p class="font-accent text-xs uppercase tracking-[0.35em] text-rose-gold">Niche</p>
+                  <div class="flex items-center justify-between">
+                    <p class="font-accent text-xs uppercase tracking-[0.35em] text-rose-gold">{i.ugcPage.nicheLabel}</p>
+                    <NicheIcon client:visible niche={link.id as 'travel' | 'languages' | 'art'} className="w-10 h-10 opacity-60 group-hover:opacity-100 transition-opacity" />
+                  </div>
                   <div class="mt-6 flex items-end justify-between gap-4">
                     <h2 class="font-heading text-4xl text-charcoal md:text-5xl">{link.label}</h2>
                     <span class="text-2xl text-rose-gold transition-transform duration-300 group-hover:translate-x-1">→</span>
@@ -169,7 +73,10 @@ const pageDescription = 'Professional UGC portfolio for Marta Gallardo featuring
         >
           <ScrollReveal client:visible className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div class="max-w-3xl">
-              <p class="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold">{niche.eyebrow}</p>
+              <div class="flex items-center gap-4">
+                <p class="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold">{niche.eyebrow}</p>
+                <NicheIcon client:visible niche={niche.id as 'travel' | 'languages' | 'art'} className="w-12 h-12" />
+              </div>
               <h2 class="mt-4 font-heading text-4xl text-charcoal md:text-6xl">{niche.label}</h2>
               <p class="mt-4 font-body text-base leading-8 text-warm-gray md:text-lg">{niche.intro}</p>
             </div>
@@ -177,7 +84,7 @@ const pageDescription = 'Professional UGC portfolio for Marta Gallardo featuring
               href="#top"
               class="inline-flex items-center gap-2 self-start rounded-full border border-blush-200 bg-blush-50 px-4 py-2 font-body text-sm text-charcoal transition hover:border-rose-gold hover:text-rose-gold"
             >
-              Back to top
+              {i.ugcPage.backToTop}
               <span aria-hidden="true">↑</span>
             </a>
           </ScrollReveal>
@@ -191,12 +98,12 @@ const pageDescription = 'Professional UGC portfolio for Marta Gallardo featuring
                       <div class="flex h-full flex-col justify-between rounded-[1.1rem] border border-dashed border-rose-gold/25 bg-white/35 p-4">
                         <div class="flex items-center justify-between gap-3">
                           <span class="rounded-full bg-white/80 px-3 py-1 font-body text-[11px] uppercase tracking-[0.28em] text-rose-gold">
-                            Placeholder
+                            {i.ugcPage.placeholder}
                           </span>
-                          <span class="font-body text-[11px] uppercase tracking-[0.24em] text-warm-gray">UGC Demo</span>
+                          <span class="font-body text-[11px] uppercase tracking-[0.24em] text-warm-gray">{i.ugcPage.ugcDemo}</span>
                         </div>
                         <div>
-                          <p class="font-accent text-xs uppercase tracking-[0.3em] text-warm-gray">Creative direction</p>
+                          <p class="font-accent text-xs uppercase tracking-[0.3em] text-warm-gray">{i.ugcPage.creativeDirection}</p>
                           <p class="mt-2 font-heading text-2xl leading-tight text-charcoal">{card.media}</p>
                         </div>
                       </div>
@@ -207,7 +114,7 @@ const pageDescription = 'Professional UGC portfolio for Marta Gallardo featuring
                     <span class="rounded-full bg-blush-50 px-3 py-1 font-body text-xs font-medium uppercase tracking-[0.2em] text-rose-gold">
                       {card.format}
                     </span>
-                    <span class="font-body text-xs uppercase tracking-[0.3em] text-warm-gray">Native ad style</span>
+                    <span class="font-body text-xs uppercase tracking-[0.3em] text-warm-gray">{i.ugcPage.nativeAdStyle}</span>
                   </div>
 
                   <h3 class="mt-5 font-heading text-3xl leading-tight text-charcoal">{card.title}</h3>

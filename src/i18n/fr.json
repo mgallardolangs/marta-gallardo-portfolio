@@ -47,7 +47,7 @@
       "Correction et édition de textes"
     ],
     "whyMe": "Pourquoi travailler avec moi ?",
-    "whyMeText": "Langues, expérience réelle (service client, au pair, études à Paris) et engagement dans chaque projet."
+    "whyMeText": "Langues, expérience réelle (service client, au pair, programme Erasmus+ à Paris) et engagement dans chaque projet."
   },
   "blog": {
     "title": "Blog",
@@ -100,6 +100,7 @@
       "languages": [
         "Espagnol",
         "Français",
+        "Catalan",
         "Allemand",
         "Italien",
         "Anglais"
@@ -110,13 +111,235 @@
       "title": "Une première impression en mouvement",
       "description": "Cet espace peut accueillir la vidéo d’introduction de Marta : naturelle, élégante et pensée pour transmettre sa personnalité, sa présence face caméra et son univers visuel.",
       "placeholder": "Vidéo intro",
-      "note": "Format placeholder pour reel / présentation"
+      "note": "Format 9:16 · placeholder pour reel / présentation"
     },
     "gallery": {
-      "shotOne": "Cutout Lifestyle",
-      "shotTwo": "Cutout Beauty",
-      "shotThree": "Cutout Travel",
-      "shotFour": "Behind the scenes"
+      "shotOne": "Photo lifestyle",
+      "shotTwo": "Photo beauté",
+      "shotThree": "Photo voyage",
+      "shotFour": "Making-of"
+    }
+  },
+  "ugcPage": {
+    "hero": {
+      "backgroundLabel": "PORTFOLIO DE MARQUE",
+      "eyebrow": "UGC · concepts de publicités natives",
+      "headline": "Des concepts UGC sobres et éditoriaux pensés pour les marques, pas pour des journaux d’influenceuse.",
+      "description": "Un portfolio placeholder soigneusement curaté pour Marta Gallardo, avec des concepts de campagne axés sur le voyage, les langues et l’art. Chaque carte est conçue pour simuler une création prête pour le paid social : crédible, structurée et orientée conversion."
+    },
+    "pageDescription": "Portfolio UGC professionnel de Marta Gallardo avec des campagnes éditoriales conceptuelles autour du voyage, des langues et de l’art.",
+    "nicheLabel": "Niche",
+    "backToTop": "Retour en haut",
+    "placeholder": "Maquette",
+    "ugcDemo": "Démo UGC",
+    "creativeDirection": "Direction créative",
+    "nativeAdStyle": "Style publicité native",
+    "niches": {
+      "travel": {
+        "label": "Voyages",
+        "accent": "Storytelling pour hôtels et destinations",
+        "eyebrow": "Hôtellerie, bagages, réservation et contenus centrés sur l’expérience",
+        "intro": "Un mélange soigné de walkthroughs de check-in, de montages d’itinéraires et de contenus voyage orientés produit, pensés pour s’intégrer naturellement dans des campagnes paid social.",
+        "cards": [
+          {
+            "title": "Storyboard de check-in en hôtel boutique",
+            "description": "Une séquence d’arrivée apaisée qui met en avant la simplicité de réservation, les détails de la chambre et l’expérience client grâce à une voix off utile.",
+            "format": "Témoignage",
+            "media": "Reel room tour de 15 s"
+          },
+          {
+            "title": "Montage produit des essentiels cabine",
+            "description": "Un visuel au style natif qui présente les accessoires de voyage comme des solutions pratiques pour des escapades de week-end en court courrier.",
+            "format": "Unboxing",
+            "media": "Concept de carrousel photo"
+          },
+          {
+            "title": "Walkthrough d’app d’itinéraire week-end",
+            "description": "Une démo guidée par écran montrant comment une application de planification de voyage simplifie réservations, cartes et organisation du séjour en un seul flux.",
+            "format": "Tutoriel",
+            "media": "Interface mobile + voix off"
+          },
+          {
+            "title": "Avis sur un service de transfert aéroport",
+            "description": "Un contenu testimonial fluide centré sur la praticité, la ponctualité et la confiance au moment de réserver pour des visiteurs qui découvrent la destination.",
+            "format": "Témoignage",
+            "media": "Mockup d’annonce verticale"
+          }
+        ]
+      },
+      "languages": {
+        "label": "Langues",
+        "accent": "Publicités éducatives, utiles et multilingues",
+        "eyebrow": "Applications de langues, services internationaux et outils d’apprentissage",
+        "intro": "Des concepts de démonstration pensés pour les marques qui ont besoin d’une communication claire et crédible — parfaits pour les campagnes multilingues, les parcours d’onboarding et les explications produit.",
+        "cards": [
+          {
+            "title": "Démo de première leçon sur une app de langues",
+            "description": "Une présentation produit accessible qui montre la plateforme comme une habitude quotidienne simple, plutôt qu’un post d’influence centré sur la personnalité.",
+            "format": "Tutoriel",
+            "media": "Placeholder de démo écran"
+          },
+          {
+            "title": "Publicité de preuve sociale pour un service de traduction",
+            "description": "Un concept testimonial épuré qui montre comment un copy localisé renforce la confiance des audiences internationales et des lancements transfrontaliers.",
+            "format": "Témoignage",
+            "media": "Talking head style fondatrice"
+          },
+          {
+            "title": "Présentation starter pack de kit d’étude",
+            "description": "Une séquence éditoriale d’unboxing avec flashcards, carnets et ressources numériques positionnés comme un bundle d’apprentissage pratique.",
+            "format": "Unboxing",
+            "media": "Concept flatlay de bureau"
+          },
+          {
+            "title": "Explication d’un parcours de réservation multilingue",
+            "description": "Une démo concise pour les plateformes globales, qui met l’accent sur le changement de langue, la clarté et la confiance au moment du checkout.",
+            "format": "Tutoriel",
+            "media": "Walkthrough orienté conversion"
+          }
+        ]
+      },
+      "art": {
+        "label": "Art",
+        "accent": "Démo produit éditoriale pour marques créatives",
+        "eyebrow": "Outils créatifs, ateliers, galeries et produits orientés design",
+        "intro": "Des concepts UGC à la sensibilité éditoriale pour les marques d’art et de design, mêlant visuels tactiles et hooks informatifs qui performent bien en paid media.",
+        "cards": [
+          {
+            "title": "Reveal de matériaux de sketchbook",
+            "description": "Un concept d’unboxing doux et tactile centré sur la texture du papier, les détails du packaging et la sensation premium du kit créatif.",
+            "format": "Unboxing",
+            "media": "Plan zénithal de table"
+          },
+          {
+            "title": "Tutoriel de coffret aquarelle pour débutants",
+            "description": "Un concept publicitaire pas à pas qui montre ce que contient le set, comment commencer et pourquoi le bundle paraît accessible aux nouveaux utilisateurs.",
+            "format": "Tutoriel",
+            "media": "Clip démo axé processus"
+          },
+          {
+            "title": "Avis sur audioguide de musée",
+            "description": "Un angle testimonial raffiné qui présente le guide comme une manière plus riche et immersive de découvrir les expositions sur place.",
+            "format": "Témoignage",
+            "media": "Visuel lifestyle + citation"
+          },
+          {
+            "title": "Avant / après d’un service d’encadrement",
+            "description": "Un traitement de publicité native montrant comment un encadrement sur mesure sublime la présentation des œuvres pour des publics déco et cadeau.",
+            "format": "Tutoriel",
+            "media": "Carrousel transformation"
+          }
+        ]
+      }
+    }
+  },
+  "translationPage": {
+    "copy": {
+      "eyebrow": "Traduction, localisation et rédaction SEO",
+      "headline": "Des services linguistiques à l’approche professionnelle et à la vision internationale.",
+      "intro": "J’aide les marques, les studios et les entreprises digitales à adapter leur message avec précision, naturel et sensibilité culturelle pour que chaque texte convainque sur le bon marché.",
+      "summary": "Mon profil associe une formation linguistique, une expérience concrète en service client en français, un parcours international comme au pair et un programme Erasmus+ de six mois à Paris. J’aborde ainsi chaque texte avec rigueur linguistique, compréhension culturelle et sens du résultat.",
+      "availability": "Disponible pour des projets freelance, des collaborations ponctuelles et un accompagnement éditorial continu.",
+      "educationTitle": "Formation et profil linguistique",
+      "educationIntro": "Une base académique tournée vers les langues, la communication interculturelle et la rédaction, renforcée par une immersion concrète dans des environnements internationaux.",
+      "studies": [
+        "Formation axée sur les langues, la communication écrite et l’adaptation de contenus pour des publics internationaux.",
+        "Perfectionnement du français grâce à un programme Erasmus+ de six mois à Paris et à un contact régulier avec des environnements francophones.",
+        "Intérêt constant pour l’écriture claire, la terminologie et l’optimisation de contenus pour les supports digitaux."
+      ],
+      "languagesTitle": "Langues",
+      "experienceIntro": "Une expérience appliquée à la communication réelle, au contact direct avec le public et à l’adaptation du langage selon chaque contexte.",
+      "experience": [
+        {
+          "title": "Service client en français",
+          "text": "Communication quotidienne avec des clients francophones, gestion des demandes et attention portée au ton de marque dans des situations réelles."
+        },
+        {
+          "title": "Expérience internationale comme au pair",
+          "text": "Vie et travail dans un environnement multiculturel, avec le développement de l’adaptabilité, de l’empathie et de l’aisance relationnelle."
+        },
+        {
+          "title": "Programme Erasmus+ à Paris",
+          "text": "Séjour de six mois à Paris dans le cadre d’un programme Erasmus+, qui a renforcé mon français, mon écoute active et ma compréhension des nuances culturelles."
+        }
+      ],
+      "skillsIntro": "Une approche pensée pour des textes qui doivent sonner juste, respecter la marque et performer en ligne.",
+      "skills": [
+        "Traduction et adaptation de contenus",
+        "Localisation web et culturelle",
+        "Rédaction SEO multilingue",
+        "Correction, édition et optimisation du style",
+        "Recherche terminologique et cohérence de ton",
+        "Gestion de glossaires, briefs et chartes éditoriales"
+      ],
+      "tools": [
+        "Google Docs et Word",
+        "Tableurs et suivi des modifications",
+        "CMS et éditeurs web",
+        "Glossaires, chartes de style et check-lists qualité"
+      ],
+      "processDescriptions": [
+        "J’analyse les objectifs, le public, le ton, la langue cible et les besoins SEO avant de commencer.",
+        "Je traduis ou je rédige avec une attention particulière à la clarté, à l’intention commerciale et au naturel.",
+        "Je vérifie la terminologie, la cohérence, la fluidité et les détails formels pour affiner la version finale.",
+        "Je livre un texte prêt à être publié, avec remarques ou ajustements si le projet en a besoin."
+      ],
+      "whyMeCards": [
+        {
+          "title": "Des langues maîtrisées avec exigence",
+          "text": "Je travaille dans plusieurs langues et j’adapte le message pour qu’il conserve son sens, son ton et sa crédibilité."
+        },
+        {
+          "title": "Une expérience internationale concrète",
+          "text": "Mon parcours réunit service client en français, programme Erasmus+ à Paris et travail dans des environnements multiculturels."
+        },
+        {
+          "title": "Un vrai sens du détail à chaque livraison",
+          "text": "Je privilégie la clarté, la précision et une communication professionnelle tout au long du projet."
+        }
+      ],
+      "samplesTitle": "Exemples d’adaptation",
+      "samples": [
+        {
+          "label": "EN → FR · copy SEO",
+          "sourceLabel": "Original",
+          "source": "Natural skincare for busy routines: lightweight formulas, visible results and everyday comfort.",
+          "targetLabel": "Adaptation",
+          "target": "Des soins naturels pour les rythmes soutenus : des formules légères, des résultats visibles et un confort au quotidien."
+        },
+        {
+          "label": "ES → FR · message web",
+          "sourceLabel": "Original",
+          "source": "Descubre una experiencia auténtica pensada para viajeros que buscan comodidad, encanto y sencillez.",
+          "targetLabel": "Adaptation",
+          "target": "Découvrez une expérience authentique pensée pour les voyageurs qui recherchent confort, charme et simplicité."
+        }
+      ]
+    },
+    "ui": {
+      "badgeLanguages": "6 langues",
+      "badgeCustomerService": "Service client en français",
+      "badgeParis": "Erasmus+ Paris",
+      "profile": "Profil professionnel",
+      "coreServices": "Services principaux",
+      "focus": "Approche",
+      "focusText": "Précision de traduction, adaptation culturelle, ton soigné et contenus pensés pour la recherche.",
+      "languagesHeading": "Langues",
+      "experienceLabel": "Expérience",
+      "core": "Fondamentaux",
+      "editorial": "Éditorial",
+      "tools": "Outils",
+      "servicesIntro": "Un accompagnement sur mesure pour les entreprises qui ont besoin de textes efficaces d’une langue à l’autre, d’une plateforme à l’autre et d’un contexte de recherche à l’autre.",
+      "processIntro": "Un flux de travail clair et structuré permet à chaque projet d’avancer efficacement, dans l’alignement et avec un rendu prêt à publier.",
+      "step": "Étape",
+      "samplesIntro": "De courts exemples pour montrer comment le sens, le ton et la lisibilité restent intacts lors de l’adaptation."
+    },
+    "levels": {
+      "native": "Natif",
+      "advancedC1": "Avancé · C1",
+      "advanced": "Avancé",
+      "intermediateB1": "Intermédiaire · B1",
+      "basicA2": "Élémentaire · A2"
     }
   }
 }

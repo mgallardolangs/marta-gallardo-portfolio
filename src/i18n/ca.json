@@ -47,7 +47,7 @@
       "Correcció i edició de textos"
     ],
     "whyMe": "Per què treballar amb mi?",
-    "whyMeText": "Idiomes, experiència real (atenció al client, au pair, estudis a París) i compromís amb cada projecte."
+    "whyMeText": "Idiomes, experiència real (atenció al client, au pair, programa Erasmus+ a París) i compromís amb cada projecte."
   },
   "blog": {
     "title": "Blog",
@@ -100,6 +100,7 @@
       "languages": [
         "Espanyol",
         "Francès",
+        "Català",
         "Alemany",
         "Italià",
         "Anglès"
@@ -110,13 +111,235 @@
       "title": "Una primera impressió en moviment",
       "description": "Aquest espai pot presentar el vídeo d’introducció de Marta: natural, elegant i pensat per transmetre personalitat, presència davant de càmera i un univers visual refinat.",
       "placeholder": "Vídeo intro",
-      "note": "Format placeholder per a reel / presentació"
+      "note": "Format 9:16 · placeholder per a reel / presentació"
     },
     "gallery": {
-      "shotOne": "Cutout Lifestyle",
-      "shotTwo": "Cutout Beauty",
-      "shotThree": "Cutout Travel",
-      "shotFour": "Behind the scenes"
+      "shotOne": "Foto lifestyle",
+      "shotTwo": "Foto beauty",
+      "shotThree": "Foto viatges",
+      "shotFour": "Making of"
+    }
+  },
+  "ugcPage": {
+    "hero": {
+      "backgroundLabel": "PORTFOLI DE MARCA",
+      "eyebrow": "UGC · conceptes d’anuncis natius",
+      "headline": "Conceptes de UGC nets i editorials creats per a marques, no per a diaris d’influencer.",
+      "description": "Un portfoli placeholder curat per a Marta Gallardo amb conceptes de campanya centrats en viatges, idiomes i art. Cada targeta està pensada per simular creativitats llestes per a paid social: creïbles, ordenades i orientades a conversió."
+    },
+    "pageDescription": "Portfoli professional de UGC de Marta Gallardo amb campanyes editorials conceptuals de viatges, idiomes i art.",
+    "nicheLabel": "Nínxol",
+    "backToTop": "Torna amunt",
+    "placeholder": "Maqueta",
+    "ugcDemo": "Demo UGC",
+    "creativeDirection": "Direcció creativa",
+    "nativeAdStyle": "Estil d’anunci natiu",
+    "niches": {
+      "travel": {
+        "label": "Viatges",
+        "accent": "Storytelling per a hotels i destinacions",
+        "eyebrow": "Hostaleria, equipatge, reserves i contingut centrat en l’experiència",
+        "intro": "Una barreja cuidada de walkthroughs de check-in, edicions d’itineraris i peces de viatge centrades en producte, dissenyades per integrar-se de manera natural en campanyes de paid social.",
+        "cards": [
+          {
+            "title": "Storyboard de check-in en hotel boutique",
+            "description": "Una seqüència d’arribada serena que destaca la facilitat de la reserva, els detalls de l’habitació i l’experiència de l’hoste amb una locució útil.",
+            "format": "Testimoni",
+            "media": "Reel de room tour de 15 s"
+          },
+          {
+            "title": "Edició de producte d’imprescindibles d’equipatge de mà",
+            "description": "Una peça visual d’estil natiu que presenta accessoris de viatge com a solucions pràctiques per a escapades curtes de cap de setmana.",
+            "format": "Unboxing",
+            "media": "Concepte de carrusel fotogràfic"
+          },
+          {
+            "title": "Walkthrough d’app d’itineraris de cap de setmana",
+            "description": "Demo guiada per pantalla que mostra com una app de planificació de viatges simplifica reserves, mapes i organització del viatge en un sol flux.",
+            "format": "Tutorial",
+            "media": "Interfície mòbil + locució"
+          },
+          {
+            "title": "Ressenya de servei de trasllat a l’aeroport",
+            "description": "Peça testimonial de baixa fricció centrada en la comoditat, la puntualitat i la confiança en la reserva per a visitants que arriben per primera vegada.",
+            "format": "Testimoni",
+            "media": "Mockup d’anunci vertical"
+          }
+        ]
+      },
+      "languages": {
+        "label": "Idiomes",
+        "accent": "Anuncis educatius, útils i multilingües",
+        "eyebrow": "Apps d’idiomes, serveis internacionals i eines d’aprenentatge",
+        "intro": "Conceptes de mostra pensats per a marques que necessiten una comunicació clara i creïble, ideals per a campanyes multilingües, fluxos d’onboarding i peces explicatives de producte.",
+        "cards": [
+          {
+            "title": "Demo de primera lliçó en app d’idiomes",
+            "description": "Recorregut amable del producte que presenta la plataforma com un hàbit diari senzill, en lloc d’un post d’influencer basat en la personalitat.",
+            "format": "Tutorial",
+            "media": "Placeholder de demo en pantalla"
+          },
+          {
+            "title": "Anunci de prova social per a servei de traducció",
+            "description": "Concepte testimonial net que mostra com un copy localitzat millora la confiança d’audiències internacionals i llançaments transfronterers.",
+            "format": "Testimoni",
+            "media": "Talking head estil founder"
+          },
+          {
+            "title": "Showcase de kit d’estudi per començar",
+            "description": "Seqüència editorial d’unboxing amb flashcards, quaderns i recursos digitals posicionats com un pack pràctic d’aprenentatge.",
+            "format": "Unboxing",
+            "media": "Concepte flatlay d’escriptori"
+          },
+          {
+            "title": "Explicador de flux de reserva multilingüe",
+            "description": "Una demo breu per a plataformes globals que posa el focus en el canvi d’idioma, la claredat i la confiança durant el checkout.",
+            "format": "Tutorial",
+            "media": "Walkthrough orientat a conversió"
+          }
+        ]
+      },
+      "art": {
+        "label": "Art",
+        "accent": "Demos editorials de producte per a marques creatives",
+        "eyebrow": "Eines creatives, tallers, galeries i productes amb enfocament de disseny",
+        "intro": "Conceptes de UGC amb sensibilitat editorial per a marques d’art i disseny, equilibrant visuals tàctils amb hooks informatius que funcionen molt bé en campanyes de pagament.",
+        "cards": [
+          {
+            "title": "Reveal de materials de sketchbook",
+            "description": "Concepte d’unboxing suau i tàctil centrat en la textura del paper, els detalls del packaging i la sensació premium del kit creatiu.",
+            "format": "Unboxing",
+            "media": "Pla zenital de taula"
+          },
+          {
+            "title": "Tutorial de set d’aquarel·la per a principiants",
+            "description": "Concepte publicitari pas a pas que mostra què inclou el set, com començar i per què el pack resulta accessible per a usuaris nous.",
+            "format": "Tutorial",
+            "media": "Clip demo centrat en el procés"
+          },
+          {
+            "title": "Ressenya d’audioguia de museu",
+            "description": "Enfocament testimonial refinat que presenta la guia com una manera més rica i immersiva de viure les exposicions in situ.",
+            "format": "Testimoni",
+            "media": "Imatge lifestyle + cita"
+          },
+          {
+            "title": "Abans / després d’un servei d’emmarcat",
+            "description": "Tractament d’anunci natiu que mostra com l’emmarcat a mida eleva la presentació d’obres per a audiències interessades en decoració i regals.",
+            "format": "Tutorial",
+            "media": "Carrusel de transformació"
+          }
+        ]
+      }
+    }
+  },
+  "translationPage": {
+    "copy": {
+      "eyebrow": "Traducció, localització i redacció SEO",
+      "headline": "Serveis lingüístics amb enfocament professional i visió internacional.",
+      "intro": "Ajude marques, estudis i negocis digitals a adaptar el seu missatge amb precisió, naturalitat i sensibilitat cultural perquè cada text resulte convincent en el mercat adequat.",
+      "summary": "El meu perfil combina formació lingüística, experiència real en atenció al client en francés, treball internacional com a au pair i un programa Erasmus+ de sis mesos a París. Això em permet treballar els textos no sols des de la correcció, sinó també des del context cultural i la intenció comercial.",
+      "availability": "Disponible per a projectes freelance, col·laboracions puntuals i suport editorial continu.",
+      "educationTitle": "Formació i perfil lingüístic",
+      "educationIntro": "Base acadèmica orientada als idiomes, la comunicació intercultural i la redacció, reforçada amb immersió pràctica en entorns internacionals.",
+      "studies": [
+        "Formació centrada en idiomes, comunicació escrita i adaptació de continguts per a públics internacionals.",
+        "Perfeccionament del francés a través d’un programa Erasmus+ de sis mesos a París i contacte habitual amb entorns francòfons.",
+        "Interés continu per l’escriptura clara, la terminologia i l’optimització de continguts per a entorns digitals."
+      ],
+      "languagesTitle": "Idiomes",
+      "experienceIntro": "Experiència aplicada a la comunicació real, al tracte directe amb persones i a l’adaptació del llenguatge a contextos diferents.",
+      "experience": [
+        {
+          "title": "Atenció al client en francés",
+          "text": "Comunicació diària amb clients francòfons, resolució d’incidències i cura del to de marca en situacions reals."
+        },
+        {
+          "title": "Experiència internacional com a au pair",
+          "text": "Convivència i treball en un entorn multicultural, desenvolupant adaptabilitat, empatia i fluïdesa comunicativa."
+        },
+        {
+          "title": "Programa Erasmus+ a París",
+          "text": "Estada de sis mesos a París a través del programa Erasmus+, que va reforçar el francés, l’escolta activa i la comprensió dels matisos culturals."
+        }
+      ],
+      "skillsIntro": "Un enfocament de treball pensat per a textos que han de sonar naturals, alineats amb la marca i preparats per funcionar online.",
+      "skills": [
+        "Traducció i adaptació de continguts",
+        "Localització web i cultural",
+        "SEO copywriting multilingüe",
+        "Correcció, edició i millora d’estil",
+        "Investigació terminològica i consistència de to",
+        "Gestió de glossaris, briefs i guies d’estil"
+      ],
+      "tools": [
+        "Google Docs i Word",
+        "Fulls de càlcul i control de canvis",
+        "CMS i editors web",
+        "Glossaris, guies d’estil i checklists de revisió"
+      ],
+      "processDescriptions": [
+        "Analitze objectius, públic, to, idioma de destinació i necessitats SEO abans de començar.",
+        "Traduïsc o redacte amb focus en claredat, intenció comercial i naturalitat.",
+        "Revise terminologia, coherència, fluïdesa i detalls formals per polir el resultat final.",
+        "Entregue el text llest per publicar, amb observacions o ajustos si el projecte ho necessita."
+      ],
+      "whyMeCards": [
+        {
+          "title": "Idiomes amb criteri professional",
+          "text": "Treballe amb diversos idiomes i sé adaptar el missatge perquè mantinga sentit, to i credibilitat."
+        },
+        {
+          "title": "Experiència real, més enllà de l’acadèmia",
+          "text": "He utilitzat el francés en atenció al client, he fet un Erasmus+ a París i he treballat en entorns multiculturals."
+        },
+        {
+          "title": "Compromís en cada lliurament",
+          "text": "Prioritze la claredat, el detall i una comunicació professional durant tot el procés."
+        }
+      ],
+      "samplesTitle": "Mostres d’adaptació",
+      "samples": [
+        {
+          "label": "FR → CA · missatge web",
+          "sourceLabel": "Original",
+          "source": "Découvrez une expérience authentique pensée pour les voyageurs qui recherchent confort, charme et simplicité.",
+          "targetLabel": "Adaptació",
+          "target": "Descobrix una experiència autèntica pensada per a viatgers que busquen comoditat, encant i senzillesa."
+        },
+        {
+          "label": "EN → CA · copy SEO",
+          "sourceLabel": "Original",
+          "source": "Natural skincare for busy routines: lightweight formulas, visible results and everyday comfort.",
+          "targetLabel": "Adaptació",
+          "target": "Cosmètica natural per a rutines intenses: fórmules lleugeres, resultats visibles i benestar diari."
+        }
+      ]
+    },
+    "ui": {
+      "badgeLanguages": "6 idiomes",
+      "badgeCustomerService": "Atenció al client en francés",
+      "badgeParis": "Erasmus+ París",
+      "profile": "Perfil professional",
+      "coreServices": "Serveis principals",
+      "focus": "Enfocament",
+      "focusText": "Precisió en la traducció, adaptació cultural, to cuidat i textos pensats per a cercadors.",
+      "languagesHeading": "Idiomes",
+      "experienceLabel": "Experiència",
+      "core": "Base",
+      "editorial": "Editorial",
+      "tools": "Eines",
+      "servicesIntro": "Suport personalitzat per a negocis que necessiten que els seus textos funcionen entre idiomes, plataformes i contextos de cerca.",
+      "processIntro": "Un flux clar i estructurat manté cada projecte eficient, alineat i preparat per a publicar-se.",
+      "step": "Pas",
+      "samplesIntro": "Exemples breus de com es preserven el sentit, el to i la llegibilitat durant l’adaptació."
+    },
+    "levels": {
+      "native": "Nadiu",
+      "advancedC1": "Avançat · C1",
+      "advanced": "Avançat",
+      "intermediateB1": "Intermedi · B1",
+      "basicA2": "Bàsic · A2"
     }
   }
 }

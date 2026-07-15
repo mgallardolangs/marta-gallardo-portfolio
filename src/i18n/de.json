@@ -47,7 +47,7 @@
       "Korrekturlesen und Textbearbeitung"
     ],
     "whyMe": "Warum mit mir arbeiten?",
-    "whyMeText": "Sprachen, praktische Erfahrung (Kundenservice, Au-pair, Studium in Paris) und Engagement für jedes Projekt."
+    "whyMeText": "Sprachen, praktische Erfahrung (Kundenservice, Au-pair, Erasmus+-Programm in Paris) und Engagement für jedes Projekt."
   },
   "blog": {
     "title": "Blog",
@@ -91,7 +91,7 @@
       "description": "Ich entwickle Bilder, Texte und digitale Erlebnisse mit einem editorischen Gespür für Lifestyle-, Beauty-, Travel- und internationale Marken.",
       "mainPhoto": "Hauptfoto",
       "scrollCue": "Scrollen zum Entdecken",
-      "coverLabel": "Cover Story"
+      "coverLabel": "Titel-Story"
     },
     "about": {
       "eyebrow": "Editoriales Profil",
@@ -100,6 +100,7 @@
       "languages": [
         "Spanisch",
         "Französisch",
+        "Katalanisch",
         "Deutsch",
         "Italienisch",
         "Englisch"
@@ -110,13 +111,235 @@
       "title": "Ein erster Eindruck in Bewegung",
       "description": "Dieser Bereich kann Martas Intro-Video zeigen: natürlich, elegant und darauf ausgelegt, Persönlichkeit, Kamerapräsenz und eine klare visuelle Welt zu vermitteln.",
       "placeholder": "Intro-Video",
-      "note": "Placeholder für Reel / Vorstellung"
+      "note": "9:16-Format · Platzhalter für Reel / Vorstellung"
     },
     "gallery": {
-      "shotOne": "Lifestyle Cutout",
-      "shotTwo": "Beauty Cutout",
-      "shotThree": "Travel Cutout",
-      "shotFour": "Behind the scenes"
+      "shotOne": "Lifestyle-Foto",
+      "shotTwo": "Beauty-Foto",
+      "shotThree": "Reisefoto",
+      "shotFour": "Blick hinter die Kulissen"
+    }
+  },
+  "ugcPage": {
+    "hero": {
+      "backgroundLabel": "MARKENPORTFOLIO",
+      "eyebrow": "UGC · Native-Ad-Konzepte",
+      "headline": "Klare, editoriale UGC-Konzepte für Marken — nicht für Influencer-Tagebücher.",
+      "description": "Ein kuratiertes Placeholder-Portfolio für Marta Gallardo mit Kampagnenkonzepten rund um Reisen, Sprachen und Kunst. Jede Karte ist so angelegt, dass sie Paid-Social-ready Creative simuliert: glaubwürdig, strukturiert und auf Conversion ausgerichtet."
+    },
+    "pageDescription": "Professionelles UGC-Portfolio von Marta Gallardo mit editorialen Konzeptkampagnen zu Reisen, Sprachen und Kunst.",
+    "nicheLabel": "Nische",
+    "backToTop": "Zurück nach oben",
+    "placeholder": "Platzhalter",
+    "ugcDemo": "UGC-Demo",
+    "creativeDirection": "Kreative Leitung",
+    "nativeAdStyle": "Native-Ad-Stil",
+    "niches": {
+      "travel": {
+        "label": "Reisen",
+        "accent": "Storytelling für Hotels und Destinationen",
+        "eyebrow": "Hotellerie, Gepäck, Buchung und erlebnisorientierter Content",
+        "intro": "Eine durchdachte Mischung aus Check-in-Walkthroughs, Itinerary-Edits und produktfokussierten Travel-Assets, die sich natürlich in Paid-Social-Feeds einfügen.",
+        "cards": [
+          {
+            "title": "Check-in-Storyboard für Boutique-Hotels",
+            "description": "Eine ruhige Ankunftssequenz, die Buchungskomfort, Zimmereigenschaften und das Gästeerlebnis mit hilfreichen Voiceover-Hinweisen hervorhebt.",
+            "format": "Testimonial",
+            "media": "15-Sek.-Room-Tour-Reel"
+          },
+          {
+            "title": "Produkte-Edit für Handgepäck-Essentials",
+            "description": "Ein Native-Style-Packing-Visual, das Reiseaccessoires als praktische Lösung für kurze Wochenendtrips positioniert.",
+            "format": "Unboxing",
+            "media": "Foto-Karussell-Konzept"
+          },
+          {
+            "title": "Walkthrough einer Wochenend-Itinerary-App",
+            "description": "Eine screenbasierte Demo, die zeigt, wie eine Reiseplanungs-App Reservierungen, Karten und Reiseorganisation in einem Ablauf vereinfacht.",
+            "format": "Tutorial",
+            "media": "Mobile UI + Voiceover"
+          },
+          {
+            "title": "Bewertung eines Flughafentransfer-Services",
+            "description": "Ein unkompliziertes Testimonial-Asset mit Fokus auf Komfort, Pünktlichkeit und Buchungssicherheit für Erstbesucher.",
+            "format": "Testimonial",
+            "media": "Vertikales Ad-Mockup"
+          }
+        ]
+      },
+      "languages": {
+        "label": "Sprachen",
+        "accent": "Lehrreiche, nützliche und mehrsprachige Ads",
+        "eyebrow": "Sprach-Apps, internationale Services und Lerntools",
+        "intro": "Beispielkonzepte für Marken, die klare und glaubwürdige Kommunikation brauchen — ideal für mehrsprachige Kampagnen, Onboarding-Flows und Produkt-Erklärformate.",
+        "cards": [
+          {
+            "title": "Demo einer ersten Lektion in einer Sprach-App",
+            "description": "Ein sympathischer Produkt-Rundgang, der die Plattform als einfache tägliche Gewohnheit statt als persönlichkeitgetriebenen Influencer-Post inszeniert.",
+            "format": "Tutorial",
+            "media": "Screen-Demo-Placeholder"
+          },
+          {
+            "title": "Social-Proof-Ad für einen Übersetzungsservice",
+            "description": "Ein klares Testimonial-Konzept, das zeigt, wie lokalisierter Copy das Vertrauen internationaler Zielgruppen und grenzüberschreitender Launches stärkt.",
+            "format": "Testimonial",
+            "media": "Founder-Style Talking Head"
+          },
+          {
+            "title": "Starter-Pack-Showcase für ein Study Kit",
+            "description": "Eine editoriale Unboxing-Sequenz mit Flashcards, Notizbüchern und digitalen Ressourcen, positioniert als praktisches Lernbundle.",
+            "format": "Unboxing",
+            "media": "Desk-Flatlay-Konzept"
+          },
+          {
+            "title": "Erklärstück für einen mehrsprachigen Buchungsflow",
+            "description": "Ein kompaktes Demo-Asset für globale Plattformen, das Sprachwechsel, Klarheit und Sicherheit im Checkout hervorhebt.",
+            "format": "Tutorial",
+            "media": "Conversion-orientierter Walkthrough"
+          }
+        ]
+      },
+      "art": {
+        "label": "Kunst",
+        "accent": "Editoriale Produktdemos für kreative Marken",
+        "eyebrow": "Kreativtools, Workshops, Galerien und designorientierte Produkte",
+        "intro": "UGC-Konzepte mit editorialem Gefühl für Kunst- und Designmarken, die haptische Visuals mit informativen Hooks verbinden und im Paid-Bereich gut funktionieren.",
+        "cards": [
+          {
+            "title": "Material-Reveal für ein Sketchbook",
+            "description": "Ein weiches, haptisches Unboxing-Konzept mit Fokus auf Papierstruktur, Packaging-Details und dem hochwertigen Eindruck des Kreativ-Kits.",
+            "format": "Unboxing",
+            "media": "Overhead-Tischaufnahme"
+          },
+          {
+            "title": "Tutorial für ein Anfänger-Aquarellset",
+            "description": "Ein Schritt-für-Schritt-Ad-Konzept, das zeigt, was im Set enthalten ist, wie man startet und warum sich das Bundle für Einsteiger zugänglich anfühlt.",
+            "format": "Tutorial",
+            "media": "Prozessorientierter Demo-Clip"
+          },
+          {
+            "title": "Bewertung eines Museums-Audioguides",
+            "description": "Ein raffiniertes Testimonial, das den Guide als intensivere und immersivere Möglichkeit präsentiert, Ausstellungen vor Ort zu erleben.",
+            "format": "Testimonial",
+            "media": "Lifestyle-Still + Zitat"
+          },
+          {
+            "title": "Vorher / nachher für einen Rahmenservice",
+            "description": "Ein Native-Ad-Ansatz, der zeigt, wie individuelle Rahmung die Präsentation von Kunstwerken für Wohn- und Geschenkzielgruppen aufwertet.",
+            "format": "Tutorial",
+            "media": "Transformations-Karussell"
+          }
+        ]
+      }
+    }
+  },
+  "translationPage": {
+    "copy": {
+      "eyebrow": "Übersetzung, Lokalisierung und SEO-Texte",
+      "headline": "Sprachdienstleistungen mit professionellem Anspruch und internationalem Blick.",
+      "intro": "Ich unterstütze Marken, Studios und digitale Unternehmen dabei, ihre Botschaft präzise, natürlich und kultursensibel zu adaptieren, damit jeder Text im richtigen Markt überzeugend wirkt.",
+      "summary": "Mein Profil verbindet eine sprachorientierte Ausbildung, praktische Erfahrung im französischsprachigen Kundenservice, internationale Tätigkeit als Au-pair und ein sechsmonatiges Erasmus+-Programm in Paris. So bearbeite ich Texte nicht nur sprachlich korrekt, sondern auch mit kulturellem Verständnis und kommerziellem Feingefühl.",
+      "availability": "Verfügbar für Freelance-Projekte, punktuelle Kooperationen und laufende redaktionelle Unterstützung.",
+      "educationTitle": "Ausbildung und sprachliches Profil",
+      "educationIntro": "Eine akademische Basis mit Schwerpunkt auf Sprachen, interkultureller Kommunikation und Textarbeit, ergänzt durch praktische Immersion in internationalen Umfeldern.",
+      "studies": [
+        "Ausbildung mit Fokus auf Sprachen, schriftliche Kommunikation und die Anpassung von Inhalten für internationale Zielgruppen.",
+        "Vertiefung des Französischen durch ein sechsmonatiges Erasmus+-Programm in Paris und den regelmäßigen Kontakt mit frankophonen Umfeldern.",
+        "Stetiges Interesse an klarer Sprache, Terminologiemanagement und der Optimierung von Inhalten für digitale Kanäle."
+      ],
+      "languagesTitle": "Sprachen",
+      "experienceIntro": "Praxisnahe Erfahrung in realen Kommunikationssituationen, im direkten Kontakt mit Menschen und in der Anpassung von Sprache an unterschiedliche Kontexte.",
+      "experience": [
+        {
+          "title": "Französischsprachiger Kundenservice",
+          "text": "Tägliche Kommunikation mit frankophonen Kundinnen und Kunden, Lösungsorientierung bei Anfragen und ein sicheres Gespür für den Markenton in realen Situationen."
+        },
+        {
+          "title": "Internationale Erfahrung als Au-pair",
+          "text": "Leben und Arbeiten in einem multikulturellen Umfeld, wodurch Anpassungsfähigkeit, Empathie und kommunikative Sicherheit gestärkt wurden."
+        },
+        {
+          "title": "Erasmus+-Programm in Paris",
+          "text": "Sechsmonatiger Erasmus+-Aufenthalt in Paris, der mein Französisch, mein aktives Zuhören und mein Verständnis für kulturelle Nuancen vertieft hat."
+        }
+      ],
+      "skillsIntro": "Ein Arbeitsansatz für Texte, die natürlich klingen, zur Marke passen und online funktionieren sollen.",
+      "skills": [
+        "Übersetzung und Content-Adaption",
+        "Web- und Kulturlokalisierung",
+        "Mehrsprachiges SEO-Copywriting",
+        "Korrektorat, Lektorat und stilistische Optimierung",
+        "Terminologierecherche und Tonalitätskonsistenz",
+        "Pflege von Glossaren, Briefings und Styleguides"
+      ],
+      "tools": [
+        "Google Docs und Word",
+        "Tabellen und Änderungsverfolgung",
+        "CMS-Workflows und Web-Editoren",
+        "Glossare, Styleguides und QA-Checklisten"
+      ],
+      "processDescriptions": [
+        "Vor dem Start prüfe ich Ziele, Zielgruppe, Tonalität, Zielsprache und SEO-Anforderungen.",
+        "Ich übersetze oder schreibe mit Blick auf Klarheit, Suchintention und natürliche Formulierungen.",
+        "Ich kontrolliere Terminologie, Konsistenz, Lesefluss und formale Details, um die finale Version zu verfeinern.",
+        "Ich liefere Texte, die veröffentlichungsbereit sind, bei Bedarf inklusive Anmerkungen oder Anpassungen."
+      ],
+      "whyMeCards": [
+        {
+          "title": "Sprachen mit professionellem Feingefühl",
+          "text": "Ich arbeite in mehreren Sprachen und passe Botschaften so an, dass Sinn, Ton und Glaubwürdigkeit erhalten bleiben."
+        },
+        {
+          "title": "Internationale Erfahrung aus der Praxis",
+          "text": "Zu meinem Hintergrund gehören französischer Kundenservice, ein Erasmus+-Programm in Paris und Arbeit in multikulturellen Umfeldern."
+        },
+        {
+          "title": "Verlässlichkeit bis ins Detail",
+          "text": "Ich lege während des gesamten Prozesses Wert auf Klarheit, Sorgfalt und professionelle Kommunikation."
+        }
+      ],
+      "samplesTitle": "Beispiele für Adaptionen",
+      "samples": [
+        {
+          "label": "FR → DE · Website-Text",
+          "sourceLabel": "Original",
+          "source": "Découvrez une expérience authentique pensée pour les voyageurs qui recherchent confort, charme et simplicité.",
+          "targetLabel": "Adaptierte Version",
+          "target": "Entdecken Sie ein authentisches Erlebnis für Reisende, die Komfort, Charme und Einfachheit suchen."
+        },
+        {
+          "label": "EN → DE · SEO-Text",
+          "sourceLabel": "Original",
+          "source": "Natural skincare for busy routines: lightweight formulas, visible results and everyday comfort.",
+          "targetLabel": "Adaptierte Version",
+          "target": "Natürliche Hautpflege für volle Tage: leichte Formeln, sichtbare Ergebnisse und Wohlbefinden im Alltag."
+        }
+      ]
+    },
+    "ui": {
+      "badgeLanguages": "6 Sprachen",
+      "badgeCustomerService": "Kundenservice auf Französisch",
+      "badgeParis": "Erasmus+ Paris",
+      "profile": "Berufliches Profil",
+      "coreServices": "Leistungen im Fokus",
+      "focus": "Schwerpunkt",
+      "focusText": "Übersetzungsgenauigkeit, kulturelle Adaption, ein gepflegter Ton und suchorientierte Texte.",
+      "languagesHeading": "Sprachen",
+      "experienceLabel": "Erfahrung",
+      "core": "Fundament",
+      "editorial": "Redaktionell",
+      "tools": "Tools",
+      "servicesIntro": "Individuelle Unterstützung für Unternehmen, die Texte brauchen, die über Sprachen, Plattformen und Suchkontexte hinweg funktionieren.",
+      "processIntro": "Ein klar strukturierter Ablauf sorgt dafür, dass jedes Projekt effizient, abgestimmt und veröffentlichungsbereit bleibt.",
+      "step": "Schritt",
+      "samplesIntro": "Kurze Beispiele dafür, wie Bedeutung, Ton und Lesbarkeit bei der Adaption erhalten bleiben."
+    },
+    "levels": {
+      "native": "Muttersprache",
+      "advancedC1": "Fortgeschritten · C1",
+      "advanced": "Fortgeschritten",
+      "intermediateB1": "Mittelstufe · B1",
+      "basicA2": "Grundkenntnisse · A2"
     }
   }
 }
