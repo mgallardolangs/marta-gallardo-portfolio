@@ -8,5 +8,9 @@
   },
   "videoPlaceholderOrEmbedUrl": "https://example.com/embed/video",
   "ugcHeaderImage": "",
-  "instagramScreenshot": ""
+  "instagramScreenshot": "",
+  "socialLinks": {
+    "linkedin": "https://linkedin.com",
+    "instagram": "https://instagram.com"
+  }
 }

@@ -4101,6 +4101,18 @@ collections:
           name: item
           widget: image
         required: false
+    - label: 🔗 Redes sociales
+      name: socialLinks
+      widget: object
+      fields:
+      - label: LinkedIn URL
+        name: linkedin
+        widget: string
+        default: https://linkedin.com
+      - label: Instagram URL
+        name: instagram
+        widget: string
+        default: https://instagram.com
     format: json
 - name: blog
   label: Blog Posts
