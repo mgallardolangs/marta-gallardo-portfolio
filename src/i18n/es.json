@@ -134,9 +134,9 @@
     "niches": {
       "travel": {
         "label": "Viajes",
-        "accent": "Storytelling para hoteles y destinos",
+        "accent": "Historias que viajan contigo",
         "eyebrow": "Hostelería, equipaje, reservas y contenido centrado en la experiencia",
-        "intro": "Una mezcla cuidada de recorridos guiados de check-in, ediciones de itinerario y piezas de viaje centradas en producto, diseñadas para integrarse de forma natural en campañas de paid social.",
+        "intro": "Contenido de viaje pensado para vender: check-ins de alojamiento, recomendaciones de itinerario y piezas centradas en producto, creadas para integrarse de forma natural en campañas de paid social.",
         "cards": [
           {
             "title": "Storyboard de check-in en hotel boutique",
@@ -166,9 +166,9 @@
       },
       "languages": {
         "label": "Idiomas",
-        "accent": "Anuncios educativos, útiles y multilingües",
+        "accent": "Más idiomas, más conexión",
         "eyebrow": "Apps de idiomas, servicios internacionales y herramientas de aprendizaje",
-        "intro": "Conceptos de muestra pensados para marcas que necesitan una comunicación clara y creíble; ideales para campañas multilingües, flujos de onboarding y piezas explicativas de producto.",
+        "intro": "Piezas pensadas para marcas que necesitan una comunicación clara y creíble en varios idiomas: campañas multilingües, procesos de onboarding y contenido explicativo de producto.",
         "cards": [
           {
             "title": "Demo de primera lección en app de idiomas",
@@ -200,7 +200,7 @@
         "label": "Arte",
         "accent": "Demos editoriales de producto para marcas creativas",
         "eyebrow": "Herramientas creativas, talleres, galerías y productos con enfoque de diseño",
-        "intro": "Conceptos de UGC con sensibilidad editorial para marcas de arte y diseño, equilibrando visuales táctiles con hooks informativos que funcionan muy bien en campañas de pago.",
+        "intro": "Contenido con mirada editorial para marcas de arte y diseño: visuales cuidados y táctiles, con inicios de vídeo pensados para captar la atención desde el primer segundo — ideal para campañas de pago.",
         "cards": [
           {
             "title": "Presentación de materiales de cuaderno de bocetos",
@@ -231,15 +231,16 @@
     },
     "nicheLabel": "Nicho",
     "creativeDirection": "Dirección creativa",
-    "backToTop": "Volver arriba",
+    "backToTop": "",
     "placeholder": "Maqueta",
     "ugcDemo": "Demo UGC",
     "nativeAdStyle": "Estilo de anuncio nativo",
     "hero": {
       "backgroundLabel": "PORTFOLIO DE MARCA",
-      "eyebrow": "UGC · conceptos de anuncios nativos",
-      "headline": "Conceptos de UGC limpios y editoriales creados para marcas, no para diarios de influencer.",
-      "description": "Un portfolio conceptual curado para Marta Gallardo con conceptos de campaña centrados en viajes, idiomas y arte. Cada tarjeta está pensada para simular creatividad lista para paid social: creíble, ordenada y orientada a la conversión."
+      "eyebrow": "UGC",
+      "headline": "@marttelier",
+      "highlight": "De traductora de idiomas a traductora de marcas"
+      "description": "Llevo años contando historias reales, en varios idiomas y desde varios países, sin buscar nada a cambio. \n El UGC me permite seguir haciendo lo que mejor sé hacer: traducir experiencias en contenido auténtica, colaborando con marcas que inspiran. "
     }
   },
   "blog": {
@@ -256,7 +257,7 @@
   },
   "about": {
     "title": "¡ENCANTADA Me presento!",
-    "text": "Soy Marta, tengo 23 años, vivo en Elche y soy creadora de contenido UGC y especialista en traducción y SEO. \n\nHablo español y francés a la perfección, además de saber catalán, inglés, alemán e italiano. Me apasiona crear contenido auténtico para marcas y ayudar a empresas a comunicarse globalmente."
+    "text": "Soy Marta, tengo 23 años y vivo en Elche. Especializada en contenido orgánico, soy creadora UGC, traductora y especialista SEO. \n Mi fuerte es la mirada auténtica, curiosa y multicultural. Vengo del mundo de la traducción, no del marketing tradicional, y eso se nota: entiendo los matices de cada mensaje y sé cómo hacer que un vídeo de 30 segundos diga mucho más. \n Si buscas alguien que combine creatividad, cercanía y visión global en su contenido, hablemos. ¡Estaré encantada de darle a tu marca ese toque distintivo."
   },
   "ugc": {
     "title": "UGC Portfolio",
@@ -312,28 +313,28 @@
   "home": {
     "hero": {
       "kicker": "UGC · Traducción · SEO",
-      "description": "Una mirada creativa con precisión estratégica. Enfocada para marcas lifestyle, viajes y proyectos internacionales.\n\nAmante de lo estético y lo auténtico. Me apasiona el arte, la naturaleza y crear contenido que se sienta real, cuidado y cercano. ",
+      "description": "Contenido orgánico, mirada creativa, alcance internacional. Varios idiomas, una forma auténtica de comunicar. Lo estético y lo real conviven en mi trabajo. Arte, naturaleza e historias reales: mi inspiración constante. ",
       "mainPhoto": "Foto principal",
       "scrollCue": "Desliza para descubrir",
       "coverLabel": "Portada editorial"
     },
     "about": {
-      "eyebrow": "Perfil editorial",
-      "highlight": "Una mirada creativa con precisión estratégica.",
+      "eyebrow": "",
+      "highlight": "Tranquila de espíritu, inquieta de mente.",
       "languagesLabel": "Idiomas con los que trabajo",
       "languages": [
         "Español",
         "Francés",
         "Catalán",
+        "Inglés", 
         "Alemán",
-        "Italiano",
-        "Inglés"
+        "Italiano"
       ]
     },
     "video": {
-      "eyebrow": "Vídeo de presentación",
-      "title": "Una primera impresión en movimiento",
-      "description": "Este espacio puede presentar el vídeo de introducción de Marta: natural, elegante y pensado para transmitir personalidad, presencia ante cámara y universo visual.",
+      "eyebrow": "MARCA PERSONAL",
+      "title": "@marttelier",
+      "description": "A los 23 no tengo todas las respuestas, y está bien así. No busco un horario ni una oficina fija: busco una vida construida a mi manera. \n Viajar, aprender idiomas, crecer sin estrés y sin la presión de tenerlo todo resuelto. Entre proyecto y proyecto siempre hay hueco para la creatividad. Disfruto el camino tanto como el destino y cada oportunidad es una forma más de aprender. ",
       "placeholder": "Vídeo intro",
       "note": "Formato 9:16 · placeholder para reel / presentación"
     },
