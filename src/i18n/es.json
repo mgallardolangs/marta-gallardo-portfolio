@@ -23,40 +23,43 @@
   "translationPage": {
     "copy": {
       "skills": [
-        "Traducción y adaptación de contenidos",
-        "Localización web y cultural",
-        "SEO copywriting multilingüe",
+        "Traducción y adaptación de contenidos \n FR⇄ES y EN/DE/IT/CA→ES",
+        "Localización web",
         "Corrección, edición y mejora de estilo",
-        "Investigación terminológica y consistencia de voz",
-        "Gestión de glosarios, briefs y guías de estilo"
+        "Investigación terminológica y gestión de glosarios",
+        "SEO local",
+        "Optimización de contenido para buscadores",
+        "Keyword planner",
+        "Copywriting"
       ],
       "experienceIntro": "Experiencia aplicada a la comunicación real, el trato directo con personas y la adaptación del lenguaje a distintos contextos.",
       "whyMeCards": [
         {
           "title": "Idiomas con criterio profesional",
-          "text": "Trabajo con varios idiomas y sé adaptar el mensaje para que mantenga sentido, tono y credibilidad."
+          "text": "No traduzco palabra por palabra: adapto el mensaje para que mantenga sentido, tono y credibilidad en el idioma de destino."
         },
         {
-          "title": "Experiencia real, no solo académica",
-          "text": "He utilizado el francés en atención al cliente, he realizado un Erasmus+ en París y he trabajado en entornos multiculturales."
+          "title": "Enfoque orientado a resultados",
+          "text": "Cada texto se piensa para su propósito final — vender, posicionar o informar — no solo para sonar bien."
         },
         {
           "title": "Compromiso con cada entrega",
-          "text": "Priorizo la claridad, el detalle y una comunicación seria durante todo el proceso."
+          "text": "Cumplo plazos, mantengo comunicación clara durante todo el proceso y entrego contenido revisado y listo para publicar."
         }
       ],
       "educationIntro": "Base académica orientada a idiomas, comunicación intercultural y redacción, reforzada con inmersión práctica en entornos internacionales.",
       "processDescriptions": [
-        "Analizo objetivos, público, tono, idioma de destino y necesidades SEO antes de empezar.",
-        "Traduzco o redacto con foco en claridad, intención comercial y naturalidad.",
-        "Reviso terminología, coherencia, fluidez y detalles formales para pulir el resultado.",
-        "Entrego el texto listo para publicar, con observaciones o ajustes si el proyecto lo requiere."
+        "Analizo el objetivo del proyecto, el público al que se dirige y el contexto (idioma, plataforma o mercado) antes de empezar.",
+        "Trabajo el contenido con foco en claridad, naturalidad e intención comercial, adaptándolo al formato que necesites.",
+        "Reviso coherencia, fluidez y detalles formales para asegurar un resultado pulido y listo para publicar.",
+        "Entrego el contenido final, con espacio para ajustes u observaciones si el proyecto lo requiere."
       ],
       "summary": "Mi perfil combina formación lingüística, experiencia real en atención al cliente en francés, trabajo internacional como au pair y un programa Erasmus+ de 6 meses en París. Eso me permite trabajar los textos no solo desde la corrección, sino también desde el contexto cultural y la intención comercial.",
       "studies": [
-        "Formación centrada en idiomas, comunicación escrita y adaptación de contenidos para públicos internacionales.",
+        "Grado en Traducción e Interpretación, con especialización en francés y enfoque en redacción y adaptación de contenidos para públicos internacionales.",
         "Perfeccionamiento del francés a través de un programa Erasmus+ de 6 meses en París y contacto diario con entornos francófonos.",
-        "Interés continuo por la escritura clara, la terminología y la optimización de contenidos para entornos digitales."
+        "Interés continuo por la escritura clara, la terminología y la optimización de contenidos para entornos digitales.",
+        "Prácticas freelance en traducción jurídica (FR→ES) junto a una traductora autónoma especializada, trabajando con textos legales y posedición de traducciones automáticas"
       ],
       "samples": [
         {
@@ -74,32 +77,33 @@
           "target": "Cosmética natural para rutinas dinámicas: fórmulas ligeras, resultados visibles y bienestar diario."
         }
       ],
-      "eyebrow": "Traducción, localización y redacción SEO",
+      "eyebrow": "Traducción · Localización · SEO",
       "experience": [
         {
-          "title": "Atención al cliente en francés",
-          "text": "Comunicación diaria con clientes francófonos, resolución de incidencias y cuidado del tono de marca en situaciones reales."
+          "title": "Traducción y gestión de contenido ecommerce + ATC en francés",
+          "text": "Traducción diaria de fichas de producto (ES→FR/DE/IT) y gestión de catálogos digitales de mercería y textil para mercados europeos. \n Comunicación diaria con clientes francófonos, resolución de incidencias y cuidado del tono de marca en situaciones reales."
+        },
+        {
+          "title": "Prácticas en traducción jurídica freelance",
+          "text": "Traducción FR⇄ES de textos legales y posedición de traducciones automáticas, asegurando precisión terminológica y coherencia en distintos formatos."
         },
         {
           "title": "Experiencia internacional como au pair",
           "text": "Convivencia y trabajo en un entorno multicultural, desarrollando adaptabilidad, empatía y fluidez comunicativa."
-        },
-        {
-          "title": "Programa Erasmus+ en París",
-          "text": "Estancia de 6 meses en París a través del programa Erasmus+, que fortaleció el francés, la escucha activa y la comprensión de matices culturales."
         }
       ],
       "skillsIntro": "Un enfoque de trabajo pensado para textos que necesitan sonar naturales, alineados con la marca y listos para funcionar online.",
-      "intro": "Ayudo a marcas, estudios y negocios digitales a adaptar su mensaje con precisión, naturalidad y sensibilidad cultural para que cada texto suene convincente en el mercado adecuado.",
+      "intro": "Ayudo a marcas, estudios y negocios digitales a adaptar su mensaje con precisión, naturalidad y sensibilidad cultural, para que cada contenido resulte convincente en el mercado al que se dirige. \n Mi perfil combina formación lingüística con experiencia real: atención al cliente en francés, una etapa como au pair en el extranjero y un programa Erasmus+ de 6 meses en París. Esto me permite trabajar cada proyecto no solo desde la corrección, sino desde el contexto cultural y la intención comercial detrás de cada mensaje.",
       "samplesTitle": "Muestras de adaptación",
       "educationTitle": "Formación y perfil lingüístico",
-      "headline": "Servicios lingüísticos con enfoque profesional y visión internacional.",
+      "headline": "Del texto a la conversión: Traducción y SEO multilingüe.",
       "availability": "Disponible para proyectos freelance, colaboraciones puntuales y apoyo editorial continuo.",
       "tools": [
-        "Google Docs y Word",
-        "Hojas de cálculo y control de cambios",
-        "CMS y editores web",
-        "Glosarios, guías de estilo y checklists de revisión"
+        "Microsoft Office, Google Workspace y Notion",
+        "Herramientas de IA",
+        "WordPress",
+        "Google Search Console",
+        "Google MyBussines"
       ],
       "languagesTitle": "Idiomas"
     },
@@ -107,19 +111,19 @@
       "samplesIntro": "Ejemplos breves de cómo se preservan el sentido, el tono y la legibilidad durante la adaptación.",
       "focusText": "Precisión de traducción, adaptación cultural, tono cuidado y textos pensados para buscadores.",
       "languagesHeading": "Idiomas",
-      "editorial": "Editorial",
-      "badgeParis": "Erasmus+ París",
+      "editorial": "SEO",
+      "badgeParis": "SEO multilingüe",
       "profile": "Perfil profesional",
       "experienceLabel": "Experiencia",
       "step": "Paso",
       "servicesIntro": "Apoyo personalizado para negocios que necesitan que sus textos funcionen entre idiomas, plataformas y contextos de búsqueda.",
-      "badgeCustomerService": "Atención al cliente en francés",
+      "badgeCustomerService": "Localización web",
       "focus": "Enfoque",
-      "badgeLanguages": "6 idiomas",
+      "badgeLanguages": "Traducción FR ⇄ ES",
       "tools": "Herramientas",
       "coreServices": "Servicios principales",
       "processIntro": "Un flujo claro y estructurado mantiene cada proyecto eficiente, alineado y listo para su publicación.",
-      "core": "Base"
+      "core": "Traducción"
     },
     "levels": {
       "native": "Nativo",
@@ -239,7 +243,7 @@
       "backgroundLabel": "PORTFOLIO DE MARCA",
       "eyebrow": "UGC",
       "headline": "@marttelier",
-      "highlight": "De traductora de idiomas a traductora de marcas"
+      "highlight": "De traductora de idiomas a traductora de marcas",
       "description": "Llevo años contando historias reales, en varios idiomas y desde varios países, sin buscar nada a cambio. \n El UGC me permite seguir haciendo lo que mejor sé hacer: traducir experiencias en contenido auténtica, colaborando con marcas que inspiran. "
     }
   },
@@ -274,19 +278,19 @@
     "skills": "Habilidades",
     "education": "Formación",
     "experience": "Experiencia",
-    "whyMeText": "Idiomas, experiencia real (atención al cliente, au pair, programa Erasmus+ en París) y compromiso con cada proyecto.",
+    "whyMeText": "Combino formación en traducción, un enfoque orientado a resultados y compromiso real con cada proyecto — sin necesitar años de experiencia para entregar un trabajo serio y cuidado.",
     "process": "Mi proceso de trabajo",
     "processSteps": {
       "briefing": "Briefing",
-      "translation": "Traducción / Redacción",
+      "translation": "Desarrollo",
       "review": "Revisión",
       "delivery": "Entrega"
     },
     "title": "Traducción + SEO",
     "servicesList": [
-      "Traducción de sitios web",
-      "Localización de contenido",
-      "SEO copywriting multilingüe",
+      "Traducción y localización de contenido web",
+      "Adaptación de catálogos y fichas de producto",
+      "Análisis SEO y copywriting multilingüe",
       "Corrección y edición de textos"
     ],
     "services": "Servicios que ofrezco"
