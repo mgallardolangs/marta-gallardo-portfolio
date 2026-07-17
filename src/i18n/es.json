@@ -114,7 +114,7 @@
       "editorial": "SEO",
       "badgeParis": "SEO multilingüe",
       "profile": "Perfil profesional",
-      "experienceLabel": "Experiencia",
+      "experienceLabel": "Recorrido profesional",
       "step": "Paso",
       "servicesIntro": "Apoyo personalizado para negocios que necesitan que sus textos funcionen entre idiomas, plataformas y contextos de búsqueda.",
       "badgeCustomerService": "Localización web",
@@ -202,7 +202,7 @@
       },
       "art": {
         "label": "Arte",
-        "accent": "Demos editoriales de producto para marcas creativas",
+        "accent": "Cratividad hecha a mano",
         "eyebrow": "Herramientas creativas, talleres, galerías y productos con enfoque de diseño",
         "intro": "Contenido con mirada editorial para marcas de arte y diseño: visuales cuidados y táctiles, con inicios de vídeo pensados para captar la atención desde el primer segundo — ideal para campañas de pago.",
         "cards": [
@@ -261,7 +261,7 @@
   },
   "about": {
     "title": "¡ENCANTADA Me presento!",
-    "text": "Soy Marta, tengo 23 años y vivo en Elche. Especializada en contenido orgánico, soy creadora UGC, traductora y especialista SEO. \n Mi fuerte es la mirada auténtica, curiosa y multicultural. Vengo del mundo de la traducción, no del marketing tradicional, y eso se nota: entiendo los matices de cada mensaje y sé cómo hacer que un vídeo de 30 segundos diga mucho más. \n Si buscas alguien que combine creatividad, cercanía y visión global en su contenido, hablemos. ¡Estaré encantada de darle a tu marca ese toque distintivo."
+    "text": "Soy Marta, tengo 23 años y vivo en Elche. Especializada en contenido orgánico, soy creadora UGC, traductora y especialista SEO. \n Mi fuerte es la mirada auténtica, curiosa y multicultural. Vengo del mundo de la traducción, no del marketing tradicional, y eso se nota: entiendo los matices de cada mensaje y sé cómo hacer que un vídeo de 30 segundos diga mucho más. \n Si buscas alguien que combine creatividad, cercanía y visión global en su contenido, hablemos. ¡Estaré encantada de darle a tu marca ese toque distintivo!"
   },
   "ugc": {
     "title": "UGC Portfolio",
@@ -275,7 +275,7 @@
   },
   "translation": {
     "whyMe": "¿Por qué trabajar conmigo?",
-    "skills": "Habilidades",
+    "skills": "Competencias",
     "education": "Formación",
     "experience": "Experiencia",
     "whyMeText": "Combino formación en traducción, un enfoque orientado a resultados y compromiso real con cada proyecto — sin necesitar años de experiencia para entregar un trabajo serio y cuidado.",
@@ -309,7 +309,7 @@
     "age": "23 años",
     "city": "Elche, España",
     "ugcLabel": "Creadora UGC @marttelier",
-    "seoLabel": "Traducción Multilingüe Localización + SEO"
+    "seoLabel": "Traducción y SEO multilingües"
   },
   "footer": {
     "rights": "Todos los derechos reservados"
