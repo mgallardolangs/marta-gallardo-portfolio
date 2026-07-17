@@ -93,7 +93,7 @@
         }
       ],
       "skillsIntro": "Un enfoque de trabajo pensado para textos que necesitan sonar naturales, alineados con la marca y listos para funcionar online.",
-      "intro": "Ayudo a marcas, estudios y negocios digitales a adaptar su mensaje con precisión, naturalidad y sensibilidad cultural, para que cada contenido resulte convincente en el mercado al que se dirige. \n Mi perfil combina formación lingüística con experiencia real: atención al cliente en francés, una etapa como au pair en el extranjero y un programa Erasmus+ de 6 meses en París. Esto me permite trabajar cada proyecto no solo desde la corrección, sino desde el contexto cultural y la intención comercial detrás de cada mensaje.",
+      "intro": "Adaptar un mensaje no consiste solo en traducirlo. Consiste en hacer que siga funcionando allí donde esté su audiencia. \n Cada idioma tiene sus propios matices, cada mercado su contexto y cada marca su propia forma de comunicarse.\n Ayudo a empresas a adaptar y optimizar su contenido para que conecte con nuevos mercados, mejore su visibilidad en buscadores y mantenga la misma naturalidad en cualquier idioma. \n Mi trabajo combina traducción, localización y posicionamiento SEO para que cada contenido conserve su intención, resulte relevante para su audiencia y tenga oportunidades reales de posicionar en Google. \n Mi experiencia combina formación en Traducción e Interpretación, comunicación diaria con clientes francófonos, proyectos de localización para comercio electrónico y una inmersión internacional que ha reforzado mi manera de entender los idiomas desde su contexto cultural, no solo desde la gramática. \n Esa visión me permite trabajar cada proyecto con un objetivo claro: que el contenido parezca escrito originalmente para el mercado al que se dirige.",
       "samplesTitle": "Muestras de adaptación",
       "educationTitle": "Formación y perfil lingüístico",
       "headline": "Del texto a la conversión: Traducción y SEO multilingüe.",
@@ -114,7 +114,7 @@
       "editorial": "SEO",
       "badgeParis": "SEO multilingüe",
       "profile": "Perfil profesional",
-      "experienceLabel": "Experiencia",
+      "experienceLabel": "Recorrido profesional",
       "step": "Paso",
       "servicesIntro": "Apoyo personalizado para negocios que necesitan que sus textos funcionen entre idiomas, plataformas y contextos de búsqueda.",
       "badgeCustomerService": "Localización web",
@@ -138,9 +138,9 @@
     "niches": {
       "travel": {
         "label": "Viajes",
-        "accent": "Historias que viajan contigo",
-        "eyebrow": "Hostelería, equipaje, reservas y contenido centrado en la experiencia",
-        "intro": "Contenido de viaje pensado para vender: check-ins de alojamiento, recomendaciones de itinerario y piezas centradas en producto, creadas para integrarse de forma natural en campañas de paid social.",
+        "accent": "Experiencias",
+        "eyebrow": "Para marcas que venden experiencias, no solo destinos.",
+        "intro": "Creo contenido para alojamientos, turismo, equipaje y servicios de viaje que inspira confianza antes incluso de hacer una reserva. \n Desde check-ins y recorridos hasta recomendaciones e integración de producto, cada pieza busca transmitir la experiencia de forma natural e invitar al usuario a imaginarse viviéndola.",
         "cards": [
           {
             "title": "Storyboard de check-in en hotel boutique",
@@ -170,9 +170,9 @@
       },
       "languages": {
         "label": "Idiomas",
-        "accent": "Más idiomas, más conexión",
-        "eyebrow": "Apps de idiomas, servicios internacionales y herramientas de aprendizaje",
-        "intro": "Piezas pensadas para marcas que necesitan una comunicación clara y creíble en varios idiomas: campañas multilingües, procesos de onboarding y contenido explicativo de producto.",
+        "accent": "Comunicación internacional",
+        "eyebrow": "Comunicar bien también es hablar el idioma de tu audiencia.",
+        "intro": "Desarrollo contenido para aplicaciones de idiomas, plataformas educativas y servicios internacionales que necesitan comunicar de forma clara, cercana y creíble. \n Mi experiencia en comunicación multilingüe me permite adaptar cada mensaje teniendo en cuenta no solo el idioma, sino también el contexto cultural y la manera en que conecta con las personas.",
         "cards": [
           {
             "title": "Demo de primera lección en app de idiomas",
@@ -202,9 +202,9 @@
       },
       "art": {
         "label": "Arte",
-        "accent": "Demos editoriales de producto para marcas creativas",
-        "eyebrow": "Herramientas creativas, talleres, galerías y productos con enfoque de diseño",
-        "intro": "Contenido con mirada editorial para marcas de arte y diseño: visuales cuidados y táctiles, con inicios de vídeo pensados para captar la atención desde el primer segundo — ideal para campañas de pago.",
+        "accent": "Marcas creativas",
+        "eyebrow": "Cuando el producto cuida los detalles, el contenido también debe hacerlo.",
+        "intro": "Trabajo con marcas creativas, ilustración, papelería, cerámica, diseño y lifestyle desarrollando contenido con una estética cuidada, una narrativa visual coherente y un enfoque editorial. \n Cada imagen y cada plano están pensados para transmitir la identidad de la marca y captar la atención desde el primer instante.",
         "cards": [
           {
             "title": "Presentación de materiales de cuaderno de bocetos",
@@ -240,11 +240,11 @@
     "ugcDemo": "Demo UGC",
     "nativeAdStyle": "Estilo de anuncio nativo",
     "hero": {
-      "backgroundLabel": "PORTFOLIO DE MARCA",
-      "eyebrow": "UGC",
+      "backgroundLabel": "PORTFOLIO UGC",
+      "eyebrow": "Contenido que conecta de forma natural",
       "headline": "@marttelier",
       "highlight": "De traductora de idiomas a traductora de marcas",
-      "description": "Llevo años contando historias reales, en varios idiomas y desde varios países, sin buscar nada a cambio. \n El UGC me permite seguir haciendo lo que mejor sé hacer: traducir experiencias en contenido auténtica, colaborando con marcas que inspiran. "
+      "description": "Las personas confían en las personas. \n Por eso el contenido generado por creadores se ha convertido en una de las formas más eficaces de conectar con una audiencia.\n Creo vídeos e imágenes que se integran de forma natural en la experiencia del usuario, transmitiendo cercanía, autenticidad y credibilidad sin perder de vista los objetivos de la marca. \n Mi enfoque combina creatividad, sensibilidad estética y una visión internacional para desarrollar contenido que funciona tanto de forma orgánica como en campañas de paid social."
     }
   },
   "blog": {
@@ -254,17 +254,17 @@
   },
   "nav": {
     "home": "Inicio",
-    "ugc": "UGC",
-    "translationSeo": "Traducción + SEO",
+    "ugc": "Contenido creativo",
+    "translationSeo": "Comunicación multilingüe y SEO",
     "blog": "Blog",
     "contact": "Contacto"
   },
   "about": {
-    "title": "¡ENCANTADA Me presento!",
-    "text": "Soy Marta, tengo 23 años y vivo en Elche. Especializada en contenido orgánico, soy creadora UGC, traductora y especialista SEO. \n Mi fuerte es la mirada auténtica, curiosa y multicultural. Vengo del mundo de la traducción, no del marketing tradicional, y eso se nota: entiendo los matices de cada mensaje y sé cómo hacer que un vídeo de 30 segundos diga mucho más. \n Si buscas alguien que combine creatividad, cercanía y visión global en su contenido, hablemos. ¡Estaré encantada de darle a tu marca ese toque distintivo."
+    "title": "¡ENCANTADA Soy Marta!",
+    "text": "Por eso estudié Traducción e Interpretación. Con el tiempo descubrí que comunicar va mucho más allá de traducir palabras: consiste en comprender a las personas, el contexto y la intención que hay detrás de cada mensaje. \n Hoy combino esa visión con la creación de contenido, la localización y el SEO multilingüe para ayudar a las marcas a comunicar de forma natural en distintos idiomas y mercados. \n Me gusta moverme entre la creatividad y la estrategia. Observar, analizar y encontrar la manera de que cada mensaje conserve su esencia, esté donde esté su audiencia."
   },
   "ugc": {
-    "title": "UGC Portfolio",
+    "title": "Portfolio UGC",
     "subtitle": "Contenido que conecta con tu audiencia",
     "niches": {
       "travel": "Viajes",
@@ -275,7 +275,7 @@
   },
   "translation": {
     "whyMe": "¿Por qué trabajar conmigo?",
-    "skills": "Habilidades",
+    "skills": "Competencias",
     "education": "Formación",
     "experience": "Experiencia",
     "whyMeText": "Combino formación en traducción, un enfoque orientado a resultados y compromiso real con cada proyecto — sin necesitar años de experiencia para entregar un trabajo serio y cuidado.",
@@ -309,22 +309,22 @@
     "age": "23 años",
     "city": "Elche, España",
     "ugcLabel": "Creadora UGC @marttelier",
-    "seoLabel": "Traducción Multilingüe Localización + SEO"
+    "seoLabel": "Traducción y SEO multilingües"
   },
   "footer": {
     "rights": "Todos los derechos reservados"
   },
   "home": {
     "hero": {
-      "kicker": "UGC · Traducción · SEO",
-      "description": "Contenido orgánico, mirada creativa, alcance internacional. Varios idiomas, una forma auténtica de comunicar. Lo estético y lo real conviven en mi trabajo. Arte, naturaleza e historias reales: mi inspiración constante. ",
+      "kicker": "Historias que conectan, sin importar el idioma.",
+      "description": "Contenido que conecta con personas, sin importar el idioma. \n Ayudo a marcas a comunicar de forma natural en diferentes idiomas y mercados, combinando creatividad, estrategia y sensibilidad cultural para que cada mensaje llegue a las personas adecuadas.",
       "mainPhoto": "Foto principal",
-      "scrollCue": "Desliza para descubrir",
+      "scrollCue": "Descubre cómo trabajo",
       "coverLabel": "Portada editorial"
     },
     "about": {
       "eyebrow": "",
-      "highlight": "Tranquila de espíritu, inquieta de mente.",
+      "highlight": "Siempre me han interesado las historias que consiguen conectar con las personas, independientemente del idioma en el que se cuenten.",
       "languagesLabel": "Idiomas con los que trabajo",
       "languages": [
         "Español",
@@ -338,7 +338,7 @@
     "video": {
       "eyebrow": "MARCA PERSONAL",
       "title": "@marttelier",
-      "description": "A los 23 no tengo todas las respuestas, y está bien así. No busco un horario ni una oficina fija: busco una vida construida a mi manera. \n Viajar, aprender idiomas, crecer sin estrés y sin la presión de tenerlo todo resuelto. Entre proyecto y proyecto siempre hay hueco para la creatividad. Disfruto el camino tanto como el destino y cada oportunidad es una forma más de aprender. ",
+      "description": "Un espacio donde se encuentran la creatividad, los idiomas y las historias reales. \n Comparto aquello que me inspira: arte, viajes, aprendizaje y pequeños momentos cotidianos que merecen ser contados. \n Mi contenido nace de la curiosidad, la observación y el interés por las personas, las culturas y las formas en que nos comunicamos. \n Creo que las historias más memorables no son las más perfectas, sino las que consiguen hacer que alguien se detenga, sienta y recuerde.",
       "placeholder": "Vídeo intro",
       "note": "Formato 9:16 · placeholder para reel / presentación"
     },
