@@ -10,6 +10,8 @@ export const languages = { es, en, fr, de, it, ca } as const;
 export type Lang = keyof typeof languages;
 export const defaultLang: Lang = 'es';
 export const langNames: Record<Lang, string> = { es: 'ES', en: 'EN', fr: 'FR', de: 'DE', it: 'IT', ca: 'CA' };
+// ponytail: only these show in the language dropdown. Add de/it/ca back when translations are ready.
+export const visibleLangs: Lang[] = ['es', 'en', 'fr'];
 
 export function t(lang: Lang = defaultLang) {
   return languages[lang] ?? languages[defaultLang];
