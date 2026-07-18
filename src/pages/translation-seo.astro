@@ -76,14 +76,11 @@ const pageDescription = page.hero.text.replaceAll('\\n', ' ').replace(/\s+/g, ' 
       <div class="mt-10 grid gap-6 lg:grid-cols-3">
         <article class="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
           <h3 class="font-heading text-2xl text-white">{page.skills.linguistic.title}</h3>
-          <ul class="mt-5 space-y-3 text-sm leading-7 text-blush-50/90">
+          <div class="mt-5 flex flex-wrap gap-3">
             {page.skills.linguistic.items.map((item) => (
-              <li class="flex gap-3">
-                <span class="mt-2 h-2 w-2 rounded-full bg-rose-gold"></span>
-                <span>{item}</span>
-              </li>
+              <span class="rounded-full border border-blush-200/30 bg-white/10 px-4 py-2 text-sm text-blush-50">{item}</span>
             ))}
-          </ul>
+          </div>
         </article>
         <article class="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
           <h3 class="font-heading text-2xl text-white">{page.skills.webOptimization.title}</h3>
@@ -93,13 +90,13 @@ const pageDescription = page.hero.text.replaceAll('\\n', ' ').replace(/\s+/g, ' 
             ))}
           </div>
         </article>
-        <article class="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-          <h3 class="font-heading text-2xl text-white">{page.skills.tools.title}</h3>
-          <div class="mt-5 flex flex-wrap gap-3">
+        <article class="rounded-[1.75rem] border border-blush-100 bg-white p-6">
+          <h3 class="font-heading text-2xl text-charcoal">{page.skills.tools.title}</h3>
+          <ul class="mt-5 space-y-3 text-sm leading-7 text-warm-gray">
             {page.skills.tools.items.map((item) => (
-              <span class="rounded-full border border-blush-200/30 bg-cream px-4 py-2 text-sm text-charcoal">{item}</span>
+              <li>{item}</li>
             ))}
-          </div>
+          </ul>
         </article>
       </div>
     </section>
