@@ -3,88 +3,116 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ScrollReveal from '../components/ScrollReveal';
 import PageTransition from '../components/PageTransition';
 import StaggerContainer, { StaggerItem } from '../components/StaggerContainer';
+import RichText from '../components/RichText.astro';
 import { getLangFromUrl, t } from '../i18n';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
 const page = i.translationPage;
-const copy = page.copy;
-const ui = page.ui;
-const levels = page.levels;
 
-const languages = [
-  { name: 'Español', level: levels.native },
-  { name: 'Français', level: levels.advancedC1 },
-  { name: 'Català', level: levels.advanced },
-  { name: 'English', level: levels.intermediateB1 },
-  { name: 'Deutsch', level: levels.basicA2 },
-  { name: 'Italiano', level: levels.basicA2 },
-];
-
-const serviceCards = i.translation.servicesList;
-const processSteps = [
-  i.translation.processSteps.briefing,
-  i.translation.processSteps.translation,
-  i.translation.processSteps.review,
-  i.translation.processSteps.delivery,
-];
-
-const pageTitle = `${i.hero.name} — ${i.translation.title}`;
-const pageDescription = copy.summary;
+const pageTitle = `${i.hero.name} — ${i.nav.translationSeo}`;
+const pageDescription = page.hero.text.replaceAll('\\n', ' ').replace(/\s+/g, ' ').trim();
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
   <PageTransition client:load className="pt-24">
-    <section class="relative overflow-hidden border-b border-blush-100 bg-gradient-to-b from-blush-50 via-cream to-cream">
-      <div class="absolute inset-x-0 top-0 h-64 bg-blush-100/35 blur-3xl"></div>
-      <div class="relative mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-20">
-        <div class="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-          <div class="space-y-6">
-            <p class="font-accent text-sm uppercase tracking-[0.28em] text-rose-gold">{copy.eyebrow}</p>
-            <h1 class="max-w-3xl font-heading text-5xl font-semibold leading-tight text-charcoal md:text-6xl">
-              {copy.headline}
-            </h1>
-            <p class="max-w-2xl text-lg leading-8 text-warm-gray">{copy.intro}</p>
-            <p class="max-w-2xl text-base leading-8 text-warm-gray">{copy.summary}</p>
-            <div class="flex flex-wrap gap-3 pt-2">
-              <span class="rounded-full border border-blush-200 bg-white/80 px-4 py-2 text-sm text-charcoal">{ui.badgeLanguages}</span>
-              <span class="rounded-full border border-blush-200 bg-white/80 px-4 py-2 text-sm text-charcoal">{ui.badgeCustomerService}</span>
-              <span class="rounded-full border border-blush-200 bg-white/80 px-4 py-2 text-sm text-charcoal">{ui.badgeParis}</span>
-            </div>
-          </div>
-
-          <aside class="rounded-[2rem] border border-blush-100 bg-white/80 p-8 shadow-[0_20px_60px_rgba(183,110,121,0.12)] backdrop-blur-sm">
-            <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{ui.profile}</p>
-            <div class="mt-6 space-y-5 text-sm leading-7 text-warm-gray">
-              <div class="border-b border-blush-100 pb-5">
-                <p class="font-heading text-2xl text-charcoal">{i.hero.name}</p>
-                <p>{copy.availability}</p>
-              </div>
-              <div>
-                <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{ui.coreServices}</p>
-                <ul class="mt-3 space-y-2 text-charcoal">
-                  {serviceCards.map((service) => <li>• {service}</li>)}
-                </ul>
-              </div>
-              <div>
-                <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{ui.focus}</p>
-                <p class="mt-3">{ui.focusText}</p>
-              </div>
-            </div>
-          </aside>
+    <section class="relative overflow-hidden border-b border-blush-100 bg-gradient-to-b from-blush-50 via-cream to-white">
+      <div class="absolute inset-x-0 top-0 h-72 bg-blush-100/40 blur-3xl"></div>
+      <div class="relative mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
+        <div class="max-w-4xl space-y-6">
+          <p class="font-accent text-sm uppercase tracking-[0.28em] text-rose-gold">{page.hero.eyebrow}</p>
+          <h1 class="font-heading text-5xl font-semibold leading-none text-charcoal md:text-7xl">{page.hero.title}</h1>
+          <RichText text={page.hero.text} class="max-w-4xl text-lg leading-8 text-warm-gray" />
+          <p class="max-w-3xl text-base font-medium leading-7 text-charcoal/80">{page.hero.availability}</p>
         </div>
       </div>
     </section>
   </PageTransition>
 
-  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-16 md:px-10">
+  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-20">
+    <section class="space-y-8">
+      <div class="max-w-2xl">
+        <h2 class="font-heading text-4xl text-charcoal md:text-5xl">{page.services.title}</h2>
+      </div>
+      <StaggerContainer client:visible className="grid gap-6 md:grid-cols-3" staggerDelay={0.12}>
+        {page.services.items.map((service) => (
+          <StaggerItem>
+            <article class="h-full rounded-[1.75rem] border border-blush-100 bg-white p-8 shadow-sm transition-transform duration-300 hover:-translate-y-1">
+              <h3 class="font-heading text-3xl text-charcoal">{service.name}</h3>
+              <RichText text={service.description} class="mt-4 text-sm leading-7 text-warm-gray" />
+            </article>
+          </StaggerItem>
+        ))}
+      </StaggerContainer>
+    </section>
+  </ScrollReveal>
+
+  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-4 md:px-10 md:py-8">
+    <section class="rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm md:p-10">
+      <div class="max-w-3xl">
+        <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{page.experience.eyebrow}</p>
+        <h2 class="mt-4 font-heading text-4xl text-charcoal md:text-5xl">{page.experience.title}</h2>
+        <RichText text={page.experience.text} class="mt-4 text-base leading-8 text-warm-gray" />
+      </div>
+      <div class="mt-10 grid gap-6 md:grid-cols-3">
+        {page.experience.cards.map((card) => (
+          <article class="rounded-[1.75rem] border border-blush-100 bg-blush-50 p-6 md:p-7">
+            <h3 class="font-heading text-2xl text-charcoal">{card.title}</h3>
+            <p class="mt-4 font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{card.highlight}</p>
+            <RichText text={card.text} class="mt-4 text-sm leading-7 text-warm-gray" />
+          </article>
+        ))}
+      </div>
+    </section>
+  </ScrollReveal>
+
+  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-12 md:px-10 md:py-16">
+    <section class="rounded-[2rem] border border-blush-100 bg-charcoal p-8 text-cream shadow-sm md:p-10">
+      <div class="max-w-3xl">
+        <p class="font-accent text-sm uppercase tracking-[0.22em] text-blush-200">{page.skills.eyebrow}</p>
+        <h2 class="mt-4 font-heading text-4xl text-white md:text-5xl">{page.skills.title}</h2>
+        <RichText text={page.skills.text} class="mt-4 text-base leading-8 text-blush-50/90" />
+      </div>
+      <div class="mt-10 grid gap-6 lg:grid-cols-3">
+        <article class="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+          <h3 class="font-heading text-2xl text-white">{page.skills.linguistic.title}</h3>
+          <ul class="mt-5 space-y-3 text-sm leading-7 text-blush-50/90">
+            {page.skills.linguistic.items.map((item) => (
+              <li class="flex gap-3">
+                <span class="mt-2 h-2 w-2 rounded-full bg-rose-gold"></span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+        <article class="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+          <h3 class="font-heading text-2xl text-white">{page.skills.webOptimization.title}</h3>
+          <div class="mt-5 flex flex-wrap gap-3">
+            {page.skills.webOptimization.items.map((item) => (
+              <span class="rounded-full border border-blush-200/30 bg-white/10 px-4 py-2 text-sm text-blush-50">{item}</span>
+            ))}
+          </div>
+        </article>
+        <article class="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+          <h3 class="font-heading text-2xl text-white">{page.skills.tools.title}</h3>
+          <div class="mt-5 flex flex-wrap gap-3">
+            {page.skills.tools.items.map((item) => (
+              <span class="rounded-full border border-blush-200/30 bg-cream px-4 py-2 text-sm text-charcoal">{item}</span>
+            ))}
+          </div>
+        </article>
+      </div>
+    </section>
+  </ScrollReveal>
+
+  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-4 md:px-10 md:py-8">
     <section class="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
       <div class="rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm">
-        <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{copy.educationTitle}</p>
-        <h2 class="mt-4 font-heading text-4xl text-charcoal">{i.translation.education}</h2>
-        <p class="mt-4 text-base leading-8 text-warm-gray">{copy.educationIntro}</p>
+        <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{page.education.eyebrow}</p>
+        <h2 class="mt-4 font-heading text-4xl text-charcoal">{page.education.title}</h2>
+        <RichText text={page.education.intro} class="mt-4 text-base leading-8 text-warm-gray" />
         <ul class="mt-6 space-y-4 text-base leading-8 text-charcoal">
-          {copy.studies.map((study) => (
+          {page.education.studies.map((study) => (
             <li class="flex gap-3">
               <span class="mt-2 h-2.5 w-2.5 rounded-full bg-rose-gold"></span>
               <span>{study}</span>
@@ -94,10 +122,10 @@ const pageDescription = copy.summary;
       </div>
 
       <div class="rounded-[2rem] border border-blush-100 bg-blush-50 p-8 shadow-sm">
-        <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{copy.languagesTitle}</p>
-        <h2 class="mt-4 font-heading text-4xl text-charcoal">{ui.languagesHeading}</h2>
+        <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{page.education.languagesEyebrow}</p>
+        <h2 class="mt-4 font-heading text-4xl text-charcoal">{page.education.languagesTitle}</h2>
         <div class="mt-6 space-y-4">
-          {languages.map((language) => (
+          {page.education.languages.map((language) => (
             <div class="rounded-2xl border border-blush-100 bg-white px-5 py-4">
               <div class="flex items-center justify-between gap-4">
                 <span class="font-heading text-2xl text-charcoal">{language.name}</span>
@@ -111,79 +139,21 @@ const pageDescription = copy.summary;
   </ScrollReveal>
 
   <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-4 md:px-10 md:py-8">
-    <section class="rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm md:p-10">
-      <div class="max-w-3xl">
-        <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{i.translation.experience}</p>
-        <h2 class="mt-4 font-heading text-4xl text-charcoal">{i.translation.experience}</h2>
-        <p class="mt-4 text-base leading-8 text-warm-gray">{copy.experienceIntro}</p>
-      </div>
-      <div class="mt-8 grid gap-6 md:grid-cols-3">
-        {copy.experience.map((item) => (
-          <article class="rounded-[1.5rem] border border-blush-100 bg-blush-50 p-6">
-            <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{ui.experienceLabel}</p>
-            <h3 class="mt-3 font-heading text-2xl text-charcoal">{item.title}</h3>
-            <p class="mt-3 text-sm leading-7 text-warm-gray">{item.text}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-  </ScrollReveal>
-
-  <StaggerContainer client:visible className="mx-auto grid max-w-6xl gap-6 px-6 py-12 md:grid-cols-2 md:px-10 xl:grid-cols-4" staggerDelay={0.12}>
-    <StaggerItem className="md:col-span-2 xl:col-span-1">
-      <section class="h-full rounded-[2rem] border border-blush-100 bg-charcoal p-8 text-cream shadow-sm">
-        <p class="font-accent text-sm uppercase tracking-[0.22em] text-blush-200">{i.translation.skills}</p>
-        <h2 class="mt-4 font-heading text-4xl text-white">{i.translation.skills}</h2>
-        <p class="mt-4 text-sm leading-7 text-blush-50/90">{copy.skillsIntro}</p>
-      </section>
-    </StaggerItem>
-
-    <StaggerItem className="xl:col-span-1">
-      <article class="h-full rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm">
-        <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{ui.core}</p>
-        <ul class="mt-4 space-y-3 text-sm leading-7 text-charcoal">
-          {copy.skills.slice(0, 3).map((skill) => <li>• {skill}</li>)}
-        </ul>
-      </article>
-    </StaggerItem>
-
-    <StaggerItem className="xl:col-span-1">
-      <article class="h-full rounded-[2rem] border border-blush-100 bg-blush-50 p-8 shadow-sm">
-        <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{ui.editorial}</p>
-        <ul class="mt-4 space-y-3 text-sm leading-7 text-charcoal">
-          {copy.skills.slice(3).map((skill) => <li>• {skill}</li>)}
-        </ul>
-      </article>
-    </StaggerItem>
-
-    <StaggerItem className="xl:col-span-1">
-      <article class="h-full rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm">
-        <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{ui.tools}</p>
-        <ul class="mt-4 space-y-3 text-sm leading-7 text-charcoal">
-          {copy.tools.map((tool) => <li>• {tool}</li>)}
-        </ul>
-      </article>
-    </StaggerItem>
-  </StaggerContainer>
-
-  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-4 md:px-10 md:py-8">
     <section class="rounded-[2rem] border border-blush-100 bg-blush-50 p-8 shadow-sm md:p-10">
       <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div class="max-w-3xl">
-          <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{i.translation.services}</p>
-          <h2 class="mt-4 font-heading text-4xl text-charcoal">{i.translation.services}</h2>
+          <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{page.servicesOffered.eyebrow}</p>
+          <h2 class="mt-4 font-heading text-4xl text-charcoal">{page.servicesOffered.title}</h2>
         </div>
-        <p class="max-w-xl text-sm leading-7 text-warm-gray">
-          {ui.servicesIntro}
-        </p>
+        <RichText text={page.servicesOffered.intro} class="max-w-xl text-sm leading-7 text-warm-gray" />
       </div>
       <div class="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-        {serviceCards.map((service, index) => (
+        {page.servicesOffered.items.map((item, index) => (
           <article class="rounded-[1.5rem] border border-blush-100 bg-white p-6 shadow-sm">
             <div class="flex h-12 w-12 items-center justify-center rounded-full bg-blush-100 font-accent text-lg text-rose-gold">
               0{index + 1}
             </div>
-            <h3 class="mt-5 font-heading text-2xl text-charcoal">{service}</h3>
+            <h3 class="mt-5 font-heading text-2xl text-charcoal">{item}</h3>
           </article>
         ))}
       </div>
@@ -193,25 +163,23 @@ const pageDescription = copy.summary;
   <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-12 md:px-10">
     <section class="rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm md:p-10">
       <div class="max-w-3xl">
-        <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{i.translation.process}</p>
-        <h2 class="mt-4 font-heading text-4xl text-charcoal">{i.translation.process}</h2>
-        <p class="mt-4 text-base leading-8 text-warm-gray">
-          {ui.processIntro}
-        </p>
+        <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{page.process.eyebrow}</p>
+        <h2 class="mt-4 font-heading text-4xl text-charcoal">{page.process.title}</h2>
+        <RichText text={page.process.intro} class="mt-4 text-base leading-8 text-warm-gray" />
       </div>
 
       <div class="relative mt-10">
-        <div class="absolute left-[1.45rem] top-6 bottom-6 w-px bg-blush-200 md:left-10 md:right-10 md:top-10 md:h-px md:w-auto"></div>
+        <div class="absolute bottom-6 left-[1.45rem] top-6 w-px bg-blush-200 md:left-10 md:right-10 md:top-10 md:h-px md:w-auto"></div>
         <div class="grid gap-6 md:grid-cols-4">
-          {processSteps.map((step, index) => (
+          {page.process.steps.map((step, index) => (
             <article class="relative pl-14 md:pl-0">
               <div class="absolute left-0 top-0 flex h-12 w-12 items-center justify-center rounded-full border border-blush-200 bg-cream font-accent text-lg text-rose-gold md:relative md:mx-auto">
                 {index + 1}
               </div>
               <div class="rounded-[1.5rem] border border-blush-100 bg-blush-50 p-6 md:mt-6">
-                <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{ui.step} 0{index + 1}</p>
-                <h3 class="mt-3 font-heading text-2xl text-charcoal">{step}</h3>
-                <p class="mt-3 text-sm leading-7 text-warm-gray">{copy.processDescriptions[index]}</p>
+                <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">0{index + 1}</p>
+                <h3 class="mt-3 font-heading text-2xl text-charcoal">{step.title}</h3>
+                <RichText text={step.description} class="mt-3 text-sm leading-7 text-warm-gray" />
               </div>
             </article>
           ))}
@@ -223,48 +191,19 @@ const pageDescription = copy.summary;
   <StaggerContainer client:visible className="mx-auto grid max-w-6xl gap-6 px-6 py-4 md:grid-cols-3 md:px-10 md:py-8" staggerDelay={0.14}>
     <StaggerItem className="md:col-span-3">
       <section class="rounded-[2rem] border border-blush-100 bg-charcoal p-8 text-cream shadow-sm md:p-10">
-        <p class="font-accent text-sm uppercase tracking-[0.22em] text-blush-200">{i.translation.whyMe}</p>
-        <h2 class="mt-4 font-heading text-4xl text-white">{i.translation.whyMe}</h2>
-        <p class="mt-4 max-w-3xl text-base leading-8 text-blush-50/90">{i.translation.whyMeText}</p>
+        <p class="font-accent text-sm uppercase tracking-[0.22em] text-blush-200">{page.whyMe.eyebrow}</p>
+        <h2 class="mt-4 font-heading text-4xl text-white">{page.whyMe.title}</h2>
+        <RichText text={page.whyMe.text} class="mt-4 max-w-3xl text-base leading-8 text-blush-50/90" />
       </section>
     </StaggerItem>
 
-    {copy.whyMeCards.map((card) => (
+    {page.whyMe.cards.map((card) => (
       <StaggerItem>
         <article class="h-full rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm">
           <h3 class="font-heading text-3xl text-charcoal">{card.title}</h3>
-          <p class="mt-4 text-sm leading-7 text-warm-gray">{card.text}</p>
+          <RichText text={card.text} class="mt-4 text-sm leading-7 text-warm-gray" />
         </article>
       </StaggerItem>
     ))}
   </StaggerContainer>
-
-  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-12 md:px-10">
-    <section class="rounded-[2rem] border border-blush-100 bg-blush-50 p-8 shadow-sm md:p-10">
-      <div class="max-w-3xl">
-        <p class="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold">{copy.samplesTitle}</p>
-        <h2 class="mt-4 font-heading text-4xl text-charcoal">{copy.samplesTitle}</h2>
-        <p class="mt-4 text-base leading-8 text-warm-gray">
-          {ui.samplesIntro}
-        </p>
-      </div>
-      <div class="mt-8 grid gap-6 lg:grid-cols-2">
-        {copy.samples.map((sample) => (
-          <article class="rounded-[1.75rem] border border-blush-100 bg-white p-6 shadow-sm">
-            <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">{sample.label}</p>
-            <div class="mt-5 grid gap-4 md:grid-cols-2">
-              <div class="rounded-2xl bg-blush-50 p-5">
-                <p class="font-accent text-xs uppercase tracking-[0.22em] text-rose-gold">{sample.sourceLabel}</p>
-                <p class="mt-3 text-sm leading-7 text-charcoal">“{sample.source}”</p>
-              </div>
-              <div class="rounded-2xl bg-charcoal p-5 text-cream">
-                <p class="font-accent text-xs uppercase tracking-[0.22em] text-blush-200">{sample.targetLabel}</p>
-                <p class="mt-3 text-sm leading-7">“{sample.target}”</p>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  </ScrollReveal>
 </BaseLayout>

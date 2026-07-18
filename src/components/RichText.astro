@@ -1,0 +1,22 @@
+---
+// RichText — renders \n as <br> and **text** as <strong>
+// Usage: <RichText text={i.about.text} class="text-lg" />
+interface Props {
+  text: string;
+  class?: string;
+}
+
+const { text, class: className = '' } = Astro.props;
+
+// Split on \n, then handle **bold** within each segment
+function parseBold(segment: string): string {
+  return segment.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+}
+
+const parts = text.split(/\\n|\n/).map(s => s.trim()).filter(Boolean);
+---
+<div class={className}>
+  {parts.map((part, idx) => (
+    <p set:html={parseBold(part)} class={idx > 0 ? 'mt-3' : ''} />
+  ))}
+</div>

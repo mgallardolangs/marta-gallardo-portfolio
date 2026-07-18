@@ -3,10 +3,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ScrollReveal from '../../components/ScrollReveal';
 import PageTransition from '../../components/PageTransition';
 import ParallaxLayer from '../../components/ParallaxLayer';
-import StaggerContainer, { StaggerItem } from '../../components/StaggerContainer';
 import NicheCard from '../../components/NicheCard';
 import VideoGallery from '../../components/VideoGallery';
 import PhotoMasonry from '../../components/PhotoMasonry';
+import PhotoSlideshow from '../../components/PhotoSlideshow.astro';
 import { getLangFromUrl, t } from '../../i18n';
 import imagesData from '../../data/images.json';
 
@@ -48,17 +48,45 @@ const pageDescription = i.ugcPage.pageDescription;
         </ParallaxLayer>
 
         <div class="relative mx-auto max-w-6xl px-6 py-16 md:py-24">
-          <ScrollReveal client:visible className="max-w-3xl">
-            <p class="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold">{i.ugcPage.hero.eyebrow}</p>
-            <h1 class="mt-4 font-heading text-5xl leading-none text-charcoal md:text-7xl">
-              {i.ugcPage.hero.headline}
-            </h1>
-            <p class="mt-6 max-w-2xl font-body text-lg leading-8 text-warm-gray md:text-xl">
-              {i.ugcPage.hero.description}
+          <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(320px,420px)] lg:items-center lg:gap-16">
+            <ScrollReveal client:visible className="max-w-xl">
+              <p class="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold">{i.ugcPage.hero.eyebrow}</p>
+              <h1 class="mt-4 font-heading text-5xl leading-none text-charcoal md:text-7xl">
+                {i.ugcPage.hero.headline}
+              </h1>
+              <p class="mt-6 font-body text-lg leading-8 text-warm-gray md:text-xl">
+                {i.ugcPage.hero.description}
+              </p>
+            </ScrollReveal>
+
+            <ScrollReveal client:visible delay={0.12}>
+              <PhotoSlideshow
+                photos={images.ugcPhotos?.all ?? []}
+                class="aspect-[4/5] w-full max-w-md mx-auto"
+              />
+            </ScrollReveal>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 md:py-20">
+        <div class="mx-auto max-w-5xl text-center">
+          <ScrollReveal client:visible>
+            <p class="font-heading text-3xl italic leading-snug text-charcoal md:text-5xl lg:text-6xl">
+              {i.ugcPage.hero.nicheIntroTitle}
             </p>
           </ScrollReveal>
+          <ScrollReveal client:visible delay={0.15}>
+            <p class="mx-auto mt-8 max-w-3xl font-body text-lg leading-8 text-warm-gray md:text-xl">
+              {i.ugcPage.hero.nicheIntroText}
+            </p>
+          </ScrollReveal>
+        </div>
+      </section>
 
-          <ScrollReveal client:visible delay={0.12} className="mt-12">
+      <section class="px-6 pb-16 md:pb-20">
+        <div class="mx-auto max-w-6xl">
+          <ScrollReveal client:visible>
             <div class="grid gap-4 md:grid-cols-3">
               {nicheLinks.map((link) => (
                 <NicheCard

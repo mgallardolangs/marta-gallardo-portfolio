@@ -127,7 +127,9 @@
       "backgroundLabel": "PORTFOLIO BRAND",
       "eyebrow": "UGC",
       "headline": "Concept UGC puliti ed editoriali pensati per i brand, non per diari da influencer.",
-      "description": "Un portfolio placeholder curato per Marta Gallardo con concept di campagna focalizzati su viaggi, lingue e arte. Ogni card è progettata per simulare creatività pronte per il paid social: credibili, ordinate e orientate alla conversione."
+      "description": "Un portfolio placeholder curato per Marta Gallardo con concept di campagna focalizzati su viaggi, lingue e arte. Ogni card è progettata per simulare creatività pronte per il paid social: credibili, ordinate e orientate alla conversione.",
+      "nicheIntroTitle": "Ogni brand ha una storia diversa.",
+      "nicheIntroText": "Il mio lavoro consiste nel capire cosa lo rende unico e trasformare questa essenza in contenuti naturali, credibili e rilevanti per le persone che vuole raggiungere."
     },
     "pageDescription": "Portfolio UGC professionale di Marta Gallardo con campagne editoriali concettuali dedicate a viaggi, lingue e arte.",
     "nicheLabel": "Nicchia",
@@ -236,112 +238,177 @@
     }
   },
   "translationPage": {
-    "copy": {
-      "eyebrow": "Traduzione, localizzazione e SEO copywriting",
-      "headline": "Servizi linguistici con approccio professionale e visione internazionale.",
-      "intro": "Aiuto brand, studi e aziende digitali ad adattare il loro messaggio con precisione, naturalezza e sensibilità culturale, affinché ogni testo risulti convincente nel mercato giusto.",
-      "summary": "Il mio profilo unisce una formazione linguistica, esperienza concreta nell’assistenza clienti in francese, un percorso internazionale come au pair e un programma Erasmus+ di sei mesi a Parigi. Per questo affronto ogni testo con rigore linguistico, contesto culturale e attenzione agli obiettivi commerciali.",
-      "availability": "Disponibile per progetti freelance, collaborazioni occasionali e supporto editoriale continuativo.",
-      "educationTitle": "Formazione e profilo linguistico",
-      "educationIntro": "Una base accademica orientata a lingue, comunicazione interculturale e scrittura, rafforzata da un’immersione concreta in contesti internazionali.",
-      "studies": [
-        "Percorso formativo focalizzato su lingue, comunicazione scritta e adattamento dei contenuti per pubblici internazionali.",
-        "Francese perfezionato attraverso un programma Erasmus+ di sei mesi a Parigi e un contatto costante con ambienti francofoni.",
-        "Interesse continuo per scrittura chiara, gestione terminologica e ottimizzazione dei contenuti per i canali digitali."
-      ],
-      "languagesTitle": "Lingue",
-      "experienceIntro": "Esperienza applicata alla comunicazione reale, al contatto diretto con le persone e all’adattamento del linguaggio ai diversi contesti.",
-      "experience": [
+    "hero": {
+      "eyebrow": "Communication",
+      "title": "Word",
+      "text": "Adapting a message is not just about translating it. It is about making sure it still works wherever its audience is. \\n Every language has its own nuances, every market its context and every brand its own way of communicating. \\n I help companies adapt and optimize their content so it connects with new markets, improves visibility in search engines and feels just as natural in any language. \\n My work combines translation, localization and SEO positioning so that every piece of content keeps its intent, feels relevant to its audience and has real opportunities to rank on Google. \\n My background combines training in Translation and Interpreting, daily communication with French-speaking clients, localization projects for ecommerce and international immersion that has strengthened the way I understand languages through their cultural context, not just grammar. \\n That perspective allows me to approach each project with a clear goal: to make the content feel as if it had originally been written for the market it is targeting.",
+      "availability": "Available for freelance projects, one-off collaborations and ongoing editorial support."
+    },
+    "services": {
+      "title": "How I can help",
+      "items": [
         {
-          "title": "Assistenza clienti in francese",
-          "text": "Comunicazione quotidiana con clienti francofoni, gestione delle richieste e attenzione al tono del brand in situazioni reali."
+          "name": "Translation",
+          "description": "More than translating words, I adapt messages so they preserve their meaning, tone and ability to connect."
         },
         {
-          "title": "Esperienza internazionale come au pair",
-          "text": "Vivere e lavorare in un ambiente multiculturale, sviluppando adattabilità, empatia e sicurezza comunicativa."
+          "name": "Localization",
+          "description": "Every market has different references, expressions and ways of communicating. I adapt content so it feels natural in its own context."
         },
         {
-          "title": "Programma Erasmus+ a Parigi",
-          "text": "Esperienza di sei mesi a Parigi grazie al programma Erasmus+, che ha rafforzato il mio francese, l’ascolto attivo e la comprensione delle sfumature culturali."
-        }
-      ],
-      "skillsIntro": "Un approccio di lavoro pensato per testi che devono suonare naturali, rispettare il brand e funzionare online.",
-      "skills": [
-        "Traduzione e adattamento dei contenuti",
-        "Localizzazione web e culturale",
-        "SEO copywriting multilingue",
-        "Proofreading, editing e rifinitura dello stile",
-        "Ricerca terminologica e coerenza del tono",
-        "Gestione di glossari, brief e style guide"
-      ],
-      "tools": [
-        "Google Docs e Word",
-        "Fogli di calcolo e revisioni tracciate",
-        "CMS ed editor web",
-        "Glossari, linee guida di stile e checklist QA"
-      ],
-      "processDescriptions": [
-        "Prima di iniziare analizzo obiettivi, pubblico, tono, lingua di destinazione ed esigenze SEO.",
-        "Traduco o scrivo con attenzione a chiarezza, intento di ricerca e naturalezza del testo.",
-        "Verifico terminologia, coerenza, fluidità e dettagli formali per rifinire la versione finale.",
-        "Consegno testi pronti per la pubblicazione, con note o revisioni quando il progetto lo richiede."
-      ],
-      "whyMeCards": [
-        {
-          "title": "Lingue gestite con precisione",
-          "text": "Lavoro in più lingue e adatto ogni messaggio perché mantenga significato, tono e credibilità."
-        },
-        {
-          "title": "Esperienza internazionale concreta",
-          "text": "Il mio percorso include assistenza clienti in francese, un programma Erasmus+ a Parigi e lavoro in contesti multiculturali."
-        },
-        {
-          "title": "Affidabilità in ogni consegna",
-          "text": "Do priorità a chiarezza, cura del dettaglio e comunicazione professionale durante tutto il processo."
-        }
-      ],
-      "samplesTitle": "Esempi di adattamento",
-      "samples": [
-        {
-          "label": "FR → IT · messaggio web",
-          "sourceLabel": "Originale",
-          "source": "Découvrez une expérience authentique pensée pour les voyageurs qui recherchent confort, charme et simplicité.",
-          "targetLabel": "Adattamento",
-          "target": "Scopri un’esperienza autentica pensata per viaggiatori che cercano comfort, fascino e semplicità."
-        },
-        {
-          "label": "EN → IT · copy SEO",
-          "sourceLabel": "Originale",
-          "source": "Natural skincare for busy routines: lightweight formulas, visible results and everyday comfort.",
-          "targetLabel": "Adattamento",
-          "target": "Skincare naturale per ritmi intensi: formule leggere, risultati visibili e comfort quotidiano."
+          "name": "Multilingual SEO",
+          "description": "I optimize content so it can be found in search engines without compromising natural language or the reading experience."
         }
       ]
     },
-    "ui": {
-      "badgeLanguages": "6 lingue",
-      "badgeCustomerService": "Assistenza clienti in francese",
-      "badgeParis": "Erasmus+ Parigi",
-      "profile": "Profilo professionale",
-      "coreServices": "Servizi principali",
-      "focus": "Focus",
-      "focusText": "Precisione traduttiva, adattamento culturale, tono curato e testi pensati per la ricerca.",
-      "languagesHeading": "Lingue",
-      "experienceLabel": "Esperienza",
-      "core": "Base",
-      "editorial": "Editoriale",
-      "tools": "Strumenti",
-      "servicesIntro": "Supporto su misura per aziende che hanno bisogno di testi efficaci tra lingue, piattaforme e contesti di ricerca diversi.",
-      "processIntro": "Un flusso di lavoro chiaro e strutturato mantiene ogni progetto efficiente, allineato e pronto per la pubblicazione.",
-      "step": "Fase",
-      "samplesIntro": "Esempi brevi di come significato, tono e leggibilità vengano preservati durante l’adattamento."
+    "experience": {
+      "eyebrow": "Professional path",
+      "title": "Experience",
+      "text": "Hands-on experience in real communication, direct contact with people and language adaptation across different contexts.",
+      "cards": [
+        {
+          "title": "Ecommerce translation and content management + customer service in French",
+          "highlight": "Las Tijeras Mágicas",
+          "text": "Daily translation of product sheets (ES→FR/DE/IT) and management of digital catalogues for haberdashery and textile products across European markets. Daily communication with French-speaking clients, issue resolution and careful handling of brand tone in real situations."
+        },
+        {
+          "title": "Freelance legal translation internship",
+          "highlight": "Cristina Auroutinova",
+          "text": "FR⇄ES translation of legal texts and post-editing of machine translations, ensuring terminological accuracy and consistency across different formats."
+        },
+        {
+          "title": "International experience as an au pair",
+          "highlight": "Aupairworld Switzerland",
+          "text": "Living and working in a multicultural environment, developing adaptability, empathy and confident communication."
+        }
+      ]
     },
-    "levels": {
-      "native": "Madrelingua",
-      "advancedC1": "Avanzato · C1",
-      "advanced": "Avanzato",
-      "intermediateB1": "Intermedio · B1",
-      "basicA2": "Base · A2"
+    "skills": {
+      "eyebrow": "Competencies",
+      "title": "Skills",
+      "text": "A working approach designed for texts that need to sound natural, stay aligned with the brand and perform well online.",
+      "linguistic": {
+        "title": "Language services",
+        "items": [
+          "Translation and content adaptation FR⇄ES and EN/DE/IT/CA→ES",
+          "Website localization",
+          "Proofreading, editing and style refinement",
+          "Terminology research and glossary management"
+        ]
+      },
+      "webOptimization": {
+        "title": "Web content optimization",
+        "items": [
+          "Local SEO",
+          "Search engine content optimization",
+          "Keyword planner",
+          "Copywriting"
+        ]
+      },
+      "tools": {
+        "title": "Tools",
+        "items": [
+          "Microsoft Office",
+          "Google Workspace",
+          "Notion",
+          "AI tools (ChatGPT, Claude)",
+          "WordPress",
+          "Google Search Console",
+          "Google Business Profile"
+        ]
+      }
+    },
+    "education": {
+      "eyebrow": "EDUCATION AND LANGUAGE PROFILE",
+      "title": "Education",
+      "intro": "An academic foundation centered on languages, intercultural communication and writing, strengthened by practical immersion in international environments.",
+      "studies": [
+        "Degree in Translation and Interpreting, with a specialization in French and a focus on writing and content adaptation for international audiences.",
+        "Advanced French strengthened through a six-month Erasmus+ program in Paris and daily contact with francophone environments.",
+        "Ongoing interest in clear writing, terminology and content optimization for digital environments.",
+        "Freelance legal translation internship (FR→ES) alongside a specialized translator, working with legal texts and post-editing of machine translations."
+      ],
+      "languagesEyebrow": "Language skills",
+      "languagesTitle": "Languages",
+      "languages": [
+        {
+          "name": "Spanish",
+          "level": "Native"
+        },
+        {
+          "name": "French",
+          "level": "Advanced · C1"
+        },
+        {
+          "name": "Catalan",
+          "level": "Advanced"
+        },
+        {
+          "name": "English",
+          "level": "Intermediate · B1"
+        },
+        {
+          "name": "German",
+          "level": "Basic · A2"
+        },
+        {
+          "name": "Italian",
+          "level": "Basic · A2"
+        }
+      ]
+    },
+    "servicesOffered": {
+      "eyebrow": "What I offer",
+      "title": "Services I offer",
+      "intro": "Tailored support for businesses that need their content to work across languages, platforms and search contexts.",
+      "items": [
+        "Website translation",
+        "Content localization",
+        "Multilingual SEO copywriting",
+        "Proofreading and text editing"
+      ]
+    },
+    "process": {
+      "eyebrow": "Methodology",
+      "title": "How I work",
+      "intro": "A clear and structured workflow keeps every project efficient, aligned and ready to publish.",
+      "steps": [
+        {
+          "title": "Briefing",
+          "description": "I analyze the project goal, the intended audience and the context (language, platform or market) before I begin."
+        },
+        {
+          "title": "Translation / Writing",
+          "description": "I work on the content with a focus on clarity, naturalness and commercial intent, adapting it to the format you need."
+        },
+        {
+          "title": "Review",
+          "description": "I review consistency, flow and formal details to ensure a polished result that is ready to publish."
+        },
+        {
+          "title": "Delivery",
+          "description": "I deliver the final content, leaving room for adjustments or observations whenever the project requires them."
+        }
+      ]
+    },
+    "whyMe": {
+      "eyebrow": "What sets me apart",
+      "title": "Why work with me?",
+      "text": "Languages, real-world experience and a strong commitment to every piece of content I deliver.",
+      "cards": [
+        {
+          "title": "Languages handled with professional judgment",
+          "text": "I do not translate word for word: I adapt the message so it preserves meaning, tone and credibility in the target language."
+        },
+        {
+          "title": "Results-oriented approach",
+          "text": "Every text is shaped for its final purpose — to sell, rank or inform — not just to sound good."
+        },
+        {
+          "title": "Commitment in every delivery",
+          "text": "I meet deadlines, keep communication clear throughout the process and deliver revised content that is ready to publish."
+        }
+      ]
     }
   }
 }
