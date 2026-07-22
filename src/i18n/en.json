@@ -1,8 +1,8 @@
 {
   "nav": {
     "home": "Home",
-    "ugc": "UGC",
-    "translationSeo": "Translation + SEO",
+    "ugc": "Creative content",
+    "translationSeo": "Multilingual communication & SEO",
     "blog": "Blog",
     "contact": "Contact"
   },
@@ -10,12 +10,12 @@
     "name": "Marta Gallardo",
     "age": "23 years old",
     "city": "Elche, Spain",
-    "ugcLabel": "UGC Creator",
-    "seoLabel": "Multilingual Translation & Localization + SEO"
+    "ugcLabel": "UGC Creator @marttelier",
+    "seoLabel": "Multilingual Translation & SEO"
   },
   "about": {
-    "title": "About me",
-    "text": "I'm Marta, a UGC content creator and translation & SEO specialist. I speak Spanish, French, German, Italian, and English. I'm passionate about creating authentic content for brands and helping businesses communicate globally."
+    "title": "Hi! I'm Marta.",
+    "text": "I've always been fascinated by stories that bring people together, no matter the language they're told in. \\n That's what led me to study Translation and Interpreting. Along the way, I realised that effective communication goes far beyond translating words—it's about understanding people, context and the intention behind every message. \\n Today, I combine that perspective with content creation, localisation and multilingual SEO to help brands communicate naturally across languages and markets. \\n I enjoy working where creativity meets strategy: observing, analysing and finding the best way for every message to preserve its essence, wherever its audience may be."
   },
   "ugc": {
     "title": "UGC Portfolio",
@@ -28,7 +28,7 @@
     "cta": "See more"
   },
   "translation": {
-    "title": "Translation + SEO",
+    "title": "Translation & SEO",
     "education": "Education",
     "experience": "Experience",
     "skills": "Skills",
@@ -36,14 +36,14 @@
     "process": "How I work",
     "processSteps": {
       "briefing": "Briefing",
-      "translation": "Translation / Writing",
+      "translation": "Development",
       "review": "Review",
       "delivery": "Delivery"
     },
     "servicesList": [
       "Website translation",
       "Content localization",
-      "Multilingual SEO copywriting",
+      "SEO & copywriting",
       "Text proofreading & editing"
     ],
     "whyMe": "Why work with me?",
@@ -65,7 +65,7 @@
       "description": "Project description"
     },
     "seoForm": {
-      "title": "Translation + SEO",
+      "title": "Translation / SEO",
       "company": "Company",
       "email": "Email",
       "budget": "Budget",
@@ -91,16 +91,16 @@
   },
   "home": {
     "hero": {
-      "kicker": "UGC · Translation · SEO",
-      "description": "I create imagery, words, and digital experiences with an editorial sensibility for lifestyle, beauty, travel, and international brands.",
+      "kicker": "Stories that connect beyond language.",
+      "description": "Content that connects with people, wherever they are. \\n I help brands communicate naturally across languages and markets by combining creativity, strategy and cultural insight to create content that truly resonates with its audience.",
       "mainPhoto": "Main Photo",
-      "scrollCue": "Scroll to discover",
+      "scrollCue": "Discover how I work",
       "coverLabel": "Cover Story"
     },
     "about": {
       "eyebrow": "Editorial profile",
-      "highlight": "A creative eye with strategic precision.",
-      "languagesLabel": "Languages I work in",
+      "highlight": "",
+      "languagesLabel": "Working Languages",
       "languages": [
         "Spanish",
         "French",
@@ -111,9 +111,9 @@
       ]
     },
     "video": {
-      "eyebrow": "Brand identity",
-      "title": "Personal brand",
-      "description": "This space can feature Marta’s introduction video: natural, elegant, and designed to express personality, on-camera presence, and a refined visual universe.",
+      "eyebrow": "PERSONAL BRAND",
+      "title": "@marttelier",
+      "description": "A space where creativity, languages and real stories come together. \\n I share what inspires me: art, travel, continuous learning and the small everyday moments that deserve to be told. \\n Everything I create is driven by curiosity, observation and a genuine interest in people, cultures and the way we communicate. \\n Because the stories we remember most aren't the most perfect ones—they're the ones that make us pause, feel something and stay with us.",
       "placeholder": "Intro Video",
       "note": "9:16 format · placeholder for reel / introduction"
     },
@@ -126,16 +126,16 @@
   },
   "ugcPage": {
     "hero": {
-      "backgroundLabel": "BRAND PORTFOLIO",
-      "eyebrow": "UGC",
-      "headline": "Clean, editorial UGC concepts built for brands — not influencer diaries.",
-      "description": "A curated placeholder portfolio for Marta Gallardo featuring travel, language, and art-focused campaign concepts. Each card is designed to simulate paid-social ready creative: credible, organized, and conversion-aware.",
-      "nicheIntroTitle": "Every brand has a different story.",
-      "nicheIntroText": "My job is to understand what makes it unique and turn that essence into content that feels natural, credible, and relevant to the people it wants to reach."
+      "backgroundLabel": "UGC PORTFOLIO",
+      "eyebrow": "Content that connects naturally.",
+      "headline": "@marttelier",
+      "description": "People trust people. \\n That's why creator-led content has become one of the most effective ways for brands to build genuine connections with their audience. \\n I create videos and visual content that blend naturally into the user experience, bringing authenticity, credibility and a human touch without losing sight of the brand's goals. \\n My approach combines creativity, a refined visual aesthetic and an international perspective to produce content that performs organically and in paid social campaigns alike.",
+      "nicheIntroTitle": "Every brand has a different story to tell.",
+      "nicheIntroText": "My role is to understand what makes it unique and turn that essence into content that feels authentic, builds trust and resonates with the right audience."
     },
     "pageDescription": "Professional UGC portfolio for Marta Gallardo featuring editorial placeholder campaigns across travel, languages, and art.",
     "nicheLabel": "Niche",
-    "backToTop": "Back to top",
+    "backToTop": "",
     "placeholder": "Placeholder",
     "ugcDemo": "UGC Demo",
     "creativeDirection": "Creative direction",
@@ -143,9 +143,9 @@
     "niches": {
       "travel": {
         "label": "Travel",
-        "accent": "Hotel & destination storytelling",
-        "eyebrow": "Hospitality, luggage, booking, and experience-led content",
-        "intro": "A polished mix of check-in walkthroughs, itinerary edits, and product-first travel assets designed to feel native inside paid social feeds.",
+        "accent": "Experiences",
+        "eyebrow": "For brands that sell experiences, not just destinations.",
+        "intro": "I create content for hotels, tourism brands, luggage companies and travel services that inspires confidence long before a booking is made. \\n From hotel check-ins and destination highlights to product integrations and travel recommendations, every piece is designed to make people picture themselves living the experience.",
         "cards": [
           {
             "title": "Boutique Stay Check-In Storyboard",
@@ -175,9 +175,9 @@
       },
       "languages": {
         "label": "Languages",
-        "accent": "Educational, useful, multilingual ads",
-        "eyebrow": "Language apps, international services, and learning tools",
-        "intro": "Sample concepts tailored for brands that need clear, credible communication — ideal for multilingual campaigns, onboarding flows, and product explainers.",
+        "accent": "International Communication",
+        "eyebrow": "Great communication starts with speaking your audience's language.",
+        "intro": "I create content for language-learning apps, educational platforms and international services that need to communicate with clarity, authenticity and confidence. \\n My background in multilingual communication allows me to adapt every message not only to the language itself, but also to the cultural context and expectations of each audience.",
         "cards": [
           {
             "title": "Language App First-Lesson Demo",
@@ -207,9 +207,9 @@
       },
       "art": {
         "label": "Art",
-        "accent": "Editorial product demos for creative brands",
-        "eyebrow": "Creative tools, workshops, galleries, and design-led products",
-        "intro": "Editorial-feeling UGC concepts for art and design brands, balancing tactile visuals with informative hooks that work well for paid campaigns.",
+        "accent": "Creative Brands",
+        "eyebrow": "When a product is crafted with care, its content should be too.",
+        "intro": "I collaborate with creative brands in art, illustration, stationery, ceramics, design and lifestyle, producing content with a refined aesthetic, thoughtful visual storytelling and an editorial approach. \\n Every frame is carefully composed to reflect the brand's identity and capture attention from the very first second.",
         "cards": [
           {
             "title": "Sketchbook Materials Reveal",
@@ -241,9 +241,10 @@
   },
   "translationPage": {
     "hero": {
-      "eyebrow": "Communication",
-      "title": "Word",
-      "text": "Adapting a message is not just about translating it. It is about making sure it still works wherever its audience is. \\n Every language has its own nuances, every market its context and every brand its own way of communicating. \\n I help companies adapt and optimize their content so it connects with new markets, improves visibility in search engines and feels just as natural in any language. \\n My work combines translation, localization and SEO positioning so that every piece of content keeps its intent, feels relevant to its audience and has real opportunities to rank on Google. \\n My background combines training in Translation and Interpreting, daily communication with French-speaking clients, localization projects for ecommerce and international immersion that has strengthened the way I understand languages through their cultural context, not just grammar. \\n That perspective allows me to approach each project with a clear goal: to make the content feel as if it had originally been written for the market it is targeting.",
+      "backgroundLabel": "What it says → Translation \\n How each audience understands it → Localisation \\n How people find it → SEO",
+      "eyebrow": "Multilingual communication",
+      "title": "From Content to Conversion",
+      "text": "Adapting a message is about more than translating words. It's about making sure it continues to resonate, wherever its audience may be. \\n Every language has its own nuances, every market its own context, and every brand its own voice. \\n I help businesses adapt and optimise their content to reach new markets, improve their search visibility and communicate naturally across languages. \\n By combining translation, localisation and multilingual SEO, I create content that preserves its purpose, connects with the right audience and has real potential to perform in Google Search. \\n My goal is simple: to make every piece of content feel as though it were originally created for its target market.",
       "availability": "Available for freelance projects, one-off collaborations and ongoing editorial support."
     },
     "services": {
@@ -251,15 +252,15 @@
       "items": [
         {
           "name": "Translation",
-          "description": "More than translating words, I adapt messages so they preserve their meaning, tone and ability to connect."
+          "description": "More than translating words, I adapt messages so they preserve their meaning, tone and ability to connect with the people they're written for."
         },
         {
           "name": "Localization",
-          "description": "Every market has different references, expressions and ways of communicating. I adapt content so it feels natural in its own context."
+          "description": "Every market has its own cultural references, expectations and way of communicating. I adapt content so it feels natural, relevant and authentic in every context."
         },
         {
           "name": "Multilingual SEO",
-          "description": "I optimize content so it can be found in search engines without compromising natural language or the reading experience."
+          "description": "I optimise content for search engines without compromising readability, brand voice or the overall user experience."
         }
       ]
     },
@@ -286,7 +287,7 @@
       ]
     },
     "skills": {
-      "eyebrow": "Competencies",
+      "eyebrow": "Capabilities",
       "title": "Skills",
       "text": "A working approach designed for texts that need to sound natural, stay aligned with the brand and perform well online.",
       "linguistic": {
@@ -302,7 +303,7 @@
         "title": "Web content optimization",
         "items": [
           "Local SEO",
-          "Search engine content optimization",
+          "Multilingual SEO",
           "Keyword planner",
           "Copywriting"
         ]
@@ -366,7 +367,7 @@
       "items": [
         "Website translation",
         "Content localization",
-        "Multilingual SEO copywriting",
+        "SEO & copywriting",
         "Proofreading and text editing"
       ]
     },
@@ -380,7 +381,7 @@
           "description": "I analyze the project goal, the intended audience and the context (language, platform or market) before I begin."
         },
         {
-          "title": "Translation / Writing",
+          "title": "Development",
           "description": "I work on the content with a focus on clarity, naturalness and commercial intent, adapting it to the format you need."
         },
         {
