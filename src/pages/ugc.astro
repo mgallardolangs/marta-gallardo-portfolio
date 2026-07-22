@@ -47,37 +47,37 @@ const pageDescription = i.ugcPage.pageDescription;
           </div>
         </ParallaxLayer>
 
-        <div class="relative mx-auto max-w-6xl px-6 py-16 md:py-24">
-          <ScrollReveal client:visible className="max-w-2xl mb-12">
-            <p class="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold">{i.ugcPage.hero.eyebrow}</p>
-            <h1 class="mt-4 font-heading text-5xl leading-none text-charcoal md:text-7xl">
-              {i.ugcPage.hero.headline}
-            </h1>
-            <RichText text={i.ugcPage.hero.description} class="mt-6 font-body text-lg leading-8 text-warm-gray md:text-xl" />
-          </ScrollReveal>
+        <div class="relative z-10 mx-auto max-w-6xl px-6 py-16 md:py-24">
+          <div class="grid gap-12 lg:grid-cols-[1fr_minmax(280px,380px)] lg:items-center lg:gap-16">
+            <ScrollReveal client:visible className="max-w-xl">
+              <p class="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold">{i.ugcPage.hero.eyebrow}</p>
+              <h1 class="mt-4 font-heading text-5xl leading-none text-charcoal md:text-7xl">
+                {i.ugcPage.hero.headline}
+              </h1>
+              <RichText text={i.ugcPage.hero.description} class="mt-6 font-body text-lg leading-8 text-warm-gray md:text-xl" />
+            </ScrollReveal>
 
-          <!-- Horizontal scroll carousel -->
-          <ScrollReveal client:visible delay={0.12}>
-            {(images.ugcPhotos?.all ?? []).length > 0 ? (
-              <div class="relative -mx-6 px-6 overflow-x-auto scrollbar-hide">
-                <div class="flex gap-4 pb-4" style="width: max-content;">
-                  {(images.ugcPhotos?.all ?? []).map((src, idx) => (
-                    <div class="flex-shrink-0 w-56 md:w-72 aspect-[3/4] overflow-hidden rounded-2xl shadow-md">
-                      <img src={src} alt={`UGC ${idx + 1}`} class="h-full w-full object-cover hover:scale-105 transition-transform duration-500" loading="lazy" />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div class="flex gap-4 overflow-hidden">
-                {[1,2,3,4].map(() => (
-                  <div class="flex-shrink-0 w-56 md:w-72 aspect-[3/4] rounded-2xl bg-blush-100 flex items-center justify-center">
-                    <span class="text-3xl opacity-30">📸</span>
+            <!-- Single-image auto-slide carousel -->
+            <ScrollReveal client:visible delay={0.12}>
+              <div class="hero-carousel relative aspect-[3/4] w-full max-w-sm mx-auto overflow-hidden rounded-3xl shadow-lg" data-interval="3500">
+                {(images.ugcPhotos?.all ?? []).length > 0 ? (
+                  (images.ugcPhotos?.all ?? []).map((src, idx) => (
+                    <img
+                      src={src}
+                      alt={`UGC ${idx + 1}`}
+                      class={`carousel-slide absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-in-out`}
+                      style={`transform: translateX(${idx * 100}%)`}
+                      loading="lazy"
+                    />
+                  ))
+                ) : (
+                  <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-blush-100 to-blush-200">
+                    <span class="text-4xl opacity-30">📸</span>
                   </div>
-                ))}
+                )}
               </div>
-            )}
-          </ScrollReveal>
+            </ScrollReveal>
+          </div>
         </div>
       </section>
 
@@ -171,3 +171,20 @@ const pageDescription = i.ugcPage.pageDescription;
     </div>
   </PageTransition>
 </BaseLayout>
+
+<script>
+  // Auto-slide carousel: shows 1 image, slides left every interval
+  document.querySelectorAll('.hero-carousel').forEach(container => {
+    const slides = Array.from(container.querySelectorAll('.carousel-slide'));
+    if (slides.length <= 1) return;
+    const interval = parseInt((container as HTMLElement).dataset.interval || '3500');
+    let current = 0;
+
+    setInterval(() => {
+      current = (current + 1) % slides.length;
+      slides.forEach((slide, idx) => {
+        (slide as HTMLElement).style.transform = `translateX(${(idx - current) * 100}%)`;
+      });
+    }, interval);
+  });
+</script>
