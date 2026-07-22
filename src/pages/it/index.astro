@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageTransition from '../../components/PageTransition';
 import ScrollReveal from '../../components/ScrollReveal';
+import RichText from '../../components/RichText.astro';
 import AnimatedScrollText from '../../components/AnimatedScrollText';
 import AestheticGlobe from '../../components/AestheticGlobe';
 import ParallaxLayer from '../../components/ParallaxLayer';
@@ -50,7 +51,7 @@ const aboutPhotoFrames = [
 
               <StaggerItem>
                 <p class="max-w-xl font-body text-lg leading-8 text-warm-gray md:text-xl">
-                  {i.home.hero.description}
+                <RichText text={i.home.hero.description} class="max-w-xl font-body text-lg leading-8 text-warm-gray md:text-xl" />
                 </p>
               </StaggerItem>
             </StaggerContainer>
@@ -125,7 +126,7 @@ const aboutPhotoFrames = [
             <ScrollReveal client:visible direction="right" className="space-y-6 lg:pl-8 xl:pl-14">
               <h2 class="font-heading text-5xl leading-none text-charcoal md:text-6xl">{i.about.title}</h2>
               <p class="max-w-md font-body text-xl leading-8 text-warm-gray">{i.home.about.highlight}</p>
-              <p class="max-w-xl font-body text-lg leading-8 text-warm-gray md:text-xl">{i.about.text}</p>
+              <RichText text={i.about.text} class="max-w-2xl font-body text-lg leading-8 text-warm-gray md:text-xl" />
             </ScrollReveal>
           </div>
 
@@ -194,7 +195,7 @@ const aboutPhotoFrames = [
           <ScrollReveal client:visible direction="right" className="space-y-6">
             <p class="font-accent text-sm uppercase tracking-[0.36em] text-rose-gold">{i.home.video.eyebrow}</p>
             <h2 class="font-heading text-5xl leading-none text-charcoal md:text-6xl">{i.home.video.title}</h2>
-            <p class="max-w-xl font-body text-lg leading-8 text-warm-gray md:text-xl">{i.home.video.description}</p>
+            <RichText text={i.home.video.description} class="max-w-xl font-body text-lg leading-8 text-warm-gray md:text-xl" />
             <!-- Instagram profile screenshot -->
             {imagesData.instagramScreenshot ? (
               <div class="mt-6 overflow-hidden rounded-2xl border border-blush-100 shadow-sm">
