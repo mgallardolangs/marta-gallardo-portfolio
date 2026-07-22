@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ScrollReveal from '../../components/ScrollReveal';
 import PageTransition from '../../components/PageTransition';
+import RichText from '../../components/RichText.astro';
 import { getLangFromUrl, t } from '../../i18n';
 
 const lang = getLangFromUrl(Astro.url);
@@ -21,7 +22,7 @@ const cardClass = 'rounded-[2rem] border border-blush-100 p-6 shadow-sm md:p-8';
           <div class="mx-auto max-w-3xl text-center">
             <p class="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold">{i.contact.eyebrow}</p>
             <h1 class="mt-4 font-heading text-4xl font-semibold tracking-tight md:text-6xl">{i.contact.title}</h1>
-            <p class="mt-4 font-body text-lg leading-relaxed text-warm-gray md:text-xl">{i.contact.subtitle}</p>
+            <RichText text={i.contact.subtitle} class="mt-4 font-body text-lg leading-relaxed text-warm-gray md:text-xl" />
           </div>
         </ScrollReveal>
 

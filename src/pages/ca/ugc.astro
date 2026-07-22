@@ -2,11 +2,11 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ScrollReveal from '../../components/ScrollReveal';
 import PageTransition from '../../components/PageTransition';
+import RichText from '../../components/RichText.astro';
 import ParallaxLayer from '../../components/ParallaxLayer';
 import NicheCard from '../../components/NicheCard';
 import VideoGallery from '../../components/VideoGallery';
 import PhotoMasonry from '../../components/PhotoMasonry';
-import PhotoSlideshow from '../../components/PhotoSlideshow.astro';
 import { getLangFromUrl, t } from '../../i18n';
 import imagesData from '../../data/images.json';
 
@@ -53,9 +53,7 @@ const pageDescription = i.ugcPage.pageDescription;
             <h1 class="mt-4 font-heading text-5xl leading-none text-charcoal md:text-7xl">
               {i.ugcPage.hero.headline}
             </h1>
-            <p class="mt-6 font-body text-lg leading-8 text-warm-gray md:text-xl">
-              {i.ugcPage.hero.description}
-            </p>
+            <RichText text={i.ugcPage.hero.description} class="mt-6 font-body text-lg leading-8 text-warm-gray md:text-xl" />
           </ScrollReveal>
 
           <!-- Horizontal scroll carousel -->

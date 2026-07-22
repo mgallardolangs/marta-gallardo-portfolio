@@ -1,6 +1,6 @@
 ---
-// RichText — renders \n as <br> and **text** as <strong>
-// Usage: <RichText text={i.about.text} class="text-lg" />
+// RichText — renders \n as paragraph breaks and **text** as <strong>
+// Handles both literal \n and escaped \\n from JSON files
 interface Props {
   text: string;
   class?: string;
@@ -8,11 +8,11 @@ interface Props {
 
 const { text, class: className = '' } = Astro.props;
 
-// Split on \n, then handle **bold** within each segment
 function parseBold(segment: string): string {
   return segment.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 }
 
+// Split on literal \n (from JSON \\n) or actual newlines
 const parts = text.split(/\\n|\n/).map(s => s.trim()).filter(Boolean);
 ---
 <div class={className}>
