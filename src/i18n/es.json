@@ -18,7 +18,9 @@
     },
     "send": "Enviar",
     "successTitle": "¡Mensaje enviado!",
-    "successMessage": "Gracias por contactarme. Te responderé lo antes posible."
+    "successMessage": "Gracias por contactarme. Te responderé lo antes posible.",
+    "eyebrow": "Hablemos",
+    "errorRequired": "Por favor, completa este campo."
   },
   "translationPage": {
     "hero": {

@@ -73,7 +73,9 @@
     },
     "send": "Senden",
     "successTitle": "Nachricht gesendet!",
-    "successMessage": "Vielen Dank für Ihre Nachricht. Ich melde mich so schnell wie möglich."
+    "successMessage": "Vielen Dank für Ihre Nachricht. Ich melde mich so schnell wie möglich.",
+    "eyebrow": "Kontakt",
+    "errorRequired": "Bitte füllen Sie dieses Feld aus."
   },
   "footer": {
     "rights": "Alle Rechte vorbehalten"

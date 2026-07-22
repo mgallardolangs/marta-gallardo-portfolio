@@ -73,7 +73,9 @@
     },
     "send": "Enviar",
     "successTitle": "Missatge enviat!",
-    "successMessage": "Gràcies per contactar-me. Et respondré el més aviat possible."
+    "successMessage": "Gràcies per contactar-me. Et respondré el més aviat possible.",
+    "eyebrow": "Parlem",
+    "errorRequired": "Si us plau, ompliu aquest camp."
   },
   "footer": {
     "rights": "Tots els drets reservats"

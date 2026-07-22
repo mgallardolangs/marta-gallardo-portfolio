@@ -3,16 +3,16 @@
 /* ponytail: Tailwind v4 uses CSS-based config. Theme tokens here, Marta edits this file for colors/fonts */
 
 @theme {
-  /* Color palette — blush pink aesthetic */
-  --color-blush-50: #FFF5F5;
-  --color-blush-100: #F9E4E4;
-  --color-blush-200: #F2C4C4;
-  --color-blush-300: #E8A0A0;
-  --color-blush-400: #D4787A;
-  --color-rose-gold: #B76E79;
+  /* Color palette — vibrant pink with subtle red highlights */
+  --color-blush-50: #FFF0F3;
+  --color-blush-100: #FFD6E0;
+  --color-blush-200: #FFB3C6;
+  --color-blush-300: #FF8FAB;
+  --color-blush-400: #E05C7A;
+  --color-rose-gold: #C45B72;
   --color-charcoal: #2D2D2D;
   --color-warm-gray: #6B6B6B;
-  --color-cream: #FFFAF8;
+  --color-cream: #FFFBFC;
   --color-white: #FFFFFF;
 
   /* Fonts — editorial aesthetic */
@@ -28,6 +28,10 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Hide scrollbar on horizontal carousels */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* Base styles */
 body {

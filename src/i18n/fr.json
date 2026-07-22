@@ -73,7 +73,9 @@
     },
     "send": "Envoyer",
     "successTitle": "Message envoyé !",
-    "successMessage": "Merci de m'avoir contactée. Je vous répondrai dès que possible."
+    "successMessage": "Merci de m'avoir contactée. Je vous répondrai dès que possible.",
+    "eyebrow": "Parlons",
+    "errorRequired": "Veuillez remplir ce champ."
   },
   "footer": {
     "rights": "Tous droits réservés"

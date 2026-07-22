@@ -73,7 +73,9 @@
     },
     "send": "Invia",
     "successTitle": "Messaggio inviato!",
-    "successMessage": "Grazie per avermi contattata. Ti risponderò il prima possibile."
+    "successMessage": "Grazie per avermi contattata. Ti risponderò il prima possibile.",
+    "eyebrow": "Parliamo",
+    "errorRequired": "Si prega di compilare questo campo."
   },
   "footer": {
     "rights": "Tutti i diritti riservati"

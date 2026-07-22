@@ -73,7 +73,9 @@
     },
     "send": "Send",
     "successTitle": "Message sent!",
-    "successMessage": "Thanks for reaching out. I'll get back to you as soon as possible."
+    "successMessage": "Thanks for reaching out. I'll get back to you as soon as possible.",
+    "eyebrow": "Let's talk",
+    "errorRequired": "Please fill in this field."
   },
   "footer": {
     "rights": "All rights reserved"
