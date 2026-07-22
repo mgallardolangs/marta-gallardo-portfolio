@@ -41,13 +41,13 @@ const pageDescription = i.ugcPage.pageDescription;
   <PageTransition client:load>
     <div id="top" class="bg-cream pt-24">
       <section class="relative overflow-hidden border-b border-blush-100 bg-gradient-to-b from-blush-50 via-cream to-cream">
-        <ParallaxLayer client:visible className="pointer-events-none absolute inset-x-0 top-14 hidden md:block" speed={-0.12}>
+        <ParallaxLayer client:visible className="pointer-events-none absolute inset-x-0 top-4 hidden md:block" speed={-0.12}>
           <div class="mx-auto max-w-6xl px-6 text-right font-accent text-7xl italic tracking-[0.18em] text-rose-gold/10">
             {i.ugcPage.hero.backgroundLabel}
           </div>
         </ParallaxLayer>
 
-        <div class="relative z-10 mx-auto max-w-6xl px-6 py-16 md:py-24">
+        <div class="relative z-10 mx-auto max-w-6xl px-6 pt-28 pb-16 md:pt-32 md:pb-24">
           <div class="grid gap-12 lg:grid-cols-[1fr_minmax(280px,380px)] lg:items-center lg:gap-16">
             <ScrollReveal client:visible className="max-w-xl">
               <p class="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold">{i.ugcPage.hero.eyebrow}</p>
@@ -173,18 +173,52 @@ const pageDescription = i.ugcPage.pageDescription;
 </BaseLayout>
 
 <script>
-  // Auto-slide carousel: shows 1 image, slides left every interval
+  // Auto-slide carousel with mouse wheel + touch swipe support
   document.querySelectorAll('.hero-carousel').forEach(container => {
     const slides = Array.from(container.querySelectorAll('.carousel-slide'));
     if (slides.length <= 1) return;
     const interval = parseInt((container as HTMLElement).dataset.interval || '3500');
     let current = 0;
+    let autoTimer: number;
 
-    setInterval(() => {
-      current = (current + 1) % slides.length;
-      slides.forEach((slide, idx) => {
-        (slide as HTMLElement).style.transform = `translateX(${(idx - current) * 100}%)`;
+    const goTo = (idx: number) => {
+      current = ((idx % slides.length) + slides.length) % slides.length;
+      slides.forEach((slide, i) => {
+        (slide as HTMLElement).style.transform = `translateX(${(i - current) * 100}%)`;
       });
-    }, interval);
+    };
+
+    const next = () => goTo(current + 1);
+    const prev = () => goTo(current - 1);
+
+    const resetAuto = () => {
+      clearInterval(autoTimer);
+      autoTimer = window.setInterval(next, interval);
+    };
+
+    autoTimer = window.setInterval(next, interval);
+
+    // Mouse wheel: scroll left/right changes slide
+    container.addEventListener('wheel', (e: Event) => {
+      const we = e as WheelEvent;
+      if (Math.abs(we.deltaX) > Math.abs(we.deltaY) || Math.abs(we.deltaY) > 30) {
+        e.preventDefault();
+        if (we.deltaX > 0 || we.deltaY > 0) next(); else prev();
+        resetAuto();
+      }
+    }, { passive: false });
+
+    // Touch swipe
+    let touchStartX = 0;
+    container.addEventListener('touchstart', (e: Event) => {
+      touchStartX = (e as TouchEvent).touches[0].clientX;
+    });
+    container.addEventListener('touchend', (e: Event) => {
+      const diff = touchStartX - (e as TouchEvent).changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) next(); else prev();
+        resetAuto();
+      }
+    });
   });
 </script>
