@@ -14,9 +14,9 @@
     "instagram": "https://www.instagram.com/marttelier/"
   },
   "nicheBackgrounds": {
-    "travel": "/images/site/nicho-viajes.png",
-    "languages": "/images/site/nicho-idiomas.png",
-    "art": "/images/site/nicho-arte.png"
+    "travel": "/images/site/nicho-viajes.jpg",
+    "languages": "/images/site/nicho-idiomas.jpg",
+    "art": "/images/site/nicho-arte.jpg"
   },
   "ugcVideos": {
     "travel": [],

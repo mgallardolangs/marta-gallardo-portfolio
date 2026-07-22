@@ -111,9 +111,9 @@ const aboutPhotoFrames = [
               {aboutPhotoFrames.map((frame) => (
                 <div class={`absolute ${frame.pos} ${frame.size} z-10`}>
                   <ParallaxLayer client:visible speed={frame.speed}>
-                    <div class={`${frame.size} overflow-hidden rounded-full border-2 border-white bg-blush-100 shadow-[0_18px_40px_rgba(183,110,121,0.18)]`}>
+                    <div class={`${frame.size} drop-shadow-lg`}>
                       {frame.image && !frame.image.includes('gallery-shot') ? (
-                        <img src={frame.image} alt="" class="h-full w-full object-cover" loading="lazy" decoding="async" />
+                        <img src={frame.image} alt="" class="h-full w-full object-contain" loading="lazy" decoding="async" />
                       ) : (
                         <div class="flex h-full w-full items-center justify-center text-xl text-warm-gray/45">📷</div>
                       )}
