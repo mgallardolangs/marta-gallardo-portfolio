@@ -33,5 +33,16 @@
     "travel": "",
     "languages": "",
     "art": ""
+  },
+  "aboutPhotos": [],
+  "brandVideo": "",
+  "toolLogos": {
+    "microsoftOffice": "/images/tools/microsoft-office.svg",
+    "googleWorkspace": "/images/tools/google-workspace.svg",
+    "notion": "/images/tools/notion.svg",
+    "aiTools": "/images/tools/ai-tools--chatgpt--claude-.svg",
+    "wordpress": "/images/tools/wordpress.svg",
+    "googleSearchConsole": "/images/tools/google-search-console.svg",
+    "googleMyBusiness": "/images/tools/google-my-business.svg"
   }
 }

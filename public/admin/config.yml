@@ -4033,19 +4033,19 @@ collections:
         name: art
         widget: image
         required: false
-    - label: "Iconos de nicho (imágenes 3D)"
+    - label: Iconos de nicho (imágenes 3D)
       name: nicheIcons
       widget: object
       fields:
-      - label: "✈️ Icono Viajes"
+      - label: ✈️ Icono Viajes
         name: travel
         widget: image
         required: false
-      - label: "🌍 Icono Idiomas"
+      - label: 🌍 Icono Idiomas
         name: languages
         widget: image
         required: false
-      - label: "🎨 Icono Arte"
+      - label: 🎨 Icono Arte
         name: art
         widget: image
         required: false
@@ -4129,6 +4129,50 @@ collections:
         name: instagram
         widget: string
         default: https://instagram.com
+    - label: 👤 Fotos de perfil (sección Sobre mí)
+      name: aboutPhotos
+      widget: list
+      field:
+        label: Foto
+        name: item
+        widget: image
+      required: false
+    - label: 🎬 Vídeo de marca personal
+      name: brandVideo
+      widget: file
+      required: false
+    - label: 🔧 Logos de herramientas (sección Competencias)
+      name: toolLogos
+      widget: object
+      fields:
+      - label: Microsoft Office
+        name: microsoftOffice
+        widget: image
+        required: false
+      - label: Google Workspace
+        name: googleWorkspace
+        widget: image
+        required: false
+      - label: Notion
+        name: notion
+        widget: image
+        required: false
+      - label: AI Tools
+        name: aiTools
+        widget: image
+        required: false
+      - label: WordPress
+        name: wordpress
+        widget: image
+        required: false
+      - label: Google Search Console
+        name: googleSearchConsole
+        widget: image
+        required: false
+      - label: Google My Business
+        name: googleMyBusiness
+        widget: image
+        required: false
     format: json
 - name: blog
   label: Blog Posts
