@@ -1,7 +1,7 @@
 {
   "contact": {
     "title": "Colaboremos",
-    "subtitle": "¿Tienes un proyecto en mente? Me encantaría saber de ti. \\n Ya sea creando contenido desde cero o adaptándolo para nuevos mercados, mi objetivo es siempre el mismo: ayudar a las marcas a comunicar de forma auténtica.",
+    "subtitle": "¿Tienes un proyecto en mente? Me encantaría saber de ti.",
     "ugcForm": {
       "title": "Colaboración UGC",
       "company": "Empresa",
@@ -10,7 +10,7 @@
       "description": "Descripción del proyecto"
     },
     "seoForm": {
-      "title": "Traducción / SEO",
+      "title": "Traducción + SEO",
       "company": "Empresa",
       "email": "Email",
       "budget": "Presupuesto",
@@ -22,10 +22,9 @@
   },
   "translationPage": {
     "hero": {
-      "backgroundLabel": "Qué dice→ Traducción. \n Cómo lo entiende cada cultura → Localización. \n Cómo lo encuentra el usuario → SEO.",
-      "eyebrow": "Comunicación multilingüe",
-      "title": "Del texto a la conversión",
-      "text": "Adaptar un mensaje no consiste solo en traducirlo. Consiste en hacer que siga funcionando allí donde esté su audiencia. \\n Cada idioma tiene sus propios matices, cada mercado su contexto y cada marca su propia forma de comunicarse. \\n Ayudo a empresas a adaptar y optimizar su contenido para que conecte con nuevos mercados, mejore su visibilidad en buscadores y mantenga la misma naturalidad en cualquier idioma. \\n Mi trabajo combina traducción, localización y posicionamiento SEO para que cada contenido conserve su intención, resulte relevante para su audiencia y tenga oportunidades reales de posicionar en Google. \\n Mi objetivo es que cada texto parezca escrito originalmente para el mercado al que se dirige.",
+      "eyebrow": "Comunicación",
+      "title": "Palabra",
+      "text": "Adaptar un mensaje no consiste solo en traducirlo. Consiste en hacer que siga funcionando allí donde esté su audiencia. \\n Cada idioma tiene sus propios matices, cada mercado su contexto y cada marca su propia forma de comunicarse. \\n Ayudo a empresas a adaptar y optimizar su contenido para que conecte con nuevos mercados, mejore su visibilidad en buscadores y mantenga la misma naturalidad en cualquier idioma. \\n Mi trabajo combina traducción, localización y posicionamiento SEO para que cada contenido conserve su intención, resulte relevante para su audiencia y tenga oportunidades reales de posicionar en Google. \\n Mi experiencia combina formación en Traducción e Interpretación, comunicación diaria con clientes francófonos, proyectos de localización para comercio electrónico y una inmersión internacional que ha reforzado mi manera de entender los idiomas desde su contexto cultural, no solo desde la gramática. \\n Esa visión me permite trabajar cada proyecto con un objetivo claro: que el contenido parezca escrito originalmente para el mercado al que se dirige.",
       "availability": "Disponible para proyectos freelance, colaboraciones puntuales y apoyo editorial continuo."
     },
     "services": {
@@ -148,7 +147,7 @@
       "items": [
         "Traducción web",
         "Localización de contenido",
-        "SEO y copywriting",
+        "Copywriting SEO multilingüe",
         "Corrección y edición de textos"
       ]
     },
@@ -162,7 +161,7 @@
           "description": "Analizo el objetivo del proyecto, el público al que se dirige y el contexto (idioma, plataforma o mercado) antes de empezar."
         },
         {
-          "title": "Desarrollo",
+          "title": "Traducción / Redacción",
           "description": "Trabajo el contenido con foco en claridad, naturalidad e intención comercial, adaptándolo al formato que necesites."
         },
         {
@@ -350,7 +349,7 @@
       "review": "Revisión",
       "delivery": "Entrega"
     },
-    "title": "Contenido multilingüe y posicionamiento",
+    "title": "Traducción + SEO",
     "servicesList": [
       "Traducción y localización de contenido web",
       "Adaptación de catálogos y fichas de producto",
