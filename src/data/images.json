@@ -2,13 +2,14 @@
   "heroMainPhoto": "/images/site/img_5587.jpg",
   "galleryCutouts": {
     "shotOne": "/images/site/about-me-world.png",
-    "shotTwo": "/images/site/gallery-shot-two.jpg",
-    "shotThree": "/images/site/gallery-shot-three.jpg",
-    "shotFour": "/images/site/gallery-shot-four.jpg"
+    "shotTwo": "/images/site/sticker-passport.jpeg",
+    "shotThree": "/images/site/sticker-art.jpeg",
+    "shotFour": "/images/site/sticker-crochet.jpeg",
+    "shotFive": "/images/site/sticker-mountain.jpeg"
   },
   "videoPlaceholderOrEmbedUrl": "https://example.com/embed/video",
   "ugcHeaderImage": "",
-  "instagramScreenshot": "",
+  "instagramScreenshot": "/images/site/instagram-screenshot.jpeg",
   "socialLinks": {
     "linkedin": "https://www.linkedin.com/in/martagall/",
     "instagram": "https://www.instagram.com/marttelier/"
