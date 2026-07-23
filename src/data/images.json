@@ -1,7 +1,7 @@
 {
   "heroMainPhoto": "/images/site/img_5587.jpg",
   "galleryCutouts": {
-    "shotOne": "/images/site/gallery-shot-one.jpg",
+    "shotOne": "/images/site/about-me-world.png",
     "shotTwo": "/images/site/gallery-shot-two.jpg",
     "shotThree": "/images/site/gallery-shot-three.jpg",
     "shotFour": "/images/site/gallery-shot-four.jpg"
@@ -14,9 +14,9 @@
     "instagram": "https://www.instagram.com/marttelier/"
   },
   "nicheBackgrounds": {
-    "travel": "",
-    "languages": "",
-    "art": ""
+    "travel": "/images/site/nicho-viajes.jpg",
+    "languages": "/images/site/nicho-idiomas.jpg",
+    "art": "/images/site/nicho-arte.jpg"
   },
   "ugcVideos": {
     "travel": [],
@@ -33,5 +33,16 @@
     "travel": "",
     "languages": "",
     "art": ""
+  },
+  "aboutPhotos": [],
+  "brandVideo": "",
+  "toolLogos": {
+    "microsoftOffice": "/images/tools/microsoft-office.svg",
+    "googleWorkspace": "/images/tools/google-workspace.svg",
+    "notion": "/images/tools/notion.svg",
+    "aiTools": "/images/tools/ai-tools--chatgpt--claude-.svg",
+    "wordpress": "/images/tools/wordpress.svg",
+    "googleSearchConsole": "/images/tools/google-search-console.svg",
+    "googleMyBusiness": "/images/tools/google-my-business.svg"
   }
 }

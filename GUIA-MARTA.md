@@ -114,22 +114,155 @@ Cambia solo el texto entre las comillas de `"text"`.
 
 ---
 
-## 🖼️ Cómo cambiar fotos
+## 🖼️ Cómo cambiar fotos e imágenes
 
-Las fotos de la web están en la carpeta `public/images/`.
+Hay **dos formas** de cambiar las imágenes de la web:
 
-### Paso a paso:
+### Opción A: Desde el panel de administración (la más fácil)
 
-1. **Entra en GitHub** y navega a `public` → `images`
-2. Para **subir una foto nueva**: haz clic en **"Add file"** → **"Upload files"** → arrastra tu foto
-3. Para **reemplazar una foto**: sube una foto con el **mismo nombre** que la que quieres reemplazar
-4. Haz clic en **"Commit changes"**
+1. Ve a `marttelier.netlify.app/admin`
+2. Inicia sesión
+3. En el menú de la izquierda, haz clic en **"🖼️ Imágenes del sitio"**
+4. Verás todos los campos de imagen organizados por sección:
+   - **Foto principal (Hero)** — la foto grande de la portada
+   - **Fotos del globo (Sobre mí)** — las fotos circulares sobre el globo
+   - **Fondos de nicho** — las fotos de fondo de los cards de Viajes, Idiomas y Arte
+   - **Iconos de nicho** — las imágenes 3D pequeñas (avión, globo, pincel)
+   - **Captura de Instagram** — screenshot de tu perfil
+   - **Fotos UGC** — tus fotos de portfolio por categoría
+   - **Vídeos UGC** — tus vídeos por categoría
+   - **Logos de herramientas** — los iconos de Microsoft Office, Google, etc.
+   - **Redes sociales** — tus enlaces de LinkedIn e Instagram
+5. Haz clic en el campo que quieras cambiar → sube la imagen
+6. Haz clic en **"Publish"**
+
+⚠️ **Importante**: cada vez que publicas, gasta 1 crédito de construcción. Si te quedan pocos créditos, usa la Opción B.
+
+---
+
+### Opción B: Subir fotos directamente en GitHub (ahorra créditos)
+
+Esta opción es un poco más manual pero te permite subir MUCHAS imágenes gastando solo 1 crédito.
+
+#### Paso 1: Sube las imágenes a la carpeta correcta
+
+1. Entra en **GitHub** → tu repositorio
+2. Navega a la carpeta donde va la imagen:
+
+| Tipo de imagen | Carpeta en GitHub |
+|---|---|
+| Foto principal, fotos del globo, fondos de nicho, iconos, Instagram | `public` → `images` → `site` |
+| Fotos de tu portfolio UGC | `public` → `images` → `ugc` |
+| Logos de herramientas | `public` → `images` → `tools` |
+| Fotos del blog | `public` → `images` → `blog` |
+
+3. Haz clic en **"Add file"** → **"Upload files"**
+4. Arrastra todas las imágenes que quieras subir
+5. **¡NO le des a "Commit" todavía!** Primero necesitas hacer el Paso 2.
+
+Si ya le diste a Commit, no pasa nada — simplemente haz el Paso 2 como un commit separado.
+
+#### Paso 2: Dile a la web DÓNDE usar cada imagen
+
+La web necesita saber qué imagen va en cada sitio. Para eso, editas un archivo que se llama `images.json`.
+
+1. En GitHub, navega a `src` → `data` → `images.json`
+2. Haz clic en el **lápiz** ✏️ para editar
+3. Busca el campo que quieres cambiar y pon la ruta de tu imagen
+
+**Ejemplo: cambiar la foto principal del Hero**
+
+Busca esta línea:
+```
+"heroMainPhoto": "/images/site/img_5587.jpg",
+```
+
+Cámbiala por el nombre de tu nueva foto:
+```
+"heroMainPhoto": "/images/site/mi-nueva-foto.jpg",
+```
+
+**Ejemplo: añadir fotos al portfolio UGC**
+
+Busca esta parte:
+```
+"ugcPhotos": {
+    "travel": [],
+    "languages": [],
+    "art": [],
+    "all": []
+}
+```
+
+Para añadir fotos a "todas", cambia `"all": []` por:
+```
+"all": [
+    "/images/ugc/foto1.jpg",
+    "/images/ugc/foto2.jpg",
+    "/images/ugc/foto3.jpg"
+]
+```
+
+**Ejemplo: cambiar el fondo del card de Viajes**
+
+Busca:
+```
+"nicheBackgrounds": {
+    "travel": "",
+```
+
+Cámbialo por:
+```
+"nicheBackgrounds": {
+    "travel": "/images/site/fondo-viajes.jpg",
+```
+
+#### Reglas importantes para editar images.json:
+
+```
+✅ Correcto:    "/images/site/mi-foto.jpg"
+❌ Incorrecto:  mi-foto.jpg  (falta la ruta completa)
+❌ Incorrecto:  /images/site/mi-foto.jpg  (sin comillas)
+```
+
+- La ruta SIEMPRE empieza con `/images/`
+- El nombre del archivo debe ser EXACTAMENTE igual al que subiste (mayúsculas, minúsculas, guiones, todo)
+- No borres las comas `,` ni las llaves `{}` ni los corchetes `[]`
+- Para una lista de fotos, cada ruta va entre comillas y separada por comas
+- Para un campo vacío (sin imagen), déjalo como `""`
+
+#### Guía rápida de todos los campos:
+
+| Campo en images.json | Qué es | Ejemplo |
+|---|---|---|
+| `heroMainPhoto` | Foto grande de la portada | `"/images/site/marta-hero.jpg"` |
+| `galleryCutouts.shotOne` (hasta `shotFour`) | Fotos circulares del globo | `"/images/site/foto-globo-1.jpg"` |
+| `instagramScreenshot` | Captura de tu Instagram | `"/images/site/instagram.png"` |
+| `nicheBackgrounds.travel` | Fondo del card Viajes | `"/images/site/fondo-viajes.jpg"` |
+| `nicheBackgrounds.languages` | Fondo del card Idiomas | `"/images/site/fondo-idiomas.jpg"` |
+| `nicheBackgrounds.art` | Fondo del card Arte | `"/images/site/fondo-arte.jpg"` |
+| `nicheIcons.travel` | Icono 3D del avión | `"/images/site/avion-3d.png"` |
+| `nicheIcons.languages` | Icono 3D del globo | `"/images/site/globo-3d.png"` |
+| `nicheIcons.art` | Icono 3D del pincel | `"/images/site/pincel-3d.png"` |
+| `ugcPhotos.all` | Todas las fotos UGC | `["/images/ugc/f1.jpg", "/images/ugc/f2.jpg"]` |
+| `ugcPhotos.travel` | Fotos UGC de viajes | `["/images/ugc/viaje1.jpg"]` |
+| `ugcVideos.travel` | Vídeos UGC de viajes | `["/images/ugc/video1.mp4"]` |
+| `brandVideo` | Vídeo de marca personal | `"/images/site/marca-personal.mp4"` |
+| `socialLinks.linkedin` | Tu URL de LinkedIn | `"https://www.linkedin.com/in/martagall/"` |
+| `socialLinks.instagram` | Tu URL de Instagram | `"https://www.instagram.com/marttelier/"` |
+
+4. Baja y haz clic en **"Commit changes"** para guardar
+
+#### 💡 Truco para ahorrar créditos:
+
+Sube TODAS las imágenes y edita el `images.json` todo de una vez. Así solo se gasta 1 crédito por cada vez que guardas, no 1 por cada imagen.
 
 ### Consejos para fotos:
 - 📐 Usa fotos en buena calidad pero no demasiado pesadas (máximo 1-2 MB por foto)
 - 📸 Formatos recomendados: `.jpg`, `.png`, `.webp`
 - 📏 Para la foto principal del hero: usa formato vertical (tipo retrato)
-- 📏 Para el vídeo de presentación: usa formato 9:16 (vertical, como un reel de Instagram)
+- 📏 Para los vídeos: usa formato 9:16 (vertical, como un reel de Instagram)
+- 🏷️ Usa nombres de archivo simples, sin espacios ni caracteres especiales (usa guiones: `mi-foto.jpg`)
 
 ---
 
