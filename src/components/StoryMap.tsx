@@ -1,14 +1,13 @@
 // StoryMap — Global Narrative Connections Map
-// Minimalist world silhouette + photo-pins connected by golden threads
-import { motion, useInView, useAnimation } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
+// World silhouette + photo-pins connected by golden threads
+import { motion, useInView } from 'framer-motion';
+import { useRef, useState } from 'react';
 
 interface PhotoPin {
   src: string;
-  // Position as percentage of container (x%, y%)
   x: number;
   y: number;
-  size: number; // rem
+  size: number;
   label?: string;
 }
 
@@ -17,210 +16,159 @@ interface Props {
   className?: string;
 }
 
-// Simplified world continents SVG path (minimalist silhouette)
-const WORLD_PATH = `
-M 120 85 Q 125 75 135 72 Q 140 68 148 70 Q 155 65 160 58 Q 165 52 175 48
-Q 182 45 190 48 Q 195 42 200 38 Q 210 32 220 35 Q 228 30 235 28
-Q 245 25 252 30 Q 258 28 265 32 Q 272 35 275 42 Q 280 48 278 55
-Q 282 60 280 68 Q 275 75 268 78 Q 262 82 255 80 Q 248 82 242 85
-Q 235 88 228 85 Q 220 88 215 85 Q 208 82 200 85 Q 195 88 188 85
-Q 180 88 175 82 Q 168 78 160 80 Q 152 82 145 78 Q 138 75 130 78
-Q 125 80 120 85 Z
-M 290 55 Q 295 48 305 45 Q 312 42 320 45 Q 328 42 335 48 Q 342 52 345 58
-Q 348 65 345 72 Q 342 78 335 82 Q 328 85 320 82 Q 312 85 305 82
-Q 298 78 295 72 Q 292 65 290 55 Z
-M 160 110 Q 165 105 172 102 Q 180 98 188 100 Q 195 98 200 102
-Q 208 105 212 112 Q 215 118 212 125 Q 208 132 200 135 Q 195 138 188 135
-Q 180 138 175 132 Q 168 128 165 122 Q 162 118 160 110 Z
-M 240 100 Q 248 95 258 92 Q 268 90 278 95 Q 285 98 290 105
-Q 295 112 292 120 Q 288 128 280 132 Q 272 135 265 132 Q 258 135 250 130
-Q 242 125 240 118 Q 238 110 240 100 Z
-M 340 95 Q 350 88 362 85 Q 375 82 388 88 Q 395 92 400 100
-Q 405 108 402 118 Q 398 125 390 128 Q 380 132 370 128 Q 360 130 352 125
-Q 345 118 342 108 Q 340 102 340 95 Z
-M 140 135 Q 148 128 158 125 Q 168 122 178 128 Q 185 132 190 140
-Q 195 148 192 158 Q 188 168 180 175 Q 172 180 165 178 Q 158 182 150 178
-Q 142 172 140 162 Q 138 152 140 142 Q 140 138 140 135 Z
-`;
-
-// Thread connection pairs (indices into photos array)
 function getConnections(count: number): [number, number][] {
   if (count <= 1) return [];
   const conns: [number, number][] = [];
-  // Connect each photo to its neighbors + create a web through center
-  for (let i = 0; i < count - 1; i++) {
-    conns.push([i, i + 1]);
-  }
-  // Connect first to last for a loop
+  for (let i = 0; i < count - 1; i++) conns.push([i, i + 1]);
   if (count > 2) conns.push([0, count - 1]);
-  // Add some cross-connections for a web feel
   if (count > 3) conns.push([0, Math.floor(count / 2)]);
   if (count > 4) conns.push([1, count - 2]);
   return conns;
 }
 
-function Thread({ x1, y1, x2, y2, highlighted, index }: {
-  x1: number; y1: number; x2: number; y2: number;
-  highlighted: boolean; index: number;
-}) {
-  // Create a slightly curved path for organic feel
-  const mx = (x1 + x2) / 2 + (index % 2 === 0 ? 8 : -8);
-  const my = (y1 + y2) / 2 + (index % 3 === 0 ? -6 : 6);
-  const d = `M ${x1} ${y1} Q ${mx} ${my} ${x2} ${y2}`;
-
-  return (
-    <motion.path
-      d={d}
-      stroke={highlighted ? '#D4956B' : '#C9A87C'}
-      strokeWidth={highlighted ? 1.5 : 0.8}
-      fill="none"
-      strokeLinecap="round"
-      opacity={highlighted ? 0.8 : 0.3}
-      initial={{ pathLength: 0, opacity: 0 }}
-      animate={{ pathLength: 1, opacity: highlighted ? 0.8 : 0.3 }}
-      transition={{
-        pathLength: { duration: 1.5, delay: 0.3 + index * 0.25, ease: 'easeInOut' },
-        opacity: { duration: 0.4 },
-      }}
-    />
-  );
-}
-
-function PhotoPinComponent({ pin, index, isHovered, onHover, onLeave }: {
-  pin: PhotoPin; index: number;
-  isHovered: boolean;
-  onHover: () => void; onLeave: () => void;
-}) {
-  return (
-    <motion.div
-      className="absolute cursor-pointer"
-      style={{
-        left: `${pin.x}%`,
-        top: `${pin.y}%`,
-        width: `${pin.size}rem`,
-        height: `${pin.size}rem`,
-        transform: 'translate(-50%, -50%)',
-      }}
-      initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.6, delay: 0.5 + index * 0.15, ease: 'easeOut' }}
-      whileHover={{ scale: 1.1 }}
-      onHoverStart={onHover}
-      onHoverEnd={onLeave}
-    >
-      {/* Warm glow on hover */}
-      <motion.div
-        className="absolute inset-0 rounded-full"
-        style={{
-          background: 'radial-gradient(circle, rgba(212, 149, 107, 0.3), transparent 70%)',
-          transform: 'scale(1.5)',
-        }}
-        animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
-      />
-      {/* Photo */}
-      <div className="relative h-full w-full">
-        {pin.src ? (
-          <img
-            src={pin.src}
-            alt={pin.label || ''}
-            className="h-full w-full object-contain drop-shadow-lg"
-            style={{ filter: isHovered ? 'brightness(1.05)' : 'brightness(1)' }}
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center rounded-full bg-blush-50/50 text-lg text-warm-gray/30">
-            📌
-          </div>
-        )}
-      </div>
-      {/* Pin dot at bottom */}
-      <motion.div
-        className="absolute left-1/2 bottom-0 h-1.5 w-1.5 -translate-x-1/2 translate-y-1 rounded-full"
-        style={{ backgroundColor: isHovered ? '#D4956B' : '#C9A87C' }}
-        animate={{ scale: isHovered ? [1, 1.5, 1] : 1 }}
-        transition={{ repeat: isHovered ? Infinity : 0, duration: 1.5 }}
-      />
-    </motion.div>
-  );
-}
-
 export default function StoryMap({ photos, className = '' }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const connections = getConnections(photos.length);
 
-  // Breathing animation for the entire network
-  const breatheControls = useAnimation();
-  useEffect(() => {
-    if (isInView) {
-      breatheControls.start({
-        y: [0, -3, 0],
-        transition: { repeat: Infinity, duration: 8, ease: 'easeInOut' },
-      });
-    }
-  }, [isInView, breatheControls]);
-
   return (
-    <motion.div
-      ref={ref}
-      className={`relative ${className}`}
-      animate={breatheControls}
-    >
-      {/* World map silhouette — very faint watermark */}
+    <div ref={ref} className={`relative ${className}`}>
+      {/* World map silhouette — proper visible watermark */}
       <motion.svg
-        viewBox="0 0 520 220"
+        viewBox="0 0 1000 500"
         className="absolute inset-0 h-full w-full"
+        preserveAspectRatio="xMidYMid meet"
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : {}}
-        transition={{ duration: 2, delay: 0.2 }}
+        transition={{ duration: 1.5 }}
       >
         <defs>
-          <filter id="map-blur">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+          <filter id="map-soft">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" />
           </filter>
         </defs>
-        <path
-          d={WORLD_PATH}
-          fill="currentColor"
-          className="text-blush-200"
-          opacity="0.12"
-          filter="url(#map-blur)"
-        />
+        {/* North America */}
+        <path d="M 100 80 Q 120 60 150 55 Q 180 50 200 60 Q 220 55 240 65 Q 250 70 260 80 Q 265 90 260 105 Q 255 115 245 120 Q 240 130 230 140 Q 220 150 210 155 Q 200 160 190 158 Q 180 162 170 165 Q 155 170 145 160 Q 135 155 125 150 Q 115 140 110 125 Q 105 110 100 100 Q 98 90 100 80 Z"
+          fill="currentColor" className="text-blush-300" opacity="0.25" filter="url(#map-soft)" />
+        {/* South America */}
+        <path d="M 200 200 Q 210 190 225 185 Q 240 180 250 190 Q 260 200 265 215 Q 270 235 268 255 Q 265 275 260 295 Q 255 315 248 330 Q 240 345 232 355 Q 225 360 218 355 Q 210 350 205 340 Q 200 325 198 310 Q 195 290 193 270 Q 192 250 195 230 Q 197 215 200 200 Z"
+          fill="currentColor" className="text-blush-300" opacity="0.22" filter="url(#map-soft)" />
+        {/* Europe */}
+        <path d="M 440 65 Q 455 55 475 50 Q 490 48 505 55 Q 520 52 530 60 Q 540 65 545 75 Q 548 85 545 95 Q 540 105 530 112 Q 525 118 515 122 Q 505 125 495 120 Q 485 118 475 115 Q 465 112 455 108 Q 445 100 440 90 Q 438 78 440 65 Z"
+          fill="currentColor" className="text-blush-300" opacity="0.28" filter="url(#map-soft)" />
+        {/* Africa */}
+        <path d="M 470 140 Q 485 130 500 128 Q 515 125 530 135 Q 540 142 545 155 Q 550 170 548 190 Q 546 210 540 230 Q 535 250 528 268 Q 520 285 510 298 Q 500 310 490 305 Q 480 300 475 288 Q 468 270 465 250 Q 462 230 460 210 Q 458 190 460 170 Q 462 155 470 140 Z"
+          fill="currentColor" className="text-blush-300" opacity="0.25" filter="url(#map-soft)" />
+        {/* Asia */}
+        <path d="M 560 50 Q 590 40 620 38 Q 650 35 680 42 Q 710 48 740 55 Q 770 62 790 75 Q 805 85 810 100 Q 812 115 805 128 Q 795 140 780 148 Q 765 155 745 158 Q 725 160 705 155 Q 685 152 665 145 Q 645 140 625 132 Q 605 125 590 115 Q 575 105 565 90 Q 558 75 560 50 Z"
+          fill="currentColor" className="text-blush-300" opacity="0.22" filter="url(#map-soft)" />
+        {/* Australia */}
+        <path d="M 770 260 Q 790 248 815 245 Q 840 242 860 252 Q 875 260 882 275 Q 886 290 880 305 Q 872 318 858 325 Q 842 330 825 328 Q 808 325 795 315 Q 782 305 775 290 Q 770 278 770 260 Z"
+          fill="currentColor" className="text-blush-300" opacity="0.2" filter="url(#map-soft)" />
       </motion.svg>
 
-      {/* Thread connections */}
-      <svg className="absolute inset-0 h-full w-full" style={{ overflow: 'visible' }}>
+      {/* Thread connections — golden lines */}
+      <svg className="absolute inset-0 h-full w-full pointer-events-none" style={{ overflow: 'visible' }}>
         {isInView && connections.map(([a, b], idx) => {
           const pa = photos[a];
           const pb = photos[b];
           if (!pa || !pb) return null;
           const highlighted = hoveredIdx === a || hoveredIdx === b;
+          const cx = (pa.x + pb.x) / 2 + (idx % 2 === 0 ? 3 : -3);
+          const cy = (pa.y + pb.y) / 2 + (idx % 3 === 0 ? -4 : 4);
           return (
-            <Thread
-              key={`${a}-${b}`}
-              x1={(pa.x / 100) * (ref.current?.offsetWidth || 500)}
-              y1={(pa.y / 100) * (ref.current?.offsetHeight || 400)}
-              x2={(pb.x / 100) * (ref.current?.offsetWidth || 500)}
-              y2={(pb.y / 100) * (ref.current?.offsetHeight || 400)}
-              highlighted={highlighted}
-              index={idx}
+            <motion.path
+              key={`t-${a}-${b}`}
+              d={`M ${pa.x}% ${pa.y}% Q ${cx}% ${cy}% ${pb.x}% ${pb.y}%`}
+              stroke={highlighted ? '#D4956B' : '#C9A87C'}
+              strokeWidth={highlighted ? 2 : 1}
+              fill="none"
+              strokeLinecap="round"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{
+                pathLength: 1,
+                opacity: highlighted ? 0.7 : 0.25,
+                strokeWidth: highlighted ? 2 : 1,
+              }}
+              transition={{
+                pathLength: { duration: 1.2, delay: idx * 0.2, ease: 'easeOut' },
+                opacity: { duration: 0.2 },
+                strokeWidth: { duration: 0.2 },
+              }}
             />
           );
         })}
       </svg>
 
       {/* Photo pins */}
-      {photos.map((pin, idx) => (
-        <PhotoPinComponent
-          key={idx}
-          pin={pin}
-          index={idx}
-          isHovered={hoveredIdx === idx}
-          onHover={() => setHoveredIdx(idx)}
-          onLeave={() => setHoveredIdx(null)}
+      {photos.map((pin, idx) => {
+        const isHovered = hoveredIdx === idx;
+        const isConnected = hoveredIdx !== null && connections.some(
+          ([a, b]) => (a === hoveredIdx || b === hoveredIdx) && (a === idx || b === idx)
+        );
+        return (
+          <motion.div
+            key={idx}
+            className="absolute cursor-pointer"
+            style={{
+              left: `${pin.x}%`,
+              top: `${pin.y}%`,
+              width: `${pin.size}rem`,
+              height: `${pin.size}rem`,
+              transform: 'translate(-50%, -50%)',
+              zIndex: isHovered ? 30 : 10,
+            }}
+            initial={{ opacity: 0, scale: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, scale: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.3 + idx * 0.12, ease: 'backOut' }}
+            onHoverStart={() => setHoveredIdx(idx)}
+            onHoverEnd={() => setHoveredIdx(null)}
+          >
+            {/* Warm glow */}
+            <motion.div
+              className="absolute -inset-4 rounded-full"
+              style={{ background: 'radial-gradient(circle, rgba(212,149,107,0.35), transparent 65%)' }}
+              animate={{ opacity: isHovered ? 1 : 0, scale: isHovered ? 1.2 : 0.8 }}
+              transition={{ duration: 0.15 }}
+            />
+            {/* Photo */}
+            <motion.div
+              className="relative h-full w-full"
+              animate={{
+                scale: isHovered ? 1.15 : isConnected ? 1.05 : 1,
+                filter: isHovered ? 'brightness(1.1) drop-shadow(0 8px 20px rgba(212,149,107,0.4))' : 'brightness(1) drop-shadow(0 4px 12px rgba(0,0,0,0.15))',
+              }}
+              transition={{ duration: 0.15, ease: 'easeOut' }}
+            >
+              {pin.src ? (
+                <img src={pin.src} alt={pin.label || ''} className="h-full w-full object-contain" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center rounded-full bg-blush-100/50 text-lg text-warm-gray/30">📌</div>
+              )}
+            </motion.div>
+            {/* Pin dot */}
+            <motion.div
+              className="absolute left-1/2 -bottom-1 h-2 w-2 -translate-x-1/2 rounded-full bg-[#C9A87C]"
+              animate={{
+                scale: isHovered ? [1, 1.8, 1] : 1,
+                backgroundColor: isHovered ? '#D4956B' : '#C9A87C',
+              }}
+              transition={{ scale: { repeat: isHovered ? Infinity : 0, duration: 0.8 } }}
+            />
+          </motion.div>
+        );
+      })}
+
+      {/* Subtle breathing pulse along threads */}
+      {isInView && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none rounded-full"
+          style={{ background: 'radial-gradient(circle at 50% 50%, rgba(201,168,124,0.06), transparent 60%)' }}
+          animate={{ scale: [1, 1.05, 1], opacity: [0.5, 0.8, 0.5] }}
+          transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
         />
-      ))}
-    </motion.div>
+      )}
+    </div>
   );
 }
