@@ -36,8 +36,8 @@ export default function StoryMap({ photos, className = '' }: Props) {
       <img
         src="/images/site/world-map.svg"
         alt=""
-        className="absolute inset-0 h-full w-full object-contain pointer-events-none select-none"
-        style={{ opacity: 1 }}
+        className="absolute inset-0 w-full pointer-events-none select-none"
+        style={{ opacity: 1, top: '50%', transform: 'translateY(-50%) scale(1.4)' }}
       />
 
       {/* Golden thread connections */}
