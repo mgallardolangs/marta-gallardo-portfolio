@@ -50,22 +50,22 @@ export default function StoryMap({ photos, className = '' }: Props) {
         </defs>
         {/* North America */}
         <path d="M 100 80 Q 120 60 150 55 Q 180 50 200 60 Q 220 55 240 65 Q 250 70 260 80 Q 265 90 260 105 Q 255 115 245 120 Q 240 130 230 140 Q 220 150 210 155 Q 200 160 190 158 Q 180 162 170 165 Q 155 170 145 160 Q 135 155 125 150 Q 115 140 110 125 Q 105 110 100 100 Q 98 90 100 80 Z"
-          fill="currentColor" className="text-blush-300" opacity="0.25" filter="url(#map-soft)" />
+          fill="#FF8FAB"  opacity="0.35" filter="url(#map-soft)" />
         {/* South America */}
         <path d="M 200 200 Q 210 190 225 185 Q 240 180 250 190 Q 260 200 265 215 Q 270 235 268 255 Q 265 275 260 295 Q 255 315 248 330 Q 240 345 232 355 Q 225 360 218 355 Q 210 350 205 340 Q 200 325 198 310 Q 195 290 193 270 Q 192 250 195 230 Q 197 215 200 200 Z"
-          fill="currentColor" className="text-blush-300" opacity="0.22" filter="url(#map-soft)" />
+          fill="#FF8FAB"  opacity="0.3" filter="url(#map-soft)" />
         {/* Europe */}
         <path d="M 440 65 Q 455 55 475 50 Q 490 48 505 55 Q 520 52 530 60 Q 540 65 545 75 Q 548 85 545 95 Q 540 105 530 112 Q 525 118 515 122 Q 505 125 495 120 Q 485 118 475 115 Q 465 112 455 108 Q 445 100 440 90 Q 438 78 440 65 Z"
-          fill="currentColor" className="text-blush-300" opacity="0.28" filter="url(#map-soft)" />
+          fill="#FF8FAB"  opacity="0.38" filter="url(#map-soft)" />
         {/* Africa */}
         <path d="M 470 140 Q 485 130 500 128 Q 515 125 530 135 Q 540 142 545 155 Q 550 170 548 190 Q 546 210 540 230 Q 535 250 528 268 Q 520 285 510 298 Q 500 310 490 305 Q 480 300 475 288 Q 468 270 465 250 Q 462 230 460 210 Q 458 190 460 170 Q 462 155 470 140 Z"
-          fill="currentColor" className="text-blush-300" opacity="0.25" filter="url(#map-soft)" />
+          fill="#FF8FAB"  opacity="0.35" filter="url(#map-soft)" />
         {/* Asia */}
         <path d="M 560 50 Q 590 40 620 38 Q 650 35 680 42 Q 710 48 740 55 Q 770 62 790 75 Q 805 85 810 100 Q 812 115 805 128 Q 795 140 780 148 Q 765 155 745 158 Q 725 160 705 155 Q 685 152 665 145 Q 645 140 625 132 Q 605 125 590 115 Q 575 105 565 90 Q 558 75 560 50 Z"
-          fill="currentColor" className="text-blush-300" opacity="0.22" filter="url(#map-soft)" />
+          fill="#FF8FAB"  opacity="0.3" filter="url(#map-soft)" />
         {/* Australia */}
         <path d="M 770 260 Q 790 248 815 245 Q 840 242 860 252 Q 875 260 882 275 Q 886 290 880 305 Q 872 318 858 325 Q 842 330 825 328 Q 808 325 795 315 Q 782 305 775 290 Q 770 278 770 260 Z"
-          fill="currentColor" className="text-blush-300" opacity="0.2" filter="url(#map-soft)" />
+          fill="#FF8FAB"  opacity="0.28" filter="url(#map-soft)" />
       </motion.svg>
 
       {/* Thread connections — golden lines */}
