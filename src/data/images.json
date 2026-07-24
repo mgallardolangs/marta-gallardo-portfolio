@@ -2,10 +2,10 @@
   "heroMainPhoto": "/images/site/img_5587.jpg",
   "galleryCutouts": {
     "shotOne": "/images/site/about-me-world.png",
-    "shotTwo": "/images/site/sticker-passport.jpeg",
-    "shotThree": "/images/site/sticker-art.jpeg",
+    "shotTwo": "/images/site/sticker-passport.png",
+    "shotThree": "/images/site/sticker-art.png",
     "shotFour": "/images/site/sticker-crochet.png",
-    "shotFive": "/images/site/sticker-mountain.jpeg"
+    "shotFive": "/images/site/sticker-mountain.png"
   },
   "videoPlaceholderOrEmbedUrl": "https://example.com/embed/video",
   "ugcHeaderImage": "",

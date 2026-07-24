@@ -32,12 +32,12 @@ export default function StoryMap({ photos, className = '' }: Props) {
 
   return (
     <div className={`relative ${className}`} style={{ minHeight: '36rem' }}>
-      {/* World map silhouette — static image, always visible */}
+      {/* World map silhouette — Marta's mapamundi image */}
       <img
-        src="/images/site/world-map.svg"
+        src="/images/site/world-map.png"
         alt=""
         className="absolute inset-0 w-full pointer-events-none select-none"
-        style={{ opacity: 1, top: '50%', transform: 'translateY(-50%) scale(1.4)' }}
+        style={{ top: '50%', transform: 'translateY(-50%) scale(1.3)', opacity: 0.35 }}
       />
 
       {/* Golden thread connections */}
