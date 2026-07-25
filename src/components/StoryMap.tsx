@@ -51,25 +51,25 @@ export default function StoryMap({ photos, className = '' }: Props) {
           const pb = photos[b];
           if (!pa || !pb) return null;
           const highlighted = hoveredIdx === a || hoveredIdx === b;
-          const cx = (pa.x + pb.x) / 2 + (idx % 2 === 0 ? 5 : -5);
-          const cy = (pa.y + pb.y) / 2 + (idx % 3 === 0 ? -4 : 4);
           return (
-            <motion.path
+            <motion.line
               key={`t-${a}-${b}`}
-              d={`M ${pa.x} ${pa.y} Q ${cx} ${cy} ${pb.x} ${pb.y}`}
+              x1={pa.x}
+              y1={pa.y}
+              x2={pb.x}
+              y2={pb.y}
               stroke={highlighted ? '#D4956B' : '#C9A87C'}
-              strokeWidth={highlighted ? 0.4 : 0.2}
-              fill="none"
-              strokeLinecap="round"
+              strokeWidth={0.3}
               vectorEffect="non-scaling-stroke"
+              style={{ strokeWidth: highlighted ? 2 : 1 }}
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{
                 pathLength: 1,
-                opacity: highlighted ? 0.8 : 0.3,
+                opacity: highlighted ? 0.8 : 0.35,
               }}
               transition={{
                 pathLength: { duration: 1.5, delay: idx * 0.3, ease: 'easeOut' },
-                opacity: { duration: 0.2 },
+                opacity: { duration: 0.15 },
               }}
             />
           );
@@ -124,16 +124,6 @@ export default function StoryMap({ photos, className = '' }: Props) {
                 <div className="flex h-full w-full items-center justify-center rounded-full bg-pink-50 text-lg text-pink-300">📌</div>
               )}
             </motion.div>
-            {/* Pin dot */}
-            <motion.div
-              className="absolute left-1/2 -bottom-1 h-2 w-2 -translate-x-1/2 rounded-full"
-              style={{ backgroundColor: '#C9A87C' }}
-              animate={{
-                scale: isHovered ? [1, 1.8, 1] : 1,
-                backgroundColor: isHovered ? '#D4956B' : '#C9A87C',
-              }}
-              transition={{ scale: { repeat: isHovered ? Infinity : 0, duration: 0.8 } }}
-            />
           </motion.div>
         );
       })}
