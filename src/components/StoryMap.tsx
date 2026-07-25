@@ -40,42 +40,6 @@ export default function StoryMap({ photos, className = '' }: Props) {
         style={{ top: '50%', transform: 'translateY(-50%) scale(1.3)', opacity: 0.35 }}
       />
 
-      {/* Golden thread connections */}
-      <svg
-        className="absolute inset-0 h-full w-full pointer-events-none"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-      >
-        {connections.map(([a, b], idx) => {
-          const pa = photos[a];
-          const pb = photos[b];
-          if (!pa || !pb) return null;
-          const highlighted = hoveredIdx === a || hoveredIdx === b;
-          return (
-            <motion.line
-              key={`t-${a}-${b}`}
-              x1={pa.x}
-              y1={pa.y}
-              x2={pb.x}
-              y2={pb.y}
-              stroke={highlighted ? '#D4956B' : '#C9A87C'}
-              strokeWidth={0.3}
-              vectorEffect="non-scaling-stroke"
-              style={{ strokeWidth: highlighted ? 2 : 1 }}
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{
-                pathLength: 1,
-                opacity: highlighted ? 0.8 : 0.35,
-              }}
-              transition={{
-                pathLength: { duration: 1.5, delay: idx * 0.3, ease: 'easeOut' },
-                opacity: { duration: 0.15 },
-              }}
-            />
-          );
-        })}
-      </svg>
-
       {/* Photo pins */}
       {photos.map((pin, idx) => {
         const isHovered = hoveredIdx === idx;
