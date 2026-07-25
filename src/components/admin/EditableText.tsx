@@ -44,41 +44,57 @@ export default function EditableText({ i18nKey, as: Tag = 'span', className = ''
   const { getText, setText } = useAdminStore();
   const [isEditing, setIsEditing] = useState(false);
   const ref = useRef<HTMLElement | null>(null);
+  const editingRef = useRef(false); // track editing without re-render
   const text = getText(i18nKey);
   const TagName = Tag;
   const WrapperTag = (blockTags.has(Tag) ? 'div' : 'span') as keyof JSX.IntrinsicElements;
 
-  // Only update innerHTML when NOT editing (prevents clobbering user input)
-  useEffect(() => {
-    if (!ref.current || isEditing) return;
-    ref.current.innerHTML = formatText(text);
-  }, [text, isEditing]);
-
-  const startEditing = useCallback((event: MouseEvent<HTMLElement>) => {
+  const enterEdit = useCallback((event: MouseEvent<HTMLElement>) => {
     event.stopPropagation();
-    // Don't preventDefault — allow cursor placement
-    if (!isEditing) {
-      setIsEditing(true);
-      window.setTimeout(() => ref.current?.focus(), 0);
-    }
-  }, [isEditing]);
+    if (editingRef.current) return;
+    editingRef.current = true;
+    setIsEditing(true);
+    // Keep current innerHTML — don't let React touch it
+    window.setTimeout(() => {
+      if (ref.current) {
+        ref.current.contentEditable = 'true';
+        ref.current.focus();
+        // Place cursor at end
+        const range = document.createRange();
+        const sel = window.getSelection();
+        range.selectNodeContents(ref.current);
+        range.collapse(false);
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+      }
+    }, 0);
+  }, []);
 
-  const stopEditing = useCallback(() => {
-    if (!isEditing) return;
+  const exitEdit = useCallback(() => {
+    if (!editingRef.current) return;
+    editingRef.current = false;
     setIsEditing(false);
     if (!ref.current) return;
+    ref.current.contentEditable = 'false';
     const newText = parseHtml(ref.current.innerHTML);
     if (newText !== text) {
       setText(i18nKey, newText);
+    } else {
+      // Reset to formatted version
+      ref.current.innerHTML = formatText(text);
     }
-  }, [i18nKey, setText, text, isEditing]);
+  }, [i18nKey, setText, text]);
 
   const handleKeyDown = useCallback((event: KeyboardEvent<HTMLElement>) => {
     event.stopPropagation();
     if (event.key === 'Escape') {
       event.preventDefault();
+      editingRef.current = false;
       setIsEditing(false);
-      if (ref.current) ref.current.innerHTML = formatText(text);
+      if (ref.current) {
+        ref.current.contentEditable = 'false';
+        ref.current.innerHTML = formatText(text);
+      }
     }
   }, [text]);
 
@@ -88,26 +104,21 @@ export default function EditableText({ i18nKey, as: Tag = 'span', className = ''
       style={{ cursor: isEditing ? 'text' : 'pointer' }}
     >
       <TagName
-        ref={(node) => { ref.current = node as HTMLElement | null; }}
-        contentEditable={isEditing}
+        ref={(node: HTMLElement | null) => { ref.current = node; }}
         suppressContentEditableWarning
-        onBlur={stopEditing}
+        onBlur={exitEdit}
         onKeyDown={handleKeyDown}
         onClick={(event: MouseEvent<HTMLElement>) => {
           event.stopPropagation();
-          if (!isEditing) {
-            setIsEditing(true);
-            window.setTimeout(() => ref.current?.focus(), 0);
-          }
+          if (!editingRef.current) enterEdit(event);
         }}
         className={`${className} ${isEditing ? 'outline outline-2 outline-blue-400 rounded-lg px-1 bg-blue-50/20 min-w-[2rem]' : ''}`}
-        // Only set innerHTML via dangerouslySetInnerHTML on initial render / when not editing
-        {...(!isEditing ? { dangerouslySetInnerHTML: { __html: formatText(text) } } : {})}
+        dangerouslySetInnerHTML={{ __html: formatText(text) }}
       />
       {!isEditing && (
         <button
           type="button"
-          onClick={startEditing}
+          onClick={enterEdit}
           className="absolute -top-3 -right-3 opacity-0 group-hover/edit:opacity-100 transition-opacity bg-blue-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow-lg z-[60] hover:bg-blue-600"
           title={`Edit: ${i18nKey}`}
         >
