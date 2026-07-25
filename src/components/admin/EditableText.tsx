@@ -1,130 +1,127 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import type { JSX, KeyboardEvent, MouseEvent } from 'react';
-import { useAdminStore } from './useAdminStore';
+import { useEffect, useRef, useState } from 'react';
+import { adminStore } from './adminStore';
 
 interface Props {
   i18nKey: string;
-  as?: keyof JSX.IntrinsicElements;
+  as?: string;
   className?: string;
 }
 
-const blockTags = new Set(['div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'section', 'article', 'li']);
-
-function escapeHtml(value: string): string {
+function formatText(value: string): string {
   return value
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-function formatText(value: string): string {
-  return escapeHtml(value)
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\\n/g, '<br/>')
     .replace(/\n/g, '<br/>');
 }
 
-function parseHtml(html: string): string {
-  if (typeof window === 'undefined') return html;
-  const withBreaks = html
-    .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/<\/p>\s*<p[^>]*>/gi, '\n\n')
-    .replace(/<\/div>\s*<div[^>]*>/gi, '\n');
-
-  const temp = document.createElement('div');
-  temp.innerHTML = withBreaks;
-  return (temp.textContent ?? '')
-    .replace(/\u00a0/g, ' ')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
+function htmlToText(html: string): string {
+  const d = document.createElement('div');
+  d.innerHTML = html.replace(/<br\s*\/?>/gi, '\\n').replace(/<\/p>\s*<p[^>]*>/gi, '\\n');
+  return (d.textContent || '').replace(/\u00a0/g, ' ').trim();
 }
 
+/*
+ * ponytail: React is NOT allowed to touch innerHTML during editing.
+ * - No dangerouslySetInnerHTML
+ * - No useSyncExternalStore (causes re-renders that clobber content)
+ * - All DOM manipulation via refs
+ * - Store subscription only updates when NOT editing
+ */
 export default function EditableText({ i18nKey, as: Tag = 'span', className = '' }: Props) {
-  const { getText, setText } = useAdminStore();
-  const [isEditing, setIsEditing] = useState(false);
-  const ref = useRef<HTMLElement | null>(null);
-  const editingRef = useRef(false); // track editing without re-render
-  const text = getText(i18nKey);
-  const TagName = Tag;
-  const WrapperTag = (blockTags.has(Tag) ? 'div' : 'span') as keyof JSX.IntrinsicElements;
+  const elRef = useRef<HTMLDivElement>(null);
+  const editingRef = useRef(false);
+  const [editing, setEditing] = useState(false);
 
-  const enterEdit = useCallback((event: MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
+  // Mount: set initial text + subscribe to store (but skip updates while editing)
+  useEffect(() => {
+    const el = elRef.current;
+    if (!el) return;
+    el.innerHTML = formatText(adminStore.getText(i18nKey));
+    return adminStore.subscribe(() => {
+      if (!editingRef.current && el) {
+        el.innerHTML = formatText(adminStore.getText(i18nKey));
+      }
+    });
+  }, [i18nKey]);
+
+  const startEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
     if (editingRef.current) return;
     editingRef.current = true;
-    setIsEditing(true);
-    // Keep current innerHTML — don't let React touch it
-    window.setTimeout(() => {
-      if (ref.current) {
-        ref.current.contentEditable = 'true';
-        ref.current.focus();
-        // Place cursor at end
-        const range = document.createRange();
-        const sel = window.getSelection();
-        range.selectNodeContents(ref.current);
-        range.collapse(false);
-        sel?.removeAllRanges();
-        sel?.addRange(range);
-      }
-    }, 0);
-  }, []);
+    setEditing(true);
+    const el = elRef.current;
+    if (el) {
+      el.contentEditable = 'true';
+      el.focus();
+    }
+  };
 
-  const exitEdit = useCallback(() => {
+  const finishEdit = () => {
     if (!editingRef.current) return;
     editingRef.current = false;
-    setIsEditing(false);
-    if (!ref.current) return;
-    ref.current.contentEditable = 'false';
-    const newText = parseHtml(ref.current.innerHTML);
-    if (newText !== text) {
-      setText(i18nKey, newText);
-    } else {
-      // Reset to formatted version
-      ref.current.innerHTML = formatText(text);
+    setEditing(false);
+    const el = elRef.current;
+    if (!el) return;
+    el.contentEditable = 'false';
+    const newText = htmlToText(el.innerHTML);
+    const oldText = adminStore.getText(i18nKey);
+    if (newText !== oldText) {
+      adminStore.setText(i18nKey, newText);
     }
-  }, [i18nKey, setText, text]);
+    el.innerHTML = formatText(adminStore.getText(i18nKey));
+  };
 
-  const handleKeyDown = useCallback((event: KeyboardEvent<HTMLElement>) => {
-    event.stopPropagation();
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      editingRef.current = false;
-      setIsEditing(false);
-      if (ref.current) {
-        ref.current.contentEditable = 'false';
-        ref.current.innerHTML = formatText(text);
-      }
+  const cancelEdit = () => {
+    editingRef.current = false;
+    setEditing(false);
+    const el = elRef.current;
+    if (el) {
+      el.contentEditable = 'false';
+      el.innerHTML = formatText(adminStore.getText(i18nKey));
     }
-  }, [text]);
+  };
+
+  // Use native event listener for keydown to avoid React interference
+  useEffect(() => {
+    const el = elRef.current;
+    if (!el) return;
+    const onKey = (e: KeyboardEvent) => {
+      e.stopPropagation();
+      if (e.key === 'Escape') { e.preventDefault(); cancelEdit(); }
+    };
+    el.addEventListener('keydown', onKey);
+    return () => el.removeEventListener('keydown', onKey);
+  }, [i18nKey]);
+
+  const isBlock = ['div','p','h1','h2','h3','h4','h5','h6','section','li'].includes(Tag);
 
   return (
-    <WrapperTag
-      className={`group/edit relative ${blockTags.has(Tag) ? 'block' : 'inline-block'} max-w-full align-top`}
-      style={{ cursor: isEditing ? 'text' : 'pointer' }}
+    <div
+      className={`group/edit relative ${isBlock ? 'block' : 'inline-block'}`}
+      style={{ display: isBlock ? 'block' : 'inline-block' }}
     >
-      <TagName
-        ref={(node: HTMLElement | null) => { ref.current = node; }}
+      {/* The actual editable element — React NEVER sets its innerHTML after mount */}
+      <div
+        ref={elRef}
+        onClick={startEdit}
+        onBlur={finishEdit}
         suppressContentEditableWarning
-        onBlur={exitEdit}
-        onKeyDown={handleKeyDown}
-        onClick={(event: MouseEvent<HTMLElement>) => {
-          event.stopPropagation();
-          if (!editingRef.current) enterEdit(event);
-        }}
-        className={`${className} ${isEditing ? 'outline outline-2 outline-blue-400 rounded-lg px-1 bg-blue-50/20 min-w-[2rem]' : ''}`}
-        dangerouslySetInnerHTML={{ __html: formatText(text) }}
+        className={`${className} ${editing ? 'outline outline-2 outline-blue-400 rounded-lg bg-blue-50/20' : 'cursor-pointer'}`}
+        style={{ minWidth: '1rem' }}
       />
-      {!isEditing && (
+      {!editing && (
         <button
           type="button"
-          onClick={enterEdit}
+          onClick={startEdit}
           className="absolute -top-3 -right-3 opacity-0 group-hover/edit:opacity-100 transition-opacity bg-blue-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow-lg z-[60] hover:bg-blue-600"
-          title={`Edit: ${i18nKey}`}
         >
           ✏️
         </button>
       )}
-    </WrapperTag>
+    </div>
   );
 }
