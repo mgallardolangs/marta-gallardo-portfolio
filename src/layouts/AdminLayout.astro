@@ -40,58 +40,30 @@ const allImages = JSON.stringify(imagesData);
 </head>
 <body class="min-h-screen bg-cream text-charcoal">
   <AdminInit client:load i18nJson={allI18n} imagesJson={allImages} lang={lang} />
-  <AdminToolbar client:load />
 
-  <div id="admin-login" class="hidden min-h-screen items-center justify-center">
-    <div class="text-center space-y-6 p-8">
-      <h1 class="font-heading text-4xl text-charcoal">Admin</h1>
-      <p class="text-warm-gray font-body">Inicia sesión para editar</p>
-      <button id="login-btn" class="bg-rose-gold text-white px-8 py-3 rounded-full font-body text-sm uppercase tracking-wider hover:opacity-90 cursor-pointer">
-        Iniciar sesión
-      </button>
-    </div>
+  <!-- Minimal admin toolbar — small floating pill, not a full bar -->
+  <div class="fixed bottom-6 right-6 z-[100] print:hidden">
+    <AdminToolbar client:load />
   </div>
 
-  <div id="admin-site" class="pt-10">
-    <div class="scroll-progress"></div>
-    <Header lang={lang} />
-    <main>
-      <slot />
-    </main>
-    <Footer lang={lang} />
-  </div>
+  <!-- Site content — always visible, auth checked on publish only -->
+  <div class="scroll-progress"></div>
+  <Header lang={lang} />
+  <main>
+    <slot />
+  </main>
+  <Footer lang={lang} />
 
   <script is:inline>
-    (function () {
-      var login = document.getElementById('admin-login');
-      var site = document.getElementById('admin-site');
-      var loginBtn = document.getElementById('login-btn');
-
-      function check() {
-        var user = window.netlifyIdentity && window.netlifyIdentity.currentUser();
-        if (user) {
-          login.style.display = 'none';
-          site.style.display = 'block';
-        } else {
-          login.style.display = 'flex';
-          site.style.display = 'none';
+    // On production: check auth before allowing publish (not before viewing)
+    // The site always renders — auth is only needed when clicking Publish
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on('init', function(user) {
+        if (!user) {
+          window.netlifyIdentity.on('login', function() { location.reload(); });
         }
-      }
-
-      if (loginBtn) loginBtn.onclick = function () { window.netlifyIdentity && window.netlifyIdentity.open(); };
-
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on('init', check);
-        window.netlifyIdentity.on('login', function () { location.reload(); });
-      }
-
-      setTimeout(function () {
-        if (!window.netlifyIdentity || !window.netlifyIdentity.currentUser) {
-          login.style.display = 'none';
-          site.style.display = 'block';
-        }
-      }, 2000);
-    })();
+      });
+    }
   </script>
 </body>
 </html>
