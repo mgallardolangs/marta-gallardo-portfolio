@@ -1,14 +1,14 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ScrollReveal from '../components/ScrollReveal';
-import PageTransition from '../components/PageTransition';
-import RichText from '../components/RichText.astro';
-import ParallaxLayer from '../components/ParallaxLayer';
-import NicheCard from '../components/NicheCard';
-import VideoGallery from '../components/VideoGallery';
-import PhotoMasonry from '../components/PhotoMasonry';
-import { getLangFromUrl, t } from '../i18n';
-import imagesData from '../data/images.json';
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import ScrollReveal from '../../components/ScrollReveal';
+import PageTransition from '../../components/PageTransition';
+import ParallaxLayer from '../../components/ParallaxLayer';
+import VideoGallery from '../../components/VideoGallery';
+import PhotoMasonry from '../../components/PhotoMasonry';
+import { getLangFromUrl, t } from '../../i18n';
+import imagesData from '../../data/images.json';
+import EditableText from '../../components/admin/EditableText';
+import AdminNicheCard from '../../components/admin/AdminNicheCard';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
@@ -30,34 +30,26 @@ const niches = [
   iconImage: images.nicheIcons?.[niche.id] ?? '',
 }));
 
-const nicheLinks = niches.map(({ id, label, accent }) => ({ id, label, accent }));
 const allPhotos = images.ugcPhotos?.all ?? [];
-
-const pageTitle = `${i.hero.name} | ${i.ugc.title}`;
-const pageDescription = i.ugcPage.pageDescription;
 ---
-
-<BaseLayout title={pageTitle} description={pageDescription}>
+<AdminLayout title={`Admin — ${i.ugc.title}`} description={i.ugcPage.pageDescription}>
   <PageTransition client:load>
     <div id="top" class="bg-cream pt-24">
       <section class="relative overflow-hidden border-b border-blush-100 bg-gradient-to-b from-blush-50 via-cream to-cream">
         <ParallaxLayer client:visible className="pointer-events-none absolute inset-x-0 top-4 hidden md:block" speed={-0.12}>
           <div class="mx-auto max-w-6xl px-6 text-right font-accent text-7xl italic tracking-[0.18em] text-rose-gold/10">
-            {i.ugcPage.hero.backgroundLabel}
+            <EditableText client:load i18nKey="ugcPage.hero.backgroundLabel" as="span" className="" />
           </div>
         </ParallaxLayer>
 
         <div class="relative z-10 mx-auto max-w-6xl px-6 pt-28 pb-16 md:pt-32 md:pb-24">
           <div class="grid gap-12 lg:grid-cols-[1fr_minmax(280px,380px)] lg:items-center lg:gap-16">
             <ScrollReveal client:visible className="max-w-xl">
-              <p class="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold">{i.ugcPage.hero.eyebrow}</p>
-              <h1 class="mt-4 font-heading text-5xl leading-none text-charcoal md:text-7xl">
-                {i.ugcPage.hero.headline}
-              </h1>
-              <RichText text={i.ugcPage.hero.description} class="mt-6 font-body text-lg leading-8 text-warm-gray md:text-xl" />
+              <EditableText client:load i18nKey="ugcPage.hero.eyebrow" as="p" className="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold" />
+              <EditableText client:load i18nKey="ugcPage.hero.headline" as="h1" className="mt-4 font-heading text-5xl leading-none text-charcoal md:text-7xl" />
+              <EditableText client:load i18nKey="ugcPage.hero.description" as="div" className="mt-6 font-body text-lg leading-8 text-warm-gray md:text-xl" />
             </ScrollReveal>
 
-            <!-- Single-image auto-slide carousel -->
             <ScrollReveal client:visible delay={0.12}>
               <div class="hero-carousel relative aspect-[3/4] w-full max-w-sm mx-auto overflow-hidden rounded-3xl shadow-lg" data-interval="3500">
                 {(images.ugcPhotos?.all ?? []).length > 0 ? (
@@ -65,8 +57,8 @@ const pageDescription = i.ugcPage.pageDescription;
                     <img
                       src={src}
                       alt={`UGC ${idx + 1}`}
-                      class={`carousel-slide absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-in-out`}
-                      style={`transform: translateX(${idx * 100}%)`}
+                      class="carousel-slide absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-in-out"
+                      style={`transform: translateX(${idx * 100}%);`}
                       loading="lazy"
                     />
                   ))
@@ -84,14 +76,10 @@ const pageDescription = i.ugcPage.pageDescription;
       <section class="px-6 py-16 md:py-20">
         <div class="mx-auto max-w-5xl text-center">
           <ScrollReveal client:visible>
-            <p class="font-heading text-3xl italic leading-snug text-charcoal md:text-5xl lg:text-6xl">
-              {i.ugcPage.hero.nicheIntroTitle}
-            </p>
+            <EditableText client:load i18nKey="ugcPage.hero.nicheIntroTitle" as="p" className="font-heading text-3xl italic leading-snug text-charcoal md:text-5xl lg:text-6xl" />
           </ScrollReveal>
           <ScrollReveal client:visible delay={0.15}>
-            <p class="mx-auto mt-8 max-w-3xl font-body text-lg leading-8 text-warm-gray md:text-xl">
-              {i.ugcPage.hero.nicheIntroText}
-            </p>
+            <EditableText client:load i18nKey="ugcPage.hero.nicheIntroText" as="p" className="mx-auto mt-8 max-w-3xl font-body text-lg leading-8 text-warm-gray md:text-xl" />
           </ScrollReveal>
         </div>
       </section>
@@ -100,16 +88,9 @@ const pageDescription = i.ugcPage.pageDescription;
         <div class="mx-auto max-w-6xl">
           <ScrollReveal client:visible>
             <div class="grid gap-4 md:grid-cols-3">
-              {nicheLinks.map((link) => (
-                <NicheCard
-                  client:visible
-                  id={link.id}
-                  label={link.label}
-                  accent={link.accent}
-                  backgroundImage={images.nicheBackgrounds?.[link.id]}
-                  iconImage={images.nicheIcons?.[link.id]}
-                />
-              ))}
+              <AdminNicheCard client:load id="travel" labelKey="ugcPage.niches.travel.label" accentKey="ugcPage.niches.travel.accent" backgroundImageKey="nicheBackgrounds.travel" iconImageKey="nicheIcons.travel" />
+              <AdminNicheCard client:load id="languages" labelKey="ugcPage.niches.languages.label" accentKey="ugcPage.niches.languages.accent" backgroundImageKey="nicheBackgrounds.languages" iconImageKey="nicheIcons.languages" />
+              <AdminNicheCard client:load id="art" labelKey="ugcPage.niches.art.label" accentKey="ugcPage.niches.art.accent" backgroundImageKey="nicheBackgrounds.art" iconImageKey="nicheIcons.art" />
             </div>
           </ScrollReveal>
         </div>
@@ -123,13 +104,13 @@ const pageDescription = i.ugcPage.pageDescription;
           <ScrollReveal client:visible className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div class="max-w-3xl">
               <div class="flex items-center gap-4">
-                <p class="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold">{niche.eyebrow}</p>
+                <EditableText client:load i18nKey={`ugcPage.niches.${niche.id}.eyebrow`} as="p" className="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold" />
                 {niche.iconImage && (
                   <img src={niche.iconImage} alt="" class="h-12 w-12 rounded-2xl object-contain" loading="lazy" />
                 )}
               </div>
-              <h2 class="mt-4 font-heading text-4xl text-charcoal md:text-6xl">{niche.label}</h2>
-              <RichText text={niche.intro} class="mt-4 font-body text-base leading-8 text-warm-gray md:text-lg" />
+              <EditableText client:load i18nKey={`ugcPage.niches.${niche.id}.label`} as="h2" className="mt-4 font-heading text-4xl text-charcoal md:text-6xl" />
+              <EditableText client:load i18nKey={`ugcPage.niches.${niche.id}.intro`} as="p" className="mt-4 font-body text-base leading-8 text-warm-gray md:text-lg" />
             </div>
             <a
               href="#top"
@@ -170,11 +151,10 @@ const pageDescription = i.ugcPage.pageDescription;
       )}
     </div>
   </PageTransition>
-</BaseLayout>
+</AdminLayout>
 
 <script>
-  // Auto-slide carousel with mouse wheel + touch swipe support
-  document.querySelectorAll('.hero-carousel').forEach(container => {
+  document.querySelectorAll('.hero-carousel').forEach((container) => {
     const slides = Array.from(container.querySelectorAll('.carousel-slide'));
     if (slides.length <= 1) return;
     const interval = parseInt((container as HTMLElement).dataset.interval || '3500');
@@ -198,23 +178,21 @@ const pageDescription = i.ugcPage.pageDescription;
 
     autoTimer = window.setInterval(next, interval);
 
-    // Mouse wheel: scroll left/right changes slide
-    container.addEventListener('wheel', (e: Event) => {
-      const we = e as WheelEvent;
-      if (Math.abs(we.deltaX) > Math.abs(we.deltaY) || Math.abs(we.deltaY) > 30) {
-        e.preventDefault();
-        if (we.deltaX > 0 || we.deltaY > 0) next(); else prev();
+    container.addEventListener('wheel', (event: Event) => {
+      const wheelEvent = event as WheelEvent;
+      if (Math.abs(wheelEvent.deltaX) > Math.abs(wheelEvent.deltaY) || Math.abs(wheelEvent.deltaY) > 30) {
+        event.preventDefault();
+        if (wheelEvent.deltaX > 0 || wheelEvent.deltaY > 0) next(); else prev();
         resetAuto();
       }
     }, { passive: false });
 
-    // Touch swipe
     let touchStartX = 0;
-    container.addEventListener('touchstart', (e: Event) => {
-      touchStartX = (e as TouchEvent).touches[0].clientX;
+    container.addEventListener('touchstart', (event: Event) => {
+      touchStartX = (event as TouchEvent).touches[0].clientX;
     });
-    container.addEventListener('touchend', (e: Event) => {
-      const diff = touchStartX - (e as TouchEvent).changedTouches[0].clientX;
+    container.addEventListener('touchend', (event: Event) => {
+      const diff = touchStartX - (event as TouchEvent).changedTouches[0].clientX;
       if (Math.abs(diff) > 40) {
         if (diff > 0) next(); else prev();
         resetAuto();
