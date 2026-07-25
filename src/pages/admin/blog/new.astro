@@ -1,0 +1,21 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getLangFromUrl, t } from '../../../i18n';
+import BlogPostForm from '../../../components/admin/BlogPostForm';
+
+const lang = getLangFromUrl(Astro.url);
+const i = t(lang);
+---
+<AdminLayout title="Admin — New post" description="Create a new blog post">
+  <section class="mx-auto max-w-5xl px-6 pt-28 pb-16">
+    <div class="mb-8 flex items-center justify-between gap-4">
+      <div>
+        <p class="font-accent text-sm uppercase tracking-[0.28em] text-rose-gold">{i.blog.title}</p>
+        <h1 class="mt-3 font-heading text-5xl text-charcoal md:text-6xl">New post</h1>
+      </div>
+      <a href="/admin/blog/" class="text-sm text-rose-gold hover:text-blush-300 transition-colors">← Back</a>
+    </div>
+
+    <BlogPostForm client:load />
+  </section>
+</AdminLayout>

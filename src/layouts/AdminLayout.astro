@@ -1,0 +1,97 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import AdminToolbar from '../components/admin/AdminToolbar';
+import AdminInit from '../components/admin/AdminInit';
+import { getLangFromUrl, t } from '../i18n';
+import es from '../i18n/es.json';
+import en from '../i18n/en.json';
+import fr from '../i18n/fr.json';
+import imagesData from '../data/images.json';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const lang = getLangFromUrl(Astro.url);
+const i = t(lang);
+const { title = `Admin — ${i.hero.name}`, description = '' } = Astro.props;
+const allI18n = JSON.stringify({ es, en, fr });
+const allImages = JSON.stringify(imagesData);
+---
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>{title}</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    .scroll-progress { position: fixed; top: 40px; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, var(--color-blush-300), var(--color-rose-gold)); transform-origin: left; z-index: 99; }
+    @supports (animation-timeline: scroll()) { .scroll-progress { animation: scrollProgress linear; animation-timeline: scroll(); } @keyframes scrollProgress { from { transform: scaleX(0); } to { transform: scaleX(1); } } }
+  </style>
+</head>
+<body class="min-h-screen bg-cream text-charcoal">
+  <AdminInit client:load i18nJson={allI18n} imagesJson={allImages} lang={lang} />
+  <AdminToolbar client:load />
+
+  <div id="admin-login" class="hidden min-h-screen items-center justify-center">
+    <div class="text-center space-y-6 p-8">
+      <h1 class="font-heading text-4xl text-charcoal">Admin</h1>
+      <p class="text-warm-gray font-body">Inicia sesión para editar</p>
+      <button id="login-btn" class="bg-rose-gold text-white px-8 py-3 rounded-full font-body text-sm uppercase tracking-wider hover:opacity-90 cursor-pointer">
+        Iniciar sesión
+      </button>
+    </div>
+  </div>
+
+  <div id="admin-site" class="pt-10">
+    <div class="scroll-progress"></div>
+    <Header lang={lang} />
+    <main>
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </div>
+
+  <script is:inline>
+    (function () {
+      var login = document.getElementById('admin-login');
+      var site = document.getElementById('admin-site');
+      var loginBtn = document.getElementById('login-btn');
+
+      function check() {
+        var user = window.netlifyIdentity && window.netlifyIdentity.currentUser();
+        if (user) {
+          login.style.display = 'none';
+          site.style.display = 'block';
+        } else {
+          login.style.display = 'flex';
+          site.style.display = 'none';
+        }
+      }
+
+      if (loginBtn) loginBtn.onclick = function () { window.netlifyIdentity && window.netlifyIdentity.open(); };
+
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('init', check);
+        window.netlifyIdentity.on('login', function () { location.reload(); });
+      }
+
+      setTimeout(function () {
+        if (!window.netlifyIdentity || !window.netlifyIdentity.currentUser) {
+          login.style.display = 'none';
+          site.style.display = 'block';
+        }
+      }, 2000);
+    })();
+  </script>
+</body>
+</html>
