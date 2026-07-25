@@ -67,9 +67,11 @@ export default function EditableText({ i18nKey, as: Tag = 'span', className = ''
     const el = elRef.current;
     if (!el) return;
     el.contentEditable = 'false';
-    const newText = htmlToText(el.innerHTML);
-    const oldText = adminStore.getText(i18nKey);
-    if (newText !== oldText) {
+    // Compare innerHTML before/after — only save if actually changed
+    const currentHtml = el.innerHTML;
+    const originalHtml = formatText(adminStore.getText(i18nKey));
+    if (currentHtml !== originalHtml) {
+      const newText = htmlToText(currentHtml);
       adminStore.setText(i18nKey, newText);
     }
     el.innerHTML = formatText(adminStore.getText(i18nKey));
