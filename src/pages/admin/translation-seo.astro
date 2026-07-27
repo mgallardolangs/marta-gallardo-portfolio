@@ -3,6 +3,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro';
 import ScrollReveal from '../../components/ScrollReveal';
 import PageTransition from '../../components/PageTransition';
 import StaggerContainer, { StaggerItem } from '../../components/StaggerContainer';
+import EditableImage from '../../components/admin/EditableImage';
 import { getLangFromUrl, t } from '../../i18n';
 import imagesData from '../../data/images.json';
 import EditableText from '../../components/admin/EditableText';
@@ -102,14 +103,13 @@ const page = i.translationPage;
           <div class="mt-5 grid grid-cols-3 gap-4 sm:grid-cols-4">
             {page.skills.tools.items.map((item, index) => {
               const logoKey = toolLogoMap[item];
-              const logoSrc = logoKey && imagesData.toolLogos?.[logoKey as keyof typeof imagesData.toolLogos];
               return (
                 <div class="flex flex-col items-center gap-2 text-center">
-                  <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blush-50">
-                    {logoSrc ? (
-                      <img src={logoSrc} alt={item} class="h-7 w-7 object-contain" />
+                  <div class="h-12 w-12 rounded-xl bg-blush-50 overflow-hidden">
+                    {logoKey ? (
+                      <EditableImage client:load imageKey={`toolLogos.${logoKey}`} className="h-12 w-12 p-2" alt={item} />
                     ) : (
-                      <span class="text-lg text-rose-gold">⚙️</span>
+                      <div class="flex h-full w-full items-center justify-center text-lg text-rose-gold">⚙️</div>
                     )}
                   </div>
                   <EditableText client:load i18nKey={`translationPage.skills.tools.items.${index}`} as="span" className="text-xs leading-tight text-warm-gray" />

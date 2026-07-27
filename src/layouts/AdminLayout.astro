@@ -48,7 +48,7 @@ const allImages = JSON.stringify(imagesData);
 
   <!-- Site content — always visible, auth checked on publish only -->
   <div class="scroll-progress"></div>
-  <Header lang={lang} />
+  <Header lang={lang} adminMode={true} />
   <main>
     <slot />
   </main>

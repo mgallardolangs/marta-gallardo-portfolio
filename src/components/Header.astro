@@ -4,16 +4,20 @@ import siteData from '../data/images.json';
 
 interface Props {
   lang: Lang;
+  adminMode?: boolean;
 }
 
-const { lang } = Astro.props;
+const { lang, adminMode = false } = Astro.props;
 const i = t(lang);
 const allLangs = visibleLangs;
 const social = siteData.socialLinks || { linkedin: 'https://www.linkedin.com/in/martagall/', instagram: 'https://www.instagram.com/marttelier/' };
 
 // ponytail: derive active page from URL pathname
 const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
-const strippedPath = pathname.replace(`/${lang}`, '') || '/';
+const strippedPath = pathname.replace(`/${lang}`, '').replace('/admin', '') || '/';
+
+// In admin mode, prefix all nav links with /admin
+const navPath = (path: string) => adminMode ? `/admin${path === '/' ? '' : path}` : getLocalizedPath(path, lang);
 
 function isActive(path: string): boolean {
   if (path === '/') return strippedPath === '/' || strippedPath === '';
@@ -26,17 +30,17 @@ const navClass = (path: string) =>
 <header class="fixed top-0 left-0 right-0 z-50 bg-cream/80 backdrop-blur-md border-b border-blush-100">
   <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
     <!-- Logo / Name -->
-    <a href={getLocalizedPath('/', lang)} class="font-heading text-2xl font-semibold tracking-wide text-charcoal hover:text-rose-gold transition-colors">
+    <a href={navPath('/')} class="font-heading text-2xl font-semibold tracking-wide text-charcoal hover:text-rose-gold transition-colors">
       MG
     </a>
 
     <!-- Desktop Nav -->
     <ul class="hidden md:flex items-center gap-8 font-body text-sm tracking-wide">
-      <li><a href={getLocalizedPath('/', lang)} class={navClass('/')}>{i.nav.home}</a></li>
-      <li><a href={getLocalizedPath('/ugc', lang)} class={navClass('/ugc')}>{i.nav.ugc}</a></li>
-      <li><a href={getLocalizedPath('/translation-seo', lang)} class={navClass('/translation-seo')}>{i.nav.translationSeo}</a></li>
-      <li><a href={getLocalizedPath('/blog', lang)} class={navClass('/blog')}>{i.nav.blog}</a></li>
-      <li><a href={getLocalizedPath('/contact', lang)} class={navClass('/contact')}>{i.nav.contact}</a></li>
+      <li><a href={navPath('/')} class={navClass('/')}>{i.nav.home}</a></li>
+      <li><a href={navPath('/ugc')} class={navClass('/ugc')}>{i.nav.ugc}</a></li>
+      <li><a href={navPath('/translation-seo')} class={navClass('/translation-seo')}>{i.nav.translationSeo}</a></li>
+      <li><a href={navPath('/blog')} class={navClass('/blog')}>{i.nav.blog}</a></li>
+      <li><a href={navPath('/contact')} class={navClass('/contact')}>{i.nav.contact}</a></li>
     </ul>
 
     <!-- Right side: social + lang switcher -->
@@ -75,11 +79,11 @@ const navClass = (path: string) =>
   <!-- Mobile menu -->
   <div id="mobile-menu" class="hidden md:hidden bg-cream border-t border-blush-100 px-6 py-4">
     <ul class="flex flex-col gap-4 font-body text-sm">
-      <li><a href={getLocalizedPath('/', lang)} class={`block ${navClass('/')}`}>{i.nav.home}</a></li>
-      <li><a href={getLocalizedPath('/ugc', lang)} class={`block ${navClass('/ugc')}`}>{i.nav.ugc}</a></li>
-      <li><a href={getLocalizedPath('/translation-seo', lang)} class={`block ${navClass('/translation-seo')}`}>{i.nav.translationSeo}</a></li>
-      <li><a href={getLocalizedPath('/blog', lang)} class={`block ${navClass('/blog')}`}>{i.nav.blog}</a></li>
-      <li><a href={getLocalizedPath('/contact', lang)} class={`block ${navClass('/contact')}`}>{i.nav.contact}</a></li>
+      <li><a href={navPath('/')} class={`block ${navClass('/')}`}>{i.nav.home}</a></li>
+      <li><a href={navPath('/ugc')} class={`block ${navClass('/ugc')}`}>{i.nav.ugc}</a></li>
+      <li><a href={navPath('/translation-seo')} class={`block ${navClass('/translation-seo')}`}>{i.nav.translationSeo}</a></li>
+      <li><a href={navPath('/blog')} class={`block ${navClass('/blog')}`}>{i.nav.blog}</a></li>
+      <li><a href={navPath('/contact')} class={`block ${navClass('/contact')}`}>{i.nav.contact}</a></li>
     </ul>
   </div>
 </header>
