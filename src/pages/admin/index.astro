@@ -156,19 +156,13 @@ const i = t(lang);
             </ParallaxLayer>
 
             <ScrollReveal client:visible direction="up" className="relative mx-auto flex aspect-[9/16] w-full max-w-[22rem] items-center justify-center overflow-hidden rounded-[2.8rem] border border-blush-200 bg-blush-100 shadow-[0_35px_100px_rgba(183,110,121,0.14)]">
-              <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.52),rgba(255,255,255,0.05))]"></div>
-              <div class="absolute left-1/2 top-4 h-1.5 w-24 -translate-x-1/2 rounded-full bg-charcoal/12"></div>
-              <div class="absolute inset-x-[22%] top-10 h-24 rounded-full bg-white/45 blur-3xl"></div>
-              <div class="relative z-10 max-w-sm text-center">
-                <p class="font-accent text-sm uppercase tracking-[0.34em] text-rose-gold">{i.home.video.note}</p>
-                <p class="mt-5 font-heading text-4xl text-charcoal md:text-5xl">{i.home.video.placeholder}</p>
-              </div>
-              <ArrowWavy client:visible className="absolute bottom-8 right-8 hidden w-24 text-rose-gold md:block" />
+              <EditableImage client:load imageKey="brandVideo" className="absolute inset-0 h-full w-full rounded-[2.8rem] object-cover" alt="Brand video" />
+              <div class="absolute left-1/2 top-4 h-1.5 w-24 -translate-x-1/2 rounded-full bg-charcoal/12 pointer-events-none"></div>
             </ScrollReveal>
           </div>
 
           <ScrollReveal client:visible direction="right" className="space-y-6">
-            <p class="font-accent text-sm uppercase tracking-[0.36em] text-rose-gold">{i.home.video.eyebrow}</p>
+            <EditableText client:load i18nKey="home.video.eyebrow" as="p" className="font-accent text-sm uppercase tracking-[0.36em] text-rose-gold" />
             <EditableText client:load i18nKey="home.video.title" as="h2" className="font-heading text-5xl leading-none text-charcoal md:text-6xl" />
             <EditableText client:load i18nKey="home.video.description" as="div" className="max-w-xl font-body text-lg leading-8 text-warm-gray md:text-xl" />
             <div class="mt-6 overflow-hidden rounded-2xl border border-blush-100 shadow-sm">
