@@ -99,14 +99,12 @@ const i = t(lang);
 
           <ScrollReveal client:visible className="mt-12">
             <div class="text-center">
-              <p class="mb-4 font-accent text-sm uppercase tracking-[0.3em] text-rose-gold">{i.home.about.languagesLabel}</p>
-              <StaggerContainer client:visible className="flex flex-wrap justify-center gap-3" staggerDelay={0.08}>
-                {i.home.about.languages.map((language) => (
-                  <StaggerItem className="inline-flex">
-                    <span class="rounded-full border border-blush-100 bg-blush-50 px-5 py-2.5 text-sm text-charcoal">{language}</span>
-                  </StaggerItem>
+              <EditableText client:load i18nKey="home.about.languagesLabel" as="p" className="mb-4 font-accent text-sm uppercase tracking-[0.3em] text-rose-gold" />
+              <div class="flex flex-wrap justify-center gap-3">
+                {i.home.about.languages.map((language, idx) => (
+                  <EditableText client:load i18nKey={`home.about.languages.${idx}`} as="span" className="rounded-full border border-blush-100 bg-blush-50 px-5 py-2.5 text-sm text-charcoal" />
                 ))}
-              </StaggerContainer>
+              </div>
             </div>
           </ScrollReveal>
         </div>
