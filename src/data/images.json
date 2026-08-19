@@ -45,5 +45,11 @@
     "wordpress": "/images/tools/wordpress.svg",
     "googleSearchConsole": "/images/tools/google-search-console.svg",
     "googleMyBusiness": "/images/tools/google-my-business.svg"
+  },
+  "videoStickers": {
+    "one": "",
+    "two": "",
+    "three": "",
+    "four": ""
   }
 }
