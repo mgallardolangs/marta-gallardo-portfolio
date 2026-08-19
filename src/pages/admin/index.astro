@@ -113,26 +113,9 @@ const i = t(lang);
       <section class="relative px-6 pb-24 md:pb-36">
         <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
           <div class="relative min-h-[32rem] rounded-[2.8rem] border border-blush-100 bg-blush-50/70 p-5 md:min-h-[38rem] md:p-8">
-            <!-- Floating editable sticker images -->
-            <div class="absolute -left-2 top-8 z-20 md:-left-10 md:top-12 h-28 w-28 md:h-36 md:w-36">
-              <EditableImage client:load imageKey="galleryCutouts.shotOne" className="h-full w-full rounded-[1.75rem] overflow-hidden" alt="Sticker 1" />
-            </div>
-
-            <div class="absolute right-0 top-0 z-20 md:right-6 h-24 w-32 md:h-28 md:w-40">
-              <EditableImage client:load imageKey="galleryCutouts.shotTwo" className="h-full w-full rounded-[1.75rem] overflow-hidden" alt="Sticker 2" />
-            </div>
-
-            <div class="absolute -bottom-4 left-6 z-20 md:bottom-8 md:left-10 h-28 w-40 md:h-32 md:w-44">
-              <EditableImage client:load imageKey="galleryCutouts.shotThree" className="h-full w-full rounded-[1.75rem] overflow-hidden" alt="Sticker 3" />
-            </div>
-
-            <div class="absolute bottom-14 right-2 z-20 md:right-0 h-20 w-28 md:h-24 md:w-36">
-              <EditableImage client:load imageKey="galleryCutouts.shotFour" className="h-full w-full rounded-[1.75rem] overflow-hidden" alt="Sticker 4" />
-            </div>
-
-            <!-- Video/brand image -->
+            <!-- Video/brand video -->
             <ScrollReveal client:visible direction="up" className="relative mx-auto flex aspect-[9/16] w-full max-w-[22rem] items-center justify-center overflow-hidden rounded-[2.8rem] border border-blush-200 bg-blush-100 shadow-[0_35px_100px_rgba(183,110,121,0.14)]">
-              <EditableImage client:load imageKey="brandVideo" className="absolute inset-0 h-full w-full rounded-[2.8rem]" alt="Brand video" />
+              <EditableImage client:load imageKey="brandVideo" className="absolute inset-0 h-full w-full rounded-[2.8rem]" alt="Brand video" label="🎬 Change video" />
               <div class="absolute left-1/2 top-4 h-1.5 w-24 -translate-x-1/2 rounded-full bg-charcoal/12 pointer-events-none"></div>
             </ScrollReveal>
           </div>

@@ -5,13 +5,14 @@ interface Props {
   imageKey: string;
   className?: string;
   alt?: string;
+  label?: string;
 }
 
 /*
  * EditableImage — direct store access (no useSyncExternalStore)
  * Same pattern as EditableText: bypass React rendering for reliability
  */
-export default function EditableImage({ imageKey, className = '', alt = '' }: Props) {
+export default function EditableImage({ imageKey, className = '', alt = '', label = '📷 Change image' }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [src, setSrc] = useState('');
 
@@ -34,7 +35,7 @@ export default function EditableImage({ imageKey, className = '', alt = '' }: Pr
     const file = e.target.files?.[0];
     if (!file) return;
     // Accept JPG, PNG, WebP, SVG
-    const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'];
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'video/mp4', 'video/webm', 'video/quicktime'];
     if (!validTypes.includes(file.type)) {
       alert('Use JPG, PNG, WebP, or SVG format');
       return;
@@ -62,14 +63,14 @@ export default function EditableImage({ imageKey, className = '', alt = '' }: Pr
         onClick={openFilePicker}
       >
         <span className="bg-white rounded-full px-4 py-2 text-sm font-medium text-gray-800 shadow-lg pointer-events-none">
-          📷 Change image
+          {label}
         </span>
       </div>
       {/* Hidden file input */}
       <input
         ref={fileRef}
         type="file"
-        accept="image/jpeg,image/png,image/webp,image/svg+xml"
+        accept="image/jpeg,image/png,image/webp,image/svg+xml,video/mp4,video/webm,video/quicktime"
         className="hidden"
         onChange={handleFile}
       />
