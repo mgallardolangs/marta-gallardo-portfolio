@@ -97,24 +97,14 @@ const i = t(lang);
             </ScrollReveal>
           </div>
 
-          <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            <EditableImage client:load imageKey="galleryCutouts.shotOne" className="aspect-square overflow-hidden rounded-[1.75rem] border border-blush-100 bg-white shadow-sm" alt="Gallery cutout 1" />
-            <EditableImage client:load imageKey="galleryCutouts.shotTwo" className="aspect-square overflow-hidden rounded-[1.75rem] border border-blush-100 bg-white shadow-sm" alt="Gallery cutout 2" />
-            <EditableImage client:load imageKey="galleryCutouts.shotThree" className="aspect-square overflow-hidden rounded-[1.75rem] border border-blush-100 bg-white shadow-sm" alt="Gallery cutout 3" />
-            <EditableImage client:load imageKey="galleryCutouts.shotFour" className="aspect-square overflow-hidden rounded-[1.75rem] border border-blush-100 bg-white shadow-sm" alt="Gallery cutout 4" />
-            <EditableImage client:load imageKey="galleryCutouts.shotFive" className="aspect-square overflow-hidden rounded-[1.75rem] border border-blush-100 bg-white shadow-sm" alt="Gallery cutout 5" />
-          </div>
-
           <ScrollReveal client:visible className="mt-12">
             <div class="text-center">
-              <p class="mb-4 font-accent text-sm uppercase tracking-[0.3em] text-rose-gold">{i.home.about.languagesLabel}</p>
-              <StaggerContainer client:visible className="flex flex-wrap justify-center gap-3" staggerDelay={0.08}>
-                {i.home.about.languages.map((language) => (
-                  <StaggerItem className="inline-flex">
-                    <span class="rounded-full border border-blush-100 bg-blush-50 px-5 py-2.5 text-sm text-charcoal">{language}</span>
-                  </StaggerItem>
+              <EditableText client:load i18nKey="home.about.languagesLabel" as="p" className="mb-4 font-accent text-sm uppercase tracking-[0.3em] text-rose-gold" />
+              <div class="flex flex-wrap justify-center gap-3">
+                {i.home.about.languages.map((language, idx) => (
+                  <EditableText client:load i18nKey={`home.about.languages.${idx}`} as="span" className="rounded-full border border-blush-100 bg-blush-50 px-5 py-2.5 text-sm text-charcoal" />
                 ))}
-              </StaggerContainer>
+              </div>
             </div>
           </ScrollReveal>
         </div>
@@ -123,40 +113,42 @@ const i = t(lang);
       <section class="relative px-6 pb-24 md:pb-36">
         <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
           <div class="relative min-h-[32rem] rounded-[2.8rem] border border-blush-100 bg-blush-50/70 p-5 md:min-h-[38rem] md:p-8">
+            <!-- Floating sticker cards with edit capability -->
             <ParallaxLayer client:visible speed={-0.18} className="absolute -left-2 top-8 z-20 md:-left-10 md:top-12">
               <FloatingIcon client:visible intensity={10}>
-                <div class="cutout-card flex h-28 w-28 items-center justify-center rounded-[1.75rem] border border-blush-200 bg-blush-100 text-center font-accent text-sm uppercase tracking-[0.18em] text-charcoal shadow-[0_18px_40px_rgba(183,110,121,0.12)] md:h-36 md:w-36">
-                  {i.home.gallery.shotOne}
+                <div class="cutout-card pointer-events-auto h-28 w-28 rounded-[1.75rem] border border-blush-200 bg-blush-100 shadow-[0_18px_40px_rgba(183,110,121,0.12)] md:h-36 md:w-36 overflow-hidden">
+                  <EditableImage client:load imageKey="videoStickers.one" className="h-full w-full" alt="Sticker 1" />
                 </div>
               </FloatingIcon>
             </ParallaxLayer>
 
             <ParallaxLayer client:visible speed={0.22} className="absolute right-0 top-0 z-20 md:right-6">
               <FloatingIcon client:visible intensity={12}>
-                <div class="cutout-card flex h-24 w-32 items-center justify-center rounded-[1.75rem] border border-blush-200 bg-white text-center font-accent text-xs uppercase tracking-[0.2em] text-charcoal shadow-[0_18px_40px_rgba(183,110,121,0.12)] md:h-28 md:w-40">
-                  {i.home.gallery.shotTwo}
+                <div class="cutout-card pointer-events-auto h-24 w-32 rounded-[1.75rem] border border-blush-200 bg-white shadow-[0_18px_40px_rgba(183,110,121,0.12)] md:h-28 md:w-40 overflow-hidden">
+                  <EditableImage client:load imageKey="videoStickers.two" className="h-full w-full" alt="Sticker 2" />
                 </div>
               </FloatingIcon>
             </ParallaxLayer>
 
             <ParallaxLayer client:visible speed={-0.12} className="absolute -bottom-4 left-6 z-20 md:bottom-8 md:left-10">
               <FloatingIcon client:visible intensity={14}>
-                <div class="cutout-card flex h-28 w-40 items-center justify-center rounded-[1.75rem] border border-blush-200 bg-white text-center font-accent text-xs uppercase tracking-[0.2em] text-charcoal shadow-[0_18px_40px_rgba(183,110,121,0.12)] md:h-32 md:w-44">
-                  {i.home.gallery.shotThree}
+                <div class="cutout-card pointer-events-auto h-28 w-40 rounded-[1.75rem] border border-blush-200 bg-white shadow-[0_18px_40px_rgba(183,110,121,0.12)] md:h-32 md:w-44 overflow-hidden">
+                  <EditableImage client:load imageKey="videoStickers.three" className="h-full w-full" alt="Sticker 3" />
                 </div>
               </FloatingIcon>
             </ParallaxLayer>
 
             <ParallaxLayer client:visible speed={0.18} className="absolute bottom-14 right-2 z-20 md:right-0">
               <FloatingIcon client:visible intensity={11}>
-                <div class="cutout-card flex h-20 w-28 items-center justify-center rounded-[1.75rem] border border-blush-200 bg-blush-100 text-center font-accent text-[0.65rem] uppercase tracking-[0.24em] text-charcoal shadow-[0_18px_40px_rgba(183,110,121,0.12)] md:h-24 md:w-36 md:text-xs">
-                  {i.home.gallery.shotFour}
+                <div class="cutout-card pointer-events-auto h-20 w-28 rounded-[1.75rem] border border-blush-200 bg-blush-100 shadow-[0_18px_40px_rgba(183,110,121,0.12)] md:h-24 md:w-36 overflow-hidden">
+                  <EditableImage client:load imageKey="videoStickers.four" className="h-full w-full" alt="Sticker 4" />
                 </div>
               </FloatingIcon>
             </ParallaxLayer>
 
+            <!-- Video/brand video -->
             <ScrollReveal client:visible direction="up" className="relative mx-auto flex aspect-[9/16] w-full max-w-[22rem] items-center justify-center overflow-hidden rounded-[2.8rem] border border-blush-200 bg-blush-100 shadow-[0_35px_100px_rgba(183,110,121,0.14)]">
-              <EditableImage client:load imageKey="brandVideo" className="absolute inset-0 h-full w-full rounded-[2.8rem] object-cover" alt="Brand video" />
+              <EditableImage client:load imageKey="brandVideo" className="absolute inset-0 h-full w-full rounded-[2.8rem]" alt="Brand video" label="🎬 Change video" />
               <div class="absolute left-1/2 top-4 h-1.5 w-24 -translate-x-1/2 rounded-full bg-charcoal/12 pointer-events-none"></div>
             </ScrollReveal>
           </div>
