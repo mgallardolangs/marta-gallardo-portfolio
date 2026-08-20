@@ -8,6 +8,7 @@ import PhotoMasonry from '../../components/PhotoMasonry';
 import { getLangFromUrl, t } from '../../i18n';
 import imagesData from '../../data/images.json';
 import EditableText from '../../components/admin/EditableText';
+import EditableImage from '../../components/admin/EditableImage';
 import AdminNicheCard from '../../components/admin/AdminNicheCard';
 
 const lang = getLangFromUrl(Astro.url);
@@ -105,9 +106,7 @@ const allPhotos = images.ugcPhotos?.all ?? [];
             <div class="max-w-3xl">
               <div class="flex items-center gap-4">
                 <EditableText client:load i18nKey={`ugcPage.niches.${niche.id}.eyebrow`} as="p" className="font-accent text-sm uppercase tracking-[0.35em] text-rose-gold" />
-                {niche.iconImage && (
-                  <img src={niche.iconImage} alt="" class="h-12 w-12 rounded-2xl object-contain" loading="lazy" />
-                )}
+                <EditableImage client:load imageKey={`nicheIcons.${niche.id}`} className="h-12 w-12 rounded-2xl overflow-hidden" alt={`${niche.id} icon`} />
               </div>
               <EditableText client:load i18nKey={`ugcPage.niches.${niche.id}.label`} as="h2" className="mt-4 font-heading text-4xl text-charcoal md:text-6xl" />
               <EditableText client:load i18nKey={`ugcPage.niches.${niche.id}.intro`} as="p" className="mt-4 font-body text-base leading-8 text-warm-gray md:text-lg" />
