@@ -173,6 +173,10 @@ test('orbit media helpers validate caps, video poster requirements, and stable I
     orbit.validateOrbitMediaUpload(new File([Buffer.alloc(1)], 'tile.svg', { type: 'image/svg+xml' }), 'image') ?? '',
     /JPG, PNG, WebP, or GIF/,
   );
+  assert.match(
+    orbit.validateOrbitMediaUpload(new File([Buffer.alloc(1)], 'tile.svg', { type: 'image/svg+xml' }), 'video') ?? '',
+    /MP4, WebM, or QuickTime/,
+  );
 
   const videoErrors = orbit.validateOrbitMediaItem({
     id: 'video-tile',

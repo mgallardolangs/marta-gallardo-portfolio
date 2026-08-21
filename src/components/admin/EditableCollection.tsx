@@ -1,6 +1,10 @@
 import { useMemo, useState } from 'react';
 
-import { EDITABLE_COLLECTION_LOCALES, type EditableCollectionKind } from '../../lib/adminCollections.ts';
+import {
+  EDITABLE_COLLECTION_LOCALES,
+  validateToolLogoUpload,
+  type EditableCollectionKind,
+} from '../../lib/adminCollections.ts';
 import type { LanguageItem, SkillItem, ToolItem } from '../../lib/siteData.ts';
 import EditableMedia from './EditableMedia';
 import { useAdminStore } from './useAdminStore';
@@ -54,6 +58,14 @@ export default function EditableCollection({ kind, title, description }: Props) 
     if (kind === 'tools' && !toolFile) {
       setError('Select a logo before adding this tool.');
       return;
+    }
+
+    if (kind === 'tools' && toolFile) {
+      const toolLogoError = validateToolLogoUpload(toolFile);
+      if (toolLogoError) {
+        setError(toolLogoError);
+        return;
+      }
     }
 
     try {
@@ -195,7 +207,7 @@ export default function EditableCollection({ kind, title, description }: Props) 
               <EditableMedia
                 src={(item as ToolItem).logo}
                 mediaType="image"
-                acceptKind="image"
+                acceptKind="tool-logo"
                 alt={(item as ToolItem).label[store.currentLang] ?? (item as ToolItem).label.es}
                 label="🖼 Change logo"
                 emptyLabel="Upload logo"

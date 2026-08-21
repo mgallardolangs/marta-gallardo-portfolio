@@ -143,6 +143,33 @@ test('service switcher keeps desktop tabs and mobile disclosures accessible with
   assert.match(source, /aria-expanded=/);
   assert.match(source, /aria-hidden=\{isDesktop\}/);
   assert.match(source, /aria-hidden=\{!isDesktop\}/);
+  assert.match(source, /id=\{`service-panel-\$\{item\.id\}`\}/);
+  assert.match(source, /id=\{`service-mobile-panel-\$\{item\.id\}`\}/);
+  assert.match(source, /hidden=\{!isActive\}/);
+  assert.doesNotMatch(source, /activeItem &&/);
+});
+
+test('tool logo uploads accept svg inventory while orbit validators stay stricter', async () => {
+  const collections = await import('../src/lib/adminCollections.ts');
+  const orbit = await import('../src/lib/orbitMedia.ts');
+
+  const svgLogo = new File([Buffer.alloc(1)], 'screaming-frog-logo.svg', { type: 'image/svg+xml' });
+
+  assert.equal(collections.validateToolLogoUpload(svgLogo), null);
+  assert.equal(
+    collections.buildToolLogoUploadPath('tool-screaming-frog', svgLogo),
+    '/images/tools/tool-screaming-frog.svg',
+  );
+  assert.match(
+    collections.validateToolLogoUpload(
+      new File([Buffer.alloc(2 * 1024 * 1024 + 1)], 'oversized-logo.svg', { type: 'image/svg+xml' }),
+    ) ?? '',
+    /2MB/,
+  );
+  assert.match(
+    orbit.validateOrbitMediaUpload(svgLogo, 'image') ?? '',
+    /JPG, PNG, WebP, or GIF/,
+  );
 });
 
 test('experience tabs keep exactly two panels with roving tabindex keyboard support', async () => {
@@ -510,4 +537,40 @@ test('built translation route ships translation-specific GSAP and React chunks w
 
   const builtFiles = await collectFiles(path.join(distRoot, '_astro'));
   assert.ok(builtFiles.some((filePath) => /ServiceSwitcher|ExperienceTabs/.test(path.basename(filePath))));
+});
+
+test('built translation route includes stable service switcher panel ids for all three controls', async (t) => {
+  if (process.env.CHECK_DIST !== '1') {
+    t.skip('Set CHECK_DIST=1 after npm run build to verify built assets.');
+    return;
+  }
+
+  const translationDictionary = await readJson('src/i18n/es.json');
+  const serviceIds = translationDictionary.translationPage.services.items.map((item) => item.id);
+  const translationHtml = await readFile(path.join(rootDir, 'dist', 'translation-seo', 'index.html'), 'utf8');
+
+  assert.equal(serviceIds.length, 3, 'phase 4 translation data should keep exactly three service switcher entries');
+
+  for (const serviceId of serviceIds) {
+    assert.match(
+      translationHtml,
+      new RegExp(`id="service-tab-${serviceId}"[^>]*aria-controls="service-panel-${serviceId}"`),
+      `desktop tab for ${serviceId} should target a stable mounted panel`,
+    );
+    assert.match(
+      translationHtml,
+      new RegExp(`id="service-panel-${serviceId}"`),
+      `desktop panel for ${serviceId} should exist in the built HTML`,
+    );
+    assert.match(
+      translationHtml,
+      new RegExp(`id="service-mobile-trigger-${serviceId}"[^>]*aria-controls="service-mobile-panel-${serviceId}"`),
+      `mobile disclosure for ${serviceId} should target a stable mounted panel`,
+    );
+    assert.match(
+      translationHtml,
+      new RegExp(`id="service-mobile-panel-${serviceId}"`),
+      `mobile panel for ${serviceId} should exist in the built HTML`,
+    );
+  }
 });

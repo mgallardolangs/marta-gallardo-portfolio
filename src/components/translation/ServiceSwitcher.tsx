@@ -52,7 +52,6 @@ export default function ServiceSwitcher({ items, title = '' }: Props) {
   });
 
   const progress = prefersReducedMotion ? 1 : Math.min(elapsedMs / SERVICE_SWITCHER_INTERVAL_MS, 1);
-  const activeItem = items[activeIndex] ?? items[0];
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -117,7 +116,7 @@ export default function ServiceSwitcher({ items, title = '' }: Props) {
     setElapsedMs(next.elapsedMs);
   };
 
-  const desktopPanels = useMemo(() => items.map((item, index) => {
+  const desktopTabs = useMemo(() => items.map((item, index) => {
     const isActive = index === activeIndex;
     const progressValue = isActive ? progress : 0;
 
@@ -177,22 +176,32 @@ export default function ServiceSwitcher({ items, title = '' }: Props) {
       {/* Only one mode stays exposed to assistive tech at a time even though CSS swaps layouts responsively. */}
       <div hidden={!isDesktop} aria-hidden={!isDesktop} className="grid gap-10 p-6 md:grid-cols-[0.95fr_1.05fr] md:p-10">
         <div role="tablist" aria-label={title || 'Services'} className="space-y-6">
-          {desktopPanels}
+          {desktopTabs}
         </div>
 
-        {activeItem && (
-          <div
-            id={`service-panel-${activeItem.id}`}
-            role="tabpanel"
-            aria-labelledby={`service-tab-${activeItem.id}`}
-            className="flex min-h-[18rem] items-center border border-white/10 bg-white/5 p-6 md:p-8"
-          >
-            <div className="max-w-2xl space-y-4">
-              <p className="font-body text-xs font-semibold uppercase tracking-[0.3em] text-amaranth-soft">{activeItem.name}</p>
-              <p className="text-lg leading-8 text-white/78">{activeItem.description}</p>
-            </div>
-          </div>
-        )}
+        <div>
+          {items.map((item, index) => {
+            const isActive = index === activeIndex;
+
+            return (
+              <div
+                key={item.id}
+                id={`service-panel-${item.id}`}
+                role="tabpanel"
+                aria-labelledby={`service-tab-${item.id}`}
+                hidden={!isActive}
+                aria-hidden={!isActive}
+                tabIndex={isActive ? 0 : -1}
+                className="flex min-h-[18rem] items-center border border-white/10 bg-white/5 p-6 md:p-8"
+              >
+                <div className="max-w-2xl space-y-4">
+                  <p className="font-body text-xs font-semibold uppercase tracking-[0.3em] text-amaranth-soft">{item.name}</p>
+                  <p className="text-lg leading-8 text-white/78">{item.description}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <div hidden={isDesktop} aria-hidden={isDesktop} className="divide-y divide-white/10">
@@ -219,16 +228,16 @@ export default function ServiceSwitcher({ items, title = '' }: Props) {
                 </span>
               </button>
 
-              {isActive && (
-                <div
-                  id={`service-mobile-panel-${item.id}`}
-                  role="region"
-                  aria-labelledby={`service-mobile-trigger-${item.id}`}
-                  className="pt-4"
-                >
-                  <p className="text-base leading-7 text-white/78">{item.description}</p>
-                </div>
-              )}
+              <div
+                id={`service-mobile-panel-${item.id}`}
+                role="region"
+                aria-labelledby={`service-mobile-trigger-${item.id}`}
+                hidden={!isActive}
+                aria-hidden={!isActive}
+                className="pt-4"
+              >
+                <p className="text-base leading-7 text-white/78">{item.description}</p>
+              </div>
             </div>
           );
         })}

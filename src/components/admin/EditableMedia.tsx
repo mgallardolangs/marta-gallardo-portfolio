@@ -1,10 +1,11 @@
 import { useRef } from 'react';
 import { validateOrbitMediaUpload } from '../../lib/orbitMedia';
+import { validateToolLogoUpload } from '../../lib/adminCollections.ts';
 
 interface Props {
   src: string;
   mediaType: 'image' | 'video';
-  acceptKind: 'image' | 'video';
+  acceptKind: 'image' | 'video' | 'tool-logo';
   onSelect: (file: File) => Promise<void> | void;
   className?: string;
   alt?: string;
@@ -13,10 +14,24 @@ interface Props {
   poster?: string | null;
 }
 
-function getAcceptAttribute(kind: 'image' | 'video') {
-  return kind === 'video'
-    ? 'video/mp4,video/webm,video/quicktime'
-    : 'image/jpeg,image/png,image/webp,image/gif';
+function getAcceptAttribute(kind: Props['acceptKind']) {
+  if (kind === 'video') {
+    return 'video/mp4,video/webm,video/quicktime';
+  }
+
+  if (kind === 'tool-logo') {
+    return 'image/jpeg,image/png,image/webp,image/gif,image/svg+xml';
+  }
+
+  return 'image/jpeg,image/png,image/webp,image/gif';
+}
+
+function getValidationError(file: File, kind: Props['acceptKind']) {
+  if (kind === 'tool-logo') {
+    return validateToolLogoUpload(file);
+  }
+
+  return validateOrbitMediaUpload(file, kind);
 }
 
 export default function EditableMedia({
@@ -42,15 +57,20 @@ export default function EditableMedia({
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const error = validateOrbitMediaUpload(file, acceptKind);
+    const error = getValidationError(file, acceptKind);
     if (error) {
       alert(error);
       event.target.value = '';
       return;
     }
 
-    await onSelect(file);
-    event.target.value = '';
+    try {
+      await onSelect(file);
+    } catch (selectionError) {
+      alert(selectionError instanceof Error ? selectionError.message : 'Could not save this media file.');
+    } finally {
+      event.target.value = '';
+    }
   };
 
   return (

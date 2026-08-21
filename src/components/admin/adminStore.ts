@@ -10,6 +10,7 @@ import {
   buildToolLogoUploadPath,
   createEditableCollectionItem,
   getEditableCollectionValidationErrors,
+  validateToolLogoUpload,
   type AddEditableCollectionItemInput,
   type EditableCollectionKind,
   type EditableCollectionLocale,
@@ -440,6 +441,10 @@ export class AdminStore {
     const tools = this.getMutableEditableCollection('tools') as ToolItem[];
     const item = tools[index];
     if (!item) return;
+    const validationError = validateToolLogoUpload(file);
+    if (validationError) {
+      throw new Error(validationError);
+    }
     await this.setImage(`toolLogos.${item.id}`, file, buildToolLogoUploadPath(item.id, file));
   }
 

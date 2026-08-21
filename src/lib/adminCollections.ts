@@ -8,6 +8,8 @@ import type {
 } from './siteData.ts';
 
 export const EDITABLE_COLLECTION_LOCALES = ['es', 'en', 'fr'] as const;
+export const TOOL_LOGO_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'] as const;
+export const TOOL_LOGO_MAX_BYTES = 2 * 1024 * 1024;
 export type EditableCollectionLocale = (typeof EDITABLE_COLLECTION_LOCALES)[number];
 export type EditableCollectionKind = 'languages' | 'tools' | 'skills';
 
@@ -45,6 +47,29 @@ function normalizeIdSegment(value: string) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
+}
+
+function isToolLogoType(type: string) {
+  return TOOL_LOGO_TYPES.includes(type as (typeof TOOL_LOGO_TYPES)[number]);
+}
+
+function getToolLogoExtension(file: File) {
+  const mappedExtension = {
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/webp': 'webp',
+    'image/gif': 'gif',
+    'image/svg+xml': 'svg',
+  }[file.type];
+
+  if (mappedExtension) return mappedExtension;
+
+  const fallbackExtension = file.name.split('.').pop()?.toLowerCase();
+  if (fallbackExtension === 'jpeg') return 'jpg';
+  if (fallbackExtension && ['jpg', 'png', 'webp', 'gif', 'svg'].includes(fallbackExtension)) {
+    return fallbackExtension;
+  }
+  return 'png';
 }
 
 export function createCollectionLocalizedText(seed: EditableLocaleSeed): LocalizedText {
@@ -104,9 +129,20 @@ export function buildLanguageCodeFromId(id: string) {
   return id.replace(/^language-/, '') || id;
 }
 
+export function validateToolLogoUpload(file: File) {
+  if (!isToolLogoType(file.type)) {
+    return 'Tool logos must use JPG, PNG, WebP, GIF, or SVG format.';
+  }
+
+  if (file.size > TOOL_LOGO_MAX_BYTES) {
+    return 'Tool logos must be 2MB or smaller.';
+  }
+
+  return null;
+}
+
 export function buildToolLogoUploadPath(id: string, file: File) {
-  const extension = file.name.split('.').pop()?.toLowerCase() || 'png';
-  return `/images/tools/${normalizeIdSegment(id) || 'tool-item'}.${extension}`;
+  return `/images/tools/${normalizeIdSegment(id) || 'tool-item'}.${getToolLogoExtension(file)}`;
 }
 
 export function getEditableCollectionValidationErrors(siteData: SiteData) {
