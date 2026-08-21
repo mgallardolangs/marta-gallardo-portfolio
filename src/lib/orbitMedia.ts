@@ -131,6 +131,19 @@ export function getOrbitInteractionState({
   };
 }
 
+export function getOrbitVideoPlaybackMode({
+  prefersReducedMotion,
+  isDocumentVisible,
+  isRegionVisible,
+}: {
+  prefersReducedMotion: boolean | null;
+  isDocumentVisible: boolean;
+  isRegionVisible: boolean;
+}) {
+  if (prefersReducedMotion !== false) return 'pause';
+  return isDocumentVisible && isRegionVisible ? 'play-muted' : 'pause';
+}
+
 export function approximateEllipseCircumference(radiusX: number, radiusY: number) {
   const h = ((radiusX - radiusY) ** 2) / ((radiusX + radiusY) ** 2);
   return Math.PI * (radiusX + radiusY) * (1 + (3 * h) / (10 + Math.sqrt(4 - 3 * h)));

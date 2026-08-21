@@ -10,6 +10,7 @@ import {
   DESKTOP_ORBIT_GEOMETRY,
   getOrbitInteractionState,
   getOrbitItemLayout,
+  getOrbitVideoPlaybackMode,
   ORBIT_REVOLUTION_SECONDS,
   resolveOrbitHref,
 } from '../lib/orbitMedia';
@@ -107,15 +108,23 @@ export default function OvalMediaOrbit({
   };
 
   const syncVideoPlayback = () => {
-    const shouldPlayMuted = isRegionVisible && isDocumentVisible;
+    const playbackMode = getOrbitVideoPlaybackMode({
+      prefersReducedMotion,
+      isDocumentVisible,
+      isRegionVisible,
+    });
 
     items.forEach((item) => {
       if (!isVideoItem(item)) return;
       const video = videoRefs.current[item.id];
       if (!video) return;
 
-      if (!shouldPlayMuted) {
+      if (playbackMode === 'pause') {
+        video.muted = true;
         video.pause();
+        setSoundStates((current) => (current[item.id] && current[item.id] !== 'muted'
+          ? { ...current, [item.id]: 'muted' }
+          : current));
         return;
       }
 
@@ -144,6 +153,16 @@ export default function OvalMediaOrbit({
     if (!isVideoItem(item)) return;
     const video = videoRefs.current[item.id];
     if (!video) return;
+    if (getOrbitVideoPlaybackMode({
+      prefersReducedMotion,
+      isDocumentVisible,
+      isRegionVisible,
+    }) === 'pause') {
+      video.muted = true;
+      video.pause();
+      setSoundStates((current) => ({ ...current, [item.id]: 'muted' }));
+      return;
+    }
 
     video.muted = false;
     void video.play()
@@ -167,6 +186,14 @@ export default function OvalMediaOrbit({
     if (!video) return;
     video.muted = true;
     setSoundStates((current) => ({ ...current, [item.id]: 'muted' }));
+    if (getOrbitVideoPlaybackMode({
+      prefersReducedMotion,
+      isDocumentVisible,
+      isRegionVisible,
+    }) === 'pause') {
+      video.pause();
+      return;
+    }
     void video.play().catch(() => {});
   };
 
@@ -177,6 +204,16 @@ export default function OvalMediaOrbit({
     if (!isVideoItem(item)) return;
     const video = videoRefs.current[item.id];
     if (!video) return;
+    if (getOrbitVideoPlaybackMode({
+      prefersReducedMotion,
+      isDocumentVisible,
+      isRegionVisible,
+    }) === 'pause') {
+      video.muted = true;
+      video.pause();
+      setSoundStates((current) => ({ ...current, [item.id]: 'muted' }));
+      return;
+    }
 
     if (video.muted) {
       video.muted = false;
@@ -192,6 +229,14 @@ export default function OvalMediaOrbit({
 
     video.muted = true;
     setSoundStates((current) => ({ ...current, [item.id]: 'muted' }));
+    if (getOrbitVideoPlaybackMode({
+      prefersReducedMotion,
+      isDocumentVisible,
+      isRegionVisible,
+    }) === 'pause') {
+      video.pause();
+      return;
+    }
     await video.play().catch(() => {});
   };
 
@@ -224,7 +269,7 @@ export default function OvalMediaOrbit({
 
   useEffect(() => {
     syncVideoPlayback();
-  }, [isDocumentVisible, isRegionVisible, items]);
+  }, [isDocumentVisible, isRegionVisible, items, prefersReducedMotion]);
 
   useEffect(() => {
     if (!emblaApi || items.length < 2) return;

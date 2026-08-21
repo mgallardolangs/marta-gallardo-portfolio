@@ -41,6 +41,16 @@ function assertApprox(actual, expected, tolerance, label) {
   );
 }
 
+function sliceSourceSection(source, startMarker, endMarker) {
+  const start = source.indexOf(startMarker);
+  assert.notEqual(start, -1, `Expected source marker: ${startMarker}`);
+
+  const end = source.indexOf(endMarker, start);
+  assert.notEqual(end, -1, `Expected source marker: ${endMarker}`);
+
+  return source.slice(start, end);
+}
+
 async function loadOrbitModule() {
   try {
     return await import('../src/lib/orbitMedia.ts');
@@ -92,6 +102,43 @@ test('orbit helpers keep hrefs locale-aware and interaction states consistent', 
       scale: 0.92,
       zIndexBoost: 0,
     },
+  );
+});
+
+test('orbit video playback helper pauses for reduced motion and only resumes muted when visible', async () => {
+  const orbit = await loadOrbitModule();
+
+  assert.equal(
+    orbit.getOrbitVideoPlaybackMode({
+      prefersReducedMotion: true,
+      isDocumentVisible: true,
+      isRegionVisible: true,
+    }),
+    'pause',
+  );
+  assert.equal(
+    orbit.getOrbitVideoPlaybackMode({
+      prefersReducedMotion: false,
+      isDocumentVisible: true,
+      isRegionVisible: true,
+    }),
+    'play-muted',
+  );
+  assert.equal(
+    orbit.getOrbitVideoPlaybackMode({
+      prefersReducedMotion: false,
+      isDocumentVisible: false,
+      isRegionVisible: true,
+    }),
+    'pause',
+  );
+  assert.equal(
+    orbit.getOrbitVideoPlaybackMode({
+      prefersReducedMotion: false,
+      isDocumentVisible: true,
+      isRegionVisible: false,
+    }),
+    'pause',
   );
 });
 
@@ -192,6 +239,37 @@ test('homepage and admin wire the new orbit components while StoryMap files disa
   assert.match(orbitSource, /embla-carousel-auto-scroll/);
   assert.match(orbitSource, /from ['"]gsap['"]/);
   assert.match(orbitSource, /prefers-reduced-motion: reduce/);
+  assert.match(orbitSource, /getOrbitVideoPlaybackMode/);
+  assert.match(
+    orbitSource,
+    /useEffect\(\(\) => \{\s*syncVideoPlayback\(\);\s*\}, \[isDocumentVisible, isRegionVisible, items, prefersReducedMotion\]\);/,
+    'orbit playback sync should rerun when reduced-motion changes at runtime',
+  );
+  const activateTileSource = sliceSourceSection(
+    orbitSource,
+    'const activateTile = (item: OrbitMedia) => {',
+    'const deactivateTile = (item: OrbitMedia) => {',
+  );
+  assert.match(activateTileSource, /getOrbitVideoPlaybackMode\(/);
+  assert.match(activateTileSource, /=== 'pause'/);
+  assert.match(activateTileSource, /video\.pause\(\);/);
+  assert.ok(
+    activateTileSource.indexOf("=== 'pause'") < activateTileSource.indexOf('video.muted = false'),
+    'hover activation should guard reduced motion before attempting audible playback',
+  );
+
+  const toggleVideoSoundSource = sliceSourceSection(
+    orbitSource,
+    'const toggleVideoSound = async (item: OrbitMedia, event: React.MouseEvent<HTMLButtonElement>) => {',
+    'useEffect(() => {',
+  );
+  assert.match(toggleVideoSoundSource, /getOrbitVideoPlaybackMode\(/);
+  assert.match(toggleVideoSoundSource, /=== 'pause'/);
+  assert.match(toggleVideoSoundSource, /video\.pause\(\);/);
+  assert.ok(
+    toggleVideoSoundSource.indexOf("=== 'pause'") < toggleVideoSoundSource.indexOf('if (video.muted) {'),
+    'sound toggle should bail out before trying to restart playback under reduced motion',
+  );
   assert.match(orbitSource, /ref=\{emblaRef\}[\s\S]*absolute inset-0/, 'drag viewport should cover the visible orbit box');
   assert.match(orbitSource, /scale:\s*interactionState\.scale/);
   assert.match(orbitSource, /tabIndex=\{item\.href \? undefined : 0\}/);
