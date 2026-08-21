@@ -1,6 +1,8 @@
 import {
   createOrbitMediaDraft,
   applySpanishFallbackToCodeManagedLocales,
+  isOrbitImageSource,
+  isOrbitVideoSource,
   validateOrbitMediaItem,
   type OrbitAdminLang,
 } from '../../lib/orbitMedia.ts';
@@ -343,9 +345,17 @@ export class AdminStore {
     const item = this.getMutableOrbitMedia()[index];
     if (!item) return;
     item.type = type;
+
     if (type === 'image') {
+      if (!isOrbitImageSource(item.src)) {
+        item.src = '/images/site/orbit-placeholder-profile.svg';
+        delete this.pendingImages[getOrbitPendingKey(item.id, 'src')];
+      }
       item.poster = null;
       delete this.pendingImages[getOrbitPendingKey(item.id, 'poster')];
+    } else if (!isOrbitVideoSource(item.src)) {
+      item.src = '';
+      delete this.pendingImages[getOrbitPendingKey(item.id, 'src')];
     }
     this.publishSuccessState = false;
     this.publishErrorState = '';

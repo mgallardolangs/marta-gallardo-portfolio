@@ -137,6 +137,19 @@ test('orbit media helpers validate caps, video poster requirements, and stable I
     alt: orbit.createLocalizedText('Vídeo sin póster'),
   });
   assert.deepEqual(videoErrors, ['Orbit videos require a poster image.']);
+
+  assert.match(
+    orbit.validateOrbitMediaItem({
+      id: 'video-src-mismatch',
+      type: 'video',
+      src: '/images/site/orbit-placeholder-profile.svg',
+      poster: '/images/site/orbit-item-poster.jpg',
+      href: null,
+      label: orbit.createLocalizedText('Vídeo'),
+      alt: orbit.createLocalizedText('Vídeo con archivo incorrecto'),
+    }).join(' '),
+    /must use an MP4, WebM, or MOV source/,
+  );
 });
 
 test('site orbit data stays local-only, exactly fifteen items, and reuses no more than two assets', async () => {
@@ -247,6 +260,7 @@ test('admin store exposes orbit collection mutations and publishes site data upd
   assert.equal(publishedOrbit[0].type, 'video');
   assert.equal(publishedOrbit[0].href, '/contact');
   assert.equal(publishedOrbit[0].poster, '/images/site/orbit-item-poster.jpg');
+  assert.equal(publishedOrbit[0].src, '', 'switching from image to video should clear an incompatible image source');
   assert.equal(snapshot.isDirty, true);
   assert.ok(snapshot.pendingCount >= 1);
 
@@ -269,12 +283,11 @@ test('admin store exposes orbit collection mutations and publishes site data upd
   };
 
   try {
-    store.updateOrbitMediaPoster(0, null);
     await store.publish();
-    assert.match(store.getSnapshot().publishError, /Orbit videos require a poster image/);
+    assert.match(store.getSnapshot().publishError, /Orbit media requires a source file/);
     assert.equal(fetchCalls.length, 0, 'invalid orbit data should block publish before any repo writes');
 
-    store.updateOrbitMediaPoster(0, '/images/site/orbit-item-poster.jpg');
+    store.updateOrbitMediaType(0, 'image');
     await store.publish();
   } finally {
     globalThis.fetch = originalFetch;
@@ -287,7 +300,7 @@ test('admin store exposes orbit collection mutations and publishes site data upd
   const writePayload = JSON.parse(String(fetchCalls[1].init.body));
   const publishedJson = Buffer.from(writePayload.content, 'base64').toString('utf8');
   assert.match(publishedJson, /"orbitMedia"/);
-  assert.match(publishedJson, /"type": "video"/);
+  assert.match(publishedJson, /"type": "image"/);
   assert.match(publishedJson, /"href": "\/contact"/);
 });
 

@@ -23,6 +23,8 @@ export type OrbitGeometry = typeof DESKTOP_ORBIT_GEOMETRY;
 
 const TAU = Math.PI * 2;
 const LOCALIZED_FALLBACKS = ['de', 'it', 'ca'] as const;
+const IMAGE_SOURCE_PATTERN = /\.(?:jpe?g|png|webp|gif|svg)(?:\?.*)?$/i;
+const VIDEO_SOURCE_PATTERN = /\.(?:mp4|webm|mov|qt)(?:\?.*)?$/i;
 
 function normalizeOrbitProgress(progress: number): number {
   const normalized = progress % 1;
@@ -196,6 +198,18 @@ export function validateOrbitMediaUpload(file: File, expectedKind: 'image' | 'vi
 export function validateOrbitMediaItem(item: OrbitMedia) {
   const errors: string[] = [];
 
+  if (!item.src.trim()) {
+    errors.push('Orbit media requires a source file.');
+  }
+
+  if (item.type === 'image' && item.src.trim() && !IMAGE_SOURCE_PATTERN.test(item.src)) {
+    errors.push('Orbit images must use a JPG, PNG, WebP, GIF, or SVG source.');
+  }
+
+  if (item.type === 'video' && item.src.trim() && !VIDEO_SOURCE_PATTERN.test(item.src)) {
+    errors.push('Orbit videos must use an MP4, WebM, or MOV source.');
+  }
+
   if (item.type === 'video' && !item.poster?.trim()) {
     errors.push('Orbit videos require a poster image.');
   }
@@ -208,6 +222,14 @@ export function validateOrbitMediaItem(item: OrbitMedia) {
   }
 
   return errors;
+}
+
+export function isOrbitImageSource(src: string) {
+  return IMAGE_SOURCE_PATTERN.test(src);
+}
+
+export function isOrbitVideoSource(src: string) {
+  return VIDEO_SOURCE_PATTERN.test(src);
 }
 
 export function buildOrbitUploadPath(id: string, field: 'src' | 'poster', file: File) {
