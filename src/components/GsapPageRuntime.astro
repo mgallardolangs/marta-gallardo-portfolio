@@ -1,0 +1,71 @@
+<div data-gsap-page hidden aria-hidden="true"></div>
+
+<script>
+  const GSAP_PAGE_SELECTOR = '[data-gsap-page]';
+
+  type GsapPageRuntimeState = {
+    cleanup: (() => void) | null;
+  };
+
+  declare global {
+    interface Window {
+      __mgGsapPageRuntime?: GsapPageRuntimeState;
+      __mgMotionRuntime?: {
+        lenis?: {
+          on?: (event: 'scroll', callback: () => void) => void;
+          off?: (event: 'scroll', callback: () => void) => void;
+        } | null;
+      };
+    }
+  }
+
+  const mountGsapPageRuntime = async () => {
+    window.__mgGsapPageRuntime?.cleanup?.();
+
+    if (!document.querySelector(GSAP_PAGE_SELECTOR)) {
+      window.__mgGsapPageRuntime = { cleanup: null };
+      return;
+    }
+
+    const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
+      import('gsap'),
+      import('gsap/ScrollTrigger'),
+    ]);
+
+    if (!document.querySelector(GSAP_PAGE_SELECTOR)) {
+      return;
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.ticker.lagSmoothing(0);
+
+    const lenis = window.__mgMotionRuntime?.lenis ?? null;
+    const onLenisScroll = () => ScrollTrigger.update();
+    lenis?.on?.('scroll', onLenisScroll);
+
+    const refreshScroll = () => {
+      ScrollTrigger.refresh();
+    };
+    const onPageLoad = () => requestAnimationFrame(refreshScroll);
+    const onBeforePreparation = () => {
+      window.__mgGsapPageRuntime?.cleanup?.();
+    };
+
+    document.addEventListener('astro:page-load', onPageLoad);
+    document.addEventListener('astro:before-preparation', onBeforePreparation);
+    refreshScroll();
+
+    window.__mgGsapPageRuntime = {
+      cleanup: () => {
+        lenis?.off?.('scroll', onLenisScroll);
+        document.removeEventListener('astro:page-load', onPageLoad);
+        document.removeEventListener('astro:before-preparation', onBeforePreparation);
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+        ScrollTrigger.clearScrollMemory?.();
+        window.__mgGsapPageRuntime = { cleanup: null };
+      },
+    };
+  };
+
+  void mountGsapPageRuntime();
+</script>

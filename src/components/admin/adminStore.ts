@@ -162,7 +162,7 @@ function buildMarkdownPost(post: {
   return `---\ntitle: ${quoted(post.title)}\ndescription: ${quoted(post.description)}\ndate: ${quoted(post.date)}\ntags: ${tags}\nlang: ${quoted(post.lang)}\n---\n\n${post.body.trim()}\n`;
 }
 
-class AdminStore {
+export class AdminStore {
   private listeners = new Set<Listener>();
   private initialized = false;
   private token = '';
@@ -197,11 +197,21 @@ class AdminStore {
       this.originalI18n = cloneValue(i18n);
       this.images = cloneValue(images);
       this.originalImages = cloneValue(images);
+      this.currentLang = (lang || this.currentLang) as SupportedLang;
       this.initialized = true;
     }
 
-    this.currentLang = (lang || this.currentLang) as SupportedLang;
-    if (token) this.token = token;
+    if (token) {
+      this.token = token;
+      this.publishErrorState = '';
+    }
+    this.emit();
+  }
+
+  setAuthToken(token: string): void {
+    if (!token || token === this.token) return;
+    this.token = token;
+    this.publishErrorState = '';
     this.emit();
   }
 

@@ -1,8 +1,9 @@
-const LOCAL_ADMIN_HOSTS = new Set(['localhost', '127.0.0.1', '::1', '0.0.0.0']);
+export const ADMIN_INIT_RETRY_DELAY_MS = 500;
+export const ADMIN_INIT_MAX_RETRIES = 12;
+export const ADMIN_INIT_FALLBACK_DELAY_MS = 2000;
 
-export function shouldAllowTokenlessAdminInit(hostname = '') {
-  const normalizedHostname = String(hostname).trim().replace(/^\[(.*)\]$/, '$1').toLowerCase();
-  return LOCAL_ADMIN_HOSTS.has(normalizedHostname);
+export function shouldAllowTokenlessAdminInit(_hostname) {
+  return true;
 }
 
 export function getNetlifyIdentityToken(user) {

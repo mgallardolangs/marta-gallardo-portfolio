@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
 import { adminStore } from './adminStore';
 import {
+  ADMIN_INIT_FALLBACK_DELAY_MS,
+  ADMIN_INIT_MAX_RETRIES,
+  ADMIN_INIT_RETRY_DELAY_MS,
   getAdminInitDecision,
   getNetlifyIdentityToken,
   shouldAllowTokenlessAdminInit,
@@ -17,12 +20,18 @@ export default function AdminInit({ i18nJson, siteJson, lang }: Props) {
     const parsedI18n = JSON.parse(i18nJson) as Record<string, unknown>;
     const parsedSite = JSON.parse(siteJson) as Record<string, unknown>;
     let draftLoaded = adminStore.isInitialized();
+    let identityListenersCleanup: (() => void) | null = null;
+    let identityInitStarted = false;
+    let retryAttempts = 0;
+    let retryTimeout: number | undefined;
 
     const applyIdentityState = (allowTokenlessFallback: boolean) => {
       const w = window as typeof window & {
         netlifyIdentity?: {
+          init?: () => void;
           currentUser?: () => { token?: { access_token?: string } } | null;
           on?: (event: 'init' | 'login', callback: () => void) => void;
+          off?: (event: 'init' | 'login', callback: () => void) => void;
         };
       };
       const token = getNetlifyIdentityToken(w.netlifyIdentity?.currentUser?.());
@@ -42,50 +51,79 @@ export default function AdminInit({ i18nJson, siteJson, lang }: Props) {
       }
 
       if (decision === 'update-token') {
-        adminStore.init(parsedI18n, parsedSite, lang, token);
+        adminStore.setAuthToken(token);
         return true;
       }
 
       return false;
     };
 
-    const allowLocalFallback = shouldAllowTokenlessAdminInit(window.location.hostname);
-    const syncIdentity = () => applyIdentityState(false);
+    const allowTokenlessFallback = shouldAllowTokenlessAdminInit(window.location.hostname);
+    const bindIdentityListeners = () => {
+      const identity = (window as typeof window & {
+        netlifyIdentity?: {
+          init?: () => void;
+          on?: (event: 'init' | 'login', callback: () => void) => void;
+          off?: (event: 'init' | 'login', callback: () => void) => void;
+        };
+      }).netlifyIdentity;
 
-    syncIdentity();
+      if (!identity?.on) return false;
+      if (identityListenersCleanup) return true;
 
-    const interval = window.setInterval(() => {
-      if (syncIdentity()) {
-        window.clearInterval(interval);
-      }
-    }, 1000);
-
-    const identity = (window as typeof window & {
-      netlifyIdentity?: {
-        on?: (event: 'init' | 'login', callback: () => void) => void;
+      const onIdentityChange = () => {
+        applyIdentityState(false);
       };
-    }).netlifyIdentity;
 
-    const onIdentityChange = () => {
-      if (syncIdentity()) {
-        window.clearInterval(interval);
+      identity.on('init', onIdentityChange);
+      identity.on('login', onIdentityChange);
+      identityListenersCleanup = () => {
+        identity.off?.('init', onIdentityChange);
+        identity.off?.('login', onIdentityChange);
+        identityListenersCleanup = null;
+      };
+
+      if (identity.init && !identityInitStarted) {
+        identity.init();
+        identityInitStarted = true;
       }
+
+      return true;
     };
 
-    identity?.on?.('init', onIdentityChange);
-    identity?.on?.('login', onIdentityChange);
+    const syncIdentity = () => {
+      const listenersBound = bindIdentityListeners();
+      const identityApplied = applyIdentityState(false);
+      return listenersBound || identityApplied;
+    };
 
-    const fallback = allowLocalFallback
+    const attemptIdentitySync = () => {
+      if (syncIdentity()) {
+        return;
+      }
+
+      retryAttempts += 1;
+      if (retryAttempts >= ADMIN_INIT_MAX_RETRIES) {
+        return;
+      }
+
+      retryTimeout = window.setTimeout(attemptIdentitySync, ADMIN_INIT_RETRY_DELAY_MS);
+    };
+
+    attemptIdentitySync();
+
+    const fallback = allowTokenlessFallback
       ? window.setTimeout(() => {
-          if (applyIdentityState(true)) {
-            return;
-          }
-        }, 2000)
+          applyIdentityState(true);
+        }, ADMIN_INIT_FALLBACK_DELAY_MS)
       : undefined;
 
     return () => {
-      window.clearInterval(interval);
+      if (retryTimeout) {
+        window.clearTimeout(retryTimeout);
+      }
       if (fallback) window.clearTimeout(fallback);
+      identityListenersCleanup?.();
     };
   }, []); // empty deps — run once only
 

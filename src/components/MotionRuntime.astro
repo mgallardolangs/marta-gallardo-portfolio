@@ -1,7 +1,5 @@
 <script>
   import Lenis from 'lenis';
-  import gsap from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
   type MotionRuntimeState = {
     lenis: Lenis | null;
@@ -17,9 +15,6 @@
   const mountRuntime = () => {
     window.__mgMotionRuntime?.cleanup?.();
 
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.ticker.lagSmoothing(0);
-
     const lenis = new Lenis({
       autoRaf: true,
       anchors: true,
@@ -28,17 +23,11 @@
       stopInertiaOnNavigate: true,
     });
 
-    const refreshScroll = () => {
-      lenis.resize();
-      ScrollTrigger.refresh();
-    };
-
-    const updateScroll = () => {
+    const refreshRuntime = () => {
       document.documentElement.dataset.reducedMotion = lenis.prefersReducedMotion ? 'true' : 'false';
-      refreshScroll();
+      lenis.resize();
     };
 
-    const onLenisScroll = () => ScrollTrigger.update();
     const onVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
         lenis.stop();
@@ -46,32 +35,31 @@
       }
 
       lenis.start();
-      refreshScroll();
+      requestAnimationFrame(refreshRuntime);
     };
     const onBeforePreparation = () => lenis.stop();
     const onPageLoad = () => {
       lenis.start();
-      requestAnimationFrame(refreshScroll);
+      requestAnimationFrame(refreshRuntime);
     };
 
-    lenis.on('scroll', onLenisScroll);
     document.addEventListener('visibilitychange', onVisibilityChange);
     document.addEventListener('astro:before-preparation', onBeforePreparation);
     document.addEventListener('astro:page-load', onPageLoad);
 
     const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
-    reducedMotionMedia.addEventListener('change', updateScroll);
-    updateScroll();
+    const onReducedMotionChange = () => refreshRuntime();
+    reducedMotionMedia.addEventListener('change', onReducedMotionChange);
+    refreshRuntime();
 
     window.__mgMotionRuntime = {
       lenis,
       cleanup: () => {
-        lenis.off('scroll', onLenisScroll);
         lenis.destroy();
         document.removeEventListener('visibilitychange', onVisibilityChange);
         document.removeEventListener('astro:before-preparation', onBeforePreparation);
         document.removeEventListener('astro:page-load', onPageLoad);
-        reducedMotionMedia.removeEventListener('change', updateScroll);
+        reducedMotionMedia.removeEventListener('change', onReducedMotionChange);
         delete document.documentElement.dataset.reducedMotion;
       },
     };
