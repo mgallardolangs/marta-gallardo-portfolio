@@ -12,7 +12,7 @@ import { getTranslationToolTiles } from '../../lib/translationPage.js';
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
 const page = i.translationPage;
-const toolTiles = getTranslationToolTiles(lang, imagesData);
+const toolTiles = getTranslationToolTiles(lang, imagesData, page.skills.tools.items);
 ---
 <AdminLayout title={`Admin — ${i.nav.translationSeo}`} description={page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' ').trim()}>
   <PageTransition client:load className="pt-24">

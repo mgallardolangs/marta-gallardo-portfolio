@@ -8,14 +8,20 @@ export const TOOL_LOGO_KEYS = {
   'google-business-profile': 'googleMyBusiness',
 };
 
-export function getTranslationToolTiles(lang, siteData) {
+export function getTranslationToolTiles(lang, siteData, translatedLabels = []) {
   const tools = siteData?.arsenal?.tools ?? [];
   const logos = siteData?.toolLogos ?? {};
 
-  return tools.map((tool) => ({
-    id: tool.id,
-    label: tool?.label?.[lang] ?? tool?.label?.es ?? '',
-    logoKey: TOOL_LOGO_KEYS[tool.id] ?? '',
-    logoSrc: logos[TOOL_LOGO_KEYS[tool.id]] ?? tool.logo ?? '',
-  }));
+  return tools.map((tool, index) => {
+    const logoKey = TOOL_LOGO_KEYS[tool.id] ?? '';
+    const hasTranslatedLabel = Array.isArray(translatedLabels) && index in translatedLabels;
+    const translatedLabel = hasTranslatedLabel ? translatedLabels[index] : undefined;
+
+    return {
+      id: tool.id,
+      label: hasTranslatedLabel ? `${translatedLabel ?? ''}` : tool?.label?.[lang] ?? tool?.label?.es ?? '',
+      logoKey,
+      logoSrc: logos[logoKey] ?? tool.logo ?? '',
+    };
+  });
 }

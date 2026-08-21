@@ -242,11 +242,25 @@ test('code-managed DE/IT/CA translation page chrome no longer reuses obvious Eng
   }
 });
 
+test('translation page tool locales keep i18n tool counts aligned with stable site-data tools', async () => {
+  const site = await readJson('src/data/site.json');
+
+  for (const locale of locales) {
+    const dictionary = await readJson(`src/i18n/${locale}.json`);
+    assert.equal(
+      dictionary.translationPage.skills.tools.items.length,
+      site.arsenal.tools.length,
+      `${locale} tool label count should stay aligned with stable tool IDs`,
+    );
+  }
+});
+
 test('translation page tool tiles resolve logos from stable tool IDs for every locale', async () => {
   const site = await readJson('src/data/site.json');
 
   for (const locale of locales) {
-    const tiles = getTranslationToolTiles(locale, site);
+    const dictionary = await readJson(`src/i18n/${locale}.json`);
+    const tiles = getTranslationToolTiles(locale, site, dictionary.translationPage.skills.tools.items);
 
     assert.equal(tiles.length, site.arsenal.tools.length, `${locale} should expose one tile per arsenal tool`);
 
@@ -263,7 +277,7 @@ test('translation page tool tiles resolve logos from stable tool IDs for every l
   }
 });
 
-test('translation page tool tiles keep logo mapping stable even when labels change', () => {
+test('translation page tool tiles prefer editable i18n labels while keeping stable IDs and logos', () => {
   const site = {
     toolLogos: {
       microsoftOffice: '/logos/microsoft.svg',
@@ -282,19 +296,45 @@ test('translation page tool tiles keep logo mapping stable even when labels chan
       ],
     },
   };
+  const editedLabels = ['Microsoft 365', 'Espacio de trabajo Google'];
 
-  assert.deepEqual(getTranslationToolTiles('es', site), [
+  assert.deepEqual(getTranslationToolTiles('es', site, editedLabels), [
     {
       id: 'microsoft-office',
-      label: 'Etiqueta editada',
+      label: 'Microsoft 365',
       logoKey: 'microsoftOffice',
       logoSrc: '/logos/microsoft.svg',
     },
     {
       id: 'google-workspace',
-      label: 'Otro nombre',
+      label: 'Espacio de trabajo Google',
       logoKey: 'googleWorkspace',
       logoSrc: '/logos/google.svg',
+    },
+  ]);
+});
+
+test('translation page tool tiles preserve intentionally blank editable labels instead of falling back to site data', () => {
+  const site = {
+    toolLogos: {
+      microsoftOffice: '/logos/microsoft.svg',
+    },
+    arsenal: {
+      tools: [
+        {
+          id: 'microsoft-office',
+          label: { es: 'Etiqueta original', en: 'Original label' },
+        },
+      ],
+    },
+  };
+
+  assert.deepEqual(getTranslationToolTiles('es', site, ['']), [
+    {
+      id: 'microsoft-office',
+      label: '',
+      logoKey: 'microsoftOffice',
+      logoSrc: '/logos/microsoft.svg',
     },
   ]);
 });
@@ -304,5 +344,26 @@ test('admin translation SEO page uses stable tool IDs instead of translated labe
 
   assert.doesNotMatch(source, /const toolLogoMap/);
   assert.match(source, /import\s+\{\s*getTranslationToolTiles\s*\}\s+from\s+['"]..\/..\/lib\/translationPage\.js['"]/);
-  assert.match(source, /const toolTiles = getTranslationToolTiles\(lang, imagesData\);/);
+  assert.match(source, /const toolTiles = getTranslationToolTiles\(lang, imagesData, page\.skills\.tools\.items\);/);
+});
+
+test('public translation SEO pages feed editable i18n tool labels into translation tiles', async () => {
+  const pagePaths = [
+    'src/pages/translation-seo.astro',
+    'src/pages/en/translation-seo.astro',
+    'src/pages/fr/translation-seo.astro',
+    'src/pages/de/translation-seo.astro',
+    'src/pages/it/translation-seo.astro',
+    'src/pages/ca/translation-seo.astro',
+  ];
+
+  const sources = await Promise.all(pagePaths.map((pagePath) => readFile(path.join(rootDir, pagePath), 'utf8')));
+
+  sources.forEach((source, index) => {
+    assert.match(
+      source,
+      /const toolTiles = getTranslationToolTiles\(lang, siteData, page\.skills\.tools\.items\);/,
+      `${pagePaths[index]} should use editable i18n labels as the tool tile source of truth`,
+    );
+  });
 });
