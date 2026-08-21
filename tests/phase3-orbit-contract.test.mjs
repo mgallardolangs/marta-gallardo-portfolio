@@ -298,7 +298,7 @@ test('admin store exposes orbit collection mutations and publishes site data upd
         {
           id: 'hero-editorial',
           type: 'image',
-          src: '/images/site/img_5587.jpg',
+          src: '/images/site/img_5587.webp',
           href: '/',
           label: { es: 'Uno', en: 'One', fr: 'Un', de: 'Uno', it: 'Uno', ca: 'Uno' },
           alt: { es: 'Alt uno', en: 'Alt one', fr: 'Alt un', de: 'Alt uno', it: 'Alt uno', ca: 'Alt uno' },

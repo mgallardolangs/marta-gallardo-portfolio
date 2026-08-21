@@ -4,6 +4,7 @@
   --color-paper: #F4F5F1;
   --color-ink: #060403;
   --color-amaranth: #E83256;
+  --color-amaranth-ink: #C21F45;
   --color-amaranth-soft: #F5C4CD;
   --color-amaranth-mist: #F8E8EB;
   --color-ink-muted: #4C4442;
@@ -70,6 +71,7 @@ summary {
 :focus-visible {
   outline: 2px solid var(--color-amaranth);
   outline-offset: 3px;
+  box-shadow: 0 0 0 2px rgba(244, 245, 241, 0.92);
 }
 
 ::selection {
@@ -101,6 +103,10 @@ svg {
 
 .section-copy {
   max-width: 42rem;
+}
+
+.text-accent-ink {
+  color: var(--color-amaranth-ink);
 }
 
 @media (prefers-reduced-motion: reduce) {

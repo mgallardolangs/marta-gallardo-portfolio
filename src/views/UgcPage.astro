@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ScrollReveal from '../components/ScrollReveal';
-import PageTransition from '../components/PageTransition';
 import RichText from '../components/RichText.astro';
 import ParallaxLayer from '../components/ParallaxLayer';
 import NicheCard from '../components/NicheCard';
@@ -38,8 +37,7 @@ const pageDescription = i.ugcPage.pageDescription;
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
-  <PageTransition client:load>
-    <div id="top" class="bg-paper">
+  <div id="top" class="bg-paper">
       <section class="relative overflow-hidden border-b border-black/10 bg-paper px-6 pt-28 pb-16 md:pt-32 md:pb-24">
         <ParallaxLayer client:visible className="pointer-events-none absolute inset-x-0 top-6 hidden md:block" speed={-0.12}>
           <div class="site-container text-right font-accent text-7xl italic tracking-[0.18em] text-amaranth/8">
@@ -50,7 +48,7 @@ const pageDescription = i.ugcPage.pageDescription;
         <div class="site-container relative z-10 grid gap-12 lg:grid-cols-[1fr_minmax(280px,380px)] lg:items-center lg:gap-16">
           <ScrollReveal client:visible className="max-w-xl">
             <div class="inline-flex items-center gap-4 border-y border-black/12 py-3">
-              <p class="font-body text-xs font-semibold uppercase tracking-[0.35em] text-amaranth">{i.ugcPage.hero.eyebrow}</p>
+              <p class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.35em]">{i.ugcPage.hero.eyebrow}</p>
             </div>
             <TypedTitle
               as="h1"
@@ -67,10 +65,14 @@ const pageDescription = i.ugcPage.pageDescription;
                 (images.ugcPhotos?.all ?? []).map((src, idx) => (
                   <img
                     src={src}
-                    alt={`UGC ${idx + 1}`}
+                    alt=""
+                    width={1200}
+                    height={1600}
                     class="carousel-slide absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-in-out"
                     style={`transform: translateX(${idx * 100}%);`}
-                    loading="lazy"
+                    loading={idx === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    fetchpriority={idx === 0 ? 'high' : 'auto'}
                   />
                 ))
               ) : (
@@ -127,9 +129,9 @@ const pageDescription = i.ugcPage.pageDescription;
           <ScrollReveal client:visible className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div class="max-w-3xl">
               <div class="flex items-center gap-4">
-                <p class="font-body text-xs font-semibold uppercase tracking-[0.35em] text-amaranth">{niche.eyebrow}</p>
+                <p class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.35em]">{niche.eyebrow}</p>
                 {niche.iconImage && (
-                  <img src={niche.iconImage} alt="" class="h-12 w-12 object-contain" loading="lazy" />
+                  <img src={niche.iconImage} alt="" width="48" height="48" class="h-12 w-12 object-contain" loading="lazy" decoding="async" />
                 )}
               </div>
               <h2 class="mt-4 font-heading text-4xl text-ink md:text-6xl">{niche.label}</h2>
@@ -137,7 +139,7 @@ const pageDescription = i.ugcPage.pageDescription;
             </div>
             <a
               href="#top"
-              class="inline-flex items-center gap-2 self-start border-b border-amaranth pb-1 font-body text-sm text-amaranth transition hover:text-ink"
+              class="text-accent-ink inline-flex items-center gap-2 self-start border-b border-amaranth pb-1 font-body text-sm transition hover:text-ink"
             >
               {i.ugcPage.backToTop}
               <span aria-hidden="true">↑</span>
@@ -146,13 +148,13 @@ const pageDescription = i.ugcPage.pageDescription;
 
           {niche.videos.length > 0 && (
             <div class="mt-10">
-              <VideoGallery client:visible videos={niche.videos.map((src: string) => ({ src }))} />
+              <VideoGallery client:visible videos={niche.videos.map((src: string) => ({ src }))} lang={lang} />
             </div>
           )}
 
           {niche.photos.length > 0 && (
             <div class="mt-10">
-              <PhotoMasonry client:visible photos={niche.photos} />
+              <PhotoMasonry client:visible photos={niche.photos} lang={lang} />
             </div>
           )}
 
@@ -170,15 +172,14 @@ const pageDescription = i.ugcPage.pageDescription;
             <ScrollReveal client:visible>
               <div class="mb-10 flex items-center justify-between border-t border-black/10 pt-6">
                 <h2 class="font-heading text-3xl text-ink md:text-5xl">@marttelier</h2>
-                <span class="font-body text-xs font-semibold uppercase tracking-[0.32em] text-amaranth">{i.ugc.title}</span>
+                <span class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.32em]">{i.ugc.title}</span>
               </div>
             </ScrollReveal>
-            <PhotoMasonry client:visible photos={allPhotos} />
+            <PhotoMasonry client:visible photos={allPhotos} lang={lang} />
           </div>
         </section>
       )}
     </div>
-  </PageTransition>
 </BaseLayout>
 
 <script>

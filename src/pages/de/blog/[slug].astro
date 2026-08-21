@@ -4,7 +4,6 @@ import { getCollection, render } from 'astro:content';
 import { getLangFromUrl, getLocalizedPath, t } from '../../../i18n';
 import { getBlogStaticPathsForLocale } from '../../../lib/blog';
 import ScrollReveal from '../../../components/ScrollReveal';
-import PageTransition from '../../../components/PageTransition';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -17,11 +16,10 @@ const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
 ---
 <BaseLayout title={`${post.data.title} — ${i.hero.name}`} description={post.data.description}>
-  <PageTransition client:load>
     <article class="bg-paper">
       <div class="mx-auto max-w-4xl px-6 pt-28 pb-16 md:pt-32 md:pb-20">
         <ScrollReveal client:visible>
-          <a href={getLocalizedPath('/blog', lang)} class="inline-flex items-center gap-3 border-b border-amaranth pb-1 font-body text-xs font-semibold uppercase tracking-[0.28em] text-amaranth transition hover:text-ink">
+          <a href={getLocalizedPath('/blog', lang)} class="text-accent-ink inline-flex items-center gap-3 border-b border-amaranth pb-1 font-body text-xs font-semibold uppercase tracking-[0.28em] transition hover:text-ink">
             <span aria-hidden="true">←</span>
             {i.blog.backToList}
           </a>
@@ -32,7 +30,7 @@ const i = t(lang);
                 {post.data.date.toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' })}
               </time>
               {post.data.tags.map((tag: string) => (
-                <span class="border border-black/10 px-2.5 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-amaranth">{tag}</span>
+                <span class="text-accent-ink border border-black/10 px-2.5 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.24em]">{tag}</span>
               ))}
             </div>
             <h1 class="mt-6 font-heading text-4xl leading-tight text-ink md:text-6xl">
@@ -40,7 +38,7 @@ const i = t(lang);
             </h1>
             {post.data.image && (
               <div class="mt-8 overflow-hidden border border-black/10 bg-blush-50">
-                <img src={post.data.image} alt={post.data.title} class="aspect-[16/9] w-full object-cover" />
+                <img src={post.data.image} alt={post.data.title} width={1600} height={900} loading="eager" fetchpriority="high" decoding="async" class="aspect-[16/9] w-full object-cover" />
               </div>
             )}
           </header>
@@ -53,5 +51,4 @@ const i = t(lang);
         </ScrollReveal>
       </div>
     </article>
-  </PageTransition>
 </BaseLayout>

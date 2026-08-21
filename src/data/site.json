@@ -1,11 +1,11 @@
 {
-  "heroMainPhoto": "/images/site/img_5587.jpg",
+  "heroMainPhoto": "/images/site/img_5587.webp",
   "galleryCutouts": {
-    "shotOne": "/images/site/about-me-world.png",
-    "shotTwo": "/images/site/sticker-passport.png",
-    "shotThree": "/images/site/sticker-art.png",
-    "shotFour": "/images/site/sticker-crochet.png",
-    "shotFive": "/images/site/sticker-mountain.png"
+    "shotOne": "/images/site/about-me-world.webp",
+    "shotTwo": "/images/site/sticker-passport.webp",
+    "shotThree": "/images/site/sticker-art.webp",
+    "shotFour": "/images/site/sticker-crochet.webp",
+    "shotFive": "/images/site/sticker-mountain.webp"
   },
   "videoPlaceholderOrEmbedUrl": "https://example.com/embed/video",
   "ugcHeaderImage": "",
@@ -15,9 +15,9 @@
     "instagram": "https://www.instagram.com/marttelier/"
   },
   "nicheBackgrounds": {
-    "travel": "/images/site/nicho-viajes.jpg",
-    "languages": "/images/site/nicho-idiomas.jpg",
-    "art": "/images/site/nicho-arte.jpg"
+    "travel": "/images/site/nicho-viajes.webp",
+    "languages": "/images/site/nicho-idiomas.webp",
+    "art": "/images/site/nicho-arte.webp"
   },
   "ugcVideos": {
     "travel": [],
@@ -56,7 +56,7 @@
     {
       "id": "hero-editorial",
       "type": "image",
-      "src": "/images/site/img_5587.jpg",
+      "src": "/images/site/img_5587.webp",
       "href": "/",
       "label": {
         "es": "Retrato editorial",
@@ -78,7 +78,7 @@
     {
       "id": "world-cutout",
       "type": "image",
-      "src": "/images/site/about-me-world.png",
+      "src": "/images/site/about-me-world.webp",
       "href": "/translation-seo",
       "label": {
         "es": "Mapa y recorrido",
@@ -100,7 +100,7 @@
     {
       "id": "passport-sticker",
       "type": "image",
-      "src": "/images/site/sticker-passport.png",
+      "src": "/images/site/sticker-passport.webp",
       "href": "/ugc",
       "label": {
         "es": "Pasaporte creativo",
@@ -122,7 +122,7 @@
     {
       "id": "art-sticker",
       "type": "image",
-      "src": "/images/site/sticker-art.png",
+      "src": "/images/site/sticker-art.webp",
       "href": "/ugc#art",
       "label": {
         "es": "Pulso artístico",
@@ -144,7 +144,7 @@
     {
       "id": "crochet-sticker",
       "type": "image",
-      "src": "/images/site/sticker-crochet.png",
+      "src": "/images/site/sticker-crochet.webp",
       "href": "/ugc#art",
       "label": {
         "es": "Detalle artesanal",
@@ -166,7 +166,7 @@
     {
       "id": "mountain-sticker",
       "type": "image",
-      "src": "/images/site/sticker-mountain.png",
+      "src": "/images/site/sticker-mountain.webp",
       "href": "/ugc#travel",
       "label": {
         "es": "Postal de montaña",
@@ -210,7 +210,7 @@
     {
       "id": "travel-niche",
       "type": "image",
-      "src": "/images/site/nicho-viajes.jpg",
+      "src": "/images/site/nicho-viajes.webp",
       "href": "/ugc#travel",
       "label": {
         "es": "Órbita viajes",
@@ -232,7 +232,7 @@
     {
       "id": "languages-niche",
       "type": "image",
-      "src": "/images/site/nicho-idiomas.jpg",
+      "src": "/images/site/nicho-idiomas.webp",
       "href": "/ugc#languages",
       "label": {
         "es": "Órbita idiomas",
@@ -254,7 +254,7 @@
     {
       "id": "art-niche",
       "type": "image",
-      "src": "/images/site/nicho-arte.jpg",
+      "src": "/images/site/nicho-arte.webp",
       "href": "/ugc#art",
       "label": {
         "es": "Órbita arte",

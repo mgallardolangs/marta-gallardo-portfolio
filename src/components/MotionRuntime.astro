@@ -22,9 +22,16 @@
       syncTouch: false,
       stopInertiaOnNavigate: true,
     });
+    const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     const refreshRuntime = () => {
-      document.documentElement.dataset.reducedMotion = lenis.prefersReducedMotion ? 'true' : 'false';
+      if (lenis.prefersReducedMotion) {
+        lenis.stop();
+        document.documentElement.dataset.reducedMotion = 'true';
+        return;
+      }
+
+      document.documentElement.dataset.reducedMotion = reducedMotionMedia.matches ? 'true' : 'false';
       lenis.resize();
     };
 
@@ -34,11 +41,21 @@
         return;
       }
 
+      if (lenis.prefersReducedMotion) {
+        refreshRuntime();
+        return;
+      }
+
       lenis.start();
       requestAnimationFrame(refreshRuntime);
     };
     const onBeforePreparation = () => lenis.stop();
     const onPageLoad = () => {
+      if (lenis.prefersReducedMotion) {
+        refreshRuntime();
+        return;
+      }
+
       lenis.start();
       requestAnimationFrame(refreshRuntime);
     };
@@ -47,7 +64,6 @@
     document.addEventListener('astro:before-preparation', onBeforePreparation);
     document.addEventListener('astro:page-load', onPageLoad);
 
-    const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
     const onReducedMotionChange = () => refreshRuntime();
     reducedMotionMedia.addEventListener('change', onReducedMotionChange);
     refreshRuntime();

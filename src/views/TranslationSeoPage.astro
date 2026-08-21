@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageTransition from '../components/PageTransition';
 import RichText from '../components/RichText.astro';
 import TypedTitle from '../components/TypedTitle.astro';
 import GsapPageRuntime from '../components/GsapPageRuntime.astro';
@@ -21,14 +20,13 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
 
 <BaseLayout title={pageTitle} description={pageDescription}>
   <GsapPageRuntime />
-  <PageTransition client:load>
-    <div class="bg-paper" data-translation-page>
+  <div class="bg-paper" data-translation-page>
       <section class="relative overflow-hidden border-b border-black/10 bg-paper px-6 pb-20 pt-28 md:pb-24 md:pt-32">
         <div class="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(232,50,86,0.14),transparent_68%)]"></div>
         <div class="site-container relative grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
           <div class="max-w-4xl space-y-6">
             <div class="inline-flex items-center gap-4 border-y border-black/12 py-3">
-              <p class="font-body text-xs font-semibold uppercase tracking-[0.28em] text-amaranth">{page.hero.eyebrow}</p>
+              <p class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.28em]">{page.hero.eyebrow}</p>
             </div>
 
             <TypedTitle
@@ -49,7 +47,7 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
               </a>
               <a
                 href={getLocalizedPath('/contact', lang)}
-                class="inline-flex items-center gap-3 rounded-full border border-black/10 bg-white px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink transition hover:-translate-y-0.5 hover:border-amaranth hover:text-amaranth"
+                class="inline-flex items-center gap-3 rounded-full border border-black/10 bg-white px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink transition hover:-translate-y-0.5 hover:border-amaranth hover:text-ink"
               >
                 {page.hero.ctaSecondary}
               </a>
@@ -57,7 +55,7 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
           </div>
 
           <div class="border border-black/10 bg-white/84 p-6 shadow-[0_18px_40px_rgba(6,4,3,0.06)] backdrop-blur md:p-8">
-            <RichText text={page.hero.backgroundLabel} class="font-body text-xs font-semibold uppercase tracking-[0.24em] text-amaranth" />
+            <RichText text={page.hero.backgroundLabel} class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.24em]" />
           </div>
         </div>
       </section>
@@ -82,7 +80,7 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
 
           <div class="grid gap-6 lg:grid-cols-3">
             <article class="border border-black/10 bg-white p-6 shadow-[0_16px_36px_rgba(6,4,3,0.05)]">
-              <p class="font-body text-xs font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.languagesTitle}</p>
+              <p class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.26em]">{page.arsenal.languagesTitle}</p>
               <span class="mt-4 block h-px bg-black/10" data-arsenal-line></span>
               <div class="mt-6 grid gap-4 sm:grid-cols-2" data-arsenal-items>
                 {arsenalColumns.languages.map((language) => (
@@ -95,13 +93,13 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
             </article>
 
             <article class="border border-black/10 bg-white p-6 shadow-[0_16px_36px_rgba(6,4,3,0.05)]">
-              <p class="font-body text-xs font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.toolsTitle}</p>
+              <p class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.26em]">{page.arsenal.toolsTitle}</p>
               <span class="mt-4 block h-px bg-black/10" data-arsenal-line></span>
               <div class="mt-6 grid gap-4 sm:grid-cols-2" data-arsenal-items>
                 {arsenalColumns.tools.map((tool) => (
                   <div class="flex items-center gap-4 border border-black/10 bg-paper px-4 py-4" data-arsenal-item>
                     <div class="flex h-12 w-12 items-center justify-center border border-black/10 bg-white">
-                      <img src={tool.logoSrc} alt={tool.label} class="h-7 w-7 object-contain" />
+                      <img src={tool.logoSrc} alt="" width="28" height="28" loading="lazy" decoding="async" class="h-7 w-7 object-contain" />
                     </div>
                     <p class="text-sm leading-6 text-ink">{tool.label}</p>
                   </div>
@@ -110,7 +108,7 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
             </article>
 
             <article class="border border-black/10 bg-white p-6 shadow-[0_16px_36px_rgba(6,4,3,0.05)]">
-              <p class="font-body text-xs font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.skillsTitle}</p>
+              <p class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.26em]">{page.arsenal.skillsTitle}</p>
               <span class="mt-4 block h-px bg-black/10" data-arsenal-line></span>
               <div class="mt-6 flex flex-wrap gap-3" data-arsenal-items>
                 {arsenalColumns.skills.map((skill) => (
@@ -199,7 +197,6 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
         </div>
       </section>
     </div>
-  </PageTransition>
 
   <script>
     import { cleanupTranslationPageMotion, initTranslationPageMotion } from '../lib/translationPageMotion.ts';

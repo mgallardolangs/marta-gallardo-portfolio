@@ -30,7 +30,6 @@ const { title = `${i.hero.name} — UGC & SEO`, description = i.about.text } = A
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
-  <!-- Netlify Identity widget (needed for CMS login redirects) -->
   <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body class="min-h-screen bg-cream text-charcoal">
@@ -40,7 +39,6 @@ const { title = `${i.hero.name} — UGC & SEO`, description = i.about.text } = A
   </main>
   <Footer lang={lang} />
   <MotionRuntime />
-  <!-- ponytail: redirect to /admin after Netlify Identity login confirmation -->
   <script is:inline>
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on("init", user => {

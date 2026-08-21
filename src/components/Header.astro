@@ -72,6 +72,7 @@ const isActive = (path: string) => {
             aria-label={i.language.label}
             aria-haspopup="menu"
             aria-expanded="false"
+            aria-controls="site-language-menu"
             data-lang-toggle
           >
             <svg viewBox="0 0 24 24" class="h-4 w-4 stroke-current" fill="none" aria-hidden="true">
@@ -90,6 +91,7 @@ const isActive = (path: string) => {
           aria-label={i.language.label}
           aria-haspopup="menu"
           aria-expanded="false"
+          aria-controls="site-language-menu"
           data-lang-toggle
         >
           <svg viewBox="0 0 24 24" class="h-4 w-4 stroke-current" fill="none" aria-hidden="true">
@@ -97,7 +99,7 @@ const isActive = (path: string) => {
           </svg>
         </button>
       )}
-      <button type="button" class="social-control" data-menu-toggle aria-expanded="false" aria-label={i.nav.openMenu}>
+      <button type="button" class="social-control" data-menu-toggle aria-expanded="false" aria-controls="site-mobile-panel" aria-label={i.nav.openMenu}>
         <span class="sr-only">{i.nav.openMenu}</span>
         <svg viewBox="0 0 24 24" class="h-4 w-4 stroke-current" fill="none" aria-hidden="true">
           <path d="M5 7h14M5 12h14M5 17h14" stroke-linecap="round" stroke-width="1.8" />
@@ -109,7 +111,7 @@ const isActive = (path: string) => {
   {!adminMode && (
     <div class="language-popover-wrap mx-auto w-full max-w-7xl px-4 md:px-6">
       <div class="relative flex justify-end">
-        <div class="language-menu" data-lang-menu hidden role="menu" aria-label={i.language.label}>
+        <div class="language-menu" id="site-language-menu" data-lang-menu hidden role="menu" aria-label={i.language.label}>
           {visibleLangs.map((locale) => (
             <a
               href={languagePath(locale)}
@@ -124,7 +126,7 @@ const isActive = (path: string) => {
     </div>
   )}
 
-  <div class="mobile-panel" data-mobile-panel hidden>
+  <div class="mobile-panel" id="site-mobile-panel" data-mobile-panel hidden>
     <div class="mobile-panel__content">
       <div class="flex items-center justify-between border-b border-black/8 pb-4">
         <span class="font-heading text-xl tracking-[0.28em]">MG</span>
@@ -389,8 +391,47 @@ const isActive = (path: string) => {
     const menuClose = header.querySelector<HTMLButtonElement>('[data-menu-close]');
     const langToggles = Array.from(header.querySelectorAll<HTMLButtonElement>('[data-lang-toggle]'));
     const languageMenu = header.querySelector<HTMLElement>('[data-lang-menu]');
+    const mobileLinks = Array.from(header.querySelectorAll<HTMLAnchorElement>('.mobile-nav-link, .language-chip'));
+    const languageLinks = Array.from(header.querySelectorAll<HTMLAnchorElement>('[data-lang-menu] [role="menuitem"]'));
     let lastScrollY = window.scrollY;
     let bodyOverflow = '';
+    let previouslyFocusedElement: HTMLElement | null = null;
+
+    const rememberFocus = () => {
+      previouslyFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    };
+
+    const restoreFocus = () => {
+      previouslyFocusedElement?.focus();
+      previouslyFocusedElement = null;
+    };
+
+    const getFocusableElements = (container: HTMLElement | null) => {
+      if (!container) return [];
+      return Array.from(
+        container.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((element) => !element.hasAttribute('hidden'));
+    };
+
+    const trapFocus = (event: KeyboardEvent, container: HTMLElement | null) => {
+      if (event.key !== 'Tab') return;
+
+      const focusableElements = getFocusableElements(container);
+      if (focusableElements.length === 0) return;
+
+      const first = focusableElements[0];
+      const last = focusableElements[focusableElements.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
 
     const syncHeader = () => {
       const isMobileMenuOpen = mobilePanel ? !mobilePanel.hidden : false;
@@ -411,24 +452,52 @@ const isActive = (path: string) => {
       lastScrollY = window.scrollY;
     };
 
-    const setLanguageMenu = (open: boolean) => {
+    const setLanguageMenu = (open: boolean, trigger?: HTMLElement | null) => {
       if (!languageMenu) return;
+      const wasOpen = !languageMenu.hidden;
+
+      if (open && !wasOpen) {
+        previouslyFocusedElement = trigger ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
+      }
+
       languageMenu.hidden = !open;
       langToggles.forEach((toggle) => toggle.setAttribute('aria-expanded', String(open)));
+
+      if (open) {
+        requestAnimationFrame(() => {
+          languageMenu.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+        });
+        return;
+      }
+
+      if (wasOpen) {
+        restoreFocus();
+      }
     };
 
-    const setMobileMenu = (open: boolean) => {
+    const setMobileMenu = (open: boolean, trigger?: HTMLElement | null) => {
       if (!mobilePanel || !menuToggle) return;
+      const wasOpen = !mobilePanel.hidden;
 
       mobilePanel.hidden = !open;
       menuToggle.setAttribute('aria-expanded', String(open));
       header.dataset.hidden = 'false';
 
       if (open) {
+        previouslyFocusedElement = trigger ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
         bodyOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
-      } else {
+        requestAnimationFrame(() => {
+          mobilePanel.querySelector<HTMLElement>('[data-menu-close]')?.focus();
+        });
+        return;
+      }
+
+      if (!open) {
         document.body.style.overflow = bodyOverflow;
+        if (wasOpen) {
+          restoreFocus();
+        }
       }
     };
 
@@ -449,14 +518,34 @@ const isActive = (path: string) => {
     };
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        event.preventDefault();
         closeMenus();
+        return;
+      }
+
+      if (mobilePanel && !mobilePanel.hidden) {
+        trapFocus(event, mobilePanel);
+        return;
+      }
+
+      if (languageMenu && !languageMenu.hidden) {
+        trapFocus(event, languageMenu);
       }
     };
 
-    menuToggle && (menuToggle.onclick = () => setMobileMenu(mobilePanel?.hidden ?? true));
+    menuToggle && (menuToggle.onclick = () => setMobileMenu(mobilePanel?.hidden ?? true, menuToggle));
     menuClose && (menuClose.onclick = () => setMobileMenu(false));
     langToggles.forEach((toggle) => {
-      toggle.onclick = () => setLanguageMenu(languageMenu?.hidden ?? true);
+      toggle.onclick = () => {
+        rememberFocus();
+        setLanguageMenu(languageMenu?.hidden ?? true, toggle);
+      };
+    });
+    mobileLinks.forEach((link) => {
+      link.onclick = () => setMobileMenu(false);
+    });
+    languageLinks.forEach((link) => {
+      link.onclick = () => setLanguageMenu(false);
     });
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -474,6 +563,12 @@ const isActive = (path: string) => {
       if (menuClose) menuClose.onclick = null;
       langToggles.forEach((toggle) => {
         toggle.onclick = null;
+      });
+      mobileLinks.forEach((link) => {
+        link.onclick = null;
+      });
+      languageLinks.forEach((link) => {
+        link.onclick = null;
       });
       document.body.style.overflow = bodyOverflow;
     };

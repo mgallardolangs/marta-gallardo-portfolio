@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import EditableText from './EditableText';
 import EditableImage from './EditableImage';
-import { adminStore } from './adminStore';
 
 interface Props {
   id: 'travel' | 'languages' | 'art';
@@ -12,44 +10,26 @@ interface Props {
   iconImageKey: string;
 }
 
-const nicheEmojis: Record<Props['id'], string> = {
-  travel: '✈️',
-  languages: '🌍',
-  art: '🎨',
-};
-
 export default function AdminNicheCard({ id, labelKey, accentKey, backgroundImageKey, iconImageKey }: Props) {
-  const [bgSrc, setBgSrc] = useState('');
-  const [iconSrc, setIconSrc] = useState('');
-
-  useEffect(() => {
-    setBgSrc(adminStore.getImageSrc(backgroundImageKey));
-    setIconSrc(adminStore.getImageSrc(iconImageKey));
-    return adminStore.subscribe(() => {
-      setBgSrc(adminStore.getImageSrc(backgroundImageKey));
-      setIconSrc(adminStore.getImageSrc(iconImageKey));
-    });
-  }, [backgroundImageKey, iconImageKey]);
+  const prefersReducedMotion = useReducedMotion();
 
   const scrollToSection = () => {
     const target = document.getElementById(id);
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (target) target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
   };
 
   return (
     <motion.div
       className="group relative flex min-h-[17rem] w-full overflow-hidden border border-black/10 bg-paper text-left shadow-[0_18px_34px_rgba(6,4,3,0.08)]"
-      whileHover={{ y: -4 }}
+      whileHover={prefersReducedMotion ? undefined : { y: -4 }}
       transition={{ duration: 0.25, ease: 'easeOut' }}
     >
-      {/* Background — editable */}
       <div className="absolute inset-0">
         <EditableImage imageKey={backgroundImageKey} className="h-full w-full" alt={`${id} background`} />
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-charcoal/82 via-charcoal/32 to-white/10 pointer-events-none" />
 
       <div className="relative flex w-full flex-col justify-between p-5 md:p-6">
-        {/* Icon — editable */}
         <div className="flex justify-end">
           <div className="h-14 w-14 overflow-hidden border border-black/10 bg-white/88 shadow-[0_12px_24px_rgba(6,4,3,0.14)] backdrop-blur-sm">
             <EditableImage imageKey={iconImageKey} className="h-14 w-14 p-1" alt={`${id} icon`} />

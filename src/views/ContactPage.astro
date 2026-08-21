@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ScrollReveal from '../components/ScrollReveal';
-import PageTransition from '../components/PageTransition';
 import RichText from '../components/RichText.astro';
 import TypedTitle from '../components/TypedTitle.astro';
 import { getLangFromUrl, t } from '../i18n';
@@ -16,8 +15,7 @@ const cardClass = 'border border-black/10 bg-paper p-6 shadow-[0_18px_40px_rgba(
 ---
 
 <BaseLayout title={`${i.contact.title} — ${i.hero.name}`} description={i.contact.subtitle}>
-  <PageTransition client:load>
-    <section class="bg-paper px-6 pt-28 pb-16 text-ink md:pt-32 md:pb-24">
+  <section class="bg-paper px-6 pt-28 pb-16 text-ink md:pt-32 md:pb-24">
       <div class="site-container grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
         <ScrollReveal client:visible className="h-full">
           <div class="h-full border border-white/10 bg-ink p-8 text-paper md:p-10">
@@ -35,7 +33,7 @@ const cardClass = 'border border-black/10 bg-paper p-6 shadow-[0_18px_40px_rgba(
         <div class="grid gap-6 xl:grid-cols-2">
           <ScrollReveal client:visible className="h-full">
             <div class={`${cardClass} h-full`}>
-              <div class="mb-6 inline-flex border border-black/10 bg-white px-3 py-2 font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">
+              <div class="text-accent-ink mb-6 inline-flex border border-black/10 bg-white px-3 py-2 font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em]">
                 UGC
               </div>
               <h2 class="font-heading text-3xl text-ink">{i.contact.ugcForm.title}</h2>
@@ -65,7 +63,7 @@ const cardClass = 'border border-black/10 bg-paper p-6 shadow-[0_18px_40px_rgba(
 
                 <button
                   type="submit"
-                  class="inline-flex w-full items-center justify-center rounded-[8px] bg-ink px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] text-paper transition hover:bg-amaranth"
+                  class="inline-flex w-full items-center justify-center rounded-[8px] bg-ink px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] text-paper transition hover:bg-amaranth hover:text-ink"
                 >
                   {i.contact.send}
                 </button>
@@ -85,7 +83,7 @@ const cardClass = 'border border-black/10 bg-paper p-6 shadow-[0_18px_40px_rgba(
 
           <ScrollReveal client:visible className="h-full" delay={0.15}>
             <div class={`${cardClass} h-full bg-white`}>
-              <div class="mb-6 inline-flex border border-black/10 bg-blush-50 px-3 py-2 font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">
+              <div class="text-accent-ink mb-6 inline-flex border border-black/10 bg-blush-50 px-3 py-2 font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em]">
                 {i.contact.seoForm.title}
               </div>
               <h2 class="font-heading text-3xl text-ink">{i.contact.seoForm.title}</h2>
@@ -115,7 +113,7 @@ const cardClass = 'border border-black/10 bg-paper p-6 shadow-[0_18px_40px_rgba(
 
                 <button
                   type="submit"
-                  class="inline-flex w-full items-center justify-center rounded-[8px] border border-amaranth bg-paper px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] text-amaranth transition hover:bg-amaranth hover:text-paper"
+                  class="text-accent-ink inline-flex w-full items-center justify-center rounded-[8px] border border-amaranth bg-paper px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] transition hover:bg-amaranth hover:text-ink"
                 >
                   {i.contact.send}
                 </button>
@@ -135,7 +133,6 @@ const cardClass = 'border border-black/10 bg-paper p-6 shadow-[0_18px_40px_rgba(
         </div>
       </div>
     </section>
-  </PageTransition>
 </BaseLayout>
 
 <script>

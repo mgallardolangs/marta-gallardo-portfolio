@@ -1,7 +1,6 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import ScrollReveal from '../../components/ScrollReveal';
-import PageTransition from '../../components/PageTransition';
 import EditableText from '../../components/admin/EditableText';
 import { getLangFromUrl, t } from '../../i18n';
 
@@ -14,7 +13,6 @@ const labelClass = 'mb-2 block font-body text-xs font-semibold uppercase trackin
 const cardClass = 'border border-black/10 bg-paper p-6 shadow-[0_18px_40px_rgba(6,4,3,0.06)] md:p-8';
 ---
 <AdminLayout title={`Admin — ${i.contact.title}`} description={i.contact.subtitle}>
-  <PageTransition client:load>
     <section class="bg-paper px-6 pt-28 pb-16 text-ink md:pt-32 md:pb-24">
       <div class="site-container grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
         <ScrollReveal client:visible className="h-full">
@@ -103,7 +101,7 @@ const cardClass = 'border border-black/10 bg-paper p-6 shadow-[0_18px_40px_rgba(
                   <textarea id="seo-description" name="Work Description" rows="6" required class={`${fieldClass} resize-y`}></textarea>
                 </div>
 
-                <button type="submit" class="inline-flex w-full items-center justify-center rounded-[8px] border border-amaranth bg-paper px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] text-amaranth transition hover:bg-amaranth hover:text-paper">
+                <button type="submit" class="inline-flex w-full items-center justify-center rounded-[8px] border border-amaranth bg-paper px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] text-amaranth transition hover:bg-amaranth hover:text-ink">
                   <EditableText client:load i18nKey="contact.send" as="span" className="" />
                 </button>
               </form>
@@ -122,7 +120,6 @@ const cardClass = 'border border-black/10 bg-paper p-6 shadow-[0_18px_40px_rgba(
         </div>
       </div>
     </section>
-  </PageTransition>
 </AdminLayout>
 
 <script>

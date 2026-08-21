@@ -4,7 +4,6 @@ import { getCollection } from 'astro:content';
 import { getLangFromUrl, getLocalizedPath, t } from '../i18n';
 import { scopeBlogPostsToLocale } from '../lib/blog';
 import ScrollReveal from '../components/ScrollReveal';
-import PageTransition from '../components/PageTransition';
 import TypedTitle from '../components/TypedTitle.astro';
 
 const lang = getLangFromUrl(Astro.url);
@@ -15,13 +14,12 @@ const posts = scopeBlogPostsToLocale(await getCollection('blog'), lang)
 ---
 
 <BaseLayout title={`${i.blog.title} — ${i.hero.name}`}>
-  <PageTransition client:load>
-    <section class="border-b border-black/10 bg-paper px-6 pt-28 pb-12 md:pt-32 md:pb-16">
+  <section class="border-b border-black/10 bg-paper px-6 pt-28 pb-12 md:pt-32 md:pb-16">
       <div class="site-container max-w-6xl">
         <ScrollReveal client:visible>
           <div class="max-w-4xl">
             <div class="inline-flex items-center gap-4 border-y border-black/12 py-3">
-              <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.blog.title}</p>
+              <p class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.34em]">{i.blog.title}</p>
             </div>
             <TypedTitle
               as="h1"
@@ -48,7 +46,7 @@ const posts = scopeBlogPostsToLocale(await getCollection('blog'), lang)
                       {post.data.date.toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' })}
                     </time>
                     {post.data.tags.map((tag) => (
-                      <span class="border border-black/10 px-2.5 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-amaranth">{tag}</span>
+                      <span class="text-accent-ink border border-black/10 px-2.5 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.24em]">{tag}</span>
                     ))}
                   </div>
 
@@ -59,7 +57,7 @@ const posts = scopeBlogPostsToLocale(await getCollection('blog'), lang)
 
                   <a
                     href={getLocalizedPath(`/blog/${post.id}`, lang)}
-                    class="inline-flex items-center gap-3 border-b border-amaranth pb-1 font-body text-xs font-semibold uppercase tracking-[0.28em] text-amaranth transition hover:text-ink"
+                    class="text-accent-ink inline-flex items-center gap-3 border-b border-amaranth pb-1 font-body text-xs font-semibold uppercase tracking-[0.28em] transition hover:text-ink"
                   >
                     {i.blog.readMore}
                     <span aria-hidden="true">→</span>
@@ -68,9 +66,9 @@ const posts = scopeBlogPostsToLocale(await getCollection('blog'), lang)
 
                 <a href={getLocalizedPath(`/blog/${post.id}`, lang)} class="group block self-start border border-black/10 bg-paper">
                   {post.data.image ? (
-                    <img src={post.data.image} alt={post.data.title} class="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-[1.02]" />
+                    <img src={post.data.image} alt={post.data.title} width={1600} height={1200} loading="lazy" decoding="async" class="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-[1.02]" />
                   ) : (
-                    <div class="flex aspect-[4/3] items-center justify-center bg-blush-50 text-amaranth">✦</div>
+                    <div class="text-accent-ink flex aspect-[4/3] items-center justify-center bg-blush-50">✦</div>
                   )}
                 </a>
               </article>
@@ -79,5 +77,4 @@ const posts = scopeBlogPostsToLocale(await getCollection('blog'), lang)
         )}
       </div>
     </section>
-  </PageTransition>
 </BaseLayout>

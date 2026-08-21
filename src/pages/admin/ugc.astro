@@ -1,7 +1,6 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import ScrollReveal from '../../components/ScrollReveal';
-import PageTransition from '../../components/PageTransition';
 import ParallaxLayer from '../../components/ParallaxLayer';
 import VideoGallery from '../../components/VideoGallery';
 import PhotoMasonry from '../../components/PhotoMasonry';
@@ -34,7 +33,6 @@ const niches = [
 const allPhotos = images.ugcPhotos?.all ?? [];
 ---
 <AdminLayout title={`Admin — ${i.ugc.title}`} description={i.ugcPage.pageDescription}>
-  <PageTransition client:load>
     <div id="top" class="bg-paper">
       <section class="relative overflow-hidden border-b border-black/10 bg-paper px-6 pt-28 pb-16 md:pt-32 md:pb-24">
         <ParallaxLayer client:visible className="pointer-events-none absolute inset-x-0 top-6 hidden md:block" speed={-0.12}>
@@ -153,7 +151,6 @@ const allPhotos = images.ugcPhotos?.all ?? [];
         </section>
       )}
     </div>
-  </PageTransition>
 </AdminLayout>
 
 <script>

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 
 interface Props {
   id: string;
@@ -15,10 +15,12 @@ const nicheEmojis: Record<string, string> = {
 };
 
 export default function NicheCard(props: Props) {
+  const prefersReducedMotion = useReducedMotion();
+
   const scrollToSection = () => {
     const target = document.getElementById(props.id);
     if (!target) return;
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
     if (window.location.hash !== `#${props.id}`) {
       window.history.replaceState({}, '', `#${props.id}`);
     }
@@ -29,14 +31,22 @@ export default function NicheCard(props: Props) {
       type="button"
       onClick={scrollToSection}
       className="group relative flex min-h-[17rem] w-full overflow-hidden border border-black/10 bg-paper text-left shadow-[0_18px_34px_rgba(6,4,3,0.08)]"
-      whileHover={{ y: -4 }}
-      whileTap={{ scale: 0.99 }}
+      whileHover={prefersReducedMotion ? undefined : { y: -4 }}
+      whileTap={prefersReducedMotion ? undefined : { scale: 0.99 }}
       transition={{ duration: 0.25, ease: 'easeOut' }}
     >
-      <div
-        className="absolute inset-0 bg-gradient-to-br from-blush-100 via-paper to-white"
-        style={props.backgroundImage ? { backgroundImage: `url(${props.backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
-      />
+      <div className="absolute inset-0 bg-gradient-to-br from-blush-100 via-paper to-white" />
+      {props.backgroundImage && (
+        <img
+          src={props.backgroundImage}
+          alt=""
+          width={1200}
+          height={1600}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      )}
       <div className="absolute inset-0 bg-gradient-to-t from-charcoal/82 via-charcoal/32 to-white/10" />
       <div className="relative flex w-full flex-col justify-between p-5 md:p-6">
         <div className="flex justify-end">
@@ -45,18 +55,18 @@ export default function NicheCard(props: Props) {
               <motion.img
                 src={props.iconImage}
                 alt=""
+                width={48}
+                height={48}
+                loading="lazy"
+                decoding="async"
                 className="h-12 w-12 object-contain drop-shadow-lg"
-                animate={{ y: [0, -5, 0] }}
-                transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
+                animate={prefersReducedMotion ? undefined : { y: [0, -5, 0] }}
+                transition={prefersReducedMotion ? undefined : { repeat: Infinity, duration: 3, ease: 'easeInOut' }}
               />
             ) : (
-              <motion.span
-                className="select-none text-4xl"
-                animate={{ y: [0, -5, 0] }}
-                transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-              >
-                {nicheEmojis[props.id] || '📌'}
-              </motion.span>
+              <span className="select-none text-4xl" aria-hidden="true">
+                {nicheEmojis[props.id] ?? '📌'}
+              </span>
             )}
           </div>
         </div>

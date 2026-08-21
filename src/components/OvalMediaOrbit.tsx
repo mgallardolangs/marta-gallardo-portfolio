@@ -26,6 +26,15 @@ interface Props {
 
 type SoundState = 'muted' | 'sound-on' | 'blocked';
 
+const orbitLabels = {
+  es: { previous: 'Elemento anterior del orbit', next: 'Siguiente elemento del orbit', mute: 'Silenciar vídeo', enableAudio: 'Activar audio', audioBlocked: 'El navegador ha bloqueado el audio del vídeo' },
+  en: { previous: 'Previous orbit item', next: 'Next orbit item', mute: 'Mute video', enableAudio: 'Enable video sound', audioBlocked: 'The browser blocked video audio' },
+  fr: { previous: 'Élément précédent de l’orbite', next: 'Élément suivant de l’orbite', mute: 'Couper le son de la vidéo', enableAudio: 'Activer le son de la vidéo', audioBlocked: 'Le navigateur a bloqué le son de la vidéo' },
+  de: { previous: 'Vorheriges Orbit-Element', next: 'Nächstes Orbit-Element', mute: 'Video stummschalten', enableAudio: 'Videoton aktivieren', audioBlocked: 'Der Browser hat den Videoton blockiert' },
+  it: { previous: 'Elemento precedente dell’orbita', next: 'Elemento successivo dell’orbita', mute: 'Disattiva audio del video', enableAudio: 'Attiva audio del video', audioBlocked: 'Il browser ha bloccato l’audio del video' },
+  ca: { previous: 'Element anterior de l’òrbita', next: 'Element següent de l’òrbita', mute: 'Silenciar vídeo', enableAudio: 'Activar àudio del vídeo', audioBlocked: 'El navegador ha bloquejat l’àudio del vídeo' },
+} satisfies Record<Lang, Record<string, string>>;
+
 function isVideoItem(item: OrbitMedia) {
   return item.type === 'video';
 }
@@ -52,6 +61,7 @@ export default function OvalMediaOrbit({
   const [isDocumentVisible, setIsDocumentVisible] = useState(true);
   const [autoScrollSpeed, setAutoScrollSpeed] = useState(0.37);
   const shouldAnimate = !previewMode && prefersReducedMotion === false;
+  const ui = orbitLabels[lang] ?? orbitLabels.es;
 
   const plugins = useMemo(() => {
     if (!shouldAnimate || items.length < 2) return [];
@@ -475,6 +485,8 @@ export default function OvalMediaOrbit({
                       ref={(element) => { videoRefs.current[item.id] = element; }}
                       src={item.src}
                       poster={item.poster ?? undefined}
+                      width={96}
+                      height={122}
                       aria-label={alt}
                       muted
                       loop
@@ -483,7 +495,7 @@ export default function OvalMediaOrbit({
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <img src={item.src} alt={alt} className="h-full w-full object-cover" />
+                    <img src={item.src} alt={alt} width={96} height={122} loading="lazy" decoding="async" className="h-full w-full object-cover" />
                   )}
 
                   {href ? (
@@ -504,7 +516,8 @@ export default function OvalMediaOrbit({
                       type="button"
                       onClick={(event) => void toggleVideoSound(item, event)}
                       className="absolute bottom-2 right-2 z-20 rounded-full bg-ink/78 px-2 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-paper backdrop-blur-sm"
-                      aria-label={soundState === 'sound-on' ? 'Mute video' : 'Try audio'}
+                      aria-pressed={soundState === 'sound-on'}
+                      aria-label={soundState === 'sound-on' ? ui.mute : soundState === 'blocked' ? ui.audioBlocked : ui.enableAudio}
                     >
                       {soundState === 'sound-on' ? '🔊' : soundState === 'blocked' ? '🔇!' : '🔇'}
                     </button>
@@ -522,7 +535,7 @@ export default function OvalMediaOrbit({
           onClick={scrollPrev}
           disabled={items.length < 2}
           className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white text-lg text-ink transition hover:border-amaranth hover:text-amaranth disabled:cursor-not-allowed disabled:opacity-40"
-          aria-label="Previous orbit item"
+          aria-label={ui.previous}
         >
           ←
         </button>
@@ -531,7 +544,7 @@ export default function OvalMediaOrbit({
           onClick={scrollNext}
           disabled={items.length < 2}
           className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white text-lg text-ink transition hover:border-amaranth hover:text-amaranth disabled:cursor-not-allowed disabled:opacity-40"
-          aria-label="Next orbit item"
+          aria-label={ui.next}
         >
           →
         </button>

@@ -2,7 +2,6 @@
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import { getCollection } from 'astro:content';
 import { getLangFromUrl, t } from '../../../i18n';
-import PageTransition from '../../../components/PageTransition';
 import ScrollReveal from '../../../components/ScrollReveal';
 import StaggerContainer, { StaggerItem } from '../../../components/StaggerContainer';
 
@@ -14,8 +13,7 @@ const posts = (await getCollection('blog'))
 ---
 <AdminLayout title={`Admin — ${i.blog.title}`} description={i.blog.title}>
   <div class="pt-24 pb-16 max-w-5xl mx-auto px-6">
-    <PageTransition client:load>
-      <ScrollReveal client:visible>
+        <ScrollReveal client:visible>
         <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <h1 class="font-heading text-5xl md:text-7xl font-light text-charcoal mb-4">{i.blog.title}</h1>
@@ -54,6 +52,5 @@ const posts = (await getCollection('blog'))
           ))}
         </StaggerContainer>
       )}
-    </PageTransition>
-  </div>
+    </div>
 </AdminLayout>

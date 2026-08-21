@@ -1,6 +1,5 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
-import PageTransition from '../../components/PageTransition';
 import ScrollReveal from '../../components/ScrollReveal';
 import ParallaxLayer from '../../components/ParallaxLayer';
 import FloatingIcon from '../../components/FloatingIcon';
@@ -17,7 +16,6 @@ const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
 ---
 <AdminLayout title={`Admin — ${i.hero.name}`} description={i.home.hero.description}>
-  <PageTransition client:load>
     <div class="overflow-x-hidden bg-paper">
       <section class="relative overflow-hidden border-b border-black/10 bg-paper px-6 pt-28 pb-20 md:pt-32 md:pb-24">
         <div class="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(232,50,86,0.15),transparent_68%)]"></div>
@@ -165,5 +163,4 @@ const i = t(lang);
         </div>
       </section>
     </div>
-  </PageTransition>
 </AdminLayout>

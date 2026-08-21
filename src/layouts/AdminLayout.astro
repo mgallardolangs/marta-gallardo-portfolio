@@ -36,13 +36,9 @@ const allSite = JSON.stringify(siteData);
 </head>
 <body class="min-h-screen bg-cream text-charcoal">
   <AdminInit client:load i18nJson={allI18n} siteJson={allSite} lang={lang} />
-
-  <!-- Minimal admin toolbar — small floating pill, not a full bar -->
   <div class="fixed bottom-6 right-6 z-[100] print:hidden">
     <AdminToolbar client:load />
   </div>
-
-  <!-- Site content — always visible, auth checked on publish only -->
   <Header lang={lang} adminMode={true} />
   <main>
     <slot />
