@@ -1,11 +1,15 @@
 import { useMemo, useState } from 'react';
 import type { FormEvent } from 'react';
+import { ADMIN_BLOG_LANGS, isAdminBlogLang, type AdminBlogLang } from './adminStore';
 import { useAdminStore } from './useAdminStore';
-
-type LangOption = 'es' | 'en' | 'fr' | 'de' | 'it' | 'ca';
 
 const inputClass = 'w-full rounded-2xl border border-blush-100 bg-white px-4 py-3 text-sm text-charcoal outline-none transition focus:border-rose-gold focus:ring-2 focus:ring-blush-100';
 const labelClass = 'mb-2 block text-sm font-medium text-warm-gray';
+const blogLanguageLabels: Record<AdminBlogLang, string> = {
+  es: 'Español',
+  en: 'English',
+  fr: 'Français',
+};
 
 function slugify(value: string): string {
   return value
@@ -23,7 +27,7 @@ export default function BlogPostForm() {
   const [description, setDescription] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [tags, setTags] = useState('');
-  const [lang, setLang] = useState<LangOption>((store.currentLang as LangOption) || 'es');
+  const [lang, setLang] = useState<AdminBlogLang>(() => (isAdminBlogLang(store.currentLang) ? store.currentLang : 'es'));
   const [body, setBody] = useState('# Nuevo post\n\nEscribe aquí...');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -38,6 +42,11 @@ export default function BlogPostForm() {
 
     if (!title.trim() || !description.trim() || !body.trim()) {
       setError('Complete title, description, and body before publishing.');
+      return;
+    }
+
+    if (!isAdminBlogLang(lang)) {
+      setError('Blog posts can only be created in ES, EN, or FR.');
       return;
     }
 
@@ -84,13 +93,20 @@ export default function BlogPostForm() {
 
         <div>
           <label className={labelClass} htmlFor="blog-language">Language</label>
-          <select id="blog-language" value={lang} onChange={(event) => setLang(event.target.value as LangOption)} className={inputClass}>
-            <option value="es">Español</option>
-            <option value="en">English</option>
-            <option value="fr">Français</option>
-            <option value="de">Deutsch</option>
-            <option value="it">Italiano</option>
-            <option value="ca">Català</option>
+          <select
+            id="blog-language"
+            value={lang}
+            onChange={(event) => {
+              const nextLang = event.target.value;
+              if (isAdminBlogLang(nextLang)) {
+                setLang(nextLang);
+              }
+            }}
+            className={inputClass}
+          >
+            {ADMIN_BLOG_LANGS.map((locale) => (
+              <option key={locale} value={locale}>{blogLanguageLabels[locale]}</option>
+            ))}
           </select>
         </div>
 

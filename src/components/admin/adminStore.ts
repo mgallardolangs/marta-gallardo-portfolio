@@ -1,5 +1,12 @@
 type Listener = () => void;
-type SupportedLang = 'es' | 'en' | 'fr' | 'de' | 'it' | 'ca';
+export const SUPPORTED_LANGS = ['es', 'en', 'fr', 'de', 'it', 'ca'] as const;
+export type SupportedLang = (typeof SUPPORTED_LANGS)[number];
+export const ADMIN_BLOG_LANGS = ['es', 'en', 'fr'] as const;
+export type AdminBlogLang = (typeof ADMIN_BLOG_LANGS)[number];
+
+export function isAdminBlogLang(lang: string): lang is AdminBlogLang {
+  return ADMIN_BLOG_LANGS.includes(lang as AdminBlogLang);
+}
 
 type I18nTree = Record<string, unknown>;
 type ImagesTree = Record<string, unknown>;
@@ -147,7 +154,7 @@ function buildMarkdownPost(post: {
   description: string;
   date: string;
   tags: string[];
-  lang: SupportedLang;
+  lang: AdminBlogLang;
   body: string;
 }): string {
   const quoted = (value: string) => JSON.stringify(value);
@@ -344,11 +351,15 @@ class AdminStore {
     description: string;
     date: string;
     tags: string[];
-    lang: SupportedLang;
+    lang: AdminBlogLang;
     body: string;
   }): Promise<string> {
     if (!this.token) {
       throw new Error('Login required before creating blog posts.');
+    }
+
+    if (!isAdminBlogLang(post.lang)) {
+      throw new Error('Blog posts can only be created in ES, EN, or FR.');
     }
 
     const slug = post.slug.trim();
