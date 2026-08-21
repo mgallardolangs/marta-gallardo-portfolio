@@ -255,8 +255,54 @@ test('translation page tool tiles resolve logos from stable tool IDs for every l
       assert.notEqual(tile.id, '', `${locale} tile id should not be empty`);
       assert.equal(typeof tile.label, 'string');
       assert.notEqual(tile.label.trim(), '', `${locale} tile label should not be empty`);
+      assert.equal(typeof tile.logoKey, 'string');
+      assert.notEqual(tile.logoKey.trim(), '', `${locale} tile logo key should not be empty`);
       assert.equal(typeof tile.logoSrc, 'string');
       assert.notEqual(tile.logoSrc.trim(), '', `${locale} tile logo should not be empty`);
     }
   }
+});
+
+test('translation page tool tiles keep logo mapping stable even when labels change', () => {
+  const site = {
+    toolLogos: {
+      microsoftOffice: '/logos/microsoft.svg',
+      googleWorkspace: '/logos/google.svg',
+    },
+    arsenal: {
+      tools: [
+        {
+          id: 'microsoft-office',
+          label: { es: 'Etiqueta editada', en: 'Edited label' },
+        },
+        {
+          id: 'google-workspace',
+          label: { es: 'Otro nombre', en: 'Another name' },
+        },
+      ],
+    },
+  };
+
+  assert.deepEqual(getTranslationToolTiles('es', site), [
+    {
+      id: 'microsoft-office',
+      label: 'Etiqueta editada',
+      logoKey: 'microsoftOffice',
+      logoSrc: '/logos/microsoft.svg',
+    },
+    {
+      id: 'google-workspace',
+      label: 'Otro nombre',
+      logoKey: 'googleWorkspace',
+      logoSrc: '/logos/google.svg',
+    },
+  ]);
+});
+
+test('admin translation SEO page uses stable tool IDs instead of translated labels for logo lookups', async () => {
+  const source = await readFile(path.join(rootDir, 'src/pages/admin/translation-seo.astro'), 'utf8');
+
+  assert.doesNotMatch(source, /const toolLogoMap/);
+  assert.match(source, /import\s+\{\s*getTranslationToolTiles\s*\}\s+from\s+['"]..\/..\/lib\/translationPage\.js['"]/);
+  assert.match(source, /const toolTiles = getTranslationToolTiles\(lang, imagesData\);/);
 });

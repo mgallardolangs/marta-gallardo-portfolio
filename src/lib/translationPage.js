@@ -1,4 +1,4 @@
-const TOOL_LOGO_KEYS = {
+export const TOOL_LOGO_KEYS = {
   'microsoft-office': 'microsoftOffice',
   'google-workspace': 'googleWorkspace',
   notion: 'notion',
@@ -15,6 +15,7 @@ export function getTranslationToolTiles(lang, siteData) {
   return tools.map((tool) => ({
     id: tool.id,
     label: tool?.label?.[lang] ?? tool?.label?.es ?? '',
-    logoSrc: logos[TOOL_LOGO_KEYS[tool.id]] ?? '',
+    logoKey: TOOL_LOGO_KEYS[tool.id] ?? '',
+    logoSrc: logos[TOOL_LOGO_KEYS[tool.id]] ?? tool.logo ?? '',
   }));
 }

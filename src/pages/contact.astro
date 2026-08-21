@@ -135,42 +135,15 @@ const cardClass = 'rounded-[2rem] border border-blush-100 p-6 shadow-sm md:p-8';
 </BaseLayout>
 
 <script>
-  // Set localized validation messages on required fields
-  document.querySelectorAll('.contact-form').forEach(form => {
-    const errorMsg = form.getAttribute('data-error-msg') || '';
-    if (errorMsg) {
-      form.querySelectorAll('[required]').forEach(input => {
-        (input as HTMLInputElement).setCustomValidity('');
-        input.addEventListener('invalid', () => {
-          (input as HTMLInputElement).setCustomValidity(errorMsg);
-        });
-        input.addEventListener('input', () => {
-          (input as HTMLInputElement).setCustomValidity('');
-        });
-      });
-    }
+  import { initContactForms } from '../lib/contactForms.js';
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formEl = e.target as HTMLFormElement;
-      if (!formEl.checkValidity()) {
-        formEl.reportValidity();
-        return;
-      }
-      const data = new FormData(formEl);
+  const initContactPage = () => initContactForms();
+  const handlerKey = '__mgInitContactPage';
+  const docWithHandler = document as Document & Record<string, (() => void) | undefined>;
 
-      try {
-        await fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(data as any).toString(),
-        });
-        formEl.classList.add('hidden');
-        const success = formEl.parentElement?.querySelector('.contact-success');
-        success?.classList.remove('hidden');
-      } catch {
-        formEl.submit();
-      }
-    });
-  });
+  docWithHandler[handlerKey] && document.removeEventListener('astro:page-load', docWithHandler[handlerKey]);
+  docWithHandler[handlerKey] = initContactPage;
+
+  initContactPage();
+  document.addEventListener('astro:page-load', initContactPage);
 </script>

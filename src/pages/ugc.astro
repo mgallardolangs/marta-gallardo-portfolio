@@ -173,52 +173,15 @@ const pageDescription = i.ugcPage.pageDescription;
 </BaseLayout>
 
 <script>
-  // Auto-slide carousel with mouse wheel + touch swipe support
-  document.querySelectorAll('.hero-carousel').forEach(container => {
-    const slides = Array.from(container.querySelectorAll('.carousel-slide'));
-    if (slides.length <= 1) return;
-    const interval = parseInt((container as HTMLElement).dataset.interval || '3500');
-    let current = 0;
-    let autoTimer: number;
+  import { initHeroCarousels } from '../lib/heroCarousel.js';
 
-    const goTo = (idx: number) => {
-      current = ((idx % slides.length) + slides.length) % slides.length;
-      slides.forEach((slide, i) => {
-        (slide as HTMLElement).style.transform = `translateX(${(i - current) * 100}%)`;
-      });
-    };
+  const initUgcPage = () => initHeroCarousels();
+  const handlerKey = '__mgInitUgcPage';
+  const docWithHandler = document as Document & Record<string, (() => void) | undefined>;
 
-    const next = () => goTo(current + 1);
-    const prev = () => goTo(current - 1);
+  docWithHandler[handlerKey] && document.removeEventListener('astro:page-load', docWithHandler[handlerKey]);
+  docWithHandler[handlerKey] = initUgcPage;
 
-    const resetAuto = () => {
-      clearInterval(autoTimer);
-      autoTimer = window.setInterval(next, interval);
-    };
-
-    autoTimer = window.setInterval(next, interval);
-
-    // Mouse wheel: scroll left/right changes slide
-    container.addEventListener('wheel', (e: Event) => {
-      const we = e as WheelEvent;
-      if (Math.abs(we.deltaX) > Math.abs(we.deltaY) || Math.abs(we.deltaY) > 30) {
-        e.preventDefault();
-        if (we.deltaX > 0 || we.deltaY > 0) next(); else prev();
-        resetAuto();
-      }
-    }, { passive: false });
-
-    // Touch swipe
-    let touchStartX = 0;
-    container.addEventListener('touchstart', (e: Event) => {
-      touchStartX = (e as TouchEvent).touches[0].clientX;
-    });
-    container.addEventListener('touchend', (e: Event) => {
-      const diff = touchStartX - (e as TouchEvent).changedTouches[0].clientX;
-      if (Math.abs(diff) > 40) {
-        if (diff > 0) next(); else prev();
-        resetAuto();
-      }
-    });
-  });
+  initUgcPage();
+  document.addEventListener('astro:page-load', initUgcPage);
 </script>

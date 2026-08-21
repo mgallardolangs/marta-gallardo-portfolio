@@ -7,20 +7,12 @@ import EditableImage from '../../components/admin/EditableImage';
 import { getLangFromUrl, t } from '../../i18n';
 import { siteData as imagesData } from '../../lib/siteData';
 import EditableText from '../../components/admin/EditableText';
+import { getTranslationToolTiles } from '../../lib/translationPage.js';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
-
-const toolLogoMap: Record<string, string> = {
-  'Microsoft Office': 'microsoftOffice',
-  'Google Workspace': 'googleWorkspace',
-  'Notion': 'notion',
-  'AI tools (ChatGPT, Claude)': 'aiTools',
-  'WordPress': 'wordpress',
-  'Google Search Console': 'googleSearchConsole',
-  'Google My Business': 'googleMyBusiness',
-};
 const page = i.translationPage;
+const toolTiles = getTranslationToolTiles(lang, imagesData);
 ---
 <AdminLayout title={`Admin — ${i.nav.translationSeo}`} description={page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' ').trim()}>
   <PageTransition client:load className="pt-24">
@@ -101,13 +93,12 @@ const page = i.translationPage;
         <article class="rounded-[1.75rem] border border-blush-100 bg-white p-6">
           <EditableText client:load i18nKey="translationPage.skills.tools.title" as="h3" className="font-heading text-2xl text-charcoal" />
           <div class="mt-5 grid grid-cols-3 gap-4 sm:grid-cols-4">
-            {page.skills.tools.items.map((item, index) => {
-              const logoKey = toolLogoMap[item];
+            {toolTiles.map((item, index) => {
               return (
                 <div class="flex flex-col items-center gap-2 text-center">
                   <div class="h-12 w-12 rounded-xl bg-blush-50 overflow-hidden">
-                    {logoKey ? (
-                      <EditableImage client:load imageKey={`toolLogos.${logoKey}`} className="h-12 w-12 p-2" alt={item} />
+                    {item.logoKey ? (
+                      <EditableImage client:load imageKey={`toolLogos.${item.logoKey}`} className="h-12 w-12 p-2" alt={item.label} />
                     ) : (
                       <div class="flex h-full w-full items-center justify-center text-lg text-rose-gold">⚙️</div>
                     )}
