@@ -50,11 +50,11 @@ const sharedViews = [
 ];
 
 const typedViewSpecs = [
-  ['src/views/HomePage.astro', /text=\{i\.hero\.name\}/],
-  ['src/views/UgcPage.astro', /text=\{i\.ugcPage\.hero\.headline\}/],
-  ['src/views/TranslationSeoPage.astro', /text=\{page\.hero\.title\}/],
-  ['src/views/BlogIndexPage.astro', /text=\{i\.blog\.title\}/],
-  ['src/views/ContactPage.astro', /text=\{i\.contact\.title\}/],
+  ['src/views/HomePage.astro', /text=\{i\.hero\.name\}/, 1],
+  ['src/views/UgcPage.astro', /text=\{i\.ugcPage\.hero\.headline\}/, 1],
+  ['src/views/TranslationSeoPage.astro', /text=\{page\.hero\.title\}/, 4],
+  ['src/views/BlogIndexPage.astro', /text=\{i\.blog\.title\}/, 1],
+  ['src/views/ContactPage.astro', /text=\{i\.contact\.title\}/, 1],
 ];
 
 const articlePages = [
@@ -158,14 +158,14 @@ test('TypedTitle component keeps the reduced-motion and Astro lifecycle contract
   assert.match(source, /disconnect|destroy/);
 });
 
-test('Phase 2 public destination views scope TypedTitle to the five H1s only', async () => {
+test('Phase 2 public destination views keep TypedTitle scoped to approved hero and section headings', async () => {
   const sources = await Promise.all(
     typedViewSpecs.map(async ([relativePath]) => [relativePath, await readSource(relativePath)]),
   );
 
-  for (const [relativePath, expectedTextPattern] of typedViewSpecs) {
+  for (const [relativePath, expectedTextPattern, expectedCount] of typedViewSpecs) {
     const source = sources.find(([candidate]) => candidate === relativePath)[1];
-    assert.equal((source.match(/<TypedTitle\b/g) ?? []).length, 1, `${relativePath} should render exactly one TypedTitle`);
+    assert.equal((source.match(/<TypedTitle\b/g) ?? []).length, expectedCount, `${relativePath} should render the approved TypedTitle count`);
     assert.match(source, expectedTextPattern, `${relativePath} should type the expected H1 text`);
   }
 });

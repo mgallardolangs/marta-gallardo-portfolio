@@ -255,29 +255,41 @@
       "eyebrow": "Communication multilingue",
       "title": "Services de traduction, SEO et localisation",
       "text": "J’adapte les contenus pour qu’ils sonnent naturellement, créent un lien avec chaque marché et aient plus de chances d’être trouvés. Traduction, localisation et SEO multilingue avec une même intention : faire fonctionner votre message, où que se trouve votre audience.",
-      "availability": "Disponible pour des projets freelance, des collaborations ponctuelles et un accompagnement éditorial sur le long term."
+      "ctaPrimary": "VOIR LE PORTFOLIO",
+      "ctaSecondary": "PARLONS-EN"
     },
     "services": {
-      "title": "Comment je peux vous aider",
+      "title": "Services",
       "items": [
         {
+          "id": "translation",
           "name": "Traduction",
           "description": "Au-delà des mots, j’adapte les messages pour qu’ils conservent leur sens, leur ton et leur capacité à créer du lien."
         },
         {
+          "id": "localization",
           "name": "Localisation",
           "description": "Chaque marché a ses références, ses expressions et ses codes de communication. J’adapte le contenu pour qu’il paraisse naturel dans son contexte."
         },
         {
+          "id": "multilingual-seo",
           "name": "SEO multilingue",
           "description": "J’optimise les contenus pour qu’ils soient visibles sur les moteurs de recherche sans sacrifier le naturel ni le confort de lecture."
         }
       ]
     },
+    "arsenal": {
+      "title": "Mon arsenal technique",
+      "languagesTitle": "Langues",
+      "toolsTitle": "Outils",
+      "skillsTitle": "Compétences"
+    },
+    "browserTabs": {
+      "education": "Formation",
+      "experience": "Expérience"
+    },
     "experience": {
-      "eyebrow": "Parcours professionnel",
-      "title": "Expérience",
-      "text": "Une expérience concrète au service de la communication réelle, du contact humain et de l’adaptation du langage à différents contextes.",
+      "intro": "Une expérience concrète au service de la communication réelle, du contact humain et de l’adaptation du langage à différents contextes.",
       "cards": [
         {
           "title": "Traduction e-commerce et gestion de contenu + service client en français",
@@ -296,95 +308,17 @@
         }
       ]
     },
-    "skills": {
-      "eyebrow": "Compétences",
-      "title": "Savoir-faire",
-      "text": "Une méthode de travail pensée pour des textes qui doivent sonner juste, respecter la marque et fonctionner en ligne.",
-      "linguistic": {
-        "title": "Services linguistiques",
-        "items": [
-          "Traduction et adaptation de contenus FR⇄ES et EN/DE/IT/CA→ES",
-          "Localisation web",
-          "Correction, édition et amélioration du style",
-          "Recherche terminologique et gestion de glossaires"
-        ]
-      },
-      "webOptimization": {
-        "title": "Optimisation de contenu web",
-        "items": [
-          "SEO local",
-          "SEO Multilingue",
-          "Keyword planner",
-          "Copywriting"
-        ]
-      },
-      "tools": {
-        "title": "Outils",
-        "items": [
-          "Microsoft Office",
-          "Google Workspace",
-          "Notion",
-          "Outils IA (ChatGPT, Claude)",
-          "WordPress",
-          "Google Search Console",
-          "Google Business Profile"
-        ]
-      }
-    },
     "education": {
-      "eyebrow": "FORMATION ET PROFIL LINGUISTIQUE",
-      "title": "Formation",
       "intro": "Une base académique axée sur les langues, la communication interculturelle et la rédaction, renforcée par une immersion pratique dans des environnements internationaux.",
       "studies": [
         "Licence en traduction et interprétation, spécialisée en français, rédaction et adaptation de contenus.",
         "Programme Erasmus+ de six mois à Paris et pratique quotidienne dans des environnements francophones.",
         "Formation continue en écriture claire, terminologie et optimisation de contenus numériques.",
         "Stage en traduction juridique FR→ES et post-édition aux côtés d’une traductrice spécialisée."
-      ],
-      "languagesEyebrow": "Compétences linguistiques",
-      "languagesTitle": "Langues",
-      "languages": [
-        {
-          "name": "Espagnol",
-          "level": "Natif"
-        },
-        {
-          "name": "Français",
-          "level": "Avancé · C1"
-        },
-        {
-          "name": "Catalan",
-          "level": "Avancé"
-        },
-        {
-          "name": "Anglais",
-          "level": "Intermédiaire · B1"
-        },
-        {
-          "name": "Allemand",
-          "level": "Élémentaire · A2"
-        },
-        {
-          "name": "Italien",
-          "level": "Élémentaire · A2"
-        }
       ]
     },
-    "servicesOffered": {
-      "eyebrow": "Ce que je propose",
-      "title": "Mes services",
-      "intro": "Un accompagnement sur mesure pour les entreprises qui ont besoin de contenus efficaces d’une langue à l’autre, d’une plateforme à l’autre et d’un contexte de recherche à l’autre.",
-      "items": [
-        "Traduction de sites web",
-        "Localisation de contenu",
-        "SEO & copywriting",
-        "Correction et édition de textes"
-      ]
-    },
-    "process": {
-      "eyebrow": "Méthodologie",
-      "title": "Ma façon de travailler",
-      "intro": "Un processus clair et structuré permet à chaque projet d’avancer efficacement, dans l’alignement et avec un rendu prêt à publier.",
+    "methodology": {
+      "title": "Méthodologie et infographie",
       "steps": [
         {
           "title": "Briefing",
@@ -404,10 +338,8 @@
         }
       ]
     },
-    "whyMe": {
-      "eyebrow": "Valeur différenciante",
-      "title": "Pourquoi travailler avec moi ?",
-      "text": "Des langues maîtrisées, une expérience concrète et un engagement réel dans chaque contenu livré.",
+    "whyChooseMe": {
+      "title": "Pourquoi me choisir pour votre projet ?",
       "cards": [
         {
           "title": "Des langues travaillées avec exigence professionnelle",

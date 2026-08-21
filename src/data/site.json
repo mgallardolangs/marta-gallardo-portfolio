@@ -38,13 +38,13 @@
   "aboutPhotos": [],
   "brandVideo": "",
   "toolLogos": {
-    "microsoftOffice": "/images/tools/microsoft-office.svg",
-    "googleWorkspace": "/images/tools/google-workspace.svg",
+    "microsoft-office": "/images/tools/microsoft-office.svg",
+    "google-workspace": "/images/tools/google-workspace.svg",
     "notion": "/images/tools/notion.svg",
-    "aiTools": "/images/tools/ai-tools--chatgpt--claude-.svg",
+    "ai-tools": "/images/tools/ai-tools--chatgpt--claude-.svg",
     "wordpress": "/images/tools/wordpress.svg",
-    "googleSearchConsole": "/images/tools/google-search-console.svg",
-    "googleMyBusiness": "/images/tools/google-my-business.svg"
+    "google-search-console": "/images/tools/google-search-console.svg",
+    "google-business-profile": "/images/tools/google-my-business.svg"
   },
   "videoStickers": {
     "one": "",

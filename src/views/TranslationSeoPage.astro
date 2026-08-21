@@ -1,228 +1,216 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ScrollReveal from '../components/ScrollReveal';
 import PageTransition from '../components/PageTransition';
-import StaggerContainer, { StaggerItem } from '../components/StaggerContainer';
 import RichText from '../components/RichText.astro';
 import TypedTitle from '../components/TypedTitle.astro';
-import { getLangFromUrl, t } from '../i18n';
+import GsapPageRuntime from '../components/GsapPageRuntime.astro';
+import ExperienceTabs from '../components/translation/ExperienceTabs';
+import ServiceSwitcher from '../components/translation/ServiceSwitcher';
+import { getLangFromUrl, getLocalizedPath, t } from '../i18n';
 import { siteData } from '../lib/siteData';
-import { getTranslationToolTiles } from '../lib/translationPage.js';
+import { getTranslationArsenalColumns } from '../lib/translationPage.js';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
 const page = i.translationPage;
-const toolTiles = getTranslationToolTiles(lang, siteData, page.skills.tools.items);
+const arsenalColumns = getTranslationArsenalColumns(lang, siteData);
 
 const pageTitle = `${i.hero.name} — ${i.nav.translationSeo}`;
 const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' ').trim();
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
+  <GsapPageRuntime />
   <PageTransition client:load>
-    <section class="relative overflow-hidden border-b border-black/10 bg-paper px-6 pt-28 pb-20 md:pt-32 md:pb-24">
-      <div class="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(232,50,86,0.12),transparent_68%)]"></div>
-      <div class="site-container relative grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
-        <div class="max-w-4xl space-y-6">
-          <div class="inline-flex items-center gap-4 border-y border-black/12 py-3">
-            <p class="font-body text-xs font-semibold uppercase tracking-[0.28em] text-amaranth">{page.hero.eyebrow}</p>
+    <div class="bg-paper" data-translation-page>
+      <section class="relative overflow-hidden border-b border-black/10 bg-paper px-6 pb-20 pt-28 md:pb-24 md:pt-32">
+        <div class="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(232,50,86,0.14),transparent_68%)]"></div>
+        <div class="site-container relative grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+          <div class="max-w-4xl space-y-6">
+            <div class="inline-flex items-center gap-4 border-y border-black/12 py-3">
+              <p class="font-body text-xs font-semibold uppercase tracking-[0.28em] text-amaranth">{page.hero.eyebrow}</p>
+            </div>
+
+            <TypedTitle
+              as="h1"
+              text={page.hero.title}
+              trigger="load"
+              class="max-w-[14ch] font-heading text-5xl leading-[0.92] tracking-[-0.04em] text-ink md:text-7xl"
+            />
+
+            <RichText text={page.hero.text} class="max-w-3xl text-lg leading-8 text-ink-muted" />
+
+            <div class="flex flex-wrap items-center gap-4 pt-2">
+              <a
+                href={getLocalizedPath('/ugc', lang)}
+                class="inline-flex items-center gap-3 rounded-full border border-amaranth bg-amaranth px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink transition hover:-translate-y-0.5 hover:bg-ink hover:text-paper"
+              >
+                {page.hero.ctaPrimary}
+              </a>
+              <a
+                href={getLocalizedPath('/contact', lang)}
+                class="inline-flex items-center gap-3 rounded-full border border-black/10 bg-white px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink transition hover:-translate-y-0.5 hover:border-amaranth hover:text-amaranth"
+              >
+                {page.hero.ctaSecondary}
+              </a>
+            </div>
           </div>
+
+          <div class="border border-black/10 bg-white/84 p-6 shadow-[0_18px_40px_rgba(6,4,3,0.06)] backdrop-blur md:p-8">
+            <RichText text={page.hero.backgroundLabel} class="font-body text-xs font-semibold uppercase tracking-[0.24em] text-amaranth" />
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-ink px-6 py-14 text-paper md:py-18">
+        <div class="site-container space-y-6">
+          <div class="max-w-2xl">
+            <p class="font-body text-xs font-semibold uppercase tracking-[0.28em] text-amaranth-soft">{page.services.title}</p>
+          </div>
+          <ServiceSwitcher client:load items={page.services.items} title={page.services.title} />
+        </div>
+      </section>
+
+      <section class="px-6 py-14 md:py-18" data-arsenal-section>
+        <div class="site-container space-y-10">
           <TypedTitle
-            as="h1"
-            text={page.hero.title}
-            trigger="load"
-            class="max-w-[13ch] font-heading text-5xl leading-none text-ink md:text-7xl"
+            as="h2"
+            text={page.arsenal.title}
+            trigger="visible"
+            class="font-heading text-4xl text-ink md:text-5xl"
           />
-          <RichText text={page.hero.text} class="max-w-4xl text-lg leading-8 text-ink-muted" />
-          <p class="max-w-3xl font-body text-sm font-semibold uppercase tracking-[0.24em] text-ink">{page.hero.availability}</p>
-        </div>
 
-        <ScrollReveal client:visible delay={0.12}>
-          <div class="border border-black/10 bg-white p-6 shadow-[0_18px_40px_rgba(6,4,3,0.06)] md:p-8">
-            <p class="font-body text-xs font-semibold uppercase tracking-[0.24em] text-amaranth">{page.hero.backgroundLabel}</p>
-          </div>
-        </ScrollReveal>
-      </div>
-    </section>
-
-    <ScrollReveal client:visible className="px-6 py-16 md:py-20">
-      <section class="site-container space-y-8">
-        <div class="max-w-2xl border-t border-black/10 pt-6">
-          <h2 class="font-heading text-4xl text-ink md:text-5xl">{page.services.title}</h2>
-        </div>
-        <StaggerContainer client:visible className="grid gap-6 md:grid-cols-3" staggerDelay={0.12}>
-          {page.services.items.map((service) => (
-            <StaggerItem>
-              <article class="h-full border border-black/10 bg-white p-8 shadow-[0_18px_40px_rgba(6,4,3,0.06)]">
-                <h3 class="font-heading text-3xl text-ink">{service.name}</h3>
-                <RichText text={service.description} class="mt-4 text-sm leading-7 text-ink-muted" />
-              </article>
-            </StaggerItem>
-          ))}
-        </StaggerContainer>
-      </section>
-    </ScrollReveal>
-
-    <ScrollReveal client:visible className="px-6 py-4 md:py-8">
-      <section class="site-container border border-black/10 bg-white p-8 shadow-[0_18px_40px_rgba(6,4,3,0.06)] md:p-10">
-        <div class="max-w-3xl">
-          <p class="font-body text-xs font-semibold uppercase tracking-[0.24em] text-amaranth">{page.experience.eyebrow}</p>
-          <h2 class="mt-4 font-heading text-4xl text-ink md:text-5xl">{page.experience.title}</h2>
-          <RichText text={page.experience.text} class="mt-4 text-base leading-8 text-ink-muted" />
-        </div>
-        <div class="mt-10 grid gap-6 md:grid-cols-3">
-          {page.experience.cards.map((card) => (
-            <article class="border border-black/10 bg-paper p-6 md:p-7">
-              <h3 class="font-heading text-2xl text-ink">{card.title}</h3>
-              <p class="mt-4 font-body text-xs font-semibold uppercase tracking-[0.24em] text-amaranth">{card.highlight}</p>
-              <RichText text={card.text} class="mt-4 text-sm leading-7 text-ink-muted" />
-            </article>
-          ))}
-        </div>
-      </section>
-    </ScrollReveal>
-
-    <ScrollReveal client:visible className="px-6 py-12 md:py-16">
-      <section class="site-container border border-white/10 bg-ink p-8 text-paper shadow-[0_18px_40px_rgba(6,4,3,0.12)] md:p-10">
-        <div class="max-w-3xl">
-          <p class="font-body text-xs font-semibold uppercase tracking-[0.24em] text-amaranth-soft">{page.skills.eyebrow}</p>
-          <h2 class="mt-4 font-heading text-4xl text-paper md:text-5xl">{page.skills.title}</h2>
-          <RichText text={page.skills.text} class="mt-4 text-base leading-8 text-white/74" />
-        </div>
-        <div class="mt-10 grid gap-6 lg:grid-cols-3">
-          <article class="border border-white/10 bg-white/5 p-6">
-            <h3 class="font-heading text-2xl text-paper">{page.skills.linguistic.title}</h3>
-            <div class="mt-5 flex flex-wrap gap-3">
-              {page.skills.linguistic.items.map((item) => (
-                <span class="border border-white/12 bg-white/5 px-4 py-2 text-sm text-paper">{item}</span>
-              ))}
-            </div>
-          </article>
-          <article class="border border-white/10 bg-white/5 p-6">
-            <h3 class="font-heading text-2xl text-paper">{page.skills.webOptimization.title}</h3>
-            <div class="mt-5 flex flex-wrap gap-3">
-              {page.skills.webOptimization.items.map((item) => (
-                <span class="border border-white/12 bg-white/5 px-4 py-2 text-sm text-paper">{item}</span>
-              ))}
-            </div>
-          </article>
-          <article class="border border-black/10 bg-white p-6 text-ink">
-            <h3 class="font-heading text-2xl text-ink">{page.skills.tools.title}</h3>
-            <div class="mt-5 grid grid-cols-3 gap-4 sm:grid-cols-4">
-              {toolTiles.map((item) => (
-                <div class="flex flex-col items-center gap-2 text-center">
-                  <div class="flex h-12 w-12 items-center justify-center border border-black/10 bg-paper">
-                    <img src={item.logoSrc} alt={item.label} class="h-7 w-7 object-contain" />
+          <div class="grid gap-6 lg:grid-cols-3">
+            <article class="border border-black/10 bg-white p-6 shadow-[0_16px_36px_rgba(6,4,3,0.05)]">
+              <p class="font-body text-xs font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.languagesTitle}</p>
+              <span class="mt-4 block h-px bg-black/10" data-arsenal-line></span>
+              <div class="mt-6 grid gap-4 sm:grid-cols-2" data-arsenal-items>
+                {arsenalColumns.languages.map((language) => (
+                  <div class="border border-black/10 bg-paper px-4 py-4" data-arsenal-item>
+                    <p class="font-heading text-2xl text-ink">{language.label}</p>
+                    <p class="mt-2 text-sm text-ink-muted">{language.level}</p>
                   </div>
-                  <span class="text-xs leading-tight text-ink-muted">{item.label}</span>
-                </div>
+                ))}
+              </div>
+            </article>
+
+            <article class="border border-black/10 bg-white p-6 shadow-[0_16px_36px_rgba(6,4,3,0.05)]">
+              <p class="font-body text-xs font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.toolsTitle}</p>
+              <span class="mt-4 block h-px bg-black/10" data-arsenal-line></span>
+              <div class="mt-6 grid gap-4 sm:grid-cols-2" data-arsenal-items>
+                {arsenalColumns.tools.map((tool) => (
+                  <div class="flex items-center gap-4 border border-black/10 bg-paper px-4 py-4" data-arsenal-item>
+                    <div class="flex h-12 w-12 items-center justify-center border border-black/10 bg-white">
+                      <img src={tool.logoSrc} alt={tool.label} class="h-7 w-7 object-contain" />
+                    </div>
+                    <p class="text-sm leading-6 text-ink">{tool.label}</p>
+                  </div>
+                ))}
+              </div>
+            </article>
+
+            <article class="border border-black/10 bg-white p-6 shadow-[0_16px_36px_rgba(6,4,3,0.05)]">
+              <p class="font-body text-xs font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.skillsTitle}</p>
+              <span class="mt-4 block h-px bg-black/10" data-arsenal-line></span>
+              <div class="mt-6 flex flex-wrap gap-3" data-arsenal-items>
+                {arsenalColumns.skills.map((skill) => (
+                  <span class="border border-black/10 bg-paper px-4 py-2 text-sm text-ink" data-arsenal-item>{skill.label}</span>
+                ))}
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-14 md:py-18">
+        <div class="site-container">
+          <ExperienceTabs
+            client:load
+            tabs={{
+              education: {
+                label: page.browserTabs.education,
+                intro: page.education.intro,
+                studies: page.education.studies,
+              },
+              experience: {
+                label: page.browserTabs.experience,
+                intro: page.experience.intro,
+                cards: page.experience.cards,
+              },
+            }}
+          />
+        </div>
+      </section>
+
+      <section class="bg-ink px-6 py-14 text-paper md:py-18" data-methodology-section>
+        <div class="site-container space-y-10">
+          <TypedTitle
+            as="h2"
+            text={page.methodology.title}
+            trigger="visible"
+            class="font-heading text-4xl text-paper md:text-5xl"
+          />
+
+          <div class="relative">
+            <span class="absolute left-6 top-4 block h-[calc(100%-2rem)] w-px bg-white/12 md:hidden" data-methodology-connector></span>
+            <span class="absolute left-10 right-10 top-10 hidden h-px bg-white/12 md:block" data-methodology-connector></span>
+
+            <div class="grid gap-6 md:grid-cols-4">
+              {page.methodology.steps.map((step, index) => (
+                <article class="group relative pl-16 md:pl-0" data-methodology-step tabindex="0">
+                  <div class="absolute left-0 top-0 flex h-12 w-12 items-center justify-center rounded-full border border-white/12 bg-white/6 font-body text-sm font-semibold uppercase tracking-[0.16em] text-amaranth transition group-hover:-translate-y-1 group-hover:border-amaranth group-hover:bg-amaranth group-hover:text-ink group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth group-focus-visible:bg-amaranth group-focus-visible:text-ink md:relative md:mx-auto">
+                    0{index + 1}
+                  </div>
+                  <div class="border border-white/10 bg-white/5 p-6 transition group-hover:-translate-y-1 group-hover:border-amaranth/50 group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth/50 md:mt-6">
+                    <h3 class="font-heading text-2xl text-paper">{step.title}</h3>
+                    <p class="mt-4 text-sm leading-7 text-white/72">{step.description}</p>
+                  </div>
+                </article>
               ))}
             </div>
-          </article>
-        </div>
-      </section>
-    </ScrollReveal>
-
-    <ScrollReveal client:visible className="px-6 py-4 md:py-8">
-      <section class="site-container grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
-        <div class="border border-black/10 bg-white p-8 shadow-[0_18px_40px_rgba(6,4,3,0.06)]">
-          <p class="font-body text-xs font-semibold uppercase tracking-[0.24em] text-amaranth">{page.education.eyebrow}</p>
-          <h2 class="mt-4 font-heading text-4xl text-ink">{page.education.title}</h2>
-          <RichText text={page.education.intro} class="mt-4 text-base leading-8 text-ink-muted" />
-          <ul class="mt-6 space-y-4 text-base leading-8 text-ink">
-            {page.education.studies.map((study) => (
-              <li class="flex gap-3">
-                <span class="mt-2 h-2.5 w-2.5 rounded-full bg-amaranth"></span>
-                <span>{study}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div class="border border-black/10 bg-paper p-8 shadow-[0_18px_40px_rgba(6,4,3,0.06)]">
-          <p class="font-body text-xs font-semibold uppercase tracking-[0.24em] text-amaranth">{page.education.languagesEyebrow}</p>
-          <h2 class="mt-4 font-heading text-4xl text-ink">{page.education.languagesTitle}</h2>
-          <div class="mt-6 space-y-4">
-            {page.education.languages.map((language) => (
-              <div class="border border-black/10 bg-white px-5 py-4">
-                <div class="flex items-center justify-between gap-4">
-                  <span class="font-heading text-2xl text-ink">{language.name}</span>
-                  <span class="border border-black/10 bg-paper px-3 py-1 text-sm text-ink">{language.level}</span>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
-    </ScrollReveal>
 
-    <ScrollReveal client:visible className="px-6 py-4 md:py-8">
-      <section class="site-container border border-black/10 bg-paper p-8 shadow-[0_18px_40px_rgba(6,4,3,0.06)] md:p-10">
-        <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div class="max-w-3xl">
-            <p class="font-body text-xs font-semibold uppercase tracking-[0.24em] text-amaranth">{page.servicesOffered.eyebrow}</p>
-            <h2 class="mt-4 font-heading text-4xl text-ink">{page.servicesOffered.title}</h2>
-          </div>
-          <RichText text={page.servicesOffered.intro} class="max-w-xl text-sm leading-7 text-ink-muted" />
-        </div>
-        <div class="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {page.servicesOffered.items.map((item, index) => (
-            <article class="border border-black/10 bg-white p-6 shadow-[0_12px_24px_rgba(6,4,3,0.04)]">
-              <div class="flex h-12 w-12 items-center justify-center border border-black/10 bg-paper font-body text-lg font-semibold text-amaranth">
-                0{index + 1}
-              </div>
-              <h3 class="mt-5 font-heading text-2xl text-ink">{item}</h3>
-            </article>
-          ))}
-        </div>
-      </section>
-    </ScrollReveal>
+      <section class="px-6 py-14 md:py-18" data-why-section>
+        <div class="site-container space-y-10">
+          <TypedTitle
+            as="h2"
+            text={page.whyChooseMe.title}
+            trigger="visible"
+            class="max-w-3xl font-heading text-4xl text-ink md:text-5xl"
+          />
 
-    <ScrollReveal client:visible className="px-6 py-12">
-      <section class="site-container border border-black/10 bg-white p-8 shadow-[0_18px_40px_rgba(6,4,3,0.06)] md:p-10">
-        <div class="max-w-3xl">
-          <p class="font-body text-xs font-semibold uppercase tracking-[0.24em] text-amaranth">{page.process.eyebrow}</p>
-          <h2 class="mt-4 font-heading text-4xl text-ink">{page.process.title}</h2>
-          <RichText text={page.process.intro} class="mt-4 text-base leading-8 text-ink-muted" />
-        </div>
-
-        <div class="relative mt-10">
-          <div class="absolute bottom-6 left-[1.45rem] top-6 w-px bg-black/10 md:left-10 md:right-10 md:top-10 md:h-px md:w-auto"></div>
-          <div class="grid gap-6 md:grid-cols-4">
-            {page.process.steps.map((step, index) => (
-              <article class="relative pl-14 md:pl-0">
-                <div class="absolute left-0 top-0 flex h-12 w-12 items-center justify-center border border-black/10 bg-paper font-body text-lg font-semibold text-amaranth md:relative md:mx-auto">
-                  {index + 1}
-                </div>
-                <div class="border border-black/10 bg-paper p-6 md:mt-6">
-                  <p class="font-body text-xs font-semibold uppercase tracking-[0.24em] text-amaranth">0{index + 1}</p>
-                  <h3 class="mt-3 font-heading text-2xl text-ink">{step.title}</h3>
-                  <RichText text={step.description} class="mt-3 text-sm leading-7 text-ink-muted" />
+          <div class="grid gap-6 md:grid-cols-3">
+            {page.whyChooseMe.cards.map((card) => (
+              <article class="group border border-black/10 bg-white p-6 shadow-[0_16px_36px_rgba(6,4,3,0.05)]" data-why-card tabindex="0">
+                <div class="flex items-start gap-3">
+                  <span class="text-amaranth transition group-hover:opacity-100 group-focus-visible:opacity-100">[</span>
+                  <div class="space-y-4">
+                    <h3 class="font-heading text-3xl text-ink">{card.title}</h3>
+                    <p class="text-sm leading-7 text-ink-muted">{card.text}</p>
+                  </div>
+                  <span class="text-amaranth transition group-hover:opacity-100 group-focus-visible:opacity-100">]</span>
                 </div>
               </article>
             ))}
           </div>
         </div>
       </section>
-    </ScrollReveal>
-
-    <StaggerContainer client:visible className="mx-auto grid max-w-6xl gap-6 px-6 pb-12 md:grid-cols-3" staggerDelay={0.14}>
-      <StaggerItem className="md:col-span-3">
-        <section class="border border-white/10 bg-ink p-8 text-paper shadow-[0_18px_40px_rgba(6,4,3,0.12)] md:p-10">
-          <p class="font-body text-xs font-semibold uppercase tracking-[0.24em] text-amaranth-soft">{page.whyMe.eyebrow}</p>
-          <h2 class="mt-4 font-heading text-4xl text-paper">{page.whyMe.title}</h2>
-          <RichText text={page.whyMe.text} class="mt-4 max-w-3xl text-base leading-8 text-white/74" />
-        </section>
-      </StaggerItem>
-
-      {page.whyMe.cards.map((card) => (
-        <StaggerItem>
-          <article class="h-full border border-black/10 bg-white p-8 shadow-[0_18px_40px_rgba(6,4,3,0.06)]">
-            <h3 class="font-heading text-3xl text-ink">{card.title}</h3>
-            <RichText text={card.text} class="mt-4 text-sm leading-7 text-ink-muted" />
-          </article>
-        </StaggerItem>
-      ))}
-    </StaggerContainer>
+    </div>
   </PageTransition>
+
+  <script>
+    import { initTranslationPageMotion } from '../lib/translationPageMotion.ts';
+
+    const mountTranslationPage = () => {
+      void initTranslationPageMotion();
+    };
+
+    mountTranslationPage();
+    document.addEventListener('astro:page-load', mountTranslationPage);
+    document.addEventListener('astro:before-preparation', () => {
+      window.__mgTranslationPageMotion?.cleanup?.();
+    });
+  </script>
 </BaseLayout>

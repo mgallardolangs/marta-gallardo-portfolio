@@ -251,33 +251,45 @@
   },
   "translationPage": {
     "hero": {
+      "backgroundLabel": "Was der Text sagt → Übersetzung.\nWie jedes Publikum ihn versteht → Lokalisierung.\nWie Menschen ihn finden → SEO.",
       "eyebrow": "Mehrsprachige Kommunikation",
       "title": "Übersetzungs-, SEO- und Lokalisierungsdienstleistungen",
       "text": "Ich passe Inhalte so an, dass sie natürlich klingen, mit jedem Markt in Verbindung treten und bessere Chancen haben, gefunden zu werden. Übersetzung, Lokalisierung und mehrsprachiges SEO mit einer gemeinsamen Absicht: dass deine Botschaft funktioniert, egal wo dein Publikum ist.",
-      "availability": "Verfügbar für Freelance-Projekte, punktuelle Zusammenarbeit und laufende redaktionelle Unterstützung.",
-      "backgroundLabel": "Was der Text sagt → Übersetzung.\nWie jedes Publikum ihn versteht → Lokalisierung.\nWie Menschen ihn finden → SEO."
+      "ctaPrimary": "PORTFOLIO ANSEHEN",
+      "ctaSecondary": "LASSEN SIE UNS SPRECHEN"
     },
     "services": {
-      "title": "Wobei ich unterstützen kann",
+      "title": "Leistungen",
       "items": [
         {
+          "id": "translation",
           "name": "Übersetzung",
           "description": "Ich übersetze nicht nur Wörter, sondern passe Botschaften so an, dass sie ihre Bedeutung, ihren Ton und ihre Verbindungskraft behalten."
         },
         {
+          "id": "localization",
           "name": "Lokalisierung",
           "description": "Jeder Markt hat eigene Referenzen, Ausdrucksweisen und Kommunikationscodes. Ich passe Inhalte so an, dass sie in ihrem jeweiligen Kontext natürlich wirken."
         },
         {
+          "id": "multilingual-seo",
           "name": "Mehrsprachiges SEO",
           "description": "Ich optimiere Inhalte für Suchmaschinen, ohne Natürlichkeit, Markenstimme oder Lesbarkeit zu beeinträchtigen."
         }
       ]
     },
+    "arsenal": {
+      "title": "Mein technisches Arsenal",
+      "languagesTitle": "Sprachen",
+      "toolsTitle": "Werkzeuge",
+      "skillsTitle": "Fähigkeiten"
+    },
+    "browserTabs": {
+      "education": "Ausbildung",
+      "experience": "Erfahrung"
+    },
     "experience": {
-      "eyebrow": "Beruflicher Weg",
-      "title": "Erfahrung",
-      "text": "Praktische Erfahrung in echter Kommunikation, im direkten Kontakt mit Menschen und in der sprachlichen Anpassung für unterschiedliche Kontexte.",
+      "intro": "Praktische Erfahrung in echter Kommunikation, im direkten Kontakt mit Menschen und in der sprachlichen Anpassung für unterschiedliche Kontexte.",
       "cards": [
         {
           "title": "E-Commerce-Übersetzung und Content-Management + Kundenservice auf Französisch",
@@ -296,95 +308,17 @@
         }
       ]
     },
-    "skills": {
-      "eyebrow": "Kompetenzen",
-      "title": "Fähigkeiten",
-      "text": "Eine Arbeitsweise für Texte, die natürlich klingen, zur Marke passen und online gut funktionieren sollen.",
-      "linguistic": {
-        "title": "Sprachdienstleistungen",
-        "items": [
-          "Übersetzung und Inhaltsanpassung FR⇄ES und EN/DE/IT/CA→ES",
-          "Website-Lokalisierung",
-          "Korrektorat, Lektorat und stilistische Optimierung",
-          "Terminologierecherche und Glossarmanagement"
-        ]
-      },
-      "webOptimization": {
-        "title": "Optimierung von Webinhalten",
-        "items": [
-          "Lokales SEO",
-          "Suchmaschinenoptimierung für Inhalte",
-          "Keyword-Planung",
-          "Copywriting"
-        ]
-      },
-      "tools": {
-        "title": "Tools",
-        "items": [
-          "Microsoft Office",
-          "Google Workspace",
-          "Notion",
-          "KI-Tools (ChatGPT, Claude)",
-          "WordPress",
-          "Google Search Console",
-          "Google Unternehmensprofil"
-        ]
-      }
-    },
     "education": {
-      "eyebrow": "AUSBILDUNG UND SPRACHPROFIL",
-      "title": "Ausbildung",
       "intro": "Ein akademisches Fundament mit Fokus auf Sprachen, interkulturelle Kommunikation und Schreiben, gestärkt durch praktische Erfahrungen in internationalen Umfeldern.",
       "studies": [
         "Studium der Übersetzungs- und Dolmetschwissenschaft mit Schwerpunkt Französisch, Schreiben und Inhaltsanpassung.",
         "Sechsmonatiges Erasmus+ in Paris und tägliche Praxis in frankophonen Umgebungen.",
         "Kontinuierliche Weiterbildung in klarem Schreiben, Terminologie und der Optimierung digitaler Inhalte.",
         "Praktikum in juristischer Übersetzung FR→ES und Post-Editing an der Seite einer spezialisierten Übersetzerin."
-      ],
-      "languagesEyebrow": "Sprachkenntnisse",
-      "languagesTitle": "Sprachen",
-      "languages": [
-        {
-          "name": "Spanisch",
-          "level": "Muttersprache"
-        },
-        {
-          "name": "Französisch",
-          "level": "Fortgeschritten · C1"
-        },
-        {
-          "name": "Katalanisch",
-          "level": "Fortgeschritten"
-        },
-        {
-          "name": "Englisch",
-          "level": "Mittelstufe · B1"
-        },
-        {
-          "name": "Deutsch",
-          "level": "Grundkenntnisse · A2"
-        },
-        {
-          "name": "Italienisch",
-          "level": "Grundkenntnisse · A2"
-        }
       ]
     },
-    "servicesOffered": {
-      "eyebrow": "Mein Angebot",
-      "title": "Leistungen",
-      "intro": "Individuelle Unterstützung für Unternehmen, deren Inhalte über Sprachen, Plattformen und Suchkontexte hinweg funktionieren müssen.",
-      "items": [
-        "Website-Übersetzung",
-        "Inhaltslokalisierung",
-        "Mehrsprachiges SEO & Copywriting",
-        "Korrektorat und Textbearbeitung"
-      ]
-    },
-    "process": {
-      "eyebrow": "Methodik",
-      "title": "So arbeite ich",
-      "intro": "Ein klarer und strukturierter Workflow sorgt dafür, dass jedes Projekt effizient, abgestimmt und veröffentlichungsreif umgesetzt wird.",
+    "methodology": {
+      "title": "Methodik und Infografik",
       "steps": [
         {
           "title": "Briefing",
@@ -404,10 +338,8 @@
         }
       ]
     },
-    "whyMe": {
-      "eyebrow": "Was mich auszeichnet",
-      "title": "Warum mit mir arbeiten?",
-      "text": "Sprachen, Praxiserfahrung und ein echtes Engagement für jeden Inhalt, den ich liefere.",
+    "whyChooseMe": {
+      "title": "Warum sollten Sie mich für Ihr Projekt wählen?",
       "cards": [
         {
           "title": "Sprachen mit professionellem Urteilsvermögen eingesetzt",

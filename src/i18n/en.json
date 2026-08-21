@@ -255,29 +255,41 @@
       "eyebrow": "Multilingual communication",
       "title": "Translation, SEO & Localization Services",
       "text": "I adapt content so it sounds natural, connects with each market and has more chances to be found. Translation, localization and multilingual SEO with one shared intention: to make your message work, wherever your audience is.",
-      "availability": "Available for freelance projects, one-off collaborations and ongoing editorial support."
+      "ctaPrimary": "VIEW PORTFOLIO",
+      "ctaSecondary": "LET'S TALK"
     },
     "services": {
-      "title": "How I can help",
+      "title": "Services",
       "items": [
         {
+          "id": "translation",
           "name": "Translation",
           "description": "More than translating words, I adapt messages so they preserve their meaning, tone and ability to connect with the people they're written for."
         },
         {
+          "id": "localization",
           "name": "Localization",
           "description": "Every market has its own cultural references, expectations and way of communicating. I adapt content so it feels natural, relevant and authentic in every context."
         },
         {
+          "id": "multilingual-seo",
           "name": "Multilingual SEO",
           "description": "I optimise content for search engines without compromising readability, brand voice or the overall user experience."
         }
       ]
     },
+    "arsenal": {
+      "title": "My technical arsenal",
+      "languagesTitle": "Languages",
+      "toolsTitle": "Tools",
+      "skillsTitle": "Skills"
+    },
+    "browserTabs": {
+      "education": "Education",
+      "experience": "Experience"
+    },
     "experience": {
-      "eyebrow": "Professional path",
-      "title": "Experience",
-      "text": "Hands-on experience in real communication, direct contact with people and language adaptation across different contexts.",
+      "intro": "Hands-on experience in real communication, direct contact with people and language adaptation across different contexts.",
       "cards": [
         {
           "title": "Ecommerce translation and content management + customer service in French",
@@ -296,95 +308,17 @@
         }
       ]
     },
-    "skills": {
-      "eyebrow": "Capabilities",
-      "title": "Skills",
-      "text": "A working approach designed for texts that need to sound natural, stay aligned with the brand and perform well online.",
-      "linguistic": {
-        "title": "Language services",
-        "items": [
-          "Translation and content adaptation FR⇄ES and EN/DE/IT/CA→ES",
-          "Website localization",
-          "Proofreading, editing and style refinement",
-          "Terminology research and glossary management"
-        ]
-      },
-      "webOptimization": {
-        "title": "Web content optimization",
-        "items": [
-          "Local SEO",
-          "Multilingual SEO",
-          "Keyword planner",
-          "Copywriting"
-        ]
-      },
-      "tools": {
-        "title": "Tools",
-        "items": [
-          "Microsoft Office",
-          "Google Workspace",
-          "Notion",
-          "AI tools (ChatGPT, Claude)",
-          "WordPress",
-          "Google Search Console",
-          "Google Business Profile"
-        ]
-      }
-    },
     "education": {
-      "eyebrow": "EDUCATION AND LANGUAGE PROFILE",
-      "title": "Education",
       "intro": "An academic foundation centered on languages, intercultural communication and writing, strengthened by practical immersion in international environments.",
       "studies": [
         "Degree in Translation and Interpreting, specialized in French, writing and content adaptation.",
         "Six-month Erasmus+ program in Paris and daily practice in French-speaking environments.",
         "Continuous training in clear writing, terminology and digital content optimization.",
         "Legal translation internship FR→ES and post-editing alongside a specialized translator."
-      ],
-      "languagesEyebrow": "Language skills",
-      "languagesTitle": "Languages",
-      "languages": [
-        {
-          "name": "Spanish",
-          "level": "Native"
-        },
-        {
-          "name": "French",
-          "level": "Advanced · C1"
-        },
-        {
-          "name": "Catalan",
-          "level": "Advanced"
-        },
-        {
-          "name": "English",
-          "level": "Intermediate · B1"
-        },
-        {
-          "name": "German",
-          "level": "Basic · A2"
-        },
-        {
-          "name": "Italian",
-          "level": "Basic · A2"
-        }
       ]
     },
-    "servicesOffered": {
-      "eyebrow": "What I offer",
-      "title": "Services I offer",
-      "intro": "Tailored support for businesses that need their content to work across languages, platforms and search contexts.",
-      "items": [
-        "Website translation",
-        "Content localization",
-        "SEO & copywriting",
-        "Proofreading and text editing"
-      ]
-    },
-    "process": {
-      "eyebrow": "Methodology",
-      "title": "How I work",
-      "intro": "A clear and structured workflow keeps every project efficient, aligned and ready to publish.",
+    "methodology": {
+      "title": "Methodology & infographic",
       "steps": [
         {
           "title": "Briefing",
@@ -404,10 +338,8 @@
         }
       ]
     },
-    "whyMe": {
-      "eyebrow": "What sets me apart",
-      "title": "Why work with me?",
-      "text": "Languages, real-world experience and a strong commitment to every piece of content I deliver.",
+    "whyChooseMe": {
+      "title": "Why choose me for your project?",
       "cards": [
         {
           "title": "Languages handled with professional judgment",

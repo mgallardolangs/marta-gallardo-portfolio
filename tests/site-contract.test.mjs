@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { getTranslationToolTiles } from '../src/lib/translationPage.js';
+import { getTranslationArsenalColumns, getTranslationToolTiles } from '../src/lib/translationPage.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -207,28 +207,20 @@ test('code-managed DE/IT/CA translation page chrome no longer reuses obvious Eng
   const placeholderPaths = [
     'translationPage.hero.eyebrow',
     'translationPage.hero.text',
-    'translationPage.hero.availability',
+    'translationPage.hero.backgroundLabel',
+    'translationPage.hero.ctaPrimary',
+    'translationPage.hero.ctaSecondary',
     'translationPage.services.title',
-    'translationPage.experience.eyebrow',
-    'translationPage.experience.title',
-    'translationPage.experience.text',
-    'translationPage.skills.eyebrow',
-    'translationPage.skills.title',
-    'translationPage.skills.text',
-    'translationPage.education.eyebrow',
-    'translationPage.education.title',
+    'translationPage.arsenal.title',
+    'translationPage.arsenal.languagesTitle',
+    'translationPage.arsenal.toolsTitle',
+    'translationPage.arsenal.skillsTitle',
+    'translationPage.browserTabs.education',
+    'translationPage.browserTabs.experience',
+    'translationPage.experience.intro',
     'translationPage.education.intro',
-    'translationPage.education.languagesEyebrow',
-    'translationPage.education.languagesTitle',
-    'translationPage.servicesOffered.eyebrow',
-    'translationPage.servicesOffered.title',
-    'translationPage.servicesOffered.intro',
-    'translationPage.process.eyebrow',
-    'translationPage.process.title',
-    'translationPage.process.intro',
-    'translationPage.whyMe.eyebrow',
-    'translationPage.whyMe.title',
-    'translationPage.whyMe.text',
+    'translationPage.methodology.title',
+    'translationPage.whyChooseMe.title',
   ];
 
   for (const locale of [de, it, ca]) {
@@ -242,15 +234,25 @@ test('code-managed DE/IT/CA translation page chrome no longer reuses obvious Eng
   }
 });
 
-test('translation page tool locales keep i18n tool counts aligned with stable site-data tools', async () => {
+test('translation page arsenal columns stay aligned with stable site data for every locale', async () => {
   const site = await readJson('src/data/site.json');
 
   for (const locale of locales) {
-    const dictionary = await readJson(`src/i18n/${locale}.json`);
+    const columns = getTranslationArsenalColumns(locale, site);
     assert.equal(
-      dictionary.translationPage.skills.tools.items.length,
+      columns.languages.length,
+      6,
+      `${locale} should keep six separate language tiles`,
+    );
+    assert.equal(
+      columns.tools.length,
       site.arsenal.tools.length,
-      `${locale} tool label count should stay aligned with stable tool IDs`,
+      `${locale} should keep tool tiles aligned with stable tool IDs`,
+    );
+    assert.equal(
+      columns.skills.length,
+      site.arsenal.skills.length,
+      `${locale} should keep combined skills aligned with stable site data`,
     );
   }
 });
@@ -259,8 +261,7 @@ test('translation page tool tiles resolve logos from stable tool IDs for every l
   const site = await readJson('src/data/site.json');
 
   for (const locale of locales) {
-    const dictionary = await readJson(`src/i18n/${locale}.json`);
-    const tiles = getTranslationToolTiles(locale, site, dictionary.translationPage.skills.tools.items);
+    const tiles = getTranslationToolTiles(locale, site);
 
     assert.equal(tiles.length, site.arsenal.tools.length, `${locale} should expose one tile per arsenal tool`);
 
@@ -302,13 +303,13 @@ test('translation page tool tiles prefer editable i18n labels while keeping stab
     {
       id: 'microsoft-office',
       label: 'Microsoft 365',
-      logoKey: 'microsoftOffice',
+      logoKey: 'microsoft-office',
       logoSrc: '/logos/microsoft.svg',
     },
     {
       id: 'google-workspace',
       label: 'Espacio de trabajo Google',
-      logoKey: 'googleWorkspace',
+      logoKey: 'google-workspace',
       logoSrc: '/logos/google.svg',
     },
   ]);
@@ -333,26 +334,26 @@ test('translation page tool tiles preserve intentionally blank editable labels i
     {
       id: 'microsoft-office',
       label: '',
-      logoKey: 'microsoftOffice',
+      logoKey: 'microsoft-office',
       logoSrc: '/logos/microsoft.svg',
     },
   ]);
 });
 
-test('admin translation SEO page uses stable tool IDs instead of translated labels for logo lookups', async () => {
+test('admin translation SEO page uses stable site-data collections for arsenal content', async () => {
   const source = await readFile(path.join(rootDir, 'src/pages/admin/translation-seo.astro'), 'utf8');
 
-  assert.doesNotMatch(source, /const toolLogoMap/);
-  assert.match(source, /import\s+\{\s*getTranslationToolTiles\s*\}\s+from\s+['"]..\/..\/lib\/translationPage\.js['"]/);
-  assert.match(source, /const toolTiles = getTranslationToolTiles\(lang, imagesData, page\.skills\.tools\.items\);/);
+  assert.match(source, /import\s+\{\s*getTranslationArsenalColumns\s*\}\s+from\s+['"]..\/..\/lib\/translationPage\.js['"]/);
+  assert.match(source, /const arsenalColumns = getTranslationArsenalColumns\(lang, imagesData\);/);
+  assert.doesNotMatch(source, /translationPage\.skills\.tools\.items/);
 });
 
-test('shared public translation SEO view feeds editable i18n tool labels into translation tiles', async () => {
+test('shared public translation SEO view uses site data as the arsenal source of truth', async () => {
   const source = await readFile(path.join(rootDir, 'src/views/TranslationSeoPage.astro'), 'utf8');
 
   assert.match(
     source,
-    /const toolTiles = getTranslationToolTiles\(lang, siteData, page\.skills\.tools\.items\);/,
-    'src/views/TranslationSeoPage.astro should use editable i18n labels as the tool tile source of truth',
+    /const arsenalColumns = getTranslationArsenalColumns\(lang, siteData\);/,
+    'src/views/TranslationSeoPage.astro should use stable site data for arsenal columns',
   );
 });

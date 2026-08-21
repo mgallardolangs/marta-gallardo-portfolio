@@ -6,7 +6,23 @@ import {
   validateOrbitMediaItem,
   type OrbitAdminLang,
 } from '../../lib/orbitMedia.ts';
-import type { LocalizedText, OrbitMedia } from '../../lib/siteData.ts';
+import {
+  buildToolLogoUploadPath,
+  createEditableCollectionItem,
+  getEditableCollectionValidationErrors,
+  type AddEditableCollectionItemInput,
+  type EditableCollectionKind,
+  type EditableCollectionLocale,
+  updateCollectionLocalizedText,
+} from '../../lib/adminCollections.ts';
+import type {
+  LanguageItem,
+  LocalizedText,
+  OrbitMedia,
+  SiteData,
+  SkillItem,
+  ToolItem,
+} from '../../lib/siteData.ts';
 
 type Listener = () => void;
 export const SUPPORTED_LANGS = ['es', 'en', 'fr', 'de', 'it', 'ca'] as const;
@@ -59,6 +75,7 @@ type AdminSnapshot = {
   getImageSrc: (key: string) => string;
   getOrbitMedia: () => OrbitMedia[];
   getOrbitItemValidationErrors: (itemId: string) => string[];
+  getEditableCollection: (kind: EditableCollectionKind) => Array<LanguageItem | ToolItem | SkillItem>;
 };
 
 const DRAFT_STORAGE_KEY = 'marta-inline-editor-draft';
@@ -252,6 +269,7 @@ export class AdminStore {
     getImageSrc: (key: string) => this.getImageSrc(key),
     getOrbitMedia: () => this.getOrbitMedia(),
     getOrbitItemValidationErrors: (itemId: string) => this.getOrbitItemValidationErrors(itemId),
+    getEditableCollection: (kind: EditableCollectionKind) => this.getEditableCollection(kind),
   };
 
   isInitialized(): boolean {
@@ -311,6 +329,19 @@ export class AdminStore {
     });
   }
 
+  getEditableCollection(kind: EditableCollectionKind): Array<LanguageItem | ToolItem | SkillItem> {
+    const collection = this.getPersistedEditableCollection(kind);
+
+    if (kind !== 'tools') {
+      return collection;
+    }
+
+    return (collection as ToolItem[]).map((tool) => ({
+      ...tool,
+      logo: this.getImageSrc(`toolLogos.${tool.id}`) || tool.logo,
+    }));
+  }
+
   private getPersistedOrbitMedia(): OrbitMedia[] {
     const orbitMedia = deepGet(this.images, 'orbitMedia');
     if (!Array.isArray(orbitMedia)) return [];
@@ -326,6 +357,90 @@ export class AdminStore {
     this.publishSuccessState = false;
     this.publishErrorState = '';
     this.emit();
+  }
+
+  addEditableCollectionItem(kind: EditableCollectionKind, input: AddEditableCollectionItemInput): number {
+    if (!this.initialized) return -1;
+    const collection = this.getMutableEditableCollection(kind);
+    const nextItem = createEditableCollectionItem(
+      kind,
+      input,
+      collection.map((item) => String((item as { id: string }).id)),
+    );
+
+    collection.push(nextItem);
+
+    if (kind === 'tools') {
+      const tool = nextItem as ToolItem;
+      deepSet(this.images, `toolLogos.${tool.id}`, tool.logo);
+    }
+
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+    return collection.length - 1;
+  }
+
+  removeEditableCollectionItem(kind: EditableCollectionKind, index: number): void {
+    if (!this.initialized) return;
+    const collection = this.getMutableEditableCollection(kind);
+    const [removedItem] = collection.splice(index, 1);
+
+    if (kind === 'tools' && removedItem && typeof removedItem === 'object') {
+      const toolId = (removedItem as ToolItem).id;
+      delete this.pendingImages[`toolLogos.${toolId}`];
+      const toolLogos = deepGet(this.images, 'toolLogos');
+      if (toolLogos && typeof toolLogos === 'object') {
+        delete (toolLogos as Record<string, unknown>)[toolId];
+      }
+    }
+
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  moveEditableCollectionItem(kind: EditableCollectionKind, index: number, delta: number): void {
+    if (!this.initialized || delta === 0) return;
+    const collection = this.getMutableEditableCollection(kind);
+    const targetIndex = index + delta;
+
+    if (index < 0 || index >= collection.length || targetIndex < 0 || targetIndex >= collection.length) {
+      return;
+    }
+
+    const [item] = collection.splice(index, 1);
+    collection.splice(targetIndex, 0, item);
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  updateEditableCollectionText(
+    kind: EditableCollectionKind,
+    index: number,
+    field: 'label' | 'level',
+    lang: EditableCollectionLocale,
+    value: string,
+  ): void {
+    const collection = this.getMutableEditableCollection(kind);
+    const item = collection[index] as (LanguageItem | ToolItem | SkillItem | undefined);
+    if (!item || !(field in item)) return;
+
+    const localized = item[field];
+    if (!localized || typeof localized !== 'object') return;
+
+    item[field] = updateCollectionLocalizedText(localized as LocalizedText, lang, value) as never;
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  async setEditableToolLogo(index: number, file: File): Promise<void> {
+    const tools = this.getMutableEditableCollection('tools') as ToolItem[];
+    const item = tools[index];
+    if (!item) return;
+    await this.setImage(`toolLogos.${item.id}`, file, buildToolLogoUploadPath(item.id, file));
   }
 
   getImageSrc(key: string): string {
@@ -551,6 +666,15 @@ export class AdminStore {
       return;
     }
 
+    this.syncToolLogoPaths();
+    const editableCollectionErrors = getEditableCollectionValidationErrors(this.images as SiteData);
+    if (editableCollectionErrors.length > 0) {
+      this.publishErrorState = editableCollectionErrors.join(' ');
+      this.publishSuccessState = false;
+      this.emit();
+      return;
+    }
+
     if (!this.token) {
       this.publishErrorState = 'Login required before publishing.';
       this.publishSuccessState = false;
@@ -700,6 +824,34 @@ export class AdminStore {
     return nextOrbitMedia;
   }
 
+  private getPersistedEditableCollection(kind: EditableCollectionKind): Array<LanguageItem | ToolItem | SkillItem> {
+    const collection = deepGet(this.images, `arsenal.${kind}`);
+    if (!Array.isArray(collection)) return [];
+    return cloneValue(collection as Array<LanguageItem | ToolItem | SkillItem>);
+  }
+
+  private getMutableEditableCollection(kind: EditableCollectionKind): Array<LanguageItem | ToolItem | SkillItem> {
+    const collection = deepGet(this.images, `arsenal.${kind}`);
+    if (Array.isArray(collection)) return collection as Array<LanguageItem | ToolItem | SkillItem>;
+
+    const nextCollection: Array<LanguageItem | ToolItem | SkillItem> = [];
+    deepSet(this.images, `arsenal.${kind}`, nextCollection);
+    return nextCollection;
+  }
+
+  private syncToolLogoPaths(): void {
+    const toolLogos = deepGet(this.images, 'toolLogos');
+    const tools = deepGet(this.images, 'arsenal.tools');
+    if (!toolLogos || typeof toolLogos !== 'object' || !Array.isArray(tools)) return;
+
+    (tools as ToolItem[]).forEach((tool) => {
+      const mappedLogo = (toolLogos as Record<string, unknown>)[tool.id];
+      if (typeof mappedLogo === 'string' && mappedLogo.trim()) {
+        tool.logo = mappedLogo;
+      }
+    });
+  }
+
   private buildDraftPayload(): DraftPayload {
     const images = cloneValue(this.images);
     const pendingUploads = Object.keys(this.pendingImages).map((key) => ({ key }));
@@ -810,6 +962,7 @@ export class AdminStore {
       getImageSrc: (key: string) => this.getImageSrc(key),
       getOrbitMedia: () => this.getOrbitMedia(),
       getOrbitItemValidationErrors: (itemId: string) => this.getOrbitItemValidationErrors(itemId),
+      getEditableCollection: (kind: EditableCollectionKind) => this.getEditableCollection(kind),
     };
 
     this.listeners.forEach((listener) => listener());

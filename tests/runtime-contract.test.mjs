@@ -256,7 +256,7 @@ test('motion runtime keeps Lenis global while lazy-loading GSAP only for marked 
   );
 });
 
-test('built HTML pages avoid the GSAP page marker while the global motion bundle stays Lenis-only', async (t) => {
+test('built HTML pages keep the GSAP page marker scoped to home and translation routes while the global motion bundle stays Lenis-only', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built assets.');
     return;
@@ -268,11 +268,15 @@ test('built HTML pages avoid the GSAP page marker while the global motion bundle
 
   for (const htmlFile of htmlFiles) {
     const html = await readFile(htmlFile, 'utf8');
-    assert.doesNotMatch(
-      html,
-      /data-gsap-page/,
-      `${path.relative(rootDir, htmlFile)} should not contain the legacy GSAP page marker`,
-    );
+    const relativePath = path.relative(rootDir, htmlFile);
+    const allowsGsapMarker = /dist\/(?:[a-z]{2}\/)?(?:index|translation-seo\/index)\.html$/.test(relativePath.replace(/\\/g, '/'));
+
+    if (allowsGsapMarker) {
+      assert.match(html, /data-gsap-page/, `${relativePath} should opt into the route-scoped GSAP marker`);
+      continue;
+    }
+
+    assert.doesNotMatch(html, /data-gsap-page/, `${relativePath} should stay free of the route-scoped GSAP marker`);
   }
 
   const motionAssets = (await collectFiles(path.join(rootDir, 'dist', '_astro')))

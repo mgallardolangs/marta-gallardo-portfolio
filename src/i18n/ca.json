@@ -251,33 +251,45 @@
   },
   "translationPage": {
     "hero": {
+      "backgroundLabel": "Què diu el text → Traducció.\nCom l’entén cada audiència → Localització.\nCom el troben → SEO.",
       "eyebrow": "Comunicació multilingüe",
       "title": "Serveis de traducció, SEO i localització",
       "text": "Adapto continguts perquè sonin naturals, connectin amb cada mercat i tinguin més oportunitats de ser trobats. Traducció, localització i SEO multilingüe amb una mateixa intenció: que el teu missatge funcioni, sigui on sigui la teva audiència.",
-      "availability": "Disponible per a projectes freelance, col·laboracions puntuals i suport editorial continuat.",
-      "backgroundLabel": "Què diu el text → Traducció.\nCom l’entén cada audiència → Localització.\nCom el troben → SEO."
+      "ctaPrimary": "VEURE EL PORTFOLI",
+      "ctaSecondary": "PARLEM-NE"
     },
     "services": {
-      "title": "Com et puc ajudar",
+      "title": "Serveis",
       "items": [
         {
+          "id": "translation",
           "name": "Traducció",
           "description": "No em limite a traduir paraules: adapte els missatges perquè mantinguen el seu significat, el seu to i la seua capacitat de connectar."
         },
         {
+          "id": "localization",
           "name": "Localització",
           "description": "Cada mercat té referències, expressions i codis de comunicació diferents. Adapte el contingut perquè resulte natural dins del seu context."
         },
         {
+          "id": "multilingual-seo",
           "name": "SEO multilingüe",
           "description": "Optimitze continguts per als cercadors sense sacrificar naturalitat, veu de marca ni experiència de lectura."
         }
       ]
     },
+    "arsenal": {
+      "title": "El meu arsenal tècnic",
+      "languagesTitle": "Idiomes",
+      "toolsTitle": "Eines",
+      "skillsTitle": "Habilitats"
+    },
+    "browserTabs": {
+      "education": "Formació",
+      "experience": "Experiència"
+    },
     "experience": {
-      "eyebrow": "Recorregut professional",
-      "title": "Experiència",
-      "text": "Experiència pràctica en comunicació real, contacte directe amb persones i adaptació lingüística per a contextos diversos.",
+      "intro": "Experiència pràctica en comunicació real, contacte directe amb persones i adaptació lingüística per a contextos diversos.",
       "cards": [
         {
           "title": "Traducció d’e-commerce i gestió de continguts + atenció al client en francés",
@@ -296,95 +308,17 @@
         }
       ]
     },
-    "skills": {
-      "eyebrow": "Competències",
-      "title": "Habilitats",
-      "text": "Una manera de treballar pensada per a textos que han de sonar naturals, mantindre’s alineats amb la marca i funcionar bé en línia.",
-      "linguistic": {
-        "title": "Serveis lingüístics",
-        "items": [
-          "Traducció i adaptació de continguts FR⇄ES i EN/DE/IT/CA→ES",
-          "Localització web",
-          "Correcció, edició i millora d’estil",
-          "Recerca terminològica i gestió de glossaris"
-        ]
-      },
-      "webOptimization": {
-        "title": "Optimització de contingut web",
-        "items": [
-          "SEO local",
-          "Optimització de contingut per a cercadors",
-          "Planificació de paraules clau",
-          "Copywriting"
-        ]
-      },
-      "tools": {
-        "title": "Eines",
-        "items": [
-          "Microsoft Office",
-          "Google Workspace",
-          "Notion",
-          "Eines d’IA (ChatGPT, Claude)",
-          "WordPress",
-          "Google Search Console",
-          "Perfil d’empresa de Google"
-        ]
-      }
-    },
     "education": {
-      "eyebrow": "FORMACIÓ I PERFIL LINGÜÍSTIC",
-      "title": "Formació",
       "intro": "Una base acadèmica centrada en llengües, comunicació intercultural i escriptura, reforçada per una immersió pràctica en entorns internacionals.",
       "studies": [
         "Grau en Traducció i Interpretació, especialitzat en francès, redacció i adaptació de continguts.",
         "Erasmus+ de sis mesos a París i pràctica diària en entorns francòfons.",
         "Formació contínua en escriptura clara, terminologia i optimització de continguts digitals.",
         "Pràctiques de traducció jurídica FR→ES i postedició al costat d’una traductora especialitzada."
-      ],
-      "languagesEyebrow": "Competències lingüístiques",
-      "languagesTitle": "Llengües",
-      "languages": [
-        {
-          "name": "Espanyol",
-          "level": "Nadiu"
-        },
-        {
-          "name": "Francés",
-          "level": "Avançat · C1"
-        },
-        {
-          "name": "Català",
-          "level": "Avançat"
-        },
-        {
-          "name": "Anglés",
-          "level": "Intermedi · B1"
-        },
-        {
-          "name": "Alemany",
-          "level": "Bàsic · A2"
-        },
-        {
-          "name": "Italià",
-          "level": "Bàsic · A2"
-        }
       ]
     },
-    "servicesOffered": {
-      "eyebrow": "Què oferisc",
-      "title": "Serveis que oferisc",
-      "intro": "Suport a mida per a empreses que necessiten continguts efectius entre llengües, plataformes i contextos de cerca diferents.",
-      "items": [
-        "Traducció de llocs web",
-        "Localització de continguts",
-        "SEO multilingüe i copywriting",
-        "Correcció i edició de textos"
-      ]
-    },
-    "process": {
-      "eyebrow": "Metodologia",
-      "title": "Com treballe",
-      "intro": "Un flux de treball clar i estructurat fa que cada projecte avance de manera eficient, alineada i a punt per publicar-se.",
+    "methodology": {
+      "title": "Metodologia i infografia",
       "steps": [
         {
           "title": "Briefing",
@@ -404,10 +338,8 @@
         }
       ]
     },
-    "whyMe": {
-      "eyebrow": "Allò que em diferencia",
-      "title": "Per què treballar amb mi?",
-      "text": "Llengües, experiència real i un compromís fort amb cada contingut que entregue.",
+    "whyChooseMe": {
+      "title": "Per què escollir-me per al teu projecte?",
       "cards": [
         {
           "title": "Llengües treballades amb criteri professional",

@@ -251,33 +251,45 @@
   },
   "translationPage": {
     "hero": {
+      "backgroundLabel": "Cosa dice il testo → Traduzione.\nCome lo capisce ogni pubblico → Localizzazione.\nCome lo trovano le persone → SEO.",
       "eyebrow": "Comunicazione multilingue",
       "title": "Servizi di traduzione, SEO e localizzazione",
       "text": "Adatto i contenuti perché suonino naturali, entrino in contatto con ogni mercato e abbiano più possibilità di essere trovati. Traduzione, localizzazione e SEO multilingue con un’unica intenzione: far funzionare il tuo messaggio, ovunque si trovi il tuo pubblico.",
-      "availability": "Disponibile per progetti freelance, collaborazioni occasionali e supporto editoriale continuativo.",
-      "backgroundLabel": "Cosa dice il testo → Traduzione.\nCome lo capisce ogni pubblico → Localizzazione.\nCome lo trovano le persone → SEO."
+      "ctaPrimary": "VEDI IL PORTFOLIO",
+      "ctaSecondary": "PARLIAMONE"
     },
     "services": {
-      "title": "Come posso aiutarti",
+      "title": "Servizi",
       "items": [
         {
+          "id": "translation",
           "name": "Traduzione",
           "description": "Non mi limito a tradurre parole: adatto i messaggi affinché mantengano significato, tono e capacità di creare connessione."
         },
         {
+          "id": "localization",
           "name": "Localizzazione",
           "description": "Ogni mercato ha riferimenti, espressioni e codici comunicativi diversi. Adatto i contenuti perché risultino naturali nel loro contesto."
         },
         {
+          "id": "multilingual-seo",
           "name": "SEO multilingue",
           "description": "Ottimizzo i contenuti per i motori di ricerca senza sacrificare naturalezza, voce del brand o esperienza di lettura."
         }
       ]
     },
+    "arsenal": {
+      "title": "Il mio arsenale tecnico",
+      "languagesTitle": "Lingue",
+      "toolsTitle": "Strumenti",
+      "skillsTitle": "Competenze"
+    },
+    "browserTabs": {
+      "education": "Formazione",
+      "experience": "Esperienza"
+    },
     "experience": {
-      "eyebrow": "Percorso professionale",
-      "title": "Esperienza",
-      "text": "Esperienza concreta nella comunicazione reale, nel contatto diretto con le persone e nell’adattamento linguistico in contesti diversi.",
+      "intro": "Esperienza concreta nella comunicazione reale, nel contatto diretto con le persone e nell’adattamento linguistico in contesti diversi.",
       "cards": [
         {
           "title": "Traduzione e-commerce e gestione dei contenuti + assistenza clienti in francese",
@@ -296,95 +308,17 @@
         }
       ]
     },
-    "skills": {
-      "eyebrow": "Competenze",
-      "title": "Competenze",
-      "text": "Un metodo di lavoro pensato per testi che devono suonare naturali, restare coerenti con il brand e funzionare bene online.",
-      "linguistic": {
-        "title": "Servizi linguistici",
-        "items": [
-          "Traduzione e adattamento dei contenuti FR⇄ES e EN/DE/IT/CA→ES",
-          "Localizzazione di siti web",
-          "Correzione, editing e miglioramento dello stile",
-          "Ricerca terminologica e gestione dei glossari"
-        ]
-      },
-      "webOptimization": {
-        "title": "Ottimizzazione dei contenuti web",
-        "items": [
-          "SEO locale",
-          "Ottimizzazione dei contenuti per i motori di ricerca",
-          "Pianificazione delle parole chiave",
-          "Copywriting"
-        ]
-      },
-      "tools": {
-        "title": "Strumenti",
-        "items": [
-          "Microsoft Office",
-          "Google Workspace",
-          "Notion",
-          "Strumenti IA (ChatGPT, Claude)",
-          "WordPress",
-          "Google Search Console",
-          "Profilo dell’attività su Google"
-        ]
-      }
-    },
     "education": {
-      "eyebrow": "FORMAZIONE E PROFILO LINGUISTICO",
-      "title": "Formazione",
       "intro": "Una base accademica incentrata su lingue, comunicazione interculturale e scrittura, rafforzata da un’immersione pratica in contesti internazionali.",
       "studies": [
         "Laurea in Traduzione e Interpretariato, con specializzazione in francese, scrittura e adattamento dei contenuti.",
         "Erasmus+ di sei mesi a Parigi e pratica quotidiana in contesti francofoni.",
         "Formazione continua in scrittura chiara, terminologia e ottimizzazione dei contenuti digitali.",
         "Tirocinio in traduzione giuridica FR→ES e post-editing accanto a una traduttrice specializzata."
-      ],
-      "languagesEyebrow": "Competenze linguistiche",
-      "languagesTitle": "Lingue",
-      "languages": [
-        {
-          "name": "Spagnolo",
-          "level": "Madrelingua"
-        },
-        {
-          "name": "Francese",
-          "level": "Avanzato · C1"
-        },
-        {
-          "name": "Catalano",
-          "level": "Avanzato"
-        },
-        {
-          "name": "Inglese",
-          "level": "Intermedio · B1"
-        },
-        {
-          "name": "Tedesco",
-          "level": "Base · A2"
-        },
-        {
-          "name": "Italiano",
-          "level": "Base · A2"
-        }
       ]
     },
-    "servicesOffered": {
-      "eyebrow": "Cosa offro",
-      "title": "Servizi offerti",
-      "intro": "Supporto su misura per aziende che hanno bisogno di contenuti efficaci tra lingue, piattaforme e contesti di ricerca diversi.",
-      "items": [
-        "Traduzione di siti web",
-        "Localizzazione di contenuti",
-        "SEO multilingue e copywriting",
-        "Correzione e editing di testi"
-      ]
-    },
-    "process": {
-      "eyebrow": "Metodo",
-      "title": "Come lavoro",
-      "intro": "Un flusso di lavoro chiaro e strutturato rende ogni progetto efficiente, allineato e pronto per la pubblicazione.",
+    "methodology": {
+      "title": "Metodologia e infografica",
       "steps": [
         {
           "title": "Briefing",
@@ -404,10 +338,8 @@
         }
       ]
     },
-    "whyMe": {
-      "eyebrow": "Ciò che mi distingue",
-      "title": "Perché lavorare con me?",
-      "text": "Lingue, esperienza sul campo e un impegno reale in ogni contenuto che consegno.",
+    "whyChooseMe": {
+      "title": "Perché scegliermi per il tuo progetto?",
       "cards": [
         {
           "title": "Lingue gestite con criterio professionale",
