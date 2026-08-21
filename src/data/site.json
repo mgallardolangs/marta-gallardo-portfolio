@@ -393,17 +393,17 @@
           "es": "Español",
           "en": "Spanish",
           "fr": "Espagnol",
-          "de": "Spanish",
-          "it": "Spanish",
-          "ca": "Spanish"
+          "de": "Spanisch",
+          "it": "Spagnolo",
+          "ca": "Espanyol"
         },
         "level": {
           "es": "Nativo",
           "en": "Native",
           "fr": "Natif",
-          "de": "Native",
-          "it": "Native",
-          "ca": "Native"
+          "de": "Muttersprache",
+          "it": "Madrelingua",
+          "ca": "Nadiu"
         }
       },
       {
@@ -413,17 +413,17 @@
           "es": "Français",
           "en": "French",
           "fr": "Français",
-          "de": "French",
-          "it": "French",
-          "ca": "French"
+          "de": "Französisch",
+          "it": "Francese",
+          "ca": "Francès"
         },
         "level": {
           "es": "Avanzado · C1",
           "en": "Advanced · C1",
           "fr": "Avancé · C1",
-          "de": "Advanced · C1",
-          "it": "Advanced · C1",
-          "ca": "Advanced · C1"
+          "de": "Fortgeschritten · C1",
+          "it": "Avanzato · C1",
+          "ca": "Avançat · C1"
         }
       },
       {
@@ -433,17 +433,17 @@
           "es": "Català",
           "en": "Catalan",
           "fr": "Catalan",
-          "de": "Catalan",
-          "it": "Catalan",
-          "ca": "Catalan"
+          "de": "Katalanisch",
+          "it": "Catalano",
+          "ca": "Català"
         },
         "level": {
           "es": "Avanzado",
           "en": "Advanced",
           "fr": "Avancé",
-          "de": "Advanced",
-          "it": "Advanced",
-          "ca": "Advanced"
+          "de": "Fortgeschritten",
+          "it": "Avanzato",
+          "ca": "Avançat"
         }
       },
       {
@@ -453,17 +453,17 @@
           "es": "English",
           "en": "English",
           "fr": "Anglais",
-          "de": "English",
-          "it": "English",
-          "ca": "English"
+          "de": "Englisch",
+          "it": "Inglese",
+          "ca": "Anglès"
         },
         "level": {
           "es": "Intermedio · B1",
           "en": "Intermediate · B1",
           "fr": "Intermédiaire · B1",
-          "de": "Intermediate · B1",
-          "it": "Intermediate · B1",
-          "ca": "Intermediate · B1"
+          "de": "Mittelstufe · B1",
+          "it": "Intermedio · B1",
+          "ca": "Intermedi · B1"
         }
       },
       {
@@ -473,17 +473,17 @@
           "es": "Deutsch",
           "en": "German",
           "fr": "Allemand",
-          "de": "German",
-          "it": "German",
-          "ca": "German"
+          "de": "Deutsch",
+          "it": "Tedesco",
+          "ca": "Alemany"
         },
         "level": {
           "es": "Básico · A2",
           "en": "Basic · A2",
           "fr": "Élémentaire · A2",
-          "de": "Basic · A2",
-          "it": "Basic · A2",
-          "ca": "Basic · A2"
+          "de": "Grundkenntnisse · A2",
+          "it": "Base · A2",
+          "ca": "Bàsic · A2"
         }
       },
       {
@@ -493,17 +493,17 @@
           "es": "Italiano",
           "en": "Italian",
           "fr": "Italien",
-          "de": "Italian",
-          "it": "Italian",
-          "ca": "Italian"
+          "de": "Italienisch",
+          "it": "Italiano",
+          "ca": "Italià"
         },
         "level": {
           "es": "Básico · A2",
           "en": "Basic · A2",
           "fr": "Élémentaire · A2",
-          "de": "Basic · A2",
-          "it": "Basic · A2",
-          "ca": "Basic · A2"
+          "de": "Grundkenntnisse · A2",
+          "it": "Base · A2",
+          "ca": "Bàsic · A2"
         }
       }
     ],
@@ -551,9 +551,9 @@
           "es": "AI tools (ChatGPT, Claude)",
           "en": "AI tools (ChatGPT, Claude)",
           "fr": "Outils IA (ChatGPT, Claude)",
-          "de": "AI tools (ChatGPT, Claude)",
-          "it": "AI tools (ChatGPT, Claude)",
-          "ca": "AI tools (ChatGPT, Claude)"
+          "de": "KI-Tools (ChatGPT, Claude)",
+          "it": "Strumenti IA (ChatGPT, Claude)",
+          "ca": "Eines d’IA (ChatGPT, Claude)"
         }
       },
       {
@@ -587,9 +587,9 @@
           "es": "Google My Business",
           "en": "Google Business Profile",
           "fr": "Google Business Profile",
-          "de": "Google Business Profile",
-          "it": "Google Business Profile",
-          "ca": "Google Business Profile"
+          "de": "Google Unternehmensprofil",
+          "it": "Profilo dell’attività su Google",
+          "ca": "Perfil d’empresa de Google"
         }
       }
     ],
@@ -600,9 +600,9 @@
           "es": "Traducción y adaptación de contenidos FR⇄ES y EN/DE/IT/CA→ES",
           "en": "Translation and content adaptation FR⇄ES and EN/DE/IT/CA→ES",
           "fr": "Traduction et adaptation de contenus FR⇄ES et EN/DE/IT/CA→ES",
-          "de": "Translation and content adaptation FR⇄ES and EN/DE/IT/CA→ES",
-          "it": "Translation and content adaptation FR⇄ES and EN/DE/IT/CA→ES",
-          "ca": "Translation and content adaptation FR⇄ES and EN/DE/IT/CA→ES"
+          "de": "Übersetzung und Inhaltsanpassung FR⇄ES und EN/DE/IT/CA→ES",
+          "it": "Traduzione e adattamento dei contenuti FR⇄ES e EN/DE/IT/CA→ES",
+          "ca": "Traducció i adaptació de continguts FR⇄ES i EN/DE/IT/CA→ES"
         }
       },
       {
@@ -611,9 +611,9 @@
           "es": "Localización web",
           "en": "Website localization",
           "fr": "Localisation web",
-          "de": "Website localization",
-          "it": "Website localization",
-          "ca": "Website localization"
+          "de": "Website-Lokalisierung",
+          "it": "Localizzazione di siti web",
+          "ca": "Localització web"
         }
       },
       {
@@ -622,9 +622,9 @@
           "es": "Corrección, edición y mejora de estilo",
           "en": "Proofreading, editing and style refinement",
           "fr": "Correction, édition et amélioration du style",
-          "de": "Proofreading, editing and style refinement",
-          "it": "Proofreading, editing and style refinement",
-          "ca": "Proofreading, editing and style refinement"
+          "de": "Korrektorat, Lektorat und stilistische Optimierung",
+          "it": "Correzione, editing e miglioramento dello stile",
+          "ca": "Correcció, edició i millora d’estil"
         }
       },
       {
@@ -633,9 +633,9 @@
           "es": "Investigación terminológica y gestión de glosarios",
           "en": "Terminology research and glossary management",
           "fr": "Recherche terminologique et gestion de glossaires",
-          "de": "Terminology research and glossary management",
-          "it": "Terminology research and glossary management",
-          "ca": "Terminology research and glossary management"
+          "de": "Terminologierecherche und Glossarmanagement",
+          "it": "Ricerca terminologica e gestione dei glossari",
+          "ca": "Recerca terminològica i gestió de glossaris"
         }
       },
       {
@@ -644,9 +644,9 @@
           "es": "SEO Local",
           "en": "Local SEO",
           "fr": "SEO local",
-          "de": "Local SEO",
-          "it": "Local SEO",
-          "ca": "Local SEO"
+          "de": "Lokales SEO",
+          "it": "SEO locale",
+          "ca": "SEO local"
         }
       },
       {
@@ -655,9 +655,9 @@
           "es": "Optimización de contenido para buscadores",
           "en": "Multilingual SEO",
           "fr": "SEO Multilingue",
-          "de": "Search engine content optimization",
-          "it": "Search engine content optimization",
-          "ca": "Search engine content optimization"
+          "de": "Suchmaschinenoptimierung für Inhalte",
+          "it": "Ottimizzazione dei contenuti per i motori di ricerca",
+          "ca": "Optimització de contingut per a cercadors"
         }
       },
       {
@@ -666,9 +666,9 @@
           "es": "Keyword planner",
           "en": "Keyword planner",
           "fr": "Keyword planner",
-          "de": "Keyword planner",
-          "it": "Keyword planner",
-          "ca": "Keyword planner"
+          "de": "Keyword-Planung",
+          "it": "Pianificazione delle parole chiave",
+          "ca": "Planificació de paraules clau"
         }
       },
       {

@@ -21,7 +21,11 @@ const navItems = [
 ---
 <footer class="footer-shell bg-charcoal text-cream">
   <div class="mx-auto max-w-7xl px-6 py-14 md:px-10 md:py-20">
-    <div class="footer-shell__reveal rounded-[2.25rem] border border-white/10 bg-charcoal px-6 py-10 md:px-10 md:py-14">
+    <div
+      class="footer-shell__reveal rounded-[2.25rem] border border-white/10 bg-charcoal px-6 py-10 md:px-10 md:py-14"
+      data-footer-reveal
+      data-reveal-mode="idle"
+    >
       <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
         <div class="space-y-5">
           <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-blush-200">{i.footer.eyebrow}</p>
@@ -73,9 +77,39 @@ const navItems = [
   </div>
 </footer>
 
+<script>
+  import {
+    getFooterRevealMode,
+    hasFooterRevealSessionFlag,
+    rememberFooterReveal,
+  } from '../lib/footerReveal.js';
+
+  const reveal = document.querySelector('[data-footer-reveal]');
+
+  if (reveal instanceof HTMLElement) {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const mode = getFooterRevealMode({
+      hasSessionFlag: hasFooterRevealSessionFlag(window.sessionStorage),
+      prefersReducedMotion,
+    });
+
+    reveal.dataset.revealMode = mode;
+    document.documentElement.dataset.footerRevealSeen = 'true';
+
+    if (mode === 'play') {
+      rememberFooterReveal(window.sessionStorage);
+    }
+  }
+</script>
+
 <style>
   .footer-shell__reveal {
     animation: footer-reveal 0.7s ease both;
+  }
+
+  :root[data-footer-reveal-seen='true'] .footer-shell__reveal:not([data-reveal-mode='play']),
+  .footer-shell__reveal[data-reveal-mode='skip'] {
+    animation: none;
   }
 
   .footer-cta {

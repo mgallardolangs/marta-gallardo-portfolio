@@ -48,17 +48,5 @@ const allSite = JSON.stringify(siteData);
     <slot />
   </main>
   <Footer lang={lang} adminMode={true} />
-
-  <script is:inline>
-    // On production: check auth before allowing publish (not before viewing)
-    // The site always renders — auth is only needed when clicking Publish
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('init', function(user) {
-        if (!user) {
-          window.netlifyIdentity.on('login', function() { location.reload(); });
-        }
-      });
-    }
-  </script>
 </body>
 </html>

@@ -1,5 +1,10 @@
 import { useEffect } from 'react';
 import { adminStore } from './adminStore';
+import {
+  getAdminInitDecision,
+  getNetlifyIdentityToken,
+  shouldAllowTokenlessAdminInit,
+} from '../../lib/adminInit.js';
 
 interface Props {
   i18nJson: string;
@@ -9,47 +14,78 @@ interface Props {
 
 export default function AdminInit({ i18nJson, siteJson, lang }: Props) {
   useEffect(() => {
-    // Only init once — never re-init (would reset language selection)
-    if (adminStore.isInitialized()) return;
-
     const parsedI18n = JSON.parse(i18nJson) as Record<string, unknown>;
     const parsedSite = JSON.parse(siteJson) as Record<string, unknown>;
+    let draftLoaded = adminStore.isInitialized();
 
-    const tryInit = () => {
-      if (adminStore.isInitialized()) return true;
-
+    const applyIdentityState = (allowTokenlessFallback: boolean) => {
       const w = window as typeof window & {
-        netlifyIdentity?: { currentUser?: () => { token?: { access_token?: string } } | null };
+        netlifyIdentity?: {
+          currentUser?: () => { token?: { access_token?: string } } | null;
+          on?: (event: 'init' | 'login', callback: () => void) => void;
+        };
       };
-      const user = w.netlifyIdentity?.currentUser?.();
+      const token = getNetlifyIdentityToken(w.netlifyIdentity?.currentUser?.());
+      const decision = getAdminInitDecision({
+        isInitialized: adminStore.isInitialized(),
+        identityToken: token,
+        allowTokenlessFallback,
+      });
 
-      if (user?.token?.access_token) {
-        adminStore.init(parsedI18n, parsedSite, lang, user.token.access_token);
-        adminStore.loadDraft();
+      if (decision === 'init-with-token' || decision === 'init-without-token') {
+        adminStore.init(parsedI18n, parsedSite, lang, token);
+        if (!draftLoaded) {
+          adminStore.loadDraft();
+          draftLoaded = true;
+        }
         return true;
       }
+
+      if (decision === 'update-token') {
+        adminStore.init(parsedI18n, parsedSite, lang, token);
+        return true;
+      }
+
       return false;
     };
 
-    // Try immediately
-    if (tryInit()) return;
+    const allowLocalFallback = shouldAllowTokenlessAdminInit(window.location.hostname);
+    const syncIdentity = () => applyIdentityState(false);
 
-    // Retry until auth is available (but stop once initialized)
+    syncIdentity();
+
     const interval = window.setInterval(() => {
-      if (tryInit()) window.clearInterval(interval);
+      if (syncIdentity()) {
+        window.clearInterval(interval);
+      }
     }, 1000);
 
-    // Fallback for local dev: init without token after 2s
-    const fallback = window.setTimeout(() => {
-      if (!adminStore.isInitialized()) {
-        adminStore.init(parsedI18n, parsedSite, lang, '');
+    const identity = (window as typeof window & {
+      netlifyIdentity?: {
+        on?: (event: 'init' | 'login', callback: () => void) => void;
+      };
+    }).netlifyIdentity;
+
+    const onIdentityChange = () => {
+      if (syncIdentity()) {
+        window.clearInterval(interval);
       }
-      window.clearInterval(interval);
-    }, 2000);
+    };
+
+    identity?.on?.('init', onIdentityChange);
+    identity?.on?.('login', onIdentityChange);
+
+    const fallback = allowLocalFallback
+      ? window.setTimeout(() => {
+          if (applyIdentityState(true)) {
+            return;
+          }
+        }, 2000)
+      : undefined;
 
     return () => {
       window.clearInterval(interval);
-      window.clearTimeout(fallback);
+      if (fallback) window.clearTimeout(fallback);
     };
   }, []); // empty deps — run once only
 
