@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
 import { getLangFromUrl, getLocalizedPath, t } from '../../i18n';
-import { getBlogStaticPathsForLocale } from '../../lib/blog';
+import { getBlogAlternateLinksForPost, getBlogStaticPathsForLocale } from '../../lib/blog';
 import ScrollReveal from '../../components/ScrollReveal';
 
 export async function getStaticPaths() {
@@ -11,11 +11,17 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
+const posts = await getCollection('blog');
 const { Content } = await render(post);
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
+const blogAlternateLinks = getBlogAlternateLinksForPost(posts, post);
 ---
-<BaseLayout title={`${post.data.title} — ${i.hero.name}`} description={post.data.description}>
+<BaseLayout
+  title={`${post.data.title} — ${i.hero.name}`}
+  description={post.data.description}
+  alternateLinks={blogAlternateLinks}
+>
     <article class="bg-paper">
       <div class="mx-auto max-w-4xl px-6 pt-28 pb-16 md:pt-32 md:pb-20">
         <ScrollReveal client:visible>

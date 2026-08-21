@@ -5,16 +5,25 @@ import MotionRuntime from '../components/MotionRuntime.astro';
 import SeoHead from '../components/SeoHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { getLangFromUrl, t } from '../i18n';
+import { getLangFromUrl, t, type Lang } from '../i18n';
 
 interface Props {
   title?: string;
   description?: string;
+  alternateLocales?: Lang[];
+  alternateLinks?: Partial<Record<Lang, string>>;
+  xDefaultPath?: string;
 }
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
-const { title = `${i.hero.name} — UGC & SEO`, description = i.about.text } = Astro.props;
+const {
+  title = `${i.hero.name} — UGC & SEO`,
+  description = i.about.text,
+  alternateLocales,
+  alternateLinks,
+  xDefaultPath,
+} = Astro.props;
 ---
 <!DOCTYPE html>
 <html lang={lang}>
@@ -24,7 +33,15 @@ const { title = `${i.hero.name} — UGC & SEO`, description = i.about.text } = A
   <meta name="generator" content={Astro.generator} />
   <meta name="description" content={description} />
   <title>{title}</title>
-  <SeoHead lang={lang} title={title} description={description} pathname={Astro.url.pathname} />
+  <SeoHead
+    lang={lang}
+    title={title}
+    description={description}
+    pathname={Astro.url.pathname}
+    alternateLocales={alternateLocales}
+    alternateLinks={alternateLinks}
+    xDefaultPath={xDefaultPath}
+  />
   <ClientRouter />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />

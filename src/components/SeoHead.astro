@@ -1,5 +1,5 @@
 ---
-import { defaultLang, getLocalizedPath, type Lang } from '../i18n';
+import { defaultLang, getLocalizedPath, stripLocaleFromPath, visibleLangs, type Lang } from '../i18n';
 import { localize, siteData } from '../lib/siteData';
 
 interface Props {
@@ -7,11 +7,14 @@ interface Props {
   title: string;
   description: string;
   pathname: string;
+  alternateLocales?: Lang[];
+  alternateLinks?: Partial<Record<Lang, string>>;
+  xDefaultPath?: string;
 }
 
-const { lang, title, description, pathname } = Astro.props;
+const { lang, title, description, pathname, alternateLocales, alternateLinks, xDefaultPath } = Astro.props;
 const pagePath = pathname === '/' ? '/' : pathname.replace(/\/$/, '') || '/';
-const normalizedPublicPath = pagePath.replace(/^\/(?:es|en|fr|de|it|ca)(?=\/|$)/, '') || '/';
+const normalizedPublicPath = stripLocaleFromPath(pagePath);
 const absolute = (target: string) => new URL(target, Astro.site);
 const canonical = absolute(pagePath);
 const heroImage = absolute(siteData.heroMainPhoto);
@@ -20,6 +23,30 @@ const socialProfiles = [
   siteData.person.socialProfiles.linkedin,
   siteData.person.socialProfiles.instagram,
 ];
+const normalizeSeoPath = (target: string) => {
+  const withLeadingSlash = target.startsWith('/') ? target : `/${target}`;
+  return withLeadingSlash === '/' ? '/' : withLeadingSlash.replace(/\/$/, '') || '/';
+};
+const localizedAlternateLinks = alternateLinks
+  ? visibleLangs.reduce<Partial<Record<Lang, string>>>((alternates, locale) => {
+      const path = alternateLinks[locale];
+      if (typeof path === 'string' && path.trim()) {
+        alternates[locale] = normalizeSeoPath(path);
+      }
+      return alternates;
+    }, {})
+  : null;
+const resolvedAlternateLinks = localizedAlternateLinks
+  ? localizedAlternateLinks
+  : (alternateLocales ?? visibleLangs).reduce<Partial<Record<Lang, string>>>((alternates, locale) => {
+      alternates[locale] = getLocalizedPath(normalizedPublicPath, locale);
+      return alternates;
+    }, {});
+const xDefaultHref = absolute(
+  xDefaultPath
+    ? normalizeSeoPath(xDefaultPath)
+    : resolvedAlternateLinks[defaultLang] ?? pagePath,
+).toString();
 
 const personJsonLd = {
   '@context': 'https://schema.org',
@@ -39,13 +66,15 @@ const personJsonLd = {
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 {(['es', 'en', 'fr', 'de', 'it', 'ca'] as const).map((locale) => (
-  <link
-    rel="alternate"
-    hreflang={locale}
-    href={absolute(getLocalizedPath(normalizedPublicPath, locale)).toString()}
-  />
+  resolvedAlternateLinks[locale] && (
+    <link
+      rel="alternate"
+      hreflang={locale}
+      href={absolute(resolvedAlternateLinks[locale] ?? pagePath).toString()}
+    />
+  )
 ))}
-<link rel="alternate" hreflang="x-default" href={absolute(getLocalizedPath(normalizedPublicPath, defaultLang)).toString()} />
+<link rel="alternate" hreflang="x-default" href={xDefaultHref} />
 
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content={siteData.person.name} />

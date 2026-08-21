@@ -173,6 +173,69 @@ test('pending orbit upload previews stay display-only for validation and publish
   }
 });
 
+test('publish uploads pending media before writing site JSON and keeps pending state on upload failure', async () => {
+  const restoreFileReader = installMockFileReader();
+  const store = createStore();
+  const fetchCalls = [];
+  const originalFetch = globalThis.fetch;
+
+  try {
+    store.setText('home.hero.kicker', 'titular pendiente');
+    await store.setImage(
+      'heroMainPhoto',
+      new File([Buffer.from('hero-binary')], 'hero.png', { type: 'image/png' }),
+      'public/images/site/pending-hero.png',
+    );
+
+    globalThis.fetch = async (input, init = {}) => {
+      fetchCalls.push({ input: String(input), init });
+
+      if (!init.method || init.method === 'GET') {
+        return new Response(JSON.stringify({ sha: null }), {
+          status: 404,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      if (String(input).includes('public/images/site/pending-hero.png')) {
+        return new Response(JSON.stringify({ message: 'upload failed' }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      return new Response(JSON.stringify({ content: { sha: 'next-sha' } }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    };
+
+    await store.publish();
+  } finally {
+    globalThis.fetch = originalFetch;
+    restoreFileReader();
+  }
+
+  const putCalls = fetchCalls.filter((call) => call.init?.method === 'PUT');
+  assert.deepEqual(
+    putCalls.map((call) => call.input),
+    ['/.netlify/git/github/contents/public/images/site/pending-hero.png'],
+    'pending asset upload should be attempted before any i18n or site.json write and should stop publish on failure',
+  );
+  assert.ok(
+    fetchCalls.every((call) => !call.input.includes('src/data/site.json')),
+    'site.json should never be written before all pending assets finish uploading',
+  );
+  assert.match(store.getSnapshot().publishError, /upload failed/i);
+  assert.equal(store.getSnapshot().publishSuccess, false);
+  assert.match(
+    store.getSnapshot().getImageSrc('heroMainPhoto'),
+    /^data:image\/png;base64,/,
+    'failed uploads should keep the pending preview available for retry',
+  );
+  assert.ok(store.getSnapshot().pendingCount >= 2, 'failed uploads should keep pending dirty state for retry');
+});
+
 test('saving a draft strips pending upload binaries but preserves text and site metadata', async () => {
   const restoreFileReader = installMockFileReader();
   const store = createStore();

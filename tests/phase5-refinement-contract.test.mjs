@@ -110,8 +110,21 @@ function getCanonicalUrlFromHtml(html) {
   return html.match(/<link rel="canonical" href="([^"]+)"/)?.[1] ?? null;
 }
 
+function getAlternateLinksFromHtml(html) {
+  return [...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)]
+    .map((match) => ({ hreflang: match[1], href: match[2] }));
+}
+
 function getXmlLocs(xml) {
   return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+}
+
+function isBlogDetailRoute(routePath) {
+  return /^\/(?:(?:en|fr|de|it|ca)\/)?blog\/[^/]+$/.test(routePath);
+}
+
+function isAssetLikePath(pathname) {
+  return /\.[a-z0-9]+$/i.test(pathname);
 }
 
 test('referenced raster media stays optimized and stale oversized originals are removed', async () => {
@@ -339,6 +352,7 @@ test('built public and admin HTML keep SEO/noindex classes, local media referenc
   const distHtmlFiles = (await collectFiles(path.join(rootDir, 'dist')))
     .filter((filePath) => filePath.endsWith('.html'))
     .map((filePath) => path.relative(rootDir, filePath).replace(/\\/g, '/'));
+  const builtRoutePaths = new Set(distHtmlFiles.map((relativePath) => getRoutePathFromDistHtml(relativePath)));
 
   const publicRoutePaths = [];
   const adminRoutePaths = [];
@@ -354,17 +368,32 @@ test('built public and admin HTML keep SEO/noindex classes, local media referenc
       assert.equal(getCanonicalUrlFromHtml(html), null, `${routePath} should not ship public canonical SEO tags`);
     } else {
       publicRoutePaths.push(routePath);
+      const alternateLinks = getAlternateLinksFromHtml(html);
       assert.match(html, /<title>[^<]+<\/title>/);
       assert.match(html, /<meta name="description" content="[^"]+"/);
       assert.match(html, /<link rel="canonical" href="https:\/\/marttelier\.netlify\.app/);
       assert.match(html, /<link rel="alternate" hreflang="x-default"/);
-      assert.equal((html.match(/rel="alternate" hreflang="/g) ?? []).length, 7);
+      if (!isBlogDetailRoute(routePath)) {
+        assert.equal(alternateLinks.length, 7, `${routePath} should keep all locale alternates plus x-default`);
+      }
       assert.doesNotMatch(html, /noindex/);
       assert.equal(
         normalizeRoutePath(new URL(getCanonicalUrlFromHtml(html) ?? 'https://marttelier.netlify.app/').pathname),
         routePath,
         `${routePath} should self-canonicalize`,
       );
+
+      for (const { href } of alternateLinks) {
+        const alternateUrl = new URL(href);
+        if (alternateUrl.origin !== 'https://marttelier.netlify.app') continue;
+        if (isAssetLikePath(alternateUrl.pathname)) continue;
+
+        const alternateRoutePath = normalizeRoutePath(alternateUrl.pathname);
+        assert.ok(
+          builtRoutePaths.has(alternateRoutePath),
+          `${routePath} should only emit alternate hrefs for built HTML routes (missing ${alternateRoutePath})`,
+        );
+      }
     }
 
     for (const mediaPath of getLocalMediaPathsFromHtml(html)) {

@@ -54,3 +54,65 @@ test('admin blog creation stays scoped to approved ES/EN/FR locales', async () =
     'BlogPostForm should not offer DE, IT, or CA blog creation options',
   );
 });
+
+test('createBlogPost rejects duplicate slug targets before writing and BlogPostForm only clears fields on success', async () => {
+  const [{ AdminStore }, formSource] = await Promise.all([
+    import('../src/components/admin/adminStore.ts'),
+    readSource('src/components/admin/BlogPostForm.tsx'),
+  ]);
+
+  const store = new AdminStore();
+  store.init({ es: {}, en: {}, fr: {} }, {}, 'en', 'publish-token');
+
+  const fetchCalls = [];
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input, init = {}) => {
+    fetchCalls.push({ input: String(input), init });
+
+    if (String(input).includes('src/content/blog/mi-primer-post.md')) {
+      return new Response(JSON.stringify({ sha: 'existing-post-sha' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    return new Response(JSON.stringify({ content: { sha: 'unexpected-write' } }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+
+  try {
+    await assert.rejects(
+      store.createBlogPost({
+        slug: 'mi-primer-post',
+        title: 'Hello world',
+        description: 'Localized duplicate attempt',
+        date: '2025-08-01',
+        tags: ['ugc'],
+        lang: 'en',
+        body: '# Hello world',
+      }),
+      /already exists/i,
+      'same slug in another locale should still be rejected when it resolves to the same content path',
+    );
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.deepEqual(
+    fetchCalls.map((call) => `${call.init?.method ?? 'GET'} ${call.input}`),
+    ['GET /.netlify/git/github/contents/src/content/blog/mi-primer-post.md'],
+    'duplicate slug detection should stop before any PUT overwrite attempt',
+  );
+  assert.match(
+    formSource,
+    /catch \(submitError\) \{\s*setError\(submitError instanceof Error \? submitError\.message : 'Could not create the post\.'\);\s*\}/s,
+    'BlogPostForm should surface createBlogPost errors to the admin UI',
+  );
+  assert.match(
+    formSource,
+    /setSuccessPath\(path\);\s*setTitle\(''\);\s*setDescription\(''\);\s*setTags\(''\);\s*setBody\('# Nuevo post\\n\\nEscribe aquí\.\.\.'\);/s,
+    'BlogPostForm should keep form input intact on failure and only clear fields after a successful create',
+  );
+});

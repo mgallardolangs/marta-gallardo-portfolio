@@ -205,6 +205,18 @@ function buildMarkdownPost(post: {
   return `---\ntitle: ${quoted(post.title)}\ndescription: ${quoted(post.description)}\ndate: ${quoted(post.date)}\ntags: ${tags}\nlang: ${quoted(post.lang)}\n---\n\n${post.body.trim()}\n`;
 }
 
+function getDuplicateBlogPostSlugMessage(slug: string, lang: SupportedLang | AdminBlogLang): string {
+  if (lang === 'es') {
+    return `Ya existe una entrada del blog con el slug "${slug}". Usa otro slug antes de publicar.`;
+  }
+
+  if (lang === 'fr') {
+    return `Un article de blog existe déjà avec le slug "${slug}". Choisissez-en un autre avant de publier.`;
+  }
+
+  return `A blog post already exists with the slug "${slug}". Choose a different slug before publishing.`;
+}
+
 function getOrbitPendingKey(itemId: string, field: 'src' | 'poster') {
   return `orbit.${itemId}.${field}`;
 }
@@ -693,6 +705,14 @@ export class AdminStore {
     this.emit();
 
     try {
+      for (const [imageKey, pendingImage] of Object.entries(this.pendingImages)) {
+        await this.writeRepositoryFile(
+          pendingImage.path,
+          pendingImage.base64Content,
+          `chore(admin): upload ${imageKey}`,
+        );
+      }
+
       const changedLangs = Object.keys(this.i18n).filter(
         (lang) => JSON.stringify(this.i18n[lang]) !== JSON.stringify(this.originalI18n[lang]),
       );
@@ -710,14 +730,6 @@ export class AdminStore {
           'src/data/site.json',
           utf8ToBase64(`${JSON.stringify(this.images, null, 2)}\n`),
           'chore(admin): update site data',
-        );
-      }
-
-      for (const [imageKey, pendingImage] of Object.entries(this.pendingImages)) {
-        await this.writeRepositoryFile(
-          pendingImage.path,
-          pendingImage.base64Content,
-          `chore(admin): upload ${imageKey}`,
         );
       }
 
@@ -762,16 +774,30 @@ export class AdminStore {
 
     const path = `src/content/blog/${slug}.md`;
     const markdown = buildMarkdownPost(post);
-    await this.writeRepositoryFile(
-      path,
-      utf8ToBase64(markdown),
-      `feat(blog): create ${slug}`,
-    );
+    const existingSha = await this.fetchFileSha(path);
+    if (existingSha !== null) {
+      const errorLang = isAdminBlogLang(this.currentLang) ? this.currentLang : post.lang;
+      throw new Error(getDuplicateBlogPostSlugMessage(slug, errorLang));
+    }
+
+    await this.createRepositoryFile(path, utf8ToBase64(markdown), `feat(blog): create ${slug}`, existingSha);
     return path;
+  }
+
+  private async createRepositoryFile(path: string, content: string, message: string, sha: string | null): Promise<void> {
+    if (sha !== null) {
+      throw new Error(`Failed to create ${path}: file already exists.`);
+    }
+
+    await this.putRepositoryFile(path, content, message);
   }
 
   private async writeRepositoryFile(path: string, content: string, message: string): Promise<void> {
     const sha = await this.fetchFileSha(path);
+    await this.putRepositoryFile(path, content, message, sha);
+  }
+
+  private async putRepositoryFile(path: string, content: string, message: string, sha: string | null = null): Promise<void> {
     const response = await fetch(`/.netlify/git/github/contents/${encodeURI(path)}`, {
       method: 'PUT',
       headers: {

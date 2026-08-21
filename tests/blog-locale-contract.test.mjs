@@ -28,23 +28,44 @@ function distBlogPostPath(locale, slug) {
 }
 
 test('blog locale helper filters posts by exact locale only, including ES', async () => {
-  const { getBlogStaticPathsForLocale, scopeBlogPostsToLocale } = await import('../src/lib/blog.ts');
+  const {
+    getBlogAlternateLinksForPost,
+    getBlogStaticPathsForLocale,
+    scopeBlogPostsToLocale,
+  } = await import('../src/lib/blog.ts');
   const posts = [
     { id: 'solo-es', data: { lang: 'es' } },
     { id: 'hello-en', data: { lang: 'en' } },
     { id: 'bonjour-fr', data: { lang: 'fr' } },
+    { id: 'guia-es', data: { lang: 'es', translationKey: 'guide' } },
+    { id: 'guide-en', data: { lang: 'en', translationKey: 'guide' } },
+    { id: 'guide-fr', data: { lang: 'fr', translationKey: 'guide' } },
   ];
 
-  assert.deepEqual(scopeBlogPostsToLocale(posts, 'es').map((post) => post.id), ['solo-es']);
-  assert.deepEqual(scopeBlogPostsToLocale(posts, 'en').map((post) => post.id), ['hello-en']);
+  assert.deepEqual(scopeBlogPostsToLocale(posts, 'es').map((post) => post.id), ['solo-es', 'guia-es']);
+  assert.deepEqual(scopeBlogPostsToLocale(posts, 'en').map((post) => post.id), ['hello-en', 'guide-en']);
   assert.deepEqual(scopeBlogPostsToLocale(posts, 'de').map((post) => post.id), []);
   assert.deepEqual(
     getBlogStaticPathsForLocale(posts, 'es').map(({ params }) => params.slug),
-    ['solo-es'],
+    ['solo-es', 'guia-es'],
   );
   assert.deepEqual(
     getBlogStaticPathsForLocale(posts, 'fr').map(({ params }) => params.slug),
-    ['bonjour-fr'],
+    ['bonjour-fr', 'guide-fr'],
+  );
+  assert.deepEqual(
+    getBlogAlternateLinksForPost(posts, posts[0]),
+    { es: '/blog/solo-es' },
+    'slug-only posts should only advertise themselves when no sibling locales exist',
+  );
+  assert.deepEqual(
+    getBlogAlternateLinksForPost(posts, posts[3]),
+    {
+      es: '/blog/guia-es',
+      en: '/en/blog/guide-en',
+      fr: '/fr/blog/guide-fr',
+    },
+    'translationKey-linked posts should map alternates to each sibling locale path',
   );
 });
 
@@ -69,7 +90,7 @@ test('blog index and localized slug pages stay wired to exact locale scoping', a
     const source = articleSources[Object.keys(articlePagesByLocale).indexOf(locale)];
     assert.match(
       source,
-      /import\s+\{\s*getBlogStaticPathsForLocale\s*\}\s+from\s+['"].+\/lib\/blog['"]/,
+      /import\s+\{[\s\S]*getBlogStaticPathsForLocale[\s\S]*\}\s+from\s+['"].+\/lib\/blog['"]/,
       `${relativePath} should use the shared locale static-path helper`,
     );
     assert.match(
@@ -95,4 +116,24 @@ test('build only emits the Spanish root route for the Spanish-only blog post', a
       `${locale} build should not emit ${spanishOnlySlug}`,
     );
   }
+});
+
+test('built Spanish-only blog post only advertises built alternates', async (t) => {
+  if (process.env.CHECK_DIST !== '1') {
+    t.skip('Set CHECK_DIST=1 after npm run build to verify built blog SEO alternates.');
+    return;
+  }
+
+  const html = await readFile(distBlogPostPath('es', spanishOnlySlug), 'utf8');
+  const alternateEntries = [...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)]
+    .map((match) => ({ hreflang: match[1], href: match[2] }));
+
+  assert.deepEqual(
+    alternateEntries,
+    [
+      { hreflang: 'es', href: 'https://marttelier.netlify.app/blog/mi-primer-post' },
+      { hreflang: 'x-default', href: 'https://marttelier.netlify.app/blog/mi-primer-post' },
+    ],
+    'Spanish-only posts should not advertise unbuilt EN/FR/DE/IT/CA article routes',
+  );
 });
