@@ -9,7 +9,9 @@ import StaggerContainer, { StaggerItem } from '../../components/StaggerContainer
 import { getLangFromUrl, getLocalizedPath, t } from '../../i18n';
 import EditableText from '../../components/admin/EditableText';
 import EditableImage from '../../components/admin/EditableImage';
-import AdminStoryMap from '../../components/admin/AdminStoryMap';
+import AdminBrandVideo from '../../components/admin/AdminBrandVideo';
+import AdminOrbitPreview from '../../components/admin/AdminOrbitPreview';
+import EditableOrbitCollection from '../../components/admin/EditableOrbitCollection';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
@@ -82,8 +84,8 @@ const i = t(lang);
 
       <section class="border-b border-black/10 bg-white px-6 py-20 md:py-24">
         <div class="site-container grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-          <div class="relative min-h-[30rem] border border-black/10 bg-paper p-4 md:min-h-[36rem] md:p-6">
-            <AdminStoryMap client:load className="absolute inset-0" />
+          <div class="relative overflow-hidden border border-black/10 bg-paper px-4 py-8 md:px-6 md:py-10">
+            <AdminOrbitPreview client:load lang={lang} />
           </div>
 
           <ScrollReveal client:visible direction="right" className="space-y-6 lg:pl-8 xl:pl-14">
@@ -104,6 +106,10 @@ const i = t(lang);
             </div>
           </div>
         </ScrollReveal>
+
+        <div class="site-container mt-12">
+          <EditableOrbitCollection client:load />
+        </div>
       </section>
 
       <section class="bg-ink px-6 py-20 text-paper md:py-24">
@@ -142,7 +148,7 @@ const i = t(lang);
             </ParallaxLayer>
 
             <ScrollReveal client:visible direction="up" className="relative mx-auto flex aspect-[9/16] w-full max-w-[22rem] items-center justify-center overflow-hidden border border-white/12 bg-white/8">
-              <EditableImage client:load imageKey="brandVideo" className="absolute inset-0 h-full w-full" alt="Brand video" label="🎬 Change video" />
+              <AdminBrandVideo client:load />
               <div class="absolute left-1/2 top-4 h-1.5 w-24 -translate-x-1/2 rounded-full bg-white/20 pointer-events-none"></div>
               <ArrowWavy client:visible className="absolute bottom-8 right-8 hidden w-24 text-amaranth-soft md:block" />
             </ScrollReveal>

@@ -1,3 +1,11 @@
+import {
+  createOrbitMediaDraft,
+  applySpanishFallbackToCodeManagedLocales,
+  validateOrbitMediaItem,
+  type OrbitAdminLang,
+} from '../../lib/orbitMedia.ts';
+import type { LocalizedText, OrbitMedia } from '../../lib/siteData.ts';
+
 type Listener = () => void;
 export const SUPPORTED_LANGS = ['es', 'en', 'fr', 'de', 'it', 'ca'] as const;
 export type SupportedLang = (typeof SUPPORTED_LANGS)[number];
@@ -13,6 +21,7 @@ type ImagesTree = Record<string, unknown>;
 
 type PendingImage = {
   path: string;
+  sitePath: string;
   previewSrc: string;
   base64Content: string;
 };
@@ -32,8 +41,10 @@ type AdminSnapshot = {
   isPublishing: boolean;
   publishSuccess: boolean;
   publishError: string;
+  orbitValidationErrors: string[];
   getText: (key: string) => string;
   getImageSrc: (key: string) => string;
+  getOrbitMedia: () => OrbitMedia[];
 };
 
 const DRAFT_STORAGE_KEY = 'marta-inline-editor-draft';
@@ -162,6 +173,31 @@ function buildMarkdownPost(post: {
   return `---\ntitle: ${quoted(post.title)}\ndescription: ${quoted(post.description)}\ndate: ${quoted(post.date)}\ntags: ${tags}\nlang: ${quoted(post.lang)}\n---\n\n${post.body.trim()}\n`;
 }
 
+function getOrbitPendingKey(itemId: string, field: 'src' | 'poster') {
+  return `orbit.${itemId}.${field}`;
+}
+
+function normalizeUploadPath(uploadPath: string) {
+  if (uploadPath.startsWith('public/')) {
+    return {
+      path: uploadPath,
+      sitePath: `/${uploadPath.replace(/^public\//, '')}`,
+    };
+  }
+
+  if (uploadPath.startsWith('/')) {
+    return {
+      path: `public${uploadPath}`,
+      sitePath: uploadPath,
+    };
+  }
+
+  return {
+    path: uploadPath,
+    sitePath: uploadPath.startsWith('/') ? uploadPath : `/${uploadPath}`,
+  };
+}
+
 export class AdminStore {
   private listeners = new Set<Listener>();
   private initialized = false;
@@ -183,8 +219,10 @@ export class AdminStore {
     isPublishing: false,
     publishSuccess: false,
     publishError: '',
+    orbitValidationErrors: [],
     getText: (key: string) => this.getText(key),
     getImageSrc: (key: string) => this.getImageSrc(key),
+    getOrbitMedia: () => this.getOrbitMedia(),
   };
 
   isInitialized(): boolean {
@@ -230,6 +268,22 @@ export class AdminStore {
     return typeof value === 'string' ? value : '';
   }
 
+  getOrbitMedia(): OrbitMedia[] {
+    const orbitMedia = deepGet(this.images, 'orbitMedia');
+    if (!Array.isArray(orbitMedia)) return [];
+
+    return cloneValue(orbitMedia as OrbitMedia[]).map((item) => {
+      const srcPreview = this.pendingImages[getOrbitPendingKey(item.id, 'src')]?.previewSrc;
+      const posterPreview = this.pendingImages[getOrbitPendingKey(item.id, 'poster')]?.previewSrc;
+
+      return {
+        ...item,
+        src: srcPreview ?? item.src,
+        poster: posterPreview ?? item.poster ?? null,
+      };
+    });
+  }
+
   setText(key: string, value: string): void {
     if (!this.initialized) return;
     const langTree = this.i18n[this.currentLang];
@@ -247,16 +301,137 @@ export class AdminStore {
     return typeof value === 'string' ? value : '';
   }
 
-  async setImage(key: string, file: File, uploadPath: string): Promise<void> {
+  addOrbitMediaItem(): void {
     if (!this.initialized) return;
+    const orbitMedia = this.getMutableOrbitMedia();
+    orbitMedia.push(createOrbitMediaDraft(orbitMedia.map((item) => item.id)));
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  removeOrbitMediaItem(index: number): void {
+    if (!this.initialized) return;
+    const orbitMedia = this.getMutableOrbitMedia();
+    const [removedItem] = orbitMedia.splice(index, 1);
+    if (removedItem) {
+      delete this.pendingImages[getOrbitPendingKey(removedItem.id, 'src')];
+      delete this.pendingImages[getOrbitPendingKey(removedItem.id, 'poster')];
+    }
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  moveOrbitMediaItem(index: number, delta: number): void {
+    if (!this.initialized || delta === 0) return;
+    const orbitMedia = this.getMutableOrbitMedia();
+    const targetIndex = index + delta;
+
+    if (index < 0 || index >= orbitMedia.length || targetIndex < 0 || targetIndex >= orbitMedia.length) {
+      return;
+    }
+
+    const [item] = orbitMedia.splice(index, 1);
+    orbitMedia.splice(targetIndex, 0, item);
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  updateOrbitMediaType(index: number, type: OrbitMedia['type']): void {
+    const item = this.getMutableOrbitMedia()[index];
+    if (!item) return;
+    item.type = type;
+    if (type === 'image') {
+      item.poster = null;
+      delete this.pendingImages[getOrbitPendingKey(item.id, 'poster')];
+    }
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  updateOrbitMediaHref(index: number, href: string | null): void {
+    const item = this.getMutableOrbitMedia()[index];
+    if (!item) return;
+    const trimmedHref = href?.trim() ?? '';
+    item.href = trimmedHref ? (trimmedHref.startsWith('/') ? trimmedHref : `/${trimmedHref}`) : null;
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  updateOrbitMediaPoster(index: number, poster: string | null): void {
+    const item = this.getMutableOrbitMedia()[index];
+    if (!item) return;
+    item.poster = poster && poster.trim() ? poster.trim() : null;
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  updateOrbitMediaText(index: number, field: 'label' | 'alt', lang: OrbitAdminLang, value: string): void {
+    const item = this.getMutableOrbitMedia()[index];
+    if (!item) return;
+
+    const localized = { ...item[field] } as LocalizedText;
+    const previousSpanish = localized.es;
+    localized[lang] = value;
+
+    if (lang === 'es') {
+      item[field] = applySpanishFallbackToCodeManagedLocales({
+        ...localized,
+        de: localized.de === previousSpanish || !localized.de.trim() ? value : localized.de,
+        it: localized.it === previousSpanish || !localized.it.trim() ? value : localized.it,
+        ca: localized.ca === previousSpanish || !localized.ca.trim() ? value : localized.ca,
+      });
+    } else {
+      item[field] = localized;
+    }
+
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  async setOrbitMediaFile(index: number, field: 'src' | 'poster', file: File, uploadPath: string): Promise<void> {
+    const item = this.getMutableOrbitMedia()[index];
+    if (!item) return;
+
+    const normalizedPath = normalizeUploadPath(uploadPath);
     const dataUrl = await fileToDataUrl(file);
     const base64Content = dataUrl.includes(',') ? dataUrl.split(',')[1] ?? '' : dataUrl;
-    this.pendingImages[key] = {
-      path: uploadPath,
+    this.pendingImages[getOrbitPendingKey(item.id, field)] = {
+      path: normalizedPath.path,
+      sitePath: normalizedPath.sitePath,
       previewSrc: dataUrl,
       base64Content,
     };
-    deepSet(this.images, key, uploadPath);
+
+    if (field === 'src') {
+      item.src = normalizedPath.sitePath;
+    } else {
+      item.poster = normalizedPath.sitePath;
+    }
+
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  async setImage(key: string, file: File, uploadPath: string): Promise<void> {
+    if (!this.initialized) return;
+    const normalizedPath = normalizeUploadPath(uploadPath);
+    const dataUrl = await fileToDataUrl(file);
+    const base64Content = dataUrl.includes(',') ? dataUrl.split(',')[1] ?? '' : dataUrl;
+    this.pendingImages[key] = {
+      path: normalizedPath.path,
+      sitePath: normalizedPath.sitePath,
+      previewSrc: dataUrl,
+      base64Content,
+    };
+    deepSet(this.images, key, normalizedPath.sitePath);
     this.publishSuccessState = false;
     this.publishErrorState = '';
     this.emit();
@@ -297,6 +472,14 @@ export class AdminStore {
 
   async publish(): Promise<void> {
     if (!this.initialized) return;
+    const orbitValidationErrors = this.getOrbitValidationErrors();
+    if (orbitValidationErrors.length > 0) {
+      this.publishErrorState = orbitValidationErrors.join(' ');
+      this.publishSuccessState = false;
+      this.emit();
+      return;
+    }
+
     if (!this.token) {
       this.publishErrorState = 'Login required before publishing.';
       this.publishSuccessState = false;
@@ -435,12 +618,28 @@ export class AdminStore {
     return data.sha ?? null;
   }
 
+  private getMutableOrbitMedia(): OrbitMedia[] {
+    const orbitMedia = deepGet(this.images, 'orbitMedia');
+    if (Array.isArray(orbitMedia)) return orbitMedia as OrbitMedia[];
+
+    const nextOrbitMedia: OrbitMedia[] = [];
+    deepSet(this.images, 'orbitMedia', nextOrbitMedia);
+    return nextOrbitMedia;
+  }
+
+  private getOrbitValidationErrors(): string[] {
+    return this.getOrbitMedia().flatMap((item) => (
+      validateOrbitMediaItem(item).map((error) => `${item.id}: ${error}`)
+    ));
+  }
+
   private emit(): void {
     const textDiffs = Object.keys(this.i18n).reduce((total, lang) => {
       return total + countLeafDiffs(this.i18n[lang], this.originalI18n[lang]);
     }, 0);
     const imageDiffs = countLeafDiffs(this.images, this.originalImages);
     const pendingCount = textDiffs + imageDiffs;
+    const orbitValidationErrors = this.getOrbitValidationErrors();
 
     this.snapshot = {
       initialized: this.initialized,
@@ -450,8 +649,10 @@ export class AdminStore {
       isPublishing: this.isPublishingState,
       publishSuccess: this.publishSuccessState,
       publishError: this.publishErrorState,
+      orbitValidationErrors,
       getText: (key: string) => this.getText(key),
       getImageSrc: (key: string) => this.getImageSrc(key),
+      getOrbitMedia: () => this.getOrbitMedia(),
     };
 
     this.listeners.forEach((listener) => listener());

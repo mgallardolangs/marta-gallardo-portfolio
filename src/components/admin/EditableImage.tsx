@@ -34,10 +34,9 @@ export default function EditableImage({ imageKey, className = '', alt = '', labe
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    // Accept JPG, PNG, WebP, SVG
-    const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'video/mp4', 'video/webm', 'video/quicktime'];
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
     if (!validTypes.includes(file.type)) {
-      alert('Use JPG, PNG, WebP, or SVG format');
+      alert('Use JPG, PNG, WebP, GIF, or SVG format');
       return;
     }
     const ext = file.name.split('.').pop() || 'png';
@@ -70,7 +69,7 @@ export default function EditableImage({ imageKey, className = '', alt = '', labe
       <input
         ref={fileRef}
         type="file"
-        accept="image/jpeg,image/png,image/webp,image/svg+xml,video/mp4,video/webm,video/quicktime"
+        accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
         className="hidden"
         onChange={handleFile}
       />

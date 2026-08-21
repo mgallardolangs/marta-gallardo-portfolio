@@ -4,25 +4,17 @@ import PageTransition from '../components/PageTransition';
 import ScrollReveal from '../components/ScrollReveal';
 import RichText from '../components/RichText.astro';
 import AnimatedScrollText from '../components/AnimatedScrollText';
-import StoryMap from '../components/StoryMap';
+import OvalMediaOrbit from '../components/OvalMediaOrbit';
 import ParallaxLayer from '../components/ParallaxLayer';
 import FloatingIcon from '../components/FloatingIcon';
 import { ArrowWavy } from '../components/DoodleArrows';
 import StaggerContainer, { StaggerItem } from '../components/StaggerContainer';
 import TypedTitle from '../components/TypedTitle.astro';
 import { getLangFromUrl, getLocalizedPath, t } from '../i18n';
-import { siteData as imagesData } from '../lib/siteData';
+import { siteData } from '../lib/siteData';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
-
-const storyMapPhotos = [
-  { src: imagesData.galleryCutouts?.shotOne || '', x: 45, y: 20, size: 6, label: 'Europe' },
-  { src: imagesData.galleryCutouts?.shotTwo || '', x: 10, y: 32, size: 5.5, label: 'Americas' },
-  { src: imagesData.galleryCutouts?.shotThree || '', x: 63, y: 36, size: 5.5, label: 'Asia' },
-  { src: imagesData.galleryCutouts?.shotFour || '', x: 25, y: 55, size: 5, label: 'South' },
-  { src: imagesData.galleryCutouts?.shotFive || '', x: 82, y: 55, size: 5.5, label: 'Middle' },
-].filter((photo) => photo.src);
 ---
 
 <BaseLayout title={`${i.hero.name} — ${i.home.hero.kicker}`} description={i.home.hero.description}>
@@ -103,8 +95,8 @@ const storyMapPhotos = [
 
             <div class="absolute inset-0 flex items-center justify-center">
               <div class="relative flex h-[29rem] w-full max-w-[24rem] items-center justify-center overflow-hidden border border-black/10 bg-blush-50 shadow-[0_28px_90px_rgba(6,4,3,0.12)] md:h-[35rem] md:max-w-[27rem]">
-                {imagesData.heroMainPhoto && !imagesData.heroMainPhoto.includes('placeholder') ? (
-                  <img src={imagesData.heroMainPhoto} alt={i.hero.name} class="absolute inset-0 h-full w-full object-cover" />
+                {siteData.heroMainPhoto && !siteData.heroMainPhoto.includes('placeholder') ? (
+                  <img src={siteData.heroMainPhoto} alt={i.hero.name} class="absolute inset-0 h-full w-full object-cover" />
                 ) : (
                   <div class="relative z-10 text-center">
                     <p class="font-body text-xs font-semibold uppercase tracking-[0.32em] text-amaranth">{i.home.hero.coverLabel}</p>
@@ -120,8 +112,8 @@ const storyMapPhotos = [
 
       <section class="border-b border-black/10 bg-white px-6 py-20 md:py-24">
         <div class="site-container grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-          <div class="relative min-h-[30rem] border border-black/10 bg-paper p-4 md:min-h-[36rem] md:p-6">
-            <StoryMap client:visible photos={storyMapPhotos} className="absolute inset-0" />
+          <div class="relative overflow-hidden border border-black/10 bg-paper px-4 py-8 md:px-6 md:py-10">
+            <OvalMediaOrbit client:visible items={siteData.orbitMedia} lang={lang} />
           </div>
 
           <ScrollReveal client:visible direction="right" className="space-y-6 lg:pl-8 xl:pl-14">
@@ -146,6 +138,18 @@ const storyMapPhotos = [
             </StaggerContainer>
           </div>
         </ScrollReveal>
+      </section>
+
+      <section class="border-b border-white/10 bg-ink px-6 py-10" aria-hidden="true">
+        <div class="site-container">
+          <div class="relative mx-auto h-px max-w-5xl bg-white/12">
+            <span class="absolute left-1/2 top-1/2 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-3 bg-ink px-4 font-body text-[0.68rem] font-semibold uppercase tracking-[0.34em] text-amaranth-soft">
+              <span class="h-px w-8 bg-amaranth"></span>
+              MG
+              <span class="h-px w-8 bg-amaranth"></span>
+            </span>
+          </div>
+        </div>
       </section>
 
       <section class="bg-ink px-6 py-20 text-paper md:py-24">
@@ -199,9 +203,9 @@ const storyMapPhotos = [
             <p class="font-body text-xs font-semibold uppercase tracking-[0.36em] text-amaranth-soft">{i.home.video.eyebrow}</p>
             <h2 class="font-heading text-4xl leading-none text-paper md:text-6xl">{i.home.video.title}</h2>
             <RichText text={i.home.video.description} class="max-w-xl font-body text-lg leading-8 text-white/74 md:text-xl" />
-            {imagesData.instagramScreenshot ? (
+            {siteData.instagramScreenshot ? (
               <div class="mt-6 overflow-hidden border border-white/10">
-                <img src={imagesData.instagramScreenshot} alt="Instagram" class="w-full" />
+                <img src={siteData.instagramScreenshot} alt="Instagram" class="w-full" />
               </div>
             ) : (
               <div class="mt-6 flex aspect-[4/3] items-center justify-center border border-dashed border-white/20 bg-white/5">

@@ -55,8 +55,8 @@ export default function AdminToolbar() {
             <button
               type="button"
               onClick={() => void store.publish()}
-              disabled={!store.isDirty || store.isPublishing}
-              className={`w-full text-xs px-3 py-2 rounded-lg font-bold transition-colors text-left ${store.isDirty ? 'bg-green-500 hover:bg-green-400' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}`}
+              disabled={!store.isDirty || store.isPublishing || store.orbitValidationErrors.length > 0}
+              className={`w-full text-xs px-3 py-2 rounded-lg font-bold transition-colors text-left ${store.isDirty && store.orbitValidationErrors.length === 0 ? 'bg-green-500 hover:bg-green-400' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}`}
             >
               {store.isPublishing ? '⏳ Publishing...' : '🚀 Publish changes'}
             </button>
@@ -66,6 +66,9 @@ export default function AdminToolbar() {
           </div>
 
           {/* Toasts */}
+          {store.orbitValidationErrors.length > 0 && (
+            <p className="mt-2 text-xs text-amber-300">⚠️ Fix the orbit warnings before publishing.</p>
+          )}
           {store.publishSuccess && <p className="mt-2 text-xs text-green-400">✅ Published! Rebuilds in ~2 min.</p>}
           {store.publishError && <p className="mt-2 text-xs text-red-400">❌ {store.publishError}</p>}
         </div>

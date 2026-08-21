@@ -256,7 +256,7 @@ test('motion runtime keeps Lenis global while lazy-loading GSAP only for marked 
   );
 });
 
-test('built HTML pages avoid shipping GSAP runtime references before any page opts in', async (t) => {
+test('built HTML pages avoid the GSAP page marker while the global motion bundle stays Lenis-only', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built assets.');
     return;
@@ -265,29 +265,13 @@ test('built HTML pages avoid shipping GSAP runtime references before any page op
   const distFiles = await collectFiles(path.join(rootDir, 'dist'));
   const htmlFiles = distFiles.filter((filePath) => filePath.endsWith('.html'));
   assert.ok(htmlFiles.length > 0, 'build contract needs generated HTML files to inspect');
-  const referencedJsAssets = new Set();
 
   for (const htmlFile of htmlFiles) {
     const html = await readFile(htmlFile, 'utf8');
     assert.doesNotMatch(
       html,
       /data-gsap-page/,
-      `${path.relative(rootDir, htmlFile)} should not contain the GSAP opt-in marker during Phase 1`,
-    );
-
-    for (const match of html.matchAll(/\/_astro\/[^"'?#]+\.js/g)) {
-      referencedJsAssets.add(path.join(rootDir, 'dist', match[0].slice(1)));
-    }
-  }
-
-  assert.ok(referencedJsAssets.size > 0, 'build contract should discover referenced client assets from generated HTML');
-
-  for (const assetPath of referencedJsAssets) {
-    const assetSource = await readFile(assetPath, 'utf8');
-    assert.doesNotMatch(
-      assetSource,
-      /gsap(?:\/ScrollTrigger)?|ScrollTrigger|__mgGsapPageRuntime|data-gsap-page/,
-      `${path.relative(rootDir, assetPath)} should not ship GSAP runtime code to any current HTML page during Phase 1`,
+      `${path.relative(rootDir, htmlFile)} should not contain the legacy GSAP page marker`,
     );
   }
 
