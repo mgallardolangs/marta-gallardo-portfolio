@@ -174,7 +174,7 @@ La web necesita saber qué imagen va en cada sitio. Para eso, editas un archivo 
 
 Busca esta línea:
 ```
-"heroMainPhoto": "/images/site/img_5587.jpg",
+"heroMainPhoto": "/images/site/img_5587.webp",
 ```
 
 Cámbiala por el nombre de tu nueva foto:
