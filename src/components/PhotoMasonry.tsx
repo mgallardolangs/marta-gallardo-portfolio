@@ -20,6 +20,7 @@ const labels = {
 export default function PhotoMasonry({ photos, lang = 'es' }: Props) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const prefersReducedMotion = useReducedMotion();
   const ui = labels[lang] ?? labels.es;
@@ -33,6 +34,28 @@ export default function PhotoMasonry({ photos, lang = 'es' }: Props) {
       if (event.key === 'Escape') setActiveIndex(null);
       if (event.key === 'ArrowRight') setActiveIndex((current) => (current === null ? current : (current + 1) % photos.length));
       if (event.key === 'ArrowLeft') setActiveIndex((current) => (current === null ? current : (current - 1 + photos.length) % photos.length));
+      if (event.key === 'Tab') {
+        const focusableElements = dialogRef.current
+          ? Array.from(
+              dialogRef.current.querySelectorAll<HTMLElement>(
+                'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
+              ),
+            )
+          : [];
+
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (event.shiftKey && document.activeElement === firstElement) {
+          event.preventDefault();
+          lastElement.focus();
+        } else if (!event.shiftKey && document.activeElement === lastElement) {
+          event.preventDefault();
+          firstElement.focus();
+        }
+      }
     };
 
     const originalOverflow = document.body.style.overflow;
@@ -80,6 +103,7 @@ export default function PhotoMasonry({ photos, lang = 'es' }: Props) {
       <AnimatePresence>
         {activeIndex !== null && (
           <motion.div
+            ref={dialogRef}
             className="fixed inset-0 z-[130] flex items-center justify-center bg-charcoal/90 p-4 md:p-8"
             initial={prefersReducedMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}

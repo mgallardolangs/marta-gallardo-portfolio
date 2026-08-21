@@ -64,7 +64,15 @@
     document.addEventListener('astro:before-preparation', onBeforePreparation);
     document.addEventListener('astro:page-load', onPageLoad);
 
-    const onReducedMotionChange = () => refreshRuntime();
+    const onReducedMotionChange = () => {
+      if (lenis.prefersReducedMotion) {
+        refreshRuntime();
+        return;
+      }
+
+      lenis.start();
+      requestAnimationFrame(refreshRuntime);
+    };
     reducedMotionMedia.addEventListener('change', onReducedMotionChange);
     refreshRuntime();
 

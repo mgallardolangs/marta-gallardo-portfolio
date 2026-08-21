@@ -166,6 +166,11 @@ test('motion runtime and reduced-motion-sensitive components keep the Phase 5 ha
   assert.match(serviceSwitcherSource, /prefersReducedMotion/);
   assert.match(experienceTabsSource, /prefersReducedMotion \? '' : 'duration-300'/);
   assert.doesNotMatch(footerSource, /animation:\s*[^;]*infinite/, 'footer should not carry any continuous animation loop');
+  assert.match(
+    motionRuntimeSource,
+    /const onReducedMotionChange = \(\) => \{\s*if \(lenis\.prefersReducedMotion\) \{\s*refreshRuntime\(\);\s*return;\s*\}\s*lenis\.start\(\);\s*requestAnimationFrame\(refreshRuntime\);\s*\};/s,
+    'live reduced-motion toggles should restart Lenis when full motion becomes available again',
+  );
 });
 
 test('public media surfaces keep eager hero loading, lazy below-fold loading, and explicit sizing contracts', async () => {
@@ -191,6 +196,29 @@ test('public media surfaces keep eager hero loading, lazy below-fold loading, an
   assert.match(blogArticleSource, /<img src=\{post\.data\.image\} alt=\{post\.data\.title\}[^>]*width=\{1600\}[^>]*height=\{900\}[^>]*fetchpriority="high"/);
   assert.match(photoMasonrySource, /alt=""[^>]*loading="lazy"[^>]*decoding="async"/);
   assert.match(videoGallerySource, /preload="metadata"/);
+});
+
+test('media dialogs keep focus trapped and video cards avoid nested interactive controls', async () => {
+  const [photoMasonrySource, videoGallerySource] = await Promise.all([
+    readSource('src/components/PhotoMasonry.tsx'),
+    readSource('src/components/VideoGallery.tsx'),
+  ]);
+
+  assert.match(
+    photoMasonrySource,
+    /if \(event\.key === 'Tab'\) \{\s*const focusableElements = dialogRef\.current[\s\S]+const firstElement = focusableElements\[0\];[\s\S]+const lastElement = focusableElements\[focusableElements\.length - 1\];[\s\S]+lastElement\.focus\(\);[\s\S]+firstElement\.focus\(\);/s,
+    'photo dialog should trap keyboard focus while it is open',
+  );
+  assert.match(
+    videoGallerySource,
+    /if \(event\.key === 'Tab'\) \{\s*const focusableElements = dialogRef\.current[\s\S]+const firstElement = focusableElements\[0\];[\s\S]+const lastElement = focusableElements\[focusableElements\.length - 1\];[\s\S]+lastElement\.focus\(\);[\s\S]+firstElement\.focus\(\);/s,
+    'video dialog should trap keyboard focus while it is open',
+  );
+  assert.doesNotMatch(
+    videoGallerySource,
+    /<motion\.button[\s\S]*?<button/s,
+    'video cards should not nest a fullscreen button inside another button',
+  );
 });
 
 test('built HTML keeps route-scoped GSAP or Embla bundles limited to home and translation routes', async (t) => {
@@ -289,4 +317,11 @@ test('built representative routes keep SEO, noindex, hreflang, and local media r
       await access(path.join(rootDir, 'public', mediaPath.replace(/^\//, '')));
     }
   }
+
+  const robots = await readFile(path.join(rootDir, 'dist/robots.txt'), 'utf8');
+  assert.match(robots, /^User-agent: \*\nAllow: \/\nDisallow: \/admin\n\nSitemap: https:\/\/marttelier\.netlify\.app\/sitemap-index\.xml\n?$/);
+
+  const sitemapIndex = await readFile(path.join(rootDir, 'dist/sitemap-index.xml'), 'utf8');
+  assert.match(sitemapIndex, /<sitemapindex/);
+  assert.match(sitemapIndex, /https:\/\/marttelier\.netlify\.app\/sitemap-0\.xml/);
 });

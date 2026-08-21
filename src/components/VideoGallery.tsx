@@ -26,6 +26,7 @@ export default function VideoGallery({ videos, lang = 'es' }: Props) {
   const previewRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const modalVideoRef = useRef<HTMLVideoElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const prefersReducedMotion = useReducedMotion();
   const ui = labels[lang] ?? labels.es;
@@ -37,6 +38,28 @@ export default function VideoGallery({ videos, lang = 'es' }: Props) {
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setActiveIndex(null);
+      if (event.key === 'Tab') {
+        const focusableElements = dialogRef.current
+          ? Array.from(
+              dialogRef.current.querySelectorAll<HTMLElement>(
+                'button:not([disabled]), video[controls], [href], [tabindex]:not([tabindex="-1"])',
+              ),
+            )
+          : [];
+
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (event.shiftKey && document.activeElement === firstElement) {
+          event.preventDefault();
+          lastElement.focus();
+        } else if (!event.shiftKey && document.activeElement === lastElement) {
+          event.preventDefault();
+          firstElement.focus();
+        }
+      }
     };
 
     const originalOverflow = document.body.style.overflow;
@@ -85,18 +108,13 @@ export default function VideoGallery({ videos, lang = 'es' }: Props) {
     <>
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {videos.map((video, index) => (
-          <motion.button
+          <motion.article
             key={`${video.src}-${index}`}
-            type="button"
-            aria-label={`${ui.title} ${index + 1}`}
             className="group relative overflow-hidden rounded-[2rem] bg-charcoal text-left shadow-[0_20px_60px_rgba(45,45,45,0.15)]"
             whileHover={prefersReducedMotion ? undefined : { y: -4 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
             onMouseEnter={() => void playPreview(index)}
             onMouseLeave={() => stopPreview(index)}
-            onFocus={() => void playPreview(index)}
-            onBlur={() => stopPreview(index)}
-            onClick={() => setActiveIndex(index)}
           >
             <video
               ref={(element) => {
@@ -109,15 +127,23 @@ export default function VideoGallery({ videos, lang = 'es' }: Props) {
               preload="metadata"
               className="aspect-[9/16] w-full object-cover transition duration-300 group-hover:scale-[1.02]"
             />
+            <button
+              type="button"
+              aria-label={`${ui.title} ${index + 1}`}
+              className="absolute inset-0 z-10 rounded-[2rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-paper focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal"
+              onFocus={() => void playPreview(index)}
+              onBlur={() => stopPreview(index)}
+              onClick={() => setActiveIndex(index)}
+            />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/75 via-charcoal/10 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 flex items-center justify-between p-4 text-white">
+            <div className="absolute inset-x-0 bottom-0 z-10 flex items-center justify-between p-4 text-white">
               <div>
                 <p className="font-accent text-[11px] uppercase tracking-[0.35em] text-blush-100">{ui.title}</p>
                 <p className="mt-1 font-body text-sm text-white/85">{ui.hint}</p>
               </div>
               <button
                 type="button"
-                className="pointer-events-auto rounded-full bg-white/15 px-3 py-2 text-sm backdrop-blur-sm transition hover:bg-white/25"
+                className="pointer-events-auto z-20 rounded-full bg-white/15 px-3 py-2 text-sm backdrop-blur-sm transition hover:bg-white/25"
                 onClick={(event) => {
                   event.stopPropagation();
                   void requestFullscreen(previewRefs.current[index]);
@@ -127,12 +153,12 @@ export default function VideoGallery({ videos, lang = 'es' }: Props) {
                 ⤢
               </button>
             </div>
-          </motion.button>
+          </motion.article>
         ))}
       </div>
 
       {activeIndex !== null && (
-        <div className="fixed inset-0 z-[120] flex items-center justify-center bg-charcoal/90 p-4 md:p-8" role="dialog" aria-modal="true" aria-label={`${ui.dialog} ${activeIndex + 1}`}>
+        <div ref={dialogRef} className="fixed inset-0 z-[120] flex items-center justify-center bg-charcoal/90 p-4 md:p-8" role="dialog" aria-modal="true" aria-label={`${ui.dialog} ${activeIndex + 1}`}>
           <button
             ref={closeButtonRef}
             type="button"
