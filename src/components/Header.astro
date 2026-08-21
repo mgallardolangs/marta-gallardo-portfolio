@@ -373,6 +373,8 @@ const isActive = (path: string) => {
 </style>
 
 <script>
+  import { closeActiveHeaderOverlay, createHeaderOverlayState, getFocusTrapTarget, toggleLanguageMenu, toggleMobileMenu } from '../lib/headerOverlayState.js';
+
   declare global {
     interface Window {
       __mgHeaderCleanup?: () => void;
@@ -395,16 +397,7 @@ const isActive = (path: string) => {
     const languageLinks = Array.from(header.querySelectorAll<HTMLAnchorElement>('[data-lang-menu] [role="menuitem"]'));
     let lastScrollY = window.scrollY;
     let bodyOverflow = '';
-    let previouslyFocusedElement: HTMLElement | null = null;
-
-    const rememberFocus = () => {
-      previouslyFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    };
-
-    const restoreFocus = () => {
-      previouslyFocusedElement?.focus();
-      previouslyFocusedElement = null;
-    };
+    let overlayState = createHeaderOverlayState();
 
     const getFocusableElements = (container: HTMLElement | null) => {
       if (!container) return [];
@@ -433,8 +426,64 @@ const isActive = (path: string) => {
       }
     };
 
+    const focusOverlayTarget = (target: 'first-language-item' | 'mobile-close' | null) => {
+      if (target === 'mobile-close') {
+        requestAnimationFrame(() => {
+          menuClose?.focus();
+        });
+        return;
+      }
+
+      if (target === 'first-language-item') {
+        requestAnimationFrame(() => {
+          languageMenu?.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+        });
+      }
+    };
+
+    const applyOverlayResult = ({
+      state: nextState,
+      focusTarget,
+      restoreFocusTo,
+    }: {
+      state: ReturnType<typeof createHeaderOverlayState>;
+      focusTarget: 'first-language-item' | 'mobile-close' | null;
+      restoreFocusTo: HTMLElement | null;
+    }) => {
+      const wasBodyScrollLocked = overlayState.bodyScrollLocked;
+
+      if (!wasBodyScrollLocked && nextState.bodyScrollLocked) {
+        bodyOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+      }
+
+      if (wasBodyScrollLocked && !nextState.bodyScrollLocked) {
+        document.body.style.overflow = bodyOverflow;
+      }
+
+      overlayState = nextState;
+
+      if (mobilePanel && menuToggle) {
+        mobilePanel.hidden = !nextState.mobileMenuOpen;
+        menuToggle.setAttribute('aria-expanded', String(nextState.mobileMenuOpen));
+      }
+
+      if (languageMenu) {
+        languageMenu.hidden = !nextState.languageMenuOpen;
+      }
+
+      langToggles.forEach((toggle) => toggle.setAttribute('aria-expanded', String(nextState.languageMenuOpen)));
+
+      if (nextState.activeOverlay) {
+        header.dataset.hidden = 'false';
+      }
+
+      restoreFocusTo?.focus();
+      focusOverlayTarget(focusTarget);
+    };
+
     const syncHeader = () => {
-      const isMobileMenuOpen = mobilePanel ? !mobilePanel.hidden : false;
+      const isMobileMenuOpen = overlayState.mobileMenuOpen;
       header.dataset.compact = window.scrollY > 80 ? 'true' : 'false';
 
       if (!window.matchMedia('(min-width: 768px)').matches || isMobileMenuOpen) {
@@ -451,59 +500,8 @@ const isActive = (path: string) => {
 
       lastScrollY = window.scrollY;
     };
-
-    const setLanguageMenu = (open: boolean, trigger?: HTMLElement | null) => {
-      if (!languageMenu) return;
-      const wasOpen = !languageMenu.hidden;
-
-      if (open && !wasOpen) {
-        previouslyFocusedElement = trigger ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
-      }
-
-      languageMenu.hidden = !open;
-      langToggles.forEach((toggle) => toggle.setAttribute('aria-expanded', String(open)));
-
-      if (open) {
-        requestAnimationFrame(() => {
-          languageMenu.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
-        });
-        return;
-      }
-
-      if (wasOpen) {
-        restoreFocus();
-      }
-    };
-
-    const setMobileMenu = (open: boolean, trigger?: HTMLElement | null) => {
-      if (!mobilePanel || !menuToggle) return;
-      const wasOpen = !mobilePanel.hidden;
-
-      mobilePanel.hidden = !open;
-      menuToggle.setAttribute('aria-expanded', String(open));
-      header.dataset.hidden = 'false';
-
-      if (open) {
-        previouslyFocusedElement = trigger ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
-        bodyOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
-        requestAnimationFrame(() => {
-          mobilePanel.querySelector<HTMLElement>('[data-menu-close]')?.focus();
-        });
-        return;
-      }
-
-      if (!open) {
-        document.body.style.overflow = bodyOverflow;
-        if (wasOpen) {
-          restoreFocus();
-        }
-      }
-    };
-
     const closeMenus = () => {
-      setLanguageMenu(false);
-      setMobileMenu(false);
+      applyOverlayResult(closeActiveHeaderOverlay(overlayState));
     };
 
     const onScroll = () => syncHeader();
@@ -518,34 +516,34 @@ const isActive = (path: string) => {
     };
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        if (!overlayState.activeOverlay) return;
         event.preventDefault();
-        closeMenus();
+        applyOverlayResult(closeActiveHeaderOverlay(overlayState));
         return;
       }
 
-      if (mobilePanel && !mobilePanel.hidden) {
-        trapFocus(event, mobilePanel);
-        return;
-      }
-
-      if (languageMenu && !languageMenu.hidden) {
-        trapFocus(event, languageMenu);
+      const activeOverlay = getFocusTrapTarget(overlayState);
+      if (activeOverlay) {
+        trapFocus(event, activeOverlay === 'mobile' ? mobilePanel : languageMenu);
       }
     };
 
-    menuToggle && (menuToggle.onclick = () => setMobileMenu(mobilePanel?.hidden ?? true, menuToggle));
-    menuClose && (menuClose.onclick = () => setMobileMenu(false));
+    menuToggle && (menuToggle.onclick = () => {
+      applyOverlayResult(toggleMobileMenu(overlayState, menuToggle));
+    });
+    menuClose && (menuClose.onclick = () => {
+      applyOverlayResult(closeActiveHeaderOverlay(overlayState));
+    });
     langToggles.forEach((toggle) => {
       toggle.onclick = () => {
-        rememberFocus();
-        setLanguageMenu(languageMenu?.hidden ?? true, toggle);
+        applyOverlayResult(toggleLanguageMenu(overlayState, toggle));
       };
     });
     mobileLinks.forEach((link) => {
-      link.onclick = () => setMobileMenu(false);
+      link.onclick = () => applyOverlayResult(closeActiveHeaderOverlay(overlayState));
     });
     languageLinks.forEach((link) => {
-      link.onclick = () => setLanguageMenu(false);
+      link.onclick = () => applyOverlayResult(closeActiveHeaderOverlay(overlayState));
     });
 
     window.addEventListener('scroll', onScroll, { passive: true });

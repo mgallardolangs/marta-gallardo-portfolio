@@ -148,26 +148,35 @@ test('navigation exposes all six locales and header source restores focus when m
   ]);
 
   assert.match(i18nSource, /export const visibleLangs: Lang\[] = \['es', 'en', 'fr', 'de', 'it', 'ca'\];/);
-  assert.match(headerSource, /let previouslyFocusedElement: HTMLElement \| null = null;/);
   assert.match(
     headerSource,
-    /previouslyFocusedElement = document\.activeElement instanceof HTMLElement \? document\.activeElement : null;/,
-    'menu toggles should remember the previously focused element before opening an overlay',
+    /import\s+\{\s*closeActiveHeaderOverlay,\s*createHeaderOverlayState,\s*getFocusTrapTarget,\s*toggleLanguageMenu,\s*toggleMobileMenu\s*\}\s+from\s+['"]\.\.\/lib\/headerOverlayState\.js['"];/,
+    'header overlay behavior should be driven by the shared helper so mutual exclusion and focus policies stay centralized',
   );
   assert.match(
     headerSource,
-    /previouslyFocusedElement\?\.focus\(\);/,
-    'closing either overlay should restore focus to the triggering control',
+    /applyOverlayResult\(toggleLanguageMenu\(overlayState, toggle\)\);/,
+    'opening the language menu should route through the overlay helper so it can close the mobile panel first',
   );
   assert.match(
     headerSource,
-    /menuClose\?\.focus\(\);|mobilePanel\.querySelector<HTMLElement>\('\[data-menu-close\]'\)\?\.focus\(\);/,
-    'opening the mobile menu should move focus inside the panel',
+    /applyOverlayResult\(toggleMobileMenu\(overlayState, menuToggle\)\);/,
+    'opening the mobile panel should route through the overlay helper so it can close the language menu first',
   );
   assert.match(
     headerSource,
-    /languageMenu\.querySelector<HTMLElement>\('\[role="menuitem"\]'\)\?\.focus\(\);/,
-    'opening the language menu should focus the first available locale link',
+    /if \(!wasBodyScrollLocked && nextState\.bodyScrollLocked\) \{[\s\S]*document\.body\.style\.overflow = 'hidden';[\s\S]*\}[\s\S]*if \(wasBodyScrollLocked && !nextState\.bodyScrollLocked\) \{[\s\S]*document\.body\.style\.overflow = bodyOverflow;/s,
+    'body scroll locking should only be tied to the mobile panel lifecycle',
+  );
+  assert.match(
+    headerSource,
+    /const activeOverlay = getFocusTrapTarget\(overlayState\);[\s\S]*trapFocus\(event,\s*activeOverlay === 'mobile' \? mobilePanel : languageMenu\);/s,
+    'keyboard focus trapping should always target the currently active overlay',
+  );
+  assert.match(
+    headerSource,
+    /if \(event\.key === 'Escape'\) \{[\s\S]*applyOverlayResult\(closeActiveHeaderOverlay\(overlayState\)\);[\s\S]*return;[\s\S]*\}/s,
+    'Escape should close only the active overlay and restore focus through the helper result',
   );
 });
 
@@ -196,8 +205,8 @@ test('motion runtime and reduced-motion-sensitive components keep the Phase 5 ha
 
   assert.match(
     motionRuntimeSource,
-    /if \(lenis\.prefersReducedMotion\) \{\s*lenis\.stop\(\);/s,
-    'Lenis should stay off when the user prefers reduced motion',
+    /import\s+\{\s*createMotionRuntimeController\s*\}\s+from\s+['"]\.\.\/lib\/motionRuntime\.js['"];/,
+    'motion runtime should delegate Lenis lifecycle policy to the shared helper',
   );
   assert.match(translationMotionSource, /applyReducedMotionState\(root\);/);
   assert.match(orbitSource, /const shouldAnimate = !previewMode && prefersReducedMotion === false;/);
@@ -207,8 +216,18 @@ test('motion runtime and reduced-motion-sensitive components keep the Phase 5 ha
   assert.doesNotMatch(footerSource, /animation:\s*[^;]*infinite/, 'footer should not carry any continuous animation loop');
   assert.match(
     motionRuntimeSource,
-    /const onReducedMotionChange = \(\) => \{\s*if \(lenis\.prefersReducedMotion\) \{\s*refreshRuntime\(\);\s*return;\s*\}\s*lenis\.start\(\);\s*requestAnimationFrame\(refreshRuntime\);\s*\};/s,
-    'live reduced-motion toggles should restart Lenis when full motion becomes available again',
+    /controller\.syncPreference\(reducedMotionMedia\.matches\);/,
+    'runtime should synchronize the helper against the current reduced-motion media query',
+  );
+  assert.doesNotMatch(
+    motionRuntimeSource,
+    /if \(reducedMotionMedia\.matches\) \{\s*lenis\.stop\(\);/s,
+    'reduced motion should never stop an active Lenis instance while leaving input interception in place',
+  );
+  assert.match(
+    motionRuntimeSource,
+    /const onReducedMotionChange = \(\) => \{\s*if \(reducedMotionMedia\.matches\) \{\s*controller\.syncPreference\(true\);\s*return;\s*\}\s*controller\.syncPreference\(false\);\s*controller\.start\(\);\s*requestAnimationFrame\(\(\) => controller\.syncPreference\(false\)\);\s*\};/s,
+    'live reduced-motion toggles should destroy Lenis on reduce and recreate/start it when full motion returns',
   );
 });
 

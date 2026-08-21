@@ -1,9 +1,11 @@
 <script>
   import Lenis from 'lenis';
+  import { createMotionRuntimeController } from '../lib/motionRuntime.js';
 
   type MotionRuntimeState = {
     lenis: Lenis | null;
     cleanup: (() => void) | null;
+    subscribeLenis: (subscriber: (lenis: Lenis | null) => void) => () => void;
   };
 
   declare global {
@@ -15,49 +17,57 @@
   const mountRuntime = () => {
     window.__mgMotionRuntime?.cleanup?.();
 
-    const lenis = new Lenis({
-      autoRaf: true,
-      anchors: true,
-      lerp: 0.075,
-      syncTouch: false,
-      stopInertiaOnNavigate: true,
-    });
     const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    const refreshRuntime = () => {
-      if (lenis.prefersReducedMotion) {
-        lenis.stop();
-        document.documentElement.dataset.reducedMotion = 'true';
-        return;
-      }
-
-      document.documentElement.dataset.reducedMotion = reducedMotionMedia.matches ? 'true' : 'false';
-      lenis.resize();
+    const runtimeState: MotionRuntimeState = {
+      lenis: null,
+      cleanup: null,
+      subscribeLenis: () => () => {},
+    };
+    const controller = createMotionRuntimeController({
+      createLenis: () => new Lenis({
+        autoRaf: true,
+        anchors: true,
+        lerp: 0.075,
+        syncTouch: false,
+        stopInertiaOnNavigate: true,
+      }),
+      onLenisChange: (lenis) => {
+        runtimeState.lenis = lenis;
+      },
+      setReducedMotion: (prefersReducedMotion) => {
+        document.documentElement.dataset.reducedMotion = prefersReducedMotion ? 'true' : 'false';
+      },
+      clearReducedMotion: () => {
+        delete document.documentElement.dataset.reducedMotion;
+      },
+    });
+    const queueResizeSync = () => {
+      requestAnimationFrame(() => controller.syncPreference(false));
     };
 
     const onVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
-        lenis.stop();
+        controller.stop();
         return;
       }
 
-      if (lenis.prefersReducedMotion) {
-        refreshRuntime();
+      if (reducedMotionMedia.matches) {
+        controller.syncPreference(true);
         return;
       }
 
-      lenis.start();
-      requestAnimationFrame(refreshRuntime);
+      controller.start();
+      queueResizeSync();
     };
-    const onBeforePreparation = () => lenis.stop();
+    const onBeforePreparation = () => controller.stop();
     const onPageLoad = () => {
-      if (lenis.prefersReducedMotion) {
-        refreshRuntime();
+      if (reducedMotionMedia.matches) {
+        controller.syncPreference(true);
         return;
       }
 
-      lenis.start();
-      requestAnimationFrame(refreshRuntime);
+      controller.start();
+      queueResizeSync();
     };
 
     document.addEventListener('visibilitychange', onVisibilityChange);
@@ -65,28 +75,31 @@
     document.addEventListener('astro:page-load', onPageLoad);
 
     const onReducedMotionChange = () => {
-      if (lenis.prefersReducedMotion) {
-        refreshRuntime();
+      if (reducedMotionMedia.matches) {
+        controller.syncPreference(true);
         return;
       }
 
-      lenis.start();
-      requestAnimationFrame(refreshRuntime);
+      controller.syncPreference(false);
+      controller.start();
+      requestAnimationFrame(() => controller.syncPreference(false));
     };
     reducedMotionMedia.addEventListener('change', onReducedMotionChange);
-    refreshRuntime();
+    controller.syncPreference(reducedMotionMedia.matches);
+    if (!reducedMotionMedia.matches) {
+      controller.start();
+    }
 
-    window.__mgMotionRuntime = {
-      lenis,
-      cleanup: () => {
-        lenis.destroy();
-        document.removeEventListener('visibilitychange', onVisibilityChange);
-        document.removeEventListener('astro:before-preparation', onBeforePreparation);
-        document.removeEventListener('astro:page-load', onPageLoad);
-        reducedMotionMedia.removeEventListener('change', onReducedMotionChange);
-        delete document.documentElement.dataset.reducedMotion;
-      },
+    runtimeState.cleanup = () => {
+      controller.cleanup();
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      document.removeEventListener('astro:before-preparation', onBeforePreparation);
+      document.removeEventListener('astro:page-load', onPageLoad);
+      reducedMotionMedia.removeEventListener('change', onReducedMotionChange);
     };
+
+    window.__mgMotionRuntime = runtimeState;
+    runtimeState.subscribeLenis = controller.subscribeLenis;
   };
 
   mountRuntime();

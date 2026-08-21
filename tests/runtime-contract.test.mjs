@@ -221,6 +221,8 @@ test('motion runtime keeps Lenis global while lazy-loading GSAP only for marked 
   assert.match(gsapRuntimeSource, /document\.querySelector\(GSAP_PAGE_SELECTOR\)/, 'GsapPageRuntime should require the page marker before loading');
   assert.match(gsapRuntimeSource, /document\.addEventListener\('astro:page-load', onPageLoad\);/, 'GsapPageRuntime should re-evaluate on Astro page loads');
   assert.match(gsapRuntimeSource, /document\.addEventListener\('astro:before-preparation', onBeforePreparation\);/, 'GsapPageRuntime should clean up on route changes');
+  assert.match(gsapRuntimeSource, /window\.__mgMotionRuntime\?\.subscribeLenis\?\.\(/, 'GsapPageRuntime should subscribe to live Lenis instance changes instead of capturing a stale reference once');
+  assert.doesNotMatch(gsapRuntimeSource, /const lenis = window\.__mgMotionRuntime\?\.lenis \?\? null;/, 'GsapPageRuntime should not capture a one-time Lenis reference now that reduced-motion toggles recreate the instance');
 
   const sourceFiles = allSourceFiles.filter((filePath) => /\.(astro|[cm]?[jt]sx?)$/.test(filePath));
   const markerFiles = [];

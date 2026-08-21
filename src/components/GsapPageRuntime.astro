@@ -2,6 +2,10 @@
 
 <script>
   const GSAP_PAGE_SELECTOR = '[data-gsap-page]';
+  type LenisScrollSource = {
+    on?: (event: 'scroll', callback: () => void) => void;
+    off?: (event: 'scroll', callback: () => void) => void;
+  };
 
   type GsapPageRuntimeState = {
     cleanup: (() => void) | null;
@@ -11,10 +15,8 @@
     interface Window {
       __mgGsapPageRuntime?: GsapPageRuntimeState;
       __mgMotionRuntime?: {
-        lenis?: {
-          on?: (event: 'scroll', callback: () => void) => void;
-          off?: (event: 'scroll', callback: () => void) => void;
-        } | null;
+        lenis?: LenisScrollSource | null;
+        subscribeLenis?: (subscriber: (lenis: LenisScrollSource | null) => void) => () => void;
       };
     }
   }
@@ -39,9 +41,13 @@
     gsap.registerPlugin(ScrollTrigger);
     gsap.ticker.lagSmoothing(0);
 
-    const lenis = window.__mgMotionRuntime?.lenis ?? null;
     const onLenisScroll = () => ScrollTrigger.update();
-    lenis?.on?.('scroll', onLenisScroll);
+    let activeLenis: LenisScrollSource | null = null;
+    const unsubscribeLenis = window.__mgMotionRuntime?.subscribeLenis?.((lenis) => {
+      activeLenis?.off?.('scroll', onLenisScroll);
+      activeLenis = lenis;
+      activeLenis?.on?.('scroll', onLenisScroll);
+    }) ?? (() => {});
 
     const refreshScroll = () => {
       ScrollTrigger.refresh();
@@ -57,7 +63,8 @@
 
     window.__mgGsapPageRuntime = {
       cleanup: () => {
-        lenis?.off?.('scroll', onLenisScroll);
+        activeLenis?.off?.('scroll', onLenisScroll);
+        unsubscribeLenis();
         document.removeEventListener('astro:page-load', onPageLoad);
         document.removeEventListener('astro:before-preparation', onBeforePreparation);
         ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
