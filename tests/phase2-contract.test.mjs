@@ -96,6 +96,7 @@ const requiredLocalePaths = [
   'translationPage.education.studies.2',
   'translationPage.education.studies.3',
   'blog.emptyState',
+  'ugcPage.backToTop',
   'footer.eyebrow',
   'footer.headline',
   'footer.support',
@@ -244,10 +245,28 @@ test('Phase 2 Spanish and translation hero copy match the approved content set',
   assert.equal(es.translationPage.education.studies[1], 'Erasmus+ de seis meses en París y práctica diaria en entornos francófonos.');
   assert.equal(es.translationPage.education.studies[2], 'Formación continua en escritura clara, terminología y optimización de contenidos digitales.');
   assert.equal(es.translationPage.education.studies[3], 'Prácticas de traducción jurídica FR→ES y posedición junto a una traductora especializada.');
+  assert.equal(es.ugcPage.hero.headline, '@marttelier');
+  assert.equal(en.ugcPage.hero.headline, '@marttelier');
+  assert.equal(fr.ugcPage.hero.headline, '@marttelier');
+  assert.equal(de.ugcPage.hero.headline, '@marttelier');
+  assert.equal(it.ugcPage.hero.headline, '@marttelier');
+  assert.equal(ca.ugcPage.hero.headline, '@marttelier');
 
   assert.equal(en.translationPage.hero.title, 'Translation, SEO & Localization Services');
   assert.equal(fr.translationPage.hero.title, 'Services de traduction, SEO et localisation');
   assert.equal(de.translationPage.hero.title, 'Übersetzungs-, SEO- und Lokalisierungsdienstleistungen');
   assert.equal(it.translationPage.hero.title, 'Servizi di traduzione, SEO e localizzazione');
   assert.equal(ca.translationPage.hero.title, 'Serveis de traducció, SEO i localització');
+});
+
+test('Phase 2 article back-link copy avoids duplicating arrow glyphs', async () => {
+  const dictionaries = await Promise.all(locales.map((locale) => readJson(`src/i18n/${locale}.json`)));
+
+  dictionaries.forEach((dictionary, index) => {
+    assert.doesNotMatch(
+      dictionary.blog.backToList,
+      /^[←↩]/u,
+      `${locales[index]} blog.backToList should leave the arrow to markup only`,
+    );
+  });
 });

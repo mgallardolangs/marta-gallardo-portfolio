@@ -54,7 +54,7 @@
   "blog": {
     "title": "Blog",
     "readMore": "Llegir més",
-    "backToList": "← Tornar al blog",
+    "backToList": "Tornar al blog",
     "emptyState": "Encara no hi ha articles. Aviat n’hi haurà més."
   },
   "contact": {
@@ -136,7 +136,7 @@
     "hero": {
       "backgroundLabel": "PORTFOLI DE MARCA",
       "eyebrow": "UGC",
-      "headline": "Conceptes de UGC nets i editorials creats per a marques, no per a diaris d’influencer.",
+      "headline": "@marttelier",
       "description": "Creo vídeos i imatges que s’integren de manera natural a les xarxes i a les campanyes. Contingut proper, cuidat i creïble, pensat per captar l’atenció sense perdre la identitat de la marca.",
       "nicheIntroTitle": "Cada marca té una història diferent.",
       "nicheIntroText": "Entenc què fa única cada marca i ho tradueixo en contingut natural, rellevant i preparat per connectar amb la seva audiència.",

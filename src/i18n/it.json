@@ -54,7 +54,7 @@
   "blog": {
     "title": "Blog",
     "readMore": "Leggi di più",
-    "backToList": "← Torna al blog",
+    "backToList": "Torna al blog",
     "emptyState": "Ancora nessun post. Presto ne arriveranno altri."
   },
   "contact": {
@@ -136,7 +136,7 @@
     "hero": {
       "backgroundLabel": "PORTFOLIO BRAND",
       "eyebrow": "UGC",
-      "headline": "Concept UGC puliti ed editoriali pensati per i brand, non per diari da influencer.",
+      "headline": "@marttelier",
       "description": "Creo video e immagini che si integrano in modo naturale nei social e nelle campagne. Contenuti vicini, curati e credibili, pensati per catturare l’attenzione senza perdere l’identità del brand.",
       "nicheIntroTitle": "Ogni brand ha una storia diversa.",
       "nicheIntroText": "Capisco cosa rende unico ogni brand e lo traduco in contenuti naturali, rilevanti e pronti a entrare in contatto con il suo pubblico.",

@@ -54,7 +54,7 @@
   "blog": {
     "title": "Blog",
     "readMore": "Read more",
-    "backToList": "← Back to blog",
+    "backToList": "Back to blog",
     "emptyState": "No posts yet. More soon."
   },
   "contact": {
@@ -144,7 +144,7 @@
     },
     "pageDescription": "Professional UGC portfolio for Marta Gallardo featuring editorial placeholder campaigns across travel, languages, and art.",
     "nicheLabel": "Niche",
-    "backToTop": "",
+    "backToTop": "Back to top",
     "placeholder": "Placeholder",
     "ugcDemo": "UGC Demo",
     "creativeDirection": "Creative direction",

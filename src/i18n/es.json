@@ -317,7 +317,7 @@
   "blog": {
     "title": "Blog",
     "readMore": "Leer más",
-    "backToList": "← Volver al blog",
+    "backToList": "Volver al blog",
     "emptyState": "Todavía no hay posts. Muy pronto más."
   },
   "nav": {

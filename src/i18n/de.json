@@ -54,7 +54,7 @@
   "blog": {
     "title": "Blog",
     "readMore": "Weiterlesen",
-    "backToList": "← Zurück zum Blog",
+    "backToList": "Zurück zum Blog",
     "emptyState": "Noch keine Beiträge. Mehr in Kürze."
   },
   "contact": {
@@ -136,7 +136,7 @@
     "hero": {
       "backgroundLabel": "MARKENPORTFOLIO",
       "eyebrow": "UGC",
-      "headline": "Klare, editoriale UGC-Konzepte für Marken — nicht für Influencer-Tagebücher.",
+      "headline": "@marttelier",
       "description": "Ich erstelle Videos und Bilder, die sich natürlich in soziale Netzwerke und Kampagnen einfügen. Nahbarer, sorgfältiger und glaubwürdiger Content, der Aufmerksamkeit gewinnt, ohne die Markenidentität zu verlieren.",
       "nicheIntroTitle": "Jede Marke hat eine andere Geschichte.",
       "nicheIntroText": "Ich verstehe, was jede Marke einzigartig macht, und übersetze das in natürlichen, relevanten Content, der bereit ist, mit ihrem Publikum in Verbindung zu treten.",
