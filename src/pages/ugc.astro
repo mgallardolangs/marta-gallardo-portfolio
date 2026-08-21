@@ -8,7 +8,7 @@ import NicheCard from '../components/NicheCard';
 import VideoGallery from '../components/VideoGallery';
 import PhotoMasonry from '../components/PhotoMasonry';
 import { getLangFromUrl, t } from '../i18n';
-import imagesData from '../data/images.json';
+import { siteData as imagesData } from '../lib/siteData';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);

@@ -5,7 +5,7 @@ import PageTransition from '../components/PageTransition';
 import StaggerContainer, { StaggerItem } from '../components/StaggerContainer';
 import RichText from '../components/RichText.astro';
 import { getLangFromUrl, t } from '../i18n';
-import imagesData from '../data/images.json';
+import { siteData as imagesData } from '../lib/siteData';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
