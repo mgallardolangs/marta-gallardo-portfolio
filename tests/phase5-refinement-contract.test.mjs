@@ -75,6 +75,45 @@ function getLocalMediaPathsFromHtml(html) {
   return [...html.matchAll(/(?:src|href|poster)=["'](\/images\/[^"']+)["']/g)].map((match) => match[1]);
 }
 
+function normalizeRoutePath(routePath) {
+  if (!routePath || routePath === '/') return '/';
+  return routePath.replace(/\/+$/, '');
+}
+
+function getRoutePathFromDistHtml(relativePath) {
+  const distRelativePath = relativePath.replace(/^dist[\\/]/, '').replace(/\\/g, '/');
+  if (distRelativePath === 'index.html') return '/';
+  return normalizeRoutePath(`/${distRelativePath.replace(/\/index\.html$/, '').replace(/\.html$/, '')}`);
+}
+
+function isAdminRoute(routePath) {
+  return routePath === '/admin' || routePath.startsWith('/admin/');
+}
+
+function isHomeRoute(routePath) {
+  return routePath === '/' || /^\/(?:en|fr|de|it|ca)$/.test(routePath);
+}
+
+function isTranslationRoute(routePath) {
+  return routePath === '/translation-seo' || /^\/(?:en|fr|de|it|ca)\/translation-seo$/.test(routePath);
+}
+
+function routeNeedsMotionBundles(routePath) {
+  return isHomeRoute(routePath) || isTranslationRoute(routePath);
+}
+
+function getAbsoluteRouteUrl(routePath) {
+  return new URL(routePath === '/' ? '/' : `${routePath}/`, 'https://marttelier.netlify.app').toString();
+}
+
+function getCanonicalUrlFromHtml(html) {
+  return html.match(/<link rel="canonical" href="([^"]+)"/)?.[1] ?? null;
+}
+
+function getXmlLocs(xml) {
+  return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+}
+
 test('referenced raster media stays optimized and stale oversized originals are removed', async () => {
   const site = await readJson('src/data/site.json');
   const referencedRasterPaths = new Set(
@@ -227,20 +266,11 @@ test('built HTML keeps route-scoped GSAP or Embla bundles limited to home and tr
     return;
   }
 
-  const routeHtmlMap = {
-    homeEs: 'dist/index.html',
-    homeEn: 'dist/en/index.html',
-    translationEs: 'dist/translation-seo/index.html',
-    translationDe: 'dist/de/translation-seo/index.html',
-    ugcEs: 'dist/ugc/index.html',
-    contactEs: 'dist/contact/index.html',
-    blogEs: 'dist/blog/index.html',
-    adminIndex: 'dist/admin/index.html',
-    adminUgc: 'dist/admin/ugc/index.html',
-    adminTranslation: 'dist/admin/translation-seo/index.html',
-    adminContact: 'dist/admin/contact/index.html',
-    adminBlog: 'dist/admin/blog/index.html',
-  };
+  const distHtmlFiles = (await collectFiles(path.join(rootDir, 'dist')))
+    .filter((filePath) => filePath.endsWith('.html'))
+    .map((filePath) => path.relative(rootDir, filePath).replace(/\\/g, '/'));
+
+  assert.ok(distHtmlFiles.length >= 1, 'expected the build to emit HTML files into dist/');
 
   const assetCache = new Map();
   const readAsset = async (assetPath) => {
@@ -251,77 +281,92 @@ test('built HTML keeps route-scoped GSAP or Embla bundles limited to home and tr
     return contents;
   };
 
-  const routeSignals = {};
-  for (const [label, relativePath] of Object.entries(routeHtmlMap)) {
+  for (const relativePath of distHtmlFiles) {
+    const routePath = getRoutePathFromDistHtml(relativePath);
     const html = await readFile(path.join(rootDir, relativePath), 'utf8');
     const assets = getAssetPathsFromHtml(html);
     const contents = await Promise.all(assets.map((assetPath) => readAsset(assetPath)));
-    routeSignals[label] = contents.some((source) => /(?:gsap|ScrollTrigger|embla)/i.test(source));
-  }
+    const hasMotionBundle = contents.some((source) => /(?:gsap|ScrollTrigger|embla)/i.test(source));
 
-  assert.equal(routeSignals.homeEs, true);
-  assert.equal(routeSignals.homeEn, true);
-  assert.equal(routeSignals.translationEs, true);
-  assert.equal(routeSignals.translationDe, true);
-  assert.equal(routeSignals.ugcEs, false);
-  assert.equal(routeSignals.contactEs, false);
-  assert.equal(routeSignals.blogEs, false);
-  assert.equal(routeSignals.adminIndex, false);
-  assert.equal(routeSignals.adminUgc, false);
-  assert.equal(routeSignals.adminTranslation, false);
-  assert.equal(routeSignals.adminContact, false);
-  assert.equal(routeSignals.adminBlog, false);
+    assert.equal(
+      hasMotionBundle,
+      routeNeedsMotionBundles(routePath),
+      `${routePath} should ${routeNeedsMotionBundles(routePath) ? '' : 'not '}ship home/translation motion bundles`,
+    );
+  }
 });
 
-test('built representative routes keep SEO, noindex, hreflang, and local media references intact', async (t) => {
+test('built public and admin HTML keep SEO/noindex classes, local media references, and sitemap coverage intact', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built HTML contracts.');
     return;
   }
 
-  const publicRoutes = [
-    'dist/index.html',
-    'dist/en/index.html',
-    'dist/fr/index.html',
-    'dist/de/translation-seo/index.html',
-    'dist/it/translation-seo/index.html',
-    'dist/ca/index.html',
-  ];
-  const adminRoutes = [
-    'dist/admin/index.html',
-    'dist/admin/ugc/index.html',
-    'dist/admin/translation-seo/index.html',
-    'dist/admin/contact/index.html',
-    'dist/admin/blog/index.html',
-  ];
+  const distHtmlFiles = (await collectFiles(path.join(rootDir, 'dist')))
+    .filter((filePath) => filePath.endsWith('.html'))
+    .map((filePath) => path.relative(rootDir, filePath).replace(/\\/g, '/'));
 
-  for (const relativePath of publicRoutes) {
+  const publicRoutePaths = [];
+  const adminRoutePaths = [];
+
+  for (const relativePath of distHtmlFiles) {
+    const routePath = getRoutePathFromDistHtml(relativePath);
     const html = await readFile(path.join(rootDir, relativePath), 'utf8');
-    assert.match(html, /<title>[^<]+<\/title>/);
-    assert.match(html, /<meta name="description" content="[^"]+"/);
-    assert.match(html, /<link rel="canonical" href="https:\/\/marttelier\.netlify\.app/);
-    assert.equal((html.match(/rel="alternate" hreflang="/g) ?? []).length, 7);
-    assert.doesNotMatch(html, /noindex/);
+
+    if (isAdminRoute(routePath)) {
+      adminRoutePaths.push(routePath);
+      assert.match(html, /<title>Admin/);
+      assert.match(html, /<meta name="robots" content="noindex, nofollow"/);
+      assert.equal(getCanonicalUrlFromHtml(html), null, `${routePath} should not ship public canonical SEO tags`);
+    } else {
+      publicRoutePaths.push(routePath);
+      assert.match(html, /<title>[^<]+<\/title>/);
+      assert.match(html, /<meta name="description" content="[^"]+"/);
+      assert.match(html, /<link rel="canonical" href="https:\/\/marttelier\.netlify\.app/);
+      assert.match(html, /<link rel="alternate" hreflang="x-default"/);
+      assert.equal((html.match(/rel="alternate" hreflang="/g) ?? []).length, 7);
+      assert.doesNotMatch(html, /noindex/);
+      assert.equal(
+        normalizeRoutePath(new URL(getCanonicalUrlFromHtml(html) ?? 'https://marttelier.netlify.app/').pathname),
+        routePath,
+        `${routePath} should self-canonicalize`,
+      );
+    }
 
     for (const mediaPath of getLocalMediaPathsFromHtml(html)) {
       await access(path.join(rootDir, 'public', mediaPath.replace(/^\//, '')));
     }
   }
 
-  for (const relativePath of adminRoutes) {
-    const html = await readFile(path.join(rootDir, relativePath), 'utf8');
-    assert.match(html, /<title>Admin/);
-    assert.match(html, /<meta name="robots" content="noindex, nofollow"/);
-
-    for (const mediaPath of getLocalMediaPathsFromHtml(html)) {
-      await access(path.join(rootDir, 'public', mediaPath.replace(/^\//, '')));
-    }
-  }
+  assert.ok(adminRoutePaths.includes('/admin/blog/new'), 'dist should include the inline admin blog/new editor route');
+  assert.ok(publicRoutePaths.includes('/blog/mi-primer-post'), 'dist should include the built Spanish blog article route');
 
   const robots = await readFile(path.join(rootDir, 'dist/robots.txt'), 'utf8');
   assert.match(robots, /^User-agent: \*\nAllow: \/\nDisallow: \/admin\n\nSitemap: https:\/\/marttelier\.netlify\.app\/sitemap-index\.xml\n?$/);
 
   const sitemapIndex = await readFile(path.join(rootDir, 'dist/sitemap-index.xml'), 'utf8');
   assert.match(sitemapIndex, /<sitemapindex/);
-  assert.match(sitemapIndex, /https:\/\/marttelier\.netlify\.app\/sitemap-0\.xml/);
+  const sitemapUrls = getXmlLocs(sitemapIndex);
+  assert.ok(sitemapUrls.length >= 1, 'sitemap index should reference at least one sitemap file');
+
+  const sitemapRoutePaths = new Set();
+  for (const sitemapUrl of sitemapUrls) {
+    const sitemapPath = path.join(rootDir, 'dist', path.basename(new URL(sitemapUrl).pathname));
+    const sitemapXml = await readFile(sitemapPath, 'utf8');
+    for (const pageUrl of getXmlLocs(sitemapXml)) {
+      sitemapRoutePaths.add(normalizeRoutePath(new URL(pageUrl).pathname));
+    }
+  }
+
+  for (const routePath of publicRoutePaths) {
+    assert.ok(sitemapRoutePaths.has(routePath), `${routePath} should be listed in the public sitemap set`);
+  }
+
+  for (const routePath of adminRoutePaths) {
+    assert.ok(!sitemapRoutePaths.has(routePath), `${routePath} should stay out of the sitemap set`);
+  }
+
+  assert.ok(sitemapRoutePaths.has('/blog/mi-primer-post'), 'sitemap should include the built Spanish article route');
+  assert.ok(!sitemapRoutePaths.has('/admin/blog/new'), 'sitemap should exclude the inline admin new-post route');
+  assert.ok(!sitemapRoutePaths.has('/en/blog/mi-primer-post'), 'sitemap should not invent unbuilt localized article routes');
 });

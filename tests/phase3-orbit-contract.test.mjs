@@ -142,6 +142,38 @@ test('orbit video playback helper pauses for reduced motion and only resumes mut
   );
 });
 
+test('orbit activation helper distinguishes pointer hover audio from keyboard focus mute', async () => {
+  const orbit = await loadOrbitModule();
+
+  assert.equal(
+    orbit.getOrbitActivatedVideoPlaybackMode({
+      activationMode: 'pointer-hover',
+      prefersReducedMotion: false,
+      isDocumentVisible: true,
+      isRegionVisible: true,
+    }),
+    'play-with-sound',
+  );
+  assert.equal(
+    orbit.getOrbitActivatedVideoPlaybackMode({
+      activationMode: 'focus',
+      prefersReducedMotion: false,
+      isDocumentVisible: true,
+      isRegionVisible: true,
+    }),
+    'play-muted',
+  );
+  assert.equal(
+    orbit.getOrbitActivatedVideoPlaybackMode({
+      activationMode: 'pointer-hover',
+      prefersReducedMotion: true,
+      isDocumentVisible: true,
+      isRegionVisible: true,
+    }),
+    'pause',
+  );
+});
+
 test('orbit media helpers validate caps, video poster requirements, and stable IDs', async () => {
   const orbit = await loadOrbitModule();
   const existingIds = ['hero-editorial', 'hero-editorial-2'];
@@ -244,6 +276,7 @@ test('homepage and admin wire the new orbit components while StoryMap files disa
   assert.match(orbitSource, /from ['"]gsap['"]/);
   assert.match(orbitSource, /prefers-reduced-motion: reduce/);
   assert.match(orbitSource, /getOrbitVideoPlaybackMode/);
+  assert.match(orbitSource, /getOrbitActivatedVideoPlaybackMode/);
   assert.match(
     orbitSource,
     /useEffect\(\(\) => \{\s*syncVideoPlayback\(\);\s*\}, \[isDocumentVisible, isRegionVisible, items, prefersReducedMotion\]\);/,
@@ -251,16 +284,20 @@ test('homepage and admin wire the new orbit components while StoryMap files disa
   );
   const activateTileSource = sliceSourceSection(
     orbitSource,
-    'const activateTile = (item: OrbitMedia) => {',
+    'const activateTile = (item: OrbitMedia, activationMode: OrbitActivationMode) => {',
     'const deactivateTile = (item: OrbitMedia) => {',
   );
-  assert.match(activateTileSource, /getOrbitVideoPlaybackMode\(/);
-  assert.match(activateTileSource, /=== 'pause'/);
-  assert.match(activateTileSource, /video\.pause\(\);/);
+  assert.match(activateTileSource, /getOrbitActivatedVideoPlaybackMode\(/);
+  assert.match(activateTileSource, /activationMode/);
+  assert.match(activateTileSource, /play-with-sound/);
+  assert.match(activateTileSource, /play-muted/);
   assert.ok(
-    activateTileSource.indexOf("=== 'pause'") < activateTileSource.indexOf('video.muted = false'),
-    'hover activation should guard reduced motion before attempting audible playback',
+    activateTileSource.indexOf('play-muted') < activateTileSource.indexOf('video.muted = false'),
+    'focus activation should stay muted before pointer-hover audio is attempted',
   );
+  assert.match(orbitSource, /onPointerEnter=\{\(event\) => \{\s*if \(event\.pointerType === 'touch'\) return;\s*activateTile\(item, 'pointer-hover'\);/s);
+  assert.match(orbitSource, /onFocusCapture=\{\(event\) => \{/);
+  assert.match(orbitSource, /activateTile\(item, 'focus'\);/);
 
   const toggleVideoSoundSource = sliceSourceSection(
     orbitSource,
@@ -269,7 +306,7 @@ test('homepage and admin wire the new orbit components while StoryMap files disa
   );
   assert.match(toggleVideoSoundSource, /getOrbitVideoPlaybackMode\(/);
   assert.match(toggleVideoSoundSource, /=== 'pause'/);
-  assert.match(toggleVideoSoundSource, /video\.pause\(\);/);
+  assert.match(toggleVideoSoundSource, /pauseOrbitVideo\(item\.id, video\);/);
   assert.ok(
     toggleVideoSoundSource.indexOf("=== 'pause'") < toggleVideoSoundSource.indexOf('if (video.muted) {'),
     'sound toggle should bail out before trying to restart playback under reduced motion',

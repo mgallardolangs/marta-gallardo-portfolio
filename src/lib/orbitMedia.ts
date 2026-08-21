@@ -20,6 +20,7 @@ export const DESKTOP_ORBIT_GEOMETRY = {
 } as const;
 
 export type OrbitGeometry = typeof DESKTOP_ORBIT_GEOMETRY;
+export type OrbitActivationMode = 'pointer-hover' | 'focus';
 
 const TAU = Math.PI * 2;
 const LOCALIZED_FALLBACKS = ['de', 'it', 'ca'] as const;
@@ -148,6 +149,27 @@ export function getOrbitVideoPlaybackMode({
 }) {
   if (prefersReducedMotion !== false) return 'pause';
   return isDocumentVisible && isRegionVisible ? 'play-muted' : 'pause';
+}
+
+export function getOrbitActivatedVideoPlaybackMode({
+  activationMode,
+  prefersReducedMotion,
+  isDocumentVisible,
+  isRegionVisible,
+}: {
+  activationMode: OrbitActivationMode;
+  prefersReducedMotion: boolean | null;
+  isDocumentVisible: boolean;
+  isRegionVisible: boolean;
+}) {
+  const playbackMode = getOrbitVideoPlaybackMode({
+    prefersReducedMotion,
+    isDocumentVisible,
+    isRegionVisible,
+  });
+
+  if (playbackMode === 'pause') return 'pause';
+  return activationMode === 'pointer-hover' ? 'play-with-sound' : 'play-muted';
 }
 
 export function approximateEllipseCircumference(radiusX: number, radiusY: number) {

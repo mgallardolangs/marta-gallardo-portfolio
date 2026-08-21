@@ -87,8 +87,10 @@ From `src/lib/orbitMedia.ts`:
 ### Behavior
 - entrance animation uses GSAP only when reduced motion is off
 - hover/focus expands the active tile and dims the rest
-- videos stay muted unless the user explicitly enables sound
-- browser autoplay failures are tolerated and surfaced through button state
+- visible orbit videos autoplay muted when reduced motion is off
+- pointer hover is allowed to attempt audible playback; if the browser blocks it, the video falls back to muted playback and the sound button exposes the blocked state
+- keyboard focus never auto-unmutes or starts audible playback; it keeps the tile muted and relies on the explicit sound toggle
+- touch interaction keeps muted playback until the user taps the explicit sound toggle
 - reduced motion keeps the orbit static and pauses videos
 - admin preview is static and poster-first
 

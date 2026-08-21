@@ -9,6 +9,8 @@ import {
   calculateOrbitAutoScrollSpeed,
   DESKTOP_ORBIT_GEOMETRY,
   getLocalizedOrbitText,
+  getOrbitActivatedVideoPlaybackMode,
+  type OrbitActivationMode,
   getOrbitInteractionState,
   getOrbitItemLayout,
   getOrbitVideoPlaybackMode,
@@ -157,33 +159,52 @@ export default function OvalMediaOrbit({
     emblaApi.plugins().autoScroll?.stop();
   };
 
-  const activateTile = (item: OrbitMedia) => {
+  const startMutedVideoPlayback = async (itemId: string, video: HTMLVideoElement, soundState: SoundState = 'muted') => {
+    video.muted = true;
+    setSoundStates((current) => ({ ...current, [itemId]: soundState }));
+    await video.play().catch(() => {});
+  };
+
+  const pauseOrbitVideo = (itemId: string, video: HTMLVideoElement) => {
+    video.muted = true;
+    video.pause();
+    setSoundStates((current) => ({ ...current, [itemId]: 'muted' }));
+  };
+
+  const activateTile = (item: OrbitMedia, activationMode: OrbitActivationMode) => {
     setActiveId(item.id);
     stopAutoScroll();
 
     if (!isVideoItem(item)) return;
     const video = videoRefs.current[item.id];
     if (!video) return;
-    if (getOrbitVideoPlaybackMode({
+    const activatedPlaybackMode = getOrbitActivatedVideoPlaybackMode({
+      activationMode,
       prefersReducedMotion,
       isDocumentVisible,
       isRegionVisible,
-    }) === 'pause') {
-      video.muted = true;
-      video.pause();
-      setSoundStates((current) => ({ ...current, [item.id]: 'muted' }));
+    });
+
+    if (activatedPlaybackMode === 'pause') {
+      pauseOrbitVideo(item.id, video);
       return;
     }
 
-    video.muted = false;
-    void video.play()
-      .then(() => {
-        setSoundStates((current) => ({ ...current, [item.id]: 'sound-on' }));
-      })
-      .catch(() => {
-        video.muted = true;
-        setSoundStates((current) => ({ ...current, [item.id]: 'blocked' }));
-      });
+    if (activatedPlaybackMode === 'play-muted') {
+      void startMutedVideoPlayback(item.id, video);
+      return;
+    }
+
+    if (activatedPlaybackMode === 'play-with-sound') {
+      video.muted = false;
+      void video.play()
+        .then(() => {
+          setSoundStates((current) => ({ ...current, [item.id]: 'sound-on' }));
+        })
+        .catch(() => {
+          void startMutedVideoPlayback(item.id, video, 'blocked');
+        });
+    }
   };
 
   const deactivateTile = (item: OrbitMedia) => {
@@ -205,7 +226,7 @@ export default function OvalMediaOrbit({
       video.pause();
       return;
     }
-    void video.play().catch(() => {});
+    void startMutedVideoPlayback(item.id, video);
   };
 
   const toggleVideoSound = async (item: OrbitMedia, event: React.MouseEvent<HTMLButtonElement>) => {
@@ -220,9 +241,7 @@ export default function OvalMediaOrbit({
       isDocumentVisible,
       isRegionVisible,
     }) === 'pause') {
-      video.muted = true;
-      video.pause();
-      setSoundStates((current) => ({ ...current, [item.id]: 'muted' }));
+      pauseOrbitVideo(item.id, video);
       return;
     }
 
@@ -232,23 +251,12 @@ export default function OvalMediaOrbit({
         await video.play();
         setSoundStates((current) => ({ ...current, [item.id]: 'sound-on' }));
       } catch {
-        video.muted = true;
-        setSoundStates((current) => ({ ...current, [item.id]: 'blocked' }));
+        await startMutedVideoPlayback(item.id, video, 'blocked');
       }
       return;
     }
 
-    video.muted = true;
-    setSoundStates((current) => ({ ...current, [item.id]: 'muted' }));
-    if (getOrbitVideoPlaybackMode({
-      prefersReducedMotion,
-      isDocumentVisible,
-      isRegionVisible,
-    }) === 'pause') {
-      video.pause();
-      return;
-    }
-    await video.play().catch(() => {});
+    await startMutedVideoPlayback(item.id, video);
   };
 
   useEffect(() => {
@@ -468,9 +476,16 @@ export default function OvalMediaOrbit({
                 ref={(element) => { tileRefs.current[item.id] = element; }}
                 data-item-id={item.id}
                 className="absolute left-1/2 top-1/2 h-[5.4rem] w-[4.25rem] origin-center will-change-transform md:h-[7.625rem] md:w-24"
-                onPointerEnter={() => activateTile(item)}
+                onPointerEnter={(event) => {
+                  if (event.pointerType === 'touch') return;
+                  activateTile(item, 'pointer-hover');
+                }}
                 onPointerLeave={() => deactivateTile(item)}
-                onFocusCapture={() => activateTile(item)}
+                onFocusCapture={(event) => {
+                  if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+                  if (event.currentTarget.matches(':hover')) return;
+                  activateTile(item, 'focus');
+                }}
                 onBlurCapture={(event) => {
                   if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
                   deactivateTile(item);
