@@ -2,12 +2,13 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
 import { getLangFromUrl, getLocalizedPath, t } from '../../../i18n';
+import { getBlogStaticPathsForLocale } from '../../../lib/blog';
 import ScrollReveal from '../../../components/ScrollReveal';
 import PageTransition from '../../../components/PageTransition';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+  return getBlogStaticPathsForLocale(posts, 'fr');
 }
 
 const { post } = Astro.props;
