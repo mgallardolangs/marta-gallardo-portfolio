@@ -1,7 +1,7 @@
 {
   "contact": {
     "title": "Colaboremos",
-    "subtitle": "¿Tienes un proyecto en mente? Me encantaría saber de ti. \\n Ya sea creando contenido desde cero o adaptándolo para nuevos mercados, mi objetivo es siempre el mismo: ayudar a las marcas a comunicar de forma auténtica.",
+    "subtitle": "Cuéntame qué quieres crear, adaptar o posicionar. Te responderé con una propuesta clara para dar forma al proyecto.",
     "ugcForm": {
       "title": "Colaboración UGC",
       "company": "Empresa",
@@ -26,8 +26,8 @@
     "hero": {
       "backgroundLabel": "Qué dice→ Traducción. \n Cómo lo entiende cada cultura → Localización. \n Cómo lo encuentra el usuario → SEO.",
       "eyebrow": "Comunicación multilingüe",
-      "title": "Del texto a la conversión",
-      "text": "Adaptar un mensaje no consiste solo en traducirlo. Consiste en hacer que siga funcionando allí donde esté su audiencia. \\n Cada idioma tiene sus propios matices, cada mercado su contexto y cada marca su propia forma de comunicarse. \\n Ayudo a empresas a adaptar y optimizar su contenido para que conecte con nuevos mercados, mejore su visibilidad en buscadores y mantenga la misma naturalidad en cualquier idioma. \\n Mi trabajo combina traducción, localización y posicionamiento SEO para que cada contenido conserve su intención, resulte relevante para su audiencia y tenga oportunidades reales de posicionar en Google. \\n Mi objetivo es que cada texto parezca escrito originalmente para el mercado al que se dirige.",
+      "title": "Servicios de Traducción, SEO y Localización",
+      "text": "Adapto contenidos para que suenen naturales, conecten con cada mercado y tengan más oportunidades de encontrarse. Traducción, localización y SEO multilingüe con una misma intención: que tu mensaje funcione, esté donde esté tu audiencia.",
       "availability": "Disponible para proyectos freelance, colaboraciones puntuales y apoyo editorial continuo."
     },
     "services": {
@@ -55,17 +55,17 @@
         {
           "title": "Traducción y gestión de contenido ecommerce + ATC en francés",
           "highlight": "Las Tijeras Mágicas",
-          "text": "Traducción diaria de fichas de producto (ES→FR/DE/IT) y gestión de catálogos digitales de mercería y textil para mercados europeos. Comunicación diaria con clientes francófonos, resolución de incidencias y cuidado del tono de marca en situaciones reales."
+          "text": "Traducción diaria de fichas de producto (ES→FR/DE/IT), gestión de catálogos y atención a clientes francófonos, manteniendo precisión y tono de marca."
         },
         {
           "title": "Prácticas en traducción jurídica freelance",
           "highlight": "Cristina Auroutinova",
-          "text": "Traducción FR⇄ES de textos legales y posedición de traducciones automáticas, asegurando precisión terminológica y coherencia en distintos formatos."
+          "text": "Traducción FR⇄ES de textos legales y posedición, con foco en precisión terminológica y coherencia."
         },
         {
           "title": "Experiencia internacional como au pair",
           "highlight": "Aupairworld Suiza",
-          "text": "Convivencia y trabajo en un entorno multicultural, desarrollando adaptabilidad, empatía y fluidez comunicativa."
+          "text": "Trabajo y convivencia en Suiza en un entorno multicultural, reforzando adaptabilidad, empatía y fluidez comunicativa."
         }
       ]
     },
@@ -109,10 +109,10 @@
       "title": "Formación",
       "intro": "Base académica orientada a idiomas, comunicación intercultural y redacción, reforzada con inmersión práctica en entornos internacionales.",
       "studies": [
-        "Grado en Traducción e Interpretación, con especialización en francés y enfoque en redacción y adaptación de contenidos para públicos internacionales.",
-        "Perfeccionamiento del francés a través de un programa Erasmus+ de 6 meses en París y contacto diario con entornos francófonos.",
-        "Interés continuo por la escritura clara, la terminología y la optimización de contenidos para entornos digitales.",
-        "Prácticas freelance en traducción jurídica (FR→ES) junto a una traductora autónoma especializada, trabajando con textos legales y posedición de traducciones automáticas."
+        "Grado en Traducción e Interpretación, especializado en francés, redacción y adaptación de contenidos.",
+        "Erasmus+ de seis meses en París y práctica diaria en entornos francófonos.",
+        "Formación continua en escritura clara, terminología y optimización de contenidos digitales.",
+        "Prácticas de traducción jurídica FR→ES y posedición junto a una traductora especializada."
       ],
       "languagesEyebrow": "Competencias lingüísticas",
       "languagesTitle": "Idiomas",
@@ -204,7 +204,7 @@
         "label": "Viajes",
         "accent": "Experiencias",
         "eyebrow": "Para marcas que venden experiencias, no solo destinos.",
-        "intro": "Creo contenido para alojamientos, turismo, equipaje y servicios de viaje que inspira confianza antes incluso de hacer una reserva. \n Desde check-ins y recorridos hasta recomendaciones e integración de producto, cada pieza busca transmitir la experiencia de forma natural e invitar al usuario a imaginarse viviéndola.",
+        "intro": "Creo contenido para turismo, alojamientos y productos de viaje que transmite la experiencia con naturalidad: recorridos, recomendaciones, integraciones y piezas que ayudan a imaginar el destino antes de reservar.",
         "cards": [
           {
             "title": "Storyboard de check-in en hotel boutique",
@@ -236,7 +236,7 @@
         "label": "Idiomas",
         "accent": "Comunicación internacional",
         "eyebrow": "Comunicar bien también es hablar el idioma de tu audiencia.",
-        "intro": "Desarrollo contenido para aplicaciones de idiomas, plataformas educativas y servicios internacionales que necesitan comunicar de forma clara, cercana y creíble. \n Mi experiencia en comunicación multilingüe me permite adaptar cada mensaje teniendo en cuenta no solo el idioma, sino también el contexto cultural y la manera en que conecta con las personas.",
+        "intro": "Creo contenido claro y cercano para apps, plataformas educativas y servicios internacionales. Adapto el mensaje al idioma, al contexto cultural y a la forma en que cada audiencia decide y conecta.",
         "cards": [
           {
             "title": "Demo de primera lección en app de idiomas",
@@ -268,7 +268,7 @@
         "label": "Arte",
         "accent": "Marcas creativas",
         "eyebrow": "Cuando el producto cuida los detalles, el contenido también debe hacerlo.",
-        "intro": "Trabajo con marcas creativas, ilustración, papelería, cerámica, diseño y lifestyle desarrollando contenido con una estética cuidada, una narrativa visual coherente y un enfoque editorial. \n Cada imagen y cada plano están pensados para transmitir la identidad de la marca y captar la atención desde el primer instante.",
+        "intro": "Creo piezas editoriales para marcas de arte, diseño y lifestyle. Cuido composición, ritmo y narrativa para que cada plano refuerce la identidad del producto.",
         "cards": [
           {
             "title": "Presentación de materiales de cuaderno de bocetos",
@@ -308,15 +308,17 @@
       "eyebrow": "UGC",
       "headline": "@marttelier",
       "highlight": "De traductora de idiomas a traductora de marcas",
-      "description": "Las personas confían en las personas. \n Por eso el contenido generado por creadores se ha convertido en una de las formas más eficaces de conectar con una audiencia.\n Creo vídeos e imágenes que se integran de forma natural en la experiencia del usuario, transmitiendo cercanía, autenticidad y credibilidad sin perder de vista los objetivos de la marca. \n Mi enfoque combina creatividad, sensibilidad estética y una visión internacional para desarrollar contenido que funciona tanto de forma orgánica como en campañas de paid social.",
+      "description": "Creo vídeos e imágenes que se integran de forma natural en redes y campañas. Contenido cercano, cuidado y creíble, pensado para captar atención sin perder la identidad de la marca.",
       "nicheIntroTitle": "Cada marca tiene una historia diferente.",
-      "nicheIntroText": "Mi trabajo consiste en comprender qué la hace única y convertir esa esencia en contenido que resulte natural, creíble y relevante para las personas a las que quiere llegar."
-    }
+      "nicheIntroText": "Entiendo qué hace única a cada marca y lo traduzco en contenido natural, relevante y listo para conectar con su audiencia."
+    },
+    "contentComingSoon": "Contenido disponible muy pronto."
   },
   "blog": {
     "title": "Blog",
     "readMore": "Leer más",
-    "backToList": "← Volver al blog"
+    "backToList": "← Volver al blog",
+    "emptyState": "Todavía no hay posts. Muy pronto más."
   },
   "nav": {
     "home": "Inicio",
@@ -328,8 +330,8 @@
     "closeMenu": "Cerrar menú"
   },
   "about": {
-    "title": "¡ENCANTADA Soy Marta!",
-    "text": "Siempre me han interesado las historias que consiguen conectar con las personas, independientemente del idioma en el que se cuenten. \\n Eso fue lo que me llevó a estudiar Traducción e Interpretación. Allí descubrí que un buen mensaje no depende únicamente de las palabras, sino de la capacidad de transmitir la misma idea, la misma emoción y la misma intención en cualquier contexto. \\n Hoy trabajo uniendo traducción, creación de contenido, localización y SEO multilingüe para ayudar a las marcas a comunicar con naturalidad más allá de las fronteras. \\n Porque, al final, mi trabajo consiste en lo mismo que siempre me ha apasionado: encontrar la manera de que una historia siga conectando, esté donde esté su audiencia."
+    "title": "Encantada, soy Marta.",
+    "text": "Soy traductora y creadora de contenido. Trabajo entre idiomas, culturas y formatos para que cada mensaje conserve su intención y conecte de forma natural.\\n\\nCombino traducción, localización, SEO multilingüe y contenido UGC para ayudar a las marcas a comunicar con claridad, coherencia y sensibilidad cultural."
   },
   "ugc": {
     "title": "Portfolio UGC",
@@ -389,8 +391,8 @@
   },
   "home": {
     "hero": {
-      "kicker": "Historias que conectan, sin importar el idioma.",
-      "description": "Contenido que conecta con personas, sin importar el idioma. \n Ayudo a marcas a comunicar de forma natural en diferentes idiomas y mercados, combinando creatividad, estrategia y sensibilidad cultural para que cada mensaje llegue a las personas adecuadas.",
+      "kicker": "Creatividad, idiomas y estrategia",
+      "description": "Creo contenido y adapto mensajes para que las marcas conecten con personas reales, en cualquier idioma y mercado. Combino creatividad, traducción y estrategia digital con una mirada internacional.",
       "mainPhoto": "Foto principal",
       "scrollCue": "Descubre cómo trabajo",
       "coverLabel": "Portada editorial"
@@ -411,7 +413,7 @@
     "video": {
       "eyebrow": "MARCA PERSONAL",
       "title": "@marttelier",
-      "description": "Un espacio donde se encuentran la creatividad, los idiomas y las historias reales. \n Comparto aquello que me inspira: arte, viajes, aprendizaje y pequeños momentos cotidianos que merecen ser contados. \n Mi contenido nace de la curiosidad, la observación y el interés por las personas, las culturas y las formas en que nos comunicamos. \n Creo que las historias más memorables no son las más perfectas, sino las que consiguen hacer que alguien se detenga, sienta y recuerde.",
+      "description": "En @marttelier comparto contenido sobre arte, viajes, idiomas y procesos creativos. Un espacio personal donde convierto curiosidad, observación y experiencias reales en historias visuales.",
       "placeholder": "Vídeo intro",
       "note": "Formato 9:16 · placeholder para reel / presentación"
     },

@@ -1,9 +1,10 @@
 ---
-import AdminLayout from '../../layouts/AdminLayout.astro';
-import ScrollReveal from '../../components/ScrollReveal';
-import PageTransition from '../../components/PageTransition';
-import EditableText from '../../components/admin/EditableText';
-import { getLangFromUrl, t } from '../../i18n';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ScrollReveal from '../components/ScrollReveal';
+import PageTransition from '../components/PageTransition';
+import RichText from '../components/RichText.astro';
+import TypedTitle from '../components/TypedTitle.astro';
+import { getLangFromUrl, t } from '../i18n';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
@@ -13,15 +14,21 @@ const fieldClass =
 const labelClass = 'mb-2 block font-body text-xs font-semibold uppercase tracking-[0.22em] text-ink';
 const cardClass = 'border border-black/10 bg-paper p-6 shadow-[0_18px_40px_rgba(6,4,3,0.06)] md:p-8';
 ---
-<AdminLayout title={`Admin — ${i.contact.title}`} description={i.contact.subtitle}>
+
+<BaseLayout title={`${i.contact.title} — ${i.hero.name}`} description={i.contact.subtitle}>
   <PageTransition client:load>
     <section class="bg-paper px-6 pt-28 pb-16 text-ink md:pt-32 md:pb-24">
       <div class="site-container grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
         <ScrollReveal client:visible className="h-full">
           <div class="h-full border border-white/10 bg-ink p-8 text-paper md:p-10">
-            <EditableText client:load i18nKey="contact.eyebrow" as="p" className="font-body text-xs font-semibold uppercase tracking-[0.35em] text-amaranth-soft" />
-            <EditableText client:load i18nKey="contact.title" as="h1" className="mt-5 max-w-[10ch] font-heading text-4xl leading-none text-paper md:text-6xl" />
-            <EditableText client:load i18nKey="contact.subtitle" as="div" className="mt-6 max-w-xl font-body text-lg leading-8 text-white/74 md:text-xl" />
+            <p class="font-body text-xs font-semibold uppercase tracking-[0.35em] text-amaranth-soft">{i.contact.eyebrow}</p>
+            <TypedTitle
+              as="h1"
+              text={i.contact.title}
+              trigger="load"
+              class="mt-5 max-w-[10ch] font-heading text-4xl leading-none text-paper md:text-6xl"
+            />
+            <RichText text={i.contact.subtitle} class="mt-6 max-w-xl font-body text-lg leading-8 text-white/74 md:text-xl" />
           </div>
         </ScrollReveal>
 
@@ -31,33 +38,36 @@ const cardClass = 'border border-black/10 bg-paper p-6 shadow-[0_18px_40px_rgba(
               <div class="mb-6 inline-flex border border-black/10 bg-white px-3 py-2 font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">
                 UGC
               </div>
-              <EditableText client:load i18nKey="contact.ugcForm.title" as="h2" className="font-heading text-3xl text-ink" />
+              <h2 class="font-heading text-3xl text-ink">{i.contact.ugcForm.title}</h2>
 
               <form name="ugc-contact" method="POST" data-netlify="true" data-error-msg={i.contact.errorRequired} class="contact-form mt-8 space-y-5">
                 <input type="hidden" name="form-name" value="ugc-contact" />
 
                 <div>
-                  <label for="ugc-company" class={labelClass}><EditableText client:load i18nKey="contact.ugcForm.company" as="span" className="" /></label>
+                  <label for="ugc-company" class={labelClass}>{i.contact.ugcForm.company}</label>
                   <input id="ugc-company" name="Company" type="text" required class={fieldClass} />
                 </div>
 
                 <div>
-                  <label for="ugc-email" class={labelClass}><EditableText client:load i18nKey="contact.ugcForm.email" as="span" className="" /></label>
+                  <label for="ugc-email" class={labelClass}>{i.contact.ugcForm.email}</label>
                   <input id="ugc-email" name="Email" type="email" required class={fieldClass} />
                 </div>
 
                 <div>
-                  <label for="ugc-budget" class={labelClass}><EditableText client:load i18nKey="contact.ugcForm.budget" as="span" className="" /></label>
+                  <label for="ugc-budget" class={labelClass}>{i.contact.ugcForm.budget}</label>
                   <input id="ugc-budget" name="Budget" type="text" required class={fieldClass} />
                 </div>
 
                 <div>
-                  <label for="ugc-description" class={labelClass}><EditableText client:load i18nKey="contact.ugcForm.description" as="span" className="" /></label>
+                  <label for="ugc-description" class={labelClass}>{i.contact.ugcForm.description}</label>
                   <textarea id="ugc-description" name="Project Description" rows="6" required class={`${fieldClass} resize-y`}></textarea>
                 </div>
 
-                <button type="submit" class="inline-flex w-full items-center justify-center rounded-[8px] bg-ink px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] text-paper transition hover:bg-amaranth">
-                  <EditableText client:load i18nKey="contact.send" as="span" className="" />
+                <button
+                  type="submit"
+                  class="inline-flex w-full items-center justify-center rounded-[8px] bg-ink px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] text-paper transition hover:bg-amaranth"
+                >
+                  {i.contact.send}
                 </button>
               </form>
 
@@ -67,8 +77,8 @@ const cardClass = 'border border-black/10 bg-paper p-6 shadow-[0_18px_40px_rgba(
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <EditableText client:load i18nKey="contact.successTitle" as="p" className="font-heading text-2xl text-ink" />
-                <EditableText client:load i18nKey="contact.successMessage" as="p" className="mt-2 font-body text-sm text-ink-muted" />
+                <p class="font-heading text-2xl text-ink">{i.contact.successTitle}</p>
+                <p class="mt-2 font-body text-sm text-ink-muted">{i.contact.successMessage}</p>
               </div>
             </div>
           </ScrollReveal>
@@ -76,35 +86,38 @@ const cardClass = 'border border-black/10 bg-paper p-6 shadow-[0_18px_40px_rgba(
           <ScrollReveal client:visible className="h-full" delay={0.15}>
             <div class={`${cardClass} h-full bg-white`}>
               <div class="mb-6 inline-flex border border-black/10 bg-blush-50 px-3 py-2 font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">
-                <EditableText client:load i18nKey="contact.seoForm.title" as="span" className="" />
+                {i.contact.seoForm.title}
               </div>
-              <EditableText client:load i18nKey="contact.seoForm.title" as="h2" className="font-heading text-3xl text-ink" />
+              <h2 class="font-heading text-3xl text-ink">{i.contact.seoForm.title}</h2>
 
               <form name="seo-contact" method="POST" data-netlify="true" data-error-msg={i.contact.errorRequired} class="contact-form mt-8 space-y-5">
                 <input type="hidden" name="form-name" value="seo-contact" />
 
                 <div>
-                  <label for="seo-company" class={labelClass}><EditableText client:load i18nKey="contact.seoForm.company" as="span" className="" /></label>
+                  <label for="seo-company" class={labelClass}>{i.contact.seoForm.company}</label>
                   <input id="seo-company" name="Company" type="text" required class={fieldClass} />
                 </div>
 
                 <div>
-                  <label for="seo-email" class={labelClass}><EditableText client:load i18nKey="contact.seoForm.email" as="span" className="" /></label>
+                  <label for="seo-email" class={labelClass}>{i.contact.seoForm.email}</label>
                   <input id="seo-email" name="Email" type="email" required class={fieldClass} />
                 </div>
 
                 <div>
-                  <label for="seo-budget" class={labelClass}><EditableText client:load i18nKey="contact.seoForm.budget" as="span" className="" /></label>
+                  <label for="seo-budget" class={labelClass}>{i.contact.seoForm.budget}</label>
                   <input id="seo-budget" name="Budget" type="text" required class={fieldClass} />
                 </div>
 
                 <div>
-                  <label for="seo-description" class={labelClass}><EditableText client:load i18nKey="contact.seoForm.description" as="span" className="" /></label>
+                  <label for="seo-description" class={labelClass}>{i.contact.seoForm.description}</label>
                   <textarea id="seo-description" name="Work Description" rows="6" required class={`${fieldClass} resize-y`}></textarea>
                 </div>
 
-                <button type="submit" class="inline-flex w-full items-center justify-center rounded-[8px] border border-amaranth bg-paper px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] text-amaranth transition hover:bg-amaranth hover:text-paper">
-                  <EditableText client:load i18nKey="contact.send" as="span" className="" />
+                <button
+                  type="submit"
+                  class="inline-flex w-full items-center justify-center rounded-[8px] border border-amaranth bg-paper px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] text-amaranth transition hover:bg-amaranth hover:text-paper"
+                >
+                  {i.contact.send}
                 </button>
               </form>
 
@@ -114,8 +127,8 @@ const cardClass = 'border border-black/10 bg-paper p-6 shadow-[0_18px_40px_rgba(
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <EditableText client:load i18nKey="contact.successTitle" as="p" className="font-heading text-2xl text-ink" />
-                <EditableText client:load i18nKey="contact.successMessage" as="p" className="mt-2 font-body text-sm text-ink-muted" />
+                <p class="font-heading text-2xl text-ink">{i.contact.successTitle}</p>
+                <p class="mt-2 font-body text-sm text-ink-muted">{i.contact.successMessage}</p>
               </div>
             </div>
           </ScrollReveal>
@@ -123,13 +136,13 @@ const cardClass = 'border border-black/10 bg-paper p-6 shadow-[0_18px_40px_rgba(
       </div>
     </section>
   </PageTransition>
-</AdminLayout>
+</BaseLayout>
 
 <script>
-  import { initContactForms } from '../../lib/contactForms.js';
+  import { initContactForms } from '../lib/contactForms.js';
 
   const initContactPage = () => initContactForms();
-  const handlerKey = '__mgAdminInitContactPage';
+  const handlerKey = '__mgInitContactPage';
   const docWithHandler = document as Document & Record<string, (() => void) | undefined>;
 
   docWithHandler[handlerKey] && document.removeEventListener('astro:page-load', docWithHandler[handlerKey]);

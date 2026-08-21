@@ -16,8 +16,8 @@
     "seoLabel": "Multilingual Translation & SEO"
   },
   "about": {
-    "title": "Hi! I'm Marta.",
-    "text": "I've always been fascinated by stories that bring people together, no matter the language they're told in. \\n That's what led me to study Translation and Interpreting. Along the way, I realised that effective communication goes far beyond translating words—it's about understanding people, context and the intention behind every message. \\n Today, I combine that perspective with content creation, localisation and multilingual SEO to help brands communicate naturally across languages and markets. \\n I enjoy working where creativity meets strategy: observing, analysing and finding the best way for every message to preserve its essence, wherever its audience may be."
+    "title": "Nice to meet you, I’m Marta.",
+    "text": "I’m a translator and content creator. I work across languages, cultures and formats so every message keeps its intention and connects naturally.\\n\\nI combine translation, localization, multilingual SEO and UGC content to help brands communicate with clarity, consistency and cultural sensitivity."
   },
   "ugc": {
     "title": "UGC Portfolio",
@@ -54,11 +54,12 @@
   "blog": {
     "title": "Blog",
     "readMore": "Read more",
-    "backToList": "← Back to blog"
+    "backToList": "← Back to blog",
+    "emptyState": "No posts yet. More soon."
   },
   "contact": {
     "title": "Let's collaborate",
-    "subtitle": "Have a project in mind? I'd love to hear from you.",
+    "subtitle": "Tell me what you want to create, adapt or position. I’ll reply with a clear proposal to shape the project.",
     "ugcForm": {
       "title": "UGC Collaboration",
       "company": "Company",
@@ -98,8 +99,8 @@
   },
   "home": {
     "hero": {
-      "kicker": "Stories that connect beyond language.",
-      "description": "Content that connects with people, wherever they are. \\n I help brands communicate naturally across languages and markets by combining creativity, strategy and cultural insight to create content that truly resonates with its audience.",
+      "kicker": "Creativity, languages & strategy",
+      "description": "I create content and adapt messages so brands can connect with real people, in any language and market. I combine creativity, translation and digital strategy with an international perspective.",
       "mainPhoto": "Main Photo",
       "scrollCue": "Discover how I work",
       "coverLabel": "Cover Story"
@@ -120,7 +121,7 @@
     "video": {
       "eyebrow": "PERSONAL BRAND",
       "title": "@marttelier",
-      "description": "A space where creativity, languages and real stories come together. \\n I share what inspires me: art, travel, continuous learning and the small everyday moments that deserve to be told. \\n Everything I create is driven by curiosity, observation and a genuine interest in people, cultures and the way we communicate. \\n Because the stories we remember most aren't the most perfect ones—they're the ones that make us pause, feel something and stay with us.",
+      "description": "At @marttelier I share content about art, travel, languages and creative processes. A personal space where I turn curiosity, observation and real experiences into visual stories.",
       "placeholder": "Intro Video",
       "note": "9:16 format · placeholder for reel / introduction"
     },
@@ -136,9 +137,9 @@
       "backgroundLabel": "UGC PORTFOLIO",
       "eyebrow": "Content that connects naturally.",
       "headline": "@marttelier",
-      "description": "People trust people. \\n That's why creator-led content has become one of the most effective ways for brands to build genuine connections with their audience. \\n I create videos and visual content that blend naturally into the user experience, bringing authenticity, credibility and a human touch without losing sight of the brand's goals. \\n My approach combines creativity, a refined visual aesthetic and an international perspective to produce content that performs organically and in paid social campaigns alike.",
+      "description": "I create videos and images that blend naturally into social media and campaigns. Close, polished and credible content designed to capture attention without losing the brand’s identity.",
       "nicheIntroTitle": "Every brand has a different story to tell.",
-      "nicheIntroText": "My role is to understand what makes it unique and turn that essence into content that feels authentic, builds trust and resonates with the right audience.",
+      "nicheIntroText": "I understand what makes each brand unique and translate it into natural, relevant content that is ready to connect with its audience.",
       "highlight": ""
     },
     "pageDescription": "Professional UGC portfolio for Marta Gallardo featuring editorial placeholder campaigns across travel, languages, and art.",
@@ -153,7 +154,7 @@
         "label": "Travel",
         "accent": "Experiences",
         "eyebrow": "For brands that sell experiences, not just destinations.",
-        "intro": "I create content for hotels, tourism brands, luggage companies and travel services that inspires confidence long before a booking is made. \\n From hotel check-ins and destination highlights to product integrations and travel recommendations, every piece is designed to make people picture themselves living the experience.",
+        "intro": "I create content for tourism, accommodation and travel products that conveys the experience naturally: tours, recommendations, integrations and pieces that help people imagine the destination before booking.",
         "cards": [
           {
             "title": "Boutique Stay Check-In Storyboard",
@@ -185,7 +186,7 @@
         "label": "Languages",
         "accent": "International Communication",
         "eyebrow": "Great communication starts with speaking your audience's language.",
-        "intro": "I create content for language-learning apps, educational platforms and international services that need to communicate with clarity, authenticity and confidence. \\n My background in multilingual communication allows me to adapt every message not only to the language itself, but also to the cultural context and expectations of each audience.",
+        "intro": "I create clear, approachable content for apps, educational platforms and international services. I adapt the message to the language, the cultural context and the way each audience decides and connects.",
         "cards": [
           {
             "title": "Language App First-Lesson Demo",
@@ -217,7 +218,7 @@
         "label": "Art",
         "accent": "Creative Brands",
         "eyebrow": "When a product is crafted with care, its content should be too.",
-        "intro": "I collaborate with creative brands in art, illustration, stationery, ceramics, design and lifestyle, producing content with a refined aesthetic, thoughtful visual storytelling and an editorial approach. \\n Every frame is carefully composed to reflect the brand's identity and capture attention from the very first second.",
+        "intro": "I create editorial pieces for art, design and lifestyle brands. I pay attention to composition, rhythm and narrative so each shot reinforces the product’s identity.",
         "cards": [
           {
             "title": "Sketchbook Materials Reveal",
@@ -245,14 +246,15 @@
           }
         ]
       }
-    }
+    },
+    "contentComingSoon": "Content coming soon."
   },
   "translationPage": {
     "hero": {
       "backgroundLabel": "What it says → Translation \\n How each audience understands it → Localisation \\n How people find it → SEO",
       "eyebrow": "Multilingual communication",
-      "title": "From Content to Conversion",
-      "text": "Adapting a message is about more than translating words. It's about making sure it continues to resonate, wherever its audience may be. \\n Every language has its own nuances, every market its own context, and every brand its own voice. \\n I help businesses adapt and optimise their content to reach new markets, improve their search visibility and communicate naturally across languages. \\n By combining translation, localisation and multilingual SEO, I create content that preserves its purpose, connects with the right audience and has real potential to perform in Google Search. \\n My goal is simple: to make every piece of content feel as though it were originally created for its target market.",
+      "title": "Translation, SEO & Localization Services",
+      "text": "I adapt content so it sounds natural, connects with each market and has more chances to be found. Translation, localization and multilingual SEO with one shared intention: to make your message work, wherever your audience is.",
       "availability": "Available for freelance projects, one-off collaborations and ongoing editorial support."
     },
     "services": {
@@ -280,17 +282,17 @@
         {
           "title": "Ecommerce translation and content management + customer service in French",
           "highlight": "Las Tijeras Mágicas",
-          "text": "Daily translation of product sheets (ES→FR/DE/IT) and management of digital catalogues for haberdashery and textile products across European markets. Daily communication with French-speaking clients, issue resolution and careful handling of brand tone in real situations."
+          "text": "Daily translation of product sheets (ES→FR/DE/IT), catalogue management and support for French-speaking clients, maintaining accuracy and brand tone."
         },
         {
           "title": "Freelance legal translation internship",
           "highlight": "Cristina Auroutinova",
-          "text": "FR⇄ES translation of legal texts and post-editing of machine translations, ensuring terminological accuracy and consistency across different formats."
+          "text": "FR⇄ES translation of legal texts and post-editing, with a focus on terminological accuracy and consistency."
         },
         {
           "title": "International experience as an au pair",
           "highlight": "Aupairworld Switzerland",
-          "text": "Living and working in a multicultural environment, developing adaptability, empathy and confident communication."
+          "text": "Living and working in Switzerland in a multicultural environment, strengthening adaptability, empathy and communicative fluency."
         }
       ]
     },
@@ -334,10 +336,10 @@
       "title": "Education",
       "intro": "An academic foundation centered on languages, intercultural communication and writing, strengthened by practical immersion in international environments.",
       "studies": [
-        "Degree in Translation and Interpreting, with a specialization in French and a focus on writing and content adaptation for international audiences.",
-        "Advanced French strengthened through a six-month Erasmus+ program in Paris and daily contact with francophone environments.",
-        "Ongoing interest in clear writing, terminology and content optimization for digital environments.",
-        "Freelance legal translation internship (FR→ES) alongside a specialized translator, working with legal texts and post-editing of machine translations."
+        "Degree in Translation and Interpreting, specialized in French, writing and content adaptation.",
+        "Six-month Erasmus+ program in Paris and daily practice in French-speaking environments.",
+        "Continuous training in clear writing, terminology and digital content optimization.",
+        "Legal translation internship FR→ES and post-editing alongside a specialized translator."
       ],
       "languagesEyebrow": "Language skills",
       "languagesTitle": "Languages",

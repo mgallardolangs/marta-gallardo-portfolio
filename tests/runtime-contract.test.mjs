@@ -19,22 +19,8 @@ import {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
-const publicUgcPages = [
-  'src/pages/ugc.astro',
-  'src/pages/en/ugc.astro',
-  'src/pages/fr/ugc.astro',
-  'src/pages/de/ugc.astro',
-  'src/pages/it/ugc.astro',
-  'src/pages/ca/ugc.astro',
-];
-const publicContactPages = [
-  'src/pages/contact.astro',
-  'src/pages/en/contact.astro',
-  'src/pages/fr/contact.astro',
-  'src/pages/de/contact.astro',
-  'src/pages/it/contact.astro',
-  'src/pages/ca/contact.astro',
-];
+const publicUgcPages = ['src/views/UgcPage.astro'];
+const publicContactPages = ['src/views/ContactPage.astro'];
 
 async function readSource(relativePath) {
   return readFile(path.join(rootDir, relativePath), 'utf8');
@@ -181,7 +167,7 @@ test('admin layout does not force a full reload and admin init uses bounded iden
   assert.doesNotMatch(initSource, /setInterval/, 'AdminInit should not keep a permanent 1-second polling loop');
 });
 
-test('public UGC pages rerun carousel setup on astro:page-load without inline duplicate listeners', async () => {
+test('shared UGC view reruns carousel setup on astro:page-load without duplicate listeners', async () => {
   const sources = await Promise.all(
     publicUgcPages.map(async (relativePath) => [relativePath, await readSource(relativePath)]),
   );
@@ -198,7 +184,7 @@ test('public UGC pages rerun carousel setup on astro:page-load without inline du
   }
 });
 
-test('public contact pages rerun form setup on astro:page-load without duplicate submit handlers', async () => {
+test('shared contact view reruns form setup on astro:page-load without duplicate submit handlers', async () => {
   const sources = await Promise.all(
     publicContactPages.map(async (relativePath) => [relativePath, await readSource(relativePath)]),
   );

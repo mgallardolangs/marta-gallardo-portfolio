@@ -1,0 +1,216 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageTransition from '../components/PageTransition';
+import ScrollReveal from '../components/ScrollReveal';
+import RichText from '../components/RichText.astro';
+import AnimatedScrollText from '../components/AnimatedScrollText';
+import StoryMap from '../components/StoryMap';
+import ParallaxLayer from '../components/ParallaxLayer';
+import FloatingIcon from '../components/FloatingIcon';
+import { ArrowWavy } from '../components/DoodleArrows';
+import StaggerContainer, { StaggerItem } from '../components/StaggerContainer';
+import TypedTitle from '../components/TypedTitle.astro';
+import { getLangFromUrl, getLocalizedPath, t } from '../i18n';
+import { siteData as imagesData } from '../lib/siteData';
+
+const lang = getLangFromUrl(Astro.url);
+const i = t(lang);
+
+const storyMapPhotos = [
+  { src: imagesData.galleryCutouts?.shotOne || '', x: 45, y: 20, size: 6, label: 'Europe' },
+  { src: imagesData.galleryCutouts?.shotTwo || '', x: 10, y: 32, size: 5.5, label: 'Americas' },
+  { src: imagesData.galleryCutouts?.shotThree || '', x: 63, y: 36, size: 5.5, label: 'Asia' },
+  { src: imagesData.galleryCutouts?.shotFour || '', x: 25, y: 55, size: 5, label: 'South' },
+  { src: imagesData.galleryCutouts?.shotFive || '', x: 82, y: 55, size: 5.5, label: 'Middle' },
+].filter((photo) => photo.src);
+---
+
+<BaseLayout title={`${i.hero.name} — ${i.home.hero.kicker}`} description={i.home.hero.description}>
+  <PageTransition client:load>
+    <div class="overflow-x-hidden bg-paper">
+      <section class="relative overflow-hidden border-b border-black/10 bg-paper px-6 pt-28 pb-20 md:pt-32 md:pb-24">
+        <div class="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(232,50,86,0.15),transparent_68%)]"></div>
+        <div class="site-container relative grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+          <div class="space-y-8">
+            <ScrollReveal client:visible direction="none">
+              <div class="inline-flex items-center gap-4 border-y border-black/12 py-3">
+                <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.home.hero.kicker}</p>
+              </div>
+            </ScrollReveal>
+
+            <StaggerContainer client:visible className="space-y-6" staggerDelay={0.12}>
+              <StaggerItem>
+                <TypedTitle
+                  as="h1"
+                  text={i.hero.name}
+                  trigger="load"
+                  class="max-w-[11ch] font-heading text-[4.25rem] leading-[0.82] tracking-[-0.06em] text-ink sm:text-[5.25rem] md:text-[6.8rem] lg:text-[8.2rem]"
+                />
+              </StaggerItem>
+
+              <StaggerItem>
+                <div class="flex flex-wrap items-center gap-3 text-sm uppercase tracking-[0.28em] text-ink-muted md:text-base">
+                  <span>{i.hero.age}</span>
+                  <span class="text-amaranth-soft">✦</span>
+                  <span>{i.hero.city}</span>
+                </div>
+              </StaggerItem>
+
+              <StaggerItem>
+                <RichText text={i.home.hero.description} class="max-w-xl font-body text-lg leading-8 text-ink-muted md:text-xl" />
+              </StaggerItem>
+            </StaggerContainer>
+
+            <div class="flex flex-wrap items-center gap-4 pt-2">
+              <a
+                href={getLocalizedPath('/ugc', lang)}
+                class="inline-flex items-center gap-3 rounded-full border border-black/12 bg-ink px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-paper transition hover:border-amaranth hover:bg-amaranth"
+              >
+                {i.hero.ugcLabel}
+              </a>
+              <a
+                href={getLocalizedPath('/translation-seo', lang)}
+                class="inline-flex items-center gap-3 border-b border-amaranth pb-1 text-xs font-semibold uppercase tracking-[0.24em] text-amaranth transition hover:text-ink"
+              >
+                {i.hero.seoLabel}
+              </a>
+            </div>
+
+            <div class="pt-4">
+              <AnimatedScrollText client:load text={i.home.hero.scrollCue} className="max-w-xs text-ink-muted" />
+            </div>
+          </div>
+
+          <div class="relative min-h-[36rem] lg:min-h-[42rem]">
+            <FloatingIcon client:visible intensity={18} className="absolute inset-0">
+              <div class="absolute left-4 top-8 hidden h-28 w-28 rounded-full bg-amaranth-soft/30 blur-3xl md:block"></div>
+              <div class="absolute bottom-12 right-0 h-36 w-36 rounded-full bg-amaranth-mist blur-3xl"></div>
+            </FloatingIcon>
+
+            <ScrollReveal client:visible delay={0.1} direction="left" className="absolute inset-x-4 top-8 z-20 md:left-auto md:right-[58%] md:w-64">
+              <div class="border border-black/10 bg-white/72 p-4 shadow-[0_18px_40px_rgba(6,4,3,0.08)] backdrop-blur-sm">
+                <p class="font-body text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-amaranth">UGC</p>
+                <p class="mt-3 font-heading text-xl leading-tight text-ink">{i.hero.ugcLabel}</p>
+              </div>
+            </ScrollReveal>
+
+            <ScrollReveal client:visible delay={0.2} direction="right" className="absolute bottom-6 left-6 z-20 md:bottom-[10%] md:left-[60%] md:w-72">
+              <div class="border border-black/10 bg-white/72 p-4 shadow-[0_18px_40px_rgba(6,4,3,0.08)] backdrop-blur-sm">
+                <p class="font-body text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-amaranth">SEO</p>
+                <p class="mt-3 font-heading text-xl leading-tight text-ink">{i.hero.seoLabel}</p>
+              </div>
+            </ScrollReveal>
+
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="relative flex h-[29rem] w-full max-w-[24rem] items-center justify-center overflow-hidden border border-black/10 bg-blush-50 shadow-[0_28px_90px_rgba(6,4,3,0.12)] md:h-[35rem] md:max-w-[27rem]">
+                {imagesData.heroMainPhoto && !imagesData.heroMainPhoto.includes('placeholder') ? (
+                  <img src={imagesData.heroMainPhoto} alt={i.hero.name} class="absolute inset-0 h-full w-full object-cover" />
+                ) : (
+                  <div class="relative z-10 text-center">
+                    <p class="font-body text-xs font-semibold uppercase tracking-[0.32em] text-amaranth">{i.home.hero.coverLabel}</p>
+                    <p class="mt-4 font-heading text-4xl text-ink md:text-5xl">{i.home.hero.mainPhoto}</p>
+                  </div>
+                )}
+                <div class="pointer-events-none absolute inset-5 border border-white/60"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="border-b border-black/10 bg-white px-6 py-20 md:py-24">
+        <div class="site-container grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <div class="relative min-h-[30rem] border border-black/10 bg-paper p-4 md:min-h-[36rem] md:p-6">
+            <StoryMap client:visible photos={storyMapPhotos} className="absolute inset-0" />
+          </div>
+
+          <ScrollReveal client:visible direction="right" className="space-y-6 lg:pl-8 xl:pl-14">
+            <div class="w-16 border-t border-amaranth"></div>
+            <h2 class="font-heading text-4xl leading-none text-ink md:text-6xl">{i.about.title}</h2>
+            {i.home.about.highlight && (
+              <p class="max-w-md font-body text-xl leading-8 text-ink">{i.home.about.highlight}</p>
+            )}
+            <RichText text={i.about.text} class="max-w-2xl font-body text-lg leading-8 text-ink-muted md:text-xl" />
+          </ScrollReveal>
+        </div>
+
+        <ScrollReveal client:visible className="site-container mt-12">
+          <div class="border-t border-black/10 pt-8 text-center">
+            <p class="mb-4 font-body text-xs font-semibold uppercase tracking-[0.3em] text-amaranth">{i.home.about.languagesLabel}</p>
+            <StaggerContainer client:visible className="flex flex-wrap justify-center gap-3" staggerDelay={0.08}>
+              {i.home.about.languages.map((language) => (
+                <StaggerItem className="inline-flex">
+                  <span class="border border-black/10 bg-paper px-4 py-2 text-sm text-ink">{language}</span>
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
+          </div>
+        </ScrollReveal>
+      </section>
+
+      <section class="bg-ink px-6 py-20 text-paper md:py-24">
+        <div class="site-container grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+          <div class="relative min-h-[32rem] border border-white/10 bg-white/5 p-5 md:min-h-[38rem] md:p-8">
+            <ParallaxLayer client:visible speed={-0.18} className="absolute -left-2 top-8 z-20 md:-left-8 md:top-12">
+              <FloatingIcon client:visible intensity={10}>
+                <div class="flex h-28 w-28 items-center justify-center border border-white/12 bg-paper text-center font-body text-xs font-semibold uppercase tracking-[0.18em] text-ink shadow-[0_18px_40px_rgba(0,0,0,0.24)] md:h-36 md:w-36">
+                  {i.home.gallery.shotOne}
+                </div>
+              </FloatingIcon>
+            </ParallaxLayer>
+
+            <ParallaxLayer client:visible speed={0.22} className="absolute right-0 top-0 z-20 md:right-4">
+              <FloatingIcon client:visible intensity={12}>
+                <div class="flex h-24 w-32 items-center justify-center border border-white/12 bg-white text-center font-body text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-ink shadow-[0_18px_40px_rgba(0,0,0,0.24)] md:h-28 md:w-40">
+                  {i.home.gallery.shotTwo}
+                </div>
+              </FloatingIcon>
+            </ParallaxLayer>
+
+            <ParallaxLayer client:visible speed={-0.12} className="absolute -bottom-4 left-6 z-20 md:bottom-8 md:left-10">
+              <FloatingIcon client:visible intensity={14}>
+                <div class="flex h-28 w-40 items-center justify-center border border-white/12 bg-white text-center font-body text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-ink shadow-[0_18px_40px_rgba(0,0,0,0.24)] md:h-32 md:w-44">
+                  {i.home.gallery.shotThree}
+                </div>
+              </FloatingIcon>
+            </ParallaxLayer>
+
+            <ParallaxLayer client:visible speed={0.18} className="absolute bottom-14 right-2 z-20 md:right-0">
+              <FloatingIcon client:visible intensity={11}>
+                <div class="flex h-20 w-28 items-center justify-center border border-white/12 bg-amaranth text-center font-body text-[0.6rem] font-semibold uppercase tracking-[0.24em] text-paper shadow-[0_18px_40px_rgba(0,0,0,0.24)] md:h-24 md:w-36 md:text-xs">
+                  {i.home.gallery.shotFour}
+                </div>
+              </FloatingIcon>
+            </ParallaxLayer>
+
+            <ScrollReveal client:visible direction="up" className="relative mx-auto flex aspect-[9/16] w-full max-w-[22rem] items-center justify-center overflow-hidden border border-white/12 bg-white/8">
+              <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(255,255,255,0.02))]"></div>
+              <div class="absolute left-1/2 top-4 h-1.5 w-24 -translate-x-1/2 rounded-full bg-white/20"></div>
+              <div class="absolute inset-x-[22%] top-10 h-24 rounded-full bg-white/10 blur-3xl"></div>
+              <div class="relative z-10 max-w-sm text-center">
+                <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth-soft">{i.home.video.note}</p>
+                <p class="mt-5 font-heading text-4xl text-paper md:text-5xl">{i.home.video.placeholder}</p>
+              </div>
+              <ArrowWavy client:visible className="absolute bottom-8 right-8 hidden w-24 text-amaranth-soft md:block" />
+            </ScrollReveal>
+          </div>
+
+          <ScrollReveal client:visible direction="right" className="space-y-6">
+            <p class="font-body text-xs font-semibold uppercase tracking-[0.36em] text-amaranth-soft">{i.home.video.eyebrow}</p>
+            <h2 class="font-heading text-4xl leading-none text-paper md:text-6xl">{i.home.video.title}</h2>
+            <RichText text={i.home.video.description} class="max-w-xl font-body text-lg leading-8 text-white/74 md:text-xl" />
+            {imagesData.instagramScreenshot ? (
+              <div class="mt-6 overflow-hidden border border-white/10">
+                <img src={imagesData.instagramScreenshot} alt="Instagram" class="w-full" />
+              </div>
+            ) : (
+              <div class="mt-6 flex aspect-[4/3] items-center justify-center border border-dashed border-white/20 bg-white/5">
+                <p class="font-body text-sm text-white/60">📱 Instagram screenshot</p>
+              </div>
+            )}
+          </ScrollReveal>
+        </div>
+      </section>
+    </div>
+  </PageTransition>
+</BaseLayout>

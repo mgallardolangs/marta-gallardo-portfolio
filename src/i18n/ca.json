@@ -16,8 +16,8 @@
     "seoLabel": "Traducció Multilingüe & Localització + SEO"
   },
   "about": {
-    "title": "Sobre mi",
-    "text": "Soc Marta, creadora de contingut UGC i especialista en traducció i SEO. Parlo espanyol, francès, alemany, italià i anglès. M'apassiona crear contingut autèntic per a marques i ajudar empreses a comunicar-se globalment."
+    "title": "Encantada, soc la Marta.",
+    "text": "Soc traductora i creadora de contingut. Treballo entre idiomes, cultures i formats perquè cada missatge conservi la seva intenció i connecti de manera natural.\\n\\nCombino traducció, localització, SEO multilingüe i contingut UGC per ajudar les marques a comunicar amb claredat, coherència i sensibilitat cultural."
   },
   "ugc": {
     "title": "Portfolio UGC",
@@ -54,11 +54,12 @@
   "blog": {
     "title": "Blog",
     "readMore": "Llegir més",
-    "backToList": "← Tornar al blog"
+    "backToList": "← Tornar al blog",
+    "emptyState": "Encara no hi ha articles. Aviat n’hi haurà més."
   },
   "contact": {
     "title": "Col·laborem",
-    "subtitle": "Tens un projecte en ment? M'encantaria saber de tu.",
+    "subtitle": "Explica’m què vols crear, adaptar o posicionar. Et respondré amb una proposta clara per donar forma al projecte.",
     "ugcForm": {
       "title": "Col·laboració UGC",
       "company": "Empresa",
@@ -98,8 +99,8 @@
   },
   "home": {
     "hero": {
-      "kicker": "UGC · Traducció · SEO",
-      "description": "Creo imatges, paraules i experiències digitals amb una sensibilitat editorial pensada per a marques lifestyle, beauty, travel i projectes internacionals.",
+      "kicker": "Creativitat, idiomes i estratègia",
+      "description": "Creo contingut i adapto missatges perquè les marques connectin amb persones reals, en qualsevol idioma i mercat. Combino creativitat, traducció i estratègia digital amb una mirada internacional.",
       "mainPhoto": "Foto principal",
       "scrollCue": "Desplaça per descobrir",
       "coverLabel": "Portada editorial"
@@ -120,7 +121,7 @@
     "video": {
       "eyebrow": "Identitat de marca",
       "title": "Marca personal",
-      "description": "Aquest espai pot presentar el vídeo d’introducció de Marta: natural, elegant i pensat per transmetre personalitat, presència davant de càmera i un univers visual refinat.",
+      "description": "A @marttelier comparteixo contingut sobre art, viatges, idiomes i processos creatius. Un espai personal on converteixo curiositat, observació i experiències reals en històries visuals.",
       "placeholder": "Vídeo intro",
       "note": "Format 9:16 · placeholder per a reel / presentació"
     },
@@ -136,9 +137,9 @@
       "backgroundLabel": "PORTFOLI DE MARCA",
       "eyebrow": "UGC",
       "headline": "Conceptes de UGC nets i editorials creats per a marques, no per a diaris d’influencer.",
-      "description": "Un portfoli placeholder curat per a Marta Gallardo amb conceptes de campanya centrats en viatges, idiomes i art. Cada targeta està pensada per simular creativitats llestes per a paid social: creïbles, ordenades i orientades a conversió.",
+      "description": "Creo vídeos i imatges que s’integren de manera natural a les xarxes i a les campanyes. Contingut proper, cuidat i creïble, pensat per captar l’atenció sense perdre la identitat de la marca.",
       "nicheIntroTitle": "Cada marca té una història diferent.",
-      "nicheIntroText": "La meua feina consisteix a comprendre què la fa única i convertir aquesta essència en contingut que resulte natural, creïble i rellevant per a les persones a les quals vol arribar.",
+      "nicheIntroText": "Entenc què fa única cada marca i ho tradueixo en contingut natural, rellevant i preparat per connectar amb la seva audiència.",
       "highlight": ""
     },
     "pageDescription": "Portfoli professional de UGC de Marta Gallardo amb campanyes editorials conceptuals de viatges, idiomes i art.",
@@ -153,7 +154,7 @@
         "label": "Viatges",
         "accent": "Storytelling per a hotels i destinacions",
         "eyebrow": "Hostaleria, equipatge, reserves i contingut centrat en l’experiència",
-        "intro": "Una barreja cuidada de walkthroughs de check-in, edicions d’itineraris i peces de viatge centrades en producte, dissenyades per integrar-se de manera natural en campanyes de paid social.",
+        "intro": "Creo contingut per a turisme, allotjaments i productes de viatge que transmet l’experiència amb naturalitat: recorreguts, recomanacions, integracions i peces que ajuden a imaginar la destinació abans de reservar.",
         "cards": [
           {
             "title": "Storyboard de check-in en hotel boutique",
@@ -185,7 +186,7 @@
         "label": "Idiomes",
         "accent": "Anuncis educatius, útils i multilingües",
         "eyebrow": "Apps d’idiomes, serveis internacionals i eines d’aprenentatge",
-        "intro": "Conceptes de mostra pensats per a marques que necessiten una comunicació clara i creïble, ideals per a campanyes multilingües, fluxos d’onboarding i peces explicatives de producte.",
+        "intro": "Creo contingut clar i proper per a apps, plataformes educatives i serveis internacionals. Adapto el missatge a l’idioma, al context cultural i a la manera com cada audiència decideix i connecta.",
         "cards": [
           {
             "title": "Demo de primera lliçó en app d’idiomes",
@@ -217,7 +218,7 @@
         "label": "Art",
         "accent": "Demos editorials de producte per a marques creatives",
         "eyebrow": "Eines creatives, tallers, galeries i productes amb enfocament de disseny",
-        "intro": "Conceptes de UGC amb sensibilitat editorial per a marques d’art i disseny, equilibrant visuals tàctils amb hooks informatius que funcionen molt bé en campanyes de pagament.",
+        "intro": "Creo peces editorials per a marques d’art, disseny i lifestyle. Cuido la composició, el ritme i la narrativa perquè cada pla reforci la identitat del producte.",
         "cards": [
           {
             "title": "Reveal de materials de sketchbook",
@@ -245,13 +246,14 @@
           }
         ]
       }
-    }
+    },
+    "contentComingSoon": "Contingut disponible ben aviat."
   },
   "translationPage": {
     "hero": {
       "eyebrow": "Comunicació multilingüe",
       "title": "Serveis de traducció, SEO i localització",
-      "text": "Adaptar un missatge és molt més que traduir paraules. És assegurar-se que continue funcionant allà on siga la seua audiència. \\n Cada llengua té els seus matisos, cada mercat el seu context i cada marca la seua manera de comunicar. \\n Ajude empreses a adaptar i optimitzar continguts perquè connecten amb nous mercats, milloren la seua visibilitat als cercadors i sonen naturals en qualsevol llengua. \\n El meu treball combina traducció, localització i SEO perquè cada contingut mantinga la seua intenció, resulte rellevant per al públic adequat i tinga opcions reals de posicionar-se a Google. \\n El meu recorregut combina estudis de Traducció i Interpretació, comunicació diària amb clients francòfons, projectes de localització per a e-commerce i una experiència internacional que ha reforçat la meua manera d’entendre les llengües des del seu context cultural, no només gramatical. \\n Aquesta perspectiva em permet abordar cada projecte amb un objectiu clar: fer que cada contingut semble escrit des del principi per al mercat al qual s’adreça.",
+      "text": "Adapto continguts perquè sonin naturals, connectin amb cada mercat i tinguin més oportunitats de ser trobats. Traducció, localització i SEO multilingüe amb una mateixa intenció: que el teu missatge funcioni, sigui on sigui la teva audiència.",
       "availability": "Disponible per a projectes freelance, col·laboracions puntuals i suport editorial continuat.",
       "backgroundLabel": "Què diu el text → Traducció.\nCom l’entén cada audiència → Localització.\nCom el troben → SEO."
     },
@@ -280,17 +282,17 @@
         {
           "title": "Traducció d’e-commerce i gestió de continguts + atenció al client en francés",
           "highlight": "Las Tijeras Mágicas",
-          "text": "Traducció diària de fitxes de producte (ES→FR/DE/IT) i gestió de catàlegs digitals de merceria i productes tèxtils per a mercats europeus. Comunicació diària amb clients francòfons, resolució de consultes i cura del to de marca en situacions reals."
+          "text": "Traducció diària de fitxes de producte (ES→FR/DE/IT), gestió de catàlegs i atenció a clients francòfons, mantenint precisió i to de marca."
         },
         {
           "title": "Pràctiques freelance de traducció jurídica",
           "highlight": "Cristina Auroutinova",
-          "text": "Traducció FR⇄ES de textos jurídics i postedició de traduccions automàtiques, assegurant precisió terminològica i coherència entre formats."
+          "text": "Traducció FR⇄ES de textos legals i postedició, amb focus en la precisió terminològica i la coherència."
         },
         {
           "title": "Experiència internacional com a au pair",
           "highlight": "Aupairworld Switzerland",
-          "text": "Viure i treballar en un entorn multicultural, desenvolupant adaptabilitat, empatia i seguretat comunicativa."
+          "text": "Treball i convivència a Suïssa en un entorn multicultural, reforçant adaptabilitat, empatia i fluïdesa comunicativa."
         }
       ]
     },
@@ -334,10 +336,10 @@
       "title": "Formació",
       "intro": "Una base acadèmica centrada en llengües, comunicació intercultural i escriptura, reforçada per una immersió pràctica en entorns internacionals.",
       "studies": [
-        "Grau en Traducció i Interpretació, amb especialització en francés i enfocament en l’escriptura i l’adaptació de continguts per a audiències internacionals.",
-        "Francés avançat reforçat gràcies a un programa Erasmus+ de sis mesos a París i al contacte diari amb entorns francòfons.",
-        "Interés constant per l’escriptura clara, la terminologia i l’optimització de continguts per a entorns digitals.",
-        "Pràctiques freelance de traducció jurídica (FR→ES) al costat d’una traductora especialitzada, treballant amb textos legals i postedició de traduccions automàtiques."
+        "Grau en Traducció i Interpretació, especialitzat en francès, redacció i adaptació de continguts.",
+        "Erasmus+ de sis mesos a París i pràctica diària en entorns francòfons.",
+        "Formació contínua en escriptura clara, terminologia i optimització de continguts digitals.",
+        "Pràctiques de traducció jurídica FR→ES i postedició al costat d’una traductora especialitzada."
       ],
       "languagesEyebrow": "Competències lingüístiques",
       "languagesTitle": "Llengües",

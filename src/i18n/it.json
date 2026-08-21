@@ -16,8 +16,8 @@
     "seoLabel": "Traduzione Multilingue & Localizzazione + SEO"
   },
   "about": {
-    "title": "Chi sono",
-    "text": "Sono Marta, creatrice di contenuti UGC e specialista in traduzione e SEO. Parlo spagnolo, francese, tedesco, italiano e inglese. Sono appassionata di creare contenuti autentici per i brand e aiutare le aziende a comunicare a livello globale."
+    "title": "Piacere, sono Marta.",
+    "text": "Sono traduttrice e content creator. Lavoro tra lingue, culture e formati perché ogni messaggio mantenga la sua intenzione e arrivi in modo naturale.\\n\\nUnisco traduzione, localizzazione, SEO multilingue e contenuti UGC per aiutare i brand a comunicare con chiarezza, coerenza e sensibilità culturale."
   },
   "ugc": {
     "title": "Portfolio UGC",
@@ -54,11 +54,12 @@
   "blog": {
     "title": "Blog",
     "readMore": "Leggi di più",
-    "backToList": "← Torna al blog"
+    "backToList": "← Torna al blog",
+    "emptyState": "Ancora nessun post. Presto ne arriveranno altri."
   },
   "contact": {
     "title": "Collaboriamo",
-    "subtitle": "Hai un progetto in mente? Mi piacerebbe sentire da te.",
+    "subtitle": "Raccontami cosa vuoi creare, adattare o posizionare. Ti risponderò con una proposta chiara per dare forma al progetto.",
     "ugcForm": {
       "title": "Collaborazione UGC",
       "company": "Azienda",
@@ -98,8 +99,8 @@
   },
   "home": {
     "hero": {
-      "kicker": "UGC · Traduzione · SEO",
-      "description": "Creo immagini, parole ed esperienze digitali con una sensibilità editoriale pensata per brand lifestyle, beauty, travel e progetti internazionali.",
+      "kicker": "Creatività, lingue e strategia",
+      "description": "Creo contenuti e adatto i messaggi perché i brand possano entrare in contatto con persone reali, in qualsiasi lingua e mercato. Unisco creatività, traduzione e strategia digitale con uno sguardo internazionale.",
       "mainPhoto": "Foto principale",
       "scrollCue": "Scorri per scoprire",
       "coverLabel": "Copertina editoriale"
@@ -120,7 +121,7 @@
     "video": {
       "eyebrow": "Identità del brand",
       "title": "Brand personale",
-      "description": "Questo spazio può presentare il video introduttivo di Marta: naturale, elegante e pensato per trasmettere personalità, presenza davanti alla camera e un universo visivo curato.",
+      "description": "Su @marttelier condivido contenuti su arte, viaggi, lingue e processi creativi. Uno spazio personale in cui trasformo curiosità, osservazione ed esperienze reali in storie visive.",
       "placeholder": "Video intro",
       "note": "Formato 9:16 · placeholder per reel / presentazione"
     },
@@ -136,9 +137,9 @@
       "backgroundLabel": "PORTFOLIO BRAND",
       "eyebrow": "UGC",
       "headline": "Concept UGC puliti ed editoriali pensati per i brand, non per diari da influencer.",
-      "description": "Un portfolio placeholder curato per Marta Gallardo con concept di campagna focalizzati su viaggi, lingue e arte. Ogni card è progettata per simulare creatività pronte per il paid social: credibili, ordinate e orientate alla conversione.",
+      "description": "Creo video e immagini che si integrano in modo naturale nei social e nelle campagne. Contenuti vicini, curati e credibili, pensati per catturare l’attenzione senza perdere l’identità del brand.",
       "nicheIntroTitle": "Ogni brand ha una storia diversa.",
-      "nicheIntroText": "Il mio lavoro consiste nel capire cosa lo rende unico e trasformare questa essenza in contenuti naturali, credibili e rilevanti per le persone che vuole raggiungere.",
+      "nicheIntroText": "Capisco cosa rende unico ogni brand e lo traduco in contenuti naturali, rilevanti e pronti a entrare in contatto con il suo pubblico.",
       "highlight": ""
     },
     "pageDescription": "Portfolio UGC professionale di Marta Gallardo con campagne editoriali concettuali dedicate a viaggi, lingue e arte.",
@@ -153,7 +154,7 @@
         "label": "Viaggi",
         "accent": "Storytelling per hotel e destinazioni",
         "eyebrow": "Hospitality, valigeria, prenotazioni e contenuti guidati dall’esperienza",
-        "intro": "Un mix curato di walkthrough di check-in, editing di itinerari e asset travel centrati sul prodotto, progettati per integrarsi in modo naturale nei feed paid social.",
+        "intro": "Creo contenuti per turismo, strutture ricettive e prodotti di viaggio che trasmettono l’esperienza con naturalezza: tour, consigli, integrazioni e contenuti che aiutano a immaginare la destinazione prima della prenotazione.",
         "cards": [
           {
             "title": "Storyboard di check-in per soggiorno boutique",
@@ -185,7 +186,7 @@
         "label": "Lingue",
         "accent": "Annunci educativi, utili e multilingue",
         "eyebrow": "App linguistiche, servizi internazionali e strumenti di apprendimento",
-        "intro": "Concept di esempio pensati per brand che hanno bisogno di una comunicazione chiara e credibile: ideali per campagne multilingue, flussi di onboarding e spiegazioni di prodotto.",
+        "intro": "Creo contenuti chiari e vicini per app, piattaforme educative e servizi internazionali. Adatto il messaggio alla lingua, al contesto culturale e al modo in cui ogni pubblico decide e si relaziona.",
         "cards": [
           {
             "title": "Demo della prima lezione di un’app di lingue",
@@ -217,7 +218,7 @@
         "label": "Arte",
         "accent": "Demo editoriali di prodotto per brand creativi",
         "eyebrow": "Strumenti creativi, workshop, gallerie e prodotti guidati dal design",
-        "intro": "Concept UGC dal tono editoriale per brand di arte e design, che bilanciano visual tattili e hook informativi efficaci per campagne paid.",
+        "intro": "Creo contenuti editoriali per brand di arte, design e lifestyle. Curo composizione, ritmo e narrazione affinché ogni inquadratura rafforzi l’identità del prodotto.",
         "cards": [
           {
             "title": "Reveal dei materiali di uno sketchbook",
@@ -245,13 +246,14 @@
           }
         ]
       }
-    }
+    },
+    "contentComingSoon": "Contenuti in arrivo a breve."
   },
   "translationPage": {
     "hero": {
       "eyebrow": "Comunicazione multilingue",
       "title": "Servizi di traduzione, SEO e localizzazione",
-      "text": "Adattare un messaggio significa molto più che tradurre parole. Significa assicurarsi che continui a funzionare ovunque si trovi il suo pubblico. \\n Ogni lingua ha le proprie sfumature, ogni mercato il proprio contesto e ogni brand il proprio modo di comunicare. \\n Aiuto le aziende ad adattare e ottimizzare i contenuti affinché raggiungano nuovi mercati, migliorino la visibilità sui motori di ricerca e risultino naturali in ogni lingua. \\n Il mio lavoro unisce traduzione, localizzazione e SEO, così che ogni contenuto mantenga il suo intento, risulti rilevante per il pubblico giusto e abbia reali possibilità di posizionarsi su Google. \\n Il mio percorso combina studi in Traduzione e Interpretazione, comunicazione quotidiana con clienti francofoni, progetti di localizzazione per l’e-commerce e un’esperienza internazionale che ha rafforzato il mio modo di comprendere le lingue nel loro contesto culturale, non soltanto grammaticale. \\n Questa prospettiva mi permette di affrontare ogni progetto con un obiettivo chiaro: far sembrare ogni contenuto come se fosse stato scritto fin dall’inizio per il mercato a cui si rivolge.",
+      "text": "Adatto i contenuti perché suonino naturali, entrino in contatto con ogni mercato e abbiano più possibilità di essere trovati. Traduzione, localizzazione e SEO multilingue con un’unica intenzione: far funzionare il tuo messaggio, ovunque si trovi il tuo pubblico.",
       "availability": "Disponibile per progetti freelance, collaborazioni occasionali e supporto editoriale continuativo.",
       "backgroundLabel": "Cosa dice il testo → Traduzione.\nCome lo capisce ogni pubblico → Localizzazione.\nCome lo trovano le persone → SEO."
     },
@@ -280,17 +282,17 @@
         {
           "title": "Traduzione e-commerce e gestione dei contenuti + assistenza clienti in francese",
           "highlight": "Las Tijeras Mágicas",
-          "text": "Traduzione quotidiana di schede prodotto (ES→FR/DE/IT) e gestione di cataloghi digitali di merceria e prodotti tessili per mercati europei. Comunicazione quotidiana con clienti francofoni, risoluzione di richieste e cura del tono del brand in situazioni reali."
+          "text": "Traduzione quotidiana di schede prodotto (ES→FR/DE/IT), gestione dei cataloghi e assistenza ai clienti francofoni, mantenendo precisione e tono di marca."
         },
         {
           "title": "Tirocinio freelance in traduzione giuridica",
           "highlight": "Cristina Auroutinova",
-          "text": "Traduzione FR⇄ES di testi giuridici e post-editing di traduzioni automatiche, con attenzione alla precisione terminologica e alla coerenza tra formati diversi."
+          "text": "Traduzione FR⇄ES di testi legali e post-editing, con attenzione alla precisione terminologica e alla coerenza."
         },
         {
           "title": "Esperienza internazionale come au pair",
           "highlight": "Aupairworld Switzerland",
-          "text": "Vivere e lavorare in un ambiente multiculturale, sviluppando adattabilità, empatia e sicurezza nella comunicazione."
+          "text": "Lavoro e vita in Svizzera in un ambiente multiculturale, rafforzando adattabilità, empatia e scioltezza comunicativa."
         }
       ]
     },
@@ -334,10 +336,10 @@
       "title": "Formazione",
       "intro": "Una base accademica incentrata su lingue, comunicazione interculturale e scrittura, rafforzata da un’immersione pratica in contesti internazionali.",
       "studies": [
-        "Laurea in Traduzione e Interpretazione, con specializzazione in francese e attenzione alla scrittura e all’adattamento dei contenuti per pubblici internazionali.",
-        "Francese avanzato consolidato grazie a un programma Erasmus+ di sei mesi a Parigi e al contatto quotidiano con ambienti francofoni.",
-        "Interesse costante per la scrittura chiara, la terminologia e l’ottimizzazione dei contenuti per ambienti digitali.",
-        "Tirocinio freelance in traduzione giuridica (FR→ES) al fianco di una traduttrice specializzata, lavorando su testi legali e post-editing di traduzioni automatiche."
+        "Laurea in Traduzione e Interpretariato, con specializzazione in francese, scrittura e adattamento dei contenuti.",
+        "Erasmus+ di sei mesi a Parigi e pratica quotidiana in contesti francofoni.",
+        "Formazione continua in scrittura chiara, terminologia e ottimizzazione dei contenuti digitali.",
+        "Tirocinio in traduzione giuridica FR→ES e post-editing accanto a una traduttrice specializzata."
       ],
       "languagesEyebrow": "Competenze linguistiche",
       "languagesTitle": "Lingue",

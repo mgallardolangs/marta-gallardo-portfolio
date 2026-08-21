@@ -347,23 +347,12 @@ test('admin translation SEO page uses stable tool IDs instead of translated labe
   assert.match(source, /const toolTiles = getTranslationToolTiles\(lang, imagesData, page\.skills\.tools\.items\);/);
 });
 
-test('public translation SEO pages feed editable i18n tool labels into translation tiles', async () => {
-  const pagePaths = [
-    'src/pages/translation-seo.astro',
-    'src/pages/en/translation-seo.astro',
-    'src/pages/fr/translation-seo.astro',
-    'src/pages/de/translation-seo.astro',
-    'src/pages/it/translation-seo.astro',
-    'src/pages/ca/translation-seo.astro',
-  ];
+test('shared public translation SEO view feeds editable i18n tool labels into translation tiles', async () => {
+  const source = await readFile(path.join(rootDir, 'src/views/TranslationSeoPage.astro'), 'utf8');
 
-  const sources = await Promise.all(pagePaths.map((pagePath) => readFile(path.join(rootDir, pagePath), 'utf8')));
-
-  sources.forEach((source, index) => {
-    assert.match(
-      source,
-      /const toolTiles = getTranslationToolTiles\(lang, siteData, page\.skills\.tools\.items\);/,
-      `${pagePaths[index]} should use editable i18n labels as the tool tile source of truth`,
-    );
-  });
+  assert.match(
+    source,
+    /const toolTiles = getTranslationToolTiles\(lang, siteData, page\.skills\.tools\.items\);/,
+    'src/views/TranslationSeoPage.astro should use editable i18n labels as the tool tile source of truth',
+  );
 });
