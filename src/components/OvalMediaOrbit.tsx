@@ -8,6 +8,7 @@ import type { OrbitMedia } from '../lib/siteData';
 import {
   calculateOrbitAutoScrollSpeed,
   DESKTOP_ORBIT_GEOMETRY,
+  getLocalizedOrbitText,
   getOrbitInteractionState,
   getOrbitItemLayout,
   getOrbitVideoPlaybackMode,
@@ -448,8 +449,8 @@ export default function OvalMediaOrbit({
           {items.map((item, index) => {
             const href = previewMode ? null : resolveOrbitHref(item.href, lang);
             const soundState = soundStates[item.id] ?? 'muted';
-            const label = item.label[lang] ?? item.label.es;
-            const alt = item.alt[lang] ?? item.alt.es;
+            const label = getLocalizedOrbitText(item.label, lang);
+            const alt = getLocalizedOrbitText(item.alt, lang);
 
             return (
               <div

@@ -1,6 +1,6 @@
 import EditableMedia from './EditableMedia';
 import { useAdminStore } from './useAdminStore';
-import { buildOrbitUploadPath, validateOrbitMediaItem } from '../../lib/orbitMedia';
+import { buildOrbitUploadPath, getLocalizedOrbitText } from '../../lib/orbitMedia';
 
 const EDITABLE_LANGS = [
   { code: 'es', label: 'ES' },
@@ -32,7 +32,8 @@ export default function EditableOrbitCollection() {
 
       <div className="space-y-5">
         {orbitMedia.map((item, index) => {
-          const errors = validateOrbitMediaItem(item);
+          const errors = store.getOrbitItemValidationErrors(item.id);
+          const previewAlt = getLocalizedOrbitText(item.alt, store.currentLang);
 
           return (
             <article key={item.id} className="space-y-5 border border-black/10 bg-white p-5 shadow-[0_12px_32px_rgba(6,4,3,0.06)]">
@@ -76,7 +77,7 @@ export default function EditableOrbitCollection() {
                       src={item.src}
                       mediaType={item.type}
                       acceptKind={item.type}
-                      alt={item.alt[store.currentLang] ?? item.alt.es}
+                      alt={previewAlt}
                       label={item.type === 'video' ? '🎬 Change video' : '📷 Change image'}
                       emptyLabel={item.type === 'video' ? 'Upload MP4/WebM/MOV' : 'Upload JPG/PNG/WebP/GIF'}
                       className="aspect-[96/122]"
@@ -117,7 +118,7 @@ export default function EditableOrbitCollection() {
                         src={item.poster ?? ''}
                         mediaType="image"
                         acceptKind="image"
-                        alt={`${item.alt.es} poster`}
+                        alt={`${getLocalizedOrbitText(item.alt, 'es')} poster`}
                         label="🖼 Change poster"
                         emptyLabel="Poster required"
                         className="aspect-[4/5]"

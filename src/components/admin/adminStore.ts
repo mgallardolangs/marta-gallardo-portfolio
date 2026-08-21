@@ -24,15 +24,24 @@ type ImagesTree = Record<string, unknown>;
 type PendingImage = {
   path: string;
   sitePath: string;
+  previousSitePath: string | null;
   previewSrc: string;
   base64Content: string;
+};
+
+type DraftPendingUpload = {
+  key: string;
 };
 
 type DraftPayload = {
   i18n: Record<string, I18nTree>;
   images: ImagesTree;
   currentLang: SupportedLang;
-  pendingImages: Record<string, PendingImage>;
+  pendingUploads: DraftPendingUpload[];
+};
+
+type LegacyDraftPayload = DraftPayload & {
+  pendingImages?: Record<string, PendingImage>;
 };
 
 type AdminSnapshot = {
@@ -43,10 +52,13 @@ type AdminSnapshot = {
   isPublishing: boolean;
   publishSuccess: boolean;
   publishError: string;
+  draftTone: '' | 'success' | 'warning' | 'error';
+  draftMessage: string;
   orbitValidationErrors: string[];
   getText: (key: string) => string;
   getImageSrc: (key: string) => string;
   getOrbitMedia: () => OrbitMedia[];
+  getOrbitItemValidationErrors: (itemId: string) => string[];
 };
 
 const DRAFT_STORAGE_KEY = 'marta-inline-editor-draft';
@@ -200,6 +212,16 @@ function normalizeUploadPath(uploadPath: string) {
   };
 }
 
+function getPendingUploadCountLabel(count: number) {
+  return `${count} pending upload${count === 1 ? '' : 's'}`;
+}
+
+function getDraftRestoreMessage(count: number) {
+  return count === 1
+    ? 'Draft restored. 1 pending upload was not saved locally and must be reselected before publishing.'
+    : `Draft restored. ${count} pending uploads were not saved locally and must be reselected before publishing.`;
+}
+
 export class AdminStore {
   private listeners = new Set<Listener>();
   private initialized = false;
@@ -213,6 +235,8 @@ export class AdminStore {
   private isPublishingState = false;
   private publishSuccessState = false;
   private publishErrorState = '';
+  private draftToneState: '' | 'success' | 'warning' | 'error' = '';
+  private draftMessageState = '';
   private snapshot: AdminSnapshot = {
     initialized: false,
     currentLang: 'es',
@@ -221,10 +245,13 @@ export class AdminStore {
     isPublishing: false,
     publishSuccess: false,
     publishError: '',
+    draftTone: '',
+    draftMessage: '',
     orbitValidationErrors: [],
     getText: (key: string) => this.getText(key),
     getImageSrc: (key: string) => this.getImageSrc(key),
     getOrbitMedia: () => this.getOrbitMedia(),
+    getOrbitItemValidationErrors: (itemId: string) => this.getOrbitItemValidationErrors(itemId),
   };
 
   isInitialized(): boolean {
@@ -271,10 +298,8 @@ export class AdminStore {
   }
 
   getOrbitMedia(): OrbitMedia[] {
-    const orbitMedia = deepGet(this.images, 'orbitMedia');
-    if (!Array.isArray(orbitMedia)) return [];
-
-    return cloneValue(orbitMedia as OrbitMedia[]).map((item) => {
+    const orbitMedia = this.getPersistedOrbitMedia();
+    return orbitMedia.map((item) => {
       const srcPreview = this.pendingImages[getOrbitPendingKey(item.id, 'src')]?.previewSrc;
       const posterPreview = this.pendingImages[getOrbitPendingKey(item.id, 'poster')]?.previewSrc;
 
@@ -284,6 +309,13 @@ export class AdminStore {
         poster: posterPreview ?? item.poster ?? null,
       };
     });
+  }
+
+  private getPersistedOrbitMedia(): OrbitMedia[] {
+    const orbitMedia = deepGet(this.images, 'orbitMedia');
+    if (!Array.isArray(orbitMedia)) return [];
+
+    return cloneValue(orbitMedia as OrbitMedia[]);
   }
 
   setText(key: string, value: string): void {
@@ -409,12 +441,15 @@ export class AdminStore {
     const item = this.getMutableOrbitMedia()[index];
     if (!item) return;
 
+    const pendingKey = getOrbitPendingKey(item.id, field);
+    const existingPending = this.pendingImages[pendingKey];
     const normalizedPath = normalizeUploadPath(uploadPath);
     const dataUrl = await fileToDataUrl(file);
     const base64Content = dataUrl.includes(',') ? dataUrl.split(',')[1] ?? '' : dataUrl;
-    this.pendingImages[getOrbitPendingKey(item.id, field)] = {
+    this.pendingImages[pendingKey] = {
       path: normalizedPath.path,
       sitePath: normalizedPath.sitePath,
+      previousSitePath: existingPending?.previousSitePath ?? (field === 'src' ? item.src : item.poster ?? null),
       previewSrc: dataUrl,
       base64Content,
     };
@@ -432,12 +467,15 @@ export class AdminStore {
 
   async setImage(key: string, file: File, uploadPath: string): Promise<void> {
     if (!this.initialized) return;
+    const existingPending = this.pendingImages[key];
+    const currentValue = deepGet(this.images, key);
     const normalizedPath = normalizeUploadPath(uploadPath);
     const dataUrl = await fileToDataUrl(file);
     const base64Content = dataUrl.includes(',') ? dataUrl.split(',')[1] ?? '' : dataUrl;
     this.pendingImages[key] = {
       path: normalizedPath.path,
       sitePath: normalizedPath.sitePath,
+      previousSitePath: existingPending?.previousSitePath ?? (typeof currentValue === 'string' ? currentValue : null),
       previewSrc: dataUrl,
       base64Content,
     };
@@ -454,13 +492,23 @@ export class AdminStore {
 
   saveDraft(): void {
     if (typeof window === 'undefined' || !this.initialized) return;
-    const payload: DraftPayload = {
-      i18n: this.i18n,
-      images: this.images,
-      currentLang: this.currentLang,
-      pendingImages: this.pendingImages,
-    };
-    window.localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(payload));
+    try {
+      const payload = this.buildDraftPayload();
+      window.localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(payload));
+      if (payload.pendingUploads.length > 0) {
+        this.draftToneState = 'warning';
+        this.draftMessageState = `Draft saved locally. ${getPendingUploadCountLabel(payload.pendingUploads.length)} must be reselected after reload before publishing.`;
+      } else {
+        this.draftToneState = 'success';
+        this.draftMessageState = 'Draft saved locally.';
+      }
+    } catch (error) {
+      this.draftToneState = 'error';
+      this.draftMessageState = error instanceof Error && error.name === 'QuotaExceededError'
+        ? 'Draft could not be saved locally. Changes are still open in this tab; copy important text before reloading.'
+        : 'Draft could not be saved locally. Changes are still open in this tab; copy important text before reloading.';
+    }
+    this.emit();
   }
 
   loadDraft(): void {
@@ -469,11 +517,24 @@ export class AdminStore {
     if (!raw) return;
 
     try {
-      const draft = JSON.parse(raw) as Partial<DraftPayload>;
+      const draft = JSON.parse(raw) as Partial<LegacyDraftPayload>;
       if (draft.i18n) this.i18n = draft.i18n;
-      if (draft.images) this.images = draft.images;
+      if (draft.images) {
+        this.images = cloneValue(draft.images);
+      }
       if (draft.currentLang) this.currentLang = draft.currentLang;
-      if (draft.pendingImages) this.pendingImages = draft.pendingImages;
+      this.pendingImages = {};
+      if (draft.pendingImages && draft.images) {
+        this.scrubLegacyPendingDraftImages(draft.pendingImages);
+      }
+      const pendingUploadCount = draft.pendingUploads?.length ?? Object.keys(draft.pendingImages ?? {}).length;
+      if (pendingUploadCount > 0) {
+        this.draftToneState = 'warning';
+        this.draftMessageState = getDraftRestoreMessage(pendingUploadCount);
+      } else {
+        this.draftToneState = '';
+        this.draftMessageState = '';
+      }
       this.emit();
     } catch {
       window.localStorage.removeItem(DRAFT_STORAGE_KEY);
@@ -536,6 +597,8 @@ export class AdminStore {
       this.pendingImages = {};
       this.publishSuccessState = true;
       this.publishErrorState = '';
+      this.draftToneState = '';
+      this.draftMessageState = '';
       if (typeof window !== 'undefined') {
         window.localStorage.removeItem(DRAFT_STORAGE_KEY);
       }
@@ -637,10 +700,91 @@ export class AdminStore {
     return nextOrbitMedia;
   }
 
+  private buildDraftPayload(): DraftPayload {
+    const images = cloneValue(this.images);
+    const pendingUploads = Object.keys(this.pendingImages).map((key) => ({ key }));
+
+    for (const [key, pendingImage] of Object.entries(this.pendingImages)) {
+      const orbitMatch = key.match(/^orbit\.(.+)\.(src|poster)$/);
+      if (orbitMatch) {
+        const [, itemId, field] = orbitMatch;
+        const orbitMedia = deepGet(images, 'orbitMedia');
+        if (Array.isArray(orbitMedia)) {
+          const item = orbitMedia.find((candidate) => (
+            candidate !== null
+            && typeof candidate === 'object'
+            && (candidate as OrbitMedia).id === itemId
+          )) as OrbitMedia | undefined;
+          if (item) {
+            if (field === 'src') {
+              item.src = pendingImage.previousSitePath ?? '';
+            } else {
+              item.poster = pendingImage.previousSitePath;
+            }
+          }
+        }
+        continue;
+      }
+
+      deepSet(images, key, pendingImage.previousSitePath ?? '');
+    }
+
+    return {
+      i18n: this.i18n,
+      images,
+      currentLang: this.currentLang,
+      pendingUploads,
+    };
+  }
+
+  private scrubLegacyPendingDraftImages(pendingImages: Record<string, PendingImage>): void {
+    for (const [key, pendingImage] of Object.entries(pendingImages)) {
+      const orbitMatch = key.match(/^orbit\.(.+)\.(src|poster)$/);
+      if (orbitMatch) {
+        const [, itemId, field] = orbitMatch;
+        const orbitMedia = deepGet(this.images, 'orbitMedia');
+        const originalOrbitMedia = deepGet(this.originalImages, 'orbitMedia');
+        if (Array.isArray(orbitMedia) && Array.isArray(originalOrbitMedia)) {
+          const item = orbitMedia.find((candidate) => (
+            candidate !== null
+            && typeof candidate === 'object'
+            && (candidate as OrbitMedia).id === itemId
+          )) as OrbitMedia | undefined;
+          const originalItem = originalOrbitMedia.find((candidate) => (
+            candidate !== null
+            && typeof candidate === 'object'
+            && (candidate as OrbitMedia).id === itemId
+          )) as OrbitMedia | undefined;
+
+          if (item) {
+            if (field === 'src') {
+              item.src = pendingImage.previousSitePath ?? originalItem?.src ?? item.src;
+            } else {
+              item.poster = pendingImage.previousSitePath ?? originalItem?.poster ?? item.poster ?? null;
+            }
+          }
+        }
+        continue;
+      }
+
+      const originalValue = deepGet(this.originalImages, key);
+      deepSet(
+        this.images,
+        key,
+        pendingImage.previousSitePath ?? (typeof originalValue === 'string' ? originalValue : ''),
+      );
+    }
+  }
+
   private getOrbitValidationErrors(): string[] {
-    return this.getOrbitMedia().flatMap((item) => (
+    return this.getPersistedOrbitMedia().flatMap((item) => (
       validateOrbitMediaItem(item).map((error) => `${item.id}: ${error}`)
     ));
+  }
+
+  private getOrbitItemValidationErrors(itemId: string): string[] {
+    const item = this.getPersistedOrbitMedia().find((candidate) => candidate.id === itemId);
+    return item ? validateOrbitMediaItem(item) : [];
   }
 
   private emit(): void {
@@ -659,10 +803,13 @@ export class AdminStore {
       isPublishing: this.isPublishingState,
       publishSuccess: this.publishSuccessState,
       publishError: this.publishErrorState,
+      draftTone: this.draftToneState,
+      draftMessage: this.draftMessageState,
       orbitValidationErrors,
       getText: (key: string) => this.getText(key),
       getImageSrc: (key: string) => this.getImageSrc(key),
       getOrbitMedia: () => this.getOrbitMedia(),
+      getOrbitItemValidationErrors: (itemId: string) => this.getOrbitItemValidationErrors(itemId),
     };
 
     this.listeners.forEach((listener) => listener());

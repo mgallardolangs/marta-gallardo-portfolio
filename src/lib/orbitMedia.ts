@@ -64,6 +64,12 @@ export function createOrbitMediaDraft(existingIds: string[]): OrbitMedia {
   };
 }
 
+export function getLocalizedOrbitText(text: LocalizedText, lang: OrbitLang): string {
+  const localizedValue = text[lang]?.trim();
+  if (localizedValue) return localizedValue;
+  return text.es.trim();
+}
+
 export function getTiltedEllipsePoint(progress: number, geometry: OrbitGeometry = DESKTOP_ORBIT_GEOMETRY) {
   const angle = normalizeOrbitProgress(progress) * TAU;
   const rawX = Math.cos(angle) * geometry.radiusX;
@@ -229,8 +235,8 @@ export function validateOrbitMediaItem(item: OrbitMedia) {
 
   for (const field of ['label', 'alt'] as const) {
     const value = item[field];
-    if (!value.es.trim()) {
-      errors.push(`Orbit ${field} needs at least a Spanish value.`);
+    if (ORBIT_ADMIN_LANGS.some((lang) => !value[lang]?.trim())) {
+      errors.push(`Orbit ${field} needs Spanish, English, and French values.`);
     }
   }
 

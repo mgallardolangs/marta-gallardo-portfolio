@@ -10,6 +10,13 @@ const LANGS = [
 export default function AdminToolbar() {
   const store = useAdminStore();
   const [expanded, setExpanded] = useState(false);
+  const draftToneClass = store.draftTone === 'success'
+    ? 'text-green-400'
+    : store.draftTone === 'warning'
+      ? 'text-amber-300'
+      : store.draftTone === 'error'
+        ? 'text-red-400'
+        : 'text-gray-400';
 
   return (
     <>
@@ -69,6 +76,7 @@ export default function AdminToolbar() {
           {store.orbitValidationErrors.length > 0 && (
             <p className="mt-2 text-xs text-amber-300">⚠️ Fix the orbit warnings before publishing.</p>
           )}
+          {store.draftMessage && <p className={`mt-2 text-xs ${draftToneClass}`}>💾 {store.draftMessage}</p>}
           {store.publishSuccess && <p className="mt-2 text-xs text-green-400">✅ Published! Rebuilds in ~2 min.</p>}
           {store.publishError && <p className="mt-2 text-xs text-red-400">❌ {store.publishError}</p>}
         </div>
