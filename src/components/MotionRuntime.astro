@@ -1,6 +1,7 @@
 <script>
   import Lenis from 'lenis';
   import { createMotionRuntimeController } from '../lib/motionRuntime.js';
+  import { createDeferredMotionPreferenceSync } from '../lib/motionRuntime.js';
 
   type MotionRuntimeState = {
     lenis: Lenis | null;
@@ -41,17 +42,18 @@
         delete document.documentElement.dataset.reducedMotion;
       },
     });
-    const queueResizeSync = () => {
-      requestAnimationFrame(() => controller.syncPreference(false));
-    };
+    const deferredPreferenceSync = createDeferredMotionPreferenceSync({ controller, reducedMotionMedia });
+    const queueResizeSync = () => deferredPreferenceSync.queue();
 
     const onVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
+        deferredPreferenceSync.cancel();
         controller.stop();
         return;
       }
 
       if (reducedMotionMedia.matches) {
+        deferredPreferenceSync.cancel();
         controller.syncPreference(true);
         return;
       }
@@ -59,9 +61,13 @@
       controller.start();
       queueResizeSync();
     };
-    const onBeforePreparation = () => controller.stop();
+    const onBeforePreparation = () => {
+      deferredPreferenceSync.cancel();
+      controller.stop();
+    };
     const onPageLoad = () => {
       if (reducedMotionMedia.matches) {
+        deferredPreferenceSync.cancel();
         controller.syncPreference(true);
         return;
       }
@@ -76,13 +82,14 @@
 
     const onReducedMotionChange = () => {
       if (reducedMotionMedia.matches) {
+        deferredPreferenceSync.cancel();
         controller.syncPreference(true);
         return;
       }
 
       controller.syncPreference(false);
       controller.start();
-      requestAnimationFrame(() => controller.syncPreference(false));
+      queueResizeSync();
     };
     reducedMotionMedia.addEventListener('change', onReducedMotionChange);
     controller.syncPreference(reducedMotionMedia.matches);
@@ -91,6 +98,7 @@
     }
 
     runtimeState.cleanup = () => {
+      deferredPreferenceSync.cancel();
       controller.cleanup();
       document.removeEventListener('visibilitychange', onVisibilityChange);
       document.removeEventListener('astro:before-preparation', onBeforePreparation);

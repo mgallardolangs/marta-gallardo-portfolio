@@ -59,3 +59,45 @@ export function toggleMobileMenu(state, trigger) {
 export function getFocusTrapTarget(state) {
   return state.activeOverlay;
 }
+
+export function getHeaderVisibilityState({
+  currentHidden,
+  overlayState,
+  isDesktop,
+  scrollY,
+  lastScrollY,
+}) {
+  const compact = scrollY > 80;
+
+  if (!isDesktop || overlayState.activeOverlay) {
+    return {
+      compact,
+      hidden: false,
+      lastScrollY: scrollY,
+    };
+  }
+
+  const delta = scrollY - lastScrollY;
+
+  if (scrollY <= 120 || delta < -8) {
+    return {
+      compact,
+      hidden: false,
+      lastScrollY: scrollY,
+    };
+  }
+
+  if (delta > 8) {
+    return {
+      compact,
+      hidden: true,
+      lastScrollY: scrollY,
+    };
+  }
+
+  return {
+    compact,
+    hidden: currentHidden,
+    lastScrollY: scrollY,
+  };
+}

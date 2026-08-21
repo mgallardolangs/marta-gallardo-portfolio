@@ -1,8 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { createHeaderOverlayState, closeActiveHeaderOverlay, getFocusTrapTarget, toggleLanguageMenu, toggleMobileMenu } from '../src/lib/headerOverlayState.js';
-import { createMotionRuntimeController } from '../src/lib/motionRuntime.js';
+import * as headerOverlayStateModule from '../src/lib/headerOverlayState.js';
+import * as motionRuntimeModule from '../src/lib/motionRuntime.js';
+
+const {
+  createHeaderOverlayState,
+  closeActiveHeaderOverlay,
+  getFocusTrapTarget,
+  toggleLanguageMenu,
+  toggleMobileMenu,
+} = headerOverlayStateModule;
+const { createMotionRuntimeController } = motionRuntimeModule;
 
 test('motion runtime destroys Lenis under reduced motion and recreates a fresh instance when motion returns', () => {
   const instances = [];
@@ -93,6 +102,60 @@ test('motion runtime notifies live Lenis subscribers when reduced-motion toggles
   unsubscribe();
 });
 
+test('motion runtime deferred preference sync re-reads live reduced-motion state across rapid RAF races', () => {
+  assert.equal(
+    typeof motionRuntimeModule.createDeferredMotionPreferenceSync,
+    'function',
+    'motion runtime should expose a deterministic deferred sync helper for RAF race coverage',
+  );
+
+  const pendingFrames = new Map();
+  let nextFrameId = 1;
+  const syncCalls = [];
+  let lenisCreateCount = 0;
+  const reducedMotionMedia = { matches: false };
+  const deferredSync = motionRuntimeModule.createDeferredMotionPreferenceSync({
+    reducedMotionMedia,
+    controller: {
+      syncPreference(prefersReducedMotion) {
+        syncCalls.push(prefersReducedMotion);
+        if (!prefersReducedMotion) {
+          lenisCreateCount += 1;
+        }
+      },
+    },
+    requestFrame: (callback) => {
+      const frameId = nextFrameId;
+      nextFrameId += 1;
+      pendingFrames.set(frameId, callback);
+      return frameId;
+    },
+    cancelFrame: (frameId) => {
+      pendingFrames.delete(frameId);
+    },
+  });
+
+  deferredSync.queue();
+  reducedMotionMedia.matches = true;
+  pendingFrames.get(1)?.();
+
+  assert.deepEqual(syncCalls, [true], 'the queued callback should re-read the media query and keep Lenis destroyed');
+  assert.equal(lenisCreateCount, 0, 'a stale queued callback must not recreate Lenis after reduced motion turns on');
+
+  deferredSync.queue();
+  reducedMotionMedia.matches = false;
+  pendingFrames.get(2)?.();
+
+  assert.deepEqual(syncCalls, [true, false], 'the same helper should recreate Lenis when full motion returns before the frame runs');
+  assert.equal(lenisCreateCount, 1);
+
+  deferredSync.queue();
+  deferredSync.cancel();
+  pendingFrames.get(3)?.();
+
+  assert.deepEqual(syncCalls, [true, false], 'cleanup should be able to cancel the pending RAF entirely');
+});
+
 test('header overlay state keeps language and mobile overlays mutually exclusive with active-overlay focus policies', () => {
   const languageTrigger = { id: 'language-toggle' };
   const mobileTrigger = { id: 'mobile-toggle' };
@@ -125,4 +188,43 @@ test('header overlay state keeps language and mobile overlays mutually exclusive
   assert.equal(closed.state.bodyScrollLocked, false);
   assert.equal(closed.restoreFocusTo, mobileTrigger, 'closing the active overlay should restore the control that opened it');
   assert.equal(getFocusTrapTarget(closed.state), null);
+});
+
+test('header visibility stays pinned open while any overlay is active and resumes hide-on-scroll after close', () => {
+  assert.equal(
+    typeof headerOverlayStateModule.getHeaderVisibilityState,
+    'function',
+    'header overlay state should expose a shared visibility helper for overlay scroll races',
+  );
+
+  const languageOverlay = toggleLanguageMenu(createHeaderOverlayState(), { id: 'language-toggle' });
+  const mobileOverlay = toggleMobileMenu(createHeaderOverlayState(), { id: 'mobile-toggle' });
+
+  const visibleWithLanguage = headerOverlayStateModule.getHeaderVisibilityState({
+    currentHidden: true,
+    overlayState: languageOverlay.state,
+    isDesktop: true,
+    scrollY: 320,
+    lastScrollY: 200,
+  });
+  assert.equal(visibleWithLanguage.hidden, false, 'scroll-down should not hide the active language overlay or its focus trap');
+  assert.equal(visibleWithLanguage.compact, true);
+
+  const visibleWithMobile = headerOverlayStateModule.getHeaderVisibilityState({
+    currentHidden: true,
+    overlayState: mobileOverlay.state,
+    isDesktop: true,
+    scrollY: 360,
+    lastScrollY: 200,
+  });
+  assert.equal(visibleWithMobile.hidden, false, 'mobile overlay should also pin the header open');
+
+  const hiddenAfterClose = headerOverlayStateModule.getHeaderVisibilityState({
+    currentHidden: false,
+    overlayState: closeActiveHeaderOverlay(languageOverlay.state).state,
+    isDesktop: true,
+    scrollY: 320,
+    lastScrollY: 200,
+  });
+  assert.equal(hiddenAfterClose.hidden, true, 'normal scroll-hide behavior should resume once overlays close');
 });

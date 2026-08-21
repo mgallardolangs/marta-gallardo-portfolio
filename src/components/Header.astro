@@ -374,6 +374,7 @@ const isActive = (path: string) => {
 
 <script>
   import { closeActiveHeaderOverlay, createHeaderOverlayState, getFocusTrapTarget, toggleLanguageMenu, toggleMobileMenu } from '../lib/headerOverlayState.js';
+  import { getHeaderVisibilityState } from '../lib/headerOverlayState.js';
 
   declare global {
     interface Window {
@@ -396,6 +397,7 @@ const isActive = (path: string) => {
     const mobileLinks = Array.from(header.querySelectorAll<HTMLAnchorElement>('.mobile-nav-link, .language-chip'));
     const languageLinks = Array.from(header.querySelectorAll<HTMLAnchorElement>('[data-lang-menu] [role="menuitem"]'));
     let lastScrollY = window.scrollY;
+    let headerHidden = false;
     let bodyOverflow = '';
     let overlayState = createHeaderOverlayState();
 
@@ -473,32 +475,25 @@ const isActive = (path: string) => {
       }
 
       langToggles.forEach((toggle) => toggle.setAttribute('aria-expanded', String(nextState.languageMenuOpen)));
-
-      if (nextState.activeOverlay) {
-        header.dataset.hidden = 'false';
-      }
+      syncHeader();
 
       restoreFocusTo?.focus();
       focusOverlayTarget(focusTarget);
     };
 
     const syncHeader = () => {
-      const isMobileMenuOpen = overlayState.mobileMenuOpen;
-      header.dataset.compact = window.scrollY > 80 ? 'true' : 'false';
+      const nextHeaderState = getHeaderVisibilityState({
+        currentHidden: headerHidden,
+        overlayState,
+        isDesktop: window.matchMedia('(min-width: 768px)').matches,
+        scrollY: window.scrollY,
+        lastScrollY,
+      });
 
-      if (!window.matchMedia('(min-width: 768px)').matches || isMobileMenuOpen) {
-        header.dataset.hidden = 'false';
-        return;
-      }
-
-      const delta = window.scrollY - lastScrollY;
-      if (window.scrollY <= 120 || delta < -8) {
-        header.dataset.hidden = 'false';
-      } else if (delta > 8) {
-        header.dataset.hidden = 'true';
-      }
-
-      lastScrollY = window.scrollY;
+      header.dataset.compact = nextHeaderState.compact ? 'true' : 'false';
+      header.dataset.hidden = nextHeaderState.hidden ? 'true' : 'false';
+      headerHidden = nextHeaderState.hidden;
+      lastScrollY = nextHeaderState.lastScrollY;
     };
     const closeMenus = () => {
       applyOverlayResult(closeActiveHeaderOverlay(overlayState));
@@ -506,6 +501,7 @@ const isActive = (path: string) => {
 
     const onScroll = () => syncHeader();
     const onFocusIn = () => {
+      headerHidden = false;
       header.dataset.hidden = 'false';
     };
     const onPointerDown = (event: PointerEvent) => {

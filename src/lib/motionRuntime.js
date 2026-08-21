@@ -63,3 +63,30 @@ export function createMotionRuntimeController({
     },
   };
 }
+
+export function createDeferredMotionPreferenceSync({
+  controller,
+  reducedMotionMedia,
+  requestFrame = (callback) => requestAnimationFrame(callback),
+  cancelFrame = (frameId) => cancelAnimationFrame(frameId),
+}) {
+  let pendingFrame = null;
+
+  const cancel = () => {
+    if (pendingFrame === null) return;
+    cancelFrame(pendingFrame);
+    pendingFrame = null;
+  };
+
+  return {
+    queue() {
+      cancel();
+      pendingFrame = requestFrame(() => {
+        pendingFrame = null;
+        controller.syncPreference(reducedMotionMedia.matches);
+      });
+      return pendingFrame;
+    },
+    cancel,
+  };
+}

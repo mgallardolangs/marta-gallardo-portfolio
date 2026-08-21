@@ -155,6 +155,11 @@ test('navigation exposes all six locales and header source restores focus when m
   );
   assert.match(
     headerSource,
+    /getHeaderVisibilityState/,
+    'header source should route scroll visibility through a shared helper so any active overlay keeps the header visible',
+  );
+  assert.match(
+    headerSource,
     /applyOverlayResult\(toggleLanguageMenu\(overlayState, toggle\)\);/,
     'opening the language menu should route through the overlay helper so it can close the mobile panel first',
   );
@@ -219,6 +224,11 @@ test('motion runtime and reduced-motion-sensitive components keep the Phase 5 ha
     /controller\.syncPreference\(reducedMotionMedia\.matches\);/,
     'runtime should synchronize the helper against the current reduced-motion media query',
   );
+  assert.match(
+    motionRuntimeSource,
+    /createDeferredMotionPreferenceSync/,
+    'runtime should use a shared deferred RAF helper so stale callbacks cannot recreate Lenis',
+  );
   assert.doesNotMatch(
     motionRuntimeSource,
     /if \(reducedMotionMedia\.matches\) \{\s*lenis\.stop\(\);/s,
@@ -226,8 +236,13 @@ test('motion runtime and reduced-motion-sensitive components keep the Phase 5 ha
   );
   assert.match(
     motionRuntimeSource,
-    /const onReducedMotionChange = \(\) => \{\s*if \(reducedMotionMedia\.matches\) \{\s*controller\.syncPreference\(true\);\s*return;\s*\}\s*controller\.syncPreference\(false\);\s*controller\.start\(\);\s*requestAnimationFrame\(\(\) => controller\.syncPreference\(false\)\);\s*\};/s,
-    'live reduced-motion toggles should destroy Lenis on reduce and recreate/start it when full motion returns',
+    /const onReducedMotionChange = \(\) => \{\s*if \(reducedMotionMedia\.matches\) \{\s*deferredPreferenceSync\.cancel\(\);\s*controller\.syncPreference\(true\);\s*return;\s*\}\s*controller\.syncPreference\(false\);\s*controller\.start\(\);\s*queueResizeSync\(\);\s*\};/s,
+    'live reduced-motion toggles should cancel stale RAF work on reduce and recreate/start Lenis when full motion returns',
+  );
+  assert.match(
+    motionRuntimeSource,
+    /runtimeState\.cleanup = \(\) => \{\s*deferredPreferenceSync\.cancel\(\);\s*controller\.cleanup\(\);/s,
+    'runtime cleanup should cancel any pending RAF before tearing down Lenis',
   );
 });
 
