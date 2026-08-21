@@ -1,11 +1,28 @@
 type TranslationPageMotionState = {
   cleanup: (() => void) | null;
+  runId: number;
+};
+
+type TranslationPageMotionModules = Awaited<ReturnType<typeof loadDefaultModules>>;
+
+type TranslationPageMotionOptions = {
+  loadModules?: () => Promise<TranslationPageMotionModules>;
+  matchMedia?: (query: string) => { matches: boolean };
 };
 
 declare global {
   interface Window {
     __mgTranslationPageMotion?: TranslationPageMotionState;
   }
+}
+
+let translationPageMotionRunId = 0;
+
+function loadDefaultModules() {
+  return Promise.all([
+    import('gsap'),
+    import('gsap/ScrollTrigger'),
+  ]);
 }
 
 function applyReducedMotionState(root: HTMLElement) {
@@ -26,25 +43,40 @@ function applyReducedMotionState(root: HTMLElement) {
   });
 }
 
-export async function initTranslationPageMotion() {
+function resetTranslationPageMotion(runId: number) {
   window.__mgTranslationPageMotion?.cleanup?.();
+  window.__mgTranslationPageMotion = { cleanup: null, runId };
+}
+
+export function cleanupTranslationPageMotion() {
+  const runId = ++translationPageMotionRunId;
+
+  resetTranslationPageMotion(runId);
+}
+
+export async function initTranslationPageMotion({
+  loadModules = loadDefaultModules,
+  matchMedia = (query) => window.matchMedia(query),
+}: TranslationPageMotionOptions = {}) {
+  const runId = ++translationPageMotionRunId;
+
+  resetTranslationPageMotion(runId);
 
   const root = document.querySelector('[data-translation-page]');
   if (!(root instanceof HTMLElement)) {
-    window.__mgTranslationPageMotion = { cleanup: null };
     return;
   }
 
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
     applyReducedMotionState(root);
-    window.__mgTranslationPageMotion = { cleanup: null };
     return;
   }
 
-  const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
-    import('gsap'),
-    import('gsap/ScrollTrigger'),
-  ]);
+  const [{ default: gsap }, { ScrollTrigger }] = await loadModules();
+
+  if (window.__mgTranslationPageMotion?.runId !== runId) {
+    return;
+  }
 
   if (!document.body.contains(root)) {
     return;
@@ -85,7 +117,7 @@ export async function initTranslationPageMotion() {
     const methodologySteps = root.querySelectorAll('[data-methodology-step]');
 
     if (methodologySection && methodologyConnectors.length > 0 && methodologySteps.length > 0) {
-      const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+      const isDesktop = matchMedia('(min-width: 768px)').matches;
       gsap.set(methodologyConnectors, {
         scaleX: isDesktop ? 0 : 1,
         scaleY: isDesktop ? 1 : 0,
@@ -139,10 +171,18 @@ export async function initTranslationPageMotion() {
     }
   }, root);
 
+  if (window.__mgTranslationPageMotion?.runId !== runId) {
+    context.revert();
+    return;
+  }
+
   window.__mgTranslationPageMotion = {
+    runId,
     cleanup: () => {
       context.revert();
-      window.__mgTranslationPageMotion = { cleanup: null };
+      if (window.__mgTranslationPageMotion?.runId === runId) {
+        window.__mgTranslationPageMotion = { cleanup: null, runId };
+      }
     },
   };
 }

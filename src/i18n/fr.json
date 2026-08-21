@@ -288,6 +288,7 @@
       "education": "Formation",
       "experience": "Expérience"
     },
+    "browserTabsAriaLabel": "Onglets formation et expérience",
     "experience": {
       "intro": "Une expérience concrète au service de la communication réelle, du contact humain et de l’adaptation du langage à différents contextes.",
       "cards": [

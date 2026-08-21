@@ -74,6 +74,7 @@ test('all locale files expose the approved Phase 4 translation page chrome and t
       ['education', 'experience'],
       `${locale} browser tabs should expose exactly education and experience labels`,
     );
+    assert.equal(typeof dictionary.translationPage.browserTabsAriaLabel, 'string');
     assert.equal(dictionary.translationPage.whyChooseMe.title, expectedWhyChooseMeTitles[locale]);
     assert.equal(dictionary.translationPage.methodology.steps.length, 4, `${locale} should keep four methodology steps`);
   }
@@ -157,6 +158,205 @@ test('experience tabs keep exactly two panels with roving tabindex keyboard supp
   assert.match(source, /role="tab"/);
   assert.match(source, /role="tabpanel"/);
   assert.match(source, /tabIndex=\{isActive \? 0 : -1\}/);
+  assert.match(source, /aria-label=\{tabListAriaLabel\}/);
+  assert.doesNotMatch(source, /aria-label="Experience tabs"/);
+});
+
+test('experience tablist aria label is localized in all six translation dictionaries', async () => {
+  const dictionaries = await Promise.all(
+    locales.map(async (locale) => [locale, await readJson(`src/i18n/${locale}.json`)]),
+  );
+
+  const expectedTablistLabels = {
+    es: 'Pestañas de formación y experiencia',
+    en: 'Education and experience tabs',
+    fr: 'Onglets formation et expérience',
+    de: 'Tabs für Ausbildung und Erfahrung',
+    it: 'Schede formazione ed esperienza',
+    ca: 'Pestanyes de formació i experiència',
+  };
+
+  for (const [locale, dictionary] of dictionaries) {
+    assert.equal(
+      dictionary.translationPage.browserTabsAriaLabel,
+      expectedTablistLabels[locale],
+      `${locale} should localize the experience tablist aria-label`,
+    );
+  }
+});
+
+test('translation page router listeners use stable handler references for rerun-safe cleanup', async () => {
+  const source = await readSource('src/views/TranslationSeoPage.astro');
+
+  assert.match(source, /const pageLoadHandlerKey = '__mgInitTranslationPage'/);
+  assert.match(source, /const beforePreparationHandlerKey = '__mgCleanupTranslationPage'/);
+  assert.match(source, /document\.removeEventListener\('astro:page-load', docWithHandler\[pageLoadHandlerKey\]\)/);
+  assert.match(source, /document\.removeEventListener\('astro:before-preparation', docWithHandler\[beforePreparationHandlerKey\]\)/);
+  assert.match(source, /docWithHandler\[pageLoadHandlerKey\] = mountTranslationPage/);
+  assert.match(source, /docWithHandler\[beforePreparationHandlerKey\] = cleanupTranslationPage/);
+  assert.doesNotMatch(source, /document\.addEventListener\('astro:before-preparation', \(\) =>/);
+});
+
+test('translation page motion cancels stale async mounts so revisits cannot stack GSAP scopes', async () => {
+  const originalWindow = globalThis.window;
+  const originalDocument = globalThis.document;
+  const originalHTMLElement = globalThis.HTMLElement;
+
+  class HTMLElementMock {
+    querySelector(selector) {
+      return selector === '[data-translation-page]' ? this : null;
+    }
+
+    querySelectorAll() {
+      return [];
+    }
+  }
+
+  const root = new HTMLElementMock();
+  let contextCalls = 0;
+  let revertCalls = 0;
+  let resolveModules;
+  const modulesPromise = new Promise((resolve) => {
+    resolveModules = resolve;
+  });
+
+  globalThis.HTMLElement = HTMLElementMock;
+  globalThis.window = {
+    __mgTranslationPageMotion: undefined,
+    matchMedia: () => ({ matches: false }),
+  };
+  globalThis.document = {
+    body: {
+      contains: (element) => element === root,
+    },
+    querySelector: (selector) => (selector === '[data-translation-page]' ? root : null),
+  };
+
+  try {
+    const { cleanupTranslationPageMotion, initTranslationPageMotion } = await import('../src/lib/translationPageMotion.ts');
+
+    const fakeGsap = {
+      registerPlugin() {},
+      context(callback) {
+        contextCalls += 1;
+        callback();
+        return {
+          revert() {
+            revertCalls += 1;
+          },
+        };
+      },
+      set() {},
+      timeline() {
+        return {
+          to() {
+            return this;
+          },
+        };
+      },
+    };
+    const fakeScrollTrigger = {};
+
+    const firstMount = initTranslationPageMotion({
+      loadModules: () => modulesPromise,
+      matchMedia: () => ({ matches: false }),
+    });
+    const secondMount = initTranslationPageMotion({
+      loadModules: () => modulesPromise,
+      matchMedia: () => ({ matches: false }),
+    });
+
+    resolveModules([{ default: fakeGsap }, { ScrollTrigger: fakeScrollTrigger }]);
+    await Promise.all([firstMount, secondMount]);
+
+    assert.equal(contextCalls, 1, 'only the latest async mount should create a GSAP context');
+    assert.equal(typeof window.__mgTranslationPageMotion.cleanup, 'function');
+
+    window.__mgTranslationPageMotion.cleanup();
+    assert.equal(revertCalls, 1, 'cleanup should revert the surviving GSAP context exactly once');
+  } finally {
+    globalThis.window = originalWindow;
+    globalThis.document = originalDocument;
+    globalThis.HTMLElement = originalHTMLElement;
+  }
+});
+
+test('translation page motion cancels in-flight mounts when route cleanup runs before imports resolve', async () => {
+  const originalWindow = globalThis.window;
+  const originalDocument = globalThis.document;
+  const originalHTMLElement = globalThis.HTMLElement;
+
+  class HTMLElementMock {
+    querySelector() {
+      return null;
+    }
+
+    querySelectorAll() {
+      return [];
+    }
+  }
+
+  const root = new HTMLElementMock();
+  let contextCalls = 0;
+  let revertCalls = 0;
+  let resolveModules;
+  const modulesPromise = new Promise((resolve) => {
+    resolveModules = resolve;
+  });
+
+  globalThis.HTMLElement = HTMLElementMock;
+  globalThis.window = {
+    __mgTranslationPageMotion: undefined,
+    matchMedia: () => ({ matches: false }),
+  };
+  globalThis.document = {
+    body: {
+      contains: (element) => element === root,
+    },
+    querySelector: (selector) => (selector === '[data-translation-page]' ? root : null),
+  };
+
+  try {
+    const { cleanupTranslationPageMotion, initTranslationPageMotion } = await import('../src/lib/translationPageMotion.ts');
+
+    const fakeGsap = {
+      registerPlugin() {},
+      context(callback) {
+        contextCalls += 1;
+        callback();
+        return {
+          revert() {
+            revertCalls += 1;
+          },
+        };
+      },
+      set() {},
+      timeline() {
+        return {
+          to() {
+            return this;
+          },
+        };
+      },
+    };
+    const fakeScrollTrigger = {};
+
+    const pendingMount = initTranslationPageMotion({
+      loadModules: () => modulesPromise,
+      matchMedia: () => ({ matches: false }),
+    });
+
+    cleanupTranslationPageMotion();
+    resolveModules([{ default: fakeGsap }, { ScrollTrigger: fakeScrollTrigger }]);
+    await pendingMount;
+
+    assert.equal(contextCalls, 0, 'route cleanup should cancel in-flight mounts before GSAP context creation');
+    assert.equal(revertCalls, 0, 'cancelled mount should not need a later revert');
+  } finally {
+    globalThis.window = originalWindow;
+    globalThis.document = originalDocument;
+    globalThis.HTMLElement = originalHTMLElement;
+  }
 });
 
 test('translation view removes duplicated legacy sections and keeps the approved section components', async () => {

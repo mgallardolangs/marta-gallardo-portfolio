@@ -126,6 +126,7 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
         <div class="site-container">
           <ExperienceTabs
             client:load
+            tabListAriaLabel={page.browserTabsAriaLabel}
             tabs={{
               education: {
                 label: page.browserTabs.education,
@@ -201,16 +202,26 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
   </PageTransition>
 
   <script>
-    import { initTranslationPageMotion } from '../lib/translationPageMotion.ts';
+    import { cleanupTranslationPageMotion, initTranslationPageMotion } from '../lib/translationPageMotion.ts';
 
     const mountTranslationPage = () => {
       void initTranslationPageMotion();
     };
+    const cleanupTranslationPage = () => {
+      cleanupTranslationPageMotion();
+    };
+    const pageLoadHandlerKey = '__mgInitTranslationPage';
+    const beforePreparationHandlerKey = '__mgCleanupTranslationPage';
+    const docWithHandler = document as Document & Record<string, (() => void) | undefined>;
+
+    docWithHandler[pageLoadHandlerKey] && document.removeEventListener('astro:page-load', docWithHandler[pageLoadHandlerKey]);
+    docWithHandler[beforePreparationHandlerKey]
+      && document.removeEventListener('astro:before-preparation', docWithHandler[beforePreparationHandlerKey]);
+    docWithHandler[pageLoadHandlerKey] = mountTranslationPage;
+    docWithHandler[beforePreparationHandlerKey] = cleanupTranslationPage;
 
     mountTranslationPage();
     document.addEventListener('astro:page-load', mountTranslationPage);
-    document.addEventListener('astro:before-preparation', () => {
-      window.__mgTranslationPageMotion?.cleanup?.();
-    });
+    document.addEventListener('astro:before-preparation', cleanupTranslationPage);
   </script>
 </BaseLayout>

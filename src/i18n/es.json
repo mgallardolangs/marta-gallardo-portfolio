@@ -61,6 +61,7 @@
       "education": "Formación",
       "experience": "Experiencia"
     },
+    "browserTabsAriaLabel": "Pestañas de formación y experiencia",
     "experience": {
       "intro": "Experiencia aplicada a la comunicación real, el trato directo con personas y la adaptación del lenguaje a distintos contextos.",
       "cards": [

@@ -288,6 +288,7 @@
       "education": "Ausbildung",
       "experience": "Erfahrung"
     },
+    "browserTabsAriaLabel": "Tabs für Ausbildung und Erfahrung",
     "experience": {
       "intro": "Praktische Erfahrung in echter Kommunikation, im direkten Kontakt mit Menschen und in der sprachlichen Anpassung für unterschiedliche Kontexte.",
       "cards": [

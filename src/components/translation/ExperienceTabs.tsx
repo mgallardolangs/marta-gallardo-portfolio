@@ -13,6 +13,7 @@ type ExperienceCard = {
 };
 
 interface Props {
+  tabListAriaLabel: string;
   tabs: {
     education: {
       label: string;
@@ -27,7 +28,7 @@ interface Props {
   };
 }
 
-export default function ExperienceTabs({ tabs }: Props) {
+export default function ExperienceTabs({ tabListAriaLabel, tabs }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [panelHeight, setPanelHeight] = useState<number | null>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -100,7 +101,7 @@ export default function ExperienceTabs({ tabs }: Props) {
   return (
     <section className="border border-black/10 bg-white shadow-[0_20px_64px_rgba(6,4,3,0.08)]">
       <div className="border-b border-black/10 bg-paper px-4 py-4 md:px-6">
-        <div role="tablist" aria-label="Experience tabs" className="flex flex-wrap items-center gap-3">
+        <div role="tablist" aria-label={tabListAriaLabel} className="flex flex-wrap items-center gap-3">
           {panels.map((panel, index) => {
             const isActive = index === activeIndex;
             return (

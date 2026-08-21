@@ -288,6 +288,7 @@
       "education": "Formació",
       "experience": "Experiència"
     },
+    "browserTabsAriaLabel": "Pestanyes de formació i experiència",
     "experience": {
       "intro": "Experiència pràctica en comunicació real, contacte directe amb persones i adaptació lingüística per a contextos diversos.",
       "cards": [

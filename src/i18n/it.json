@@ -288,6 +288,7 @@
       "education": "Formazione",
       "experience": "Esperienza"
     },
+    "browserTabsAriaLabel": "Schede formazione ed esperienza",
     "experience": {
       "intro": "Esperienza concreta nella comunicazione reale, nel contatto diretto con le persone e nell’adattamento linguistico in contesti diversi.",
       "cards": [

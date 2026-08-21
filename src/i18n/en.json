@@ -288,6 +288,7 @@
       "education": "Education",
       "experience": "Experience"
     },
+    "browserTabsAriaLabel": "Education and experience tabs",
     "experience": {
       "intro": "Hands-on experience in real communication, direct contact with people and language adaptation across different contexts.",
       "cards": [
