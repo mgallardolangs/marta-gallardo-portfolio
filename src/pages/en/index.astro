@@ -10,7 +10,7 @@ import FloatingIcon from '../../components/FloatingIcon';
 import { ArrowWavy } from '../../components/DoodleArrows';
 import StaggerContainer, { StaggerItem } from '../../components/StaggerContainer';
 import { getLangFromUrl, getLocalizedPath, t } from '../../i18n';
-import imagesData from '../../data/images.json';
+import { siteData as imagesData } from '../../lib/siteData';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);

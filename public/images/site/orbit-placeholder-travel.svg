@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 960" role="img" aria-labelledby="title desc">
+  <title>TRAVEL</title>
+  <desc>Escapadas con mirada editorial</desc>
+  <rect width="720" height="960" fill="#F4F5F1"/>
+  <rect x="46" y="46" width="628" height="868" rx="48" fill="none" stroke="#E83256" stroke-width="4"/>
+  <circle cx="360" cy="220" r="116" fill="#E83256" fill-opacity="0.08"/>
+  <path d="M180 690c96-72 264-72 360 0" fill="none" stroke="#060403" stroke-opacity="0.12" stroke-width="3" stroke-dasharray="10 18"/>
+  <text x="360" y="214" text-anchor="middle" fill="#060403" font-family="Instrument Sans, Arial, sans-serif" font-size="98" font-weight="700" letter-spacing="10">MG</text>
+  <text x="360" y="520" text-anchor="middle" fill="#E83256" font-family="Instrument Sans, Arial, sans-serif" font-size="24" font-weight="600" letter-spacing="8">TRAVEL</text>
+  <text x="360" y="590" text-anchor="middle" fill="#060403" font-family="Instrument Serif, Georgia, serif" font-size="44" font-style="italic">Escapadas con mirada editorial</text>
+</svg>

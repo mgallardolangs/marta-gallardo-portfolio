@@ -1,0 +1,63 @@
+---
+import { defaultLang, getLocalizedPath, type Lang } from '../i18n';
+import { localize, siteData } from '../lib/siteData';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  pathname: string;
+}
+
+const { lang, title, description, pathname } = Astro.props;
+const pagePath = pathname === '/' ? '/' : pathname.replace(/\/$/, '') || '/';
+const normalizedPublicPath = pagePath.replace(/^\/(?:es|en|fr|de|it|ca)(?=\/|$)/, '') || '/';
+const absolute = (target: string) => new URL(target, Astro.site);
+const canonical = absolute(pagePath);
+const heroImage = absolute(siteData.heroMainPhoto);
+const languageNames = siteData.arsenal.languages.map(({ label }) => localize(label, lang));
+const socialProfiles = [
+  siteData.person.socialProfiles.linkedin,
+  siteData.person.socialProfiles.instagram,
+];
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: siteData.person.name,
+  url: absolute(getLocalizedPath('/', lang)).toString(),
+  image: heroImage.toString(),
+  homeLocation: {
+    '@type': 'Place',
+    name: siteData.person.location,
+  },
+  knowsLanguage: languageNames,
+  sameAs: socialProfiles,
+};
+---
+<link rel="canonical" href={canonical.toString()} />
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+{(['es', 'en', 'fr', 'de', 'it', 'ca'] as const).map((locale) => (
+  <link
+    rel="alternate"
+    hreflang={locale}
+    href={absolute(getLocalizedPath(normalizedPublicPath, locale)).toString()}
+  />
+))}
+<link rel="alternate" hreflang="x-default" href={absolute(getLocalizedPath(normalizedPublicPath, defaultLang)).toString()} />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={siteData.person.name} />
+<meta property="og:locale" content={lang} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical.toString()} />
+<meta property="og:image" content={heroImage.toString()} />
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={heroImage.toString()} />
+
+<script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />

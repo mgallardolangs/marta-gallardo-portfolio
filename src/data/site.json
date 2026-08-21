@@ -1,0 +1,695 @@
+{
+  "heroMainPhoto": "/images/site/img_5587.jpg",
+  "galleryCutouts": {
+    "shotOne": "/images/site/about-me-world.png",
+    "shotTwo": "/images/site/sticker-passport.png",
+    "shotThree": "/images/site/sticker-art.png",
+    "shotFour": "/images/site/sticker-crochet.png",
+    "shotFive": "/images/site/sticker-mountain.png"
+  },
+  "videoPlaceholderOrEmbedUrl": "https://example.com/embed/video",
+  "ugcHeaderImage": "",
+  "instagramScreenshot": "/images/site/instagram-screenshot.jpeg",
+  "socialLinks": {
+    "linkedin": "https://www.linkedin.com/in/martagall/",
+    "instagram": "https://www.instagram.com/marttelier/"
+  },
+  "nicheBackgrounds": {
+    "travel": "/images/site/nicho-viajes.jpg",
+    "languages": "/images/site/nicho-idiomas.jpg",
+    "art": "/images/site/nicho-arte.jpg"
+  },
+  "ugcVideos": {
+    "travel": [],
+    "languages": [],
+    "art": []
+  },
+  "ugcPhotos": {
+    "travel": [],
+    "languages": [],
+    "art": [],
+    "all": []
+  },
+  "nicheIcons": {
+    "travel": "",
+    "languages": "",
+    "art": ""
+  },
+  "aboutPhotos": [],
+  "brandVideo": "",
+  "toolLogos": {
+    "microsoftOffice": "/images/tools/microsoft-office.svg",
+    "googleWorkspace": "/images/tools/google-workspace.svg",
+    "notion": "/images/tools/notion.svg",
+    "aiTools": "/images/tools/ai-tools--chatgpt--claude-.svg",
+    "wordpress": "/images/tools/wordpress.svg",
+    "googleSearchConsole": "/images/tools/google-search-console.svg",
+    "googleMyBusiness": "/images/tools/google-my-business.svg"
+  },
+  "videoStickers": {
+    "one": "",
+    "two": "",
+    "three": "",
+    "four": ""
+  },
+  "orbitMedia": [
+    {
+      "id": "hero-editorial",
+      "type": "image",
+      "src": "/images/site/img_5587.jpg",
+      "href": "/",
+      "label": {
+        "es": "Retrato editorial",
+        "en": "Editorial portrait",
+        "fr": "Portrait éditorial",
+        "de": "Editorial-Porträt",
+        "it": "Ritratto editoriale",
+        "ca": "Retrat editorial"
+      },
+      "alt": {
+        "es": "Retrato editorial de Marta Gallardo para la portada del portfolio",
+        "en": "Editorial portrait of Marta Gallardo for the portfolio cover",
+        "fr": "Portrait éditorial de Marta Gallardo pour la couverture du portfolio",
+        "de": "Editorial-Porträt von Marta Gallardo für das Portfolio-Cover",
+        "it": "Ritratto editoriale di Marta Gallardo per la copertina del portfolio",
+        "ca": "Retrat editorial de Marta Gallardo per a la portada del portfoli"
+      }
+    },
+    {
+      "id": "world-cutout",
+      "type": "image",
+      "src": "/images/site/about-me-world.png",
+      "href": "/translation-seo",
+      "label": {
+        "es": "Mapa y recorrido",
+        "en": "Map and journey",
+        "fr": "Carte et parcours",
+        "de": "Karte und Weg",
+        "it": "Mappa e percorso",
+        "ca": "Mapa i recorregut"
+      },
+      "alt": {
+        "es": "Recorte con mapa para presentar la trayectoria internacional de Marta",
+        "en": "Map cutout introducing Marta’s international journey",
+        "fr": "Découpe avec carte pour présenter le parcours international de Marta",
+        "de": "Kartenausschnitt zur Darstellung von Martas internationalem Weg",
+        "it": "Ritaglio con mappa per raccontare il percorso internazionale di Marta",
+        "ca": "Retall amb mapa per presentar el recorregut internacional de Marta"
+      }
+    },
+    {
+      "id": "passport-sticker",
+      "type": "image",
+      "src": "/images/site/sticker-passport.png",
+      "href": "/ugc",
+      "label": {
+        "es": "Pasaporte creativo",
+        "en": "Creative passport",
+        "fr": "Passeport créatif",
+        "de": "Kreativer Reisepass",
+        "it": "Passaporto creativo",
+        "ca": "Passaport creatiu"
+      },
+      "alt": {
+        "es": "Sticker de pasaporte que representa viajes y campañas de estilo de vida",
+        "en": "Passport sticker representing travel and lifestyle campaigns",
+        "fr": "Sticker passeport représentant des campagnes voyage et lifestyle",
+        "de": "Reisepass-Sticker für Reise- und Lifestyle-Kampagnen",
+        "it": "Sticker passaporto che rappresenta viaggi e campagne lifestyle",
+        "ca": "Adhesiu de passaport que representa viatges i campanyes lifestyle"
+      }
+    },
+    {
+      "id": "art-sticker",
+      "type": "image",
+      "src": "/images/site/sticker-art.png",
+      "href": "/ugc#art",
+      "label": {
+        "es": "Pulso artístico",
+        "en": "Artistic pulse",
+        "fr": "Élan artistique",
+        "de": "Künstlerischer Impuls",
+        "it": "Impulso artistico",
+        "ca": "Pols artístic"
+      },
+      "alt": {
+        "es": "Sticker artístico para campañas visuales y creativas",
+        "en": "Art sticker for visual and creative campaigns",
+        "fr": "Sticker artistique pour des campagnes visuelles et créatives",
+        "de": "Kunst-Sticker für visuelle und kreative Kampagnen",
+        "it": "Sticker artistico per campagne visive e creative",
+        "ca": "Adhesiu artístic per a campanyes visuals i creatives"
+      }
+    },
+    {
+      "id": "crochet-sticker",
+      "type": "image",
+      "src": "/images/site/sticker-crochet.png",
+      "href": "/ugc#art",
+      "label": {
+        "es": "Detalle artesanal",
+        "en": "Craft detail",
+        "fr": "Détail artisanal",
+        "de": "Handwerksdetail",
+        "it": "Dettaglio artigianale",
+        "ca": "Detall artesanal"
+      },
+      "alt": {
+        "es": "Sticker de crochet para contenido artesanal y lifestyle",
+        "en": "Crochet sticker for craft and lifestyle content",
+        "fr": "Sticker crochet pour du contenu artisanal et lifestyle",
+        "de": "Häkel-Sticker für Craft- und Lifestyle-Inhalte",
+        "it": "Sticker all’uncinetto per contenuti artigianali e lifestyle",
+        "ca": "Adhesiu de ganxet per a contingut artesanal i lifestyle"
+      }
+    },
+    {
+      "id": "mountain-sticker",
+      "type": "image",
+      "src": "/images/site/sticker-mountain.png",
+      "href": "/ugc#travel",
+      "label": {
+        "es": "Postal de montaña",
+        "en": "Mountain postcard",
+        "fr": "Carte de montagne",
+        "de": "Berg-Postkarte",
+        "it": "Cartolina di montagna",
+        "ca": "Postal de muntanya"
+      },
+      "alt": {
+        "es": "Sticker de montaña para campañas de viajes y escapadas",
+        "en": "Mountain sticker for travel and getaway campaigns",
+        "fr": "Sticker montagne pour des campagnes voyage et escapades",
+        "de": "Berg-Sticker für Reise- und Ausflugskampagnen",
+        "it": "Sticker montagna per campagne travel e weekend",
+        "ca": "Adhesiu de muntanya per a campanyes de viatges i escapades"
+      }
+    },
+    {
+      "id": "instagram-proof",
+      "type": "image",
+      "src": "/images/site/instagram-screenshot.jpeg",
+      "href": "/contact",
+      "label": {
+        "es": "Presencia social",
+        "en": "Social presence",
+        "fr": "Présence sociale",
+        "de": "Social Presence",
+        "it": "Presenza social",
+        "ca": "Presència social"
+      },
+      "alt": {
+        "es": "Captura de Instagram de marttelier como muestra de presencia de marca",
+        "en": "Instagram screenshot of marttelier showing current brand presence",
+        "fr": "Capture Instagram de marttelier montrant la présence actuelle de la marque",
+        "de": "Instagram-Screenshot von marttelier als Nachweis der Markenpräsenz",
+        "it": "Screenshot Instagram di marttelier come prova della presenza del brand",
+        "ca": "Captura d’Instagram de marttelier com a mostra de presència de marca"
+      }
+    },
+    {
+      "id": "travel-niche",
+      "type": "image",
+      "src": "/images/site/nicho-viajes.jpg",
+      "href": "/ugc#travel",
+      "label": {
+        "es": "Órbita viajes",
+        "en": "Travel orbit",
+        "fr": "Orbite voyage",
+        "de": "Reise-Orbit",
+        "it": "Orbita viaggi",
+        "ca": "Òrbita viatges"
+      },
+      "alt": {
+        "es": "Imagen de apoyo para la categoría de viajes en el portfolio UGC",
+        "en": "Supporting image for the travel category in the UGC portfolio",
+        "fr": "Image de soutien pour la catégorie voyage du portfolio UGC",
+        "de": "Bild für die Reise-Kategorie im UGC-Portfolio",
+        "it": "Immagine di supporto per la categoria viaggi del portfolio UGC",
+        "ca": "Imatge de suport per a la categoria de viatges del portfoli UGC"
+      }
+    },
+    {
+      "id": "languages-niche",
+      "type": "image",
+      "src": "/images/site/nicho-idiomas.jpg",
+      "href": "/ugc#languages",
+      "label": {
+        "es": "Órbita idiomas",
+        "en": "Language orbit",
+        "fr": "Orbite langues",
+        "de": "Sprachen-Orbit",
+        "it": "Orbita lingue",
+        "ca": "Òrbita idiomes"
+      },
+      "alt": {
+        "es": "Imagen de apoyo para campañas sobre idiomas y comunicación",
+        "en": "Supporting image for languages and communication campaigns",
+        "fr": "Image de soutien pour les campagnes liées aux langues et à la communication",
+        "de": "Bild für Sprach- und Kommunikationskampagnen",
+        "it": "Immagine di supporto per campagne su lingue e comunicazione",
+        "ca": "Imatge de suport per a campanyes d’idiomes i comunicació"
+      }
+    },
+    {
+      "id": "art-niche",
+      "type": "image",
+      "src": "/images/site/nicho-arte.jpg",
+      "href": "/ugc#art",
+      "label": {
+        "es": "Órbita arte",
+        "en": "Art orbit",
+        "fr": "Orbite art",
+        "de": "Kunst-Orbit",
+        "it": "Orbita arte",
+        "ca": "Òrbita art"
+      },
+      "alt": {
+        "es": "Imagen de apoyo para campañas visuales del nicho artístico",
+        "en": "Supporting image for visual campaigns in the art niche",
+        "fr": "Image de soutien pour les campagnes visuelles du secteur artistique",
+        "de": "Bild für visuelle Kampagnen im Kunstbereich",
+        "it": "Immagine di supporto per campagne visive nel settore artistico",
+        "ca": "Imatge de suport per a campanyes visuals del nínxol artístic"
+      }
+    },
+    {
+      "id": "placeholder-travel-story",
+      "type": "image",
+      "src": "/images/site/orbit-placeholder-travel.svg",
+      "href": "/ugc",
+      "label": {
+        "es": "Historia de viaje",
+        "en": "Travel story",
+        "fr": "Histoire de voyage",
+        "de": "Reisestory",
+        "it": "Storia di viaggio",
+        "ca": "Història de viatge"
+      },
+      "alt": {
+        "es": "Placeholder gráfico para un caso de viaje pendiente de publicar",
+        "en": "Branded placeholder for a travel case study that is still to be published",
+        "fr": "Placeholder graphique pour un cas voyage à publier",
+        "de": "Gebrandeter Platzhalter für einen noch unveröffentlichten Reise-Case",
+        "it": "Placeholder grafico per un caso travel ancora da pubblicare",
+        "ca": "Placeholder gràfic per a un cas de viatge encara per publicar"
+      }
+    },
+    {
+      "id": "placeholder-language-case",
+      "type": "image",
+      "src": "/images/site/orbit-placeholder-languages.svg",
+      "href": "/translation-seo",
+      "label": {
+        "es": "Caso multilingüe",
+        "en": "Multilingual case",
+        "fr": "Cas multilingue",
+        "de": "Mehrsprachiger Case",
+        "it": "Caso multilingue",
+        "ca": "Cas multilingüe"
+      },
+      "alt": {
+        "es": "Placeholder gráfico para un proyecto multilingüe pendiente",
+        "en": "Branded placeholder for an upcoming multilingual project",
+        "fr": "Placeholder graphique pour un futur projet multilingue",
+        "de": "Gebrandeter Platzhalter für ein kommendes mehrsprachiges Projekt",
+        "it": "Placeholder grafico per un prossimo progetto multilingue",
+        "ca": "Placeholder gràfic per a un proper projecte multilingüe"
+      }
+    },
+    {
+      "id": "placeholder-editorial-drop",
+      "type": "image",
+      "src": "/images/site/orbit-placeholder-editorial.svg",
+      "href": "/blog",
+      "label": {
+        "es": "Editorial en curso",
+        "en": "Editorial in progress",
+        "fr": "Éditorial en cours",
+        "de": "Editorial in Arbeit",
+        "it": "Editoriale in corso",
+        "ca": "Editorial en curs"
+      },
+      "alt": {
+        "es": "Placeholder gráfico para una nueva pieza editorial del portfolio",
+        "en": "Branded placeholder for a new editorial portfolio piece",
+        "fr": "Placeholder graphique pour une nouvelle pièce éditoriale du portfolio",
+        "de": "Gebrandeter Platzhalter für ein neues Editorial im Portfolio",
+        "it": "Placeholder grafico per una nuova pièce editoriale del portfolio",
+        "ca": "Placeholder gràfic per a una nova peça editorial del portfoli"
+      }
+    },
+    {
+      "id": "placeholder-collaboration",
+      "type": "image",
+      "src": "/images/site/orbit-placeholder-collab.svg",
+      "href": "/contact",
+      "label": {
+        "es": "Próxima colaboración",
+        "en": "Next collaboration",
+        "fr": "Prochaine collaboration",
+        "de": "Nächste Zusammenarbeit",
+        "it": "Prossima collaborazione",
+        "ca": "Pròxima col·laboració"
+      },
+      "alt": {
+        "es": "Placeholder gráfico para una colaboración futura con marca",
+        "en": "Branded placeholder for a future brand collaboration",
+        "fr": "Placeholder graphique pour une future collaboration de marque",
+        "de": "Gebrandeter Platzhalter für eine zukünftige Markenkooperation",
+        "it": "Placeholder grafico per una futura collaborazione con un brand",
+        "ca": "Placeholder gràfic per a una futura col·laboració amb una marca"
+      }
+    },
+    {
+      "id": "placeholder-profile-note",
+      "type": "image",
+      "src": "/images/site/orbit-placeholder-profile.svg",
+      "href": null,
+      "label": {
+        "es": "Nota de perfil",
+        "en": "Profile note",
+        "fr": "Note de profil",
+        "de": "Profilnotiz",
+        "it": "Nota profilo",
+        "ca": "Nota de perfil"
+      },
+      "alt": {
+        "es": "Placeholder gráfico con identidad visual de Marta Gallardo",
+        "en": "Branded placeholder carrying Marta Gallardo’s visual identity",
+        "fr": "Placeholder graphique portant l’identité visuelle de Marta Gallardo",
+        "de": "Gebrandeter Platzhalter mit der visuellen Identität von Marta Gallardo",
+        "it": "Placeholder grafico con l’identità visiva di Marta Gallardo",
+        "ca": "Placeholder gràfic amb la identitat visual de Marta Gallardo"
+      }
+    }
+  ],
+  "arsenal": {
+    "languages": [
+      {
+        "id": "language-es",
+        "code": "es",
+        "label": {
+          "es": "Español",
+          "en": "Spanish",
+          "fr": "Espagnol",
+          "de": "Spanish",
+          "it": "Spanish",
+          "ca": "Spanish"
+        },
+        "level": {
+          "es": "Nativo",
+          "en": "Native",
+          "fr": "Natif",
+          "de": "Native",
+          "it": "Native",
+          "ca": "Native"
+        }
+      },
+      {
+        "id": "language-fr",
+        "code": "fr",
+        "label": {
+          "es": "Français",
+          "en": "French",
+          "fr": "Français",
+          "de": "French",
+          "it": "French",
+          "ca": "French"
+        },
+        "level": {
+          "es": "Avanzado · C1",
+          "en": "Advanced · C1",
+          "fr": "Avancé · C1",
+          "de": "Advanced · C1",
+          "it": "Advanced · C1",
+          "ca": "Advanced · C1"
+        }
+      },
+      {
+        "id": "language-ca",
+        "code": "ca",
+        "label": {
+          "es": "Català",
+          "en": "Catalan",
+          "fr": "Catalan",
+          "de": "Catalan",
+          "it": "Catalan",
+          "ca": "Catalan"
+        },
+        "level": {
+          "es": "Avanzado",
+          "en": "Advanced",
+          "fr": "Avancé",
+          "de": "Advanced",
+          "it": "Advanced",
+          "ca": "Advanced"
+        }
+      },
+      {
+        "id": "language-en",
+        "code": "en",
+        "label": {
+          "es": "English",
+          "en": "English",
+          "fr": "Anglais",
+          "de": "English",
+          "it": "English",
+          "ca": "English"
+        },
+        "level": {
+          "es": "Intermedio · B1",
+          "en": "Intermediate · B1",
+          "fr": "Intermédiaire · B1",
+          "de": "Intermediate · B1",
+          "it": "Intermediate · B1",
+          "ca": "Intermediate · B1"
+        }
+      },
+      {
+        "id": "language-de",
+        "code": "de",
+        "label": {
+          "es": "Deutsch",
+          "en": "German",
+          "fr": "Allemand",
+          "de": "German",
+          "it": "German",
+          "ca": "German"
+        },
+        "level": {
+          "es": "Básico · A2",
+          "en": "Basic · A2",
+          "fr": "Élémentaire · A2",
+          "de": "Basic · A2",
+          "it": "Basic · A2",
+          "ca": "Basic · A2"
+        }
+      },
+      {
+        "id": "language-it",
+        "code": "it",
+        "label": {
+          "es": "Italiano",
+          "en": "Italian",
+          "fr": "Italien",
+          "de": "Italian",
+          "it": "Italian",
+          "ca": "Italian"
+        },
+        "level": {
+          "es": "Básico · A2",
+          "en": "Basic · A2",
+          "fr": "Élémentaire · A2",
+          "de": "Basic · A2",
+          "it": "Basic · A2",
+          "ca": "Basic · A2"
+        }
+      }
+    ],
+    "tools": [
+      {
+        "id": "microsoft-office",
+        "logo": "/images/tools/microsoft-office.svg",
+        "label": {
+          "es": "Microsoft Office",
+          "en": "Microsoft Office",
+          "fr": "Microsoft Office",
+          "de": "Microsoft Office",
+          "it": "Microsoft Office",
+          "ca": "Microsoft Office"
+        }
+      },
+      {
+        "id": "google-workspace",
+        "logo": "/images/tools/google-workspace.svg",
+        "label": {
+          "es": "Google Workspace",
+          "en": "Google Workspace",
+          "fr": "Google Workspace",
+          "de": "Google Workspace",
+          "it": "Google Workspace",
+          "ca": "Google Workspace"
+        }
+      },
+      {
+        "id": "notion",
+        "logo": "/images/tools/notion.svg",
+        "label": {
+          "es": "Notion",
+          "en": "Notion",
+          "fr": "Notion",
+          "de": "Notion",
+          "it": "Notion",
+          "ca": "Notion"
+        }
+      },
+      {
+        "id": "ai-tools",
+        "logo": "/images/tools/ai-tools--chatgpt--claude-.svg",
+        "label": {
+          "es": "AI tools (ChatGPT, Claude)",
+          "en": "AI tools (ChatGPT, Claude)",
+          "fr": "Outils IA (ChatGPT, Claude)",
+          "de": "AI tools (ChatGPT, Claude)",
+          "it": "AI tools (ChatGPT, Claude)",
+          "ca": "AI tools (ChatGPT, Claude)"
+        }
+      },
+      {
+        "id": "wordpress",
+        "logo": "/images/tools/wordpress.svg",
+        "label": {
+          "es": "WordPress",
+          "en": "WordPress",
+          "fr": "WordPress",
+          "de": "WordPress",
+          "it": "WordPress",
+          "ca": "WordPress"
+        }
+      },
+      {
+        "id": "google-search-console",
+        "logo": "/images/tools/google-search-console.svg",
+        "label": {
+          "es": "Google Search Console",
+          "en": "Google Search Console",
+          "fr": "Google Search Console",
+          "de": "Google Search Console",
+          "it": "Google Search Console",
+          "ca": "Google Search Console"
+        }
+      },
+      {
+        "id": "google-business-profile",
+        "logo": "/images/tools/google-my-business.svg",
+        "label": {
+          "es": "Google My Business",
+          "en": "Google Business Profile",
+          "fr": "Google Business Profile",
+          "de": "Google Business Profile",
+          "it": "Google Business Profile",
+          "ca": "Google Business Profile"
+        }
+      }
+    ],
+    "skills": [
+      {
+        "id": "translation-content-adaptation",
+        "label": {
+          "es": "Traducción y adaptación de contenidos FR⇄ES y EN/DE/IT/CA→ES",
+          "en": "Translation and content adaptation FR⇄ES and EN/DE/IT/CA→ES",
+          "fr": "Traduction et adaptation de contenus FR⇄ES et EN/DE/IT/CA→ES",
+          "de": "Translation and content adaptation FR⇄ES and EN/DE/IT/CA→ES",
+          "it": "Translation and content adaptation FR⇄ES and EN/DE/IT/CA→ES",
+          "ca": "Translation and content adaptation FR⇄ES and EN/DE/IT/CA→ES"
+        }
+      },
+      {
+        "id": "website-localization",
+        "label": {
+          "es": "Localización web",
+          "en": "Website localization",
+          "fr": "Localisation web",
+          "de": "Website localization",
+          "it": "Website localization",
+          "ca": "Website localization"
+        }
+      },
+      {
+        "id": "proofreading-editing-style",
+        "label": {
+          "es": "Corrección, edición y mejora de estilo",
+          "en": "Proofreading, editing and style refinement",
+          "fr": "Correction, édition et amélioration du style",
+          "de": "Proofreading, editing and style refinement",
+          "it": "Proofreading, editing and style refinement",
+          "ca": "Proofreading, editing and style refinement"
+        }
+      },
+      {
+        "id": "terminology-glossaries",
+        "label": {
+          "es": "Investigación terminológica y gestión de glosarios",
+          "en": "Terminology research and glossary management",
+          "fr": "Recherche terminologique et gestion de glossaires",
+          "de": "Terminology research and glossary management",
+          "it": "Terminology research and glossary management",
+          "ca": "Terminology research and glossary management"
+        }
+      },
+      {
+        "id": "local-seo",
+        "label": {
+          "es": "SEO Local",
+          "en": "Local SEO",
+          "fr": "SEO local",
+          "de": "Local SEO",
+          "it": "Local SEO",
+          "ca": "Local SEO"
+        }
+      },
+      {
+        "id": "content-optimization",
+        "label": {
+          "es": "Optimización de contenido para buscadores",
+          "en": "Multilingual SEO",
+          "fr": "SEO Multilingue",
+          "de": "Search engine content optimization",
+          "it": "Search engine content optimization",
+          "ca": "Search engine content optimization"
+        }
+      },
+      {
+        "id": "keyword-planning",
+        "label": {
+          "es": "Keyword planner",
+          "en": "Keyword planner",
+          "fr": "Keyword planner",
+          "de": "Keyword planner",
+          "it": "Keyword planner",
+          "ca": "Keyword planner"
+        }
+      },
+      {
+        "id": "copywriting",
+        "label": {
+          "es": "Copywriting",
+          "en": "Copywriting",
+          "fr": "Copywriting",
+          "de": "Copywriting",
+          "it": "Copywriting",
+          "ca": "Copywriting"
+        }
+      }
+    ]
+  },
+  "person": {
+    "name": "Marta Gallardo",
+    "location": "Elche, Spain",
+    "socialProfiles": {
+      "linkedin": "https://www.linkedin.com/in/martagall/",
+      "instagram": "https://www.instagram.com/marttelier/"
+    }
+  }
+}

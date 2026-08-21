@@ -1,6 +1,6 @@
 ---
-import { t, getLangFromUrl, getLocalizedPath, langNames, visibleLangs, type Lang } from '../i18n';
-import siteData from '../data/images.json';
+import { getLocalizedPath, langNames, stripLocaleFromPath, t, visibleLangs, type Lang } from '../i18n';
+import { siteData } from '../lib/siteData';
 
 interface Props {
   lang: Lang;
@@ -9,87 +9,481 @@ interface Props {
 
 const { lang, adminMode = false } = Astro.props;
 const i = t(lang);
-const allLangs = visibleLangs;
-const social = siteData.socialLinks || { linkedin: 'https://www.linkedin.com/in/martagall/', instagram: 'https://www.instagram.com/marttelier/' };
+const pathname = Astro.url.pathname;
+const publicPath = stripLocaleFromPath(pathname).replace(/^\/admin(?=\/|$)/, '') || '/';
+const strippedPath = publicPath === '/' ? '/' : publicPath.replace(/\/$/, '');
+const navPath = (path: string) => (adminMode ? `/admin${path === '/' ? '' : path}` : getLocalizedPath(path, lang));
+const languagePath = (nextLang: Lang) => getLocalizedPath(strippedPath === '' ? '/' : strippedPath, nextLang);
 
-// ponytail: derive active page from URL pathname
-const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
-const strippedPath = pathname.replace(`/${lang}`, '').replace('/admin', '') || '/';
+const navItems = [
+  { href: '/', label: i.nav.home },
+  { href: '/ugc', label: i.nav.ugc },
+  { href: '/translation-seo', label: i.nav.translationSeo },
+  { href: '/blog', label: i.nav.blog },
+  { href: '/contact', label: i.nav.contact },
+];
 
-// In admin mode, prefix all nav links with /admin
-const navPath = (path: string) => adminMode ? `/admin${path === '/' ? '' : path}` : getLocalizedPath(path, lang);
-
-function isActive(path: string): boolean {
+const isActive = (path: string) => {
   if (path === '/') return strippedPath === '/' || strippedPath === '';
-  return strippedPath.startsWith(path);
-}
-
-const navClass = (path: string) =>
-  `transition-colors hover:text-rose-gold ${isActive(path) ? 'text-rose-gold font-medium border-b-2 border-rose-gold pb-0.5' : ''}`;
+  return strippedPath === path || strippedPath.startsWith(`${path}/`);
+};
 ---
-<header class="fixed top-0 left-0 right-0 z-50 bg-cream/80 backdrop-blur-md border-b border-blush-100">
-  <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-    <!-- Logo / Name -->
-    <a href={navPath('/')} class="font-heading text-2xl font-semibold tracking-wide text-charcoal hover:text-rose-gold transition-colors">
-      MG
+<header
+  class="site-header fixed inset-x-0 top-0 z-50 px-4 py-4 md:px-6"
+  data-header-root
+  data-compact="false"
+  data-hidden="false"
+  data-admin={adminMode ? 'true' : 'false'}
+>
+  <div class="site-header__shell mx-auto flex w-full max-w-7xl items-center justify-between rounded-full border border-black/8 bg-cream/92 px-4 py-3 text-charcoal backdrop-blur md:px-6">
+    <a href={navPath('/')} class="site-header__brand inline-flex items-center gap-2 text-base font-semibold tracking-[0.36em] text-charcoal transition hover:text-rose-gold">
+      <span class="font-heading text-lg">MG</span>
     </a>
 
-    <!-- Desktop Nav -->
-    <ul class="hidden md:flex items-center gap-8 font-body text-sm tracking-wide">
-      <li><a href={navPath('/')} class={navClass('/')}>{i.nav.home}</a></li>
-      <li><a href={navPath('/ugc')} class={navClass('/ugc')}>{i.nav.ugc}</a></li>
-      <li><a href={navPath('/translation-seo')} class={navClass('/translation-seo')}>{i.nav.translationSeo}</a></li>
-      <li><a href={navPath('/blog')} class={navClass('/blog')}>{i.nav.blog}</a></li>
-      <li><a href={navPath('/contact')} class={navClass('/contact')}>{i.nav.contact}</a></li>
-    </ul>
+    <div class="hidden items-center gap-8 md:flex">
+      <nav aria-label="Primary" class="flex items-center gap-5">
+        {navItems.map((item) => (
+          <a
+            href={navPath(item.href)}
+            class="nav-link group"
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            <span class="nav-link__bracket nav-link__bracket--left" aria-hidden="true">[</span>
+            <span class="nav-link__text">
+              <span>{item.label}</span>
+              <span aria-hidden="true">{item.label}</span>
+            </span>
+            <span class="nav-link__bracket nav-link__bracket--right" aria-hidden="true">]</span>
+          </a>
+        ))}
+      </nav>
 
-    <!-- Right side: social + lang switcher -->
-    <div class="flex items-center gap-4">
-      <!-- LinkedIn -->
-      <a href={social.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn" class="text-charcoal hover:text-rose-gold transition-colors">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-      </a>
-      <!-- Instagram -->
-      <a href={social.instagram} target="_blank" rel="noopener" aria-label="Instagram" class="text-charcoal hover:text-rose-gold transition-colors">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-      </a>
-      <!-- Language switcher -->
-      <div class="relative group">
-        <button class="text-sm font-body tracking-wide text-charcoal hover:text-rose-gold transition-colors flex items-center gap-1" aria-label={i.language.label}>
-          {langNames[lang]}
-          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      <div class="flex items-center gap-3">
+        <a href={siteData.socialLinks.linkedin} target="_blank" rel="noreferrer noopener" aria-label="LinkedIn" class="social-control">
+          <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M20.45 20.45H16.9v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.02H3.56V9h3.56v11.45ZM22.22 0H1.77A1.75 1.75 0 0 0 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45A1.76 1.76 0 0 0 24 22.27V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
+        </a>
+        <a href={siteData.socialLinks.instagram} target="_blank" rel="noreferrer noopener" aria-label="Instagram" class="social-control">
+          <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M12 0C8.74 0 8.33.01 7.05.07 2.69.27.27 2.69.07 7.05.01 8.33 0 8.74 0 12c0 3.26.01 3.67.07 4.95.2 4.36 2.62 6.78 6.98 6.98 1.28.06 1.69.07 4.95.07 3.26 0 3.67-.01 4.95-.07 4.36-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95 0-3.26-.01-3.67-.07-4.95-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0Zm0 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.67 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07-3.2 0-3.58-.01-4.85-.07-3.26-.15-4.77-1.69-4.92-4.92A69.57 69.57 0 0 1 2.16 12c0-3.2.01-3.58.07-4.85.15-3.23 1.67-4.77 4.92-4.92A69.56 69.56 0 0 1 12 2.16Zm0 3.68a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32Zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm6.4-11.84a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88Z"/></svg>
+        </a>
+        {!adminMode && (
+          <button
+            type="button"
+            class="social-control"
+            aria-label={i.language.label}
+            aria-haspopup="menu"
+            aria-expanded="false"
+            data-lang-toggle
+          >
+            <svg viewBox="0 0 24 24" class="h-4 w-4 stroke-current" fill="none" aria-hidden="true">
+              <path d="M12 3c4.97 0 9 4.03 9 9s-4.03 9-9 9-9-4.03-9-9 4.03-9 9-9Zm0 0c2.27 2.46 3.5 5.71 3.5 9S14.27 18.54 12 21m0-18C9.73 5.46 8.5 8.71 8.5 12s1.23 6.54 3.5 9m-8.36-6h16.72M3.64 9h16.72" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" />
+            </svg>
+          </button>
+        )}
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2 md:hidden">
+      {!adminMode && (
+        <button
+          type="button"
+          class="social-control"
+          aria-label={i.language.label}
+          aria-haspopup="menu"
+          aria-expanded="false"
+          data-lang-toggle
+        >
+          <svg viewBox="0 0 24 24" class="h-4 w-4 stroke-current" fill="none" aria-hidden="true">
+            <path d="M12 3c4.97 0 9 4.03 9 9s-4.03 9-9 9-9-4.03-9-9 4.03-9 9-9Zm0 0c2.27 2.46 3.5 5.71 3.5 9S14.27 18.54 12 21m0-18C9.73 5.46 8.5 8.71 8.5 12s1.23 6.54 3.5 9m-8.36-6h16.72M3.64 9h16.72" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" />
+          </svg>
         </button>
-        <div class="absolute right-0 top-full mt-2 bg-white shadow-lg rounded-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 min-w-[100px]">
-          {allLangs.map(l => (
-            <a href={getLocalizedPath(Astro.url.pathname.replace(`/${lang}`, '') || '/', l)}
-               class={`block px-4 py-1.5 text-sm hover:bg-blush-50 transition-colors ${l === lang ? 'text-rose-gold font-medium' : 'text-charcoal'}`}>
-              {langNames[l]}
+      )}
+      <button type="button" class="social-control" data-menu-toggle aria-expanded="false" aria-label={i.nav.openMenu}>
+        <span class="sr-only">{i.nav.openMenu}</span>
+        <svg viewBox="0 0 24 24" class="h-4 w-4 stroke-current" fill="none" aria-hidden="true">
+          <path d="M5 7h14M5 12h14M5 17h14" stroke-linecap="round" stroke-width="1.8" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  {!adminMode && (
+    <div class="language-popover-wrap mx-auto w-full max-w-7xl px-4 md:px-6">
+      <div class="relative flex justify-end">
+        <div class="language-menu" data-lang-menu hidden role="menu" aria-label={i.language.label}>
+          {visibleLangs.map((locale) => (
+            <a
+              href={languagePath(locale)}
+              class:list={['language-menu__link', locale === lang && 'is-active']}
+              role="menuitem"
+            >
+              {langNames[locale]}
             </a>
           ))}
         </div>
       </div>
-
-      <!-- Mobile menu button -->
-      <button id="mobile-menu-btn" class="md:hidden text-charcoal" aria-label="Menu">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-      </button>
     </div>
-  </nav>
+  )}
 
-  <!-- Mobile menu -->
-  <div id="mobile-menu" class="hidden md:hidden bg-cream border-t border-blush-100 px-6 py-4">
-    <ul class="flex flex-col gap-4 font-body text-sm">
-      <li><a href={navPath('/')} class={`block ${navClass('/')}`}>{i.nav.home}</a></li>
-      <li><a href={navPath('/ugc')} class={`block ${navClass('/ugc')}`}>{i.nav.ugc}</a></li>
-      <li><a href={navPath('/translation-seo')} class={`block ${navClass('/translation-seo')}`}>{i.nav.translationSeo}</a></li>
-      <li><a href={navPath('/blog')} class={`block ${navClass('/blog')}`}>{i.nav.blog}</a></li>
-      <li><a href={navPath('/contact')} class={`block ${navClass('/contact')}`}>{i.nav.contact}</a></li>
-    </ul>
+  <div class="mobile-panel" data-mobile-panel hidden>
+    <div class="mobile-panel__content">
+      <div class="flex items-center justify-between border-b border-black/8 pb-4">
+        <span class="font-heading text-xl tracking-[0.28em]">MG</span>
+        <button type="button" class="social-control" data-menu-close aria-label={i.nav.closeMenu}>
+          <span class="sr-only">{i.nav.closeMenu}</span>
+          <svg viewBox="0 0 24 24" class="h-4 w-4 stroke-current" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6 6 18" stroke-linecap="round" stroke-width="1.8" />
+          </svg>
+        </button>
+      </div>
+
+      <nav aria-label="Mobile" class="mt-8 flex flex-col gap-5">
+        {navItems.map((item) => (
+          <a href={navPath(item.href)} class="mobile-nav-link" aria-current={isActive(item.href) ? 'page' : undefined}>
+            <span class="mobile-nav-link__line">
+              <span>{item.label}</span>
+              <span aria-hidden="true">{item.label}</span>
+            </span>
+          </a>
+        ))}
+      </nav>
+
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a href={siteData.socialLinks.linkedin} target="_blank" rel="noreferrer noopener" aria-label="LinkedIn" class="social-control">
+          <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M20.45 20.45H16.9v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.02H3.56V9h3.56v11.45ZM22.22 0H1.77A1.75 1.75 0 0 0 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45A1.76 1.76 0 0 0 24 22.27V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
+        </a>
+        <a href={siteData.socialLinks.instagram} target="_blank" rel="noreferrer noopener" aria-label="Instagram" class="social-control">
+          <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M12 0C8.74 0 8.33.01 7.05.07 2.69.27.27 2.69.07 7.05.01 8.33 0 8.74 0 12c0 3.26.01 3.67.07 4.95.2 4.36 2.62 6.78 6.98 6.98 1.28.06 1.69.07 4.95.07 3.26 0 3.67-.01 4.95-.07 4.36-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95 0-3.26-.01-3.67-.07-4.95-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0Zm0 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.67 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07-3.2 0-3.58-.01-4.85-.07-3.26-.15-4.77-1.69-4.92-4.92A69.57 69.57 0 0 1 2.16 12c0-3.2.01-3.58.07-4.85.15-3.23 1.67-4.77 4.92-4.92A69.56 69.56 0 0 1 12 2.16Zm0 3.68a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32Zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm6.4-11.84a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88Z"/></svg>
+        </a>
+      </div>
+
+      {!adminMode && (
+        <div class="mt-10 flex items-center gap-3">
+          {visibleLangs.map((locale) => (
+            <a href={languagePath(locale)} class:list={['language-chip', locale === lang && 'is-active']}>
+              {langNames[locale]}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
   </div>
 </header>
 
+<style>
+  .site-header {
+    transition: transform 0.35s ease, padding 0.35s ease;
+  }
+
+  .site-header[data-hidden='true'] {
+    transform: translateY(calc(-100% - 0.75rem));
+  }
+
+  .site-header[data-compact='true'] {
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+  }
+
+  .site-header[data-compact='true'] .site-header__shell {
+    border-radius: 1.25rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    box-shadow: 0 14px 40px rgba(6, 4, 3, 0.08);
+  }
+
+  .site-header__shell {
+    transition: border-radius 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 30px rgba(6, 4, 3, 0.05);
+  }
+
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    overflow: hidden;
+    padding: 0.15rem 0;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .nav-link__text {
+    display: grid;
+    height: 1.05rem;
+    overflow: hidden;
+    color: rgba(6, 4, 3, 0.8);
+    transition: color 0.2s ease;
+  }
+
+  .nav-link__text > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 1.05rem;
+    transform: translateY(0);
+    transition: transform 0.24s ease;
+  }
+
+  .nav-link__bracket {
+    color: var(--color-amaranth);
+    font-size: 0.9rem;
+    opacity: 0;
+    transform: translateY(0.3rem);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .nav-link:hover .nav-link__text,
+  .nav-link:focus-visible .nav-link__text,
+  .nav-link[aria-current='page'] .nav-link__text {
+    color: var(--color-amaranth);
+  }
+
+  .nav-link:hover .nav-link__text > span,
+  .nav-link:focus-visible .nav-link__text > span,
+  .nav-link[aria-current='page'] .nav-link__text > span {
+    transform: translateY(-100%);
+  }
+
+  .nav-link:hover .nav-link__bracket,
+  .nav-link:focus-visible .nav-link__bracket,
+  .nav-link[aria-current='page'] .nav-link__bracket {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .social-control {
+    display: inline-flex;
+    height: 2.6rem;
+    width: 2.6rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid rgba(6, 4, 3, 0.08);
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--color-ink);
+    box-shadow: 0 6px 0 rgba(232, 50, 86, 0.22);
+    transition: transform 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .social-control:hover,
+  .social-control:focus-visible {
+    transform: translateY(-3px);
+    color: var(--color-amaranth);
+    border-color: rgba(232, 50, 86, 0.24);
+    box-shadow: 0 10px 0 rgba(232, 50, 86, 0.28);
+  }
+
+  .language-menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.8rem);
+    min-width: 5rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(6, 4, 3, 0.08);
+    background: rgba(244, 245, 241, 0.98);
+    padding: 0.4rem;
+    box-shadow: 0 20px 50px rgba(6, 4, 3, 0.1);
+  }
+
+  .language-menu__link,
+  .language-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .language-menu__link {
+    width: 100%;
+  }
+
+  .language-menu__link:hover,
+  .language-menu__link:focus-visible,
+  .language-menu__link.is-active,
+  .language-chip:hover,
+  .language-chip:focus-visible,
+  .language-chip.is-active {
+    background: rgba(232, 50, 86, 0.1);
+    color: var(--color-amaranth);
+  }
+
+  .mobile-panel {
+    position: fixed;
+    inset: 0;
+    z-index: 48;
+    background: rgba(244, 245, 241, 0.96);
+    backdrop-filter: blur(18px);
+  }
+
+  .mobile-panel__content {
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+    padding: 1.25rem 1.1rem 2rem;
+  }
+
+  .mobile-nav-link {
+    overflow: hidden;
+    border-bottom: 1px solid rgba(6, 4, 3, 0.08);
+    padding-bottom: 0.9rem;
+    font-size: clamp(1.8rem, 8vw, 2.6rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  .mobile-nav-link__line {
+    display: grid;
+    overflow: hidden;
+    color: rgba(6, 4, 3, 0.88);
+  }
+
+  .mobile-nav-link__line > span {
+    min-height: 1.15em;
+    transition: transform 0.24s ease;
+  }
+
+  .mobile-nav-link:hover .mobile-nav-link__line > span,
+  .mobile-nav-link:focus-visible .mobile-nav-link__line > span,
+  .mobile-nav-link[aria-current='page'] .mobile-nav-link__line > span {
+    transform: translateY(-100%);
+    color: var(--color-amaranth);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header,
+    .site-header__shell,
+    .nav-link__text > span,
+    .nav-link__bracket,
+    .social-control,
+    .mobile-nav-link__line > span {
+      transition: none;
+    }
+  }
+</style>
+
 <script>
-  const btn = document.getElementById('mobile-menu-btn');
-  const menu = document.getElementById('mobile-menu');
-  btn?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+  declare global {
+    interface Window {
+      __mgHeaderCleanup?: () => void;
+      __mgHeaderBound?: boolean;
+    }
+  }
+
+  const initHeader = () => {
+    window.__mgHeaderCleanup?.();
+
+    const header = document.querySelector<HTMLElement>('[data-header-root]');
+    if (!header) return;
+
+    const mobilePanel = header.querySelector<HTMLElement>('[data-mobile-panel]');
+    const menuToggle = header.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+    const menuClose = header.querySelector<HTMLButtonElement>('[data-menu-close]');
+    const langToggles = Array.from(header.querySelectorAll<HTMLButtonElement>('[data-lang-toggle]'));
+    const languageMenu = header.querySelector<HTMLElement>('[data-lang-menu]');
+    let lastScrollY = window.scrollY;
+    let bodyOverflow = '';
+
+    const syncHeader = () => {
+      const isMobileMenuOpen = mobilePanel ? !mobilePanel.hidden : false;
+      header.dataset.compact = window.scrollY > 80 ? 'true' : 'false';
+
+      if (!window.matchMedia('(min-width: 768px)').matches || isMobileMenuOpen) {
+        header.dataset.hidden = 'false';
+        return;
+      }
+
+      const delta = window.scrollY - lastScrollY;
+      if (window.scrollY <= 120 || delta < -8) {
+        header.dataset.hidden = 'false';
+      } else if (delta > 8) {
+        header.dataset.hidden = 'true';
+      }
+
+      lastScrollY = window.scrollY;
+    };
+
+    const setLanguageMenu = (open: boolean) => {
+      if (!languageMenu) return;
+      languageMenu.hidden = !open;
+      langToggles.forEach((toggle) => toggle.setAttribute('aria-expanded', String(open)));
+    };
+
+    const setMobileMenu = (open: boolean) => {
+      if (!mobilePanel || !menuToggle) return;
+
+      mobilePanel.hidden = !open;
+      menuToggle.setAttribute('aria-expanded', String(open));
+      header.dataset.hidden = 'false';
+
+      if (open) {
+        bodyOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = bodyOverflow;
+      }
+    };
+
+    const closeMenus = () => {
+      setLanguageMenu(false);
+      setMobileMenu(false);
+    };
+
+    const onScroll = () => syncHeader();
+    const onFocusIn = () => {
+      header.dataset.hidden = 'false';
+    };
+    const onPointerDown = (event: PointerEvent) => {
+      const target = event.target instanceof Node ? event.target : null;
+      if (target && !header.contains(target)) {
+        closeMenus();
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeMenus();
+      }
+    };
+
+    menuToggle && (menuToggle.onclick = () => setMobileMenu(mobilePanel?.hidden ?? true));
+    menuClose && (menuClose.onclick = () => setMobileMenu(false));
+    langToggles.forEach((toggle) => {
+      toggle.onclick = () => setLanguageMenu(languageMenu?.hidden ?? true);
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    header.addEventListener('focusin', onFocusIn);
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    syncHeader();
+
+    window.__mgHeaderCleanup = () => {
+      window.removeEventListener('scroll', onScroll);
+      header.removeEventListener('focusin', onFocusIn);
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+      if (menuToggle) menuToggle.onclick = null;
+      if (menuClose) menuClose.onclick = null;
+      langToggles.forEach((toggle) => {
+        toggle.onclick = null;
+      });
+      document.body.style.overflow = bodyOverflow;
+    };
+  };
+
+  if (!window.__mgHeaderBound) {
+    window.__mgHeaderBound = true;
+    document.addEventListener('astro:before-swap', () => window.__mgHeaderCleanup?.());
+    document.addEventListener('astro:page-load', initHeader);
+  }
+
+  initHeader();
 </script>

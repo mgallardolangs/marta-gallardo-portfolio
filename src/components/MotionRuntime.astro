@@ -1,0 +1,81 @@
+<script>
+  import Lenis from 'lenis';
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  type MotionRuntimeState = {
+    lenis: Lenis | null;
+    cleanup: (() => void) | null;
+  };
+
+  declare global {
+    interface Window {
+      __mgMotionRuntime?: MotionRuntimeState;
+    }
+  }
+
+  const mountRuntime = () => {
+    window.__mgMotionRuntime?.cleanup?.();
+
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.ticker.lagSmoothing(0);
+
+    const lenis = new Lenis({
+      autoRaf: true,
+      anchors: true,
+      lerp: 0.075,
+      syncTouch: false,
+      stopInertiaOnNavigate: true,
+    });
+
+    const refreshScroll = () => {
+      lenis.resize();
+      ScrollTrigger.refresh();
+    };
+
+    const updateScroll = () => {
+      document.documentElement.dataset.reducedMotion = lenis.prefersReducedMotion ? 'true' : 'false';
+      refreshScroll();
+    };
+
+    const onLenisScroll = () => ScrollTrigger.update();
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        lenis.stop();
+        return;
+      }
+
+      lenis.start();
+      refreshScroll();
+    };
+    const onBeforePreparation = () => lenis.stop();
+    const onPageLoad = () => {
+      lenis.start();
+      requestAnimationFrame(refreshScroll);
+    };
+
+    lenis.on('scroll', onLenisScroll);
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    document.addEventListener('astro:before-preparation', onBeforePreparation);
+    document.addEventListener('astro:page-load', onPageLoad);
+
+    const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
+    reducedMotionMedia.addEventListener('change', updateScroll);
+    updateScroll();
+
+    window.__mgMotionRuntime = {
+      lenis,
+      cleanup: () => {
+        lenis.off('scroll', onLenisScroll);
+        lenis.destroy();
+        document.removeEventListener('visibilitychange', onVisibilityChange);
+        document.removeEventListener('astro:before-preparation', onBeforePreparation);
+        document.removeEventListener('astro:page-load', onPageLoad);
+        reducedMotionMedia.removeEventListener('change', updateScroll);
+        delete document.documentElement.dataset.reducedMotion;
+      },
+    };
+  };
+
+  mountRuntime();
+</script>

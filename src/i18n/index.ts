@@ -23,8 +23,23 @@ export function getLangFromUrl(url: URL): Lang {
   return defaultLang;
 }
 
+export function stripLocaleFromPath(pathname: string): string {
+  const normalizedPath = pathname.replace(/\/$/, '') || '/';
+  const segments = normalizedPath.split('/').filter(Boolean);
+  const [first, ...rest] = segments;
+
+  if (first && first in languages) {
+    const nextPath = `/${rest.join('/')}`.replace(/\/$/, '');
+    return nextPath || '/';
+  }
+
+  return normalizedPath;
+}
+
 export function getLocalizedPath(path: string, lang: Lang): string {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+
   // ponytail: ES is default (no prefix), others get /en/, /fr/, etc.
-  if (lang === defaultLang) return path;
-  return `/${lang}${path}`;
+  if (lang === defaultLang) return normalizedPath;
+  return `/${lang}${normalizedPath}`;
 }

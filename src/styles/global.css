@@ -1,72 +1,119 @@
 @import "tailwindcss";
 
-/* ponytail: Tailwind v4 uses CSS-based config. Theme tokens here, Marta edits this file for colors/fonts */
-
 @theme {
-  /* Color palette — vibrant pink with subtle red highlights */
-  --color-blush-50: #FFF0F3;
-  --color-blush-100: #FFD6E0;
-  --color-blush-200: #FFB3C6;
-  --color-blush-300: #FF8FAB;
-  --color-blush-400: #E05C7A;
-  --color-rose-gold: #C45B72;
-  --color-charcoal: #2D2D2D;
-  --color-warm-gray: #6B6B6B;
-  --color-cream: #FFFBFC;
+  --color-paper: #F4F5F1;
+  --color-ink: #060403;
+  --color-amaranth: #E83256;
+  --color-amaranth-soft: #F5C4CD;
+  --color-amaranth-mist: #F8E8EB;
+  --color-ink-muted: #4C4442;
+  --color-ink-faint: #8A7E79;
+
+  --color-cream: var(--color-paper);
+  --color-charcoal: var(--color-ink);
+  --color-warm-gray: var(--color-ink-muted);
+  --color-rose-gold: var(--color-amaranth);
+  --color-blush-50: #FBF7F8;
+  --color-blush-100: #F5E6EA;
+  --color-blush-200: #E9CBD4;
+  --color-blush-300: #D98A9A;
+  --color-blush-400: #B95A70;
   --color-white: #FFFFFF;
 
-  /* Fonts — editorial aesthetic */
-  --font-heading: 'Cormorant Garamond', serif;
-  --font-body: 'Lora', serif;
-  --font-accent: 'Playfair Display', serif;
+  --font-heading: 'Instrument Sans', system-ui, sans-serif;
+  --font-body: 'Instrument Sans', system-ui, sans-serif;
+  --font-accent: 'Instrument Serif', Georgia, serif;
 
-  /* Spacing scale extras */
   --spacing-128: 32rem;
+
+  --shadow-amaranth: 0 18px 38px rgba(232, 50, 86, 0.16);
+  --shadow-ink: 0 18px 54px rgba(6, 4, 3, 0.08);
 }
 
-/* Smooth scroll */
+:root {
+  color-scheme: light;
+}
+
 html {
-  scroll-behavior: smooth;
+  min-height: 100%;
+  background: var(--color-paper);
 }
 
-/* Hide scrollbar on horizontal carousels */
-.scrollbar-hide::-webkit-scrollbar { display: none; }
-.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-
-/* Base styles */
 body {
+  min-height: 100%;
   font-family: var(--font-body);
-  color: var(--color-charcoal);
-  background-color: var(--color-cream);
+  color: var(--color-ink);
+  background: var(--color-paper);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
-  letter-spacing: 0.02em;
+  letter-spacing: -0.03em;
 }
 
-/* Scroll-driven animation utilities (Josh W Comeau approach) */
-@supports (animation-timeline: scroll()) {
-  .scroll-fade-in {
-    animation: scrollFadeIn linear both;
-    animation-timeline: view();
-    animation-range: entry 0% entry 100%;
+a,
+button,
+input,
+textarea,
+select,
+summary {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-amaranth);
+  outline-offset: 3px;
+}
+
+::selection {
+  color: var(--color-paper);
+  background: rgba(232, 50, 86, 0.9);
+}
+
+img,
+video,
+svg {
+  display: block;
+}
+
+.site-container {
+  width: min(100% - 2rem, 80rem);
+  margin-inline: auto;
+}
+
+.site-section {
+  padding-block: clamp(4rem, 7vw, 7rem);
+}
+
+.section-shell {
+  border: 1px solid rgba(6, 4, 3, 0.08);
+  border-radius: 2rem;
+  background: rgba(255, 255, 255, 0.56);
+  box-shadow: var(--shadow-ink);
+}
+
+.section-copy {
+  max-width: 42rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
   }
 
-  @keyframes scrollFadeIn {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .scroll-progress-bar {
-    animation: scrollProgress linear;
-    animation-timeline: scroll();
-    transform-origin: left;
-  }
-
-  @keyframes scrollProgress {
-    from { transform: scaleX(0); }
-    to { transform: scaleX(1); }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

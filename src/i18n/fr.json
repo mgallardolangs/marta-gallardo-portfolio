@@ -4,7 +4,9 @@
     "ugc": "Création de contenu",
     "translationSeo": "Communication multilingue & SEO",
     "blog": "Blog",
-    "contact": "Contact"
+    "contact": "Contact",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
   },
   "hero": {
     "name": "Marta Gallardo",
@@ -78,7 +80,12 @@
     "errorRequired": "Veuillez remplir ce champ."
   },
   "footer": {
-    "rights": "Tous droits réservés"
+    "rights": "Tous droits réservés",
+    "eyebrow": "Vous avez un projet en tête ?",
+    "headline": "Parlons-en.",
+    "support": "Contenu, localisation et stratégie pensés avec un regard éditorial clair.",
+    "cta": "Me contacter",
+    "location": "Elche, Espagne"
   },
   "language": {
     "label": "Langue",
@@ -131,7 +138,8 @@
       "headline": "@marttelier",
       "description": "Les personnes font confiance aux personnes. \\n C'est pourquoi le contenu créé par des créateurs est aujourd'hui l'un des moyens les plus efficaces pour les marques de créer une relation authentique avec leur audience. \\n Je réalise des vidéos et des contenus visuels qui s'intègrent naturellement dans l'expérience utilisateur, en apportant authenticité, crédibilité et proximité, tout en restant fidèles aux objectifs de la marque. \\n Mon approche associe créativité, sensibilité esthétique et vision internationale afin de produire des contenus performants, aussi bien en organique que dans les campagnes publicitaires",
       "nicheIntroTitle": "Chaque marque a une propre histoire différente.",
-      "nicheIntroText": "Mon rôle consiste à comprendre ce qui la rend unique et à transformer cette essence en contenu naturel, crédible et capable de toucher les personnes qu'il souhaite atteindre."
+      "nicheIntroText": "Mon rôle consiste à comprendre ce qui la rend unique et à transformer cette essence en contenu naturel, crédible et capable de toucher les personnes qu'il souhaite atteindre.",
+      "highlight": ""
     },
     "pageDescription": "Portfolio UGC professionnel de Marta Gallardo avec des campagnes éditoriales conceptuelles autour du voyage, des langues et de l’art.",
     "nicheLabel": "Niche",

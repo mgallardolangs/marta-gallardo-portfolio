@@ -307,9 +307,9 @@ class AdminStore {
 
       if (JSON.stringify(this.images) !== JSON.stringify(this.originalImages)) {
         await this.writeRepositoryFile(
-          'src/data/images.json',
+          'src/data/site.json',
           utf8ToBase64(`${JSON.stringify(this.images, null, 2)}\n`),
-          'chore(admin): update site images',
+          'chore(admin): update site data',
         );
       }
 

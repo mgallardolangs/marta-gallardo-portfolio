@@ -3,17 +3,17 @@ import { adminStore } from './adminStore';
 
 interface Props {
   i18nJson: string;
-  imagesJson: string;
+  siteJson: string;
   lang: string;
 }
 
-export default function AdminInit({ i18nJson, imagesJson, lang }: Props) {
+export default function AdminInit({ i18nJson, siteJson, lang }: Props) {
   useEffect(() => {
     // Only init once — never re-init (would reset language selection)
     if (adminStore.isInitialized()) return;
 
     const parsedI18n = JSON.parse(i18nJson) as Record<string, unknown>;
-    const parsedImages = JSON.parse(imagesJson) as Record<string, unknown>;
+    const parsedSite = JSON.parse(siteJson) as Record<string, unknown>;
 
     const tryInit = () => {
       if (adminStore.isInitialized()) return true;
@@ -24,7 +24,7 @@ export default function AdminInit({ i18nJson, imagesJson, lang }: Props) {
       const user = w.netlifyIdentity?.currentUser?.();
 
       if (user?.token?.access_token) {
-        adminStore.init(parsedI18n, parsedImages, lang, user.token.access_token);
+        adminStore.init(parsedI18n, parsedSite, lang, user.token.access_token);
         adminStore.loadDraft();
         return true;
       }
@@ -42,7 +42,7 @@ export default function AdminInit({ i18nJson, imagesJson, lang }: Props) {
     // Fallback for local dev: init without token after 2s
     const fallback = window.setTimeout(() => {
       if (!adminStore.isInitialized()) {
-        adminStore.init(parsedI18n, parsedImages, lang, '');
+        adminStore.init(parsedI18n, parsedSite, lang, '');
       }
       window.clearInterval(interval);
     }, 2000);

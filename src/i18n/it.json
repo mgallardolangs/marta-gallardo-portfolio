@@ -4,7 +4,9 @@
     "ugc": "UGC",
     "translationSeo": "Traduzione + SEO",
     "blog": "Blog",
-    "contact": "Contatto"
+    "contact": "Contatto",
+    "openMenu": "Apri menu",
+    "closeMenu": "Chiudi menu"
   },
   "hero": {
     "name": "Marta Gallardo",
@@ -78,7 +80,12 @@
     "errorRequired": "Si prega di compilare questo campo."
   },
   "footer": {
-    "rights": "Tutti i diritti riservati"
+    "rights": "Tutti i diritti riservati",
+    "eyebrow": "Hai un progetto in mente?",
+    "headline": "Parliamone.",
+    "support": "Contenuti, localizzazione e strategia con uno sguardo editoriale chiaro.",
+    "cta": "Contattami",
+    "location": "Elche, Spagna"
   },
   "language": {
     "label": "Lingua",
@@ -131,7 +138,8 @@
       "headline": "Concept UGC puliti ed editoriali pensati per i brand, non per diari da influencer.",
       "description": "Un portfolio placeholder curato per Marta Gallardo con concept di campagna focalizzati su viaggi, lingue e arte. Ogni card è progettata per simulare creatività pronte per il paid social: credibili, ordinate e orientate alla conversione.",
       "nicheIntroTitle": "Ogni brand ha una storia diversa.",
-      "nicheIntroText": "Il mio lavoro consiste nel capire cosa lo rende unico e trasformare questa essenza in contenuti naturali, credibili e rilevanti per le persone che vuole raggiungere."
+      "nicheIntroText": "Il mio lavoro consiste nel capire cosa lo rende unico e trasformare questa essenza in contenuti naturali, credibili e rilevanti per le persone che vuole raggiungere.",
+      "highlight": ""
     },
     "pageDescription": "Portfolio UGC professionale di Marta Gallardo con campagne editoriali concettuali dedicate a viaggi, lingue e arte.",
     "nicheLabel": "Nicchia",
@@ -244,7 +252,8 @@
       "eyebrow": "Communication",
       "title": "Word",
       "text": "Adapting a message is not just about translating it. It is about making sure it still works wherever its audience is. \\n Every language has its own nuances, every market its context and every brand its own way of communicating. \\n I help companies adapt and optimize their content so it connects with new markets, improves visibility in search engines and feels just as natural in any language. \\n My work combines translation, localization and SEO positioning so that every piece of content keeps its intent, feels relevant to its audience and has real opportunities to rank on Google. \\n My background combines training in Translation and Interpreting, daily communication with French-speaking clients, localization projects for ecommerce and international immersion that has strengthened the way I understand languages through their cultural context, not just grammar. \\n That perspective allows me to approach each project with a clear goal: to make the content feel as if it had originally been written for the market it is targeting.",
-      "availability": "Available for freelance projects, one-off collaborations and ongoing editorial support."
+      "availability": "Available for freelance projects, one-off collaborations and ongoing editorial support.",
+      "backgroundLabel": "Cosa dice il testo → Traduzione.\nCome lo capisce ogni pubblico → Localizzazione.\nCome lo trovano le persone → SEO."
     },
     "services": {
       "title": "How I can help",

@@ -4,7 +4,9 @@
     "ugc": "Creative content",
     "translationSeo": "Multilingual communication & SEO",
     "blog": "Blog",
-    "contact": "Contact"
+    "contact": "Contact",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "hero": {
     "name": "Marta Gallardo",
@@ -78,7 +80,12 @@
     "errorRequired": "Please fill in this field."
   },
   "footer": {
-    "rights": "All rights reserved"
+    "rights": "All rights reserved",
+    "eyebrow": "Do you have a project in mind?",
+    "headline": "Let’s talk.",
+    "support": "Content, localisation, and strategy shaped with a clear, editorial eye.",
+    "cta": "Get in touch",
+    "location": "Elche, Spain"
   },
   "language": {
     "label": "Language",
@@ -131,7 +138,8 @@
       "headline": "@marttelier",
       "description": "People trust people. \\n That's why creator-led content has become one of the most effective ways for brands to build genuine connections with their audience. \\n I create videos and visual content that blend naturally into the user experience, bringing authenticity, credibility and a human touch without losing sight of the brand's goals. \\n My approach combines creativity, a refined visual aesthetic and an international perspective to produce content that performs organically and in paid social campaigns alike.",
       "nicheIntroTitle": "Every brand has a different story to tell.",
-      "nicheIntroText": "My role is to understand what makes it unique and turn that essence into content that feels authentic, builds trust and resonates with the right audience."
+      "nicheIntroText": "My role is to understand what makes it unique and turn that essence into content that feels authentic, builds trust and resonates with the right audience.",
+      "highlight": ""
     },
     "pageDescription": "Professional UGC portfolio for Marta Gallardo featuring editorial placeholder campaigns across travel, languages, and art.",
     "nicheLabel": "Niche",

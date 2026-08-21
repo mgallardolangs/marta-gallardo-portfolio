@@ -323,7 +323,9 @@
     "ugc": "Contenido creativo",
     "translationSeo": "Comunicación multilingüe y SEO",
     "blog": "Blog",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
   },
   "about": {
     "title": "¡ENCANTADA Soy Marta!",
@@ -378,7 +380,12 @@
     "seoLabel": "Traducción y SEO multilingües"
   },
   "footer": {
-    "rights": "Todos los derechos reservados"
+    "rights": "Todos los derechos reservados",
+    "eyebrow": "¿Tienes un proyecto en mente?",
+    "headline": "Hablemos.",
+    "support": "Contenido, localización y estrategia con una mirada editorial clara y cercana.",
+    "cta": "Contactar",
+    "location": "Elche, España"
   },
   "home": {
     "hero": {
@@ -398,7 +405,8 @@
         "Inglés",
         "Alemán",
         "Italiano"
-      ]
+      ],
+      "highlight": ""
     },
     "video": {
       "eyebrow": "MARCA PERSONAL",
