@@ -102,10 +102,11 @@ svg {
 .typed-cursor {
   display: inline-block;
   grid-area: 1 / 2;
-  align-self: start;
+  align-self: end;
   min-width: 0.34em;
   color: var(--color-amaranth);
   margin-inline-start: 0.12em;
+  transform: translateY(0.04em);
   animation: typed-cursor-blink 1s steps(1) infinite;
 }
 
@@ -175,17 +176,19 @@ svg {
 }
 
 .home-hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 1rem 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
 }
 
 .home-hero__cta {
   position: relative;
   display: inline-flex;
+  width: 100%;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  text-align: center;
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.24em;
@@ -199,7 +202,9 @@ svg {
 .home-hero__cta-label {
   position: relative;
   z-index: 1;
-  display: inline-flex;
+  display: block;
+  white-space: normal;
+  text-wrap: balance;
   transition:
     transform 0.28s ease,
     color 0.28s ease;
@@ -209,6 +214,7 @@ svg {
   overflow: hidden;
   border: 1px solid var(--color-ink);
   background: var(--color-ink);
+  min-height: 4rem;
   color: var(--color-paper);
   padding: 1rem 1.2rem;
 }
@@ -225,42 +231,6 @@ svg {
 
 .home-hero__cta--primary:hover::before,
 .home-hero__cta--primary:focus-visible::before {
-  transform: scaleX(1);
-}
-
-.home-hero__cta--secondary {
-  color: var(--color-ink);
-  padding-bottom: 0.4rem;
-}
-
-.home-hero__cta--secondary::before,
-.home-hero__cta--secondary::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1px;
-}
-
-.home-hero__cta--secondary::before {
-  background: rgb(6 4 3 / 0.24);
-}
-
-.home-hero__cta--secondary::after {
-  background: var(--color-amaranth);
-  transform: scaleX(0.32);
-  transform-origin: left;
-  transition: transform 0.28s ease;
-}
-
-.home-hero__cta--secondary:hover,
-.home-hero__cta--secondary:focus-visible {
-  color: var(--color-amaranth);
-}
-
-.home-hero__cta--secondary:hover::after,
-.home-hero__cta--secondary:focus-visible::after {
   transform: scaleX(1);
 }
 

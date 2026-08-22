@@ -461,8 +461,8 @@ test('homepage and admin keep the approved orbit wiring while StoryMap files dis
   );
   assert.match(
     orbitSource,
-    /const setActiveTile = \(itemId: string \| null\) => \{\s*activeIdRef\.current = itemId;\s*setActiveId\(itemId\);\s*\};/s,
-    'orbit component should synchronize activeIdRef with state updates so hover changes stay visible to intro onComplete without stale closures',
+    /const setActiveTile = \(itemId: string \| null\) => \{\s*activeIdRef\.current = itemId;\s*syncOrbitDriftPlayback\(driftTweenRef\.current,\s*itemId\);\s*setActiveId\(itemId\);\s*\};/s,
+    'orbit component should synchronize activeIdRef with state updates and immediately pause or resume drift without waiting for the effect cycle',
   );
   assert.match(
     orbitSource,
@@ -471,12 +471,12 @@ test('homepage and admin keep the approved orbit wiring while StoryMap files dis
   );
   assert.match(
     orbitSource,
-    /const driftPlaybackMode = getOrbitDriftPlaybackMode\(activeId\);/,
+    /syncOrbitDriftPlayback\(driftTweenRef\.current,\s*activeId\);/,
     'orbit component should delegate drift pause vs play state to the shared playback helper',
   );
   assert.match(
     orbitSource,
-    /if \(driftPlaybackMode === 'pause'\) \{\s*driftTweenRef\.current\?\.pause\(\);\s*\} else \{\s*driftTweenRef\.current\?\.play\(\);\s*\}/s,
+    /syncOrbitDriftPlayback\(driftTweenRef\.current,\s*itemId\);/,
     'orbit hover state should pause and resume the shared GSAP drift tween instead of moving slides directly',
   );
   assert.doesNotMatch(orbitSource, /embla-carousel-react/);

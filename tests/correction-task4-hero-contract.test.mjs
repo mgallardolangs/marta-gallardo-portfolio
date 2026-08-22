@@ -54,8 +54,12 @@ test('public hero matches the approved Checkpoint 1 source markers and CTA struc
   assert.match(heroSection, /i\.home\.hero\.description/);
   assert.match(heroSection, /href=\{getLocalizedPath\('\/ugc',\s*lang\)\}/);
   assert.match(heroSection, /href=\{getLocalizedPath\('\/translation-seo',\s*lang\)\}/);
-  assert.match(heroSection, /class="home-hero__cta home-hero__cta--primary"/);
-  assert.match(heroSection, /class="home-hero__cta home-hero__cta--secondary"/);
+  assert.equal(
+    heroSection.match(/class="home-hero__cta home-hero__cta--primary"/g)?.length,
+    2,
+    'public hero should keep both CTAs on the shared primary treatment',
+  );
+  assert.doesNotMatch(heroSection, /home-hero__cta--secondary/);
   assert.doesNotMatch(heroSection, /rounded-full|rounded-\[/);
 });
 
@@ -87,11 +91,11 @@ test('admin hero mirrors the layout with editable copy and keeps later admin too
   assert.match(heroSection, /i18nKey="home\.hero\.description"/);
   assert.match(
     heroSection,
-    /<div class="group\/edit relative inline-flex">[\s\S]*?<a href="\/admin\/ugc" class="home-hero__cta home-hero__cta--primary">[\s\S]*?<\/a>[\s\S]*?<\/div>/,
+    /<div class="group\/edit relative flex w-full">[\s\S]*?<a href="\/admin\/ugc" class="home-hero__cta home-hero__cta--primary">[\s\S]*?<\/a>[\s\S]*?<\/div>/,
   );
   assert.match(
     heroSection,
-    /<div class="group\/edit relative inline-flex">[\s\S]*?<a href="\/admin\/translation-seo" class="home-hero__cta home-hero__cta--secondary">[\s\S]*?<\/a>[\s\S]*?<\/div>/,
+    /<div class="group\/edit relative flex w-full">[\s\S]*?<a href="\/admin\/translation-seo" class="home-hero__cta home-hero__cta--primary">[\s\S]*?<\/a>[\s\S]*?<\/div>/,
   );
   assert.match(heroSection, /<EditableText client:load i18nKey="hero\.ugcLabel" as="span" className="home-hero__cta-label" clickToEdit=\{false\} editButtonTargetId="admin-home-ugc-cta-edit" \/>/);
   assert.match(heroSection, /<EditableText client:load i18nKey="hero\.seoLabel" as="span" className="home-hero__cta-label" clickToEdit=\{false\} editButtonTargetId="admin-home-seo-cta-edit" \/>/);

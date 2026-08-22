@@ -19,7 +19,7 @@ const i = t(lang);
 <AdminLayout title={`Admin — ${i.hero.name}`} description={i.home.hero.description}>
     <div class="overflow-x-hidden bg-paper">
       <!-- admin-home-hero:start -->
-      <section data-admin-home-hero class="home-hero bg-paper px-6 pt-28 pb-16 md:pt-32 md:pb-20">
+      <section data-admin-home-hero class="home-hero bg-paper px-6 pt-20 pb-16 md:pt-24 md:pb-20">
         <div class="site-container home-hero__stage">
           <div class="home-hero__copy">
             <StaggerContainer client:visible className="space-y-6 md:space-y-8" staggerDelay={0.1}>
@@ -54,14 +54,14 @@ const i = t(lang);
               <div class="home-hero__clip">
                 <StaggerItem>
                   <div class="home-hero__actions">
-                    <div class="group/edit relative inline-flex">
+                    <div class="group/edit relative flex w-full">
                       <a href="/admin/ugc" class="home-hero__cta home-hero__cta--primary">
                         <EditableText client:load i18nKey="hero.ugcLabel" as="span" className="home-hero__cta-label" clickToEdit={false} editButtonTargetId="admin-home-ugc-cta-edit" />
                       </a>
                       <span id="admin-home-ugc-cta-edit" />
                     </div>
-                    <div class="group/edit relative inline-flex">
-                      <a href="/admin/translation-seo" class="home-hero__cta home-hero__cta--secondary">
+                    <div class="group/edit relative flex w-full">
+                      <a href="/admin/translation-seo" class="home-hero__cta home-hero__cta--primary">
                         <EditableText client:load i18nKey="hero.seoLabel" as="span" className="home-hero__cta-label" clickToEdit={false} editButtonTargetId="admin-home-seo-cta-edit" />
                       </a>
                       <span id="admin-home-seo-cta-edit" />

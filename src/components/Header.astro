@@ -40,8 +40,8 @@ const isActive = (path: string) => {
       <span class="font-heading text-lg">MG</span>
     </a>
 
-    <div class="hidden items-center gap-8 md:flex">
-      <nav aria-label="Primary" class="flex items-center gap-5">
+    <div class="hidden items-center gap-6 md:ml-auto md:flex">
+      <nav aria-label="Primary" class="flex items-center gap-4">
         {navItems.map((item) => (
           <a
             href={navPath(item.href)}
@@ -60,10 +60,10 @@ const isActive = (path: string) => {
 
       <div class="flex items-center gap-3">
         <a href={siteData.socialLinks.linkedin} target="_blank" rel="noreferrer noopener" aria-label="LinkedIn" class="social-control">
-          <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M20.45 20.45H16.9v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.02H3.56V9h3.56v11.45ZM22.22 0H1.77A1.75 1.75 0 0 0 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45A1.76 1.76 0 0 0 24 22.27V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
+          <span class="social-control__linkedin-mark" aria-hidden="true">in</span>
         </a>
         <a href={siteData.socialLinks.instagram} target="_blank" rel="noreferrer noopener" aria-label="Instagram" class="social-control">
-          <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M12 0C8.74 0 8.33.01 7.05.07 2.69.27.27 2.69.07 7.05.01 8.33 0 8.74 0 12c0 3.26.01 3.67.07 4.95.2 4.36 2.62 6.78 6.98 6.98 1.28.06 1.69.07 4.95.07 3.26 0 3.67-.01 4.95-.07 4.36-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95 0-3.26-.01-3.67-.07-4.95-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0Zm0 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.67 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07-3.2 0-3.58-.01-4.85-.07-3.26-.15-4.77-1.69-4.92-4.92A69.57 69.57 0 0 1 2.16 12c0-3.2.01-3.58.07-4.85.15-3.23 1.67-4.77 4.92-4.92A69.56 69.56 0 0 1 12 2.16Zm0 3.68a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32Zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm6.4-11.84a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88Z"/></svg>
+          <svg viewBox="0 0 24 24" class="h-3.5 w-3.5 fill-current" aria-hidden="true"><path d="M12 0C8.74 0 8.33.01 7.05.07 2.69.27.27 2.69.07 7.05.01 8.33 0 8.74 0 12c0 3.26.01 3.67.07 4.95.2 4.36 2.62 6.78 6.98 6.98 1.28.06 1.69.07 4.95.07 3.26 0 3.67-.01 4.95-.07 4.36-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95 0-3.26-.01-3.67-.07-4.95-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0Zm0 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.67 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07-3.2 0-3.58-.01-4.85-.07-3.26-.15-4.77-1.69-4.92-4.92A69.57 69.57 0 0 1 2.16 12c0-3.2.01-3.58.07-4.85.15-3.23 1.67-4.77 4.92-4.92A69.56 69.56 0 0 1 12 2.16Zm0 3.68a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32Zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm6.4-11.84a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88Z"/></svg>
         </a>
         {!adminMode && (
           <button
@@ -151,10 +151,10 @@ const isActive = (path: string) => {
 
       <div class="mt-10 flex flex-wrap gap-3">
         <a href={siteData.socialLinks.linkedin} target="_blank" rel="noreferrer noopener" aria-label="LinkedIn" class="social-control">
-          <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M20.45 20.45H16.9v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12Zm1.78 13.02H3.56V9h3.56v11.45ZM22.22 0H1.77A1.75 1.75 0 0 0 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45A1.76 1.76 0 0 0 24 22.27V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
+          <span class="social-control__linkedin-mark" aria-hidden="true">in</span>
         </a>
         <a href={siteData.socialLinks.instagram} target="_blank" rel="noreferrer noopener" aria-label="Instagram" class="social-control">
-          <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M12 0C8.74 0 8.33.01 7.05.07 2.69.27.27 2.69.07 7.05.01 8.33 0 8.74 0 12c0 3.26.01 3.67.07 4.95.2 4.36 2.62 6.78 6.98 6.98 1.28.06 1.69.07 4.95.07 3.26 0 3.67-.01 4.95-.07 4.36-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95 0-3.26-.01-3.67-.07-4.95-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0Zm0 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.67 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07-3.2 0-3.58-.01-4.85-.07-3.26-.15-4.77-1.69-4.92-4.92A69.57 69.57 0 0 1 2.16 12c0-3.2.01-3.58.07-4.85.15-3.23 1.67-4.77 4.92-4.92A69.56 69.56 0 0 1 12 2.16Zm0 3.68a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32Zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm6.4-11.84a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88Z"/></svg>
+          <svg viewBox="0 0 24 24" class="h-3.5 w-3.5 fill-current" aria-hidden="true"><path d="M12 0C8.74 0 8.33.01 7.05.07 2.69.27.27 2.69.07 7.05.01 8.33 0 8.74 0 12c0 3.26.01 3.67.07 4.95.2 4.36 2.62 6.78 6.98 6.98 1.28.06 1.69.07 4.95.07 3.26 0 3.67-.01 4.95-.07 4.36-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95 0-3.26-.01-3.67-.07-4.95-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0Zm0 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.67 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07-3.2 0-3.58-.01-4.85-.07-3.26-.15-4.77-1.69-4.92-4.92A69.57 69.57 0 0 1 2.16 12c0-3.2.01-3.58.07-4.85.15-3.23 1.67-4.77 4.92-4.92A69.56 69.56 0 0 1 12 2.16Zm0 3.68a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32Zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm6.4-11.84a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88Z"/></svg>
         </a>
       </div>
 
@@ -194,12 +194,12 @@ const isActive = (path: string) => {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.45rem;
+    gap: 0.35rem;
     overflow: hidden;
     padding: 0.15rem 0;
-    font-size: 0.74rem;
+    font-size: 0.64rem;
     font-weight: 600;
-    letter-spacing: 0.24em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
   }
 
@@ -249,8 +249,8 @@ const isActive = (path: string) => {
 
   .social-control {
     display: inline-flex;
-    height: 2.6rem;
-    width: 2.6rem;
+    height: 2.2rem;
+    width: 2.2rem;
     align-items: center;
     justify-content: center;
     border-radius: 999px;
@@ -261,11 +261,22 @@ const isActive = (path: string) => {
     transition: transform 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   }
 
+  .social-control__linkedin-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    text-transform: lowercase;
+    transform: translateY(-0.02em);
+  }
+
   .social-control:hover,
   .social-control:focus-visible {
     transform: translateY(-3px);
     color: var(--color-amaranth);
-    color: var(--color-ink);
     border-color: var(--color-ink);
     box-shadow: 0 4px 0 #E83256;
   }

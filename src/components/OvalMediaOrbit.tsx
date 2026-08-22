@@ -7,7 +7,6 @@ import {
   DESKTOP_ORBIT_GEOMETRY,
   getLocalizedOrbitText,
   getOrbitActivatedVideoPlaybackMode,
-  getOrbitDriftPlaybackMode,
   getOrbitDriftTweenOptions,
   getOrbitInteractionState,
   getOrbitItemLayout,
@@ -15,6 +14,7 @@ import {
   resolveOrbitHref,
   shouldPauseOrbitDriftOnIntroComplete,
   shouldStartOrbitDrift,
+  syncOrbitDriftPlayback,
 } from '../lib/orbitMedia';
 
 interface Props {
@@ -177,13 +177,7 @@ export default function OvalMediaOrbit({
   useEffect(() => {
     activeIdRef.current = activeId;
     applyOrbitLayout();
-
-    const driftPlaybackMode = getOrbitDriftPlaybackMode(activeId);
-    if (driftPlaybackMode === 'pause') {
-      driftTweenRef.current?.pause();
-    } else {
-      driftTweenRef.current?.play();
-    }
+    syncOrbitDriftPlayback(driftTweenRef.current, activeId);
   }, [activeId, items]);
 
   useEffect(() => {
@@ -291,6 +285,7 @@ export default function OvalMediaOrbit({
 
   const setActiveTile = (itemId: string | null) => {
     activeIdRef.current = itemId;
+    syncOrbitDriftPlayback(driftTweenRef.current, itemId);
     setActiveId(itemId);
   };
 
@@ -305,6 +300,11 @@ export default function OvalMediaOrbit({
         className="relative mx-auto w-full max-w-[46rem]"
         role="region"
         aria-label={ariaLabel}
+        onPointerLeave={(event) => {
+          if (event.pointerType === 'touch') return;
+          if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+          clearActiveTile();
+        }}
       >
         <div className="relative aspect-[720/440] min-h-[22rem] overflow-hidden md:min-h-[27.5rem]">
           <div

@@ -22,7 +22,7 @@ const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-p
   <GsapPageRuntime />
   <div class="overflow-x-hidden bg-paper">
       <!-- home-hero:start -->
-      <section data-home-hero class="home-hero bg-paper px-6 pt-28 pb-16 md:pt-32 md:pb-20">
+      <section data-home-hero class="home-hero bg-paper px-6 pt-20 pb-16 md:pt-24 md:pb-20">
         <div class="site-container home-hero__stage">
           <div class="home-hero__copy">
             <StaggerContainer client:visible className="space-y-6 md:space-y-8" staggerDelay={0.1}>
@@ -60,7 +60,7 @@ const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-p
                     <a href={getLocalizedPath('/ugc', lang)} class="home-hero__cta home-hero__cta--primary">
                       <span class="home-hero__cta-label">{i.hero.ugcLabel}</span>
                     </a>
-                    <a href={getLocalizedPath('/translation-seo', lang)} class="home-hero__cta home-hero__cta--secondary">
+                    <a href={getLocalizedPath('/translation-seo', lang)} class="home-hero__cta home-hero__cta--primary">
                       <span class="home-hero__cta-label">{i.hero.seoLabel}</span>
                     </a>
                   </div>
@@ -97,7 +97,7 @@ const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-p
             </p>
           </ScrollReveal>
 
-          <div class="order-4 lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:order-none">
+          <div class="order-4 lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:order-none lg:translate-x-6">
             <OvalMediaOrbit client:visible items={siteData.orbitMedia} lang={lang} />
           </div>
         </div>

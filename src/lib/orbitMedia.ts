@@ -150,6 +150,21 @@ export function getOrbitDriftPlaybackMode(activeId: string | null) {
   return activeId === null ? 'play' : 'pause';
 }
 
+export function syncOrbitDriftPlayback(
+  tween: { pause: () => unknown; play: () => unknown } | null | undefined,
+  activeId: string | null,
+) {
+  const playbackMode = getOrbitDriftPlaybackMode(activeId);
+  if (!tween) return playbackMode;
+  if (playbackMode === 'pause') {
+    tween.pause();
+    return playbackMode;
+  }
+
+  tween.play();
+  return playbackMode;
+}
+
 export function shouldPauseOrbitDriftOnIntroComplete(activeId: string | null) {
   return getOrbitDriftPlaybackMode(activeId) === 'pause';
 }
