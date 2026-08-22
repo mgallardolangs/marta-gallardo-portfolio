@@ -203,6 +203,27 @@ test('orbit activation helper distinguishes pointer hover audio from keyboard fo
   );
 });
 
+test('orbit drift playback helper pauses on pointer hover activation and resumes on pointer leave', async () => {
+  const orbit = await loadOrbitModule();
+
+  assert.equal(
+    typeof orbit.getOrbitDriftPlaybackMode,
+    'function',
+    'orbit media helpers should expose a small drift playback helper so hover pause/resume stays independent from component ref names',
+  );
+
+  assert.equal(
+    orbit.getOrbitDriftPlaybackMode({ isPointerHoverActive: true }),
+    'pause',
+    'pointer hover activation should pause the GSAP drift tween',
+  );
+  assert.equal(
+    orbit.getOrbitDriftPlaybackMode({ isPointerHoverActive: false }),
+    'play',
+    'pointer leave should resume the GSAP drift tween',
+  );
+});
+
 test('orbit media helpers validate caps, video poster requirements, and stable IDs', async () => {
   const orbit = await loadOrbitModule();
   const existingIds = ['hero-editorial', 'hero-editorial-2'];
