@@ -275,12 +275,19 @@ test('homepage and admin keep the approved orbit wiring while StoryMap files dis
   assert.match(orbitSource, /from ['"]gsap['"]/);
   assert.doesNotMatch(orbitSource, /embla-carousel-react/);
   assert.doesNotMatch(orbitSource, /embla-carousel-auto-scroll|AutoScroll/);
+  assert.doesNotMatch(orbitSource, /\b(?:useEmblaCarousel|emblaApi|emblaRef)\b/);
+  assert.doesNotMatch(orbitSource, /\bdragFree\b|\bdraggable\s*=/);
   assert.doesNotMatch(orbitSource, /\bscrollPrev\b|\bscrollNext\b/);
   assert.doesNotMatch(orbitSource, /onWheel\s*=/);
-  assert.doesNotMatch(orbitSource, /ui\.previous|ui\.next|aria-roledescription="carousel"/);
-  assert.match(orbitSource, /repeat:\s*-1/);
-  assert.match(orbitSource, /ease:\s*['"]none['"]/);
-  assert.match(orbitSource, /duration:\s*ORBIT_REVOLUTION_SECONDS/);
+  assert.doesNotMatch(orbitSource, /onKeyDown\s*=/);
+  assert.doesNotMatch(orbitSource, /ArrowLeft|ArrowRight/);
+  assert.doesNotMatch(orbitSource, /ui\.previous|ui\.next|aria-roledescription="carousel"|aria-label=\{ui\.(?:previous|next)\}/);
+  assert.doesNotMatch(orbitSource, /\bprevious\s*:\s*['"]|\bnext\s*:\s*['"]/);
+  assert.match(
+    orbitSource,
+    /gsap\.to\(\s*[A-Za-z_$][\w$]*progress[\w$]*Ref\.current\s*,\s*\{[\s\S]*?repeat:\s*-1[\s\S]*?ease:\s*['"]none['"][\s\S]*?duration:\s*ORBIT_REVOLUTION_SECONDS[\s\S]*?onUpdate:\s*applyOrbitLayout[\s\S]*?\}\s*\)/i,
+    'orbit motion should run from a GSAP progress ref loop with an infinite linear revolution that reapplies layout on update',
+  );
   assert.match(orbitSource, /prefers-reduced-motion: reduce/);
   assert.match(orbitSource, /getOrbitVideoPlaybackMode/);
   assert.match(orbitSource, /getOrbitActivatedVideoPlaybackMode/);
@@ -303,6 +310,7 @@ test('homepage and admin keep the approved orbit wiring while StoryMap files dis
     'focus activation should stay muted before pointer-hover audio is attempted',
   );
   assert.match(orbitSource, /onPointerEnter=\{\(event\) => \{\s*if \(event\.pointerType === 'touch'\) return;\s*activateTile\(item, 'pointer-hover'\);/s);
+  assert.match(orbitSource, /onPointerLeave=\{\(\) => deactivateTile\(item\)\}/);
   assert.match(orbitSource, /onFocusCapture=\{\(event\) => \{/);
   assert.match(orbitSource, /activateTile\(item, 'focus'\);/);
   assert.match(orbitHelperSource, /grayscale\(1\) brightness\(0\.42\)/);

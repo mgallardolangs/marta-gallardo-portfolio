@@ -17,6 +17,12 @@ const affectedSourcePaths = [
   'src/components/admin/AdminOrbitPreview.tsx',
 ];
 const legacyVisualTokenPattern = /\b(?:amaranth-soft|amaranth-mist|amaranth-ink|blush-[a-z0-9/-]+|rose-gold)\b|#fff(?:fff)?\b/i;
+const approvedOpaqueHexColors = new Set(['#f4f5f1', '#060403', '#e83256']);
+const hexLiteralPattern = /#(?:[\da-f]{3}|[\da-f]{4}|[\da-f]{6}|[\da-f]{8})\b/gi;
+
+function extractHexLiterals(source) {
+  return [...source.matchAll(hexLiteralPattern)].map((match) => match[0]);
+}
 
 async function readSource(relativePath) {
   return readFile(path.join(rootDir, relativePath), 'utf8');
@@ -26,20 +32,34 @@ async function readJson(relativePath) {
   return JSON.parse(await readSource(relativePath));
 }
 
-function getEnclosingSection(source, marker) {
-  const markerIndex = source.indexOf(marker);
-  assert.notEqual(markerIndex, -1, `Expected source marker: ${marker}`);
+function getMarkedHomeOrbitSection(source) {
+  const sectionMatch = source.match(/<section\b[^>]*(?:data-home-orbit\b|class=(['"])[^'"]*\bhome-orbit\b[^'"]*\1)[^>]*>/i);
+  assert.ok(sectionMatch, 'Expected the Home orbit section to advertise a stable data-home-orbit or home-orbit marker');
 
-  const start = source.lastIndexOf('<section', markerIndex);
-  assert.notEqual(start, -1, `Expected enclosing <section> before: ${marker}`);
+  const start = sectionMatch.index ?? -1;
+  assert.notEqual(start, -1, 'Expected the marked Home orbit section opening tag');
 
-  const end = source.indexOf('</section>', markerIndex);
-  assert.notEqual(end, -1, `Expected closing </section> after: ${marker}`);
+  const end = source.indexOf('</section>', start);
+  assert.notEqual(end, -1, 'Expected the marked Home orbit section to close');
 
-  return source.slice(start, end + '</section>'.length);
+  return {
+    openingTag: sectionMatch[0],
+    section: source.slice(start, end + '</section>'.length),
+  };
 }
 
-test('approved home correction removes legacy visual tokens from the affected sources only', async () => {
+function getSvgTextNodes(source) {
+  return [...source.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/gi)].map((match) => ({
+    attributes: match[1] ?? '',
+    textContent: match[2]?.trim() ?? '',
+  }));
+}
+
+function getSvgPaintValues(source) {
+  return [...source.matchAll(/\b(?:fill|stroke)=["']([^"']+)["']/gi)].map((match) => match[1].trim());
+}
+
+test('approved home correction removes legacy visual tokens and unapproved hex colors from the affected sources only', async () => {
   const sources = await Promise.all(
     affectedSourcePaths.map(async (relativePath) => [relativePath, await readSource(relativePath)]),
   );
@@ -49,6 +69,15 @@ test('approved home correction removes legacy visual tokens from the affected so
       source,
       legacyVisualTokenPattern,
       `${relativePath} should drop legacy blush/amaranth/rose-gold tokens and opaque #fff literals`,
+    );
+
+    const disallowedHexLiterals = [...new Set(
+      extractHexLiterals(source).filter((hexLiteral) => !approvedOpaqueHexColors.has(hexLiteral.toLowerCase())),
+    )];
+    assert.deepEqual(
+      disallowedHexLiterals,
+      [],
+      `${relativePath} should only keep approved opaque hex colors (#F4F5F1, #060403, #E83256); transparent variants must use rgb()/rgba()/color-mix() instead`,
     );
   }
 });
@@ -103,29 +132,50 @@ test('TypedTitle keeps the underscore cursor and global injected cursor styling 
   );
 });
 
-test('Home keeps the approved full-width ink orbit feature instead of the old about side-by-side layout', async () => {
+test('Home keeps the approved full-width ink orbit wrapper contract instead of the old about side-by-side layout', async () => {
   const homeSource = await readSource('src/views/HomePage.astro');
-  const orbitSection = getEnclosingSection(homeSource, '<OvalMediaOrbit client:visible');
+  const orbitSection = getMarkedHomeOrbitSection(homeSource);
 
   assert.match(homeSource, /i\.home\.orbit\.kicker/);
   assert.match(homeSource, /i\.home\.orbit\.title/);
   assert.match(homeSource, /i\.home\.orbit\.description/);
   assert.match(homeSource, /i\.home\.orbit\.index/);
-  assert.match(orbitSection, /bg-ink/, 'the Home orbit section should sit on the ink background');
+  assert.match(orbitSection.openingTag, /\bbg-ink\b/, 'the Home orbit section should sit on the ink background');
   assert.doesNotMatch(
-    orbitSection,
+    orbitSection.section,
+    /\bbg-(?:white|paper)\b/,
+    'the Home orbit section should not keep white or paper backgrounds in its wrapper contract',
+  );
+  assert.doesNotMatch(
+    orbitSection.section,
+    /\b(?:rounded(?:-[^\s"'`>]+)?|border(?:-[^\s"'`>]+)?|shadow(?:-[^\s"'`>]+)?|card)\b/i,
+    'the Home orbit section should not keep rounded, border, shadow, or card wrapper chrome',
+  );
+  assert.doesNotMatch(
+    orbitSection.section,
     /lg:grid-cols-\[1\.1fr_0\.9fr\]/,
     'the Home orbit section should no longer keep the adjacent two-column about layout',
   );
 });
 
-test('favicon stays transparent and renders only a black MG mark', async () => {
+test('favicon stays transparent and renders only a single ink MG text mark', async () => {
   const faviconSource = await readSource('public/favicon.svg');
+  const textNodes = getSvgTextNodes(faviconSource);
+  const visibleTextNodes = textNodes.filter(({ attributes }) => !/\b(?:display|visibility)=["'](?:none|hidden)["']|opacity=["']0(?:\.0+)?["']/i.test(attributes));
+  const paintValues = getSvgPaintValues(faviconSource)
+    .filter((value) => !/^(?:none|transparent)$/i.test(value))
+    .map((value) => value.toLowerCase());
 
-  assert.doesNotMatch(faviconSource, /<rect\b/i, 'favicon should not include a filled background rect');
-  assert.doesNotMatch(faviconSource, /#(?:B76E79|E83256|FFFAF8)/i, 'favicon should not keep the legacy pink or pale fills');
-  assert.match(faviconSource, /MG/);
-  assert.match(faviconSource, /#(?:000|000000)\b/i, 'favicon should render the MG mark in black');
+  assert.doesNotMatch(faviconSource, /<(?:rect|circle|ellipse|path|polygon|polyline|line)\b/i, 'favicon should not include background, border, or decorative SVG shapes');
+  assert.doesNotMatch(faviconSource, /\bstyle=["'][^"']*background/i, 'favicon should not carry any styled background');
+  assert.equal(visibleTextNodes.length, 1, 'favicon should expose exactly one visible text node');
+  assert.equal(visibleTextNodes[0]?.textContent, 'MG', 'favicon should render only the MG monogram');
+  assert.match(visibleTextNodes[0]?.attributes ?? '', /\bfill=["']#060403["']/i, 'favicon should render the MG mark in ink (#060403)');
+  assert.deepEqual(
+    [...new Set(paintValues)],
+    ['#060403'],
+    'favicon should not introduce any fill or stroke colors beyond the ink MG mark',
+  );
 });
 
 test('site orbit dataset is the approved local mock placeholder set', async () => {
