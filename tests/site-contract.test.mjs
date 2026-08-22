@@ -68,6 +68,19 @@ function deepGet(source, path) {
   return path.split('.').reduce((current, segment) => current?.[segment], source);
 }
 
+function assertMaxSentenceCount(value, maxSentences, label) {
+  const sentenceCount = value
+    .split(/[.!?]+/)
+    .map((sentence) => sentence.trim())
+    .filter(Boolean)
+    .length;
+
+  assert.ok(
+    sentenceCount <= maxSentences,
+    `${label} should contain no more than ${maxSentences} sentences`,
+  );
+}
+
 test('locale files preserve the same structural shape', async () => {
   const loadedLocales = await Promise.all(
     locales.map(async (locale) => [locale, await readJson(`src/i18n/${locale}.json`)]),
@@ -128,6 +141,89 @@ test('site data preserves the Phase 1 contract', async () => {
   assertStableIds(site.arsenal.skills, 'arsenal.skills');
   site.arsenal.skills.forEach((skill, index) => {
     assertLocalizedText(skill.label, `arsenal.skills[${index}].label`);
+  });
+});
+
+test('site data locks the approved UGC editorial contact sheet dataset', async () => {
+  const site = await readJson('src/data/site.json');
+  const expectedIds = ['travel', 'languages', 'art'].flatMap((category) => (
+    [1, 2, 3, 4].map((slot) => `ugc-${category}-${String(slot).padStart(2, '0')}`)
+  ));
+
+  assert.ok(Array.isArray(site.ugcPortfolio), 'ugcPortfolio should be an array');
+  assert.equal(site.ugcPortfolio.length, 12, 'ugcPortfolio should contain exactly 12 fixed slots');
+  assert.deepEqual(
+    [...site.ugcPortfolio.map((item) => item.id)].sort(),
+    [...expectedIds].sort(),
+    'ugcPortfolio should keep the approved stable slot IDs',
+  );
+
+  assert.deepEqual(
+    Object.fromEntries(['travel', 'languages', 'art'].map((category) => [
+      category,
+      site.ugcPortfolio.filter((item) => item.category === category).length,
+    ])),
+    { travel: 4, languages: 4, art: 4 },
+    'ugcPortfolio should keep exactly four items per approved category',
+  );
+
+  for (const category of ['travel', 'languages', 'art']) {
+    const categoryItems = site.ugcPortfolio.filter((item) => item.category === category);
+    const typeCounts = Object.fromEntries(['image', 'video'].map((type) => [
+      type,
+      categoryItems.filter((item) => item.type === type).length,
+    ]));
+
+    assert.deepEqual(
+      typeCounts,
+      { image: 2, video: 2 },
+      `${category} should keep two images and two videos`,
+    );
+  }
+
+  site.ugcPortfolio.forEach((item, index) => {
+    assert.match(item.id, /^ugc-(travel|languages|art)-0[1-4]$/, `ugcPortfolio[${index}].id should use the approved stable slot format`);
+    assert.match(item.category, /^(travel|languages|art)$/, `ugcPortfolio[${index}].category should stay in the approved set`);
+    assert.match(item.type, /^(image|video)$/, `ugcPortfolio[${index}].type should be image or video`);
+    assert.match(
+      item.src,
+      /^\/images\/ugc\/mock-\d{2}\.(?:webp|mp4)$/,
+      `ugcPortfolio[${index}].src should use the approved local mock path`,
+    );
+    assertLocalizedText(item.label, `ugcPortfolio[${index}].label`);
+    assertLocalizedText(item.title, `ugcPortfolio[${index}].title`);
+    assertLocalizedText(item.description, `ugcPortfolio[${index}].description`);
+    assertLocalizedText(item.format, `ugcPortfolio[${index}].format`);
+    assertLocalizedText(item.alt, `ugcPortfolio[${index}].alt`);
+
+    for (const locale of locales) {
+      assertMaxSentenceCount(
+        item.description[locale],
+        2,
+        `ugcPortfolio[${index}].description.${locale}`,
+      );
+    }
+
+    if (item.type === 'video') {
+      assert.match(
+        item.src,
+        /^\/images\/ugc\/mock-\d{2}\.(?:mp4|webm|mov)$/,
+        `ugcPortfolio[${index}] videos should point at a local video mock asset`,
+      );
+      assert.equal(typeof item.poster, 'string', `ugcPortfolio[${index}].poster should exist for videos`);
+      assert.match(
+        item.poster,
+        /^\/images\/ugc\/mock-\d{2}\.webp$/,
+        `ugcPortfolio[${index}].poster should use the approved local poster path`,
+      );
+    } else {
+      assert.equal(item.poster, null, `ugcPortfolio[${index}].poster should stay null for images`);
+      assert.match(
+        item.src,
+        /^\/images\/ugc\/mock-\d{2}\.webp$/,
+        `ugcPortfolio[${index}] images should point at a local image mock asset`,
+      );
+    }
   });
 });
 

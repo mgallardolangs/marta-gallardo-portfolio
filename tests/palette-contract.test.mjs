@@ -215,3 +215,35 @@ test('palette audit rejects any non-approved rgb triplet across built assets whe
     );
   }));
 });
+
+test('UGC public and admin contact-sheet sources stay inside the strict paper ink amaranth token family', async () => {
+  const requiredUgcSources = [
+    'src/views/UgcPage.astro',
+    'src/pages/admin/ugc.astro',
+    'src/components/UgcContactSheet.tsx',
+    'src/components/admin/EditableUgcPortfolio.tsx',
+  ];
+
+  const ugcSources = await Promise.all(requiredUgcSources.map(async (relativePath) => {
+    const absolutePath = path.join(rootDir, relativePath);
+
+    try {
+      return [relativePath, await readFile(absolutePath, 'utf8')];
+    } catch (error) {
+      assert.fail(`${relativePath} should exist for the approved strict-palette UGC contact sheet: ${error.message}`);
+    }
+  }));
+
+  for (const [relativePath, source] of ugcSources) {
+    assert.doesNotMatch(
+      source,
+      /\bbg-white(?:\/\d+)?\b|\bborder-black\/(?:10|12)\b|\btext-accent-ink\b/,
+      `${relativePath} should not keep white fills, black utility borders, or legacy accent text tokens`,
+    );
+  }
+
+  const combinedSource = ugcSources.map(([, source]) => source).join('\n');
+  assert.match(combinedSource, /\bbg-paper\b/, 'UGC contact-sheet sources should use paper surfaces');
+  assert.match(combinedSource, /\btext-ink\b/, 'UGC contact-sheet sources should use ink text');
+  assert.match(combinedSource, /\btext-amaranth\b/, 'UGC contact-sheet sources should use amaranth accents');
+});
