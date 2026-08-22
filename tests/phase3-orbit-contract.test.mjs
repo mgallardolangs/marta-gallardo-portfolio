@@ -63,7 +63,7 @@ test('orbit geometry maps the approved ellipse checkpoints', async () => {
   const orbit = await loadOrbitModule();
   const geometry = orbit.DESKTOP_ORBIT_GEOMETRY;
 
-  assert.equal(orbit.ORBIT_REVOLUTION_SECONDS, 68);
+  assert.equal(orbit.ORBIT_REVOLUTION_SECONDS, 76);
 
   const zero = orbit.getTiltedEllipsePoint(0, geometry);
   const quarter = orbit.getTiltedEllipsePoint(0.25, geometry);
@@ -235,25 +235,26 @@ test('orbit media helpers validate caps, video poster requirements, and stable I
   );
 });
 
-test('site orbit data stays local-only, exactly fifteen items, and reuses no more than two assets', async () => {
+test('site orbit data stays fixed to the approved fifteen local mock placeholders', async () => {
   const site = await readJson('src/data/site.json');
   const orbitMedia = site.orbitMedia;
 
   assert.equal(orbitMedia.length, 15);
 
-  const repeatedCounts = new Map();
-  for (const item of orbitMedia) {
-    assert.match(item.src, /^\/images\/site\//, `orbit item ${item.id} should use a local site asset`);
+  for (const [index, item] of orbitMedia.entries()) {
+    assert.equal(item.type, 'image', `orbit item ${item.id} should stay on the approved image placeholders`);
+    assert.match(item.src, /^\/images\/orbit\/mock-\d{2}\.webp$/, `orbit item ${item.id} should use the approved mock placeholder path`);
     assert.doesNotMatch(item.src, /^https?:\/\//, `orbit item ${item.id} should not use remote assets`);
-    repeatedCounts.set(item.src, (repeatedCounts.get(item.src) ?? 0) + 1);
-  }
-
-  for (const [src, count] of repeatedCounts) {
-    assert.ok(count <= 2, `${src} should not be repeated more than twice in the initial orbit`);
+    assert.equal(item.href, null, `orbit item ${item.id} should keep href null until real destinations are approved`);
+    assert.equal(
+      item.src,
+      `/images/orbit/mock-${String(index + 1).padStart(2, '0')}.webp`,
+      `orbit item ${item.id} should follow the approved mock placeholder order`,
+    );
   }
 });
 
-test('homepage and admin wire the new orbit components while StoryMap files disappear', async () => {
+test('homepage and admin keep the approved orbit wiring while StoryMap files disappear', async () => {
   const [homeSource, adminSource, orbitSource, orbitHelperSource] = await Promise.all([
     readSource('src/views/HomePage.astro'),
     readSource('src/pages/admin/index.astro'),
@@ -271,9 +272,15 @@ test('homepage and admin wire the new orbit components while StoryMap files disa
   assert.match(adminSource, /<AdminOrbitPreview client:load/);
   assert.doesNotMatch(adminSource, /AdminStoryMap/);
 
-  assert.match(orbitSource, /embla-carousel-react/);
-  assert.match(orbitSource, /embla-carousel-auto-scroll/);
   assert.match(orbitSource, /from ['"]gsap['"]/);
+  assert.doesNotMatch(orbitSource, /embla-carousel-react/);
+  assert.doesNotMatch(orbitSource, /embla-carousel-auto-scroll|AutoScroll/);
+  assert.doesNotMatch(orbitSource, /\bscrollPrev\b|\bscrollNext\b/);
+  assert.doesNotMatch(orbitSource, /onWheel\s*=/);
+  assert.doesNotMatch(orbitSource, /ui\.previous|ui\.next|aria-roledescription="carousel"/);
+  assert.match(orbitSource, /repeat:\s*-1/);
+  assert.match(orbitSource, /ease:\s*['"]none['"]/);
+  assert.match(orbitSource, /duration:\s*ORBIT_REVOLUTION_SECONDS/);
   assert.match(orbitSource, /prefers-reduced-motion: reduce/);
   assert.match(orbitSource, /getOrbitVideoPlaybackMode/);
   assert.match(orbitSource, /getOrbitActivatedVideoPlaybackMode/);
@@ -298,6 +305,7 @@ test('homepage and admin wire the new orbit components while StoryMap files disa
   assert.match(orbitSource, /onPointerEnter=\{\(event\) => \{\s*if \(event\.pointerType === 'touch'\) return;\s*activateTile\(item, 'pointer-hover'\);/s);
   assert.match(orbitSource, /onFocusCapture=\{\(event\) => \{/);
   assert.match(orbitSource, /activateTile\(item, 'focus'\);/);
+  assert.match(orbitHelperSource, /grayscale\(1\) brightness\(0\.42\)/);
 
   const toggleVideoSoundSource = sliceSourceSection(
     orbitSource,
@@ -311,11 +319,8 @@ test('homepage and admin wire the new orbit components while StoryMap files disa
     toggleVideoSoundSource.indexOf("=== 'pause'") < toggleVideoSoundSource.indexOf('if (video.muted) {'),
     'sound toggle should bail out before trying to restart playback under reduced motion',
   );
-  assert.match(orbitSource, /ref=\{emblaRef\}[\s\S]*absolute inset-0/, 'drag viewport should cover the visible orbit box');
   assert.match(orbitSource, /scale:\s*interactionState\.scale/);
   assert.match(orbitSource, /tabIndex=\{item\.href \? undefined : 0\}/);
-  assert.match(orbitSource, /aria-roledescription="carousel"/);
-  assert.match(orbitHelperSource, /grayscale\(1\) brightness\(0\.42\)/);
 
   await assert.rejects(access(path.join(rootDir, 'src/components/StoryMap.tsx')));
   await assert.rejects(access(path.join(rootDir, 'src/components/admin/AdminStoryMap.tsx')));
@@ -447,6 +452,7 @@ test('built home route ships orbit motion chunks while contact and blog stay fre
   assert.ok(blogAssets.every((assetPath) => !/OvalMediaOrbit\./.test(assetPath)), 'blog should not reference the orbit client chunk');
 
   const allBuiltFiles = await collectFiles(path.join(distRoot, '_astro'));
-  const orbitAssets = allBuiltFiles.filter((filePath) => /OvalMediaOrbit|embla|gsap/i.test(path.basename(filePath)));
+  const orbitAssets = allBuiltFiles.filter((filePath) => /OvalMediaOrbit|gsap/i.test(path.basename(filePath)));
   assert.ok(orbitAssets.length >= 1, 'build should emit at least one orbit-related client chunk');
+  assert.ok(orbitAssets.every((filePath) => !/embla/i.test(path.basename(filePath))), 'build should not emit embla orbit chunks once the correction lands');
 });
