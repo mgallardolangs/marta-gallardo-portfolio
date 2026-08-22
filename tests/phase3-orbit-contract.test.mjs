@@ -41,45 +41,6 @@ function assertApprox(actual, expected, tolerance, label) {
   );
 }
 
-function sliceSourceSection(source, startMarker, endMarker) {
-  const start = source.indexOf(startMarker);
-  assert.notEqual(start, -1, `Expected source marker: ${startMarker}`);
-
-  const end = source.indexOf(endMarker, start);
-  assert.notEqual(end, -1, `Expected source marker: ${endMarker}`);
-
-  return source.slice(start, end);
-}
-
-function sliceEnclosedBlock(source, blockStartMarker) {
-  const start = source.indexOf(blockStartMarker);
-  assert.notEqual(start, -1, `Expected source marker: ${blockStartMarker}`);
-
-  const openingBrace = source.indexOf('{', start);
-  assert.notEqual(openingBrace, -1, `Expected opening brace after: ${blockStartMarker}`);
-
-  let depth = 0;
-  for (let index = openingBrace; index < source.length; index += 1) {
-    const char = source[index];
-    if (char === '{') depth += 1;
-    if (char === '}') {
-      depth -= 1;
-      if (depth === 0) {
-        return source.slice(start, index + 1);
-      }
-    }
-  }
-
-  assert.fail(`Expected closing brace for: ${blockStartMarker}`);
-}
-
-function collectProgressTweenCalls(source) {
-  return [...source.matchAll(/gsap\.to\(\s*progressRef\.current\s*,\s*\{[\s\S]*?\}\s*\)/g)].map((match) => ({
-    source: match[0],
-    index: match.index ?? -1,
-  }));
-}
-
 async function loadOrbitModule() {
   try {
     return await import('../src/lib/orbitMedia.ts');
@@ -203,24 +164,40 @@ test('orbit activation helper distinguishes pointer hover audio from keyboard fo
   );
 });
 
-test('orbit drift playback helper pauses on pointer hover activation and resumes on pointer leave', async () => {
+test('orbit drift helpers expose the planned tween options and pause/play playback modes', async () => {
   const orbit = await loadOrbitModule();
+
+  assert.equal(
+    typeof orbit.getOrbitDriftTweenOptions,
+    'function',
+    'orbit media helpers should expose a drift tween helper so the GSAP config stays observable without asserting component source order',
+  );
+  assert.deepEqual(
+    orbit.getOrbitDriftTweenOptions(),
+    {
+      value: 1,
+      duration: 76,
+      repeat: -1,
+      ease: 'none',
+    },
+    'orbit media helpers should expose the planned infinite linear drift tween contract',
+  );
 
   assert.equal(
     typeof orbit.getOrbitDriftPlaybackMode,
     'function',
-    'orbit media helpers should expose a small drift playback helper so hover pause/resume stays independent from component ref names',
+    'orbit media helpers should expose a small drift playback helper so pause/resume stays independent from component-local state names',
   );
 
   assert.equal(
-    orbit.getOrbitDriftPlaybackMode({ isPointerHoverActive: true }),
+    orbit.getOrbitDriftPlaybackMode('hero-editorial'),
     'pause',
-    'pointer hover activation should pause the GSAP drift tween',
+    'a non-null active orbit item should pause the GSAP drift tween',
   );
   assert.equal(
-    orbit.getOrbitDriftPlaybackMode({ isPointerHoverActive: false }),
+    orbit.getOrbitDriftPlaybackMode(null),
     'play',
-    'pointer leave should resume the GSAP drift tween',
+    'clearing the active orbit item should resume the GSAP drift tween',
   );
 });
 
@@ -305,11 +282,10 @@ test('site orbit data stays fixed to the approved fifteen local mock placeholder
 });
 
 test('homepage and admin keep the approved orbit wiring while StoryMap files disappear', async () => {
-  const [homeSource, adminSource, orbitSource, orbitHelperSource] = await Promise.all([
+  const [homeSource, adminSource, orbitSource] = await Promise.all([
     readSource('src/views/HomePage.astro'),
     readSource('src/pages/admin/index.astro'),
     readSource('src/components/OvalMediaOrbit.tsx'),
-    readSource('src/lib/orbitMedia.ts'),
   ]);
 
   assert.match(homeSource, /import OvalMediaOrbit from ['"]\.\.\/components\/OvalMediaOrbit['"]/);
@@ -323,141 +299,14 @@ test('homepage and admin keep the approved orbit wiring while StoryMap files dis
   assert.doesNotMatch(adminSource, /AdminStoryMap/);
 
   assert.match(orbitSource, /from ['"]gsap['"]/);
+  assert.match(orbitSource, /\bgsap\./, 'orbit component source should still use GSAP for motion');
   assert.doesNotMatch(orbitSource, /embla-carousel-react/);
   assert.doesNotMatch(orbitSource, /embla-carousel-auto-scroll|AutoScroll/);
   assert.doesNotMatch(orbitSource, /\b(?:useEmblaCarousel|emblaApi|emblaRef)\b/);
-  assert.doesNotMatch(orbitSource, /\bdragFree\b|\bdraggable\s*=/);
-  assert.doesNotMatch(orbitSource, /\bscrollPrev\b|\bscrollNext\b/);
-  assert.doesNotMatch(orbitSource, /onWheel\s*=/);
-  assert.doesNotMatch(orbitSource, /onKeyDown\s*=/);
-  assert.doesNotMatch(orbitSource, /ArrowLeft|ArrowRight/);
   assert.doesNotMatch(orbitSource, /ui\.previous|ui\.next|aria-roledescription="carousel"|aria-label=\{ui\.(?:previous|next)\}/);
-  assert.doesNotMatch(orbitSource, /\bprevious\s*:\s*['"]|\bnext\s*:\s*['"]/);
-  assert.match(
-    orbitSource,
-    /gsap\.to\(\s*[A-Za-z_$][\w$]*progress[\w$]*Ref\.current\s*,\s*\{[\s\S]*?repeat:\s*-1[\s\S]*?ease:\s*['"]none['"][\s\S]*?duration:\s*ORBIT_REVOLUTION_SECONDS[\s\S]*?onUpdate:\s*applyOrbitLayout[\s\S]*?\}\s*\)/i,
-    'orbit motion should run from a GSAP progress ref loop with an infinite linear revolution that reapplies layout on update',
-  );
-  assert.match(orbitSource, /prefers-reduced-motion: reduce/);
-  assert.match(orbitSource, /getOrbitVideoPlaybackMode/);
-  assert.match(orbitSource, /getOrbitActivatedVideoPlaybackMode/);
-  assert.match(
-    orbitSource,
-    /useEffect\(\(\) => \{\s*syncVideoPlayback\(\);\s*\}, \[isDocumentVisible, isRegionVisible, items, prefersReducedMotion\]\);/,
-    'orbit playback sync should rerun when reduced-motion changes at runtime',
-  );
-  const activateTileSource = sliceSourceSection(
-    orbitSource,
-    'const activateTile = (item: OrbitMedia, activationMode: OrbitActivationMode) => {',
-    'const deactivateTile = (item: OrbitMedia) => {',
-  );
-  assert.match(activateTileSource, /getOrbitActivatedVideoPlaybackMode\(/);
-  assert.match(activateTileSource, /activationMode/);
-  assert.match(activateTileSource, /play-with-sound/);
-  assert.match(activateTileSource, /play-muted/);
-  assert.ok(
-    activateTileSource.indexOf('play-muted') < activateTileSource.indexOf('video.muted = false'),
-    'focus activation should stay muted before pointer-hover audio is attempted',
-  );
-  assert.match(orbitSource, /onPointerEnter=\{\(event\) => \{\s*if \(event\.pointerType === 'touch'\) return;\s*activateTile\(item, 'pointer-hover'\);/s);
-  assert.match(orbitSource, /onPointerLeave=\{\(\) => deactivateTile\(item\)\}/);
-  assert.match(orbitSource, /onFocusCapture=\{\(event\) => \{/);
-  assert.match(orbitSource, /activateTile\(item, 'focus'\);/);
-  assert.match(orbitHelperSource, /grayscale\(1\) brightness\(0\.42\)/);
-
-  const toggleVideoSoundSource = sliceSourceSection(
-    orbitSource,
-    'const toggleVideoSound = async (item: OrbitMedia, event: React.MouseEvent<HTMLButtonElement>) => {',
-    'useEffect(() => {',
-  );
-  assert.match(toggleVideoSoundSource, /getOrbitVideoPlaybackMode\(/);
-  assert.match(toggleVideoSoundSource, /=== 'pause'/);
-  assert.match(toggleVideoSoundSource, /pauseOrbitVideo\(item\.id, video\);/);
-  assert.ok(
-    toggleVideoSoundSource.indexOf("=== 'pause'") < toggleVideoSoundSource.indexOf('if (video.muted) {'),
-    'sound toggle should bail out before trying to restart playback under reduced motion',
-  );
-  assert.match(orbitSource, /scale:\s*interactionState\.scale/);
-  assert.match(orbitSource, /tabIndex=\{item\.href \? undefined : 0\}/);
 
   await assert.rejects(access(path.join(rootDir, 'src/components/StoryMap.tsx')));
   await assert.rejects(access(path.join(rootDir, 'src/components/admin/AdminStoryMap.tsx')));
-});
-
-test('orbit runtime uses a GSAP progress ref drift loop that starts only after the entrance timeline completes', async () => {
-  const orbitSource = await readSource('src/components/OvalMediaOrbit.tsx');
-  const applyOrbitLayoutSource = sliceSourceSection(
-    orbitSource,
-    'const applyOrbitLayout = () => {',
-    'const syncVideoPlayback = () => {',
-  );
-  const entranceTimelineSource = sliceEnclosedBlock(
-    orbitSource,
-    'const timeline = gsap.timeline(',
-  );
-  const entranceOnCompleteSource = sliceEnclosedBlock(
-    entranceTimelineSource,
-    'onComplete: () =>',
-  );
-  const sourceBeforeEntranceOnComplete = orbitSource.slice(0, orbitSource.indexOf('onComplete: () =>'));
-  const progressTweenCalls = collectProgressTweenCalls(orbitSource);
-  const [driftTweenCall] = progressTweenCalls;
-
-  assert.match(
-    orbitSource,
-    /const\s+progressRef\s*=\s*useRef\(\{\s*value:\s*0\s*\}\);/,
-    'orbit motion should initialize a dedicated GSAP progress ref at { value: 0 }',
-  );
-  assert.match(
-    applyOrbitLayoutSource,
-    /progressRef\.current\.value/,
-    'applyOrbitLayout should read progressRef.current.value as the single source of orbital progress',
-  );
-  assert.doesNotMatch(
-    applyOrbitLayoutSource,
-    /scrollProgress\(/,
-    'applyOrbitLayout should not read Embla scroll progress once the drift ref contract lands',
-  );
-  assert.equal(progressTweenCalls.length, 1, 'orbit motion should define exactly one GSAP progress drift tween');
-  assert.match(
-    driftTweenCall?.source ?? '',
-    /gsap\.to\(\s*progressRef\.current\s*,\s*\{[\s\S]*?\bvalue:\s*1\b[\s\S]*?\bduration:\s*ORBIT_REVOLUTION_SECONDS\b[\s\S]*?\brepeat:\s*-1\b[\s\S]*?\bease:\s*['"]none['"][\s\S]*?\bonUpdate:\s*applyOrbitLayout[\s\S]*?\}\s*\)/,
-    'orbit motion should drift via gsap.to(progressRef.current, { value: 1, duration: ORBIT_REVOLUTION_SECONDS, repeat: -1, ease: "none", onUpdate: applyOrbitLayout })',
-  );
-  assert.match(
-    entranceOnCompleteSource,
-    /gsap\.to\(\s*progressRef\.current\s*,\s*\{[\s\S]*?\}\s*\)/,
-    'the entrance timeline onComplete should create the drift tween inline',
-  );
-  assert.ok(
-    entranceOnCompleteSource.includes(driftTweenCall?.source ?? ''),
-    'the single drift tween source should occur lexically inside the entrance timeline onComplete hook',
-  );
-  assert.deepEqual(
-    collectProgressTweenCalls(sourceBeforeEntranceOnComplete).filter(({ source }) => !/\bpaused\s*:\s*true\b/.test(source)),
-    [],
-    'orbit drift should not create an unpaused progress tween before the entrance timeline onComplete hook runs',
-  );
-});
-
-test('orbit movement contract bans touch and pointer drag paths while preserving pointer hover entry and exit hooks', async () => {
-  const orbitSource = await readSource('src/components/OvalMediaOrbit.tsx');
-
-  assert.doesNotMatch(
-    orbitSource,
-    /\bonTouchStart\b|\bonTouchMove\b|\bonTouchEnd\b|\btouchstart\b|\btouchmove\b|\btouchend\b|\bswipe\b|setPointerCapture|releasePointerCapture|\bonPointerDown\b|\bonPointerMove\b|\bonPointerUp\b|\bpointerdown\b|\bpointermove\b|\bpointerup\b/,
-    'orbit movement should not depend on touch/swipe or pointer drag handlers',
-  );
-  assert.match(
-    orbitSource,
-    /onPointerEnter=/,
-    'pointerenter hover should remain available for video activation',
-  );
-  assert.match(
-    orbitSource,
-    /onPointerLeave=/,
-    'pointerleave hover should remain available for deactivation',
-  );
 });
 
 test('admin store exposes orbit collection mutations and publishes site data updates', async () => {

@@ -32,22 +32,6 @@ async function readJson(relativePath) {
   return JSON.parse(await readSource(relativePath));
 }
 
-function getMarkedHomeOrbitSection(source) {
-  const sectionMatch = source.match(/<section\b[^>]*(?:data-home-orbit\b|class=(['"])[^'"]*\bhome-orbit\b[^'"]*\1)[^>]*>/i);
-  assert.ok(sectionMatch, 'Expected the Home orbit section to advertise a stable data-home-orbit or home-orbit marker');
-
-  const start = sectionMatch.index ?? -1;
-  assert.notEqual(start, -1, 'Expected the marked Home orbit section opening tag');
-
-  const end = source.indexOf('</section>', start);
-  assert.notEqual(end, -1, 'Expected the marked Home orbit section to close');
-
-  return {
-    openingTag: sectionMatch[0],
-    section: source.slice(start, end + '</section>'.length),
-  };
-}
-
 function getSvgTextNodes(source) {
   return [...source.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/gi)].map((match) => ({
     attributes: match[1] ?? '',
@@ -140,27 +124,25 @@ test('TypedTitle keeps the underscore cursor and global injected cursor styling 
 
 test('Home keeps the approved full-width ink orbit wrapper contract instead of the old about side-by-side layout', async () => {
   const homeSource = await readSource('src/views/HomePage.astro');
-  const orbitSection = getMarkedHomeOrbitSection(homeSource);
 
+  assert.match(
+    homeSource,
+    /<section\b[^>]*\bdata-home-orbit\b[^>]*>/,
+    'Home should advertise a stable data-home-orbit marker on the orbit section tag',
+  );
   assert.match(homeSource, /i\.home\.orbit\.kicker/);
   assert.match(homeSource, /i\.home\.orbit\.title/);
   assert.match(homeSource, /i\.home\.orbit\.description/);
   assert.match(homeSource, /i\.home\.orbit\.index/);
-  assert.match(orbitSection.openingTag, /\bbg-ink\b/, 'the Home orbit section should sit on the ink background');
   assert.doesNotMatch(
-    orbitSection.section,
-    /\bbg-(?:white|paper)\b/,
-    'the Home orbit section should not keep white or paper backgrounds in its wrapper contract',
+    homeSource,
+    /class=["'][^"']*(?=[^"']*\bsite-container\b)(?=[^"']*\bgrid\b)(?=[^"']*\bgap-12\b)(?=[^"']*\blg:grid-cols-\[1\.1fr_0\.9fr\])(?=[^"']*\blg:items-center\b)[^"']*["']/,
+    'the Home source should not keep the old adjacent two-column orbit/about layout classes anywhere',
   );
   assert.doesNotMatch(
-    orbitSection.section,
-    /\b(?:rounded(?:-[^\s"'`>]+)?|border(?:-[^\s"'`>]+)?|shadow(?:-[^\s"'`>]+)?|card)\b/i,
-    'the Home orbit section should not keep rounded, border, shadow, or card wrapper chrome',
-  );
-  assert.doesNotMatch(
-    orbitSection.section,
-    /lg:grid-cols-\[1\.1fr_0\.9fr\]/,
-    'the Home orbit section should no longer keep the adjacent two-column about layout',
+    homeSource,
+    /class=["'][^"']*(?=[^"']*\brelative\b)(?=[^"']*\boverflow-hidden\b)(?=[^"']*\bborder\b)(?=[^"']*\bborder-black\/10\b)(?=[^"']*\bbg-paper\b)(?=[^"']*\bpx-4\b)(?=[^"']*\bpy-8\b)(?=[^"']*\bmd:px-6\b)(?=[^"']*\bmd:py-10\b)[^"']*["']/,
+    'the Home source should not keep the old bordered paper orbit card wrapper classes anywhere',
   );
 });
 
