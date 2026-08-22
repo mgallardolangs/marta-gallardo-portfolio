@@ -127,8 +127,8 @@ test('Home keeps the approved full-width ink orbit wrapper contract instead of t
 
   assert.match(
     homeSource,
-    /<section\b[^>]*\bdata-home-orbit\b[^>]*>/,
-    'Home should advertise a stable data-home-orbit marker on the orbit section tag',
+    /<section\b(?=[^>]*\bdata-home-orbit\b)(?=[^>]*\bclass=["'][^"']*\bhome-orbit\b[^"']*\bbg-ink\b[^"']*\btext-paper\b[^"']*["'])[^>]*>/,
+    'Home should expose a data-home-orbit opening tag whose class contract includes home-orbit, bg-ink, and text-paper',
   );
   assert.match(homeSource, /i\.home\.orbit\.kicker/);
   assert.match(homeSource, /i\.home\.orbit\.title/);
@@ -142,7 +142,7 @@ test('Home keeps the approved full-width ink orbit wrapper contract instead of t
   assert.doesNotMatch(
     homeSource,
     /class=["'][^"']*(?=[^"']*\brelative\b)(?=[^"']*\boverflow-hidden\b)(?=[^"']*\bborder\b)(?=[^"']*\bborder-black\/10\b)(?=[^"']*\bbg-paper\b)(?=[^"']*\bpx-4\b)(?=[^"']*\bpy-8\b)(?=[^"']*\bmd:px-6\b)(?=[^"']*\bmd:py-10\b)[^"']*["']/,
-    'the Home source should not keep the old bordered paper orbit card wrapper classes anywhere',
+    'the Home source should not keep the old bordered paper-card orbit wrapper tokens anywhere',
   );
 });
 

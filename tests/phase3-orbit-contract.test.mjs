@@ -34,6 +34,10 @@ async function collectFiles(dir) {
   return files;
 }
 
+function countMatches(source, pattern) {
+  return [...source.matchAll(pattern)].length;
+}
+
 function assertApprox(actual, expected, tolerance, label) {
   assert.ok(
     Math.abs(actual - expected) <= tolerance,
@@ -164,8 +168,24 @@ test('orbit activation helper distinguishes pointer hover audio from keyboard fo
   );
 });
 
-test('orbit drift helpers expose the planned tween options and pause/play playback modes', async () => {
+test('orbit drift helpers expose the planned entrance gate, tween options, and pause/play playback modes', async () => {
   const orbit = await loadOrbitModule();
+
+  assert.equal(
+    typeof orbit.shouldStartOrbitDrift,
+    'function',
+    'orbit media helpers should expose a pure entrance gate helper so drift start stays testable without asserting component-local control flow',
+  );
+  assert.equal(
+    orbit.shouldStartOrbitDrift(false),
+    false,
+    'orbit drift should stay idle until the entrance sequence finishes',
+  );
+  assert.equal(
+    orbit.shouldStartOrbitDrift(true),
+    true,
+    'orbit drift should start once the entrance sequence reports completion',
+  );
 
   assert.equal(
     typeof orbit.getOrbitDriftTweenOptions,
@@ -300,10 +320,32 @@ test('homepage and admin keep the approved orbit wiring while StoryMap files dis
 
   assert.match(orbitSource, /from ['"]gsap['"]/);
   assert.match(orbitSource, /\bgsap\./, 'orbit component source should still use GSAP for motion');
+  assert.match(
+    orbitSource,
+    /\bshouldStartOrbitDrift\(/,
+    'orbit component source should call the shared drift entrance gate helper instead of baking the start condition inline',
+  );
+  assert.match(
+    orbitSource,
+    /onComplete:\s*\(\)\s*=>\s*\{(?=[\s\S]*?\bshouldStartOrbitDrift\()(?=[\s\S]*?playAutoScroll\(0\))[\s\S]*?\}/,
+    'orbit component should keep drift start scoped to entrance completion while delegating the gate decision to the helper',
+  );
+  assert.equal(
+    countMatches(orbitSource, /playAutoScroll\(0\)/g),
+    1,
+    'orbit component should only contain one eager drift start call, inside entrance completion',
+  );
   assert.doesNotMatch(orbitSource, /embla-carousel-react/);
   assert.doesNotMatch(orbitSource, /embla-carousel-auto-scroll|AutoScroll/);
   assert.doesNotMatch(orbitSource, /\b(?:useEmblaCarousel|emblaApi|emblaRef)\b/);
+  assert.doesNotMatch(orbitSource, /\bdragFree\b|\bdraggable\s*=/);
+  assert.doesNotMatch(orbitSource, /\bscrollPrev\b|\bscrollNext\b/);
+  assert.doesNotMatch(orbitSource, /\bonWheel\b|\bonKeyDown\b/);
+  assert.doesNotMatch(orbitSource, /ArrowLeft|ArrowRight/);
+  assert.doesNotMatch(orbitSource, /\btouch(?:Start|Move|End)\b|touchstart|touchmove|touchend/);
   assert.doesNotMatch(orbitSource, /ui\.previous|ui\.next|aria-roledescription="carousel"|aria-label=\{ui\.(?:previous|next)\}/);
+  assert.doesNotMatch(orbitSource, /\bprevious\s*:\s*['"]|\bnext\s*:\s*['"]/);
+  assert.doesNotMatch(orbitSource, /<button\b/i, 'orbit component source should not ship button controls anywhere');
 
   await assert.rejects(access(path.join(rootDir, 'src/components/StoryMap.tsx')));
   await assert.rejects(access(path.join(rootDir, 'src/components/admin/AdminStoryMap.tsx')));
