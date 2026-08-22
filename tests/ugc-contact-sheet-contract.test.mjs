@@ -75,7 +75,12 @@ test('all six locale files expose the exact UGC contact sheet copy keys', async 
 
 test('UGC helper module keeps filter visibility and wraparound navigation pure', async () => {
   const ugcModule = await importModule('src/lib/ugcPortfolio.ts');
-  const { filterUgcPortfolio, getUgcTileVisibility, getNextUgcIndex } = ugcModule;
+  const {
+    filterUgcPortfolio,
+    getUgcTileVisibility,
+    getNextUgcIndex,
+    isUgcViewerOpen,
+  } = ugcModule;
   const createLocalizedText = (seed) => Object.fromEntries(locales.map((locale) => [locale, `${seed}-${locale}`]));
   const items = [
     'travel',
@@ -106,6 +111,7 @@ test('UGC helper module keeps filter visibility and wraparound navigation pure',
   assert.equal(typeof filterUgcPortfolio, 'function', 'filterUgcPortfolio should be exported');
   assert.equal(typeof getUgcTileVisibility, 'function', 'getUgcTileVisibility should be exported');
   assert.equal(typeof getNextUgcIndex, 'function', 'getNextUgcIndex should be exported');
+  assert.equal(typeof isUgcViewerOpen, 'function', 'isUgcViewerOpen should be exported');
   assert.equal(filterUgcPortfolio(items, 'all').length, 12, 'all filter should preserve all 12 fixed slots');
   assert.equal(filterUgcPortfolio(items, 'travel').length, 4, 'travel filter should return only the four travel slots');
   assert.equal(filterUgcPortfolio(items, 'languages').length, 4, 'languages filter should return only the four language slots');
@@ -115,6 +121,8 @@ test('UGC helper module keeps filter visibility and wraparound navigation pure',
   assert.equal(getUgcTileVisibility(items[0], 'all'), 'visible', 'all filter should keep every tile visible');
   assert.equal(getNextUgcIndex(4, 0, 'previous'), 3, 'previous navigation should wrap from first to last');
   assert.equal(getNextUgcIndex(4, 3, 'next'), 0, 'next navigation should wrap from last to first');
+  assert.equal(isUgcViewerOpen(null), false, 'viewer lifecycle helper should treat null activeId as closed');
+  assert.equal(isUgcViewerOpen(items[0].id), true, 'viewer lifecycle helper should treat any activeId as open');
 
   const initialFilter = typeof ugcModule.getInitialUgcFilter === 'function'
     ? ugcModule.getInitialUgcFilter()
@@ -212,6 +220,21 @@ test('UgcContactSheet component locks fixed filters grid blank tiles hover previ
     componentSource,
     /paused\s*\?\s*[^:]*\.play\(\)\s*:\s*[^;]*\.pause\(\)/,
     'clicking the focused video should toggle play and pause',
+  );
+});
+
+test('UGC viewer lifecycle keeps opener focus and body lock stable across in-viewer navigation', async () => {
+  const componentSource = await readSource('src/components/UgcContactSheet.tsx');
+
+  assert.match(
+    componentSource,
+    /const isViewerOpen = activeId !== null;/,
+    'viewer lifecycle should derive a stable isViewerOpen boolean from activeId',
+  );
+  assert.match(
+    componentSource,
+    /useEffect\(\(\) => \{\s*if \(!isViewerOpen\) return;[\s\S]*?document\.body\.style\.overflow = 'hidden';[\s\S]*?return \(\) => \{[\s\S]*?document\.body\.style\.overflow = previousOverflow;[\s\S]*?restoreFocusRef\.current\?\.focus\(\);[\s\S]*?restoreFocusRef\.current = null;[\s\S]*?\};\s*\}, \[isViewerOpen\]\);/,
+    'viewer open/close cleanup should be scoped to the boolean open state so activeId navigation does not unlock the body or restore background focus mid-session',
   );
 });
 

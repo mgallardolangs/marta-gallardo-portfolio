@@ -663,6 +663,9 @@ export class AdminStore {
   async setUgcPortfolioPoster(itemId: string, file: File): Promise<void> {
     const item = this.getMutableUgcPortfolio().find((candidate) => candidate.id === itemId);
     if (!item) return;
+    if (item.type !== 'video') {
+      throw new Error('Poster uploads are only available for video UGC items.');
+    }
 
     const validationError = validateUgcMediaUpload(file, 'image');
     if (validationError) {

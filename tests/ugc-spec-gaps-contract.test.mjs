@@ -89,6 +89,65 @@ function createUgcStore() {
   return store;
 }
 
+test('UGC poster uploads reject image slots without mutating poster state or pending uploads', async () => {
+  const restoreFileReader = installMockFileReader();
+  const store = createUgcStore();
+
+  try {
+    store.updateUgcPortfolioField('ugc-travel-01', 'type', 'image');
+
+    const beforeSnapshot = store.getSnapshot();
+    const beforeItem = beforeSnapshot.getUgcPortfolio()[0];
+
+    assert.equal(beforeItem.poster, '/images/ugc/original-video-poster.jpg');
+
+    await assert.rejects(
+      store.setUgcPortfolioPoster(
+        'ugc-travel-01',
+        new File([Buffer.from('poster-binary')], 'replacement-poster.jpg', { type: 'image/jpeg' }),
+      ),
+      /Poster uploads are only available for video UGC items\./,
+    );
+
+    const afterSnapshot = store.getSnapshot();
+    const afterItem = afterSnapshot.getUgcPortfolio()[0];
+
+    assert.equal(afterItem.poster, '/images/ugc/original-video-poster.jpg');
+    assert.equal(afterSnapshot.pendingCount, beforeSnapshot.pendingCount);
+    assert.deepEqual(
+      afterSnapshot.getUgcPortfolioItemValidationErrors('ugc-travel-01'),
+      [
+        'UGC images must use a JPG, PNG, WebP, or GIF source.',
+        'UGC images should not keep a poster value.',
+      ],
+      'rejecting the upload should preserve the same resolvable stale-poster validation state',
+    );
+  } finally {
+    restoreFileReader();
+  }
+});
+
+test('UGC poster uploads accept video slots and stage the replacement poster preview', async () => {
+  const restoreFileReader = installMockFileReader();
+  const store = createUgcStore();
+
+  try {
+    await store.setUgcPortfolioPoster(
+      'ugc-travel-01',
+      new File([Buffer.from('poster-binary')], 'replacement-poster.jpg', { type: 'image/jpeg' }),
+    );
+
+    const snapshot = store.getSnapshot();
+    const item = snapshot.getUgcPortfolio()[0];
+
+    assert.match(item.poster ?? '', /^data:image\/jpeg;base64,/);
+    assert.ok(snapshot.pendingCount >= 1, 'accepted video poster uploads should create a pending change');
+    assert.deepEqual(snapshot.getUgcPortfolioItemValidationErrors('ugc-travel-01'), []);
+  } finally {
+    restoreFileReader();
+  }
+});
+
 test('UGC type switching stays non-destructive until poster is explicitly cleared', async () => {
   const restoreFileReader = installMockFileReader();
   const store = createUgcStore();
@@ -239,12 +298,27 @@ test('UGC viewer and editor source expose flushSync playback, right-edge control
     /className="absolute right-4 top-1\/2 flex -translate-y-1\/2 flex-col items-center gap-3[\s\S]*aria-label=\{copy\.previous\}[\s\S]*aria-label=\{copy\.next\}[\s\S]*\{activeVisibleIndex \+ 1\} \/ \{visibleItems\.length\}/,
     'viewer arrows and counter should stay as a right-edge vertical stack with the counter below the arrows',
   );
-  assert.match(
+  assert.doesNotMatch(
     editorSource,
     /item\.type === 'video' \|\| Boolean\(item\.poster\)/,
-    'image items with an existing poster should keep the poster editor visible until cleared',
+    'image items with stale posters should not keep the poster upload control visible',
+  );
+  assert.match(
+    editorSource,
+    /item\.type === 'video'\s*\?\s*\([\s\S]*label="🖼 Change poster"/,
+    'video items should keep the poster upload control',
+  );
+  assert.match(
+    editorSource,
+    /(?:Boolean\(item\.poster\)|item\.poster)\s*\?\s*\([\s\S]*Clear poster/,
+    'image items with stale posters should keep only the clear action',
   );
   assert.match(editorSource, /Clear poster/);
   assert.match(editorSource, /clearUgcPortfolioPoster\(item\.id\)/);
   assert.match(storeSource, /clearUgcPortfolioPoster\s*\(/);
+  assert.match(
+    storeSource,
+    /if\s*\(\s*item\.type\s*!==\s*['"]video['"]\s*\)\s*\{\s*throw new Error\(['"]Poster uploads are only available for video UGC items\.['"]\);\s*\}/,
+    'admin store should reject poster uploads unless the current UGC slot is a video',
+  );
 });

@@ -29,6 +29,10 @@ export function canOpenUgcItem(state) {
   return state.visibility === 'visible';
 }
 
+export function isUgcViewerOpen(activeId: string | null) {
+  return activeId !== null;
+}
+
 export function getNextUgcIndex(
   count: number,
   index: number,

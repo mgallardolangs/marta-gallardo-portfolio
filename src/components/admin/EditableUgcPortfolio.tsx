@@ -89,7 +89,7 @@ export default function EditableUgcPortfolio() {
                         <p>The slot stays in place even when the public filter hides it.</p>
                       </div>
 
-                      {item.type === 'video' || Boolean(item.poster) ? (
+                      {item.type === 'video' ? (
                         <div className="space-y-3">
                           <EditableMedia
                             src={item.poster ?? ''}
@@ -97,12 +97,25 @@ export default function EditableUgcPortfolio() {
                             acceptKind="image"
                             alt={`${item.alt.es} poster`}
                             label="🖼 Change poster"
-                            emptyLabel={item.type === 'video' ? 'Poster required' : 'Poster can be cleared or replaced'}
+                            emptyLabel="Poster required"
                             className="aspect-[4/5] border border-ink/10 bg-paper"
                             onSelect={async (file) => {
                               await store.setUgcPortfolioPoster(item.id, file);
                             }}
                           />
+                          <button
+                            type="button"
+                            onClick={() => store.clearUgcPortfolioPoster(item.id)}
+                            className="inline-flex items-center justify-center border border-ink/12 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink transition hover:border-amaranth hover:text-amaranth"
+                          >
+                            Clear poster
+                          </button>
+                        </div>
+                      ) : item.poster ? (
+                        <div className="space-y-3">
+                          <div className="rounded-sm border border-amaranth/24 bg-paper px-4 py-3 text-sm leading-6 text-amaranth">
+                            This image slot still has a stale poster from an earlier video. Clear it to finish the image state.
+                          </div>
                           <button
                             type="button"
                             onClick={() => store.clearUgcPortfolioPoster(item.id)}

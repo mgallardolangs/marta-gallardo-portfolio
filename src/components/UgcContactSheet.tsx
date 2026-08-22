@@ -50,6 +50,7 @@ export default function UgcContactSheet({
   const [activeId, setActiveId] = useState<string | null>(null);
   const [navigationDirection, setNavigationDirection] = useState<-1 | 1>(1);
   const [focusedVideoPlaying, setFocusedVideoPlaying] = useState(false);
+  const isViewerOpen = activeId !== null;
 
   const previewVideoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
   const dialogRef = useRef<HTMLDivElement | null>(null);
@@ -81,18 +82,19 @@ export default function UgcContactSheet({
   }, [activeId, activeVisibleIndex]);
 
   useEffect(() => {
-    if (!activeId) return;
+    if (!isViewerOpen) return;
 
     const previousOverflow = document.body.style.overflow;
+    const focusTimer = window.setTimeout(() => closeButtonRef.current?.focus(), 0);
     document.body.style.overflow = 'hidden';
-    window.setTimeout(() => closeButtonRef.current?.focus(), 0);
 
     return () => {
+      window.clearTimeout(focusTimer);
       document.body.style.overflow = previousOverflow;
       restoreFocusRef.current?.focus();
       restoreFocusRef.current = null;
     };
-  }, [activeId]);
+  }, [isViewerOpen]);
 
   useEffect(() => {
     if (!activeItem) return;
