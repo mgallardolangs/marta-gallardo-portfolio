@@ -196,3 +196,47 @@ The first implementation checkpoint was reviewed at `http://localhost:4322` on 2
 - Keep the CTA, five navigation links, social links, location, and legal text.
 - Fix vertical-roll link wrappers so only one label row is visible at rest.
 - Restore the text-only `in` LinkedIn mark in header, mobile menu, and footer. Do not use the full LinkedIn SVG.
+
+## Live refinement 3
+
+Checkpoint 3 was approved exactly as shown in `checkpoint-3-portrait-copy.html`.
+
+### Permanent typed cursor
+
+- Do not rely on Typed.js's injected cursor node.
+- Render one component-owned underscore after the visual text.
+- The underscore is always present, amaranth, separated by `0.12em`, and blinks continuously.
+- Typed.js types only the title characters with `showCursor: false`.
+- In wrapped titles, the custom cursor aligns to the lower-right end of the final line.
+
+### Carousel chrome copy
+
+- Remove the editor-facing carousel description completely.
+- Remove `TRABAJO SELECCIONADO / 01—15`.
+- Remove any visible item count.
+- Temporary Spanish chrome:
+  - Kicker: `ARCHIVO CREATIVO`
+  - Title: `HISTORIAS EN MOVIMIENTO.`
+  - Signature: `MARTA GALLARDO · PORTFOLIO`
+  - Bottom note: `CONTENIDO · IDIOMAS · VIAJES · ARTE`
+- Provide natural localized equivalents in EN/FR/DE/IT/CA.
+- Do not change the approved orbit layout or behavior.
+
+### Homepage portrait
+
+- Replace the abstract three-frame oval with `siteData.heroMainPhoto`.
+- The portrait is a borderless square-corner 4:5 frame.
+- Entrance:
+  - Image reveals bottom-to-top with a clip-path over about one second.
+  - Four square corner details enter in a short stagger.
+  - A paper horizontal rule draws near the bottom after the portrait reveal.
+- Corner details:
+  - Top-left and bottom-right: amaranth.
+  - Top-right and bottom-left: ink.
+  - They sit partly outside the photo frame.
+- Hover:
+  - Portrait scales to about `1.055`.
+  - Saturation and contrast increase only slightly.
+  - Corner squares move outward by a few pixels.
+- No rounded container, pastel card, glow, or extra portrait border.
+- The admin homepage uses the same frame with `EditableImage`.
