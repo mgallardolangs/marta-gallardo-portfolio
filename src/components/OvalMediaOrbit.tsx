@@ -13,6 +13,7 @@ import {
   getOrbitItemLayout,
   getOrbitVideoPlaybackMode,
   resolveOrbitHref,
+  shouldPauseOrbitDriftOnIntroComplete,
   shouldStartOrbitDrift,
 } from '../lib/orbitMedia';
 
@@ -228,8 +229,10 @@ export default function OvalMediaOrbit({
         applyOrbitLayout();
         const entranceComplete = true;
         if (!shouldStartOrbitDrift(entranceComplete)) return;
+        const shouldPauseDriftOnIntroComplete = shouldPauseOrbitDriftOnIntroComplete(activeIdRef.current);
         driftTweenRef.current = gsap.to(progressRef.current, {
           ...getOrbitDriftTweenOptions(),
+          paused: shouldPauseDriftOnIntroComplete,
           onUpdate: () => applyOrbitLayout(),
         });
       },
@@ -286,12 +289,13 @@ export default function OvalMediaOrbit({
     };
   }, []);
 
-  const setActiveTile = (itemId: string) => {
+  const setActiveTile = (itemId: string | null) => {
+    activeIdRef.current = itemId;
     setActiveId(itemId);
   };
 
   const clearActiveTile = () => {
-    setActiveId(null);
+    setActiveTile(null);
   };
 
   return (

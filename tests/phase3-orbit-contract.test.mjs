@@ -219,6 +219,12 @@ test('orbit drift helpers expose the planned entrance gate, tween options, and p
   );
 
   assert.equal(
+    typeof orbit.shouldPauseOrbitDriftOnIntroComplete,
+    'function',
+    'orbit media helpers should expose a pure hover-before-intro-complete helper so the race stays testable outside React and GSAP timing',
+  );
+
+  assert.equal(
     orbit.getOrbitDriftPlaybackMode('hero-editorial'),
     'pause',
     'a non-null active orbit item should pause the GSAP drift tween',
@@ -227,6 +233,16 @@ test('orbit drift helpers expose the planned entrance gate, tween options, and p
     orbit.getOrbitDriftPlaybackMode(null),
     'play',
     'clearing the active orbit item should resume the GSAP drift tween',
+  );
+  assert.equal(
+    orbit.shouldPauseOrbitDriftOnIntroComplete('hero-editorial'),
+    true,
+    'hover becoming active before intro completion should create the drift tween paused instead of letting it start for one frame',
+  );
+  assert.equal(
+    orbit.shouldPauseOrbitDriftOnIntroComplete(null),
+    false,
+    'when no tile is active at intro completion the drift tween should start normally',
   );
 });
 
@@ -354,8 +370,13 @@ test('homepage and admin keep the approved orbit wiring while StoryMap files dis
   );
   assert.match(
     orbitSource,
-    /onComplete:\s*\(\)\s*=>\s*\{(?=[\s\S]*?\bshouldStartOrbitDrift\()(?=[\s\S]*?\bgetOrbitDriftTweenOptions\(\))(?=[\s\S]*?\bdriftTweenRef\.current = gsap\.to\(progressRef\.current,\s*[\s\S]*?\))[\s\S]*?\}/,
+    /onComplete:\s*\(\)\s*=>\s*\{(?=[\s\S]*?\bshouldStartOrbitDrift\()(?=[\s\S]*?\bshouldPauseOrbitDriftOnIntroComplete\(activeIdRef\.current\))(?=[\s\S]*?\bgetOrbitDriftTweenOptions\(\))(?=[\s\S]*?\bdriftTweenRef\.current = gsap\.to\(progressRef\.current,\s*[\s\S]*?\bpaused:\s*shouldPauseDriftOnIntroComplete\b[\s\S]*?\))[\s\S]*?\}/,
     'orbit component should only create the infinite drift tween after the entrance sequence completes',
+  );
+  assert.match(
+    orbitSource,
+    /const setActiveTile = \(itemId: string \| null\) => \{\s*activeIdRef\.current = itemId;\s*setActiveId\(itemId\);\s*\};/s,
+    'orbit component should synchronize activeIdRef with state updates so hover changes stay visible to intro onComplete without stale closures',
   );
   assert.match(
     orbitSource,

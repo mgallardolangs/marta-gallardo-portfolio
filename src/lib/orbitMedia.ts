@@ -150,6 +150,10 @@ export function getOrbitDriftPlaybackMode(activeId: string | null) {
   return activeId === null ? 'play' : 'pause';
 }
 
+export function shouldPauseOrbitDriftOnIntroComplete(activeId: string | null) {
+  return getOrbitDriftPlaybackMode(activeId) === 'pause';
+}
+
 export function shouldStartOrbitDrift(entranceComplete: boolean) {
   return entranceComplete;
 }
