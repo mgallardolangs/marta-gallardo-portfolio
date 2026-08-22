@@ -146,16 +146,16 @@ test('site data preserves the Phase 1 contract', async () => {
 
 test('site data locks the approved UGC editorial contact sheet dataset', async () => {
   const site = await readJson('src/data/site.json');
-  const expectedIds = ['travel', 'languages', 'art'].flatMap((category) => (
-    [1, 2, 3, 4].map((slot) => `ugc-${category}-${String(slot).padStart(2, '0')}`)
+  const expectedIds = [1, 2, 3, 4].flatMap((slot) => (
+    ['travel', 'languages', 'art'].map((category) => `ugc-${category}-${String(slot).padStart(2, '0')}`)
   ));
 
   assert.ok(Array.isArray(site.ugcPortfolio), 'ugcPortfolio should be an array');
   assert.equal(site.ugcPortfolio.length, 12, 'ugcPortfolio should contain exactly 12 fixed slots');
   assert.deepEqual(
-    [...site.ugcPortfolio.map((item) => item.id)].sort(),
-    [...expectedIds].sort(),
-    'ugcPortfolio should keep the approved stable slot IDs',
+    site.ugcPortfolio.map((item) => item.id),
+    expectedIds,
+    'ugcPortfolio should keep the approved stable slot IDs in the approved interleaved order',
   );
 
   assert.deepEqual(
