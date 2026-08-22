@@ -215,6 +215,66 @@ test('UgcContactSheet component locks fixed filters grid blank tiles hover previ
   );
 });
 
+test('UGC contact sheet opens only visible tiles through a shared activation guard', async () => {
+  const [helperSource, componentSource] = await Promise.all([
+    readSource('src/lib/ugcPortfolio.ts'),
+    readSource('src/components/UgcContactSheet.tsx'),
+  ]);
+
+  assert.match(
+    helperSource,
+    /export\s+(?:function|const)\s+canOpenUgcItem\b/,
+    'ugcPortfolio helpers should export canOpenUgcItem(state) so blank-vs-visible activation stays pure',
+  );
+  assertMatchesAny(
+    helperSource,
+    [
+      /\bcanOpenUgcItem\s*\(\s*state\s*\)/,
+      /\bcanOpenUgcItem\s*=\s*\(\s*state\s*\)/,
+      /\bcanOpenUgcItem\s*=\s*function\s*\(\s*state\s*\)/,
+    ],
+    'canOpenUgcItem should accept a single state object argument',
+  );
+  assertMatchesAny(
+    helperSource,
+    [
+      /state\.(?:visibility|tileVisibility)\s*===\s*['"]visible['"]/,
+      /state\.(?:visibility|tileVisibility)\s*!==\s*['"]blank['"]/,
+      /return\s+!state\.(?:isBlank|disabled|isFilteredBlank)\b/,
+    ],
+    'canOpenUgcItem should allow activation only for visible authored tiles',
+  );
+  assert.match(
+    componentSource,
+    /\bcanOpenUgcItem\(/,
+    'UgcContactSheet should route tile activation through canOpenUgcItem',
+  );
+  assertMatchesAny(
+    componentSource,
+    [
+      /if\s*\(\s*!canOpenUgcItem\([^)]+\)\s*\)\s*return/,
+      /canOpenUgcItem\([^)]+\)\s*\?\s*(?:setActiveId|setActiveItem|open[A-Za-z]+)\(/,
+    ],
+    'blank filtered cells should short-circuit before opening the focus viewer',
+  );
+  assertMatchesAny(
+    componentSource,
+    [
+      /onClick=\{[\s\S]{0,260}?(?:setActiveId|setActiveItem|open[A-Za-z]+)\(/,
+      /onKeyDown=\{[\s\S]{0,320}?(?:Enter|Space|NumpadEnter)[\s\S]{0,220}?(?:setActiveId|setActiveItem|open[A-Za-z]+)\(/,
+    ],
+    'visible tile click or activation should set the active item and open the focus viewer through a stable interaction contract',
+  );
+  assertMatchesAny(
+    componentSource,
+    [
+      /setActiveId\(\s*item\.id\s*\)/,
+      /setActiveItem\(\s*item\s*\)/,
+    ],
+    'opening the focus viewer should track the activated item',
+  );
+});
+
 test('admin UGC preview and fixed-slot editor expose only the approved controls', async () => {
   const [adminPageSource, editorSource, adminStoreSource] = await Promise.all([
     readSource('src/pages/admin/ugc.astro'),
