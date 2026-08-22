@@ -51,6 +51,28 @@ function sliceSourceSection(source, startMarker, endMarker) {
   return source.slice(start, end);
 }
 
+function sliceEnclosedBlock(source, blockStartMarker) {
+  const start = source.indexOf(blockStartMarker);
+  assert.notEqual(start, -1, `Expected source marker: ${blockStartMarker}`);
+
+  const openingBrace = source.indexOf('{', start);
+  assert.notEqual(openingBrace, -1, `Expected opening brace after: ${blockStartMarker}`);
+
+  let depth = 0;
+  for (let index = openingBrace; index < source.length; index += 1) {
+    const char = source[index];
+    if (char === '{') depth += 1;
+    if (char === '}') {
+      depth -= 1;
+      if (depth === 0) {
+        return source.slice(start, index + 1);
+      }
+    }
+  }
+
+  assert.fail(`Expected closing brace for: ${blockStartMarker}`);
+}
+
 async function loadOrbitModule() {
   try {
     return await import('../src/lib/orbitMedia.ts');
@@ -332,6 +354,80 @@ test('homepage and admin keep the approved orbit wiring while StoryMap files dis
 
   await assert.rejects(access(path.join(rootDir, 'src/components/StoryMap.tsx')));
   await assert.rejects(access(path.join(rootDir, 'src/components/admin/AdminStoryMap.tsx')));
+});
+
+test('orbit runtime uses a GSAP progress ref drift loop that starts only after the entrance timeline completes', async () => {
+  const orbitSource = await readSource('src/components/OvalMediaOrbit.tsx');
+  const applyOrbitLayoutSource = sliceSourceSection(
+    orbitSource,
+    'const applyOrbitLayout = () => {',
+    'const syncVideoPlayback = () => {',
+  );
+  const entranceTimelineSource = sliceEnclosedBlock(
+    orbitSource,
+    'const timeline = gsap.timeline(',
+  );
+  const entranceOnCompleteSource = sliceEnclosedBlock(
+    entranceTimelineSource,
+    'onComplete: () =>',
+  );
+  const sourceBeforeEntranceTimeline = orbitSource.slice(0, orbitSource.indexOf('const timeline = gsap.timeline('));
+
+  assert.match(
+    orbitSource,
+    /const\s+progressRef\s*=\s*useRef\(\{\s*value:\s*0\s*\}\);/,
+    'orbit motion should initialize a dedicated GSAP progress ref at { value: 0 }',
+  );
+  assert.match(
+    orbitSource,
+    /const\s+driftTweenRef\s*=\s*useRef<gsap\.core\.Tween\s*\|\s*null>\(null\);/,
+    'orbit motion should keep the drifting GSAP tween in a dedicated ref',
+  );
+  assert.match(
+    applyOrbitLayoutSource,
+    /progressRef\.current\.value/,
+    'applyOrbitLayout should read progressRef.current.value as the single source of orbital progress',
+  );
+  assert.doesNotMatch(
+    applyOrbitLayoutSource,
+    /scrollProgress\(/,
+    'applyOrbitLayout should not read Embla scroll progress once the drift ref contract lands',
+  );
+  assert.match(
+    orbitSource,
+    /gsap\.to\(\s*progressRef\.current\s*,\s*\{[\s\S]*?\bvalue:\s*1\b[\s\S]*?\bduration:\s*ORBIT_REVOLUTION_SECONDS\b[\s\S]*?\brepeat:\s*-1\b[\s\S]*?\bease:\s*['"]none['"][\s\S]*?\bonUpdate:\s*applyOrbitLayout[\s\S]*?\}\s*\)/,
+    'orbit motion should drift via gsap.to(progressRef.current, { value: 1, duration: ORBIT_REVOLUTION_SECONDS, repeat: -1, ease: "none", onUpdate: applyOrbitLayout })',
+  );
+  assert.match(
+    entranceOnCompleteSource,
+    /driftTweenRef\.current\s*(?:=|\?\.(?:play|restart|resume)|\.(?:play|restart|resume))/,
+    'the entrance timeline onComplete should own the drift start hook',
+  );
+  assert.doesNotMatch(
+    sourceBeforeEntranceTimeline,
+    /driftTweenRef\.current\s*(?:=|\?\.(?:play|restart|resume)|\.(?:play|restart|resume))/,
+    'orbit drift should not start before the entrance timeline onComplete hook runs',
+  );
+});
+
+test('orbit movement contract bans touch and pointer drag paths while preserving pointer hover entry and exit hooks', async () => {
+  const orbitSource = await readSource('src/components/OvalMediaOrbit.tsx');
+
+  assert.doesNotMatch(
+    orbitSource,
+    /\bonTouchStart\b|\bonTouchMove\b|\bonTouchEnd\b|\btouchstart\b|\btouchmove\b|\btouchend\b|\bswipe\b|setPointerCapture|releasePointerCapture|\bonPointerDown\b|\bonPointerMove\b|\bonPointerUp\b|\bpointerdown\b|\bpointermove\b|\bpointerup\b/,
+    'orbit movement should not depend on touch/swipe or pointer drag handlers',
+  );
+  assert.match(
+    orbitSource,
+    /onPointerEnter=/,
+    'pointerenter hover should remain available for video activation',
+  );
+  assert.match(
+    orbitSource,
+    /onPointerLeave=/,
+    'pointerleave hover should remain available for deactivation',
+  );
 });
 
 test('admin store exposes orbit collection mutations and publishes site data updates', async () => {
