@@ -73,6 +73,13 @@ function sliceEnclosedBlock(source, blockStartMarker) {
   assert.fail(`Expected closing brace for: ${blockStartMarker}`);
 }
 
+function collectProgressTweenCalls(source) {
+  return [...source.matchAll(/gsap\.to\(\s*progressRef\.current\s*,\s*\{[\s\S]*?\}\s*\)/g)].map((match) => ({
+    source: match[0],
+    index: match.index ?? -1,
+  }));
+}
+
 async function loadOrbitModule() {
   try {
     return await import('../src/lib/orbitMedia.ts');
@@ -371,17 +378,14 @@ test('orbit runtime uses a GSAP progress ref drift loop that starts only after t
     entranceTimelineSource,
     'onComplete: () =>',
   );
-  const sourceBeforeEntranceTimeline = orbitSource.slice(0, orbitSource.indexOf('const timeline = gsap.timeline('));
+  const sourceBeforeEntranceOnComplete = orbitSource.slice(0, orbitSource.indexOf('onComplete: () =>'));
+  const progressTweenCalls = collectProgressTweenCalls(orbitSource);
+  const [driftTweenCall] = progressTweenCalls;
 
   assert.match(
     orbitSource,
     /const\s+progressRef\s*=\s*useRef\(\{\s*value:\s*0\s*\}\);/,
     'orbit motion should initialize a dedicated GSAP progress ref at { value: 0 }',
-  );
-  assert.match(
-    orbitSource,
-    /const\s+driftTweenRef\s*=\s*useRef<gsap\.core\.Tween\s*\|\s*null>\(null\);/,
-    'orbit motion should keep the drifting GSAP tween in a dedicated ref',
   );
   assert.match(
     applyOrbitLayoutSource,
@@ -393,20 +397,25 @@ test('orbit runtime uses a GSAP progress ref drift loop that starts only after t
     /scrollProgress\(/,
     'applyOrbitLayout should not read Embla scroll progress once the drift ref contract lands',
   );
+  assert.equal(progressTweenCalls.length, 1, 'orbit motion should define exactly one GSAP progress drift tween');
   assert.match(
-    orbitSource,
+    driftTweenCall?.source ?? '',
     /gsap\.to\(\s*progressRef\.current\s*,\s*\{[\s\S]*?\bvalue:\s*1\b[\s\S]*?\bduration:\s*ORBIT_REVOLUTION_SECONDS\b[\s\S]*?\brepeat:\s*-1\b[\s\S]*?\bease:\s*['"]none['"][\s\S]*?\bonUpdate:\s*applyOrbitLayout[\s\S]*?\}\s*\)/,
     'orbit motion should drift via gsap.to(progressRef.current, { value: 1, duration: ORBIT_REVOLUTION_SECONDS, repeat: -1, ease: "none", onUpdate: applyOrbitLayout })',
   );
   assert.match(
     entranceOnCompleteSource,
-    /driftTweenRef\.current\s*(?:=|\?\.(?:play|restart|resume)|\.(?:play|restart|resume))/,
-    'the entrance timeline onComplete should own the drift start hook',
+    /gsap\.to\(\s*progressRef\.current\s*,\s*\{[\s\S]*?\}\s*\)/,
+    'the entrance timeline onComplete should create the drift tween inline',
   );
-  assert.doesNotMatch(
-    sourceBeforeEntranceTimeline,
-    /driftTweenRef\.current\s*(?:=|\?\.(?:play|restart|resume)|\.(?:play|restart|resume))/,
-    'orbit drift should not start before the entrance timeline onComplete hook runs',
+  assert.ok(
+    entranceOnCompleteSource.includes(driftTweenCall?.source ?? ''),
+    'the single drift tween source should occur lexically inside the entrance timeline onComplete hook',
+  );
+  assert.deepEqual(
+    collectProgressTweenCalls(sourceBeforeEntranceOnComplete).filter(({ source }) => !/\bpaused\s*:\s*true\b/.test(source)),
+    [],
+    'orbit drift should not create an unpaused progress tween before the entrance timeline onComplete hook runs',
   );
 });
 
