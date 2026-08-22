@@ -56,8 +56,8 @@
     {
       "id": "hero-editorial",
       "type": "image",
-      "src": "/images/site/img_5587.webp",
-      "href": "/",
+      "src": "/images/orbit/mock-01.webp",
+      "href": null,
       "label": {
         "es": "Retrato editorial",
         "en": "Editorial portrait",
@@ -78,8 +78,8 @@
     {
       "id": "world-cutout",
       "type": "image",
-      "src": "/images/site/about-me-world.webp",
-      "href": "/translation-seo",
+      "src": "/images/orbit/mock-02.webp",
+      "href": null,
       "label": {
         "es": "Mapa y recorrido",
         "en": "Map and journey",
@@ -100,8 +100,8 @@
     {
       "id": "passport-sticker",
       "type": "image",
-      "src": "/images/site/sticker-passport.webp",
-      "href": "/ugc",
+      "src": "/images/orbit/mock-03.webp",
+      "href": null,
       "label": {
         "es": "Pasaporte creativo",
         "en": "Creative passport",
@@ -122,8 +122,8 @@
     {
       "id": "art-sticker",
       "type": "image",
-      "src": "/images/site/sticker-art.webp",
-      "href": "/ugc#art",
+      "src": "/images/orbit/mock-04.webp",
+      "href": null,
       "label": {
         "es": "Pulso artístico",
         "en": "Artistic pulse",
@@ -144,8 +144,8 @@
     {
       "id": "crochet-sticker",
       "type": "image",
-      "src": "/images/site/sticker-crochet.webp",
-      "href": "/ugc#art",
+      "src": "/images/orbit/mock-05.webp",
+      "href": null,
       "label": {
         "es": "Detalle artesanal",
         "en": "Craft detail",
@@ -166,8 +166,8 @@
     {
       "id": "mountain-sticker",
       "type": "image",
-      "src": "/images/site/sticker-mountain.webp",
-      "href": "/ugc#travel",
+      "src": "/images/orbit/mock-06.webp",
+      "href": null,
       "label": {
         "es": "Postal de montaña",
         "en": "Mountain postcard",
@@ -188,8 +188,8 @@
     {
       "id": "instagram-proof",
       "type": "image",
-      "src": "/images/site/instagram-screenshot.jpeg",
-      "href": "/contact",
+      "src": "/images/orbit/mock-07.webp",
+      "href": null,
       "label": {
         "es": "Presencia social",
         "en": "Social presence",
@@ -210,8 +210,8 @@
     {
       "id": "travel-niche",
       "type": "image",
-      "src": "/images/site/nicho-viajes.webp",
-      "href": "/ugc#travel",
+      "src": "/images/orbit/mock-08.webp",
+      "href": null,
       "label": {
         "es": "Órbita viajes",
         "en": "Travel orbit",
@@ -232,8 +232,8 @@
     {
       "id": "languages-niche",
       "type": "image",
-      "src": "/images/site/nicho-idiomas.webp",
-      "href": "/ugc#languages",
+      "src": "/images/orbit/mock-09.webp",
+      "href": null,
       "label": {
         "es": "Órbita idiomas",
         "en": "Language orbit",
@@ -254,8 +254,8 @@
     {
       "id": "art-niche",
       "type": "image",
-      "src": "/images/site/nicho-arte.webp",
-      "href": "/ugc#art",
+      "src": "/images/orbit/mock-10.webp",
+      "href": null,
       "label": {
         "es": "Órbita arte",
         "en": "Art orbit",
@@ -276,8 +276,8 @@
     {
       "id": "placeholder-travel-story",
       "type": "image",
-      "src": "/images/site/orbit-placeholder-travel.svg",
-      "href": "/ugc",
+      "src": "/images/orbit/mock-11.webp",
+      "href": null,
       "label": {
         "es": "Historia de viaje",
         "en": "Travel story",
@@ -298,8 +298,8 @@
     {
       "id": "placeholder-language-case",
       "type": "image",
-      "src": "/images/site/orbit-placeholder-languages.svg",
-      "href": "/translation-seo",
+      "src": "/images/orbit/mock-12.webp",
+      "href": null,
       "label": {
         "es": "Caso multilingüe",
         "en": "Multilingual case",
@@ -320,8 +320,8 @@
     {
       "id": "placeholder-editorial-drop",
       "type": "image",
-      "src": "/images/site/orbit-placeholder-editorial.svg",
-      "href": "/blog",
+      "src": "/images/orbit/mock-13.webp",
+      "href": null,
       "label": {
         "es": "Editorial en curso",
         "en": "Editorial in progress",
@@ -342,8 +342,8 @@
     {
       "id": "placeholder-collaboration",
       "type": "image",
-      "src": "/images/site/orbit-placeholder-collab.svg",
-      "href": "/contact",
+      "src": "/images/orbit/mock-14.webp",
+      "href": null,
       "label": {
         "es": "Próxima colaboración",
         "en": "Next collaboration",
@@ -364,7 +364,7 @@
     {
       "id": "placeholder-profile-note",
       "type": "image",
-      "src": "/images/site/orbit-placeholder-profile.svg",
+      "src": "/images/orbit/mock-15.webp",
       "href": null,
       "label": {
         "es": "Nota de perfil",
