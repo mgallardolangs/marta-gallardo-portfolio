@@ -283,10 +283,10 @@ test('UGC contact sheet opens only visible tiles through a shared activation gua
   assertMatchesAny(
     componentSource,
     [
-      /onClick=\{[\s\S]{0,260}?(?:setActiveId|setActiveItem|open[A-Za-z]+)\(/,
-      /onKeyDown=\{[\s\S]{0,320}?(?:Enter|Space|NumpadEnter)[\s\S]{0,220}?(?:setActiveId|setActiveItem|open[A-Za-z]+)\(/,
+      /onClick=\{\(event\) => \{[\s\S]*?stopAllPreviewVideoPlayback\(previewVideoRefs\.current\);[\s\S]*?setActiveId\(item\.id\)/,
+      /onKeyDown=\{\(event\) => \{[\s\S]*?(?:Enter|Space|NumpadEnter)[\s\S]*?stopAllPreviewVideoPlayback\(previewVideoRefs\.current\);[\s\S]*?setActiveId\(item\.id\)/,
     ],
-    'visible tile click or activation should set the active item and open the focus viewer through a stable interaction contract',
+    'visible tile click or activation should always stop all preview playback before setting the active item and opening the focus viewer',
   );
   assertMatchesAny(
     componentSource,

@@ -157,6 +157,19 @@ export function playFocusedVideoPlayback(
   }
 }
 
+export function stopPreviewVideoPlayback(video: HTMLVideoElement | null | undefined) {
+  if (!video) return;
+  video.pause();
+  video.currentTime = 0;
+  video.muted = true;
+}
+
+export function stopAllPreviewVideoPlayback(previewVideos: Record<string, HTMLVideoElement | null | undefined>) {
+  for (const video of Object.values(previewVideos)) {
+    stopPreviewVideoPlayback(video);
+  }
+}
+
 export function resetFocusedVideoPlayback(video: HTMLVideoElement | null | undefined) {
   if (!video) return;
   video.pause();

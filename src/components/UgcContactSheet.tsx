@@ -11,6 +11,8 @@ import {
   getUgcTileVisibility,
   playFocusedVideoPlayback,
   resetFocusedVideoPlayback,
+  stopAllPreviewVideoPlayback,
+  stopPreviewVideoPlayback,
   type UgcFilter,
   type UgcTileVisibility,
 } from '../lib/ugcPortfolio.ts';
@@ -168,6 +170,7 @@ export default function UgcContactSheet({
   }, [activeItem]);
 
   const closeDialog = () => {
+    stopAllPreviewVideoPlayback(previewVideoRefs.current);
     resetFocusedVideoPlayback(focusedVideoRef.current);
     setFocusedVideoPlaying(false);
     setActiveId(null);
@@ -206,11 +209,7 @@ export default function UgcContactSheet({
   const handlePreviewLeave = (item: UgcPortfolioItem) => {
     if (item.type !== 'video') return;
 
-    const previewVideo = previewVideoRefs.current[item.id];
-    if (!previewVideo) return;
-
-    previewVideo.pause();
-    previewVideo.currentTime = 0;
+    stopPreviewVideoPlayback(previewVideoRefs.current[item.id]);
   };
 
   const handleDialogVideoClick = () => {
@@ -278,6 +277,11 @@ export default function UgcContactSheet({
                 onClick={(event) => {
                   if (!canOpenUgcItem({ visibility })) return;
 
+                  if (item.type === 'video') {
+                    stopPreviewVideoPlayback(previewVideoRefs.current[item.id]);
+                  }
+                  stopAllPreviewVideoPlayback(previewVideoRefs.current);
+
                   flushSync(() => {
                     restoreFocusRef.current = event.currentTarget;
                     setNavigationDirection(1);
@@ -293,6 +297,11 @@ export default function UgcContactSheet({
                   if (!canOpenUgcItem({ visibility })) return;
                   if (!['Enter', ' ', 'Space', 'Spacebar', 'NumpadEnter'].includes(event.key)) return;
                   event.preventDefault();
+
+                  if (item.type === 'video') {
+                    stopPreviewVideoPlayback(previewVideoRefs.current[item.id]);
+                  }
+                  stopAllPreviewVideoPlayback(previewVideoRefs.current);
 
                   flushSync(() => {
                     restoreFocusRef.current = event.currentTarget as HTMLButtonElement;

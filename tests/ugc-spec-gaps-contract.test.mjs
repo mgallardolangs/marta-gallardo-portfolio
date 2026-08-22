@@ -5,7 +5,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { AdminStore } from '../src/components/admin/adminStore.ts';
-import { playFocusedVideoPlayback } from '../src/lib/ugcPortfolio.ts';
+import {
+  playFocusedVideoPlayback,
+  stopAllPreviewVideoPlayback,
+  stopPreviewVideoPlayback,
+} from '../src/lib/ugcPortfolio.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -270,6 +274,60 @@ test('focused playback helper flips to audible looping playback immediately and 
   assert.deepEqual(rejectedStates, [false]);
 });
 
+test('preview stop helpers pause and reset all previews before focused playback starts', async () => {
+  const playbackLog = [];
+  const clickedPreview = {
+    currentTime: 9,
+    muted: false,
+    pause() {
+      playbackLog.push(`pause:clicked:${this.currentTime}`);
+    },
+  };
+  const hiddenPreview = {
+    currentTime: 4,
+    muted: false,
+    pause() {
+      playbackLog.push(`pause:hidden:${this.currentTime}`);
+    },
+  };
+
+  stopPreviewVideoPlayback(clickedPreview);
+  assert.equal(clickedPreview.currentTime, 0);
+  assert.equal(clickedPreview.muted, true);
+
+  clickedPreview.currentTime = 12;
+  clickedPreview.muted = false;
+
+  const focusedVideo = {
+    currentTime: 21,
+    loop: false,
+    muted: true,
+    paused: true,
+    play() {
+      playbackLog.push(`play:focused:${clickedPreview.currentTime}:${hiddenPreview.currentTime}`);
+      this.paused = false;
+      return Promise.resolve();
+    },
+  };
+
+  stopAllPreviewVideoPlayback({
+    clicked: clickedPreview,
+    hidden: hiddenPreview,
+  });
+  await playFocusedVideoPlayback(focusedVideo);
+
+  assert.deepEqual(playbackLog, [
+    'pause:clicked:9',
+    'pause:clicked:12',
+    'pause:hidden:4',
+    'play:focused:0:0',
+  ]);
+  assert.equal(clickedPreview.currentTime, 0);
+  assert.equal(clickedPreview.muted, true);
+  assert.equal(hiddenPreview.currentTime, 0);
+  assert.equal(hiddenPreview.muted, true);
+});
+
 test('UGC viewer and editor source expose flushSync playback, right-edge controls, and poster clearing', async () => {
   const [sheetSource, editorSource, storeSource] = await Promise.all([
     readSource('src/components/UgcContactSheet.tsx'),
@@ -280,13 +338,18 @@ test('UGC viewer and editor source expose flushSync playback, right-edge control
   assert.match(sheetSource, /from ['"]react-dom['"]/);
   assert.match(
     sheetSource,
-    /onClick=\{\(event\) => \{[\s\S]{0,240}?flushSync\(\(\) => \{[\s\S]{0,240}?setActiveId\(item\.id\)[\s\S]{0,240}?\}\)[\s\S]{0,240}?playFocusedVideoPlayback\(/,
-    'tile click should flushSync the viewer mount and start focused playback within the same gesture path',
+    /onClick=\{\(event\) => \{[\s\S]*?stopAllPreviewVideoPlayback\(previewVideoRefs\.current\);[\s\S]*?flushSync\(\(\) => \{[\s\S]*?setActiveId\(item\.id\)[\s\S]*?\}\)[\s\S]*?playFocusedVideoPlayback\(/,
+    'tile click should stop all preview playback before flushSync opens the viewer and starts focused playback within the same gesture path',
   );
   assert.match(
     sheetSource,
-    /onKeyDown=\{\(event\) => \{[\s\S]{0,320}?(?:Enter|Space|NumpadEnter)[\s\S]{0,280}?flushSync\(\(\) => \{[\s\S]{0,240}?setActiveId\(item\.id\)[\s\S]{0,240}?\}\)[\s\S]{0,240}?playFocusedVideoPlayback\(/,
-    'keyboard activation should keep first focused playback inside the same synchronous gesture path instead of deferring it to an effect',
+    /onKeyDown=\{\(event\) => \{[\s\S]*?(?:Enter|Space|NumpadEnter)[\s\S]*?stopAllPreviewVideoPlayback\(previewVideoRefs\.current\);[\s\S]*?flushSync\(\(\) => \{[\s\S]*?setActiveId\(item\.id\)[\s\S]*?\}\)[\s\S]*?playFocusedVideoPlayback\(/,
+    'keyboard activation should stop all preview playback before synchronously mounting the viewer and starting focused playback',
+  );
+  assert.match(
+    sheetSource,
+    /const closeDialog = \(\) => \{[\s\S]{0,220}?stopAllPreviewVideoPlayback\(previewVideoRefs\.current\);[\s\S]{0,220}?resetFocusedVideoPlayback\(focusedVideoRef\.current\);[\s\S]{0,220}?setActiveId\(null\);[\s\S]{0,80}?\}/,
+    'closing the viewer should leave every preview video paused and reset until the next hover',
   );
   assert.match(
     sheetSource,
