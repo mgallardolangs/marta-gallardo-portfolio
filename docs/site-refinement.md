@@ -32,7 +32,7 @@
 
 ### Shared public views
 - `src/views/HomePage.astro` — Checkpoint 1 hero, GSAP-only home orbit carousel, about, proof section
-- `src/views/UgcPage.astro` — hero carousel, niche cards, galleries
+- `src/views/UgcPage.astro` — editorial hero, fixed 12-slot UGC contact sheet, mixed-media focus viewer
 - `src/views/TranslationSeoPage.astro` — typed hero, service switcher, arsenal, tabs, methodology, why section
 - `src/views/BlogIndexPage.astro` — locale-scoped blog index
 - `src/views/ContactPage.astro` — twin contact forms
@@ -40,9 +40,9 @@
 ### Public interactive components
 - `TypedTitle.astro` — Typed.js SSR-safe headings
 - `OvalMediaOrbit.tsx` — home orbit only
+- `UgcContactSheet.tsx` — fixed UGC contact sheet grid, hover previews, and filter-scoped focus viewer
 - `ServiceSwitcher.tsx` — translation route only
 - `ExperienceTabs.tsx` — translation route only
-- `PhotoMasonry.tsx`, `VideoGallery.tsx`, `NicheCard.tsx` — UGC route
 - `Header.astro`, `Footer.astro` — shared chrome
 
 ### Admin components
@@ -51,12 +51,13 @@
 - `EditableText.tsx`, `EditableImage.tsx`, `EditableMedia.tsx` — inline editing primitives
 - `EditableOrbitCollection.tsx` — orbit schema editing
 - `EditableCollection.tsx` — translation arsenal editing
+- `EditableUgcPortfolio.tsx` — fixed-slot UGC portfolio editor with per-slot media and ES/EN/FR fields
 - `AdminOrbitPreview.tsx` — static orbit preview without autoplay runtime or visible controls
 
 ## 3. Library ownership
 
 - CSS / Tailwind: spacing, colors, layout, focus, typography
-- Framer Motion: scroll reveal, stagger, parallax, hover lift, UGC gallery transitions
+- Framer Motion: scroll reveal, stagger, parallax, hover lift, UGC contact-sheet grid/viewer transitions
 - GSAP + ScrollTrigger: public Home and Translation routes only; the Home orbit carousel is GSAP-only
 - Lenis: global smooth-scroll runtime in public layout only; stops under reduced motion
 - Typed.js: `TypedTitle.astro` only
@@ -99,7 +100,59 @@ From `src/lib/orbitMedia.ts`:
 - reduced motion keeps the orbit static and pauses videos
 - admin preview is static and poster-first
 
-## 5. Translation page behavior
+## 5. UGC editorial contact sheet contract
+
+### Data source
+`src/data/site.json > ugcPortfolio`
+
+Each item keeps:
+- `id`
+- `category` (`travel` | `languages` | `art`)
+- `type` (`image` | `video`)
+- `src`
+- `poster` (`null` for images, required for videos)
+- localized `label`
+- localized `title`
+- localized `description`
+- localized `format`
+- localized `alt`
+
+The authored grid is fixed at 12 interleaved slots:
+- slot order stays authored; filters never reflow, reorder, add, or remove cells
+- categories stay balanced at `4 / 4 / 4` for Travel, Languages, and Art
+- each category stays balanced at `2 image + 2 video`
+- the initial temporary media live at local `/images/ugc/mock-01.webp` … `/images/ugc/mock-12.webp` and `/images/ugc/mock-02.mp4` … `/images/ugc/mock-12.mp4`
+- admin replacement keeps those paths local and updates the fixed slot in place instead of generating new layout entries
+
+### Filters and grid
+- `UgcContactSheet.tsx` owns the public and admin-preview UGC interaction
+- desktop grid stays `4 x 3`; mobile stays `2 x 6`
+- `All`, `Travel`, `Languages`, and `Art` are the only filters
+- non-matching items white out to plain paper cells with no hover/click affordance
+- matching items stay in their exact cells; the contact sheet never collapses gaps
+- image hover scales to about `1.055` and reveals the compact ink label
+- video hover swaps the poster for a muted looping preview and resets to time `0` on leave
+
+### Focus viewer
+- clicking a visible tile opens the full-screen ink overlay viewer and locks body scroll
+- desktop layout uses left project copy, centered `9:16` media, and right-side vertical arrows/counter
+- mobile stacks the copy above the same `9:16` frame while keeping the controls at the right edge
+- up/down arrows and keyboard `ArrowUp`/`ArrowDown` navigate only within the active filter; `All` navigates all 12 items
+- navigation wraps, `Escape` closes, and focus returns to the originating tile
+- images stay `object-fit: cover`
+- viewer videos autoplay audibly, loop, and clicking the focused video toggles play/pause
+- navigating away pauses, resets, and remutes the previous video before the next item mounts
+
+### Admin editing
+- `/admin/ugc` mirrors the public hero, filters, grid, and focus viewer as a preview above the editor
+- `EditableUgcPortfolio.tsx` exposes 12 fixed slot forms only; there are no add/remove/reorder controls
+- each slot can edit category, type, primary media, poster, and ES/EN/FR `label`, `title`, `description`, `format`, and `alt`
+- Spanish edits still backfill DE/IT/CA until code-managed locales are updated explicitly
+- image uploads stay <= `2 MB`; video uploads stay <= `8 MB`
+- accepted images: JPEG, PNG, WebP, GIF; accepted videos: MP4, WebM, QuickTime/MOV
+- pending binary uploads stay memory-only and must be reselected after reload
+
+## 6. Translation page behavior
 
 - Typed hero title remains SSR-readable
 - `ServiceSwitcher` is the only rotating service control; hover/focus/document-hidden/reduced-motion all pause its timer
@@ -107,7 +160,7 @@ From `src/lib/orbitMedia.ts`:
 - `ExperienceTabs` owns the two-panel education/experience browser tab UI
 - `translationPageMotion.ts` owns GSAP section lines/cards/connectors and must revert cleanly on Astro navigation
 
-## 6. Admin collection semantics
+## 7. Admin collection semantics
 
 ### Inline locales
 Editable in admin:
@@ -128,7 +181,7 @@ When an admin adds new orbit/tool/skill/language copy, Spanish is the fallback s
 - Publish writes changed locale JSON, changed `src/data/site.json`, uploaded assets, and blog markdown files
 - Blog creation is restricted to ES/EN/FR
 
-## 7. Locale scope and fallback
+## 8. Locale scope and fallback
 
 Astro config:
 - default locale: `es`
@@ -137,7 +190,7 @@ Astro config:
 
 Header language controls must expose all six locales.
 
-## 8. Astro lifecycle cleanup rules
+## 9. Astro lifecycle cleanup rules
 
 - `TypedTitle.astro` destroys Typed instances on `astro:before-preparation` and re-inits on `astro:page-load`
 - `Header.astro` cleans listeners before swaps and restores focus when overlays close
@@ -145,7 +198,7 @@ Header language controls must expose all six locales.
 - `GsapPageRuntime.astro` kills ScrollTriggers on route cleanup
 - `translationPageMotion.ts` must be cancellable across async imports and revisits
 
-## 9. Performance and reduced-motion rules
+## 10. Performance and reduced-motion rules
 
 ### Performance
 - referenced raster assets should stay in WebP unless SVG/video behavior requires otherwise
@@ -164,7 +217,7 @@ Header language controls must expose all six locales.
 - translation GSAP sections render their final state directly
 - footer has no continuous animation loop
 
-## 10. Tests and commands
+## 11. Tests and commands
 
 Run from repository root:
 
@@ -184,7 +237,7 @@ Important contracts live in:
 - `tests/phase4-translation-contract.test.mjs`
 - `tests/phase5-refinement-contract.test.mjs`
 
-## 11. External references
+## 12. External references
 
 Use as references only:
 - Astro routing: https://docs.astro.build/en/guides/routing/
@@ -192,6 +245,6 @@ Use as references only:
 - Astro styling: https://docs.astro.build/en/guides/styling/
 - Astro i18n: https://docs.astro.build/en/guides/internationalization/
 
-## 12. No-copy boundary
+## 13. No-copy boundary
 
 Do not copy external code, templates, or third-party assets into this repository. External URLs above are implementation references only; design, copy, and assets in this project must stay original and repository-owned.
