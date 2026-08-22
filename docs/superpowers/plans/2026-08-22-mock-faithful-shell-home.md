@@ -150,12 +150,6 @@ Use only:
 --color-cream: var(--color-paper);
 --color-charcoal: var(--color-ink);
 --color-warm-gray: rgb(6 4 3 / 0.68);
---color-rose-gold: var(--color-amaranth);
---color-blush-50: var(--color-paper);
---color-blush-100: var(--color-paper);
---color-blush-200: var(--color-paper);
---color-blush-300: var(--color-amaranth);
---color-blush-400: var(--color-amaranth);
 --color-white: var(--color-paper);
 ```
 

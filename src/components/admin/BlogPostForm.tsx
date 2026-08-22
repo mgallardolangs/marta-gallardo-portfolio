@@ -3,7 +3,7 @@ import type { FormEvent } from 'react';
 import { ADMIN_BLOG_LANGS, isAdminBlogLang, type AdminBlogLang } from './adminStore';
 import { useAdminStore } from './useAdminStore';
 
-const inputClass = 'w-full rounded-2xl border border-blush-100 bg-white px-4 py-3 text-sm text-charcoal outline-none transition focus:border-rose-gold focus:ring-2 focus:ring-blush-100';
+const inputClass = 'w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-charcoal outline-none transition focus:border-amaranth focus:ring-2 focus:ring-amaranth/20';
 const labelClass = 'mb-2 block text-sm font-medium text-warm-gray';
 const blogLanguageLabels: Record<AdminBlogLang, string> = {
   es: 'Español',
@@ -74,7 +74,7 @@ export default function BlogPostForm() {
   };
 
   return (
-    <form onSubmit={(event) => void handleSubmit(event)} className="space-y-6 rounded-[2rem] border border-blush-100 bg-white p-6 shadow-sm md:p-8">
+    <form onSubmit={(event) => void handleSubmit(event)} className="space-y-6 rounded-[2rem] border border-black/10 bg-white p-6 shadow-sm md:p-8">
       <div className="grid gap-6 md:grid-cols-2">
         <div className="md:col-span-2">
           <label className={labelClass} htmlFor="blog-title">Title</label>
@@ -117,7 +117,7 @@ export default function BlogPostForm() {
 
         <div className="md:col-span-2">
           <label className={labelClass} htmlFor="blog-slug">Slug</label>
-          <input id="blog-slug" value={slug} readOnly className={`${inputClass} bg-blush-50 text-warm-gray`} />
+          <input id="blog-slug" value={slug} readOnly className={`${inputClass} bg-paper text-warm-gray`} />
         </div>
 
         <div className="md:col-span-2">
@@ -131,7 +131,7 @@ export default function BlogPostForm() {
 
       <div className="flex items-center justify-between gap-4">
         <p className="text-xs text-warm-gray">Posts are committed through Netlify Git Gateway.</p>
-        <button type="submit" disabled={isSubmitting} className="rounded-full bg-rose-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50">
+        <button type="submit" disabled={isSubmitting} className="rounded-full bg-amaranth px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50">
           {isSubmitting ? 'Creating...' : 'Create post'}
         </button>
       </div>

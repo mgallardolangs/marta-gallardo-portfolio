@@ -138,7 +138,7 @@ export default function VideoGallery({ videos, lang = 'es' }: Props) {
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/75 via-charcoal/10 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 z-10 flex items-center justify-between p-4 text-white">
               <div>
-                <p className="font-accent text-[11px] uppercase tracking-[0.35em] text-blush-100">{ui.title}</p>
+                <p className="font-accent text-[11px] uppercase tracking-[0.35em] text-paper">{ui.title}</p>
                 <p className="mt-1 font-body text-sm text-white/85">{ui.hint}</p>
               </div>
               <button

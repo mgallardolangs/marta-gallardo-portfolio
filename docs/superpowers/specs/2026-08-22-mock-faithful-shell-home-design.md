@@ -41,7 +41,7 @@ Remove from the affected surfaces:
 - `--color-amaranth-soft`
 - `--color-amaranth-mist`
 - `--color-amaranth-ink`
-- `--color-blush-*`
+- Legacy `blush-*` utilities or variables
 - Pink radial gradients and glow blobs
 - Solid `#FFFFFF`; use paper instead
 

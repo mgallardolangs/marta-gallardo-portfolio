@@ -43,7 +43,7 @@ const blogAlternateLinks = getBlogAlternateLinksForPost(posts, post);
               {post.data.title}
             </h1>
             {post.data.image && (
-              <div class="mt-8 overflow-hidden border border-black/10 bg-blush-50">
+              <div class="mt-8 overflow-hidden border border-black/10 bg-paper">
                 <img src={post.data.image} alt={post.data.title} width={1600} height={900} loading="eager" fetchpriority="high" decoding="async" class="aspect-[16/9] w-full object-cover" />
               </div>
             )}

@@ -35,7 +35,7 @@ export default function NicheCard(props: Props) {
       whileTap={prefersReducedMotion ? undefined : { scale: 0.99 }}
       transition={{ duration: 0.25, ease: 'easeOut' }}
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-blush-100 via-paper to-white" />
+      <div className="absolute inset-0 bg-gradient-to-br from-paper via-white to-paper" />
       {props.backgroundImage && (
         <img
           src={props.backgroundImage}

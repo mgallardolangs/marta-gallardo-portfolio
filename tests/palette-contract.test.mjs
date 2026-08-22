@@ -8,7 +8,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const srcDir = path.join(rootDir, 'src');
 const sourceExtensions = new Set(['.astro', '.tsx', '.css', '.ts', '.js']);
-const forbiddenLegacyAmaranthPattern = /\bamaranth-(?:soft|mist|ink)\b/i;
+const forbiddenLegacyPalettePattern = /\b(?:amaranth-(?:soft|mist|ink)|blush-[a-z0-9/-]+|rose-gold)\b|#fff(?:fff)?\b/i;
+const approvedOpaqueHexColors = new Set(['#f4f5f1', '#060403', '#e83256']);
+const hexLiteralPattern = /#(?:[\da-f]{3}|[\da-f]{4}|[\da-f]{6}|[\da-f]{8})\b/gi;
 
 function decodeCssEscapes(source) {
   return source.replace(/\\([0-9a-fA-F]{1,6}\s?|.)/g, (_, escapedValue) => {
@@ -39,7 +41,11 @@ async function collectSourceFiles(directory) {
   return files.flat().sort();
 }
 
-test('all src files drop amaranth soft/mist/ink token names even when CSS escapes are decoded', async () => {
+function extractHexLiterals(source) {
+  return [...source.matchAll(hexLiteralPattern)].map((match) => match[0]);
+}
+
+test('all src files drop legacy palette token names even when CSS escapes are decoded', async () => {
   const sourceFiles = await collectSourceFiles(srcDir);
 
   await Promise.all(sourceFiles.map(async (absolutePath) => {
@@ -49,8 +55,18 @@ test('all src files drop amaranth soft/mist/ink token names even when CSS escape
 
     assert.doesNotMatch(
       decodedSource,
-      forbiddenLegacyAmaranthPattern,
-      `${relativePath} should not contain amaranth-soft, amaranth-mist, or amaranth-ink after decoding CSS escapes`,
+      forbiddenLegacyPalettePattern,
+      `${relativePath} should not contain legacy blush, rose-gold, or extra amaranth tokens after decoding CSS escapes`,
+    );
+
+    const disallowedHexLiterals = [...new Set(
+      extractHexLiterals(source).filter((hexLiteral) => !approvedOpaqueHexColors.has(hexLiteral.toLowerCase())),
+    )];
+
+    assert.deepEqual(
+      disallowedHexLiterals,
+      [],
+      `${relativePath} should only keep approved opaque hex colors (#F4F5F1, #060403, #E83256)`,
     );
   }));
 });
@@ -78,5 +94,10 @@ test('theme color declarations reject backslash escapes and extra amaranth varia
     decodedVariableNames.filter((name) => name.startsWith('--color-amaranth-')),
     [],
     'theme should not declare --color-amaranth-* aliases beyond the approved base variable',
+  );
+  assert.deepEqual(
+    decodedVariableNames.filter((name) => /^--color-(?:rose-gold|blush-(?:50|100|200|300|400))$/i.test(name)),
+    [],
+    'theme should not declare legacy rose-gold or blush variables',
   );
 });

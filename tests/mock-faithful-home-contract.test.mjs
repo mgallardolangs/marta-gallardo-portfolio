@@ -1,23 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const locales = ['es', 'en', 'fr', 'de', 'it', 'ca'];
-const affectedSourcePaths = [
-  'src/components/Header.astro',
-  'src/components/TypedTitle.astro',
-  'src/views/HomePage.astro',
-  'src/components/OvalMediaOrbit.tsx',
-  'src/pages/admin/index.astro',
-  'src/components/admin/AdminOrbitPreview.tsx',
-];
 const legacyVisualTokenPattern = /\b(?:amaranth-soft|amaranth-mist|amaranth-ink|blush-[a-z0-9/-]+|rose-gold)\b|#fff(?:fff)?\b/i;
 const approvedOpaqueHexColors = new Set(['#f4f5f1', '#060403', '#e83256']);
 const hexLiteralPattern = /#(?:[\da-f]{3}|[\da-f]{4}|[\da-f]{6}|[\da-f]{8})\b/gi;
+const sourceExtensions = new Set(['.astro', '.tsx', '.css', '.ts', '.js']);
 
 function extractHexLiterals(source) {
   return [...source.matchAll(hexLiteralPattern)].map((match) => match[0]);
@@ -29,6 +22,22 @@ async function readSource(relativePath) {
 
 async function readJson(relativePath) {
   return JSON.parse(await readSource(relativePath));
+}
+
+async function listSourceFiles(relativeDir = 'src') {
+  const absoluteDir = path.join(rootDir, relativeDir);
+  const entries = await readdir(absoluteDir, { withFileTypes: true });
+  const nestedPaths = await Promise.all(entries.map(async (entry) => {
+    const relativePath = path.join(relativeDir, entry.name);
+
+    if (entry.isDirectory()) {
+      return listSourceFiles(relativePath);
+    }
+
+    return sourceExtensions.has(path.extname(entry.name)) ? [relativePath] : [];
+  }));
+
+  return nestedPaths.flat().sort();
 }
 
 function getSvgTextNodes(source) {
@@ -48,10 +57,11 @@ function getSvgPaintValues(source) {
   return [...source.matchAll(/\b(?:fill|stroke)=["']([^"']+)["']/gi)].map((match) => match[1].trim());
 }
 
-test('approved home correction removes legacy visual tokens and unapproved hex colors from the affected sources only', async () => {
-  const sources = await Promise.all(
-    affectedSourcePaths.map(async (relativePath) => [relativePath, await readSource(relativePath)]),
-  );
+test('strict palette cleanup removes legacy visual tokens and unapproved hex colors from all src sources', async () => {
+  const sourcePaths = await listSourceFiles();
+  assert.ok(sourcePaths.length > 0, 'expected src source files to audit');
+
+  const sources = await Promise.all(sourcePaths.map(async (relativePath) => [relativePath, await readSource(relativePath)]));
 
   for (const [relativePath, source] of sources) {
     assert.doesNotMatch(
@@ -69,6 +79,13 @@ test('approved home correction removes legacy visual tokens and unapproved hex c
       `${relativePath} should only keep approved opaque hex colors (#F4F5F1, #060403, #E83256); transparent variants must use rgb()/rgba()/color-mix() instead`,
     );
   }
+
+  const globalCssSource = sources.find(([relativePath]) => relativePath === 'src/styles/global.css')?.[1] ?? '';
+  assert.doesNotMatch(
+    globalCssSource,
+    /--color-(?:rose-gold|blush-(?:50|100|200|300|400))\s*:/,
+    'src/styles/global.css should not declare legacy rose-gold or blush theme tokens',
+  );
 });
 
 test('header shell and social controls keep the mock-faithful chrome contract', async () => {
