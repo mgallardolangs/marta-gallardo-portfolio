@@ -8,7 +8,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const locales = ['es', 'en', 'fr', 'de', 'it', 'ca'];
 const affectedSourcePaths = [
-  'src/styles/global.css',
   'src/components/Header.astro',
   'src/components/TypedTitle.astro',
   'src/views/HomePage.astro',

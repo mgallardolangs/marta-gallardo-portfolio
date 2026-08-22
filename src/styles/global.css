@@ -4,17 +4,14 @@
   --color-paper: #F4F5F1;
   --color-ink: #060403;
   --color-amaranth: #E83256;
-  --color-amaranth-\69 nk: var(--color-amaranth);
-  --color-amaranth-\73 oft: var(--color-amaranth);
-  --color-amaranth-mi\73 t: rgb(244 245 241 / 0.88);
-  --color-b\6c ush-\35 0: var(--color-paper);
-  --color-b\6c ush-\31 00: var(--color-paper);
-  --color-b\6c ush-\32 00: var(--color-paper);
-  --color-b\6c ush-\33 00: var(--color-amaranth);
-  --color-b\6c ush-\34 00: var(--color-amaranth);
+  --color-blush-50: var(--color-paper);
+  --color-blush-100: var(--color-paper);
+  --color-blush-200: var(--color-paper);
+  --color-blush-300: var(--color-amaranth);
+  --color-blush-400: var(--color-amaranth);
   --color-cream: var(--color-paper);
   --color-charcoal: var(--color-ink);
-  --color-rose-\67 old: var(--color-amaranth);
+  --color-rose-gold: var(--color-amaranth);
   --color-white: var(--color-paper);
   --color-warm-gray: rgb(6 4 3 / 0.68);
   --color-ink-muted: rgb(6 4 3 / 0.68);
@@ -390,88 +387,6 @@ svg {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@layer utilities {
-  .bg-b\6c ush-\35 0 {
-    background-color: var(--color-paper);
-  }
-
-  .bg-b\6c ush-\35 0\/70 {
-    background-color: rgb(244 245 241 / 0.7);
-  }
-
-  .border-b\6c ush-\31 00 {
-    border-color: var(--color-paper);
-  }
-
-  .fill-b\6c ush-\31 00\/20 {
-    fill: rgb(244 245 241 / 0.2);
-  }
-
-  .stroke-b\6c ush-\32 00\/20 {
-    stroke: rgb(244 245 241 / 0.2);
-  }
-
-  .stroke-b\6c ush-\32 00\/25 {
-    stroke: rgb(244 245 241 / 0.25);
-  }
-
-  .stroke-b\6c ush-\32 00\/28 {
-    stroke: rgb(244 245 241 / 0.28);
-  }
-
-  .stroke-b\6c ush-\32 00\/30 {
-    stroke: rgb(244 245 241 / 0.3);
-  }
-
-  .stroke-b\6c ush-\32 00\/35 {
-    stroke: rgb(244 245 241 / 0.35);
-  }
-
-  .stroke-b\6c ush-\32 00\/40 {
-    stroke: rgb(244 245 241 / 0.4);
-  }
-
-  .text-b\6c ush-\31 00,
-  .text-b\6c ush-\32 00 {
-    color: var(--color-paper);
-  }
-
-  .text-b\6c ush-\33 00,
-  .text-rose-\67 old,
-  .text-amaranth-\73 oft {
-    color: var(--color-amaranth);
-  }
-
-  .bg-rose-\67 old {
-    background-color: var(--color-amaranth);
-  }
-
-  .border-rose-\67 old {
-    border-color: var(--color-amaranth);
-  }
-
-  .bg-amaranth-\73 oft\/30 {
-    background-color: rgb(232 50 86 / 0.3);
-  }
-
-  .bg-amaranth-mi\73 t {
-    background-color: rgb(244 245 241 / 0.88);
-  }
-
-  .hover\:text-b\6c ush-\33 00:hover,
-  .hover\:text-rose-\67 old:hover {
-    color: var(--color-amaranth);
-  }
-
-  .focus\:border-rose-\67 old:focus {
-    border-color: var(--color-amaranth);
-  }
-
-  .focus\:ring-b\6c ush-\31 00:focus {
-    --tw-ring-color: rgb(244 245 241 / 1);
   }
 }
 

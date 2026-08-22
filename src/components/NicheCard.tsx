@@ -72,10 +72,10 @@ export default function NicheCard(props: Props) {
         </div>
 
         <div>
-          <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.35em] text-amaranth-soft">UGC</p>
+          <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.35em] text-amaranth">UGC</p>
           <div className="mt-4 flex items-end justify-between gap-4">
             <h2 className="font-heading text-4xl text-white md:text-[2.8rem]">{props.label}</h2>
-            <span className="border-b border-amaranth pb-1 text-sm font-semibold uppercase tracking-[0.22em] text-amaranth-soft transition-colors duration-300 group-hover:text-white">→</span>
+            <span className="border-b border-amaranth pb-1 text-sm font-semibold uppercase tracking-[0.22em] text-amaranth transition-colors duration-300 group-hover:text-white">→</span>
           </div>
           <p className="mt-4 max-w-xs font-body text-sm leading-6 text-white/85 md:text-base">{props.accent}</p>
         </div>

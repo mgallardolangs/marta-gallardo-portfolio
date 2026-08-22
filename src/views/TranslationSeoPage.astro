@@ -63,7 +63,7 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
       <section class="bg-ink px-6 py-14 text-paper md:py-18">
         <div class="site-container space-y-6">
           <div class="max-w-2xl">
-            <p class="font-body text-xs font-semibold uppercase tracking-[0.28em] text-amaranth-soft">{page.services.title}</p>
+            <p class="font-body text-xs font-semibold uppercase tracking-[0.28em] text-paper">{page.services.title}</p>
           </div>
           <ServiceSwitcher client:load items={page.services.items} title={page.services.title} />
         </div>

@@ -37,10 +37,10 @@ export default function AdminNicheCard({ id, labelKey, accentKey, backgroundImag
         </div>
 
         <div>
-          <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.35em] text-amaranth-soft">UGC</p>
+          <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.35em] text-amaranth">UGC</p>
           <div className="mt-4 flex items-end justify-between gap-4">
             <EditableText i18nKey={labelKey} as="h2" className="font-heading text-4xl text-white md:text-[2.8rem]" />
-            <button type="button" onClick={scrollToSection} className="border-b border-amaranth pb-1 text-sm font-semibold uppercase tracking-[0.22em] text-amaranth-soft transition-colors hover:text-white">→</button>
+            <button type="button" onClick={scrollToSection} className="border-b border-amaranth pb-1 text-sm font-semibold uppercase tracking-[0.22em] text-amaranth transition-colors hover:text-white">→</button>
           </div>
           <EditableText i18nKey={accentKey} as="p" className="mt-4 max-w-xs font-body text-sm leading-6 text-white/85 md:text-base" />
         </div>

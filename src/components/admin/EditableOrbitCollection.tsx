@@ -63,7 +63,7 @@ export default function EditableOrbitCollection() {
                   <button
                     type="button"
                     onClick={() => store.removeOrbitMediaItem(index)}
-                    className="border border-amaranth/30 bg-amaranth-mist px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-amaranth transition hover:bg-amaranth hover:text-ink"
+                    className="border border-amaranth/30 bg-paper px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-amaranth transition hover:bg-amaranth hover:text-ink"
                   >
                     Remove
                   </button>
@@ -134,7 +134,7 @@ export default function EditableOrbitCollection() {
                   )}
 
                   {errors.length > 0 && (
-                    <div className="border border-amaranth/30 bg-amaranth-mist px-4 py-3 text-sm text-amaranth">
+                    <div className="border border-amaranth/30 bg-paper px-4 py-3 text-sm text-amaranth">
                       {errors.map((error) => (
                         <p key={error}>{error}</p>
                       ))}

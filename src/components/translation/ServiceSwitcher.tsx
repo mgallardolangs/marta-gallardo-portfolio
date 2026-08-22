@@ -195,7 +195,7 @@ export default function ServiceSwitcher({ items, title = '' }: Props) {
                 className="flex min-h-[18rem] items-center border border-white/10 bg-white/5 p-6 md:p-8"
               >
                 <div className="max-w-2xl space-y-4">
-                  <p className="font-body text-xs font-semibold uppercase tracking-[0.3em] text-amaranth-soft">{item.name}</p>
+                  <p className="font-body text-xs font-semibold uppercase tracking-[0.3em] text-paper">{item.name}</p>
                   <p className="text-lg leading-8 text-white/78">{item.description}</p>
                 </div>
               </div>

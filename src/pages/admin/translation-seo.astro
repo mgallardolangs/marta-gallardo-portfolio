@@ -40,7 +40,7 @@ const arsenalColumns = getTranslationArsenalColumns(lang, imagesData);
     <section class="bg-ink px-6 py-14 text-paper md:py-18">
       <div class="site-container grid gap-10 md:grid-cols-[0.95fr_1.05fr]">
         <div class="space-y-6">
-          <EditableText client:load i18nKey="translationPage.services.title" as="p" className="font-body text-xs font-semibold uppercase tracking-[0.28em] text-amaranth-soft" />
+          <EditableText client:load i18nKey="translationPage.services.title" as="p" className="font-body text-xs font-semibold uppercase tracking-[0.28em] text-paper" />
 
           <div class="space-y-6">
             {page.services.items.map((service, index) => (
@@ -54,7 +54,7 @@ const arsenalColumns = getTranslationArsenalColumns(lang, imagesData);
         </div>
 
         <div class="border border-white/10 bg-white/5 p-6 md:p-8">
-          <EditableText client:load i18nKey="translationPage.services.items.0.name" as="p" className="font-body text-xs font-semibold uppercase tracking-[0.3em] text-amaranth-soft" />
+          <EditableText client:load i18nKey="translationPage.services.items.0.name" as="p" className="font-body text-xs font-semibold uppercase tracking-[0.3em] text-paper" />
           <EditableText client:load i18nKey="translationPage.services.items.0.description" as="div" className="mt-4 text-lg leading-8 text-white/78" />
         </div>
       </div>
