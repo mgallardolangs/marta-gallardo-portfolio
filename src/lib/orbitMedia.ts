@@ -9,13 +9,13 @@ export const ORBIT_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'imag
 export const ORBIT_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/quicktime'] as const;
 export const ORBIT_IMAGE_MAX_BYTES = 2 * 1024 * 1024;
 export const ORBIT_VIDEO_MAX_BYTES = 8 * 1024 * 1024;
-export const ORBIT_REVOLUTION_SECONDS = 68;
+export const ORBIT_REVOLUTION_SECONDS = 76;
 
 export const DESKTOP_ORBIT_GEOMETRY = {
-  width: 690,
-  height: 430,
-  radiusX: 296,
-  radiusY: 154,
+  width: 720,
+  height: 440,
+  radiusX: 324,
+  radiusY: 145,
   tiltDeg: -18,
 } as const;
 
@@ -91,11 +91,10 @@ export function getOrbitItemLayout(
 ) {
   const point = getTiltedEllipsePoint(progress + index / Math.max(total, 1), geometry);
   const depth = Math.max(0, Math.min(1, (point.y + geometry.height / 2) / geometry.height));
-  const baseScale = 0.76 + depth * 0.28;
 
   return {
     point,
-    baseScale,
+    baseScale: 1,
     depth,
     zIndex: 20 + Math.round(depth * 80),
     leftPercent: 50 + (point.x / geometry.width) * 100,
@@ -116,7 +115,7 @@ export function getOrbitInteractionState({
     return {
       opacity: 1,
       filter: 'none',
-      scale: Number((baseScale * 1.5).toFixed(2)),
+      scale: 1.52,
       zIndexBoost: 1000,
     };
   }
@@ -136,6 +135,23 @@ export function getOrbitInteractionState({
     scale: baseScale,
     zIndexBoost: 0,
   };
+}
+
+export function getOrbitDriftTweenOptions() {
+  return {
+    value: 1,
+    duration: ORBIT_REVOLUTION_SECONDS,
+    repeat: -1,
+    ease: 'none' as const,
+  };
+}
+
+export function getOrbitDriftPlaybackMode(activeId: string | null) {
+  return activeId === null ? 'play' : 'pause';
+}
+
+export function shouldStartOrbitDrift(entranceComplete: boolean) {
+  return entranceComplete;
 }
 
 export function getOrbitVideoPlaybackMode({
@@ -170,35 +186,6 @@ export function getOrbitActivatedVideoPlaybackMode({
 
   if (playbackMode === 'pause') return 'pause';
   return activationMode === 'pointer-hover' ? 'play-with-sound' : 'play-muted';
-}
-
-export function approximateEllipseCircumference(radiusX: number, radiusY: number) {
-  const h = ((radiusX - radiusY) ** 2) / ((radiusX + radiusY) ** 2);
-  return Math.PI * (radiusX + radiusY) * (1 + (3 * h) / (10 + Math.sqrt(4 - 3 * h)));
-}
-
-export function calculateOrbitAutoScrollSpeed({
-  itemCount,
-  tilePitch,
-  geometry = DESKTOP_ORBIT_GEOMETRY,
-  revolutionSeconds = ORBIT_REVOLUTION_SECONDS,
-  fps = 60,
-}: {
-  itemCount: number;
-  tilePitch: number;
-  geometry?: OrbitGeometry;
-  revolutionSeconds?: number;
-  fps?: number;
-}) {
-  if (itemCount <= 0 || tilePitch <= 0) return 2;
-
-  // Embla auto-scroll uses horizontal px/frame, so we convert the ellipse pitch
-  // (circumference ÷ itemCount) into the current measured slide pitch before
-  // dividing by the target revolution time.
-  const circumference = approximateEllipseCircumference(geometry.radiusX, geometry.radiusY);
-  const orbitalPitch = circumference / itemCount;
-  const pixelsPerSecond = circumference / revolutionSeconds;
-  return Number(((pixelsPerSecond / fps) * (tilePitch / orbitalPitch)).toFixed(4));
 }
 
 export function resolveOrbitHref(href: string | null | undefined, lang: OrbitLang) {

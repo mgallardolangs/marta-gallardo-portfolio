@@ -58,32 +58,41 @@ test('orbit geometry maps the approved ellipse checkpoints', async () => {
   const geometry = orbit.DESKTOP_ORBIT_GEOMETRY;
 
   assert.equal(orbit.ORBIT_REVOLUTION_SECONDS, 76);
+  assert.deepEqual(geometry, {
+    width: 720,
+    height: 440,
+    radiusX: 324,
+    radiusY: 145,
+    tiltDeg: -18,
+  });
 
   const zero = orbit.getTiltedEllipsePoint(0, geometry);
   const quarter = orbit.getTiltedEllipsePoint(0.25, geometry);
   const half = orbit.getTiltedEllipsePoint(0.5, geometry);
 
-  assertApprox(zero.x, 281.61, 0.2, 'phase 0 x');
-  assertApprox(zero.y, -91.47, 0.2, 'phase 0 y');
-  assertApprox(quarter.x, 47.59, 0.2, 'phase 0.25 x');
-  assertApprox(quarter.y, 146.47, 0.2, 'phase 0.25 y');
-  assertApprox(half.x, -281.61, 0.2, 'phase 0.5 x');
-  assertApprox(half.y, 91.47, 0.2, 'phase 0.5 y');
+  assertApprox(zero.x, 308.14, 0.2, 'phase 0 x');
+  assertApprox(zero.y, -100.12, 0.2, 'phase 0 y');
+  assertApprox(quarter.x, 44.81, 0.2, 'phase 0.25 x');
+  assertApprox(quarter.y, 137.9, 0.2, 'phase 0.25 y');
+  assertApprox(half.x, -308.14, 0.2, 'phase 0.5 x');
+  assertApprox(half.y, 100.12, 0.2, 'phase 0.5 y');
 });
 
 test('orbit helpers keep hrefs locale-aware and interaction states consistent', async () => {
   const orbit = await loadOrbitModule();
+  const layout = orbit.getOrbitItemLayout(0.12, 3, 15, orbit.DESKTOP_ORBIT_GEOMETRY);
 
   assert.equal(orbit.resolveOrbitHref('/contact', 'fr'), '/fr/contact');
   assert.equal(orbit.resolveOrbitHref('/blog', 'es'), '/blog');
   assert.equal(orbit.resolveOrbitHref(null, 'en'), null);
+  assert.equal(layout.baseScale, 1, 'orbit tiles should keep a flat base scale so adjacent overlap stays consistent across the loop');
 
   assert.deepEqual(
     orbit.getOrbitInteractionState({ baseScale: 0.92, isActive: true, hasActiveTile: true }),
     {
       opacity: 1,
       filter: 'none',
-      scale: 1.38,
+      scale: 1.52,
       zIndexBoost: 1000,
     },
   );
@@ -312,10 +321,18 @@ test('homepage and admin keep the approved orbit wiring while StoryMap files dis
   assert.match(homeSource, /<OvalMediaOrbit client:visible/);
   assert.doesNotMatch(homeSource, /StoryMap/);
   assert.match(homeSource, /bg-ink/, 'home page should add the approved black anchor section');
+  assert.match(homeSource, /i\.home\.orbit\.kicker/);
+  assert.match(homeSource, /i\.home\.orbit\.title/);
+  assert.match(homeSource, /i\.home\.orbit\.description/);
+  assert.match(homeSource, /i\.home\.orbit\.index/);
 
   assert.match(adminSource, /import EditableOrbitCollection from ['"]\.\.\/\.\.\/components\/admin\/EditableOrbitCollection['"]/);
   assert.match(adminSource, /import AdminOrbitPreview from ['"]\.\.\/\.\.\/components\/admin\/AdminOrbitPreview['"]/);
   assert.match(adminSource, /<AdminOrbitPreview client:load/);
+  assert.match(adminSource, /i18nKey="home\.orbit\.kicker"/);
+  assert.match(adminSource, /i18nKey="home\.orbit\.title"/);
+  assert.match(adminSource, /i18nKey="home\.orbit\.description"/);
+  assert.match(adminSource, /i18nKey="home\.orbit\.index"/);
   assert.doesNotMatch(adminSource, /AdminStoryMap/);
 
   assert.match(orbitSource, /from ['"]gsap['"]/);
@@ -327,13 +344,33 @@ test('homepage and admin keep the approved orbit wiring while StoryMap files dis
   );
   assert.match(
     orbitSource,
-    /onComplete:\s*\(\)\s*=>\s*\{(?=[\s\S]*?\bshouldStartOrbitDrift\()(?=[\s\S]*?playAutoScroll\(0\))[\s\S]*?\}/,
-    'orbit component should keep drift start scoped to entrance completion while delegating the gate decision to the helper',
+    /const progressRef = useRef\(\{ value: 0 \}\);/,
+    'orbit component should keep drift progress in a mutable ref object so GSAP can drive layout without Embla state',
   );
-  assert.equal(
-    countMatches(orbitSource, /playAutoScroll\(0\)/g),
-    1,
-    'orbit component should only contain one eager drift start call, inside entrance completion',
+  assert.match(
+    orbitSource,
+    /const driftTweenRef = useRef<gsap\.core\.Tween \| null>\(null\);/,
+    'orbit component should keep a drift tween ref for hover pause and Astro navigation cleanup',
+  );
+  assert.match(
+    orbitSource,
+    /onComplete:\s*\(\)\s*=>\s*\{(?=[\s\S]*?\bshouldStartOrbitDrift\()(?=[\s\S]*?\bgetOrbitDriftTweenOptions\(\))(?=[\s\S]*?\bdriftTweenRef\.current = gsap\.to\(progressRef\.current,\s*[\s\S]*?\))[\s\S]*?\}/,
+    'orbit component should only create the infinite drift tween after the entrance sequence completes',
+  );
+  assert.match(
+    orbitSource,
+    /onUpdate:\s*\(\)\s*=>\s*applyOrbitLayout\(/,
+    'orbit drift tween should re-apply tile coordinates on every GSAP update for smooth motion',
+  );
+  assert.match(
+    orbitSource,
+    /const driftPlaybackMode = getOrbitDriftPlaybackMode\(activeId\);/,
+    'orbit component should delegate drift pause vs play state to the shared playback helper',
+  );
+  assert.match(
+    orbitSource,
+    /if \(driftPlaybackMode === 'pause'\) \{\s*driftTweenRef\.current\?\.pause\(\);\s*\} else \{\s*driftTweenRef\.current\?\.play\(\);\s*\}/s,
+    'orbit hover state should pause and resume the shared GSAP drift tween instead of moving slides directly',
   );
   assert.doesNotMatch(orbitSource, /embla-carousel-react/);
   assert.doesNotMatch(orbitSource, /embla-carousel-auto-scroll|AutoScroll/);
@@ -346,6 +383,7 @@ test('homepage and admin keep the approved orbit wiring while StoryMap files dis
   assert.doesNotMatch(orbitSource, /ui\.previous|ui\.next|aria-roledescription="carousel"|aria-label=\{ui\.(?:previous|next)\}/);
   assert.doesNotMatch(orbitSource, /\bprevious\s*:\s*['"]|\bnext\s*:\s*['"]/);
   assert.doesNotMatch(orbitSource, /<button\b/i, 'orbit component source should not ship button controls anywhere');
+  assert.doesNotMatch(orbitSource, /\baria-pressed=|\btoggleVideoSound\b|enableAudio|audioBlocked|mute:/, 'orbit component should remove the old visible video sound toggle UI');
 
   await assert.rejects(access(path.join(rootDir, 'src/components/StoryMap.tsx')));
   await assert.rejects(access(path.join(rootDir, 'src/components/admin/AdminStoryMap.tsx')));
@@ -480,4 +518,6 @@ test('built home route ships orbit motion chunks while contact and blog stay fre
   const orbitAssets = allBuiltFiles.filter((filePath) => /OvalMediaOrbit|gsap/i.test(path.basename(filePath)));
   assert.ok(orbitAssets.length >= 1, 'build should emit at least one orbit-related client chunk');
   assert.ok(orbitAssets.every((filePath) => !/embla/i.test(path.basename(filePath))), 'build should not emit embla orbit chunks once the correction lands');
+  const builtContents = await Promise.all(allBuiltFiles.map((filePath) => readFile(filePath, 'utf8')));
+  assert.ok(builtContents.every((source) => !/embla/i.test(source)), 'build output should not contain embla package code once the correction lands');
 });

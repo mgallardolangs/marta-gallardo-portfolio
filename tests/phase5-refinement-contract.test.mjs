@@ -228,7 +228,8 @@ test('motion runtime and reduced-motion-sensitive components keep the Phase 5 ha
   );
   assert.match(translationMotionSource, /applyReducedMotionState\(root\);/);
   assert.match(orbitSource, /const shouldAnimate = !previewMode && prefersReducedMotion === false;/);
-  assert.match(orbitSource, /aria-pressed=\{soundState === 'sound-on'\}/);
+  assert.match(orbitSource, /getOrbitActivatedVideoPlaybackMode/);
+  assert.doesNotMatch(orbitSource, /\baria-pressed=|\btoggleVideoSound\b|enableAudio|audioBlocked|mute:/);
   assert.match(serviceSwitcherSource, /prefersReducedMotion/);
   assert.match(experienceTabsSource, /prefersReducedMotion \? '' : 'duration-300'/);
   assert.doesNotMatch(footerSource, /animation:\s*[^;]*infinite/, 'footer should not carry any continuous animation loop');
@@ -271,7 +272,7 @@ test('public media surfaces keep eager hero loading, lazy below-fold loading, an
     readSource('src/components/VideoGallery.tsx'),
   ]);
 
-  assert.match(homeSource, /<img[^>]*src=\{siteData\.heroMainPhoto\}[^>]*alt=\{heroPortraitAlt\}[^>]*width=\{1200\}[^>]*height=\{1600\}[^>]*fetchpriority="high"/);
+  assert.match(homeSource, /<HomeHeroAbstractVisual \/>/);
   assert.match(homeSource, /<img[^>]*src=\{siteData\.instagramScreenshot\}[^>]*width=\{1251\}[^>]*height=\{495\}[^>]*loading="lazy"[^>]*decoding="async"/);
   assert.match(ugcSource, /idx === 0 \? 'eager' : 'lazy'/);
   assert.match(ugcSource, /idx === 0 \? 'high' : 'auto'/);
@@ -307,7 +308,7 @@ test('media dialogs keep focus trapped and video cards avoid nested interactive 
   );
 });
 
-test('built HTML keeps route-scoped GSAP or Embla bundles limited to home and translation routes', async (t) => {
+test('built HTML keeps route-scoped GSAP bundles limited to home and translation routes with no Embla chunks anywhere', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built route bundles.');
     return;
@@ -333,7 +334,7 @@ test('built HTML keeps route-scoped GSAP or Embla bundles limited to home and tr
     const html = await readFile(path.join(rootDir, relativePath), 'utf8');
     const assets = getAssetPathsFromHtml(html);
     const contents = await Promise.all(assets.map((assetPath) => readAsset(assetPath)));
-    const hasMotionBundle = contents.some((source) => /(?:gsap|ScrollTrigger|embla)/i.test(source));
+    const hasMotionBundle = contents.some((source) => /(?:gsap|ScrollTrigger)/i.test(source));
 
     assert.equal(
       hasMotionBundle,
@@ -341,6 +342,11 @@ test('built HTML keeps route-scoped GSAP or Embla bundles limited to home and tr
       `${routePath} should ${routeNeedsMotionBundles(routePath) ? '' : 'not '}ship home/translation motion bundles`,
     );
   }
+
+  const builtAssets = await collectFiles(path.join(rootDir, 'dist', '_astro'));
+  const builtAssetContents = await Promise.all(builtAssets.map((filePath) => readFile(filePath, 'utf8')));
+  assert.ok(builtAssets.every((filePath) => !/embla/i.test(path.basename(filePath))), 'dist/_astro should not emit any Embla-named chunks');
+  assert.ok(builtAssetContents.every((source) => !/embla/i.test(source)), 'built bundles should not embed Embla runtime code anywhere');
 });
 
 test('built public and admin HTML keep SEO/noindex classes, local media references, and sitemap coverage intact', async (t) => {

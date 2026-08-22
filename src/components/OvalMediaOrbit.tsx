@@ -1,21 +1,20 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import useEmblaCarousel from 'embla-carousel-react';
-import AutoScroll from 'embla-carousel-auto-scroll';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 
 import type { Lang } from '../i18n';
 import type { OrbitMedia } from '../lib/siteData';
 import {
-  calculateOrbitAutoScrollSpeed,
   DESKTOP_ORBIT_GEOMETRY,
   getLocalizedOrbitText,
   getOrbitActivatedVideoPlaybackMode,
   type OrbitActivationMode,
+  getOrbitDriftPlaybackMode,
+  getOrbitDriftTweenOptions,
   getOrbitInteractionState,
   getOrbitItemLayout,
   getOrbitVideoPlaybackMode,
-  ORBIT_REVOLUTION_SECONDS,
   resolveOrbitHref,
+  shouldStartOrbitDrift,
 } from '../lib/orbitMedia';
 
 interface Props {
@@ -26,19 +25,25 @@ interface Props {
   previewMode?: boolean;
 }
 
-type SoundState = 'muted' | 'sound-on' | 'blocked';
-
-const orbitLabels = {
-  es: { previous: 'Elemento anterior del orbit', next: 'Siguiente elemento del orbit', mute: 'Silenciar vídeo', enableAudio: 'Activar audio', audioBlocked: 'El navegador ha bloqueado el audio del vídeo' },
-  en: { previous: 'Previous orbit item', next: 'Next orbit item', mute: 'Mute video', enableAudio: 'Enable video sound', audioBlocked: 'The browser blocked video audio' },
-  fr: { previous: 'Élément précédent de l’orbite', next: 'Élément suivant de l’orbite', mute: 'Couper le son de la vidéo', enableAudio: 'Activer le son de la vidéo', audioBlocked: 'Le navigateur a bloqué le son de la vidéo' },
-  de: { previous: 'Vorheriges Orbit-Element', next: 'Nächstes Orbit-Element', mute: 'Video stummschalten', enableAudio: 'Videoton aktivieren', audioBlocked: 'Der Browser hat den Videoton blockiert' },
-  it: { previous: 'Elemento precedente dell’orbita', next: 'Elemento successivo dell’orbita', mute: 'Disattiva audio del video', enableAudio: 'Attiva audio del video', audioBlocked: 'Il browser ha bloccato l’audio del video' },
-  ca: { previous: 'Element anterior de l’òrbita', next: 'Element següent de l’òrbita', mute: 'Silenciar vídeo', enableAudio: 'Activar àudio del vídeo', audioBlocked: 'El navegador ha bloquejat l’àudio del vídeo' },
-} satisfies Record<Lang, Record<string, string>>;
-
 function isVideoItem(item: OrbitMedia) {
   return item.type === 'video';
+}
+
+async function playMuted(video: HTMLVideoElement) {
+  video.muted = true;
+  await video.play().catch(() => {});
+}
+
+async function playWithSound(video: HTMLVideoElement) {
+  video.muted = false;
+  await video.play().catch(async () => {
+    await playMuted(video);
+  });
+}
+
+function pauseAndMute(video: HTMLVideoElement) {
+  video.muted = true;
+  video.pause();
 }
 
 export default function OvalMediaOrbit({
@@ -54,47 +59,27 @@ export default function OvalMediaOrbit({
   const centerRef = useRef<HTMLDivElement | null>(null);
   const underlineRef = useRef<HTMLDivElement | null>(null);
   const echoRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const progressRef = useRef({ value: 0 });
+  const driftTweenRef = useRef<gsap.core.Tween | null>(null);
   const entranceTimelineRef = useRef<gsap.core.Timeline | null>(null);
-  const entrancePlayedRef = useRef(false);
+  const activeIdRef = useRef<string | null>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [soundStates, setSoundStates] = useState<Record<string, SoundState>>({});
+  const [activeActivationMode, setActiveActivationMode] = useState<OrbitActivationMode | null>(null);
   const [isRegionVisible, setIsRegionVisible] = useState(true);
   const [isDocumentVisible, setIsDocumentVisible] = useState(true);
-  const [autoScrollSpeed, setAutoScrollSpeed] = useState(0.37);
   const shouldAnimate = !previewMode && prefersReducedMotion === false;
-  const ui = orbitLabels[lang] ?? orbitLabels.es;
 
-  const plugins = useMemo(() => {
-    if (!shouldAnimate || items.length < 2) return [];
-
-    return [
-      AutoScroll({
-        playOnInit: false,
-        startDelay: 0,
-        stopOnInteraction: false,
-        stopOnMouseEnter: false,
-        stopOnFocusIn: false,
-        speed: autoScrollSpeed,
-      }),
-    ];
-  }, [autoScrollSpeed, items.length, shouldAnimate]);
-
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    {
-      align: 'center',
-      dragFree: true,
-      loop: items.length > 1,
-      watchFocus: true,
-    },
-    plugins,
-  );
-
-  const hasActiveTile = activeId !== null;
+  const killMotion = () => {
+    entranceTimelineRef.current?.kill();
+    entranceTimelineRef.current = null;
+    driftTweenRef.current?.kill();
+    driftTweenRef.current = null;
+  };
 
   const applyOrbitLayout = () => {
-    if (!emblaApi) return;
-    const progress = emblaApi.scrollProgress();
+    const progress = progressRef.current.value;
+    const hasActiveTile = activeIdRef.current !== null;
 
     items.forEach((item, index) => {
       const tile = tileRefs.current[item.id];
@@ -103,7 +88,7 @@ export default function OvalMediaOrbit({
       const layout = getOrbitItemLayout(progress, index, items.length, DESKTOP_ORBIT_GEOMETRY);
       const interactionState = getOrbitInteractionState({
         baseScale: layout.baseScale,
-        isActive: activeId === item.id,
+        isActive: activeIdRef.current === item.id,
         hasActiveTile,
       });
 
@@ -118,145 +103,6 @@ export default function OvalMediaOrbit({
         scale: interactionState.scale,
       });
     });
-  };
-
-  const syncVideoPlayback = () => {
-    const playbackMode = getOrbitVideoPlaybackMode({
-      prefersReducedMotion,
-      isDocumentVisible,
-      isRegionVisible,
-    });
-
-    items.forEach((item) => {
-      if (!isVideoItem(item)) return;
-      const video = videoRefs.current[item.id];
-      if (!video) return;
-
-      if (playbackMode === 'pause') {
-        video.muted = true;
-        video.pause();
-        setSoundStates((current) => (current[item.id] && current[item.id] !== 'muted'
-          ? { ...current, [item.id]: 'muted' }
-          : current));
-        return;
-      }
-
-      video.muted = true;
-      void video.play().catch(() => {});
-      setSoundStates((current) => (current[item.id] && current[item.id] !== 'muted'
-        ? { ...current, [item.id]: 'muted' }
-        : current));
-    });
-  };
-
-  const playAutoScroll = (delay = 0) => {
-    if (!shouldAnimate || !emblaApi) return;
-    emblaApi.plugins().autoScroll?.play(delay);
-  };
-
-  const stopAutoScroll = () => {
-    if (!emblaApi) return;
-    emblaApi.plugins().autoScroll?.stop();
-  };
-
-  const startMutedVideoPlayback = async (itemId: string, video: HTMLVideoElement, soundState: SoundState = 'muted') => {
-    video.muted = true;
-    setSoundStates((current) => ({ ...current, [itemId]: soundState }));
-    await video.play().catch(() => {});
-  };
-
-  const pauseOrbitVideo = (itemId: string, video: HTMLVideoElement) => {
-    video.muted = true;
-    video.pause();
-    setSoundStates((current) => ({ ...current, [itemId]: 'muted' }));
-  };
-
-  const activateTile = (item: OrbitMedia, activationMode: OrbitActivationMode) => {
-    setActiveId(item.id);
-    stopAutoScroll();
-
-    if (!isVideoItem(item)) return;
-    const video = videoRefs.current[item.id];
-    if (!video) return;
-    const activatedPlaybackMode = getOrbitActivatedVideoPlaybackMode({
-      activationMode,
-      prefersReducedMotion,
-      isDocumentVisible,
-      isRegionVisible,
-    });
-
-    if (activatedPlaybackMode === 'pause') {
-      pauseOrbitVideo(item.id, video);
-      return;
-    }
-
-    if (activatedPlaybackMode === 'play-muted') {
-      void startMutedVideoPlayback(item.id, video);
-      return;
-    }
-
-    if (activatedPlaybackMode === 'play-with-sound') {
-      video.muted = false;
-      void video.play()
-        .then(() => {
-          setSoundStates((current) => ({ ...current, [item.id]: 'sound-on' }));
-        })
-        .catch(() => {
-          void startMutedVideoPlayback(item.id, video, 'blocked');
-        });
-    }
-  };
-
-  const deactivateTile = (item: OrbitMedia) => {
-    setActiveId((current) => (current === item.id ? null : current));
-    if (shouldAnimate) {
-      playAutoScroll(600);
-    }
-
-    if (!isVideoItem(item)) return;
-    const video = videoRefs.current[item.id];
-    if (!video) return;
-    video.muted = true;
-    setSoundStates((current) => ({ ...current, [item.id]: 'muted' }));
-    if (getOrbitVideoPlaybackMode({
-      prefersReducedMotion,
-      isDocumentVisible,
-      isRegionVisible,
-    }) === 'pause') {
-      video.pause();
-      return;
-    }
-    void startMutedVideoPlayback(item.id, video);
-  };
-
-  const toggleVideoSound = async (item: OrbitMedia, event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (!isVideoItem(item)) return;
-    const video = videoRefs.current[item.id];
-    if (!video) return;
-    if (getOrbitVideoPlaybackMode({
-      prefersReducedMotion,
-      isDocumentVisible,
-      isRegionVisible,
-    }) === 'pause') {
-      pauseOrbitVideo(item.id, video);
-      return;
-    }
-
-    if (video.muted) {
-      video.muted = false;
-      try {
-        await video.play();
-        setSoundStates((current) => ({ ...current, [item.id]: 'sound-on' }));
-      } catch {
-        await startMutedVideoPlayback(item.id, video, 'blocked');
-      }
-      return;
-    }
-
-    await startMutedVideoPlayback(item.id, video);
   };
 
   useEffect(() => {
@@ -287,74 +133,112 @@ export default function OvalMediaOrbit({
   }, []);
 
   useEffect(() => {
-    syncVideoPlayback();
-  }, [isDocumentVisible, isRegionVisible, items, prefersReducedMotion]);
+    const basePlaybackMode = getOrbitVideoPlaybackMode({
+      prefersReducedMotion,
+      isDocumentVisible,
+      isRegionVisible,
+    });
+
+    items.forEach((item) => {
+      if (!isVideoItem(item)) return;
+      const video = videoRefs.current[item.id];
+      if (!video) return;
+
+      if (activeId === item.id && activeActivationMode) {
+        const activatedPlaybackMode = getOrbitActivatedVideoPlaybackMode({
+          activationMode: activeActivationMode,
+          prefersReducedMotion,
+          isDocumentVisible,
+          isRegionVisible,
+        });
+
+        if (activatedPlaybackMode === 'pause') {
+          pauseAndMute(video);
+          return;
+        }
+
+        if (activatedPlaybackMode === 'play-muted') {
+          void playMuted(video);
+          return;
+        }
+
+        void playWithSound(video);
+        return;
+      }
+
+      if (basePlaybackMode === 'pause') {
+        pauseAndMute(video);
+        return;
+      }
+
+      void playMuted(video);
+    });
+  }, [activeActivationMode, activeId, isDocumentVisible, isRegionVisible, items, prefersReducedMotion]);
 
   useEffect(() => {
-    if (!emblaApi || items.length < 2) return;
-
-    const pitch = emblaApi.slideNodes()[0]?.getBoundingClientRect().width ?? 96;
-    setAutoScrollSpeed(calculateOrbitAutoScrollSpeed({
-      itemCount: items.length,
-      tilePitch: pitch,
-      revolutionSeconds: ORBIT_REVOLUTION_SECONDS,
-    }));
-  }, [emblaApi, items.length]);
-
-  useEffect(() => {
-    if (!emblaApi || prefersReducedMotion === null) return;
-
-    const onScroll = () => applyOrbitLayout();
-    emblaApi.on('scroll', onScroll);
-    emblaApi.on('reInit', onScroll);
-    emblaApi.on('settle', onScroll);
+    activeIdRef.current = activeId;
     applyOrbitLayout();
 
-    return () => {
-      emblaApi.off('scroll', onScroll);
-      emblaApi.off('reInit', onScroll);
-      emblaApi.off('settle', onScroll);
-    };
-  }, [activeId, emblaApi, hasActiveTile, prefersReducedMotion, items]);
+    const driftPlaybackMode = getOrbitDriftPlaybackMode(activeId);
+    if (driftPlaybackMode === 'pause') {
+      driftTweenRef.current?.pause();
+    } else {
+      driftTweenRef.current?.play();
+    }
+  }, [activeId, items]);
 
   useEffect(() => {
-    if (!emblaApi || prefersReducedMotion === null) return;
-
-    entranceTimelineRef.current?.kill();
-
-    if (!shouldAnimate) {
-      entrancePlayedRef.current = true;
-      applyOrbitLayout();
-      return;
-    }
+    if (prefersReducedMotion === null) return;
 
     const tiles = items.map((item) => tileRefs.current[item.id]).filter(Boolean) as HTMLDivElement[];
     if (tiles.length === 0) return;
 
-    stopAutoScroll();
+    killMotion();
+    progressRef.current.value = 0;
+
+    if (!shouldAnimate) {
+      gsap.set(tiles, {
+        left: '50%',
+        top: '50%',
+        xPercent: -50,
+        yPercent: -50,
+        opacity: 1,
+        scale: 1,
+      });
+      gsap.set(centerRef.current, { clipPath: 'inset(0 0 0 0)' });
+      gsap.set(underlineRef.current, { scaleX: 1, transformOrigin: 'center center' });
+      gsap.set(echoRefs.current.filter(Boolean), { scale: 1, opacity: 1 });
+      applyOrbitLayout();
+      return;
+    }
+
     gsap.set(tiles, {
       left: '50%',
       top: '50%',
       xPercent: -50,
       yPercent: -50,
       opacity: 0,
-      scale: 0.62,
+      scale: 0.58,
     });
     gsap.set(centerRef.current, { clipPath: 'inset(0 0 100% 0)' });
     gsap.set(underlineRef.current, { scaleX: 0, transformOrigin: 'center center' });
-    gsap.set(echoRefs.current.filter(Boolean), { scale: 1.18, opacity: 0 });
+    gsap.set(echoRefs.current.filter(Boolean), { scale: 1.16, opacity: 0 });
 
     const timeline = gsap.timeline({
-      defaults: { ease: 'back.out(1.4)' },
+      defaults: { ease: 'power3.out' },
       onComplete: () => {
-        entrancePlayedRef.current = true;
         applyOrbitLayout();
-        playAutoScroll(0);
+        const entranceComplete = true;
+        if (!shouldStartOrbitDrift(entranceComplete)) return;
+        driftTweenRef.current = gsap.to(progressRef.current, {
+          ...getOrbitDriftTweenOptions(),
+          onUpdate: () => applyOrbitLayout(),
+        });
       },
     });
 
     timeline.to(tiles, {
-      duration: 1.4,
+      duration: 1.6,
       opacity: 1,
       scale: 1,
       stagger: {
@@ -364,109 +248,84 @@ export default function OvalMediaOrbit({
       left: (_index, element: HTMLDivElement) => {
         const itemId = element.dataset.itemId ?? '';
         const itemIndex = items.findIndex((item) => item.id === itemId);
-        return `${getOrbitItemLayout(emblaApi.scrollProgress(), itemIndex, items.length, DESKTOP_ORBIT_GEOMETRY).leftPercent}%`;
+        return `${getOrbitItemLayout(progressRef.current.value, itemIndex, items.length, DESKTOP_ORBIT_GEOMETRY).leftPercent}%`;
       },
       top: (_index, element: HTMLDivElement) => {
         const itemId = element.dataset.itemId ?? '';
         const itemIndex = items.findIndex((item) => item.id === itemId);
-        return `${getOrbitItemLayout(emblaApi.scrollProgress(), itemIndex, items.length, DESKTOP_ORBIT_GEOMETRY).topPercent}%`;
+        return `${getOrbitItemLayout(progressRef.current.value, itemIndex, items.length, DESKTOP_ORBIT_GEOMETRY).topPercent}%`;
       },
     }, 0);
-    timeline.to(centerRef.current, { duration: 0.8, clipPath: 'inset(0 0 0% 0)', ease: 'power2.out' }, 0.18);
+    timeline.to(centerRef.current, { duration: 0.78, clipPath: 'inset(0 0 0 0)', ease: 'power2.out' }, 0.2);
     timeline.to(echoRefs.current.filter(Boolean), {
-      duration: 0.9,
+      duration: 0.82,
       scale: 1,
       opacity: 1,
       stagger: 0.08,
       ease: 'power2.out',
     }, 0.12);
-    timeline.to(underlineRef.current, { duration: 0.7, scaleX: 1, ease: 'power2.out' }, 0.42);
+    timeline.to(underlineRef.current, { duration: 0.7, scaleX: 1, ease: 'power2.out' }, 0.52);
 
     entranceTimelineRef.current = timeline;
 
     return () => {
       timeline.kill();
     };
-  }, [emblaApi, items, prefersReducedMotion, shouldAnimate]);
+  }, [items, prefersReducedMotion, shouldAnimate]);
 
-  useEffect(() => () => {
-    entranceTimelineRef.current?.kill();
+  useEffect(() => {
+    const onBeforePreparation = () => {
+      killMotion();
+      Object.values(videoRefs.current).forEach((video) => {
+        if (video) pauseAndMute(video);
+      });
+    };
+
+    document.addEventListener('astro:before-preparation', onBeforePreparation);
+    return () => {
+      document.removeEventListener('astro:before-preparation', onBeforePreparation);
+      onBeforePreparation();
+    };
   }, []);
 
-  const scrollPrev = () => {
-    emblaApi?.scrollPrev();
-    playAutoScroll(1200);
+  const setActiveTile = (itemId: string, mode: OrbitActivationMode) => {
+    setActiveId(itemId);
+    setActiveActivationMode(mode);
   };
 
-  const scrollNext = () => {
-    emblaApi?.scrollNext();
-    playAutoScroll(1200);
-  };
-
-  const onRegionKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'ArrowLeft') {
-      event.preventDefault();
-      scrollPrev();
-    }
-
-    if (event.key === 'ArrowRight') {
-      event.preventDefault();
-      scrollNext();
-    }
-  };
-
-  const onWheel = (event: React.WheelEvent<HTMLDivElement>) => {
-    if (Math.abs(event.deltaX) + Math.abs(event.deltaY) < 8) return;
-    event.preventDefault();
-    if (event.deltaX + event.deltaY > 0) {
-      scrollNext();
-      return;
-    }
-    scrollPrev();
+  const clearActiveTile = () => {
+    setActiveId(null);
+    setActiveActivationMode(null);
   };
 
   return (
-    <div className={`space-y-5 ${className}`}>
+    <div className={className}>
       <div
         ref={regionRef}
-        className="relative mx-auto w-full max-w-[44rem] outline-none"
-        onKeyDown={onRegionKeyDown}
-        onWheel={onWheel}
+        className="relative mx-auto w-full max-w-[46rem]"
         role="region"
         aria-label={ariaLabel}
-        aria-roledescription="carousel"
-        tabIndex={0}
       >
-        <div ref={emblaRef} className="relative aspect-[690/430] min-h-[21rem] overflow-hidden md:min-h-[26rem]">
-          <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-0">
-            <div className="flex h-full">
-              {items.map((item) => (
-                <div key={`ghost-${item.id}`} className="min-w-0 flex-[0_0_96px]" aria-hidden="true" />
-              ))}
-            </div>
-          </div>
-
-          <div className="pointer-events-none absolute inset-[8%] rounded-full border border-amaranth/14" />
+        <div className="relative aspect-[720/440] min-h-[22rem] overflow-hidden md:min-h-[27.5rem]">
           <div
             ref={(element) => { echoRefs.current[0] = element; }}
-            className="pointer-events-none absolute left-1/2 top-1/2 h-[58%] w-[72%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-amaranth/16"
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[55%] w-[56%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/12"
           />
           <div
             ref={(element) => { echoRefs.current[1] = element; }}
-            className="pointer-events-none absolute left-1/2 top-1/2 h-[74%] w-[88%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-amaranth/10"
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[70%] w-[72%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10"
           />
 
           <div
             ref={centerRef}
             className="pointer-events-none absolute left-1/2 top-1/2 z-30 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
           >
-            <span className="font-heading text-[2.9rem] tracking-[-0.08em] text-ink md:text-[4.1rem]">MG</span>
+            <span className="font-heading text-[3rem] tracking-[-0.08em] text-paper md:text-[4.75rem]">MG</span>
             <div ref={underlineRef} className="mt-3 h-px w-16 bg-amaranth md:w-24" />
           </div>
 
-          {items.map((item, index) => {
+          {items.map((item) => {
             const href = previewMode ? null : resolveOrbitHref(item.href, lang);
-            const soundState = soundStates[item.id] ?? 'muted';
             const label = getLocalizedOrbitText(item.label, lang);
             const alt = getLocalizedOrbitText(item.alt, lang);
 
@@ -475,33 +334,36 @@ export default function OvalMediaOrbit({
                 key={item.id}
                 ref={(element) => { tileRefs.current[item.id] = element; }}
                 data-item-id={item.id}
-                className="absolute left-1/2 top-1/2 h-[5.4rem] w-[4.25rem] origin-center will-change-transform md:h-[7.625rem] md:w-24"
+                className="absolute left-1/2 top-1/2 h-[5.875rem] w-[4.625rem] origin-center outline-none will-change-transform md:h-[7.875rem] md:w-[6.125rem]"
                 onPointerEnter={(event) => {
                   if (event.pointerType === 'touch') return;
-                  activateTile(item, 'pointer-hover');
+                  setActiveTile(item.id, 'pointer-hover');
                 }}
-                onPointerLeave={() => deactivateTile(item)}
+                onPointerLeave={(event) => {
+                  if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+                  clearActiveTile();
+                }}
                 onFocusCapture={(event) => {
                   if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
                   if (event.currentTarget.matches(':hover')) return;
-                  activateTile(item, 'focus');
+                  setActiveTile(item.id, 'focus');
                 }}
                 onBlurCapture={(event) => {
                   if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
-                  deactivateTile(item);
+                  clearActiveTile();
                 }}
-                tabIndex={item.href ? undefined : 0}
-                role={item.href ? undefined : 'group'}
-                aria-label={item.href ? undefined : label}
+                tabIndex={href ? undefined : 0}
+                role={href ? undefined : 'group'}
+                aria-label={href ? undefined : label}
               >
-                <div className="relative h-full w-full overflow-hidden bg-white shadow-[0_12px_32px_rgba(6,4,3,0.18)]">
+                <div className="relative h-full w-full overflow-hidden bg-white/95 shadow-[0_16px_40px_rgba(6,4,3,0.28)] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-amaranth">
                   {isVideoItem(item) ? (
                     <video
                       ref={(element) => { videoRefs.current[item.id] = element; }}
                       src={item.src}
                       poster={item.poster ?? undefined}
-                      width={96}
-                      height={122}
+                      width={98}
+                      height={126}
                       aria-label={alt}
                       muted
                       loop
@@ -510,59 +372,29 @@ export default function OvalMediaOrbit({
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <img src={item.src} alt={alt} width={96} height={122} loading="lazy" decoding="async" className="h-full w-full object-cover" />
+                    <img
+                      src={item.src}
+                      alt={alt}
+                      width={98}
+                      height={126}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover"
+                    />
                   )}
 
                   {href ? (
-                    <a
-                      href={href}
-                      aria-label={label}
-                      className="absolute inset-0 z-10"
-                      draggable={false}
-                    >
+                    <a href={href} aria-label={label} className="absolute inset-0 z-10">
                       <span className="sr-only">{label}</span>
                     </a>
                   ) : (
                     <div className="absolute inset-0 z-10" />
-                  )}
-
-                  {isVideoItem(item) && (
-                    <button
-                      type="button"
-                      onClick={(event) => void toggleVideoSound(item, event)}
-                      className="absolute bottom-2 right-2 z-20 rounded-full bg-ink/78 px-2 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-paper backdrop-blur-sm"
-                      aria-pressed={soundState === 'sound-on'}
-                      aria-label={soundState === 'sound-on' ? ui.mute : soundState === 'blocked' ? ui.audioBlocked : ui.enableAudio}
-                    >
-                      {soundState === 'sound-on' ? '🔊' : soundState === 'blocked' ? '🔇!' : '🔇'}
-                    </button>
                   )}
                 </div>
               </div>
             );
           })}
         </div>
-      </div>
-
-      <div className="flex items-center justify-center gap-3">
-        <button
-          type="button"
-          onClick={scrollPrev}
-          disabled={items.length < 2}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white text-lg text-ink transition hover:border-amaranth hover:text-amaranth disabled:cursor-not-allowed disabled:opacity-40"
-          aria-label={ui.previous}
-        >
-          ←
-        </button>
-        <button
-          type="button"
-          onClick={scrollNext}
-          disabled={items.length < 2}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-black/10 bg-white text-lg text-ink transition hover:border-amaranth hover:text-amaranth disabled:cursor-not-allowed disabled:opacity-40"
-          aria-label={ui.next}
-        >
-          →
-        </button>
       </div>
     </div>
   );

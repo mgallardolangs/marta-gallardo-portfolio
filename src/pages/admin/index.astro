@@ -79,33 +79,50 @@ const i = t(lang);
       </section>
       <!-- admin-home-hero:end -->
 
-      <section class="border-b border-black/10 bg-white px-6 py-20 md:py-24">
-        <div class="site-container grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-          <div class="relative overflow-hidden border border-black/10 bg-paper px-4 py-8 md:px-6 md:py-10">
+      <section data-admin-home-orbit class="home-orbit bg-ink px-6 py-16 text-paper md:py-24">
+        <div class="site-container grid gap-8 lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)_minmax(0,12rem)] lg:grid-rows-[auto_1fr_auto] lg:items-center xl:grid-cols-[minmax(0,21rem)_minmax(0,1fr)_minmax(0,14rem)]">
+          <ScrollReveal client:visible direction="right" className="space-y-4 lg:col-start-1 lg:row-start-1 lg:self-start">
+            <EditableText client:load i18nKey="home.orbit.kicker" as="p" className="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth" />
+            <EditableText client:load i18nKey="home.orbit.title" as="h2" className="max-w-[8ch] font-heading text-[2.8rem] leading-[0.9] tracking-[-0.08em] text-paper md:text-[4.25rem] xl:text-[5.5rem]" />
+          </ScrollReveal>
+
+          <ScrollReveal client:visible direction="left" className="order-3 lg:col-start-1 lg:row-start-3 lg:order-none lg:self-end">
+            <EditableText client:load i18nKey="home.orbit.description" as="p" className="max-w-md font-body text-sm leading-7 text-white/74 md:text-base md:leading-8" />
+          </ScrollReveal>
+
+          <ScrollReveal client:visible direction="left" className="order-2 lg:col-start-3 lg:row-start-1 lg:order-none lg:justify-self-end lg:self-start">
+            <EditableText client:load i18nKey="home.orbit.index" as="p" className="font-body text-[0.72rem] font-semibold uppercase tracking-[0.34em] text-white/60 md:text-xs" />
+          </ScrollReveal>
+
+          <div class="order-4 lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:order-none">
             <AdminOrbitPreview client:load lang={lang} />
           </div>
+        </div>
+      </section>
 
-          <ScrollReveal client:visible direction="right" className="space-y-6 lg:pl-8 xl:pl-14">
+      <section class="bg-paper px-6 py-20 md:py-24">
+        <div class="site-container space-y-12">
+          <ScrollReveal client:visible direction="right" className="space-y-6">
             <div class="w-16 border-t border-amaranth"></div>
             <EditableText client:load i18nKey="about.title" as="h2" className="font-heading text-4xl leading-none text-ink md:text-6xl" />
             <EditableText client:load i18nKey="home.about.highlight" as="p" className="max-w-md font-body text-xl leading-8 text-ink" />
-            <EditableText client:load i18nKey="about.text" as="div" className="max-w-2xl font-body text-lg leading-8 text-ink-muted md:text-xl" />
+            <EditableText client:load i18nKey="about.text" as="div" className="max-w-3xl font-body text-lg leading-8 text-ink-muted md:text-xl" />
           </ScrollReveal>
-        </div>
 
-        <ScrollReveal client:visible className="site-container mt-12">
-          <div class="border-t border-black/10 pt-8 text-center">
-            <EditableText client:load i18nKey="home.about.languagesLabel" as="p" className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.3em] text-amaranth" />
-            <div class="flex flex-wrap justify-center gap-3">
-              {i.home.about.languages.map((language, idx) => (
-                <EditableText client:load i18nKey={`home.about.languages.${idx}`} as="span" className="border border-black/10 bg-paper px-4 py-2 text-sm text-ink" />
-              ))}
+          <ScrollReveal client:visible>
+            <div class="border-t border-black/10 pt-8">
+              <EditableText client:load i18nKey="home.about.languagesLabel" as="p" className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.3em] text-amaranth" />
+              <div class="flex flex-wrap gap-3">
+                {i.home.about.languages.map((language, idx) => (
+                  <EditableText client:load i18nKey={`home.about.languages.${idx}`} as="span" className="border border-black/10 bg-paper px-4 py-2 text-sm text-ink" />
+                ))}
+              </div>
             </div>
-          </div>
-        </ScrollReveal>
+          </ScrollReveal>
 
-        <div class="site-container mt-12">
-          <EditableOrbitCollection client:load />
+          <div class="border-t border-black/10 pt-10">
+            <EditableOrbitCollection client:load />
+          </div>
         </div>
       </section>
 
