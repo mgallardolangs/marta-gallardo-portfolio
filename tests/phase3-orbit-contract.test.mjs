@@ -380,6 +380,11 @@ test('homepage and admin keep the approved orbit wiring while StoryMap files dis
   assert.doesNotMatch(orbitSource, /\bonWheel\b|\bonKeyDown\b/);
   assert.doesNotMatch(orbitSource, /ArrowLeft|ArrowRight/);
   assert.doesNotMatch(orbitSource, /\btouch(?:Start|Move|End)\b|touchstart|touchmove|touchend/);
+  assert.doesNotMatch(orbitSource, /onFocusCapture=\{/, 'keyboard focus should stay visual-only instead of activating orbit motion state');
+  assert.doesNotMatch(orbitSource, /onBlurCapture=\{/, 'keyboard focus should not clear hover-driven orbit motion state because it should never activate it');
+  assert.match(orbitSource, /focus-within:outline/, 'orbit tiles may still expose a visual focus treatment without changing motion behavior');
+  assert.doesNotMatch(orbitSource, /tabIndex=\{href \? undefined : 0\}/, 'mock orbit tiles with href null should not become inert tab stops');
+  assert.doesNotMatch(orbitSource, /role=\{href \? undefined : 'group'\}/, 'non-interactive mock orbit tiles should not add extra group semantics');
   assert.doesNotMatch(orbitSource, /ui\.previous|ui\.next|aria-roledescription="carousel"|aria-label=\{ui\.(?:previous|next)\}/);
   assert.doesNotMatch(orbitSource, /\bprevious\s*:\s*['"]|\bnext\s*:\s*['"]/);
   assert.doesNotMatch(orbitSource, /<button\b/i, 'orbit component source should not ship button controls anywhere');

@@ -7,7 +7,6 @@ import {
   DESKTOP_ORBIT_GEOMETRY,
   getLocalizedOrbitText,
   getOrbitActivatedVideoPlaybackMode,
-  type OrbitActivationMode,
   getOrbitDriftPlaybackMode,
   getOrbitDriftTweenOptions,
   getOrbitInteractionState,
@@ -65,7 +64,6 @@ export default function OvalMediaOrbit({
   const activeIdRef = useRef<string | null>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [activeActivationMode, setActiveActivationMode] = useState<OrbitActivationMode | null>(null);
   const [isRegionVisible, setIsRegionVisible] = useState(true);
   const [isDocumentVisible, setIsDocumentVisible] = useState(true);
   const shouldAnimate = !previewMode && prefersReducedMotion === false;
@@ -144,9 +142,9 @@ export default function OvalMediaOrbit({
       const video = videoRefs.current[item.id];
       if (!video) return;
 
-      if (activeId === item.id && activeActivationMode) {
+      if (activeId === item.id) {
         const activatedPlaybackMode = getOrbitActivatedVideoPlaybackMode({
-          activationMode: activeActivationMode,
+          activationMode: 'pointer-hover',
           prefersReducedMotion,
           isDocumentVisible,
           isRegionVisible,
@@ -173,7 +171,7 @@ export default function OvalMediaOrbit({
 
       void playMuted(video);
     });
-  }, [activeActivationMode, activeId, isDocumentVisible, isRegionVisible, items, prefersReducedMotion]);
+  }, [activeId, isDocumentVisible, isRegionVisible, items, prefersReducedMotion]);
 
   useEffect(() => {
     activeIdRef.current = activeId;
@@ -288,14 +286,12 @@ export default function OvalMediaOrbit({
     };
   }, []);
 
-  const setActiveTile = (itemId: string, mode: OrbitActivationMode) => {
+  const setActiveTile = (itemId: string) => {
     setActiveId(itemId);
-    setActiveActivationMode(mode);
   };
 
   const clearActiveTile = () => {
     setActiveId(null);
-    setActiveActivationMode(null);
   };
 
   return (
@@ -337,24 +333,12 @@ export default function OvalMediaOrbit({
                 className="absolute left-1/2 top-1/2 h-[5.875rem] w-[4.625rem] origin-center outline-none will-change-transform md:h-[7.875rem] md:w-[6.125rem]"
                 onPointerEnter={(event) => {
                   if (event.pointerType === 'touch') return;
-                  setActiveTile(item.id, 'pointer-hover');
+                  setActiveTile(item.id);
                 }}
                 onPointerLeave={(event) => {
                   if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
                   clearActiveTile();
                 }}
-                onFocusCapture={(event) => {
-                  if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
-                  if (event.currentTarget.matches(':hover')) return;
-                  setActiveTile(item.id, 'focus');
-                }}
-                onBlurCapture={(event) => {
-                  if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
-                  clearActiveTile();
-                }}
-                tabIndex={href ? undefined : 0}
-                role={href ? undefined : 'group'}
-                aria-label={href ? undefined : label}
               >
                 <div className="relative h-full w-full overflow-hidden bg-white/95 shadow-[0_16px_40px_rgba(6,4,3,0.28)] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-amaranth">
                   {isVideoItem(item) ? (
