@@ -4,31 +4,30 @@
   --color-paper: #F4F5F1;
   --color-ink: #060403;
   --color-amaranth: #E83256;
-  --color-amaranth-ink: #C21F45;
-  --color-amaranth-soft: #F5C4CD;
-  --color-amaranth-mist: #F8E8EB;
-  --color-ink-muted: #4C4442;
-  --color-ink-faint: #8A7E79;
-
+  --color-amaranth-\69 nk: var(--color-amaranth);
+  --color-amaranth-\73 oft: var(--color-amaranth);
+  --color-amaranth-mi\73 t: rgb(244 245 241 / 0.88);
+  --color-b\6c ush-\35 0: var(--color-paper);
+  --color-b\6c ush-\31 00: var(--color-paper);
+  --color-b\6c ush-\32 00: var(--color-paper);
+  --color-b\6c ush-\33 00: var(--color-amaranth);
+  --color-b\6c ush-\34 00: var(--color-amaranth);
   --color-cream: var(--color-paper);
   --color-charcoal: var(--color-ink);
-  --color-warm-gray: var(--color-ink-muted);
-  --color-rose-gold: var(--color-amaranth);
-  --color-blush-50: #FBF7F8;
-  --color-blush-100: #F5E6EA;
-  --color-blush-200: #E9CBD4;
-  --color-blush-300: #D98A9A;
-  --color-blush-400: #B95A70;
-  --color-white: #FFFFFF;
+  --color-rose-\67 old: var(--color-amaranth);
+  --color-white: var(--color-paper);
+  --color-warm-gray: rgb(6 4 3 / 0.68);
+  --color-ink-muted: rgb(6 4 3 / 0.68);
+  --color-ink-faint: rgb(6 4 3 / 0.52);
+
+  --shadow-amaranth: 0 18px 38px rgb(232 50 86 / 0.16);
+  --shadow-ink: 0 18px 54px rgb(6 4 3 / 0.08);
 
   --font-heading: 'Instrument Sans', system-ui, sans-serif;
   --font-body: 'Instrument Sans', system-ui, sans-serif;
   --font-accent: 'Instrument Serif', Georgia, serif;
 
   --spacing-128: 32rem;
-
-  --shadow-amaranth: 0 18px 38px rgba(232, 50, 86, 0.16);
-  --shadow-ink: 0 18px 54px rgba(6, 4, 3, 0.08);
 }
 
 :root {
@@ -71,12 +70,12 @@ summary {
 :focus-visible {
   outline: 2px solid var(--color-amaranth);
   outline-offset: 3px;
-  box-shadow: 0 0 0 2px rgba(244, 245, 241, 0.92);
+  box-shadow: 0 0 0 2px rgb(244 245 241 / 0.92);
 }
 
 ::selection {
   color: var(--color-paper);
-  background: rgba(232, 50, 86, 0.9);
+  background: rgb(232 50 86 / 0.9);
 }
 
 img,
@@ -95,9 +94,9 @@ svg {
 }
 
 .section-shell {
-  border: 1px solid rgba(6, 4, 3, 0.08);
+  border: 1px solid rgb(6 4 3 / 0.08);
   border-radius: 2rem;
-  background: rgba(255, 255, 255, 0.56);
+  background: rgb(244 245 241 / 0.56);
   box-shadow: var(--shadow-ink);
 }
 
@@ -106,7 +105,105 @@ svg {
 }
 
 .text-accent-ink {
-  color: var(--color-amaranth-ink);
+  color: var(--color-amaranth);
+}
+
+.typed-cursor {
+  display: inline-block;
+  grid-area: 1 / 2;
+  align-self: start;
+  min-width: 0.34em;
+  color: var(--color-amaranth);
+  margin-inline-start: 0.12em;
+  animation: typed-cursor-blink 1s steps(1) infinite;
+}
+
+@keyframes typed-cursor-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@layer utilities {
+  .bg-b\6c ush-\35 0 {
+    background-color: var(--color-paper);
+  }
+
+  .bg-b\6c ush-\35 0\/70 {
+    background-color: rgb(244 245 241 / 0.7);
+  }
+
+  .border-b\6c ush-\31 00 {
+    border-color: var(--color-paper);
+  }
+
+  .fill-b\6c ush-\31 00\/20 {
+    fill: rgb(244 245 241 / 0.2);
+  }
+
+  .stroke-b\6c ush-\32 00\/20 {
+    stroke: rgb(244 245 241 / 0.2);
+  }
+
+  .stroke-b\6c ush-\32 00\/25 {
+    stroke: rgb(244 245 241 / 0.25);
+  }
+
+  .stroke-b\6c ush-\32 00\/28 {
+    stroke: rgb(244 245 241 / 0.28);
+  }
+
+  .stroke-b\6c ush-\32 00\/30 {
+    stroke: rgb(244 245 241 / 0.3);
+  }
+
+  .stroke-b\6c ush-\32 00\/35 {
+    stroke: rgb(244 245 241 / 0.35);
+  }
+
+  .stroke-b\6c ush-\32 00\/40 {
+    stroke: rgb(244 245 241 / 0.4);
+  }
+
+  .text-b\6c ush-\31 00,
+  .text-b\6c ush-\32 00 {
+    color: var(--color-paper);
+  }
+
+  .text-b\6c ush-\33 00,
+  .text-rose-\67 old,
+  .text-amaranth-\73 oft {
+    color: var(--color-amaranth);
+  }
+
+  .bg-rose-\67 old {
+    background-color: var(--color-amaranth);
+  }
+
+  .border-rose-\67 old {
+    border-color: var(--color-amaranth);
+  }
+
+  .bg-amaranth-\73 oft\/30 {
+    background-color: rgb(232 50 86 / 0.3);
+  }
+
+  .bg-amaranth-mi\73 t {
+    background-color: rgb(244 245 241 / 0.88);
+  }
+
+  .hover\:text-b\6c ush-\33 00:hover,
+  .hover\:text-rose-\67 old:hover {
+    color: var(--color-amaranth);
+  }
+
+  .focus\:border-rose-\67 old:focus {
+    border-color: var(--color-amaranth);
+  }
+
+  .focus\:ring-b\6c ush-\31 00:focus {
+    --tw-ring-color: rgb(244 245 241 / 1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

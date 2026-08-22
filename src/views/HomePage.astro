@@ -45,7 +45,7 @@ const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-p
               <StaggerItem>
                 <div class="flex flex-wrap items-center gap-3 text-sm uppercase tracking-[0.28em] text-ink-muted md:text-base">
                   <span>{i.hero.age}</span>
-                  <span class="text-amaranth-soft">✦</span>
+                  <span class="text-amaranth">✦</span>
                   <span>{i.hero.city}</span>
                 </div>
               </StaggerItem>
@@ -77,8 +77,8 @@ const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-p
 
           <div class="relative min-h-[36rem] lg:min-h-[42rem]">
             <FloatingIcon client:visible intensity={18} className="absolute inset-0">
-              <div class="absolute left-4 top-8 hidden h-28 w-28 rounded-full bg-amaranth-soft/30 blur-3xl md:block"></div>
-              <div class="absolute bottom-12 right-0 h-36 w-36 rounded-full bg-amaranth-mist blur-3xl"></div>
+              <div class="absolute left-4 top-8 hidden h-28 w-28 rounded-full bg-amaranth/30 blur-3xl md:block"></div>
+              <div class="absolute bottom-12 right-0 h-36 w-36 rounded-full bg-paper/88 blur-3xl"></div>
             </FloatingIcon>
 
             <ScrollReveal client:visible delay={0.1} direction="left" className="absolute inset-x-4 top-8 z-20 md:left-auto md:right-[58%] md:w-64">
@@ -96,7 +96,7 @@ const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-p
             </ScrollReveal>
 
             <div class="absolute inset-0 flex items-center justify-center">
-              <div class="relative flex h-[29rem] w-full max-w-[24rem] items-center justify-center overflow-hidden border border-black/10 bg-blush-50 shadow-[0_28px_90px_rgba(6,4,3,0.12)] md:h-[35rem] md:max-w-[27rem]">
+              <div class="relative flex h-[29rem] w-full max-w-[24rem] items-center justify-center overflow-hidden border border-black/10 bg-paper shadow-[0_28px_90px_rgba(6,4,3,0.12)] md:h-[35rem] md:max-w-[27rem]">
                 {siteData.heroMainPhoto && !siteData.heroMainPhoto.includes('placeholder') ? (
                   <img
                     src={siteData.heroMainPhoto}
@@ -154,7 +154,7 @@ const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-p
       <section class="border-b border-white/10 bg-ink px-6 py-10" aria-hidden="true">
         <div class="site-container">
           <div class="relative mx-auto h-px max-w-5xl bg-white/12">
-            <span class="absolute left-1/2 top-1/2 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-3 bg-ink px-4 font-body text-[0.68rem] font-semibold uppercase tracking-[0.34em] text-amaranth-soft">
+            <span class="absolute left-1/2 top-1/2 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-3 bg-ink px-4 font-body text-[0.68rem] font-semibold uppercase tracking-[0.34em] text-amaranth">
               <span class="h-px w-8 bg-amaranth"></span>
               MG
               <span class="h-px w-8 bg-amaranth"></span>
@@ -203,15 +203,15 @@ const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-p
               <div class="absolute left-1/2 top-4 h-1.5 w-24 -translate-x-1/2 rounded-full bg-white/20"></div>
               <div class="absolute inset-x-[22%] top-10 h-24 rounded-full bg-white/10 blur-3xl"></div>
               <div class="relative z-10 max-w-sm text-center">
-                <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth-soft">{i.home.video.note}</p>
+                <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.home.video.note}</p>
                 <p class="mt-5 font-heading text-4xl text-paper md:text-5xl">{i.home.video.placeholder}</p>
               </div>
-              <ArrowWavy client:visible className="absolute bottom-8 right-8 hidden w-24 text-amaranth-soft md:block" />
+              <ArrowWavy client:visible className="absolute bottom-8 right-8 hidden w-24 text-amaranth md:block" />
             </ScrollReveal>
           </div>
 
           <ScrollReveal client:visible direction="right" className="space-y-6">
-            <p class="font-body text-xs font-semibold uppercase tracking-[0.36em] text-amaranth-soft">{i.home.video.eyebrow}</p>
+            <p class="font-body text-xs font-semibold uppercase tracking-[0.36em] text-amaranth">{i.home.video.eyebrow}</p>
             <h2 class="font-heading text-4xl leading-none text-paper md:text-6xl">{i.home.video.title}</h2>
             <RichText text={i.home.video.description} class="max-w-xl font-body text-lg leading-8 text-white/74 md:text-xl" />
             {siteData.instagramScreenshot ? (

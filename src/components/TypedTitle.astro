@@ -15,12 +15,14 @@ const Tag = as;
   <span class="typed-title" aria-hidden="true">
     <span class="typed-title__reserve">{text}</span>
     <span class="typed-title__visual" data-typed-title-visual>{text}</span>
+    <span class="typed-title__cursor-space"></span>
   </span>
 </Tag>
 
 <style>
   .typed-title {
     display: inline-grid;
+    grid-template-columns: minmax(0, max-content) 0.46em;
     align-items: start;
   }
 
@@ -37,6 +39,13 @@ const Tag = as;
 
   .typed-title__visual {
     min-width: 1ch;
+  }
+
+  .typed-title__cursor-space {
+    grid-area: 1 / 2;
+    width: 0.46em;
+    visibility: hidden;
+    pointer-events: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -110,6 +119,7 @@ const Tag = as;
       contentType: 'null',
       typeSpeed: trigger === 'visible' ? 32 : 42,
       startDelay: trigger === 'visible' ? 0 : 160,
+      autoInsertCss: false,
       showCursor: true,
       cursorChar: '_',
       loop: false,
