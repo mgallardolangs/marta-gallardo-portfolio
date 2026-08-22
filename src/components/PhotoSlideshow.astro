@@ -15,7 +15,7 @@ const slideshowPhotos = photos.filter(Boolean);
 ---
 
 <div
-  class={`photo-slideshow relative overflow-hidden rounded-[2rem] bg-paper shadow-[0_30px_80px_rgba(232,50,86,0.15)] ${className}`}
+  class={`photo-slideshow relative overflow-hidden rounded-[2rem] bg-paper shadow-[0_30px_80px_rgb(232_50_86_/_0.15)] ${className}`}
   data-interval={String(interval)}
 >
   {slideshowPhotos.length > 0 ? (
@@ -30,10 +30,10 @@ const slideshowPhotos = photos.filter(Boolean);
   ) : (
     <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-paper via-white to-paper p-8">
       <div class="relative flex h-full w-full items-center justify-center">
-        <div class="absolute left-[12%] top-[16%] flex h-[58%] w-[40%] rotate-[-8deg] items-center justify-center rounded-[2rem] border border-black/10 bg-paper/45 shadow-[0_18px_40px_rgba(232,50,86,0.14)] backdrop-blur-sm">
+        <div class="absolute left-[12%] top-[16%] flex h-[58%] w-[40%] rotate-[-8deg] items-center justify-center rounded-[2rem] border border-black/10 bg-paper/45 shadow-[0_18px_40px_rgb(232_50_86_/_0.14)] backdrop-blur-sm">
           <span class="text-4xl opacity-45">📸</span>
         </div>
-        <div class="absolute right-[12%] bottom-[16%] flex h-[58%] w-[40%] rotate-[8deg] items-center justify-center rounded-[2rem] border border-black/10 bg-paper/60 shadow-[0_18px_40px_rgba(232,50,86,0.18)] backdrop-blur-sm">
+        <div class="absolute right-[12%] bottom-[16%] flex h-[58%] w-[40%] rotate-[8deg] items-center justify-center rounded-[2rem] border border-black/10 bg-paper/60 shadow-[0_18px_40px_rgb(232_50_86_/_0.18)] backdrop-blur-sm">
           <span class="text-4xl opacity-55">📸</span>
         </div>
       </div>
