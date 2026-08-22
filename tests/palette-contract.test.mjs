@@ -100,6 +100,32 @@ test('all src files drop legacy palette token names even when CSS escapes are de
   }));
 });
 
+test('EditableImage keeps strict paper ink amaranth tokens without regressing svg or shared video upload support', async () => {
+  const [editableImageSource, editableMediaSource] = await Promise.all([
+    readFile(path.join(srcDir, 'components/admin/EditableImage.tsx'), 'utf8'),
+    readFile(path.join(srcDir, 'components/admin/EditableMedia.tsx'), 'utf8'),
+  ]);
+
+  assert.doesNotMatch(
+    editableImageSource,
+    /bg-pink-50|text-pink-300|bg-white|text-gray-800|rounded-inherit/,
+    'EditableImage should drop the legacy fallback, overlay, and action pill classes',
+  );
+  assert.match(
+    editableImageSource,
+    /border border-dashed border-ink\/10[^"]*bg-paper\/80[^"]*text-amaranth/,
+    'EditableImage empty state should use paper with an amaranth icon',
+  );
+  assert.match(editableImageSource, /bg-ink\/55/, 'EditableImage overlay should use an ink alpha surface');
+  assert.match(
+    editableImageSource,
+    /border border-amaranth\/20 bg-paper px-4 py-2 text-sm font-medium text-ink[\s\S]*group-hover\/img:border-amaranth\/50[\s\S]*group-hover\/img:text-amaranth[\s\S]*group-focus-within\/img:border-amaranth\/50[\s\S]*group-focus-within\/img:text-amaranth/s,
+    'EditableImage action pill should keep a paper base with amaranth hover and focus accents',
+  );
+  assert.match(editableImageSource, /image\/svg\+xml/, 'EditableImage should still accept svg uploads');
+  assert.match(editableMediaSource, /video\/mp4,video\/webm,video\/quicktime/, 'shared admin media upload support should still include video formats');
+});
+
 test('theme color declarations reject backslash escapes and extra amaranth variable names', async () => {
   const globalCssSource = await readFile(path.join(srcDir, 'styles/global.css'), 'utf8');
   const themeMatch = globalCssSource.match(/@theme\s*\{([\s\S]*?)\}/);

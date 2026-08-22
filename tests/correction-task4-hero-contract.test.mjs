@@ -54,8 +54,9 @@ test('public hero matches the approved Checkpoint 1 source markers and CTA struc
   assert.match(heroSection, /i\.home\.hero\.description/);
   assert.match(
     heroSection,
-    /<HomeHeroPortrait>\s*<img[^>]*src=\{siteData\.heroMainPhoto\}[^>]*alt=\{i\.hero\.name\}[^>]*width=\{1200\}[^>]*height=\{1600\}[^>]*loading="eager"[^>]*fetchpriority="high"[^>]*decoding="async"[^>]*class="home-hero__portrait-image"[^>]*\/>\s*<\/HomeHeroPortrait>/s,
+    /<HomeHeroPortrait>\s*<img[^>]*src=\{siteData\.heroMainPhoto\}[^>]*alt=\{i\.hero\.name\}[^>]*width=\{1200\}[^>]*height=\{1600\}[^>]*loading="eager"[^>]*fetchpriority="high"[^>]*decoding="async"[^>]*\/>\s*<\/HomeHeroPortrait>/s,
   );
+  assert.doesNotMatch(heroSection, /home-hero__portrait-image/);
   assert.match(heroSection, /href=\{getLocalizedPath\('\/ugc',\s*lang\)\}/);
   assert.match(heroSection, /href=\{getLocalizedPath\('\/translation-seo',\s*lang\)\}/);
   assert.equal(
@@ -91,7 +92,12 @@ test('portrait component replaces the old abstract visual with a slotted media f
     /\.home-hero__portrait\s*\{[^}]*max-width:\s*400px;[^}]*aspect-ratio:\s*4\s*\/\s*5;[^}]*margin-inline:\s*auto;[^}]*\}/s,
   );
   assert.match(globalCssSource, /\.home-hero__portrait-media\s*\{[^}]*clip-path:/s);
-  assert.match(globalCssSource, /\.home-hero__portrait:hover\s+\.home-hero__portrait-image,[\s\S]*transform:\s*scale\(1\.055\);/s);
+  assert.match(globalCssSource, /\.home-hero__portrait-media img\s*\{[^}]*object-fit:\s*cover;[^}]*transition:[^}]*transform 0\.42s ease,[^}]*filter 0\.42s ease;[^}]*\}/s);
+  assert.match(
+    globalCssSource,
+    /\.home-hero__portrait:hover\s+\.home-hero__portrait-media img,\s*\.home-hero__portrait:focus-within\s+\.home-hero__portrait-media img\s*\{[^}]*transform:\s*scale\(1\.055\);[^}]*\}/s,
+  );
+  assert.doesNotMatch(globalCssSource, /\.home-hero__portrait-image\b/);
   assert.doesNotMatch(globalCssSource, /home-hero__oval|home-hero__frame|home-hero__mark/);
 });
 
@@ -110,8 +116,9 @@ test('admin hero mirrors the layout with editable copy and keeps later admin too
   assert.match(heroSection, /i18nKey="home\.hero\.description"/);
   assert.match(
     heroSection,
-    /<HomeHeroPortrait>\s*<EditableImage client:load imageKey="heroMainPhoto" className="home-hero__portrait-image" alt=\{i\.hero\.name\} \/>[\s\S]*<\/HomeHeroPortrait>/s,
+    /<HomeHeroPortrait>\s*<EditableImage client:load imageKey="heroMainPhoto" className="h-full w-full" alt=\{i\.hero\.name\} \/>[\s\S]*<\/HomeHeroPortrait>/s,
   );
+  assert.doesNotMatch(heroSection, /home-hero__portrait-image/);
   assert.match(
     heroSection,
     /<div class="group\/edit relative flex w-full">[\s\S]*?<a href="\/admin\/ugc" class="home-hero__cta home-hero__cta--primary">[\s\S]*?<\/a>[\s\S]*?<\/div>/,

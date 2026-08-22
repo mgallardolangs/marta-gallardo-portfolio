@@ -134,11 +134,19 @@ test('portrait refactor deletes the abstract hero visual and replaces it with th
     /\.home-hero__portrait\s*\{[^}]*max-width:\s*400px;[^}]*aspect-ratio:\s*4\s*\/\s*5;[^}]*margin-inline:\s*auto;[^}]*\}/s,
   );
   assert.match(globalCssSource, /\.home-hero__portrait-media\s*\{[^}]*clip-path:\s*inset\(100% 0 0 0\);[^}]*animation:\s*home-hero-portrait-reveal 1\.05s/s);
+  assert.match(
+    globalCssSource,
+    /\.home-hero__portrait-media img\s*\{[^}]*display:\s*block;[^}]*width:\s*100%;[^}]*height:\s*100%;[^}]*object-fit:\s*cover;[^}]*transition:[^}]*transform 0\.42s ease,[^}]*filter 0\.42s ease;[^}]*\}/s,
+  );
   assert.match(globalCssSource, /\.home-hero__portrait-corner\s*\{[^}]*width:\s*28px;[^}]*height:\s*28px;[^}]*\}/s);
   assert.match(globalCssSource, /\.home-hero__portrait-corner--top-left\s*\{[^}]*animation-delay:\s*0\.62s;[^}]*\}/s);
   assert.match(globalCssSource, /\.home-hero__portrait-corner--bottom-left\s*\{[^}]*animation-delay:\s*0\.92s;[^}]*\}/s);
   assert.match(globalCssSource, /\.home-hero__portrait-rule\s*\{[^}]*animation:\s*home-hero-portrait-rule-draw [^;]* 1\.02s both;[^}]*\}/s);
-  assert.match(globalCssSource, /\.home-hero__portrait:hover\s+\.home-hero__portrait-image,[\s\S]*transform:\s*scale\(1\.055\);[\s\S]*filter:\s*saturate\(/s);
+  assert.match(
+    globalCssSource,
+    /\.home-hero__portrait:hover\s+\.home-hero__portrait-media img,\s*\.home-hero__portrait:focus-within\s+\.home-hero__portrait-media img\s*\{[^}]*transform:\s*scale\(1\.055\);[^}]*filter:\s*saturate\(1\.04\) contrast\(1\.03\);[^}]*\}/s,
+  );
+  assert.doesNotMatch(globalCssSource, /\.home-hero__portrait-image\b/);
 });
 
 test('public and admin heroes wire the approved portrait media with eager public loading and editable admin media', async () => {
@@ -150,12 +158,14 @@ test('public and admin heroes wire the approved portrait media with eager public
   assert.match(homeSource, /import HomeHeroPortrait from '\.\.\/components\/HomeHeroPortrait\.astro';/);
   assert.match(
     homeSource,
-    /<HomeHeroPortrait>\s*<img[^>]*src=\{siteData\.heroMainPhoto\}[^>]*alt=\{i\.hero\.name\}[^>]*width=\{1200\}[^>]*height=\{1600\}[^>]*loading="eager"[^>]*fetchpriority="high"[^>]*decoding="async"[^>]*class="home-hero__portrait-image"[^>]*\/>\s*<\/HomeHeroPortrait>/s,
+    /<HomeHeroPortrait>\s*<img[^>]*src=\{siteData\.heroMainPhoto\}[^>]*alt=\{i\.hero\.name\}[^>]*width=\{1200\}[^>]*height=\{1600\}[^>]*loading="eager"[^>]*fetchpriority="high"[^>]*decoding="async"[^>]*\/>\s*<\/HomeHeroPortrait>/s,
   );
+  assert.doesNotMatch(homeSource, /home-hero__portrait-image/);
 
   assert.match(adminHomeSource, /import HomeHeroPortrait from '\.\.\/\.\.\/components\/HomeHeroPortrait\.astro';/);
   assert.match(
     adminHomeSource,
-    /<HomeHeroPortrait>\s*<EditableImage client:load imageKey="heroMainPhoto" className="home-hero__portrait-image" alt=\{i\.hero\.name\} \/>[\s\S]*<\/HomeHeroPortrait>/s,
+    /<HomeHeroPortrait>\s*<EditableImage client:load imageKey="heroMainPhoto" className="h-full w-full" alt=\{i\.hero\.name\} \/>[\s\S]*<\/HomeHeroPortrait>/s,
   );
+  assert.doesNotMatch(adminHomeSource, /home-hero__portrait-image/);
 });
