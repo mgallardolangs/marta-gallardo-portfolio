@@ -1,0 +1,19 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`home-hero__visual ${className}`.trim()} data-home-hero-visual aria-hidden="true">
+  <div class="home-hero__oval"></div>
+  <div class="home-hero__frame home-hero__frame--amaranth"></div>
+  <div class="home-hero__frame home-hero__frame--ink"></div>
+  <div class="home-hero__frame home-hero__frame--paper"></div>
+
+  <div class="home-hero__mark">
+    <span class="home-hero__mark-text">MG</span>
+    <span class="home-hero__mark-rule"></span>
+  </div>
+</div>

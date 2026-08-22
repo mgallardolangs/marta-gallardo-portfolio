@@ -2,122 +2,75 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ScrollReveal from '../components/ScrollReveal';
 import RichText from '../components/RichText.astro';
-import AnimatedScrollText from '../components/AnimatedScrollText';
 import OvalMediaOrbit from '../components/OvalMediaOrbit';
 import ParallaxLayer from '../components/ParallaxLayer';
 import FloatingIcon from '../components/FloatingIcon';
 import GsapPageRuntime from '../components/GsapPageRuntime.astro';
 import { ArrowWavy } from '../components/DoodleArrows';
 import StaggerContainer, { StaggerItem } from '../components/StaggerContainer';
+import HomeHeroAbstractVisual from '../components/HomeHeroAbstractVisual.astro';
 import TypedTitle from '../components/TypedTitle.astro';
 import { getLangFromUrl, getLocalizedPath, t } from '../i18n';
 import { siteData } from '../lib/siteData';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
-const heroPortraitAlt = siteData.orbitMedia.find((item) => item.id === 'hero-editorial')?.alt[lang] ?? i.hero.name;
 const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-proof')?.alt[lang] ?? 'Instagram';
 ---
 
 <BaseLayout title={`${i.hero.name} — ${i.home.hero.kicker}`} description={i.home.hero.description}>
   <GsapPageRuntime />
   <div class="overflow-x-hidden bg-paper">
-      <section class="relative overflow-hidden border-b border-black/10 bg-paper px-6 pt-28 pb-20 md:pt-32 md:pb-24">
-        <div class="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(232,50,86,0.15),transparent_68%)]"></div>
-        <div class="site-container relative grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-          <div class="space-y-8">
-            <ScrollReveal client:visible direction="none">
-              <div class="inline-flex items-center gap-4 border-y border-black/12 py-3">
-                <p class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.34em]">{i.home.hero.kicker}</p>
+      <section data-home-hero class="home-hero bg-paper px-6 pt-28 pb-16 md:pt-32 md:pb-20">
+        <div class="site-container home-hero__stage">
+          <div class="home-hero__copy">
+            <StaggerContainer client:visible className="space-y-6 md:space-y-8" staggerDelay={0.1}>
+              <div class="home-hero__clip">
+                <StaggerItem>
+                  <p class="home-hero__kicker">{i.home.hero.kicker}</p>
+                </StaggerItem>
               </div>
-            </ScrollReveal>
 
-            <StaggerContainer client:visible className="space-y-6" staggerDelay={0.12}>
-              <StaggerItem>
-                <TypedTitle
-                  as="h1"
-                  text={i.hero.name}
-                  trigger="load"
-                  class="max-w-[11ch] font-heading text-[4.25rem] leading-[0.82] tracking-[-0.06em] text-ink sm:text-[5.25rem] md:text-[6.8rem] lg:text-[8.2rem]"
-                />
-              </StaggerItem>
-
-              <StaggerItem>
-                <div class="flex flex-wrap items-center gap-3 text-sm uppercase tracking-[0.28em] text-ink-muted md:text-base">
-                  <span>{i.hero.age}</span>
-                  <span class="text-amaranth">✦</span>
-                  <span>{i.hero.city}</span>
-                </div>
-              </StaggerItem>
-
-              <StaggerItem>
-                <RichText text={i.home.hero.description} class="max-w-xl font-body text-lg leading-8 text-ink-muted md:text-xl" />
-              </StaggerItem>
-            </StaggerContainer>
-
-            <div class="flex flex-wrap items-center gap-4 pt-2">
-              <a
-                href={getLocalizedPath('/ugc', lang)}
-                class="inline-flex items-center gap-3 rounded-full border border-black/12 bg-ink px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-paper transition hover:border-amaranth hover:bg-amaranth hover:text-ink"
-              >
-                {i.hero.ugcLabel}
-              </a>
-              <a
-                href={getLocalizedPath('/translation-seo', lang)}
-                class="text-accent-ink inline-flex items-center gap-3 border-b border-amaranth pb-1 text-xs font-semibold uppercase tracking-[0.24em] transition hover:text-ink"
-              >
-                {i.hero.seoLabel}
-              </a>
-            </div>
-
-            <div class="pt-4">
-              <AnimatedScrollText client:load text={i.home.hero.scrollCue} className="max-w-xs text-ink-muted" />
-            </div>
-          </div>
-
-          <div class="relative min-h-[36rem] lg:min-h-[42rem]">
-            <FloatingIcon client:visible intensity={18} className="absolute inset-0">
-              <div class="absolute left-4 top-8 hidden h-28 w-28 rounded-full bg-amaranth/30 blur-3xl md:block"></div>
-              <div class="absolute bottom-12 right-0 h-36 w-36 rounded-full bg-paper/88 blur-3xl"></div>
-            </FloatingIcon>
-
-            <ScrollReveal client:visible delay={0.1} direction="left" className="absolute inset-x-4 top-8 z-20 md:left-auto md:right-[58%] md:w-64">
-              <div class="border border-black/10 bg-white/72 p-4 shadow-[0_18px_40px_rgba(6,4,3,0.08)] backdrop-blur-sm">
-                <p class="text-accent-ink font-body text-[0.7rem] font-semibold uppercase tracking-[0.3em]">UGC</p>
-                <p class="mt-3 font-heading text-xl leading-tight text-ink">{i.hero.ugcLabel}</p>
+              <div class="home-hero__clip">
+                <StaggerItem>
+                  <TypedTitle as="h1" text={i.hero.name} trigger="load" class="home-hero__title" />
+                </StaggerItem>
               </div>
-            </ScrollReveal>
 
-            <ScrollReveal client:visible delay={0.2} direction="right" className="absolute bottom-6 left-6 z-20 md:bottom-[10%] md:left-[60%] md:w-72">
-              <div class="border border-black/10 bg-white/72 p-4 shadow-[0_18px_40px_rgba(6,4,3,0.08)] backdrop-blur-sm">
-                <p class="text-accent-ink font-body text-[0.7rem] font-semibold uppercase tracking-[0.3em]">SEO</p>
-                <p class="mt-3 font-heading text-xl leading-tight text-ink">{i.hero.seoLabel}</p>
-              </div>
-            </ScrollReveal>
-
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="relative flex h-[29rem] w-full max-w-[24rem] items-center justify-center overflow-hidden border border-black/10 bg-paper shadow-[0_28px_90px_rgba(6,4,3,0.12)] md:h-[35rem] md:max-w-[27rem]">
-                {siteData.heroMainPhoto && !siteData.heroMainPhoto.includes('placeholder') ? (
-                  <img
-                    src={siteData.heroMainPhoto}
-                    alt={heroPortraitAlt}
-                    width={1200}
-                    height={1600}
-                    loading="eager"
-                    fetchpriority="high"
-                    decoding="async"
-                    class="absolute inset-0 h-full w-full object-cover"
-                  />
-                ) : (
-                  <div class="relative z-10 text-center">
-                    <p class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.32em]">{i.home.hero.coverLabel}</p>
-                    <p class="mt-4 font-heading text-4xl text-ink md:text-5xl">{i.home.hero.mainPhoto}</p>
+              <div class="home-hero__clip">
+                <StaggerItem>
+                  <div class="home-hero__meta">
+                    <span>{i.hero.age}</span>
+                    <span class="home-hero__separator">✦</span>
+                    <span>{i.hero.city}</span>
                   </div>
-                )}
-                <div class="pointer-events-none absolute inset-5 border border-white/60"></div>
+                </StaggerItem>
               </div>
-            </div>
+
+              <div class="home-hero__clip">
+                <StaggerItem>
+                  <RichText text={i.home.hero.description} class="home-hero__description" />
+                </StaggerItem>
+              </div>
+
+              <div class="home-hero__clip">
+                <StaggerItem>
+                  <div class="home-hero__actions">
+                    <a href={getLocalizedPath('/ugc', lang)} class="home-hero__cta home-hero__cta--primary">
+                      <span class="home-hero__cta-label">{i.hero.ugcLabel}</span>
+                    </a>
+                    <a href={getLocalizedPath('/translation-seo', lang)} class="home-hero__cta home-hero__cta--secondary">
+                      <span class="home-hero__cta-label">{i.hero.seoLabel}</span>
+                    </a>
+                  </div>
+                </StaggerItem>
+              </div>
+            </StaggerContainer>
           </div>
+
+          <ScrollReveal client:visible direction="none" className="home-hero__visual-shell">
+            <HomeHeroAbstractVisual />
+          </ScrollReveal>
         </div>
       </section>
 

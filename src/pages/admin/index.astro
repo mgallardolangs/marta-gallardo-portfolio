@@ -5,78 +5,73 @@ import ParallaxLayer from '../../components/ParallaxLayer';
 import FloatingIcon from '../../components/FloatingIcon';
 import { ArrowWavy } from '../../components/DoodleArrows';
 import StaggerContainer, { StaggerItem } from '../../components/StaggerContainer';
-import { getLangFromUrl, getLocalizedPath, t } from '../../i18n';
+import { getLangFromUrl, t } from '../../i18n';
 import EditableText from '../../components/admin/EditableText';
 import EditableImage from '../../components/admin/EditableImage';
 import AdminBrandVideo from '../../components/admin/AdminBrandVideo';
 import AdminOrbitPreview from '../../components/admin/AdminOrbitPreview';
 import EditableOrbitCollection from '../../components/admin/EditableOrbitCollection';
+import HomeHeroAbstractVisual from '../../components/HomeHeroAbstractVisual.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
 ---
 <AdminLayout title={`Admin — ${i.hero.name}`} description={i.home.hero.description}>
     <div class="overflow-x-hidden bg-paper">
-      <section class="relative overflow-hidden border-b border-black/10 bg-paper px-6 pt-28 pb-20 md:pt-32 md:pb-24">
-        <div class="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(232,50,86,0.15),transparent_68%)]"></div>
-        <div class="site-container relative grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-          <div class="space-y-8">
-            <ScrollReveal client:visible direction="none">
-              <div class="inline-flex items-center gap-4 border-y border-black/12 py-3">
-                <EditableText client:load i18nKey="home.hero.kicker" as="p" className="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth" />
+      <section data-admin-home-hero class="home-hero bg-paper px-6 pt-28 pb-16 md:pt-32 md:pb-20">
+        <div class="site-container home-hero__stage">
+          <div class="home-hero__copy">
+            <StaggerContainer client:visible className="space-y-6 md:space-y-8" staggerDelay={0.1}>
+              <div class="home-hero__clip">
+                <StaggerItem>
+                  <EditableText client:load i18nKey="home.hero.kicker" as="p" className="home-hero__kicker" />
+                </StaggerItem>
               </div>
-            </ScrollReveal>
 
-            <StaggerContainer client:visible className="space-y-6" staggerDelay={0.12}>
-              <StaggerItem>
-                <EditableText client:load i18nKey="hero.name" as="h1" className="max-w-[11ch] font-heading text-[4.25rem] leading-[0.82] tracking-[-0.06em] text-ink sm:text-[5.25rem] md:text-[6.8rem] lg:text-[8.2rem]" />
-              </StaggerItem>
+              <div class="home-hero__clip">
+                <StaggerItem>
+                  <EditableText client:load i18nKey="hero.name" as="h1" className="home-hero__title" />
+                </StaggerItem>
+              </div>
 
-              <StaggerItem>
-                <div class="flex flex-wrap items-center gap-3 text-sm uppercase tracking-[0.28em] text-ink-muted md:text-base">
-                  <EditableText client:load i18nKey="hero.age" as="span" className="" />
-                  <span class="text-amaranth">✦</span>
-                  <EditableText client:load i18nKey="hero.city" as="span" className="" />
-                </div>
-              </StaggerItem>
+              <div class="home-hero__clip">
+                <StaggerItem>
+                  <div class="home-hero__meta">
+                    <EditableText client:load i18nKey="hero.age" as="span" className="" />
+                    <span class="home-hero__separator">✦</span>
+                    <EditableText client:load i18nKey="hero.city" as="span" className="" />
+                  </div>
+                </StaggerItem>
+              </div>
 
-              <StaggerItem>
-                <EditableText client:load i18nKey="home.hero.description" as="div" className="max-w-xl font-body text-lg leading-8 text-ink-muted md:text-xl" />
-              </StaggerItem>
+              <div class="home-hero__clip">
+                <StaggerItem>
+                  <EditableText client:load i18nKey="home.hero.description" as="div" className="home-hero__description" />
+                </StaggerItem>
+              </div>
+
+              <div class="home-hero__clip">
+                <StaggerItem>
+                  <div class="home-hero__actions">
+                    <div class="home-hero__cta home-hero__cta--primary">
+                      <div class="home-hero__cta-label">
+                        <EditableText client:load i18nKey="hero.ugcLabel" as="span" className="" />
+                      </div>
+                    </div>
+                    <div class="home-hero__cta home-hero__cta--secondary">
+                      <div class="home-hero__cta-label">
+                        <EditableText client:load i18nKey="hero.seoLabel" as="span" className="" />
+                      </div>
+                    </div>
+                  </div>
+                </StaggerItem>
+              </div>
             </StaggerContainer>
-
-            <div class="pt-4">
-              <EditableText client:load i18nKey="home.hero.scrollCue" as="p" className="max-w-xs font-body text-sm uppercase tracking-[0.3em] text-ink-muted" />
-            </div>
           </div>
 
-          <div class="relative min-h-[36rem] lg:min-h-[42rem]">
-            <FloatingIcon client:visible intensity={18} className="absolute inset-0">
-              <div class="absolute left-4 top-8 hidden h-28 w-28 rounded-full bg-amaranth/30 blur-3xl md:block"></div>
-              <div class="absolute bottom-12 right-0 h-36 w-36 rounded-full bg-paper/88 blur-3xl"></div>
-            </FloatingIcon>
-
-            <ScrollReveal client:visible delay={0.1} direction="left" className="absolute inset-x-4 top-8 z-20 md:left-auto md:right-[58%] md:w-64">
-              <a href={getLocalizedPath('/ugc', lang)} class="block border border-black/10 bg-white/72 p-4 shadow-[0_18px_40px_rgba(6,4,3,0.08)] backdrop-blur-sm">
-                <p class="font-body text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-amaranth">UGC</p>
-                <EditableText client:load i18nKey="hero.ugcLabel" as="p" className="mt-3 font-heading text-xl leading-tight text-ink" />
-              </a>
-            </ScrollReveal>
-
-            <ScrollReveal client:visible delay={0.2} direction="right" className="absolute bottom-6 left-6 z-20 md:bottom-[10%] md:left-[60%] md:w-72">
-              <a href={getLocalizedPath('/translation-seo', lang)} class="block border border-black/10 bg-white/72 p-4 shadow-[0_18px_40px_rgba(6,4,3,0.08)] backdrop-blur-sm">
-                <p class="font-body text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-amaranth">SEO</p>
-                <EditableText client:load i18nKey="hero.seoLabel" as="p" className="mt-3 font-heading text-xl leading-tight text-ink" />
-              </a>
-            </ScrollReveal>
-
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="relative flex h-[29rem] w-full max-w-[24rem] items-center justify-center overflow-hidden border border-black/10 bg-paper shadow-[0_28px_90px_rgba(6,4,3,0.12)] md:h-[35rem] md:max-w-[27rem]">
-                <EditableImage client:load imageKey="heroMainPhoto" className="absolute inset-0 h-full w-full" alt={i.hero.name} />
-                <div class="pointer-events-none absolute inset-5 border border-white/60"></div>
-              </div>
-            </div>
-          </div>
+          <ScrollReveal client:visible direction="none" className="home-hero__visual-shell">
+            <HomeHeroAbstractVisual />
+          </ScrollReveal>
         </div>
       </section>
 

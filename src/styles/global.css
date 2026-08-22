@@ -124,6 +124,275 @@ svg {
   }
 }
 
+.home-hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgb(6 4 3 / 0.1);
+}
+
+.home-hero__stage {
+  display: grid;
+  gap: clamp(2.75rem, 6vw, 5.5rem);
+}
+
+.home-hero__copy {
+  max-width: 32rem;
+}
+
+.home-hero__clip {
+  overflow: hidden;
+}
+
+.home-hero__kicker {
+  display: inline-flex;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--color-amaranth);
+}
+
+.home-hero__title {
+  display: block;
+  max-width: 7.2ch;
+  font-size: clamp(4rem, 11vw, 7rem);
+  line-height: 0.84;
+  letter-spacing: -0.08em;
+}
+
+.home-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.home-hero__separator {
+  color: var(--color-amaranth);
+}
+
+.home-hero__description {
+  max-width: 30rem;
+  font-size: clamp(1.02rem, 2vw, 1.18rem);
+  line-height: 1.9;
+  color: var(--color-ink-muted);
+}
+
+.home-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem 1.5rem;
+}
+
+.home-hero__cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  transition:
+    color 0.28s ease,
+    border-color 0.28s ease,
+    transform 0.28s ease;
+}
+
+.home-hero__cta-label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  transition:
+    transform 0.28s ease,
+    color 0.28s ease;
+}
+
+.home-hero__cta--primary {
+  overflow: hidden;
+  border: 1px solid var(--color-ink);
+  background: var(--color-ink);
+  color: var(--color-paper);
+  padding: 1rem 1.2rem;
+}
+
+.home-hero__cta--primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-amaranth);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.32s ease;
+}
+
+.home-hero__cta--primary:hover::before,
+.home-hero__cta--primary:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.home-hero__cta--secondary {
+  color: var(--color-ink);
+  padding-bottom: 0.4rem;
+}
+
+.home-hero__cta--secondary::before,
+.home-hero__cta--secondary::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+}
+
+.home-hero__cta--secondary::before {
+  background: rgb(6 4 3 / 0.24);
+}
+
+.home-hero__cta--secondary::after {
+  background: var(--color-amaranth);
+  transform: scaleX(0.32);
+  transform-origin: left;
+  transition: transform 0.28s ease;
+}
+
+.home-hero__cta--secondary:hover,
+.home-hero__cta--secondary:focus-visible {
+  color: var(--color-amaranth);
+}
+
+.home-hero__cta--secondary:hover::after,
+.home-hero__cta--secondary:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.home-hero__cta:hover .home-hero__cta-label,
+.home-hero__cta:focus-visible .home-hero__cta-label {
+  transform: translateX(2px);
+}
+
+.home-hero__visual-shell {
+  width: 100%;
+}
+
+.home-hero__visual {
+  position: relative;
+  width: min(100%, 31rem);
+  aspect-ratio: 0.92;
+  margin-inline: auto;
+}
+
+.home-hero__oval {
+  position: absolute;
+  inset: 10% 9% 14% 10%;
+  border: 1px solid rgb(6 4 3 / 0.16);
+  border-radius: 50%;
+  transform: rotate(-18deg);
+}
+
+.home-hero__frame {
+  --home-hero-frame-start: translate3d(0, 1.4rem, 0) rotate(0deg);
+  --home-hero-frame-rest: translate3d(0, 0, 0) rotate(0deg);
+  position: absolute;
+  width: clamp(6rem, 24vw, 10.5rem);
+  aspect-ratio: 1 / 1.22;
+  border: 1px solid;
+  opacity: 0;
+  transform-origin: center;
+  transform: var(--home-hero-frame-rest);
+  animation: home-hero-frame-in 0.86s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.home-hero__frame--amaranth {
+  right: 6%;
+  bottom: 12%;
+  border-color: rgb(232 50 86 / 0.82);
+  background: rgb(232 50 86 / 0.14);
+  --home-hero-frame-start: translate3d(-1.3rem, 1.5rem, 0) rotate(-11deg);
+  --home-hero-frame-rest: translate3d(0, 0, 0) rotate(-5deg);
+  animation-delay: 0.08s;
+}
+
+.home-hero__frame--ink {
+  top: 17%;
+  right: 24%;
+  border-color: var(--color-ink);
+  background: var(--color-ink);
+  --home-hero-frame-start: translate3d(0.4rem, 1.3rem, 0) rotate(7deg);
+  --home-hero-frame-rest: translate3d(0, 0, 0) rotate(2deg);
+  animation-delay: 0.18s;
+}
+
+.home-hero__frame--paper {
+  top: 34%;
+  left: 14%;
+  border-color: rgb(6 4 3 / 0.24);
+  background: var(--color-paper);
+  --home-hero-frame-start: translate3d(1.15rem, 1.2rem, 0) rotate(-8deg);
+  --home-hero-frame-rest: translate3d(0, 0, 0) rotate(-2deg);
+  animation-delay: 0.28s;
+}
+
+.home-hero__mark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  opacity: 0;
+  transform: translateY(1rem);
+  animation: home-hero-mark-in 0.7s ease both 0.34s;
+}
+
+.home-hero__mark-text {
+  font-family: var(--font-heading);
+  font-size: clamp(4rem, 16vw, 6.9rem);
+  line-height: 0.86;
+  letter-spacing: -0.08em;
+  color: var(--color-ink);
+}
+
+.home-hero__mark-rule {
+  width: clamp(4.5rem, 18vw, 7.2rem);
+  height: 2px;
+  background: var(--color-amaranth);
+}
+
+@keyframes home-hero-frame-in {
+  from {
+    opacity: 0;
+    filter: blur(2px);
+    transform: var(--home-hero-frame-start);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: var(--home-hero-frame-rest);
+  }
+}
+
+@keyframes home-hero-mark-in {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @layer utilities {
   .bg-b\6c ush-\35 0 {
     background-color: var(--color-paper);
@@ -206,6 +475,18 @@ svg {
   }
 }
 
+@media (min-width: 1024px) {
+  .home-hero__stage {
+    grid-template-columns: minmax(0, 32rem) minmax(0, 1fr);
+    align-items: end;
+  }
+
+  .home-hero__visual {
+    margin-right: 0;
+    margin-left: auto;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
     scroll-behavior: auto;
@@ -218,5 +499,12 @@ svg {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .home-hero__frame,
+  .home-hero__mark {
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 }
