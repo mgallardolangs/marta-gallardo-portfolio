@@ -151,3 +151,48 @@ Before presenting the live checkpoint:
 8. Confirm favicon has transparent background.
 9. Run targeted tests and the Astro build.
 10. Start the background dev server and stop for user visual approval before changing any other page.
+
+## Live refinement 2
+
+The first implementation checkpoint was reviewed at `http://localhost:4322` on 2026-08-22. Apply these approved corrections without changing the accepted carousel geometry or imagery.
+
+### Navbar and hero spacing
+
+- Reduce the gap between the navbar and the first hero content.
+- Desktop hero top padding becomes approximately `6rem`; mobile becomes approximately `5rem`.
+- Reduce desktop navigation labels from `0.74rem` to approximately `0.64rem`.
+- Reduce desktop social/language controls from `2.6rem` to approximately `2.2rem`.
+- Tighten nav/control gaps so the complete navigation group sits farther right.
+
+### Typed cursor
+
+- The amaranth underscore sits immediately after the end of `Gallardo`.
+- In a wrapped two-line title, align the cursor to the bottom/end of the text grid, not the top or vertical center.
+- Preserve the fixed gap and infinite blink.
+
+### Hero CTAs
+
+- Both `Creadora UGC @marttelier` and `Traducción y SEO multilingüe` use the same black rectangular button treatment.
+- Both buttons remain on one horizontal row.
+- Both share the same amaranth fill-sweep hover.
+
+### Carousel placement and resume
+
+- Shift the complete approved orbit slightly right on desktop only.
+- Do not change its dimensions, tilt, overlap, media size, entrance, speed, or hover styling.
+- Pointer leave resumes the drift immediately rather than waiting only for React state propagation.
+- Leaving the complete orbit region also clears any stale active tile and resumes movement.
+
+### Scroll reveals
+
+- Keep all homepage section reveals.
+- Increase their visual clarity with a longer travel distance and duration while preserving the same section structure.
+- Section headings, copy, language tiles, and the final black content section must visibly reveal as the user scrolls.
+
+### Footer
+
+- Remove the rounded inner footer bubble, its border, and floating-card spacing.
+- Footer content sits directly on the black footer background, matching the seamless approved footer mock.
+- Keep the CTA, five navigation links, social links, location, and legal text.
+- Fix vertical-roll link wrappers so only one label row is visible at rest.
+- Restore the text-only `in` LinkedIn mark in header, mobile menu, and footer. Do not use the full LinkedIn SVG.
