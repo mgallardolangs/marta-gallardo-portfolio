@@ -167,20 +167,20 @@ test('admin layout does not force a full reload and admin init uses bounded iden
   assert.doesNotMatch(initSource, /setInterval/, 'AdminInit should not keep a permanent 1-second polling loop');
 });
 
-test('shared UGC view reruns carousel setup on astro:page-load without duplicate listeners', async () => {
+test('shared UGC view removes the legacy hero carousel runtime in favor of the React contact sheet', async () => {
   const sources = await Promise.all(
     publicUgcPages.map(async (relativePath) => [relativePath, await readSource(relativePath)]),
   );
 
   for (const [relativePath, source] of sources) {
-    assert.match(source, /import\s+\{\s*initHeroCarousels\s*\}\s+from\s+['"].+heroCarousel\.js['"]/,
-      `${relativePath} should use the shared hero carousel initializer`);
-    assert.match(source, /const initUgcPage = \(\) => initHeroCarousels\(\);/,
-      `${relativePath} should wrap carousel setup in a named init function`);
-    assert.match(source, /initUgcPage\(\);/,
-      `${relativePath} should initialize the carousel on first load`);
-    assert.match(source, /document\.addEventListener\('astro:page-load', initUgcPage\);/,
-      `${relativePath} should re-run carousel setup after Astro client navigation`);
+    assert.doesNotMatch(source, /initHeroCarousels/,
+      `${relativePath} should remove the legacy hero carousel runtime`);
+    assert.doesNotMatch(source, /heroCarousel\.js/,
+      `${relativePath} should not import the hero carousel helper anymore`);
+    assert.doesNotMatch(source, /document\.addEventListener\('astro:page-load',\s*initUgcPage\);/,
+      `${relativePath} should not attach the retired UGC page-load carousel handler`);
+    assert.match(source, /<UgcContactSheet\b/,
+      `${relativePath} should mount the React contact sheet instead of the carousel script`);
   }
 });
 

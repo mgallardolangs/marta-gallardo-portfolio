@@ -74,7 +74,7 @@ export default function EditableMedia({
   };
 
   return (
-    <div className={`group/media relative overflow-hidden bg-white ${className}`} style={{ cursor: 'pointer', minHeight: '3rem' }}>
+    <div className={`group/media relative overflow-hidden bg-paper ${className}`} style={{ cursor: 'pointer', minHeight: '3rem' }}>
       {src ? (
         mediaType === 'video' ? (
           <video
@@ -90,16 +90,16 @@ export default function EditableMedia({
           <img src={src} alt={alt} className="h-full w-full object-cover" />
         )
       ) : (
-        <div className="flex h-full w-full items-center justify-center bg-pink-50 text-center text-sm text-pink-300 min-h-[3rem] px-3">
+        <div className="flex h-full w-full min-h-[3rem] items-center justify-center bg-paper/80 px-3 text-center text-sm text-amaranth">
           {emptyLabel}
         </div>
       )}
 
       <div
-        className="absolute inset-0 z-10 flex items-center justify-center bg-black/30 opacity-0 transition-opacity group-hover/media:opacity-100"
+        className="absolute inset-0 z-10 flex items-center justify-center bg-ink/55 opacity-0 transition-opacity group-hover/media:opacity-100"
         onClick={openFilePicker}
       >
-        <span className="rounded-full bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-lg pointer-events-none">
+        <span className="pointer-events-none border border-amaranth/20 bg-paper px-4 py-2 text-sm font-medium text-ink shadow-[0_18px_40px_rgb(6_4_3_/_0.24)]">
           {label}
         </span>
       </div>

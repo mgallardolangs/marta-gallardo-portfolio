@@ -82,6 +82,8 @@ const requiredLocalePaths = [
   'home.video.description',
   'ugcPage.hero.description',
   'ugcPage.hero.nicheIntroText',
+  'ugcPage.contactSheet.eyebrow',
+  'ugcPage.contactSheet.headline',
   'ugcPage.niches.travel.intro',
   'ugcPage.niches.languages.intro',
   'ugcPage.niches.art.intro',
@@ -256,6 +258,13 @@ test('Phase 2 Spanish and translation hero copy match the approved content set',
   assert.equal(de.ugcPage.hero.headline, '@marttelier');
   assert.equal(it.ugcPage.hero.headline, '@marttelier');
   assert.equal(ca.ugcPage.hero.headline, '@marttelier');
+  assert.equal(es.ugcPage.contactSheet.eyebrow, 'UGC · DIRECCIÓN CREATIVA');
+  assert.equal(es.ugcPage.contactSheet.headline, 'CONTENIDO QUE CONVIERTE EXPERIENCIAS, IDIOMAS Y ARTE EN HISTORIAS VISUALES.');
+  assert.equal(en.ugcPage.contactSheet.headline, 'CONTENT THAT TURNS EXPERIENCES, LANGUAGES, AND ART INTO VISUAL STORIES.');
+  assert.equal(fr.ugcPage.contactSheet.headline, 'DU CONTENU QUI TRANSFORME LES EXPÉRIENCES, LES LANGUES ET L’ART EN HISTOIRES VISUELLES.');
+  assert.equal(de.ugcPage.contactSheet.headline, 'INHALTE, DIE ERLEBNISSE, SPRACHEN UND KUNST IN VISUELLE GESCHICHTEN VERWANDELN.');
+  assert.equal(it.ugcPage.contactSheet.headline, 'CONTENUTI CHE TRASFORMANO ESPERIENZE, LINGUE E ARTE IN STORIE VISIVE.');
+  assert.equal(ca.ugcPage.contactSheet.headline, 'CONTINGUT QUE CONVERTEIX EXPERIÈNCIES, IDIOMES I ART EN HISTÒRIES VISUALS.');
 
   assert.equal(en.translationPage.hero.title, 'Translation, SEO & Localization Services');
   assert.equal(fr.translationPage.hero.title, 'Services de traduction, SEO et localisation');

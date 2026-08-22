@@ -179,7 +179,7 @@ test('UgcContactSheet component locks fixed filters grid blank tiles hover previ
   assert.match(componentSource, /\.pause\(\)/, 'pointer leave should pause video previews');
   assert.match(componentSource, /\brole=["']dialog["']/, 'focus viewer should expose a dialog role');
   assert.match(componentSource, /\baria-modal=["']true["']/, 'focus viewer should be modal');
-  assert.match(componentSource, /\baspect-\[9\/16\]\b/, 'focus viewer media should stay in a 9:16 frame');
+  assert.match(componentSource, /aspect-\[9\/16\]/, 'focus viewer media should stay in a 9:16 frame');
   assert.match(componentSource, /\bcopy\.close\b/, 'focus viewer should expose the localized close label');
   assert.match(componentSource, /\bcopy\.previous\b/, 'focus viewer should expose localized previous navigation');
   assert.match(componentSource, /\bcopy\.next\b/, 'focus viewer should expose localized next navigation');
@@ -412,7 +412,10 @@ test('admin store applies Spanish UGC fallback locales and publishes the updated
   assert.equal(store.getSnapshot().publishError, '');
   assert.equal(store.getSnapshot().publishSuccess, true);
 
-  const siteWrite = fetchCalls.find((call) => String(call.input).includes('src/data/site.json'));
+  const siteWrite = fetchCalls.find((call) => (
+    String(call.input).includes('src/data/site.json')
+    && call.init.method === 'PUT'
+  ));
   assert.ok(siteWrite, 'publishing UGC slot edits should write src/data/site.json');
   assert.equal(
     JSON.parse(String(siteWrite.init.body)).message,

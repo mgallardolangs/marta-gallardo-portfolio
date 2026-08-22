@@ -5,6 +5,11 @@ import {
   type OrbitAdminLang,
 } from '../../lib/orbitMedia.ts';
 import {
+  applySpanishFallbackToUgcLocales,
+  validateUgcMediaUpload,
+  validateUgcPortfolioItem,
+} from '../../lib/ugcPortfolio.ts';
+import {
   buildToolLogoUploadPath,
   createEditableCollectionItem,
   getEditableCollectionValidationErrors,
@@ -21,6 +26,8 @@ import type {
   SiteData,
   SkillItem,
   ToolItem,
+  UgcCategory,
+  UgcPortfolioItem,
 } from '../../lib/siteData.ts';
 
 type Listener = () => void;
@@ -73,7 +80,9 @@ type AdminSnapshot = {
   getText: (key: string) => string;
   getImageSrc: (key: string) => string;
   getOrbitMedia: () => OrbitMedia[];
+  getUgcPortfolio: () => UgcPortfolioItem[];
   getOrbitItemValidationErrors: (itemId: string) => string[];
+  getUgcPortfolioItemValidationErrors: (itemId: string) => string[];
   getEditableCollection: (kind: EditableCollectionKind) => Array<LanguageItem | ToolItem | SkillItem>;
 };
 
@@ -219,12 +228,22 @@ function getOrbitPendingKey(itemId: string, field: 'src' | 'poster') {
   return `orbit.${itemId}.${field}`;
 }
 
+function getUgcPendingKey(itemId: string, field: 'src' | 'poster') {
+  return `ugc.${itemId}.${field}`;
+}
+
 function normalizeUploadPath(uploadPath: string) {
   if (uploadPath.startsWith('public/')) {
     return {
       path: uploadPath,
       sitePath: `/${uploadPath.replace(/^public\//, '')}`,
     };
+  }
+
+  function buildUgcUploadPath(itemId: string, field: 'src' | 'poster', file: File) {
+    const extension = file.name.split('.').pop()?.toLowerCase() || (field === 'poster' ? 'jpg' : 'webp');
+    const safeId = itemId.replace(/[^a-z0-9-]+/gi, '-').replace(/^-+|-+$/g, '').toLowerCase() || 'ugc-item';
+    return `/images/ugc/${safeId}${field === 'poster' ? '-poster' : ''}.${extension}`;
   }
 
   if (uploadPath.startsWith('/')) {
@@ -279,7 +298,9 @@ export class AdminStore {
     getText: (key: string) => this.getText(key),
     getImageSrc: (key: string) => this.getImageSrc(key),
     getOrbitMedia: () => this.getOrbitMedia(),
+    getUgcPortfolio: () => this.getUgcPortfolio(),
     getOrbitItemValidationErrors: (itemId: string) => this.getOrbitItemValidationErrors(itemId),
+    getUgcPortfolioItemValidationErrors: (itemId: string) => this.getUgcPortfolioItemValidationErrors(itemId),
     getEditableCollection: (kind: EditableCollectionKind) => this.getEditableCollection(kind),
   };
 
@@ -336,6 +357,21 @@ export class AdminStore {
         ...item,
         src: srcPreview ?? item.src,
         poster: posterPreview ?? item.poster ?? null,
+      };
+    });
+  }
+
+  getUgcPortfolio(): UgcPortfolioItem[] {
+    const ugcPortfolio = this.getPersistedUgcPortfolio();
+
+    return ugcPortfolio.map((item) => {
+      const srcPreview = this.pendingImages[getUgcPendingKey(item.id, 'src')]?.previewSrc;
+      const posterPreview = this.pendingImages[getUgcPendingKey(item.id, 'poster')]?.previewSrc;
+
+      return {
+        ...item,
+        src: srcPreview ?? item.src,
+        poster: posterPreview ?? item.poster,
       };
     });
   }
@@ -583,6 +619,59 @@ export class AdminStore {
     this.emit();
   }
 
+  updateUgcPortfolioField(
+    itemId: string,
+    field: 'category' | 'type' | 'label' | 'title' | 'description' | 'format' | 'alt',
+    value: string,
+    lang?: OrbitAdminLang,
+  ): void {
+    const item = this.getMutableUgcPortfolio().find((candidate) => candidate.id === itemId);
+    if (!item) return;
+
+    if (field === 'category') {
+      item.category = value as UgcCategory;
+    } else if (field === 'type') {
+      item.type = value as UgcPortfolioItem['type'];
+    } else {
+      if (!lang) return;
+
+      const localized = { ...item[field] } as LocalizedText;
+      const previousSpanish = localized.es;
+      localized[lang] = value;
+      item[field] = lang === 'es'
+        ? applySpanishFallbackToUgcLocales(localized, previousSpanish)
+        : localized;
+    }
+
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  async setUgcPortfolioMedia(itemId: string, file: File): Promise<void> {
+    const item = this.getMutableUgcPortfolio().find((candidate) => candidate.id === itemId);
+    if (!item) return;
+
+    const validationError = validateUgcMediaUpload(file, item.type);
+    if (validationError) {
+      throw new Error(validationError);
+    }
+
+    await this.setPendingUgcAsset(item, 'src', file, buildUgcUploadPath(item.id, 'src', file));
+  }
+
+  async setUgcPortfolioPoster(itemId: string, file: File): Promise<void> {
+    const item = this.getMutableUgcPortfolio().find((candidate) => candidate.id === itemId);
+    if (!item) return;
+
+    const validationError = validateUgcMediaUpload(file, 'image');
+    if (validationError) {
+      throw new Error(validationError);
+    }
+
+    await this.setPendingUgcAsset(item, 'poster', file, buildUgcUploadPath(item.id, 'poster', file));
+  }
+
   async setImage(key: string, file: File, uploadPath: string): Promise<void> {
     if (!this.initialized) return;
     const existingPending = this.pendingImages[key];
@@ -664,6 +753,14 @@ export class AdminStore {
     const orbitValidationErrors = this.getOrbitValidationErrors();
     if (orbitValidationErrors.length > 0) {
       this.publishErrorState = orbitValidationErrors.join(' ');
+      this.publishSuccessState = false;
+      this.emit();
+      return;
+    }
+
+    const ugcValidationErrors = this.getUgcPortfolioValidationErrors();
+    if (ugcValidationErrors.length > 0) {
+      this.publishErrorState = ugcValidationErrors.join(' ');
       this.publishSuccessState = false;
       this.emit();
       return;
@@ -841,6 +938,53 @@ export class AdminStore {
     return nextOrbitMedia;
   }
 
+  private getPersistedUgcPortfolio(): UgcPortfolioItem[] {
+    const ugcPortfolio = deepGet(this.images, 'ugcPortfolio');
+    if (!Array.isArray(ugcPortfolio)) return [];
+
+    return cloneValue(ugcPortfolio as UgcPortfolioItem[]);
+  }
+
+  private getMutableUgcPortfolio(): UgcPortfolioItem[] {
+    const ugcPortfolio = deepGet(this.images, 'ugcPortfolio');
+    if (Array.isArray(ugcPortfolio)) return ugcPortfolio as UgcPortfolioItem[];
+
+    const nextUgcPortfolio: UgcPortfolioItem[] = [];
+    deepSet(this.images, 'ugcPortfolio', nextUgcPortfolio);
+    return nextUgcPortfolio;
+  }
+
+  private async setPendingUgcAsset(
+    item: UgcPortfolioItem,
+    field: 'src' | 'poster',
+    file: File,
+    uploadPath: string,
+  ): Promise<void> {
+    const pendingKey = getUgcPendingKey(item.id, field);
+    const existingPending = this.pendingImages[pendingKey];
+    const normalizedPath = normalizeUploadPath(uploadPath);
+    const dataUrl = await fileToDataUrl(file);
+    const base64Content = dataUrl.includes(',') ? dataUrl.split(',')[1] ?? '' : dataUrl;
+
+    this.pendingImages[pendingKey] = {
+      path: normalizedPath.path,
+      sitePath: normalizedPath.sitePath,
+      previousSitePath: existingPending?.previousSitePath ?? (field === 'src' ? item.src : item.poster),
+      previewSrc: dataUrl,
+      base64Content,
+    };
+
+    if (field === 'src') {
+      item.src = normalizedPath.sitePath;
+    } else {
+      item.poster = normalizedPath.sitePath;
+    }
+
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
   private getPersistedEditableCollection(kind: EditableCollectionKind): Array<LanguageItem | ToolItem | SkillItem> {
     const collection = deepGet(this.images, `arsenal.${kind}`);
     if (!Array.isArray(collection)) return [];
@@ -895,6 +1039,28 @@ export class AdminStore {
         continue;
       }
 
+      const ugcMatch = key.match(/^ugc\.(.+)\.(src|poster)$/);
+      if (ugcMatch) {
+        const [, itemId, field] = ugcMatch;
+        const ugcPortfolio = deepGet(images, 'ugcPortfolio');
+        if (Array.isArray(ugcPortfolio)) {
+          const item = ugcPortfolio.find((candidate) => (
+            candidate !== null
+            && typeof candidate === 'object'
+            && (candidate as UgcPortfolioItem).id === itemId
+          )) as UgcPortfolioItem | undefined;
+
+          if (item) {
+            if (field === 'src') {
+              item.src = pendingImage.previousSitePath ?? '';
+            } else {
+              item.poster = pendingImage.previousSitePath;
+            }
+          }
+        }
+        continue;
+      }
+
       deepSet(images, key, pendingImage.previousSitePath ?? '');
     }
 
@@ -936,6 +1102,34 @@ export class AdminStore {
         continue;
       }
 
+      const ugcMatch = key.match(/^ugc\.(.+)\.(src|poster)$/);
+      if (ugcMatch) {
+        const [, itemId, field] = ugcMatch;
+        const ugcPortfolio = deepGet(this.images, 'ugcPortfolio');
+        const originalUgcPortfolio = deepGet(this.originalImages, 'ugcPortfolio');
+        if (Array.isArray(ugcPortfolio) && Array.isArray(originalUgcPortfolio)) {
+          const item = ugcPortfolio.find((candidate) => (
+            candidate !== null
+            && typeof candidate === 'object'
+            && (candidate as UgcPortfolioItem).id === itemId
+          )) as UgcPortfolioItem | undefined;
+          const originalItem = originalUgcPortfolio.find((candidate) => (
+            candidate !== null
+            && typeof candidate === 'object'
+            && (candidate as UgcPortfolioItem).id === itemId
+          )) as UgcPortfolioItem | undefined;
+
+          if (item) {
+            if (field === 'src') {
+              item.src = pendingImage.previousSitePath ?? originalItem?.src ?? item.src;
+            } else {
+              item.poster = pendingImage.previousSitePath ?? originalItem?.poster ?? item.poster ?? null;
+            }
+          }
+        }
+        continue;
+      }
+
       const originalValue = deepGet(this.originalImages, key);
       deepSet(
         this.images,
@@ -954,6 +1148,17 @@ export class AdminStore {
   private getOrbitItemValidationErrors(itemId: string): string[] {
     const item = this.getPersistedOrbitMedia().find((candidate) => candidate.id === itemId);
     return item ? validateOrbitMediaItem(item) : [];
+  }
+
+  private getUgcPortfolioValidationErrors(): string[] {
+    return this.getPersistedUgcPortfolio().flatMap((item) => (
+      validateUgcPortfolioItem(item).map((error) => `${item.id}: ${error}`)
+    ));
+  }
+
+  private getUgcPortfolioItemValidationErrors(itemId: string): string[] {
+    const item = this.getPersistedUgcPortfolio().find((candidate) => candidate.id === itemId);
+    return item ? validateUgcPortfolioItem(item) : [];
   }
 
   private emit(): void {
@@ -978,7 +1183,9 @@ export class AdminStore {
       getText: (key: string) => this.getText(key),
       getImageSrc: (key: string) => this.getImageSrc(key),
       getOrbitMedia: () => this.getOrbitMedia(),
+      getUgcPortfolio: () => this.getUgcPortfolio(),
       getOrbitItemValidationErrors: (itemId: string) => this.getOrbitItemValidationErrors(itemId),
+      getUgcPortfolioItemValidationErrors: (itemId: string) => this.getUgcPortfolioItemValidationErrors(itemId),
       getEditableCollection: (kind: EditableCollectionKind) => this.getEditableCollection(kind),
     };
 

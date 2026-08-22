@@ -1,168 +1,84 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import ScrollReveal from '../../components/ScrollReveal';
-import ParallaxLayer from '../../components/ParallaxLayer';
-import VideoGallery from '../../components/VideoGallery';
-import PhotoMasonry from '../../components/PhotoMasonry';
+import TypedTitle from '../../components/TypedTitle.astro';
+import UgcContactSheet from '../../components/UgcContactSheet';
+import EditableUgcPortfolio from '../../components/admin/EditableUgcPortfolio';
 import { getLangFromUrl, t } from '../../i18n';
-import { siteData as imagesData } from '../../lib/siteData';
-import EditableText from '../../components/admin/EditableText';
-import EditableImage from '../../components/admin/EditableImage';
-import AdminNicheCard from '../../components/admin/AdminNicheCard';
+import { siteData } from '../../lib/siteData';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
-const images = imagesData as {
-  nicheBackgrounds?: Record<string, string>;
-  nicheIcons?: Record<string, string>;
-  ugcVideos?: Record<string, string[]>;
-  ugcPhotos?: Record<string, string[]>;
-};
-
-const niches = [
-  { id: 'travel', ...i.ugcPage.niches.travel },
-  { id: 'languages', ...i.ugcPage.niches.languages },
-  { id: 'art', ...i.ugcPage.niches.art },
-].map((niche) => ({
-  ...niche,
-  videos: images.ugcVideos?.[niche.id] ?? [],
-  photos: images.ugcPhotos?.[niche.id] ?? [],
-  iconImage: images.nicheIcons?.[niche.id] ?? '',
-}));
-
-const allPhotos = images.ugcPhotos?.all ?? [];
 ---
+
 <AdminLayout title={`Admin — ${i.ugc.title}`} description={i.ugcPage.pageDescription}>
-    <div id="top" class="bg-paper">
-      <section class="relative overflow-hidden border-b border-black/10 bg-paper px-6 pt-28 pb-16 md:pt-32 md:pb-24">
-        <ParallaxLayer client:visible className="pointer-events-none absolute inset-x-0 top-6 hidden md:block" speed={-0.12}>
-          <div class="site-container text-right font-accent text-7xl italic tracking-[0.18em] text-amaranth/8">
-            <EditableText client:load i18nKey="ugcPage.hero.backgroundLabel" as="span" className="" />
-          </div>
-        </ParallaxLayer>
+  <div class="bg-paper">
+    <section class="px-6 pt-28 pb-8 md:pt-32 md:pb-10">
+      <div class="site-container">
+        <ScrollReveal client:visible className="max-w-6xl">
+          <p class="text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">
+            {i.ugcPage.contactSheet.eyebrow}
+          </p>
+          <TypedTitle
+            as="h1"
+            text={i.ugcPage.hero.headline}
+            trigger="load"
+            class="mt-5 block max-w-[9ch] text-5xl leading-none text-ink md:text-7xl"
+          />
+          <p class="mt-8 max-w-5xl text-balance text-2xl font-semibold uppercase leading-[1.18] tracking-[0.18em] text-ink md:text-4xl">
+            {i.ugcPage.contactSheet.headline}
+          </p>
+        </ScrollReveal>
 
-        <div class="site-container relative z-10 grid gap-12 lg:grid-cols-[1fr_minmax(280px,380px)] lg:items-center lg:gap-16">
-          <ScrollReveal client:visible className="max-w-xl">
-            <div class="inline-flex items-center gap-4 border-y border-black/12 py-3">
-              <EditableText client:load i18nKey="ugcPage.hero.eyebrow" as="p" className="font-body text-xs font-semibold uppercase tracking-[0.35em] text-amaranth" />
-            </div>
-            <EditableText client:load i18nKey="ugcPage.hero.headline" as="h1" className="mt-5 max-w-[9ch] font-heading text-5xl leading-none text-ink md:text-7xl" />
-            <EditableText client:load i18nKey="ugcPage.hero.description" as="div" className="mt-6 font-body text-lg leading-8 text-ink-muted md:text-xl" />
-          </ScrollReveal>
-
-          <ScrollReveal client:visible delay={0.12}>
-            <div class="hero-carousel relative mx-auto aspect-[3/4] w-full max-w-sm overflow-hidden border border-black/10 bg-white shadow-[0_24px_70px_rgba(6,4,3,0.12)]" data-interval="3500">
-              {(images.ugcPhotos?.all ?? []).length > 0 ? (
-                (images.ugcPhotos?.all ?? []).map((src, idx) => (
-                  <img
-                    src={src}
-                    alt={`UGC ${idx + 1}`}
-                    class="carousel-slide absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-in-out"
-                    style={`transform: translateX(${idx * 100}%);`}
-                    loading="lazy"
-                  />
-                ))
-              ) : (
-                <div class="absolute inset-0 flex items-center justify-center bg-paper">
-                  <span class="text-4xl opacity-30">📸</span>
-                </div>
-              )}
-            </div>
-          </ScrollReveal>
+        <div class="mt-8 overflow-hidden" aria-hidden="true">
+          <div class="ugc-hero-rule h-px bg-ink/20" />
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="px-6 py-16 md:py-20">
-        <div class="site-container max-w-5xl text-center">
-          <ScrollReveal client:visible>
-            <div class="mx-auto max-w-4xl border-t border-black/10 pt-8">
-              <EditableText client:load i18nKey="ugcPage.hero.nicheIntroTitle" as="p" className="font-heading text-3xl italic leading-snug text-ink md:text-5xl lg:text-6xl" />
-            </div>
-          </ScrollReveal>
-          <ScrollReveal client:visible delay={0.15}>
-            <EditableText client:load i18nKey="ugcPage.hero.nicheIntroText" as="p" className="mx-auto mt-8 max-w-3xl font-body text-lg leading-8 text-ink-muted md:text-xl" />
-          </ScrollReveal>
+    <section class="px-6 pb-16 md:pb-20">
+      <div class="site-container">
+        <UgcContactSheet
+          client:load
+          adminPreview
+          items={siteData.ugcPortfolio}
+          lang={lang}
+          copy={i.ugcPage.contactSheet}
+        />
+      </div>
+    </section>
+
+    <section class="border-t border-ink/10 px-6 py-16">
+      <div class="site-container space-y-8">
+        <div class="max-w-3xl space-y-3">
+          <p class="text-xs font-semibold uppercase tracking-[0.32em] text-amaranth">Editor</p>
+          <h2 class="text-3xl text-ink md:text-4xl">Fixed 12-slot UGC portfolio</h2>
+          <p class="text-base leading-7 text-ink/68">
+            Update media and ES / EN / FR copy without changing the approved authored order.
+          </p>
         </div>
-      </section>
 
-      <section class="px-6 pb-16 md:pb-20">
-        <div class="site-container max-w-6xl">
-          <ScrollReveal client:visible>
-            <div class="grid gap-4 md:grid-cols-3">
-              <AdminNicheCard client:load id="travel" labelKey="ugcPage.niches.travel.label" accentKey="ugcPage.niches.travel.accent" backgroundImageKey="nicheBackgrounds.travel" iconImageKey="nicheIcons.travel" />
-              <AdminNicheCard client:load id="languages" labelKey="ugcPage.niches.languages.label" accentKey="ugcPage.niches.languages.accent" backgroundImageKey="nicheBackgrounds.languages" iconImageKey="nicheIcons.languages" />
-              <AdminNicheCard client:load id="art" labelKey="ugcPage.niches.art.label" accentKey="ugcPage.niches.art.accent" backgroundImageKey="nicheBackgrounds.art" iconImageKey="nicheIcons.art" />
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {niches.map((niche, index) => (
-        <section
-          id={niche.id}
-          class={`mx-auto max-w-6xl scroll-mt-28 border-t border-black/10 px-6 py-16 md:py-20 ${index === niches.length - 1 ? 'border-b' : ''}`}
-        >
-          <ScrollReveal client:visible className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div class="max-w-3xl">
-              <div class="flex items-center gap-4">
-                <EditableText client:load i18nKey={`ugcPage.niches.${niche.id}.eyebrow`} as="p" className="font-body text-xs font-semibold uppercase tracking-[0.35em] text-amaranth" />
-                <EditableImage client:load imageKey={`nicheIcons.${niche.id}`} className="h-12 w-12 overflow-hidden" alt={`${niche.id} icon`} />
-              </div>
-              <EditableText client:load i18nKey={`ugcPage.niches.${niche.id}.label`} as="h2" className="mt-4 font-heading text-4xl text-ink md:text-6xl" />
-              <EditableText client:load i18nKey={`ugcPage.niches.${niche.id}.intro`} as="div" className="mt-4 font-body text-base leading-8 text-ink-muted md:text-lg" />
-            </div>
-            <a href="#top" class="inline-flex items-center gap-2 self-start border-b border-amaranth pb-1 font-body text-sm text-amaranth transition hover:text-ink">
-              {i.ugcPage.backToTop}
-              <span aria-hidden="true">↑</span>
-            </a>
-          </ScrollReveal>
-
-          {niche.videos.length > 0 && (
-            <div class="mt-10">
-              <VideoGallery client:visible videos={niche.videos.map((src: string) => ({ src }))} />
-            </div>
-          )}
-
-          {niche.photos.length > 0 && (
-            <div class="mt-10">
-              <PhotoMasonry client:visible photos={niche.photos} />
-            </div>
-          )}
-
-          {!niche.videos.length && !niche.photos.length && (
-            <div class="mt-10 flex aspect-[3/1] items-center justify-center border border-dashed border-black/10 bg-paper/70">
-              <p class="font-body text-sm text-ink-muted">{i.ugcPage.contentComingSoon}</p>
-            </div>
-          )}
-        </section>
-      ))}
-
-      {allPhotos.length > 0 && (
-        <section class="px-4 py-16 md:py-20">
-          <div class="mx-auto max-w-7xl">
-            <ScrollReveal client:visible>
-              <div class="mb-10 flex items-center justify-between border-t border-black/10 pt-6">
-                <h2 class="font-heading text-3xl text-ink md:text-5xl">@marttelier</h2>
-                <span class="font-body text-xs font-semibold uppercase tracking-[0.32em] text-amaranth">{i.ugc.title}</span>
-              </div>
-            </ScrollReveal>
-            <PhotoMasonry client:visible photos={allPhotos} />
-          </div>
-        </section>
-      )}
-    </div>
+        <EditableUgcPortfolio client:load />
+      </div>
+    </section>
+  </div>
 </AdminLayout>
 
-<script>
-  import { initHeroCarousels } from '../../lib/heroCarousel.js';
+<style>
+  .ugc-hero-rule {
+    transform-origin: left;
+    animation: ugc-hero-rule-draw 0.7s ease-out both;
+  }
 
-  const initUgcPage = () => initHeroCarousels();
-  const handlerKey = '__mgAdminInitUgcPage';
-  const docWithHandler = document as Document & Record<string, (() => void) | undefined>;
+  @keyframes ugc-hero-rule-draw {
+    from {
+      transform: scaleX(0);
+      opacity: 0;
+    }
 
-  docWithHandler[handlerKey] && document.removeEventListener('astro:page-load', docWithHandler[handlerKey]);
-  docWithHandler[handlerKey] = initUgcPage;
-
-  initUgcPage();
-  document.addEventListener('astro:page-load', initUgcPage);
-</script>
+    to {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+  }
+</style>

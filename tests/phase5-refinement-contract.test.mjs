@@ -261,10 +261,10 @@ test('motion runtime and reduced-motion-sensitive components keep the Phase 5 ha
 });
 
 test('public media surfaces keep eager hero loading, lazy below-fold loading, and explicit sizing contracts', async () => {
-  const [homeSource, ugcSource, nicheCardSource, orbitSource, blogIndexSource, blogArticleSource, photoMasonrySource, videoGallerySource] = await Promise.all([
+  const [homeSource, ugcSource, ugcContactSheetSource, orbitSource, blogIndexSource, blogArticleSource, photoMasonrySource, videoGallerySource] = await Promise.all([
     readSource('src/views/HomePage.astro'),
     readSource('src/views/UgcPage.astro'),
-    readSource('src/components/NicheCard.tsx'),
+    readSource('src/components/UgcContactSheet.tsx'),
     readSource('src/components/OvalMediaOrbit.tsx'),
     readSource('src/views/BlogIndexPage.astro'),
     readSource('src/pages/blog/[slug].astro'),
@@ -275,10 +275,9 @@ test('public media surfaces keep eager hero loading, lazy below-fold loading, an
   assert.match(homeSource, /<HomeHeroPortrait>/);
   assert.match(homeSource, /siteData\.heroMainPhoto/);
   assert.match(homeSource, /<img[^>]*src=\{siteData\.instagramScreenshot\}[^>]*width=\{1251\}[^>]*height=\{495\}[^>]*loading="lazy"[^>]*decoding="async"/);
-  assert.match(ugcSource, /idx === 0 \? 'eager' : 'lazy'/);
-  assert.match(ugcSource, /idx === 0 \? 'high' : 'auto'/);
-  assert.doesNotMatch(nicheCardSource, /backgroundImage:/, 'niche cards should render real lazy images instead of CSS background-image payloads');
-  assert.match(nicheCardSource, /<img[^>]*alt=""[^>]*width=\{1200\}[^>]*height=\{1600\}[^>]*loading="lazy"[^>]*decoding="async"/);
+  assert.doesNotMatch(ugcSource, /fetchpriority="high"|idx === 0 \? 'eager' : 'lazy'/, 'UGC should no longer preload a hero carousel image after the contact-sheet rewrite');
+  assert.match(ugcContactSheetSource, /<img[\s\S]*loading="lazy"/, 'UGC contact-sheet still images should stay lazy-loaded');
+  assert.match(ugcContactSheetSource, /preload="metadata"/, 'UGC contact-sheet videos should only preload metadata');
   assert.match(orbitSource, /<img[^>]*src=\{item\.src\}[^>]*alt=\{alt\}[^>]*loading="lazy"[^>]*decoding="async"/);
   assert.match(blogIndexSource, /<img src=\{post\.data\.image\} alt=\{post\.data\.title\}[^>]*width=\{1600\}[^>]*height=\{1200\}/);
   assert.match(blogArticleSource, /<img src=\{post\.data\.image\} alt=\{post\.data\.title\}[^>]*width=\{1600\}[^>]*height=\{900\}[^>]*fetchpriority="high"/);
