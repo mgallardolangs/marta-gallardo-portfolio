@@ -50,12 +50,12 @@ const {
   <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body class="min-h-screen bg-cream text-charcoal">
+  <MotionRuntime />
   <Header lang={lang} />
   <main class="relative">
     <slot />
   </main>
   <Footer lang={lang} />
-  <MotionRuntime />
   <script is:inline>
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on("init", user => {

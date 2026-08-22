@@ -11,7 +11,7 @@ const {
   toggleLanguageMenu,
   toggleMobileMenu,
 } = headerOverlayStateModule;
-const { createMotionRuntimeController } = motionRuntimeModule;
+const { createMotionRuntimeController, MOTION_RUNTIME_READY_EVENT } = motionRuntimeModule;
 
 test('motion runtime destroys Lenis under reduced motion and recreates a fresh instance when motion returns', () => {
   const instances = [];
@@ -227,4 +227,230 @@ test('header visibility stays pinned open while any overlay is active and resume
     lastScrollY: 200,
   });
   assert.equal(hiddenAfterClose.hidden, true, 'normal scroll-hide behavior should resume once overlays close');
+});
+
+test('gsap page runtime subscribes when motion runtime becomes available later and cleanup leaves route-owned triggers alive', async () => {
+  const originalWindow = globalThis.window;
+  const originalDocument = globalThis.document;
+  const originalRequestAnimationFrame = globalThis.requestAnimationFrame;
+
+  const marker = { id: 'gsap-marker' };
+  const documentListeners = new Map();
+  const lenisScrollCallbacks = [];
+  const lenisOffCallbacks = [];
+  let scrollTriggerRefreshCalls = 0;
+  let scrollTriggerUpdateCalls = 0;
+  let scrollTriggerKillCalls = 0;
+  let clearScrollMemoryCalls = 0;
+  let unsubscribeCalls = 0;
+  let resolveModules;
+  const modulesPromise = new Promise((resolve) => {
+    resolveModules = resolve;
+  });
+
+  globalThis.window = {
+    __mgGsapPageRuntime: undefined,
+    __mgMotionRuntime: undefined,
+  };
+  globalThis.document = {
+    body: {
+      contains: (element) => element === marker,
+    },
+    querySelector: (selector) => (selector === '[data-gsap-page]' ? marker : null),
+    addEventListener(type, listener) {
+      const listeners = documentListeners.get(type) ?? new Set();
+      listeners.add(listener);
+      documentListeners.set(type, listeners);
+    },
+    removeEventListener(type, listener) {
+      documentListeners.get(type)?.delete(listener);
+    },
+    dispatchEvent(event) {
+      for (const listener of documentListeners.get(event.type) ?? []) {
+        listener(event);
+      }
+      return true;
+    },
+  };
+  globalThis.requestAnimationFrame = (callback) => {
+    callback();
+    return 1;
+  };
+
+  try {
+    const { cleanupGsapPageRuntime, initGsapPageRuntime } = await import('../src/lib/gsapPageRuntime.ts');
+
+    const mountPromise = initGsapPageRuntime({
+      loadModules: () => modulesPromise,
+    });
+
+    resolveModules([
+      {
+        default: {
+          registerPlugin() {},
+          ticker: {
+            lagSmoothing() {},
+          },
+        },
+      },
+      {
+        ScrollTrigger: {
+          refresh() {
+            scrollTriggerRefreshCalls += 1;
+          },
+          update() {
+            scrollTriggerUpdateCalls += 1;
+          },
+          clearScrollMemory() {
+            clearScrollMemoryCalls += 1;
+          },
+          getAll() {
+            return [{
+              kill() {
+                scrollTriggerKillCalls += 1;
+              },
+            }];
+          },
+        },
+      },
+    ]);
+    await Promise.resolve();
+
+    assert.equal(
+      documentListeners.get(MOTION_RUNTIME_READY_EVENT)?.size ?? 0,
+      1,
+      'the GSAP runtime should wait for MotionRuntime readiness on first load when Lenis is not ready yet',
+    );
+
+    window.__mgMotionRuntime = {
+      subscribeLenis(subscriber) {
+        const lenis = {
+          on(event, callback) {
+            if (event === 'scroll') {
+              lenisScrollCallbacks.push(callback);
+            }
+          },
+          off(event, callback) {
+            if (event === 'scroll') {
+              lenisOffCallbacks.push(callback);
+            }
+          },
+        };
+
+        subscriber(lenis);
+        return () => {
+          unsubscribeCalls += 1;
+        };
+      },
+    };
+
+    document.dispatchEvent({ type: MOTION_RUNTIME_READY_EVENT });
+    await mountPromise;
+
+    assert.equal(scrollTriggerRefreshCalls, 1, 'mount should refresh ScrollTrigger once after the bridge becomes live');
+    assert.equal(lenisScrollCallbacks.length, 1, 'mount should subscribe exactly one Lenis scroll bridge');
+
+    lenisScrollCallbacks[0]();
+    assert.equal(scrollTriggerUpdateCalls, 1, 'Lenis scroll events should drive ScrollTrigger updates');
+
+    cleanupGsapPageRuntime();
+
+    assert.equal(lenisOffCallbacks.length, 1, 'cleanup should detach the exact Lenis scroll listener it added');
+    assert.equal(unsubscribeCalls, 1, 'cleanup should unsubscribe from live MotionRuntime changes');
+    assert.equal(clearScrollMemoryCalls, 1, 'cleanup may clear scroll memory for the departed route');
+    assert.equal(scrollTriggerKillCalls, 0, 'cleanup must not kill route-owned ScrollTriggers from the current page');
+  } finally {
+    globalThis.window = originalWindow;
+    globalThis.document = originalDocument;
+    globalThis.requestAnimationFrame = originalRequestAnimationFrame;
+  }
+});
+
+test('gsap page runtime run-id cleanup cancels stale imports and pending motion-runtime readiness listeners', async () => {
+  const originalWindow = globalThis.window;
+  const originalDocument = globalThis.document;
+
+  const marker = { id: 'gsap-marker' };
+  const documentListeners = new Map();
+  let subscribeCalls = 0;
+  let resolveModules;
+  const modulesPromise = new Promise((resolve) => {
+    resolveModules = resolve;
+  });
+
+  globalThis.window = {
+    __mgGsapPageRuntime: undefined,
+    __mgMotionRuntime: undefined,
+  };
+  globalThis.document = {
+    body: {
+      contains: (element) => element === marker,
+    },
+    querySelector: (selector) => (selector === '[data-gsap-page]' ? marker : null),
+    addEventListener(type, listener) {
+      const listeners = documentListeners.get(type) ?? new Set();
+      listeners.add(listener);
+      documentListeners.set(type, listeners);
+    },
+    removeEventListener(type, listener) {
+      documentListeners.get(type)?.delete(listener);
+    },
+    dispatchEvent(event) {
+      for (const listener of documentListeners.get(event.type) ?? []) {
+        listener(event);
+      }
+      return true;
+    },
+  };
+
+  try {
+    const { cleanupGsapPageRuntime, initGsapPageRuntime } = await import('../src/lib/gsapPageRuntime.ts');
+
+    const firstMount = initGsapPageRuntime({
+      loadModules: () => modulesPromise,
+    });
+    const secondMount = initGsapPageRuntime({
+      loadModules: () => modulesPromise,
+    });
+
+    cleanupGsapPageRuntime();
+    assert.equal(
+      documentListeners.get(MOTION_RUNTIME_READY_EVENT)?.size ?? 0,
+      0,
+      'route cleanup should remove any pending motion-runtime readiness listener immediately',
+    );
+
+    resolveModules([
+      {
+        default: {
+          registerPlugin() {},
+          ticker: {
+            lagSmoothing() {},
+          },
+        },
+      },
+      {
+        ScrollTrigger: {
+          refresh() {},
+          update() {},
+          clearScrollMemory() {},
+        },
+      },
+    ]);
+
+    await Promise.all([firstMount, secondMount]);
+
+    window.__mgMotionRuntime = {
+      subscribeLenis() {
+        subscribeCalls += 1;
+        return () => {};
+      },
+    };
+    document.dispatchEvent({ type: MOTION_RUNTIME_READY_EVENT });
+
+    assert.equal(subscribeCalls, 0, 'stale async mounts must not subscribe after a newer cleanup invalidates their run id');
+  } finally {
+    globalThis.window = originalWindow;
+    globalThis.document = originalDocument;
+  }
 });

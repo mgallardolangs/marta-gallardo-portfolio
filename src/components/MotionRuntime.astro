@@ -1,7 +1,7 @@
 <script>
   import Lenis from 'lenis';
   import { createMotionRuntimeController } from '../lib/motionRuntime.js';
-  import { createDeferredMotionPreferenceSync } from '../lib/motionRuntime.js';
+  import { createDeferredMotionPreferenceSync, MOTION_RUNTIME_READY_EVENT } from '../lib/motionRuntime.js';
 
   type MotionRuntimeState = {
     lenis: Lenis | null;
@@ -106,8 +106,9 @@
       reducedMotionMedia.removeEventListener('change', onReducedMotionChange);
     };
 
-    window.__mgMotionRuntime = runtimeState;
     runtimeState.subscribeLenis = controller.subscribeLenis;
+    window.__mgMotionRuntime = runtimeState;
+    document.dispatchEvent(new CustomEvent(MOTION_RUNTIME_READY_EVENT));
   };
 
   mountRuntime();

@@ -202,27 +202,35 @@ test('shared contact view reruns form setup on astro:page-load without duplicate
 });
 
 test('motion runtime keeps Lenis global while lazy-loading GSAP only for marked pages', async () => {
-  const [layoutSource, runtimeSource, gsapRuntimeSource, allSourceFiles, pageFiles, layoutFiles] = await Promise.all([
+  const [layoutSource, runtimeSource, gsapRuntimeSource, gsapRuntimeModuleSource, allSourceFiles, pageFiles, layoutFiles] = await Promise.all([
     readSource('src/layouts/BaseLayout.astro'),
     readSource('src/components/MotionRuntime.astro'),
     readSource('src/components/GsapPageRuntime.astro'),
+    readSource('src/lib/gsapPageRuntime.ts'),
     collectFiles(path.join(rootDir, 'src')),
     collectFiles(path.join(rootDir, 'src', 'pages')),
     collectFiles(path.join(rootDir, 'src', 'layouts')),
   ]);
 
   assert.match(layoutSource, /<MotionRuntime\s*\/>/, 'BaseLayout should keep MotionRuntime mounted globally');
+  assert.ok(
+    layoutSource.indexOf('<MotionRuntime />') < layoutSource.indexOf('<main class="relative">'),
+    'BaseLayout should render MotionRuntime before the page slot so first-load GSAP routes can see the global runtime as early as Astro allows',
+  );
   assert.doesNotMatch(runtimeSource, /import\s+gsap\s+from\s+['"]gsap['"]/, 'MotionRuntime should not statically import gsap');
   assert.doesNotMatch(runtimeSource, /import\s+\{\s*ScrollTrigger\s*\}\s+from\s+['"]gsap\/ScrollTrigger['"]/, 'MotionRuntime should not statically import ScrollTrigger');
   assert.doesNotMatch(runtimeSource, /gsap|ScrollTrigger/, 'global MotionRuntime should stay Lenis-only');
-  assert.match(gsapRuntimeSource, /const GSAP_PAGE_SELECTOR = ['"]\[data-gsap-page\]['"];/, 'GsapPageRuntime should use an explicit page marker');
-  assert.match(gsapRuntimeSource, /import\(['"]gsap['"]\)/, 'GsapPageRuntime should lazy-load gsap with a dynamic import');
-  assert.match(gsapRuntimeSource, /import\(['"]gsap\/ScrollTrigger['"]\)/, 'GsapPageRuntime should lazy-load ScrollTrigger with a dynamic import');
-  assert.match(gsapRuntimeSource, /document\.querySelector\(GSAP_PAGE_SELECTOR\)/, 'GsapPageRuntime should require the page marker before loading');
-  assert.match(gsapRuntimeSource, /document\.addEventListener\('astro:page-load', onPageLoad\);/, 'GsapPageRuntime should re-evaluate on Astro page loads');
-  assert.match(gsapRuntimeSource, /document\.addEventListener\('astro:before-preparation', onBeforePreparation\);/, 'GsapPageRuntime should clean up on route changes');
-  assert.match(gsapRuntimeSource, /window\.__mgMotionRuntime\?\.subscribeLenis\?\.\(/, 'GsapPageRuntime should subscribe to live Lenis instance changes instead of capturing a stale reference once');
-  assert.doesNotMatch(gsapRuntimeSource, /const lenis = window\.__mgMotionRuntime\?\.lenis \?\? null;/, 'GsapPageRuntime should not capture a one-time Lenis reference now that reduced-motion toggles recreate the instance');
+  assert.match(gsapRuntimeSource, /import\s+\{\s*initGsapPageRuntime\s*\}\s+from\s+['"]\.\.\/lib\/gsapPageRuntime\.ts['"];/, 'GsapPageRuntime should delegate lifecycle hardening to a shared helper');
+  assert.match(gsapRuntimeModuleSource, /export const GSAP_PAGE_SELECTOR = ['"]\[data-gsap-page\]['"];/, 'GsapPageRuntime should use an explicit page marker');
+  assert.match(gsapRuntimeModuleSource, /import\(['"]gsap['"]\)/, 'GsapPageRuntime should lazy-load gsap with a dynamic import');
+  assert.match(gsapRuntimeModuleSource, /import\(['"]gsap\/ScrollTrigger['"]\)/, 'GsapPageRuntime should lazy-load ScrollTrigger with a dynamic import');
+  assert.match(gsapRuntimeModuleSource, /document\.querySelector\(GSAP_PAGE_SELECTOR\)/, 'GsapPageRuntime should require the page marker before loading');
+  assert.match(gsapRuntimeModuleSource, /document\.addEventListener\('astro:page-load', onPageLoad\);/, 'GsapPageRuntime should re-evaluate on Astro page loads');
+  assert.match(gsapRuntimeModuleSource, /document\.addEventListener\('astro:before-preparation', onBeforePreparation\);/, 'GsapPageRuntime should clean up on route changes');
+  assert.match(gsapRuntimeModuleSource, /window\.__mgGsapPageRuntime\?\.runId !== runId/, 'GsapPageRuntime should gate async continuations behind a run-id token');
+  assert.match(gsapRuntimeModuleSource, /waitForMotionRuntimeReady/, 'GsapPageRuntime should wait for MotionRuntime readiness when Lenis is not yet available on first load');
+  assert.doesNotMatch(gsapRuntimeModuleSource, /ScrollTrigger\.getAll\(\)\.forEach\(\(trigger\) => trigger\.kill\(\)\)/, 'GsapPageRuntime cleanup should not kill route-owned ScrollTriggers');
+  assert.doesNotMatch(gsapRuntimeModuleSource, /const lenis = window\.__mgMotionRuntime\?\.lenis \?\? null;/, 'GsapPageRuntime should not capture a one-time Lenis reference now that reduced-motion toggles recreate the instance');
 
   const sourceFiles = allSourceFiles.filter((filePath) => /\.(astro|[cm]?[jt]sx?)$/.test(filePath));
   const markerFiles = [];
@@ -248,8 +256,8 @@ test('motion runtime keeps Lenis global while lazy-loading GSAP only for marked 
 
   assert.deepEqual(
     markerFiles,
-    ['src/components/GsapPageRuntime.astro'],
-    'Phase 1 should keep the GSAP page marker in the opt-in component only so no live page opts into the GSAP chunk yet',
+    ['src/components/GsapPageRuntime.astro', 'src/lib/gsapPageRuntime.ts'],
+    'the GSAP marker should stay confined to the route runtime component and its helper so unrelated routes never opt into the chunk',
   );
   assert.deepEqual(
     gsapRuntimeUsageFiles,
@@ -291,4 +299,30 @@ test('built HTML pages keep the GSAP page marker scoped to home and translation 
 
   const runtimeStats = await stat(motionAssets[0]);
   assert.ok(runtimeStats.size < 40000, 'Lenis-only MotionRuntime bundle should stay well below the old 130KB payload');
+
+  for (const relativePath of [
+    'dist/index.html',
+    'dist/en/index.html',
+    'dist/fr/index.html',
+    'dist/de/index.html',
+    'dist/it/index.html',
+    'dist/ca/index.html',
+    'dist/translation-seo/index.html',
+    'dist/en/translation-seo/index.html',
+    'dist/fr/translation-seo/index.html',
+    'dist/de/translation-seo/index.html',
+    'dist/it/translation-seo/index.html',
+    'dist/ca/translation-seo/index.html',
+  ]) {
+    const html = await readFile(path.join(rootDir, relativePath.replace(/^dist[\\/]/, 'dist/')), 'utf8');
+    const motionScriptIndex = html.indexOf('/_astro/MotionRuntime.astro_astro_type_script_index_0_lang');
+    const gsapScriptIndex = html.indexOf('/_astro/GsapPageRuntime.astro_astro_type_script_index_0_lang');
+
+    assert.ok(motionScriptIndex >= 0, `${relativePath} should include the global MotionRuntime asset`);
+    assert.ok(gsapScriptIndex >= 0, `${relativePath} should include the route-scoped GsapPageRuntime asset`);
+    assert.ok(
+      motionScriptIndex < gsapScriptIndex,
+      `${relativePath} should load MotionRuntime before GsapPageRuntime so first-load Lenis bridging can bind deterministically`,
+    );
+  }
 });

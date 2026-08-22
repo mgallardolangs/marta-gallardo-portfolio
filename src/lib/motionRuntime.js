@@ -1,3 +1,5 @@
+export const MOTION_RUNTIME_READY_EVENT = 'mg:motion-runtime-ready';
+
 export function createMotionRuntimeController({
   createLenis,
   onLenisChange = () => {},
@@ -88,5 +90,47 @@ export function createDeferredMotionPreferenceSync({
       return pendingFrame;
     },
     cancel,
+  };
+}
+
+export function waitForMotionRuntimeReady({
+  getRuntime = () => window.__mgMotionRuntime ?? null,
+  addReadyListener = (listener) => {
+    document.addEventListener(MOTION_RUNTIME_READY_EVENT, listener);
+    return () => document.removeEventListener(MOTION_RUNTIME_READY_EVENT, listener);
+  },
+} = {}) {
+  let settled = false;
+  let cleanupReadyListener = () => {};
+  let resolvePromise = () => {};
+
+  const settle = (runtime) => {
+    if (settled) return;
+    settled = true;
+    cleanupReadyListener();
+    resolvePromise(runtime);
+  };
+
+  const resolveIfReady = () => {
+    const runtime = getRuntime();
+    if (!runtime?.subscribeLenis) return false;
+    settle(runtime);
+    return true;
+  };
+
+  const promise = new Promise((resolve) => {
+    resolvePromise = resolve;
+  });
+
+  cleanupReadyListener = addReadyListener(() => {
+    resolveIfReady();
+  });
+  resolveIfReady();
+
+  return {
+    promise,
+    cancel() {
+      settle(null);
+    },
   };
 }
