@@ -343,7 +343,7 @@ git commit -m "feat: add approved temporary orbit media" -m "Co-authored-by: Cop
 
 - Modify: `src/views/HomePage.astro`
 - Modify: `src/pages/admin/index.astro`
-- Modify: `tests/mock-faithful-home-contract.test.mjs`
+- Modify: `tests/correction-task4-hero-contract.test.mjs`
 
 - [ ] **Step 1: Replace the current hero decoration**
 
@@ -398,7 +398,7 @@ Use `EditableText` for eyebrow, title, age, city, description, and CTA labels. T
 Run:
 
 ```bash
-node --test tests/mock-faithful-home-contract.test.mjs tests/phase2-contract.test.mjs
+node --test tests/palette-contract.test.mjs tests/correction-task4-hero-contract.test.mjs tests/phase2-contract.test.mjs
 ```
 
 Expected: Checkpoint 1 hero assertions pass.

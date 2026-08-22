@@ -18,6 +18,7 @@ const i = t(lang);
 ---
 <AdminLayout title={`Admin — ${i.hero.name}`} description={i.home.hero.description}>
     <div class="overflow-x-hidden bg-paper">
+      <!-- admin-home-hero:start -->
       <section data-admin-home-hero class="home-hero bg-paper px-6 pt-28 pb-16 md:pt-32 md:pb-20">
         <div class="site-container home-hero__stage">
           <div class="home-hero__copy">
@@ -53,15 +54,17 @@ const i = t(lang);
               <div class="home-hero__clip">
                 <StaggerItem>
                   <div class="home-hero__actions">
-                    <div class="home-hero__cta home-hero__cta--primary">
-                      <div class="home-hero__cta-label">
-                        <EditableText client:load i18nKey="hero.ugcLabel" as="span" className="" />
-                      </div>
+                    <div class="group/edit relative inline-flex">
+                      <a href="/admin/ugc" class="home-hero__cta home-hero__cta--primary">
+                        <EditableText client:load i18nKey="hero.ugcLabel" as="span" className="home-hero__cta-label" clickToEdit={false} editButtonTargetId="admin-home-ugc-cta-edit" />
+                      </a>
+                      <span id="admin-home-ugc-cta-edit" />
                     </div>
-                    <div class="home-hero__cta home-hero__cta--secondary">
-                      <div class="home-hero__cta-label">
-                        <EditableText client:load i18nKey="hero.seoLabel" as="span" className="" />
-                      </div>
+                    <div class="group/edit relative inline-flex">
+                      <a href="/admin/translation-seo" class="home-hero__cta home-hero__cta--secondary">
+                        <EditableText client:load i18nKey="hero.seoLabel" as="span" className="home-hero__cta-label" clickToEdit={false} editButtonTargetId="admin-home-seo-cta-edit" />
+                      </a>
+                      <span id="admin-home-seo-cta-edit" />
                     </div>
                   </div>
                 </StaggerItem>
@@ -74,6 +77,7 @@ const i = t(lang);
           </ScrollReveal>
         </div>
       </section>
+      <!-- admin-home-hero:end -->
 
       <section class="border-b border-black/10 bg-white px-6 py-20 md:py-24">
         <div class="site-container grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
