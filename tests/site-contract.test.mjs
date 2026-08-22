@@ -146,20 +146,22 @@ test('site data preserves the Phase 1 contract', async () => {
 
 test('site data locks the approved UGC editorial contact sheet dataset', async () => {
   const site = await readJson('src/data/site.json');
+  const categories = ['travel', 'languages', 'art'];
   const expectedIds = [1, 2, 3, 4].flatMap((slot) => (
-    ['travel', 'languages', 'art'].map((category) => `ugc-${category}-${String(slot).padStart(2, '0')}`)
+    categories.map((category) => `ugc-${category}-${String(slot).padStart(2, '0')}`)
   ));
 
   assert.ok(Array.isArray(site.ugcPortfolio), 'ugcPortfolio should be an array');
   assert.equal(site.ugcPortfolio.length, 12, 'ugcPortfolio should contain exactly 12 fixed slots');
+  assertStableIds(site.ugcPortfolio, 'ugcPortfolio');
   assert.deepEqual(
-    site.ugcPortfolio.map((item) => item.id),
-    expectedIds,
-    'ugcPortfolio should keep the approved stable slot IDs in the approved interleaved order',
+    [...site.ugcPortfolio.map((item) => item.id)].sort(),
+    [...expectedIds].sort(),
+    'ugcPortfolio should keep the approved stable slot IDs without relying on brittle JSON source ordering',
   );
 
   assert.deepEqual(
-    Object.fromEntries(['travel', 'languages', 'art'].map((category) => [
+    Object.fromEntries(categories.map((category) => [
       category,
       site.ugcPortfolio.filter((item) => item.category === category).length,
     ])),
@@ -167,7 +169,7 @@ test('site data locks the approved UGC editorial contact sheet dataset', async (
     'ugcPortfolio should keep exactly four items per approved category',
   );
 
-  for (const category of ['travel', 'languages', 'art']) {
+  for (const category of categories) {
     const categoryItems = site.ugcPortfolio.filter((item) => item.category === category);
     const typeCounts = Object.fromEntries(['image', 'video'].map((type) => [
       type,

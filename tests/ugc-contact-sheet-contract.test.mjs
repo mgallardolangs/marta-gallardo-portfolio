@@ -28,6 +28,13 @@ async function importModule(relativePath) {
   }
 }
 
+function assertMatchesAny(source, patterns, message) {
+  assert.ok(
+    patterns.some((pattern) => pattern.test(source)),
+    message,
+  );
+}
+
 test('all six locale files expose the exact UGC contact sheet copy keys', async () => {
   const dictionaries = await Promise.all(
     locales.map(async (locale) => [locale, await readJson(`src/i18n/${locale}.json`)]),
@@ -67,7 +74,8 @@ test('all six locale files expose the exact UGC contact sheet copy keys', async 
 });
 
 test('UGC helper module keeps filter visibility and wraparound navigation pure', async () => {
-  const { filterUgcPortfolio, getUgcTileVisibility, getNextUgcIndex } = await importModule('src/lib/ugcPortfolio.ts');
+  const ugcModule = await importModule('src/lib/ugcPortfolio.ts');
+  const { filterUgcPortfolio, getUgcTileVisibility, getNextUgcIndex } = ugcModule;
   const createLocalizedText = (seed) => Object.fromEntries(locales.map((locale) => [locale, `${seed}-${locale}`]));
   const items = [
     'travel',
@@ -107,6 +115,14 @@ test('UGC helper module keeps filter visibility and wraparound navigation pure',
   assert.equal(getUgcTileVisibility(items[0], 'all'), 'visible', 'all filter should keep every tile visible');
   assert.equal(getNextUgcIndex(4, 0, 'previous'), 3, 'previous navigation should wrap from first to last');
   assert.equal(getNextUgcIndex(4, 3, 'next'), 0, 'next navigation should wrap from last to first');
+
+  const initialFilter = typeof ugcModule.getInitialUgcFilter === 'function'
+    ? ugcModule.getInitialUgcFilter()
+    : ugcModule.INITIAL_UGC_FILTER ?? ugcModule.DEFAULT_UGC_FILTER ?? null;
+
+  if (initialFilter !== null) {
+    assert.equal(initialFilter, 'all', 'initial UGC filter helpers should default to All');
+  }
 });
 
 test('public UgcPage keeps TypedTitle but swaps in the approved contact-sheet shell', async () => {
@@ -139,6 +155,15 @@ test('UgcContactSheet component locks fixed filters grid blank tiles hover previ
     /\[\s*['"]all['"]\s*,\s*['"]travel['"]\s*,\s*['"]languages['"]\s*,\s*['"]art['"]\s*\]/,
     'UgcContactSheet should keep the approved filter order All / Travel / Languages / Art',
   );
+  assertMatchesAny(
+    componentSource,
+    [
+      /useState(?:<[^>]+>)?\(\s*['"]all['"]\s*\)/,
+      /useState(?:<[^>]+>)?\(\s*(?:INITIAL|DEFAULT)_UGC_FILTER\s*\)/,
+      /useState(?:<[^>]+>)?\(\s*getInitialUgcFilter\(\)\s*\)/,
+    ],
+    'UgcContactSheet should start on the All filter through a stable useState contract or a small pure helper',
+  );
   assert.match(componentSource, /\bgrid-cols-2\b/, 'UgcContactSheet should keep a two-column mobile grid');
   assert.match(componentSource, /\blg:grid-cols-4\b/, 'UgcContactSheet should keep a four-column desktop grid');
   assert.match(componentSource, /\bitems\.map\(/, 'UgcContactSheet should render all authored slots instead of only visible items');
@@ -166,8 +191,23 @@ test('UgcContactSheet component locks fixed filters grid blank tiles hover previ
   assert.match(componentSource, /Escape/, 'Escape should close the focus viewer');
   assert.match(componentSource, /ArrowUp/, 'ArrowUp should navigate the focused viewer');
   assert.match(componentSource, /ArrowDown/, 'ArrowDown should navigate the focused viewer');
-  assert.match(componentSource, /\bautoPlay\b/, 'focused videos should autoplay when opened');
   assert.match(componentSource, /\bloop\b/, 'focused videos should loop');
+  assertMatchesAny(
+    componentSource,
+    [
+      /\b(?:play|start)[A-Za-z]*(?:Focused|Active|Modal)[A-Za-z]*Video(?:Playback)?\s*\(/,
+      /(?:focused|active|modal)[A-Za-z]*Video(?:Ref)?(?:\.current)?[\s\S]{0,240}?\.muted\s*=\s*false[\s\S]{0,240}?\.play\(\)/i,
+    ],
+    'focused videos should explicitly unmute and start after a user click instead of relying on autoplay alone; a playback helper is welcome',
+  );
+  assertMatchesAny(
+    componentSource,
+    [
+      /\b(?:reset|stop|cleanup)[A-Za-z]*(?:Focused|Active|Modal)[A-Za-z]*Video(?:Playback)?\s*\(/,
+      /(?:focused|active|modal)[A-Za-z]*Video(?:Ref)?(?:\.current)?[\s\S]{0,240}?\.pause\(\)[\s\S]{0,160}?currentTime\s*=\s*0/i,
+    ],
+    'focused viewer should pause and rewind the previously active video during navigation and when closing',
+  );
   assert.match(
     componentSource,
     /paused\s*\?\s*[^:]*\.play\(\)\s*:\s*[^;]*\.pause\(\)/,
