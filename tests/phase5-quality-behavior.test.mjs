@@ -454,3 +454,111 @@ test('gsap page runtime run-id cleanup cancels stale imports and pending motion-
     globalThis.document = originalDocument;
   }
 });
+
+test('gsap page runtime cancels synchronously on route teardown before modules resolve without leaking listeners', async () => {
+  const originalWindow = globalThis.window;
+  const originalDocument = globalThis.document;
+
+  const marker = { id: 'gsap-marker' };
+  const documentListeners = new Map();
+  const removeCounts = new Map();
+  let scrollTriggerRefreshCalls = 0;
+  let subscribeCalls = 0;
+  let resolveModules;
+  const modulesPromise = new Promise((resolve) => {
+    resolveModules = resolve;
+  });
+
+  globalThis.window = {
+    __mgGsapPageRuntime: undefined,
+    __mgMotionRuntime: {
+      subscribeLenis() {
+        subscribeCalls += 1;
+        return () => {};
+      },
+    },
+  };
+  globalThis.document = {
+    body: {
+      contains: (element) => element === marker,
+    },
+    querySelector: (selector) => (selector === '[data-gsap-page]' ? marker : null),
+    addEventListener(type, listener) {
+      const listeners = documentListeners.get(type) ?? new Set();
+      listeners.add(listener);
+      documentListeners.set(type, listeners);
+    },
+    removeEventListener(type, listener) {
+      const listeners = documentListeners.get(type);
+      if (!listeners?.delete(listener)) return;
+      removeCounts.set(type, (removeCounts.get(type) ?? 0) + 1);
+    },
+    dispatchEvent(event) {
+      for (const listener of documentListeners.get(event.type) ?? []) {
+        listener(event);
+      }
+      return true;
+    },
+  };
+
+  try {
+    const { initGsapPageRuntime } = await import('../src/lib/gsapPageRuntime.ts');
+
+    const mountPromise = initGsapPageRuntime({
+      loadModules: () => modulesPromise,
+    });
+
+    assert.equal(
+      documentListeners.get('astro:before-preparation')?.size ?? 0,
+      1,
+      'route teardown listener should register synchronously before module loading begins',
+    );
+
+    document.dispatchEvent({ type: 'astro:before-preparation' });
+
+    assert.equal(
+      documentListeners.get('astro:before-preparation')?.size ?? 0,
+      0,
+      'teardown should invalidate the run immediately and remove the early listener right away',
+    );
+
+    resolveModules([
+      {
+        default: {
+          registerPlugin() {},
+          ticker: {
+            lagSmoothing() {},
+          },
+        },
+      },
+      {
+        ScrollTrigger: {
+          refresh() {
+            scrollTriggerRefreshCalls += 1;
+          },
+          update() {},
+          clearScrollMemory() {},
+        },
+      },
+    ]);
+
+    await mountPromise;
+
+    assert.equal(subscribeCalls, 0, 'a stale run must never subscribe Lenis after route teardown wins the race');
+    assert.equal(scrollTriggerRefreshCalls, 0, 'a stale run must never refresh ScrollTrigger after route teardown wins the race');
+    assert.equal(documentListeners.get('astro:page-load')?.size ?? 0, 0, 'stale runs must not leak page-load listeners');
+    assert.equal(
+      documentListeners.get(MOTION_RUNTIME_READY_EVENT)?.size ?? 0,
+      0,
+      'stale runs must not leak pending motion-runtime readiness listeners',
+    );
+    assert.equal(
+      removeCounts.get('astro:before-preparation') ?? 0,
+      1,
+      'cleanup should remove the early route teardown listener exactly once',
+    );
+  } finally {
+    globalThis.window = originalWindow;
+    globalThis.document = originalDocument;
+  }
+});

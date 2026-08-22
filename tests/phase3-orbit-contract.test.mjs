@@ -307,6 +307,92 @@ test('orbit media helpers validate caps, video poster requirements, and stable I
   );
 });
 
+test('admin orbit type switches keep existing media paths and posters until an explicit replacement', () => {
+  const store = new AdminStore();
+  const localized = {
+    es: 'Elemento',
+    en: 'Item',
+    fr: 'Élément',
+    de: 'Elemento',
+    it: 'Elemento',
+    ca: 'Element',
+  };
+
+  store.init(
+    {
+      es: { home: { hero: { kicker: 'hola' } } },
+      en: { home: { hero: { kicker: 'hello' } } },
+      fr: { home: { hero: { kicker: 'salut' } } },
+    },
+    {
+      orbitMedia: [
+        {
+          id: 'mock-01',
+          type: 'image',
+          src: '/images/orbit/mock-01.webp',
+          href: null,
+          label: localized,
+          alt: localized,
+          poster: null,
+        },
+        {
+          id: 'orbit-video',
+          type: 'video',
+          src: '/images/site/original-video.mp4',
+          href: '/contact',
+          label: localized,
+          alt: localized,
+          poster: '/images/site/original-video-poster.jpg',
+        },
+      ],
+      socialLinks: { linkedin: '', instagram: '' },
+      nicheBackgrounds: {},
+      ugcVideos: {},
+      ugcPhotos: {},
+      nicheIcons: {},
+      aboutPhotos: [],
+      brandVideo: '',
+      toolLogos: {},
+      videoStickers: {},
+      galleryCutouts: {},
+      videoPlaceholderOrEmbedUrl: '',
+      ugcHeaderImage: '',
+      instagramScreenshot: '',
+      arsenal: { languages: [], tools: [], skills: [] },
+      person: { name: 'Marta', location: 'Barcelona', socialProfiles: { linkedin: '', instagram: '' } },
+    },
+    'es',
+    'publish-token',
+  );
+
+  store.updateOrbitMediaType(0, 'video');
+  let snapshot = store.getSnapshot();
+  assert.equal(snapshot.getOrbitMedia()[0].src, '/images/orbit/mock-01.webp');
+  assert.equal(snapshot.getOrbitMedia()[0].poster, null);
+  assert.match(
+    snapshot.getOrbitItemValidationErrors('mock-01').join(' '),
+    /must use an MP4, WebM, or MOV source/,
+    'switching an image placeholder to video should preserve the path and surface the existing validation error',
+  );
+
+  store.updateOrbitMediaType(0, 'image');
+  snapshot = store.getSnapshot();
+  assert.equal(snapshot.getOrbitMedia()[0].src, '/images/orbit/mock-01.webp');
+  assert.deepEqual(snapshot.getOrbitItemValidationErrors('mock-01'), []);
+
+  store.updateOrbitMediaType(1, 'image');
+  snapshot = store.getSnapshot();
+  assert.equal(snapshot.getOrbitMedia()[1].src, '/images/site/original-video.mp4');
+  assert.equal(snapshot.getOrbitMedia()[1].poster, '/images/site/original-video-poster.jpg');
+  assert.match(snapshot.getOrbitItemValidationErrors('orbit-video').join(' '), /must use a JPG, PNG, WebP, GIF, or SVG source/);
+
+  store.updateOrbitMediaType(1, 'video');
+  snapshot = store.getSnapshot();
+  assert.equal(snapshot.getOrbitMedia()[1].src, '/images/site/original-video.mp4');
+  assert.equal(snapshot.getOrbitMedia()[1].poster, '/images/site/original-video-poster.jpg');
+  assert.deepEqual(snapshot.getOrbitItemValidationErrors('orbit-video'), []);
+});
+
 test('site orbit data stays fixed to the approved fifteen local mock placeholders', async () => {
   const site = await readJson('src/data/site.json');
   const orbitMedia = site.orbitMedia;
@@ -473,7 +559,11 @@ test('admin store exposes orbit collection mutations and publishes site data upd
   assert.equal(publishedOrbit[0].type, 'video');
   assert.equal(publishedOrbit[0].href, '/contact');
   assert.equal(publishedOrbit[0].poster, '/images/site/orbit-item-poster.jpg');
-  assert.equal(publishedOrbit[0].src, '', 'switching from image to video should clear an incompatible image source');
+  assert.equal(
+    publishedOrbit[0].src,
+    '/images/site/orbit-placeholder-profile.svg',
+    'switching from image to video should preserve the existing source until the editor uploads a matching video file',
+  );
   assert.equal(snapshot.isDirty, true);
   assert.ok(snapshot.pendingCount >= 1);
 
@@ -497,10 +587,15 @@ test('admin store exposes orbit collection mutations and publishes site data upd
 
   try {
     await store.publish();
-    assert.match(store.getSnapshot().publishError, /Orbit media requires a source file/);
+    assert.match(store.getSnapshot().publishError, /Orbit videos must use an MP4, WebM, or MOV source/);
     assert.equal(fetchCalls.length, 0, 'invalid orbit data should block publish before any repo writes');
 
     store.updateOrbitMediaType(0, 'image');
+    assert.equal(
+      store.getSnapshot().getOrbitMedia()[0].poster,
+      '/images/site/orbit-item-poster.jpg',
+      'switching back to image should keep any poster the editor already chose until they remove it explicitly',
+    );
     await store.publish();
   } finally {
     globalThis.fetch = originalFetch;
@@ -515,6 +610,7 @@ test('admin store exposes orbit collection mutations and publishes site data upd
   assert.match(publishedJson, /"orbitMedia"/);
   assert.match(publishedJson, /"type": "image"/);
   assert.match(publishedJson, /"href": "\/contact"/);
+  assert.match(publishedJson, /"poster": "\/images\/site\/orbit-item-poster\.jpg"/);
 });
 
 test('built home route ships orbit motion chunks while contact and blog stay free of orbit runtime code', async (t) => {

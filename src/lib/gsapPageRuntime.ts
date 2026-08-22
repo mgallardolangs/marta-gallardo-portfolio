@@ -80,20 +80,38 @@ export async function initGsapPageRuntime({
   let unsubscribeLenis = () => {};
   let cancelMotionRuntimeWait = () => {};
   let clearScrollMemory: (() => void) | undefined;
+  let cleanedUp = false;
+  let beforePreparationListenerRegistered = false;
+  let pageLoadListenerRegistered = false;
 
   const onLenisScroll = () => {
     scrollTriggerUpdate?.();
   };
   let scrollTriggerUpdate: (() => void) | undefined;
+  let scrollTriggerRefresh: (() => void) | undefined;
+
+  const removeBeforePreparationListener = () => {
+    if (!beforePreparationListenerRegistered) return;
+    beforePreparationListenerRegistered = false;
+    document.removeEventListener('astro:before-preparation', onBeforePreparation);
+  };
+
+  const removePageLoadListener = () => {
+    if (!pageLoadListenerRegistered) return;
+    pageLoadListenerRegistered = false;
+    document.removeEventListener('astro:page-load', onPageLoad);
+  };
 
   const cleanup = () => {
+    if (cleanedUp) return;
+    cleanedUp = true;
     cancelMotionRuntimeWait();
     activeLenis?.off?.('scroll', onLenisScroll);
     activeLenis = null;
     unsubscribeLenis();
     unsubscribeLenis = () => {};
-    document.removeEventListener('astro:page-load', onPageLoad);
-    document.removeEventListener('astro:before-preparation', onBeforePreparation);
+    removePageLoadListener();
+    removeBeforePreparationListener();
     clearScrollMemory?.();
 
     if (window.__mgGsapPageRuntime?.runId === runId) {
@@ -116,7 +134,9 @@ export async function initGsapPageRuntime({
   const onBeforePreparation = () => {
     cleanupGsapPageRuntime();
   };
-  let scrollTriggerRefresh: (() => void) | undefined;
+
+  document.addEventListener('astro:before-preparation', onBeforePreparation);
+  beforePreparationListenerRegistered = true;
 
   window.__mgGsapPageRuntime = {
     cleanup,
@@ -126,6 +146,7 @@ export async function initGsapPageRuntime({
   const [{ default: gsap }, { ScrollTrigger }] = await loadModules();
 
   if (window.__mgGsapPageRuntime?.runId !== runId || !hasLiveGsapPageMarker()) {
+    cleanup();
     return;
   }
 
@@ -152,7 +173,7 @@ export async function initGsapPageRuntime({
     : await readyHandle?.promise;
 
   if (window.__mgGsapPageRuntime?.runId !== runId || !hasLiveGsapPageMarker()) {
-    cancelMotionRuntimeWait();
+    cleanup();
     return;
   }
 
@@ -165,6 +186,6 @@ export async function initGsapPageRuntime({
   }
 
   document.addEventListener('astro:page-load', onPageLoad);
-  document.addEventListener('astro:before-preparation', onBeforePreparation);
+  pageLoadListenerRegistered = true;
   refreshScroll();
 }
