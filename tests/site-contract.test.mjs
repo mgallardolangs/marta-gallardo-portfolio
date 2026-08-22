@@ -155,9 +155,9 @@ test('site data locks the approved UGC editorial contact sheet dataset', async (
   assert.equal(site.ugcPortfolio.length, 12, 'ugcPortfolio should contain exactly 12 fixed slots');
   assertStableIds(site.ugcPortfolio, 'ugcPortfolio');
   assert.deepEqual(
-    [...site.ugcPortfolio.map((item) => item.id)].sort(),
-    [...expectedIds].sort(),
-    'ugcPortfolio should keep the approved stable slot IDs without relying on brittle JSON source ordering',
+    site.ugcPortfolio.map((item) => item.id),
+    expectedIds,
+    'ugcPortfolio should keep the approved stable slot IDs in the approved interleaved order',
   );
 
   assert.deepEqual(

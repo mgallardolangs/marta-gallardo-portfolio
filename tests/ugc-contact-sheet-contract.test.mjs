@@ -251,3 +251,124 @@ test('admin UGC preview and fixed-slot editor expose only the approved controls'
   assert.doesNotMatch(adminStoreSource, /\baddUgcPortfolioItem\b|\bremoveUgcPortfolioItem\b|\bmoveUgcPortfolioItem\b|\breorderUgcPortfolioItem\b/, 'adminStore should not reintroduce add/remove/reorder mutations for UGC slots');
   assert.match(adminStoreSource, /['"]src\/data\/site\.json['"]/, 'admin publishing should still write the fixed-slot dataset back to src/data/site.json');
 });
+
+test('admin store applies Spanish UGC fallback locales and publishes the updated site payload', async () => {
+  const { AdminStore } = await import('../src/components/admin/adminStore.ts');
+
+  const store = new AdminStore();
+  store.init(
+    { es: {}, en: {}, fr: {}, de: {}, it: {}, ca: {} },
+    {
+      heroMainPhoto: '',
+      galleryCutouts: {},
+      videoPlaceholderOrEmbedUrl: '',
+      ugcHeaderImage: '',
+      instagramScreenshot: '',
+      socialLinks: { linkedin: '', instagram: '' },
+      nicheBackgrounds: {},
+      ugcVideos: { travel: [], languages: [], art: [] },
+      ugcPhotos: { travel: [], languages: [], art: [], all: [] },
+      nicheIcons: { travel: '', languages: '', art: '' },
+      aboutPhotos: [],
+      brandVideo: '',
+      toolLogos: {},
+      videoStickers: {},
+      orbitMedia: [],
+      ugcPortfolio: [
+        {
+          id: 'ugc-travel-01',
+          category: 'travel',
+          type: 'image',
+          src: '/images/ugc/mock-01.webp',
+          poster: null,
+          label: { es: 'Etiqueta original', en: 'Original label', fr: 'Libellé original', de: '', it: '', ca: '' },
+          title: {
+            es: 'Título original ES',
+            en: 'Original EN title',
+            fr: 'Titre FR original',
+            de: '',
+            it: 'Título original ES',
+            ca: '',
+          },
+          description: {
+            es: 'Descripción corta.',
+            en: 'Short description.',
+            fr: 'Description courte.',
+            de: '',
+            it: '',
+            ca: '',
+          },
+          format: { es: 'Vídeo vertical', en: 'Vertical video', fr: 'Vidéo verticale', de: '', it: '', ca: '' },
+          alt: { es: 'Alt original', en: 'Original alt', fr: 'Alt original FR', de: '', it: '', ca: '' },
+        },
+      ],
+      arsenal: {
+        languages: [],
+        tools: [],
+        skills: [],
+      },
+      person: { name: 'Marta', location: 'Elche', socialProfiles: { linkedin: '', instagram: '' } },
+    },
+    'es',
+    'publish-token',
+  );
+
+  assert.equal(
+    typeof store.updateUgcPortfolioField,
+    'function',
+    'AdminStore should expose updateUgcPortfolioField for fixed UGC slot copy edits',
+  );
+
+  store.updateUgcPortfolioField('ugc-travel-01', 'title', 'Nuevo título ES', 'es');
+
+  const dirtySnapshot = store.getSnapshot();
+  assert.equal(dirtySnapshot.isDirty, true, 'UGC site edits should mark the store dirty');
+  assert.ok(dirtySnapshot.pendingCount >= 1, 'UGC site edits should increase the pending change count');
+
+  const fetchCalls = [];
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input, init = {}) => {
+    fetchCalls.push({ input: String(input), init });
+
+    if (!init.method || init.method === 'GET') {
+      return new Response(JSON.stringify({ sha: 'site-sha' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    return new Response(JSON.stringify({ content: { sha: 'next-site-sha' } }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+
+  try {
+    await store.publish();
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.equal(store.getSnapshot().publishError, '');
+  assert.equal(store.getSnapshot().publishSuccess, true);
+
+  const siteWrite = fetchCalls.find((call) => String(call.input).includes('src/data/site.json'));
+  assert.ok(siteWrite, 'publishing UGC slot edits should write src/data/site.json');
+  assert.equal(
+    JSON.parse(String(siteWrite.init.body)).message,
+    'chore(admin): update site data',
+    'UGC slot edits should reuse the existing site-data publish commit message',
+  );
+
+  const writePayload = JSON.parse(String(siteWrite.init.body));
+  const publishedSite = JSON.parse(Buffer.from(writePayload.content, 'base64').toString('utf8'));
+  const publishedItem = publishedSite.ugcPortfolio.find((item) => item.id === 'ugc-travel-01');
+
+  assert.ok(publishedItem, 'publish payload should keep the edited fixed UGC slot');
+  assert.equal(publishedItem.title.es, 'Nuevo título ES');
+  assert.equal(publishedItem.title.en, 'Original EN title');
+  assert.equal(publishedItem.title.fr, 'Titre FR original');
+  assert.equal(publishedItem.title.de, 'Nuevo título ES');
+  assert.equal(publishedItem.title.it, 'Nuevo título ES');
+  assert.equal(publishedItem.title.ca, 'Nuevo título ES');
+});
