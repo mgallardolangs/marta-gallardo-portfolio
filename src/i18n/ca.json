@@ -253,7 +253,22 @@
         ]
       }
     },
-    "contentComingSoon": "Contingut disponible ben aviat."
+    "contentComingSoon": "Contingut disponible ben aviat.",
+    "contactSheet": {
+      "eyebrow": "UGC · DIRECCIÓ CREATIVA",
+      "headline": "CONTINGUT QUE CONVERTEIX EXPERIÈNCIES, IDIOMES I ART EN HISTÒRIES VISUALS.",
+      "filters": {
+        "all": "TOT",
+        "travel": "VIATGES",
+        "languages": "IDIOMES",
+        "art": "ART"
+      },
+      "close": "Tanca",
+      "previous": "Anterior",
+      "next": "Següent",
+      "formatLabel": "FORMAT",
+      "pieceLabel": "PEÇA"
+    }
   },
   "translationPage": {
     "hero": {

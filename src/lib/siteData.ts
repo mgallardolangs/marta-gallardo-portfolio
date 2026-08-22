@@ -15,6 +15,21 @@ export type OrbitMedia = {
   label: LocalizedText;
 };
 
+export type UgcCategory = 'travel' | 'languages' | 'art';
+
+export type UgcPortfolioItem = {
+  id: string;
+  category: UgcCategory;
+  type: 'image' | 'video';
+  src: string;
+  poster: string | null;
+  label: LocalizedText;
+  title: LocalizedText;
+  description: LocalizedText;
+  format: LocalizedText;
+  alt: LocalizedText;
+};
+
 export type LanguageItem = {
   id: string;
   code: string;
@@ -52,6 +67,7 @@ export type SiteData = {
   toolLogos: Record<string, string>;
   videoStickers: Record<string, string>;
   orbitMedia: OrbitMedia[];
+  ugcPortfolio: UgcPortfolioItem[];
   arsenal: {
     languages: LanguageItem[];
     tools: ToolItem[];

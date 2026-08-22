@@ -245,7 +245,22 @@
       "nicheIntroTitle": "Cada marca tiene una historia diferente.",
       "nicheIntroText": "Entiendo qué hace única a cada marca y lo traduzco en contenido natural, relevante y listo para conectar con su audiencia."
     },
-    "contentComingSoon": "Contenido disponible muy pronto."
+    "contentComingSoon": "Contenido disponible muy pronto.",
+    "contactSheet": {
+      "eyebrow": "UGC · DIRECCIÓN CREATIVA",
+      "headline": "CONTENIDO QUE CONVIERTE EXPERIENCIAS, IDIOMAS Y ARTE EN HISTORIAS VISUALES.",
+      "filters": {
+        "all": "TODO",
+        "travel": "VIAJES",
+        "languages": "IDIOMAS",
+        "art": "ARTE"
+      },
+      "close": "Cerrar",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "formatLabel": "FORMATO",
+      "pieceLabel": "PIEZA"
+    }
   },
   "blog": {
     "title": "Blog",

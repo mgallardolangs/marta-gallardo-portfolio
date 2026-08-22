@@ -253,7 +253,22 @@
         ]
       }
     },
-    "contentComingSoon": "Inhalte bald verfügbar."
+    "contentComingSoon": "Inhalte bald verfügbar.",
+    "contactSheet": {
+      "eyebrow": "UGC · KREATIVE LEITUNG",
+      "headline": "INHALTE, DIE ERLEBNISSE, SPRACHEN UND KUNST IN VISUELLE GESCHICHTEN VERWANDELN.",
+      "filters": {
+        "all": "ALLE",
+        "travel": "REISEN",
+        "languages": "SPRACHEN",
+        "art": "KUNST"
+      },
+      "close": "Schließen",
+      "previous": "Zurück",
+      "next": "Weiter",
+      "formatLabel": "FORMAT",
+      "pieceLabel": "BEITRAG"
+    }
   },
   "translationPage": {
     "hero": {

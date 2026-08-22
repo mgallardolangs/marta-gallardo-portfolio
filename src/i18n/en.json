@@ -253,7 +253,22 @@
         ]
       }
     },
-    "contentComingSoon": "Content coming soon."
+    "contentComingSoon": "Content coming soon.",
+    "contactSheet": {
+      "eyebrow": "UGC · CREATIVE DIRECTION",
+      "headline": "CONTENT THAT TURNS EXPERIENCES, LANGUAGES, AND ART INTO VISUAL STORIES.",
+      "filters": {
+        "all": "ALL",
+        "travel": "TRAVEL",
+        "languages": "LANGUAGES",
+        "art": "ART"
+      },
+      "close": "Close",
+      "previous": "Previous",
+      "next": "Next",
+      "formatLabel": "FORMAT",
+      "pieceLabel": "PIECE"
+    }
   },
   "translationPage": {
     "hero": {

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getTranslationArsenalColumns, getTranslationToolTiles } from '../src/lib/translationPage.js';
@@ -227,6 +227,30 @@ test('site data locks the approved UGC editorial contact sheet dataset', async (
       );
     }
   });
+});
+
+test('UGC local mock media files exist in the approved slots and stay within size budgets', async () => {
+  const ugcMediaDir = path.join(rootDir, 'public', 'images', 'ugc');
+
+  await Promise.all(Array.from({ length: 12 }, async (_, index) => {
+    const slot = String(index + 1).padStart(2, '0');
+    const posterStats = await stat(path.join(ugcMediaDir, `mock-${slot}.webp`));
+
+    assert.ok(posterStats.isFile(), `mock-${slot}.webp should exist`);
+    assert.ok(posterStats.size > 0, `mock-${slot}.webp should not be empty`);
+  }));
+
+  await Promise.all([2, 4, 6, 8, 10, 12].map(async (slotNumber) => {
+    const slot = String(slotNumber).padStart(2, '0');
+    const videoStats = await stat(path.join(ugcMediaDir, `mock-${slot}.mp4`));
+
+    assert.ok(videoStats.isFile(), `mock-${slot}.mp4 should exist`);
+    assert.ok(videoStats.size > 0, `mock-${slot}.mp4 should not be empty`);
+    assert.ok(
+      videoStats.size <= 8 * 1024 * 1024,
+      `mock-${slot}.mp4 should stay at or below 8MB`,
+    );
+  }));
 });
 
 test('arsenal DE/IT/CA labels stay localized instead of English placeholders', async () => {

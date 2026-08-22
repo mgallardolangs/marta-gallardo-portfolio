@@ -253,7 +253,22 @@
         ]
       }
     },
-    "contentComingSoon": "Contenuti in arrivo a breve."
+    "contentComingSoon": "Contenuti in arrivo a breve.",
+    "contactSheet": {
+      "eyebrow": "UGC · DIREZIONE CREATIVA",
+      "headline": "CONTENUTI CHE TRASFORMANO ESPERIENZE, LINGUE E ARTE IN STORIE VISIVE.",
+      "filters": {
+        "all": "TUTTO",
+        "travel": "VIAGGI",
+        "languages": "LINGUE",
+        "art": "ARTE"
+      },
+      "close": "Chiudi",
+      "previous": "Precedente",
+      "next": "Successivo",
+      "formatLabel": "FORMATO",
+      "pieceLabel": "PEZZO"
+    }
   },
   "translationPage": {
     "hero": {
