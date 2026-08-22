@@ -82,7 +82,7 @@ export default function PhotoMasonry({ photos, lang = 'es' }: Props) {
             key={`${photo}-${index}`}
             type="button"
             aria-label={`${ui.openPhoto} ${index + 1}`}
-            className="mb-4 block w-full overflow-hidden rounded-[1.75rem] bg-white shadow-[0_18px_50px_rgba(45,45,45,0.08)]"
+            className="mb-4 block w-full overflow-hidden rounded-[1.75rem] bg-white shadow-[0_18px_50px_rgb(6_4_3_/_0.08)]"
             whileHover={prefersReducedMotion ? undefined : { y: -4 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
             onClick={() => setActiveIndex(index)}

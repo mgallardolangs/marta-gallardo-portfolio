@@ -13,9 +13,8 @@ const distExtensions = new Set(['.html', '.css', '.js']);
 const forbiddenLegacyPalettePattern = /\b(?:amaranth-(?:soft|mist|ink)|blush-[a-z0-9/-]+|rose-gold)\b|#fff(?:fff)?\b/i;
 const approvedOpaqueHexColors = new Set(['#f4f5f1', '#060403', '#e83256']);
 const hexLiteralPattern = /#(?:[\da-f]{3}|[\da-f]{4}|[\da-f]{6}|[\da-f]{8})\b/gi;
-const rgbFunctionPattern = /\brgba?\(\s*([^)]*)\)/gi;
-const allowedTransparentTriplets = new Set(['244,245,241', '6,4,3', '232,50,86']);
-const forbiddenTransparentTriplets = new Set(['255,255,255', '0,0,0']);
+const rgbFunctionPattern = /rgba?\(\s*([^)]*)\)/gi;
+const approvedRgbTriplets = new Set(['244,245,241', '6,4,3', '232,50,86']);
 
 function decodeCssEscapes(source) {
   return source.replace(/\\([0-9a-fA-F]{1,6}\s?|.)/g, (_, escapedValue) => {
@@ -50,7 +49,7 @@ function extractHexLiterals(source) {
   return [...source.matchAll(hexLiteralPattern)].map((match) => match[0]);
 }
 
-function extractForbiddenRgbTriplets(source) {
+function extractDisallowedRgbFunctions(source) {
   const findings = [];
 
   for (const match of source.matchAll(rgbFunctionPattern)) {
@@ -65,11 +64,11 @@ function extractForbiddenRgbTriplets(source) {
       .map((channel) => String(Number.parseInt(channel, 10)))
       .join(',');
 
-    if (allowedTransparentTriplets.has(triplet) || !forbiddenTransparentTriplets.has(triplet)) {
+    if (approvedRgbTriplets.has(triplet)) {
       continue;
     }
 
-    findings.push(match[0]);
+    findings.push(`${match[0]} -> ${triplet}`);
   }
 
   return findings;
@@ -132,22 +131,31 @@ test('theme color declarations reject backslash escapes and extra amaranth varia
   );
 });
 
-test('palette audit allows approved paper, ink, and amaranth transparent rgb triplets', () => {
+test('palette audit allows approved paper, ink, and amaranth triplets across comma, space, and underscore syntax', () => {
   const sampleSource = [
     'box-shadow: 0 0 0 rgb(244 245 241 / 0.52);',
     'color: rgb(6 4 3 / 0.15);',
     'background: rgb(232 50 86 / 0.35);',
     'border-color: rgba(232, 50, 86, 0.4);',
+    'shadow-[0_18px_40px_rgb(6_4_3_/_0.24)]',
   ].join('\n');
 
   assert.deepEqual(
-    extractForbiddenRgbTriplets(sampleSource),
+    extractDisallowedRgbFunctions(sampleSource),
     [],
     'approved paper, ink, and amaranth transparent triplets should remain allowed',
   );
 });
 
-test('palette audit rejects forbidden white and black rgb triplets across src', async () => {
+test('palette audit rejects forbidden 45 triplets in rgba shadow syntax', () => {
+  assert.deepEqual(
+    extractDisallowedRgbFunctions('shadow-[0_18px_50px_rgba(45,45,45,0.08)]'),
+    ['rgba(45,45,45,0.08) -> 45,45,45'],
+    'legacy 45/45/45 rgba shadows must be rejected even inside Tailwind arbitrary values',
+  );
+});
+
+test('palette audit rejects any non-approved rgb triplet across src', async () => {
   const sourceFiles = await collectFiles(srcDir);
 
   await Promise.all(sourceFiles.map(async (absolutePath) => {
@@ -155,14 +163,14 @@ test('palette audit rejects forbidden white and black rgb triplets across src', 
     const source = await readFile(absolutePath, 'utf8');
 
     assert.deepEqual(
-      extractForbiddenRgbTriplets(source),
+      extractDisallowedRgbFunctions(source),
       [],
-      `${relativePath} should not contain rgb()/rgba() triplets for pure white (255/255/255) or pure black (0/0/0); use paper, ink, or approved amaranth instead`,
+      `${relativePath} should only contain rgb()/rgba() triplets for paper (244/245/241), ink (6/4/3), or approved amaranth (232/50/86)`,
     );
   }));
 });
 
-test('palette audit rejects forbidden white and black rgb triplets across built assets when CHECK_DIST=1', async (t) => {
+test('palette audit rejects any non-approved rgb triplet across built assets when CHECK_DIST=1', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built assets.');
     return;
@@ -175,9 +183,9 @@ test('palette audit rejects forbidden white and black rgb triplets across built 
     const source = await readFile(absolutePath, 'utf8');
 
     assert.deepEqual(
-      extractForbiddenRgbTriplets(source),
+      extractDisallowedRgbFunctions(source),
       [],
-      `${relativePath} should not contain built rgb()/rgba() triplets for pure white (255/255/255) or pure black (0/0/0)`,
+      `${relativePath} should only contain built rgb()/rgba() triplets for paper (244/245/241), ink (6/4/3), or approved amaranth (232/50/86)`,
     );
   }));
 });

@@ -110,7 +110,7 @@ export default function VideoGallery({ videos, lang = 'es' }: Props) {
         {videos.map((video, index) => (
           <motion.article
             key={`${video.src}-${index}`}
-            className="group relative overflow-hidden rounded-[2rem] bg-charcoal text-left shadow-[0_20px_60px_rgba(45,45,45,0.15)]"
+            className="group relative overflow-hidden rounded-[2rem] bg-charcoal text-left shadow-[0_20px_60px_rgb(6_4_3_/_0.15)]"
             whileHover={prefersReducedMotion ? undefined : { y: -4 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
             onMouseEnter={() => void playPreview(index)}
