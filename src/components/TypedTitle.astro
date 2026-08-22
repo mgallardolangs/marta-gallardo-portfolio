@@ -15,7 +15,7 @@ const Tag = as;
   <span class="typed-title" aria-hidden="true">
     <span class="typed-title__reserve">{text}</span>
     <span class="typed-title__visual" data-typed-title-visual>{text}</span>
-    <span class="typed-title__cursor-space"></span>
+    <span class="typed-title__cursor" aria-hidden="true">_</span>
   </span>
 </Tag>
 
@@ -41,11 +41,20 @@ const Tag = as;
     min-width: 1ch;
   }
 
-  .typed-title__cursor-space {
+  .typed-title__cursor {
     grid-area: 1 / 2;
     width: 0.46em;
-    visibility: hidden;
-    pointer-events: none;
+    align-self: end;
+    color: var(--color-amaranth);
+    margin-inline-start: 0.12em;
+    transform: translateY(0.04em);
+    animation: typed-title-cursor-blink 1s steps(1) infinite;
+  }
+
+  @keyframes typed-title-cursor-blink {
+    50% {
+      opacity: 0;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -69,7 +78,6 @@ const Tag = as;
 
   const ROOT_SELECTOR = '[data-typed-title]';
   const VISUAL_SELECTOR = '[data-typed-title-visual]';
-  const COMPLETE_ATTR = 'data-typed-title-complete';
   const typedState = window.__mgTypedTitleState ??= { controllers: new Map() };
 
   const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -120,8 +128,7 @@ const Tag = as;
       typeSpeed: trigger === 'visible' ? 32 : 42,
       startDelay: trigger === 'visible' ? 0 : 160,
       autoInsertCss: false,
-      showCursor: true,
-      cursorChar: '_',
+      showCursor: false,
       loop: false,
       smartBackspace: false,
       backSpeed: 0,

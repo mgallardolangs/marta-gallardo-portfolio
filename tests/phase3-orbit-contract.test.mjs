@@ -425,16 +425,18 @@ test('homepage and admin keep the approved orbit wiring while StoryMap files dis
   assert.match(homeSource, /bg-ink/, 'home page should add the approved black anchor section');
   assert.match(homeSource, /i\.home\.orbit\.kicker/);
   assert.match(homeSource, /i\.home\.orbit\.title/);
-  assert.match(homeSource, /i\.home\.orbit\.description/);
   assert.match(homeSource, /i\.home\.orbit\.index/);
+  assert.match(homeSource, /i\.home\.orbit\.note/);
+  assert.doesNotMatch(homeSource, /i\.home\.orbit\.description/);
 
   assert.match(adminSource, /import EditableOrbitCollection from ['"]\.\.\/\.\.\/components\/admin\/EditableOrbitCollection['"]/);
   assert.match(adminSource, /import AdminOrbitPreview from ['"]\.\.\/\.\.\/components\/admin\/AdminOrbitPreview['"]/);
   assert.match(adminSource, /<AdminOrbitPreview client:load/);
   assert.match(adminSource, /i18nKey="home\.orbit\.kicker"/);
   assert.match(adminSource, /i18nKey="home\.orbit\.title"/);
-  assert.match(adminSource, /i18nKey="home\.orbit\.description"/);
   assert.match(adminSource, /i18nKey="home\.orbit\.index"/);
+  assert.match(adminSource, /i18nKey="home\.orbit\.note"/);
+  assert.doesNotMatch(adminSource, /i18nKey="home\.orbit\.description"/);
   assert.doesNotMatch(adminSource, /AdminStoryMap/);
 
   assert.match(orbitSource, /from ['"]gsap['"]/);

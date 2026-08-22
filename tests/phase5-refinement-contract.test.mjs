@@ -272,7 +272,8 @@ test('public media surfaces keep eager hero loading, lazy below-fold loading, an
     readSource('src/components/VideoGallery.tsx'),
   ]);
 
-  assert.match(homeSource, /<HomeHeroAbstractVisual \/>/);
+  assert.match(homeSource, /<HomeHeroPortrait>/);
+  assert.match(homeSource, /siteData\.heroMainPhoto/);
   assert.match(homeSource, /<img[^>]*src=\{siteData\.instagramScreenshot\}[^>]*width=\{1251\}[^>]*height=\{495\}[^>]*loading="lazy"[^>]*decoding="async"/);
   assert.match(ugcSource, /idx === 0 \? 'eager' : 'lazy'/);
   assert.match(ugcSource, /idx === 0 \? 'high' : 'auto'/);

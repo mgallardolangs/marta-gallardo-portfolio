@@ -123,19 +123,22 @@ test('header shell and social controls keep the mock-faithful chrome contract', 
   );
 });
 
-test('TypedTitle keeps the underscore cursor and global injected cursor styling contract', async () => {
+test('TypedTitle keeps the underscore cursor as component-owned markup instead of injected Typed.js chrome', async () => {
   const [typedTitleSource, globalCssSource] = await Promise.all([
     readSource('src/components/TypedTitle.astro'),
     readSource('src/styles/global.css'),
   ]);
 
-  assert.match(typedTitleSource, /showCursor:\s*true/);
-  assert.match(typedTitleSource, /cursorChar:\s*['_"]_/);
+  assert.match(typedTitleSource, /<span class="typed-title__cursor" aria-hidden="true">_<\/span>/);
+  assert.match(typedTitleSource, /showCursor:\s*false/);
+  assert.doesNotMatch(typedTitleSource, /cursorChar:/);
   assert.match(
-    globalCssSource,
-    /\.typed-cursor\s*\{[^}]*color:\s*(?:var\(--color-amaranth\)|#E83256);[^}]*margin(?:-inline-start|-left):\s*[^;]+;[^}]*animation:\s*[^;]*infinite[^;]*;/s,
-    'the injected Typed.js cursor should be styled globally with the approved color, fixed gap, and infinite blink',
+    typedTitleSource,
+    /\.typed-title__cursor\s*\{[^}]*color:\s*(?:var\(--color-amaranth\)|#E83256);[^}]*margin(?:-inline-start|-left):\s*[^;]+;[^}]*animation:\s*[^;]*infinite[^;]*;/s,
+    'the component-owned cursor should keep the approved color, fixed gap, and infinite blink',
   );
+  assert.doesNotMatch(globalCssSource, /\.typed-cursor\b/);
+  assert.doesNotMatch(globalCssSource, /typed-cursor-blink/);
 });
 
 test('Home keeps the approved full-width ink orbit wrapper contract instead of the old about side-by-side layout', async () => {
@@ -148,8 +151,9 @@ test('Home keeps the approved full-width ink orbit wrapper contract instead of t
   );
   assert.match(homeSource, /i\.home\.orbit\.kicker/);
   assert.match(homeSource, /i\.home\.orbit\.title/);
-  assert.match(homeSource, /i\.home\.orbit\.description/);
   assert.match(homeSource, /i\.home\.orbit\.index/);
+  assert.match(homeSource, /i\.home\.orbit\.note/);
+  assert.doesNotMatch(homeSource, /i\.home\.orbit\.description/);
   assert.doesNotMatch(
     homeSource,
     /class=["'][^"']*(?=[^"']*\bsite-container\b)(?=[^"']*\bgrid\b)(?=[^"']*\bgap-12\b)(?=[^"']*\blg:grid-cols-\[1\.1fr_0\.9fr\])(?=[^"']*\blg:items-center\b)[^"']*["']/,
@@ -213,9 +217,11 @@ test('all six locale files expose the approved home orbit copy keys', async () =
     const orbitCopy = dictionary.home?.orbit;
     assert.ok(orbitCopy && typeof orbitCopy === 'object', `${locale} should define home.orbit`);
 
-    for (const key of ['kicker', 'title', 'description', 'index']) {
+    for (const key of ['kicker', 'title', 'index', 'note']) {
       assert.equal(typeof orbitCopy[key], 'string', `${locale} home.orbit.${key} should be a string`);
       assert.notEqual(orbitCopy[key].trim(), '', `${locale} home.orbit.${key} should not be empty`);
     }
+
+    assert.equal('description' in orbitCopy, false, `${locale} home.orbit.description should be removed`);
   }
 });

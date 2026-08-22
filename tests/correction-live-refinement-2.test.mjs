@@ -73,15 +73,15 @@ test('header and footer tighten nav sizing and swap every LinkedIn icon for the 
 });
 
 test('typed cursor and shared reveal motion use the stronger alignment and timing contracts', async () => {
-  const [globalCssSource, scrollRevealSource, staggerSource] = await Promise.all([
-    readSource('src/styles/global.css'),
+  const [typedTitleSource, scrollRevealSource, staggerSource] = await Promise.all([
+    readSource('src/components/TypedTitle.astro'),
     readSource('src/components/ScrollReveal.tsx'),
     readSource('src/components/StaggerContainer.tsx'),
   ]);
 
   assert.match(
-    globalCssSource,
-    /\.typed-cursor\s*\{[^}]*grid-area:\s*1\s*\/\s*2;[^}]*align-self:\s*end;[^}]*color:\s*(?:var\(--color-amaranth\)|#E83256);[^}]*margin-inline-start:\s*0\.12em;[^}]*animation:\s*typed-cursor-blink 1s steps\(1\) infinite;[^}]*\}/s,
+    typedTitleSource,
+    /\.typed-title__cursor\s*\{[^}]*grid-area:\s*1\s*\/\s*2;[^}]*align-self:\s*end;[^}]*color:\s*(?:var\(--color-amaranth\)|#E83256);[^}]*margin-inline-start:\s*0\.12em;[^}]*animation:\s*typed-title-cursor-blink 1s steps\(1\) infinite;[^}]*\}/s,
   );
   assert.match(scrollRevealSource, /up:\s*\{\s*y:\s*64,\s*x:\s*0\s*\}/);
   assert.match(scrollRevealSource, /left:\s*\{\s*x:\s*-64,\s*y:\s*0\s*\}/);

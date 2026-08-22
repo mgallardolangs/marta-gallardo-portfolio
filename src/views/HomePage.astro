@@ -8,7 +8,7 @@ import FloatingIcon from '../components/FloatingIcon';
 import GsapPageRuntime from '../components/GsapPageRuntime.astro';
 import { ArrowWavy } from '../components/DoodleArrows';
 import StaggerContainer, { StaggerItem } from '../components/StaggerContainer';
-import HomeHeroAbstractVisual from '../components/HomeHeroAbstractVisual.astro';
+import HomeHeroPortrait from '../components/HomeHeroPortrait.astro';
 import TypedTitle from '../components/TypedTitle.astro';
 import { getLangFromUrl, getLocalizedPath, t } from '../i18n';
 import { siteData } from '../lib/siteData';
@@ -69,8 +69,19 @@ const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-p
             </StaggerContainer>
           </div>
 
-          <ScrollReveal client:visible direction="none" className="home-hero__visual-shell">
-            <HomeHeroAbstractVisual />
+          <ScrollReveal client:visible direction="none" className="home-hero__portrait-shell">
+            <HomeHeroPortrait>
+              <img
+                src={siteData.heroMainPhoto}
+                alt={i.hero.name}
+                width={1200}
+                height={1600}
+                loading="eager"
+                fetchpriority="high"
+                decoding="async"
+                class="home-hero__portrait-image"
+              />
+            </HomeHeroPortrait>
           </ScrollReveal>
         </div>
       </section>
@@ -86,8 +97,8 @@ const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-p
           </ScrollReveal>
 
           <ScrollReveal client:visible direction="left" className="order-3 lg:col-start-1 lg:row-start-3 lg:order-none lg:self-end">
-            <p class="max-w-md font-body text-sm leading-7 text-white/74 md:text-base md:leading-8">
-              {i.home.orbit.description}
+            <p class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.34em] text-white/60 md:text-xs">
+              {i.home.orbit.note}
             </p>
           </ScrollReveal>
 

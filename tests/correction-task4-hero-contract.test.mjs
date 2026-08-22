@@ -32,10 +32,10 @@ test('public hero removes the old gradient, card, photo, and scroll-cue tokens',
 
   assert.doesNotMatch(heroSection, /bg-\[radial-gradient/i);
   assert.doesNotMatch(homeSource, /AnimatedScrollText/);
-  assert.doesNotMatch(heroSection, /heroMainPhoto|siteData\.heroMainPhoto/);
   assert.doesNotMatch(heroSection, /coverLabel|mainPhoto/);
   assert.doesNotMatch(heroSection, /bg-white\/72|backdrop-blur-sm/);
   assert.doesNotMatch(heroSection, /FloatingIcon client:visible intensity=\{18\}/);
+  assert.doesNotMatch(heroSection, /home-hero__oval|home-hero__frame|home-hero__mark/);
 });
 
 test('public hero matches the approved Checkpoint 1 source markers and CTA structure', async () => {
@@ -46,12 +46,16 @@ test('public hero matches the approved Checkpoint 1 source markers and CTA struc
     heroSection,
     /<section\b(?=[^>]*\bdata-home-hero\b)(?=[^>]*\bclass=["'][^"']*\bhome-hero\b[^"']*\bbg-paper\b[^"']*["'])[^>]*>/,
   );
-  assert.match(homeSource, /import HomeHeroAbstractVisual from '\.\.\/components\/HomeHeroAbstractVisual\.astro';/);
+  assert.match(homeSource, /import HomeHeroPortrait from '\.\.\/components\/HomeHeroPortrait\.astro';/);
   assert.match(heroSection, /<TypedTitle\b[^>]*\btext=\{i\.hero\.name\}[^>]*\bclass="[^"]*\bhome-hero__title\b[^"]*"/);
   assert.match(heroSection, /i\.home\.hero\.kicker/);
   assert.match(heroSection, /i\.hero\.age/);
   assert.match(heroSection, /i\.hero\.city/);
   assert.match(heroSection, /i\.home\.hero\.description/);
+  assert.match(
+    heroSection,
+    /<HomeHeroPortrait>\s*<img[^>]*src=\{siteData\.heroMainPhoto\}[^>]*alt=\{i\.hero\.name\}[^>]*width=\{1200\}[^>]*height=\{1600\}[^>]*loading="eager"[^>]*fetchpriority="high"[^>]*decoding="async"[^>]*class="home-hero__portrait-image"[^>]*\/>\s*<\/HomeHeroPortrait>/s,
+  );
   assert.match(heroSection, /href=\{getLocalizedPath\('\/ugc',\s*lang\)\}/);
   assert.match(heroSection, /href=\{getLocalizedPath\('\/translation-seo',\s*lang\)\}/);
   assert.equal(
@@ -63,17 +67,32 @@ test('public hero matches the approved Checkpoint 1 source markers and CTA struc
   assert.doesNotMatch(heroSection, /rounded-full|rounded-\[/);
 });
 
-test('abstract visual stays decorative-only with the required Checkpoint 1 markers', async () => {
-  const visualSource = await readSource('src/components/HomeHeroAbstractVisual.astro');
+test('portrait component replaces the old abstract visual with a slotted media frame', async () => {
+  const [portraitSource, globalCssSource] = await Promise.all([
+    readSource('src/components/HomeHeroPortrait.astro'),
+    readSource('src/styles/global.css'),
+  ]);
 
-  assert.match(visualSource, /data-home-hero-visual/);
-  assert.match(visualSource, /home-hero__oval/);
-  assert.match(visualSource, /home-hero__frame--amaranth/);
-  assert.match(visualSource, /home-hero__frame--ink/);
-  assert.match(visualSource, /home-hero__frame--paper/);
-  assert.match(visualSource, /home-hero__mark-text/);
-  assert.match(visualSource, /home-hero__mark-rule/);
-  assert.doesNotMatch(visualSource, /img|EditableImage|heroMainPhoto/);
+  await assert.rejects(
+    readSource('src/components/HomeHeroAbstractVisual.astro'),
+    /ENOENT/,
+    'HomeHeroAbstractVisual.astro should be deleted after the portrait refactor',
+  );
+
+  assert.match(portraitSource, /data-home-hero-portrait/);
+  assert.match(portraitSource, /<slot \/>/);
+  assert.match(portraitSource, /home-hero__portrait-corner--top-left/);
+  assert.match(portraitSource, /home-hero__portrait-corner--top-right/);
+  assert.match(portraitSource, /home-hero__portrait-corner--bottom-right/);
+  assert.match(portraitSource, /home-hero__portrait-corner--bottom-left/);
+  assert.match(portraitSource, /home-hero__portrait-rule/);
+  assert.match(
+    globalCssSource,
+    /\.home-hero__portrait\s*\{[^}]*max-width:\s*400px;[^}]*aspect-ratio:\s*4\s*\/\s*5;[^}]*margin-inline:\s*auto;[^}]*\}/s,
+  );
+  assert.match(globalCssSource, /\.home-hero__portrait-media\s*\{[^}]*clip-path:/s);
+  assert.match(globalCssSource, /\.home-hero__portrait:hover\s+\.home-hero__portrait-image,[\s\S]*transform:\s*scale\(1\.055\);/s);
+  assert.doesNotMatch(globalCssSource, /home-hero__oval|home-hero__frame|home-hero__mark/);
 });
 
 test('admin hero mirrors the layout with editable copy and keeps later admin tooling intact', async () => {
@@ -91,6 +110,10 @@ test('admin hero mirrors the layout with editable copy and keeps later admin too
   assert.match(heroSection, /i18nKey="home\.hero\.description"/);
   assert.match(
     heroSection,
+    /<HomeHeroPortrait>\s*<EditableImage client:load imageKey="heroMainPhoto" className="home-hero__portrait-image" alt=\{i\.hero\.name\} \/>[\s\S]*<\/HomeHeroPortrait>/s,
+  );
+  assert.match(
+    heroSection,
     /<div class="group\/edit relative flex w-full">[\s\S]*?<a href="\/admin\/ugc" class="home-hero__cta home-hero__cta--primary">[\s\S]*?<\/a>[\s\S]*?<\/div>/,
   );
   assert.match(
@@ -98,13 +121,12 @@ test('admin hero mirrors the layout with editable copy and keeps later admin too
     /<div class="group\/edit relative flex w-full">[\s\S]*?<a href="\/admin\/translation-seo" class="home-hero__cta home-hero__cta--primary">[\s\S]*?<\/a>[\s\S]*?<\/div>/,
   );
   assert.match(heroSection, /<EditableText client:load i18nKey="hero\.ugcLabel" as="span" className="home-hero__cta-label" clickToEdit=\{false\} editButtonTargetId="admin-home-ugc-cta-edit" \/>/);
-  assert.match(heroSection, /<EditableText client:load i18nKey="hero\.seoLabel" as="span" className="home-hero__cta-label" clickToEdit=\{false\} editButtonTargetId="admin-home-seo-cta-edit" \/>/);
+  assert.match(heroSection, /<EditableText client:load i18nKey="hero\.seoLabel" as="span" className="home-hero__cta-label" clickToEdit=\{false\} editButtonTargetId="admin-home-seo-cta-edit" \/>/  );
   assert.match(heroSection, /<span id="admin-home-ugc-cta-edit" \/>/);
   assert.match(heroSection, /<span id="admin-home-seo-cta-edit" \/>/);
-  assert.match(adminHomeSource, /HomeHeroAbstractVisual/);
+  assert.match(adminHomeSource, /HomeHeroPortrait/);
   assert.match(adminHomeSource, /EditableOrbitCollection/);
   assert.match(adminHomeSource, /AdminOrbitPreview/);
   assert.doesNotMatch(heroSection, /bg-\[radial-gradient/i);
-  assert.doesNotMatch(heroSection, /imageKey="heroMainPhoto"/);
   assert.doesNotMatch(heroSection, /bg-white\/72|backdrop-blur-sm/);
 });

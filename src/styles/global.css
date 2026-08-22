@@ -99,23 +99,6 @@ svg {
   color: var(--color-amaranth);
 }
 
-.typed-cursor {
-  display: inline-block;
-  grid-area: 1 / 2;
-  align-self: end;
-  min-width: 0.34em;
-  color: var(--color-amaranth);
-  margin-inline-start: 0.12em;
-  transform: translateY(0.04em);
-  animation: typed-cursor-blink 1s steps(1) infinite;
-}
-
-@keyframes typed-cursor-blink {
-  50% {
-    opacity: 0;
-  }
-}
-
 .home-hero {
   position: relative;
   overflow: hidden;
@@ -239,118 +222,149 @@ svg {
   transform: translateX(2px);
 }
 
-.home-hero__visual-shell {
+.home-hero__portrait-shell {
   width: 100%;
 }
 
-.home-hero__visual {
+.home-hero__portrait {
   position: relative;
-  width: min(100%, 31rem);
-  aspect-ratio: 0.92;
+  width: min(100%, 400px);
+  max-width: 400px;
+  aspect-ratio: 4 / 5;
   margin-inline: auto;
 }
 
-.home-hero__oval {
-  position: absolute;
-  inset: 10% 9% 14% 10%;
-  border: 1px solid rgb(6 4 3 / 0.16);
-  border-radius: 50%;
-  transform: rotate(-18deg);
+.home-hero__portrait-media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: rgb(6 4 3 / 0.08);
+  clip-path: inset(100% 0 0 0);
+  animation: home-hero-portrait-reveal 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.home-hero__frame {
-  --home-hero-frame-start: translate3d(0, 1.4rem, 0) rotate(0deg);
-  --home-hero-frame-rest: translate3d(0, 0, 0) rotate(0deg);
+.home-hero__portrait-image,
+.home-hero__portrait-image > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+  object-fit: cover;
+  transition:
+    transform 0.42s ease,
+    filter 0.42s ease;
+}
+
+.home-hero__portrait-corner {
+  --home-hero-corner-x: 0px;
+  --home-hero-corner-y: 0px;
   position: absolute;
-  width: clamp(6rem, 24vw, 10.5rem);
-  aspect-ratio: 1 / 1.22;
-  border: 1px solid;
+  width: 28px;
+  height: 28px;
   opacity: 0;
-  transform-origin: center;
-  transform: var(--home-hero-frame-rest);
-  animation: home-hero-frame-in 0.86s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform: translate3d(0, 0.75rem, 0);
+  animation: home-hero-portrait-corner-in 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition: transform 0.3s ease;
 }
 
-.home-hero__frame--amaranth {
-  right: 6%;
-  bottom: 12%;
-  border-color: rgb(232 50 86 / 0.82);
-  background: rgb(232 50 86 / 0.14);
-  --home-hero-frame-start: translate3d(-1.3rem, 1.5rem, 0) rotate(-11deg);
-  --home-hero-frame-rest: translate3d(0, 0, 0) rotate(-5deg);
-  animation-delay: 0.08s;
-}
-
-.home-hero__frame--ink {
-  top: 17%;
-  right: 24%;
-  border-color: var(--color-ink);
-  background: var(--color-ink);
-  --home-hero-frame-start: translate3d(0.4rem, 1.3rem, 0) rotate(7deg);
-  --home-hero-frame-rest: translate3d(0, 0, 0) rotate(2deg);
-  animation-delay: 0.18s;
-}
-
-.home-hero__frame--paper {
-  top: 34%;
-  left: 14%;
-  border-color: rgb(6 4 3 / 0.24);
-  background: var(--color-paper);
-  --home-hero-frame-start: translate3d(1.15rem, 1.2rem, 0) rotate(-8deg);
-  --home-hero-frame-rest: translate3d(0, 0, 0) rotate(-2deg);
-  animation-delay: 0.28s;
-}
-
-.home-hero__mark {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.9rem;
-  opacity: 0;
-  transform: translateY(1rem);
-  animation: home-hero-mark-in 0.7s ease both 0.34s;
-}
-
-.home-hero__mark-text {
-  font-family: var(--font-heading);
-  font-size: clamp(4rem, 16vw, 6.9rem);
-  line-height: 0.86;
-  letter-spacing: -0.08em;
-  color: var(--color-ink);
-}
-
-.home-hero__mark-rule {
-  width: clamp(4.5rem, 18vw, 7.2rem);
-  height: 2px;
+.home-hero__portrait-corner--top-left,
+.home-hero__portrait-corner--bottom-right {
   background: var(--color-amaranth);
 }
 
-@keyframes home-hero-frame-in {
+.home-hero__portrait-corner--top-right,
+.home-hero__portrait-corner--bottom-left {
+  background: var(--color-ink);
+}
+
+.home-hero__portrait-corner--top-left {
+  top: -14px;
+  left: -14px;
+  --home-hero-corner-x: -4px;
+  --home-hero-corner-y: -4px;
+  animation-delay: 0.62s;
+}
+
+.home-hero__portrait-corner--top-right {
+  top: -14px;
+  right: -14px;
+  --home-hero-corner-x: 4px;
+  --home-hero-corner-y: -4px;
+  animation-delay: 0.72s;
+}
+
+.home-hero__portrait-corner--bottom-right {
+  right: -14px;
+  bottom: -14px;
+  --home-hero-corner-x: 4px;
+  --home-hero-corner-y: 4px;
+  animation-delay: 0.82s;
+}
+
+.home-hero__portrait-corner--bottom-left {
+  left: -14px;
+  bottom: -14px;
+  --home-hero-corner-x: -4px;
+  --home-hero-corner-y: 4px;
+  animation-delay: 0.92s;
+}
+
+.home-hero__portrait-rule {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+  height: 1px;
+  background: rgb(244 245 241 / 0.9);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: home-hero-portrait-rule-draw 0.44s cubic-bezier(0.22, 1, 0.36, 1) 1.02s both;
+}
+
+.home-hero__portrait:hover .home-hero__portrait-image,
+.home-hero__portrait:hover .home-hero__portrait-image > img,
+.home-hero__portrait:focus-within .home-hero__portrait-image,
+.home-hero__portrait:focus-within .home-hero__portrait-image > img {
+  transform: scale(1.055);
+  filter: saturate(1.04) contrast(1.03);
+}
+
+.home-hero__portrait:hover .home-hero__portrait-corner,
+.home-hero__portrait:focus-within .home-hero__portrait-corner {
+  transform: translate3d(var(--home-hero-corner-x), var(--home-hero-corner-y), 0);
+}
+
+@keyframes home-hero-portrait-reveal {
   from {
-    opacity: 0;
-    filter: blur(2px);
-    transform: var(--home-hero-frame-start);
+    clip-path: inset(100% 0 0 0);
   }
 
   to {
-    opacity: 1;
-    filter: blur(0);
-    transform: var(--home-hero-frame-rest);
+    clip-path: inset(0 0 0 0);
   }
 }
 
-@keyframes home-hero-mark-in {
+@keyframes home-hero-portrait-corner-in {
   from {
     opacity: 0;
-    transform: translateY(1rem);
+    transform: translate3d(0, 0.75rem, 0);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes home-hero-portrait-rule-draw {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
   }
 }
 
@@ -360,7 +374,7 @@ svg {
     align-items: end;
   }
 
-  .home-hero__visual {
+  .home-hero__portrait {
     margin-right: 0;
     margin-left: auto;
   }
@@ -380,8 +394,13 @@ svg {
     scroll-behavior: auto !important;
   }
 
-  .home-hero__frame,
-  .home-hero__mark {
+  .home-hero__portrait-media {
+    clip-path: inset(0 0 0 0);
+    animation: none;
+  }
+
+  .home-hero__portrait-corner,
+  .home-hero__portrait-rule {
     opacity: 1;
     transform: none;
     animation: none;

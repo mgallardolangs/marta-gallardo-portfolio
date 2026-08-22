@@ -11,7 +11,7 @@ import EditableImage from '../../components/admin/EditableImage';
 import AdminBrandVideo from '../../components/admin/AdminBrandVideo';
 import AdminOrbitPreview from '../../components/admin/AdminOrbitPreview';
 import EditableOrbitCollection from '../../components/admin/EditableOrbitCollection';
-import HomeHeroAbstractVisual from '../../components/HomeHeroAbstractVisual.astro';
+import HomeHeroPortrait from '../../components/HomeHeroPortrait.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
@@ -72,8 +72,10 @@ const i = t(lang);
             </StaggerContainer>
           </div>
 
-          <ScrollReveal client:visible direction="none" className="home-hero__visual-shell">
-            <HomeHeroAbstractVisual />
+          <ScrollReveal client:visible direction="none" className="home-hero__portrait-shell">
+            <HomeHeroPortrait>
+              <EditableImage client:load imageKey="heroMainPhoto" className="home-hero__portrait-image" alt={i.hero.name} />
+            </HomeHeroPortrait>
           </ScrollReveal>
         </div>
       </section>
@@ -87,7 +89,7 @@ const i = t(lang);
           </ScrollReveal>
 
           <ScrollReveal client:visible direction="left" className="order-3 lg:col-start-1 lg:row-start-3 lg:order-none lg:self-end">
-            <EditableText client:load i18nKey="home.orbit.description" as="p" className="max-w-md font-body text-sm leading-7 text-white/74 md:text-base md:leading-8" />
+            <EditableText client:load i18nKey="home.orbit.note" as="p" className="font-body text-[0.72rem] font-semibold uppercase tracking-[0.34em] text-white/60 md:text-xs" />
           </ScrollReveal>
 
           <ScrollReveal client:visible direction="left" className="order-2 lg:col-start-3 lg:row-start-1 lg:order-none lg:justify-self-end lg:self-start">

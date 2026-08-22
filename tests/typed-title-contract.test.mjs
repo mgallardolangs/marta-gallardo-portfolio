@@ -20,11 +20,14 @@ test('TypedTitle forces plain-text Typed.js mode and keeps ampersand titles inta
   assert.match(source, /<span class="sr-only">\{text\}<\/span>/);
   assert.match(source, /<span class="typed-title__reserve">\{text\}<\/span>/);
   assert.match(source, /<span class="typed-title__visual" data-typed-title-visual>\{text\}<\/span>/);
+  assert.match(source, /<span class="typed-title__cursor" aria-hidden="true">_<\/span>/);
   assert.match(
     source,
     /contentType:\s*['"]null['"]/,
     'TypedTitle must opt Typed.js into plain-text mode so &, <, and admin-authored text are never typed as HTML',
   );
+  assert.match(source, /showCursor:\s*false/);
+  assert.doesNotMatch(source, /cursorChar:/);
 
   const ampersandTitle = 'Translation & SEO';
   const escapedTitle = escapeHTML(ampersandTitle);
@@ -34,6 +37,7 @@ test('TypedTitle forces plain-text Typed.js mode and keeps ampersand titles inta
     '<span class="typed-title" aria-hidden="true">',
     `<span class="typed-title__reserve">${escapedTitle}</span>`,
     `<span class="typed-title__visual" data-typed-title-visual>${escapedTitle}</span>`,
+    '<span class="typed-title__cursor" aria-hidden="true">_</span>',
     '</span>',
     '</h1>',
   ].join('');
