@@ -3,23 +3,26 @@
 ## 1. Visual system
 
 ### Palette
-- Paper: `#F4F5F1`
-- Ink: `#060403`
-- Amaranth fill: `#E83256`
-- Amaranth text on paper: `#C21F45`
-- Soft amaranth: `#F5C4CD`
-- Mist: `#F8E8EB`
+- Strict opaque palette only: Paper `#F4F5F1`, Ink `#060403`, Amaranth `#E83256`
+- Softer borders, fills, shadows, and overlays must be transparent variants of those three colors only
+- Do not introduce extra opaque blush, mist, rose-gold, or alternate amaranth tones
 
 ### Contrast rules
 - Paper vs ink: `18.68`
 - Ink text on amaranth: `4.89`
-- Small amaranth text on paper must use the darker text tone, not base amaranth
+- Amaranth on paper is for large text, icons, borders, cursor, and decoration, not small body copy
 - Avoid small paper text on amaranth fills
+- Do not solve contrast with new opaque support colors
 
 ### Typography
 - Heading/body: Instrument Sans
 - Accent: Instrument Serif
 - Fonts are loaded from Google Fonts in `BaseLayout.astro` and `AdminLayout.astro`
+- `TypedTitle` keeps a reserved cursor gap and uses a permanently blinking amaranth `_` cursor
+
+### Shared shell
+- The public header stays visually seamless with the first section; no rounded shell, separate band, or resting icon chrome
+- Social, language, and menu icon controls stay flat/transparent at rest and only lift with an amaranth bottom shadow on hover/focus
 
 ## 2. Route and component ownership
 
@@ -28,7 +31,7 @@
 - `src/layouts/AdminLayout.astro` — admin shell, noindex meta, identity bootstrap, toolbar
 
 ### Shared public views
-- `src/views/HomePage.astro` — hero, orbit, about, proof section
+- `src/views/HomePage.astro` — Checkpoint 1 hero, GSAP-only home orbit carousel, about, proof section
 - `src/views/UgcPage.astro` — hero carousel, niche cards, galleries
 - `src/views/TranslationSeoPage.astro` — typed hero, service switcher, arsenal, tabs, methodology, why section
 - `src/views/BlogIndexPage.astro` — locale-scoped blog index
@@ -48,19 +51,18 @@
 - `EditableText.tsx`, `EditableImage.tsx`, `EditableMedia.tsx` — inline editing primitives
 - `EditableOrbitCollection.tsx` — orbit schema editing
 - `EditableCollection.tsx` — translation arsenal editing
-- `AdminOrbitPreview.tsx` — static orbit preview without GSAP/Embla
+- `AdminOrbitPreview.tsx` — static orbit preview without autoplay runtime or visible controls
 
 ## 3. Library ownership
 
 - CSS / Tailwind: spacing, colors, layout, focus, typography
 - Framer Motion: scroll reveal, stagger, parallax, hover lift, UGC gallery transitions
-- GSAP + ScrollTrigger: public Home and Translation routes only
-- Embla: public Home orbit only
+- GSAP + ScrollTrigger: public Home and Translation routes only; the Home orbit carousel is GSAP-only
 - Lenis: global smooth-scroll runtime in public layout only; stops under reduced motion
 - Typed.js: `TypedTitle.astro` only
 - Astro transitions `ClientRouter`: public layout only
 
-No other route should pull GSAP or Embla bundles.
+No route should pull legacy Embla bundles, and no non-Home route should pull the Home orbit runtime.
 
 ## 4. Orbit contract
 
@@ -76,20 +78,23 @@ Each item keeps:
 - localized `label`
 - localized `alt`
 
+The initial 15 slots currently point at local `public/images/orbit/mock-*.webp` mock assets. Admin users can replace those temporary images, posters, and optional links without code changes.
+
 ### Geometry
 From `src/lib/orbitMedia.ts`:
-- canvas `690 x 430`
-- `radiusX: 296`
-- `radiusY: 154`
+- canvas `720 x 440`
+- `radiusX: 324`
+- `radiusY: 145`
 - `tiltDeg: -18`
-- `ORBIT_REVOLUTION_SECONDS: 68`
+- `ORBIT_REVOLUTION_SECONDS: 76`
 
 ### Behavior
 - entrance animation uses GSAP only when reduced motion is off
-- hover/focus expands the active tile and dims the rest
+- continuous drift is GSAP-only and completes one revolution every 76 seconds
+- there are no visible previous/next buttons, dots, drag/swipe gestures, wheel handlers, or keyboard carousel controls
+- pointer hover pauses the full orbit, enlarges the active tile, and dims the rest
 - visible orbit videos autoplay muted when reduced motion is off
 - pointer hover is allowed to attempt audible playback; if the browser blocks it, the video falls back to muted playback and the sound button exposes the blocked state
-- keyboard focus never auto-unmutes or starts audible playback; it keeps the tile muted and relies on the explicit sound toggle
 - touch interaction keeps muted playback until the user taps the explicit sound toggle
 - reduced motion keeps the orbit static and pauses videos
 - admin preview is static and poster-first
