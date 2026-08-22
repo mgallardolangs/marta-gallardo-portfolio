@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { addAttribute, escapeHTML } from 'astro/runtime/server/index.js';
+import { createTypedTitleState, initAllTypedTitles, resetAllTypedTitles } from '../src/lib/typedTitleRuntime.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -44,4 +45,61 @@ test('TypedTitle forces plain-text Typed.js mode and keeps ampersand titles inta
 
   assert.match(ssrMarkup, /Translation &amp; SEO/);
   assert.doesNotMatch(ssrMarkup, /Translation & SEO/);
+});
+
+test('load titles finished statically under reduced motion clear completion and start typing when full motion returns', () => {
+  const state = createTypedTitleState();
+  const visual = { textContent: 'Original' };
+  const root = {
+    dataset: {
+      typedText: 'Translation & SEO',
+      typedTrigger: 'load',
+    },
+    querySelector(selector) {
+      return selector === '[data-typed-title-visual]' ? visual : null;
+    },
+  };
+  const scope = {
+    querySelectorAll(selector) {
+      return selector === '[data-typed-title]' ? [root] : [];
+    },
+  };
+
+  initAllTypedTitles(scope, {
+    state,
+    mediaMatches: true,
+    createTyped() {
+      throw new Error('reduced-motion load should finish statically without Typed.js');
+    },
+    createObserver() {
+      throw new Error('load trigger should not create an observer');
+    },
+  });
+
+  assert.equal(root.dataset.typedTitleComplete, 'true');
+  assert.equal(visual.textContent, 'Translation & SEO');
+
+  const typedStarts = [];
+  resetAllTypedTitles(scope, state);
+  initAllTypedTitles(scope, {
+    state,
+    mediaMatches: false,
+    createTyped(rootArg, element, options) {
+      typedStarts.push({ rootArg, element, options });
+      return {
+        destroy() {},
+      };
+    },
+    createObserver() {
+      throw new Error('load trigger should not create an observer');
+    },
+  });
+
+  assert.equal(root.dataset.typedTitleComplete, undefined);
+  assert.equal(visual.textContent, '');
+  assert.equal(typedStarts.length, 1);
+  assert.equal(typedStarts[0].rootArg, root);
+  assert.equal(typedStarts[0].element, visual);
+  assert.equal(typedStarts[0].options.text, 'Translation & SEO');
+  assert.equal(typedStarts[0].options.trigger, 'load');
 });

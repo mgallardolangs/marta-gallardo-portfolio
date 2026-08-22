@@ -66,126 +66,49 @@ const Tag = as;
 
 <script>
   import Typed from 'typed.js';
+  import {
+    createTypedTitleState,
+    initAllTypedTitles,
+    resetAllTypedTitles,
+    type TypedTitleState,
+  } from '../lib/typedTitleRuntime.ts';
 
   declare global {
     interface Window {
       __mgTypedTitleBound?: boolean;
-      __mgTypedTitleState?: {
-        controllers: Map<HTMLElement, { typed?: Typed; observer?: IntersectionObserver }>;
-      };
+      __mgTypedTitleState?: TypedTitleState;
     }
   }
 
-  const ROOT_SELECTOR = '[data-typed-title]';
-  const VISUAL_SELECTOR = '[data-typed-title-visual]';
-  const typedState = window.__mgTypedTitleState ??= { controllers: new Map() };
+  const typedState = window.__mgTypedTitleState ??= createTypedTitleState();
 
   const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  const destroyController = (root: HTMLElement) => {
-    const controller = typedState.controllers.get(root);
-    controller?.observer?.disconnect();
-    controller?.typed?.destroy();
-    typedState.controllers.delete(root);
-
-    const text = root.dataset.typedText ?? '';
-    const visual = root.querySelector<HTMLElement>(VISUAL_SELECTOR);
-    if (visual) {
-      visual.textContent = text;
-    }
-    delete root.dataset.typedTitleComplete;
-  };
-
-  const finishStatic = (root: HTMLElement) => {
-    const visual = root.querySelector<HTMLElement>(VISUAL_SELECTOR);
-    if (visual) {
-      visual.textContent = root.dataset.typedText ?? '';
-    }
-    root.dataset.typedTitleComplete = 'true';
-  };
-
-  const startTyped = (root: HTMLElement) => {
-    const existing = typedState.controllers.get(root);
-
-    if (existing?.typed || root.dataset.typedTitleComplete === 'true') {
-      return;
-    }
-
-    const visual = root.querySelector<HTMLElement>(VISUAL_SELECTOR);
-    const text = root.dataset.typedText ?? '';
-    const trigger = root.dataset.typedTrigger === 'visible' ? 'visible' : 'load';
-
-    if (!visual || !text) {
-      root.dataset.typedTitleComplete = 'true';
-      return;
-    }
-
-    visual.textContent = '';
-
-    const typed = new Typed(visual, {
-      strings: [text],
-      contentType: 'null',
-      typeSpeed: trigger === 'visible' ? 32 : 42,
-      startDelay: trigger === 'visible' ? 0 : 160,
-      autoInsertCss: false,
-      showCursor: false,
-      loop: false,
-      smartBackspace: false,
-      backSpeed: 0,
-      backDelay: 0,
-      onComplete: () => {
-        root.dataset.typedTitleComplete = 'true';
-      },
-    });
-
-    typedState.controllers.set(root, { ...existing, typed });
-  };
-
-  const initRoot = (root: HTMLElement) => {
-    if (typedState.controllers.has(root) || root.dataset.typedTitleComplete === 'true') {
-      return;
-    }
-
-    if (mediaQuery.matches) {
-      finishStatic(root);
-      return;
-    }
-
-    const trigger = root.dataset.typedTrigger === 'visible' ? 'visible' : 'load';
-
-    if (trigger === 'visible') {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) {
-              return;
-            }
-
-            observer.disconnect();
-            startTyped(root);
-          });
-        },
-        { threshold: 0.35 },
-      );
-
-      typedState.controllers.set(root, { observer });
-      observer.observe(root);
-      return;
-    }
-
-    startTyped(root);
-  };
-
   const initAll = () => {
-    document.querySelectorAll<HTMLElement>(ROOT_SELECTOR).forEach((root) => {
-      initRoot(root);
+    initAllTypedTitles(document, {
+      state: typedState,
+      mediaMatches: mediaQuery.matches,
+      createTyped: (_root, element, { text, trigger, onComplete }) =>
+        new Typed(element as Element, {
+          strings: [text],
+          contentType: 'null',
+          typeSpeed: trigger === 'visible' ? 32 : 42,
+          startDelay: trigger === 'visible' ? 0 : 160,
+          autoInsertCss: false,
+          showCursor: false,
+          loop: false,
+          smartBackspace: false,
+          backSpeed: 0,
+          backDelay: 0,
+          onComplete,
+        }),
+      createObserver: (callback, options) =>
+        new IntersectionObserver((entries) => callback(entries), options),
     });
   };
 
   const destroyAll = () => {
-    Array.from(typedState.controllers.keys()).forEach((root) => {
-      destroyController(root);
-    });
+    resetAllTypedTitles(document, typedState);
   };
 
   if (!window.__mgTypedTitleBound) {
