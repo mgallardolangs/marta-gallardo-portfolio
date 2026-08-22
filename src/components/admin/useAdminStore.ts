@@ -17,6 +17,7 @@ export function useAdminStore() {
     updateUgcPortfolioField: adminStore.updateUgcPortfolioField.bind(adminStore),
     setUgcPortfolioMedia: adminStore.setUgcPortfolioMedia.bind(adminStore),
     setUgcPortfolioPoster: adminStore.setUgcPortfolioPoster.bind(adminStore),
+    clearUgcPortfolioPoster: adminStore.clearUgcPortfolioPoster.bind(adminStore),
     addOrbitMediaItem: adminStore.addOrbitMediaItem.bind(adminStore),
     removeOrbitMediaItem: adminStore.removeOrbitMediaItem.bind(adminStore),
     moveOrbitMediaItem: adminStore.moveOrbitMediaItem.bind(adminStore),

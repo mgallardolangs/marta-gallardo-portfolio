@@ -1,0 +1,250 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { AdminStore } from '../src/components/admin/adminStore.ts';
+import { playFocusedVideoPlayback } from '../src/lib/ugcPortfolio.ts';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const rootDir = path.resolve(__dirname, '..');
+
+function createLocalizedText(seed) {
+  return {
+    es: `${seed} ES`,
+    en: `${seed} EN`,
+    fr: `${seed} FR`,
+    de: `${seed} ES`,
+    it: `${seed} ES`,
+    ca: `${seed} ES`,
+  };
+}
+
+async function readSource(relativePath) {
+  return readFile(path.join(rootDir, relativePath), 'utf8');
+}
+
+function installMockFileReader() {
+  const PreviousFileReader = globalThis.FileReader;
+
+  class MockFileReader {
+    readAsDataURL(file) {
+      this.result = `data:${file.type};base64,${Buffer.from(`preview:${file.name}`).toString('base64')}`;
+      queueMicrotask(() => this.onload?.());
+    }
+  }
+
+  globalThis.FileReader = MockFileReader;
+  return () => {
+    if (PreviousFileReader === undefined) {
+      delete globalThis.FileReader;
+      return;
+    }
+    globalThis.FileReader = PreviousFileReader;
+  };
+}
+
+function createUgcStore() {
+  const store = new AdminStore();
+  store.init(
+    { es: {}, en: {}, fr: {}, de: {}, it: {}, ca: {} },
+    {
+      heroMainPhoto: '',
+      galleryCutouts: {},
+      videoPlaceholderOrEmbedUrl: '',
+      ugcHeaderImage: '',
+      instagramScreenshot: '',
+      socialLinks: { linkedin: '', instagram: '' },
+      nicheBackgrounds: {},
+      ugcVideos: { travel: [], languages: [], art: [] },
+      ugcPhotos: { travel: [], languages: [], art: [], all: [] },
+      nicheIcons: { travel: '', languages: '', art: '' },
+      aboutPhotos: [],
+      brandVideo: '',
+      toolLogos: {},
+      videoStickers: {},
+      orbitMedia: [],
+      ugcPortfolio: [
+        {
+          id: 'ugc-travel-01',
+          category: 'travel',
+          type: 'video',
+          src: '/images/ugc/original-video.mp4',
+          poster: '/images/ugc/original-video-poster.jpg',
+          label: createLocalizedText('Label'),
+          title: createLocalizedText('Title'),
+          description: createLocalizedText('Short description.'),
+          format: createLocalizedText('Vertical video'),
+          alt: createLocalizedText('Alt'),
+        },
+      ],
+      arsenal: { languages: [], tools: [], skills: [] },
+      person: { name: 'Marta', location: 'Elche', socialProfiles: { linkedin: '', instagram: '' } },
+    },
+    'es',
+    'publish-token',
+  );
+
+  return store;
+}
+
+test('UGC type switching stays non-destructive until poster is explicitly cleared', async () => {
+  const restoreFileReader = installMockFileReader();
+  const store = createUgcStore();
+
+  try {
+    await store.setUgcPortfolioPoster(
+      'ugc-travel-01',
+      new File([Buffer.from('poster-binary')], 'replacement-poster.jpg', { type: 'image/jpeg' }),
+    );
+
+    store.updateUgcPortfolioField('ugc-travel-01', 'type', 'image');
+
+    const invalidImageSnapshot = store.getSnapshot().getUgcPortfolio()[0];
+    assert.equal(invalidImageSnapshot.type, 'image');
+    assert.equal(invalidImageSnapshot.src, '/images/ugc/original-video.mp4');
+    assert.match(invalidImageSnapshot.poster ?? '', /^data:image\/jpeg;base64,/);
+    assert.deepEqual(
+      store.getSnapshot().getUgcPortfolioItemValidationErrors('ugc-travel-01'),
+      [
+        'UGC images must use a JPG, PNG, WebP, or GIF source.',
+        'UGC images should not keep a poster value.',
+      ],
+      'switching video to image should preserve the current files but surface the exact resolvable validation errors',
+    );
+
+    await store.setUgcPortfolioMedia(
+      'ugc-travel-01',
+      new File([Buffer.from('image-binary')], 'replacement-image.webp', { type: 'image/webp' }),
+    );
+    store.clearUgcPortfolioPoster('ugc-travel-01');
+
+    const repairedSnapshot = store.getSnapshot().getUgcPortfolio()[0];
+    assert.match(repairedSnapshot.src, /^data:image\/webp;base64,/);
+    assert.equal(repairedSnapshot.poster, null);
+    assert.deepEqual(store.getSnapshot().getUgcPortfolioItemValidationErrors('ugc-travel-01'), []);
+
+    const fetchCalls = [];
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async (input, init = {}) => {
+      fetchCalls.push({ input: String(input), init });
+      if (!init.method || init.method === 'GET') {
+        return new Response(JSON.stringify({ sha: 'site-sha' }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      return new Response(JSON.stringify({ content: { sha: 'next-site-sha' } }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    };
+
+    try {
+      await store.publish();
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+
+    const putCalls = fetchCalls.filter((call) => call.init?.method === 'PUT');
+    assert.ok(
+      putCalls.some((call) => call.input.includes('public/images/ugc/ugc-travel-01.webp')),
+      'repaired image source should still upload before site.json',
+    );
+    assert.ok(
+      putCalls.some((call) => call.input.includes('src/data/site.json')),
+      'publishing the repaired slot should still write site data',
+    );
+    assert.ok(
+      putCalls.every((call) => !call.input.includes('ugc-travel-01-poster')),
+      'clearing the poster should discard any pending poster upload before publish',
+    );
+  } finally {
+    restoreFileReader();
+  }
+});
+
+test('focused playback helper flips to audible looping playback immediately and swallows rejections', async () => {
+  let syncSnapshot = null;
+  const playbackStates = [];
+  const immediateVideo = {
+    currentTime: 17,
+    loop: false,
+    muted: true,
+    paused: true,
+    play() {
+      syncSnapshot = {
+        currentTime: this.currentTime,
+        loop: this.loop,
+        muted: this.muted,
+      };
+      this.paused = false;
+      return Promise.resolve();
+    },
+  };
+
+  assert.equal(await playFocusedVideoPlayback(immediateVideo, (isPlaying) => playbackStates.push(isPlaying)), true);
+  assert.deepEqual(syncSnapshot, {
+    currentTime: 0,
+    loop: true,
+    muted: false,
+  });
+  assert.deepEqual(playbackStates, [true]);
+
+  const rejectedStates = [];
+  const rejectedVideo = {
+    currentTime: 4,
+    loop: false,
+    muted: true,
+    paused: true,
+    play() {
+      return Promise.reject(new Error('gesture rejected'));
+    },
+  };
+
+  assert.equal(await playFocusedVideoPlayback(rejectedVideo, (isPlaying) => rejectedStates.push(isPlaying)), false);
+  assert.equal(rejectedVideo.currentTime, 0);
+  assert.equal(rejectedVideo.loop, true);
+  assert.equal(rejectedVideo.muted, false);
+  assert.deepEqual(rejectedStates, [false]);
+});
+
+test('UGC viewer and editor source expose flushSync playback, right-edge controls, and poster clearing', async () => {
+  const [sheetSource, editorSource, storeSource] = await Promise.all([
+    readSource('src/components/UgcContactSheet.tsx'),
+    readSource('src/components/admin/EditableUgcPortfolio.tsx'),
+    readSource('src/components/admin/adminStore.ts'),
+  ]);
+
+  assert.match(sheetSource, /from ['"]react-dom['"]/);
+  assert.match(
+    sheetSource,
+    /onClick=\{\(event\) => \{[\s\S]{0,240}?flushSync\(\(\) => \{[\s\S]{0,240}?setActiveId\(item\.id\)[\s\S]{0,240}?\}\)[\s\S]{0,240}?playFocusedVideoPlayback\(/,
+    'tile click should flushSync the viewer mount and start focused playback within the same gesture path',
+  );
+  assert.match(
+    sheetSource,
+    /onKeyDown=\{\(event\) => \{[\s\S]{0,320}?(?:Enter|Space|NumpadEnter)[\s\S]{0,280}?flushSync\(\(\) => \{[\s\S]{0,240}?setActiveId\(item\.id\)[\s\S]{0,240}?\}\)[\s\S]{0,240}?playFocusedVideoPlayback\(/,
+    'keyboard activation should keep first focused playback inside the same synchronous gesture path instead of deferring it to an effect',
+  );
+  assert.match(
+    sheetSource,
+    /className="absolute right-4 top-4 z-10[\s\S]*\{copy\.close\}/,
+    'viewer close control should stay anchored at the top-right corner',
+  );
+  assert.match(
+    sheetSource,
+    /className="absolute right-4 top-1\/2 flex -translate-y-1\/2 flex-col items-center gap-3[\s\S]*aria-label=\{copy\.previous\}[\s\S]*aria-label=\{copy\.next\}[\s\S]*\{activeVisibleIndex \+ 1\} \/ \{visibleItems\.length\}/,
+    'viewer arrows and counter should stay as a right-edge vertical stack with the counter below the arrows',
+  );
+  assert.match(
+    editorSource,
+    /item\.type === 'video' \|\| Boolean\(item\.poster\)/,
+    'image items with an existing poster should keep the poster editor visible until cleared',
+  );
+  assert.match(editorSource, /Clear poster/);
+  assert.match(editorSource, /clearUgcPortfolioPoster\(item\.id\)/);
+  assert.match(storeSource, /clearUgcPortfolioPoster\s*\(/);
+});

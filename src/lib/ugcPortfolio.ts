@@ -122,18 +122,34 @@ export function validateUgcPortfolioItem(item: UgcPortfolioItem) {
   return errors;
 }
 
-export async function playFocusedVideoPlayback(video: HTMLVideoElement | null | undefined) {
-  if (!video) return false;
+export function playFocusedVideoPlayback(
+  video: HTMLVideoElement | null | undefined,
+  onPlaybackChange?: (isPlaying: boolean) => void,
+) {
+  const resolvePlayback = (isPlaying: boolean) => {
+    onPlaybackChange?.(isPlaying);
+    return isPlaying;
+  };
+
+  if (!video) {
+    return Promise.resolve(resolvePlayback(false));
+  }
 
   video.currentTime = 0;
   video.loop = true;
   video.muted = false;
 
   try {
-    await video.play();
-    return true;
+    const playback = video.play();
+    if (playback instanceof Promise) {
+      return playback
+        .then(() => resolvePlayback(true))
+        .catch(() => resolvePlayback(false));
+    }
+
+    return Promise.resolve(resolvePlayback(!video.paused));
   } catch {
-    return false;
+    return Promise.resolve(resolvePlayback(false));
   }
 }
 

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { useAdminStore } from './admin/useAdminStore';
 import { localize, type Locale, type UgcCategory, type UgcPortfolioItem } from '../lib/siteData.ts';
 import {
@@ -55,6 +56,7 @@ export default function UgcContactSheet({
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const focusedVideoRef = useRef<HTMLVideoElement | null>(null);
   const restoreFocusRef = useRef<HTMLElement | null>(null);
+  const gesturePlaybackItemRef = useRef<string | null>(null);
 
   const visibleItems = useMemo(
     () => filterUgcPortfolio(items, filter),
@@ -150,27 +152,18 @@ export default function UgcContactSheet({
     const video = focusedVideoRef.current;
     if (!video) return;
 
-    let cancelled = false;
+    const shouldStartFromEffect = gesturePlaybackItemRef.current !== activeItem.id;
+    gesturePlaybackItemRef.current = null;
 
-    playFocusedVideoPlayback(video).then((didPlay) => {
-      if (!cancelled) {
-        setFocusedVideoPlaying(didPlay);
-      }
-    });
+    if (shouldStartFromEffect) {
+      void playFocusedVideoPlayback(video, setFocusedVideoPlaying);
+    }
 
     return () => {
-      cancelled = true;
       resetFocusedVideoPlayback(video);
       setFocusedVideoPlaying(false);
     };
   }, [activeItem]);
-
-  const openItem = (item: UgcPortfolioItem, visibility: UgcTileVisibility, trigger?: HTMLElement | null) => {
-    if (!canOpenUgcItem({ visibility })) return;
-    restoreFocusRef.current = trigger ?? null;
-    setNavigationDirection(1);
-    setActiveId(item.id);
-  };
 
   const closeDialog = () => {
     resetFocusedVideoPlayback(focusedVideoRef.current);
@@ -282,13 +275,33 @@ export default function UgcContactSheet({
                 tabIndex={isVisible ? 0 : -1}
                 onClick={(event) => {
                   if (!canOpenUgcItem({ visibility })) return;
-                  openItem(item, visibility, event.currentTarget);
+
+                  flushSync(() => {
+                    restoreFocusRef.current = event.currentTarget;
+                    setNavigationDirection(1);
+                    setActiveId(item.id);
+                  });
+
+                  if (item.type === 'video') {
+                    gesturePlaybackItemRef.current = item.id;
+                    void playFocusedVideoPlayback(focusedVideoRef.current, setFocusedVideoPlaying);
+                  }
                 }}
                 onKeyDown={(event) => {
                   if (!canOpenUgcItem({ visibility })) return;
                   if (!['Enter', ' ', 'Space', 'Spacebar', 'NumpadEnter'].includes(event.key)) return;
                   event.preventDefault();
-                  openItem(item, visibility, event.currentTarget as HTMLButtonElement);
+
+                  flushSync(() => {
+                    restoreFocusRef.current = event.currentTarget as HTMLButtonElement;
+                    setNavigationDirection(1);
+                    setActiveId(item.id);
+                  });
+
+                  if (item.type === 'video') {
+                    gesturePlaybackItemRef.current = item.id;
+                    void playFocusedVideoPlayback(focusedVideoRef.current, setFocusedVideoPlaying);
+                  }
                 }}
                 onPointerEnter={() => handlePreviewEnter(item, visibility)}
                 onPointerLeave={() => handlePreviewLeave(item)}
@@ -350,8 +363,18 @@ export default function UgcContactSheet({
               aria-label={localize(activeItem.title, lang)}
               className="flex min-h-full items-center justify-center p-4 md:p-8"
             >
-              <div className="grid w-full max-w-7xl gap-6 text-paper lg:grid-cols-[minmax(0,19rem)_minmax(0,24rem)_auto] lg:items-center">
-                <div className="order-1 space-y-4 lg:order-1">
+              <div className="relative w-full max-w-7xl pr-20 text-paper md:pr-24">
+                <button
+                  ref={closeButtonRef}
+                  type="button"
+                  onClick={closeDialog}
+                  className="absolute right-4 top-4 z-10 inline-flex items-center justify-center border border-paper/16 bg-paper px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink transition hover:border-amaranth hover:text-amaranth md:right-6 md:top-6"
+                >
+                  {copy.close}
+                </button>
+
+                <div className="grid gap-6 lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)] lg:items-center">
+                  <div className="order-1 space-y-4 lg:order-1">
                   <p className="text-xs font-semibold uppercase tracking-[0.32em] text-amaranth">
                     {categoryLabel(activeItem.category)} · {localize(activeItem.format, lang)}
                   </p>
@@ -369,78 +392,62 @@ export default function UgcContactSheet({
                       <dd className="text-paper">{activeVisibleIndex + 1} / {visibleItems.length}</dd>
                     </div>
                   </dl>
-                </div>
-
-                <div className="order-2 flex justify-center lg:order-2">
-                  <AnimatePresence mode="wait" initial={false}>
-                    <motion.div
-                      key={activeItem.id}
-                      initial={{ opacity: 0, y: navigationDirection > 0 ? 24 : -24, scale: 0.96 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: navigationDirection > 0 ? -24 : 24, scale: 0.96 }}
-                      transition={{ duration: 0.24, ease: 'easeOut' }}
-                      className="aspect-[9/16] w-full max-w-sm overflow-hidden bg-paper"
-                    >
-                      {activeItem.type === 'video' ? (
-                        <video
-                          ref={focusedVideoRef}
-                          src={activeItem.src}
-                          poster={activeItem.poster ?? undefined}
-                          loop
-                          playsInline
-                          preload="metadata"
-                          tabIndex={0}
-                          onClick={handleDialogVideoClick}
-                          className="h-full w-full cursor-pointer object-cover"
-                        />
-                      ) : (
-                        <img
-                          src={activeItem.src}
-                          alt={localize(activeItem.alt, lang)}
-                          className="h-full w-full object-cover"
-                        />
-                      )}
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
-
-                <div className="order-3 flex items-center justify-between gap-3 lg:order-3 lg:flex-col lg:justify-center">
-                  <button
-                    ref={closeButtonRef}
-                    type="button"
-                    onClick={closeDialog}
-                    className="inline-flex items-center justify-center border border-paper/16 bg-paper px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink transition hover:border-amaranth hover:text-amaranth"
-                  >
-                    {copy.close}
-                  </button>
-                  <div className="flex items-center gap-3 lg:flex-col">
-                    <button
-                      type="button"
-                      onClick={() => navigate('previous')}
-                      className="inline-flex h-12 w-12 items-center justify-center border border-paper/16 text-paper transition hover:border-amaranth hover:text-amaranth"
-                      aria-label={copy.previous}
-                    >
-                      ↑
-                    </button>
-                    <span className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-paper/70">
-                      {activeVisibleIndex + 1} / {visibleItems.length}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => navigate('next')}
-                      className="inline-flex h-12 w-12 items-center justify-center border border-paper/16 text-paper transition hover:border-amaranth hover:text-amaranth"
-                      aria-label={copy.next}
-                    >
-                      ↓
-                    </button>
                   </div>
-                  {activeItem.type === 'video' ? (
-                    <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-paper/70">
-                      {focusedVideoPlaying ? localize(activeItem.format, lang) : localize(activeItem.format, lang)}
-                    </p>
-                  ) : (
-                    <span className="block h-4" aria-hidden="true" />
-                  )}
+
+                  <div className="order-2 flex justify-center lg:order-2">
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.div
+                        key={activeItem.id}
+                        initial={{ opacity: 0, y: navigationDirection > 0 ? 24 : -24, scale: 0.96 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: navigationDirection > 0 ? -24 : 24, scale: 0.96 }}
+                        transition={{ duration: 0.24, ease: 'easeOut' }}
+                        className="aspect-[9/16] w-full max-w-sm overflow-hidden bg-paper"
+                      >
+                        {activeItem.type === 'video' ? (
+                          <video
+                            ref={focusedVideoRef}
+                            src={activeItem.src}
+                            poster={activeItem.poster ?? undefined}
+                            loop
+                            playsInline
+                            preload="metadata"
+                            tabIndex={0}
+                            onClick={handleDialogVideoClick}
+                            className="h-full w-full cursor-pointer object-cover"
+                          />
+                        ) : (
+                          <img
+                            src={activeItem.src}
+                            alt={localize(activeItem.alt, lang)}
+                            className="h-full w-full object-cover"
+                          />
+                        )}
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+                </div>
+
+                <div className="absolute right-4 top-1/2 flex -translate-y-1/2 flex-col items-center gap-3 md:right-6">
+                  <button
+                    type="button"
+                    onClick={() => navigate('previous')}
+                    className="inline-flex h-12 w-12 items-center justify-center border border-paper/16 text-paper transition hover:border-amaranth hover:text-amaranth"
+                    aria-label={copy.previous}
+                  >
+                    ↑
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => navigate('next')}
+                    className="inline-flex h-12 w-12 items-center justify-center border border-paper/16 text-paper transition hover:border-amaranth hover:text-amaranth"
+                    aria-label={copy.next}
+                  >
+                    ↓
+                  </button>
+                  <span className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-paper/70">
+                    {activeVisibleIndex + 1} / {visibleItems.length}
+                  </span>
                 </div>
               </div>
             </div>

@@ -232,18 +232,18 @@ function getUgcPendingKey(itemId: string, field: 'src' | 'poster') {
   return `ugc.${itemId}.${field}`;
 }
 
+function buildUgcUploadPath(itemId: string, field: 'src' | 'poster', file: File) {
+  const extension = file.name.split('.').pop()?.toLowerCase() || (field === 'poster' ? 'jpg' : 'webp');
+  const safeId = itemId.replace(/[^a-z0-9-]+/gi, '-').replace(/^-+|-+$/g, '').toLowerCase() || 'ugc-item';
+  return `/images/ugc/${safeId}${field === 'poster' ? '-poster' : ''}.${extension}`;
+}
+
 function normalizeUploadPath(uploadPath: string) {
   if (uploadPath.startsWith('public/')) {
     return {
       path: uploadPath,
       sitePath: `/${uploadPath.replace(/^public\//, '')}`,
     };
-  }
-
-  function buildUgcUploadPath(itemId: string, field: 'src' | 'poster', file: File) {
-    const extension = file.name.split('.').pop()?.toLowerCase() || (field === 'poster' ? 'jpg' : 'webp');
-    const safeId = itemId.replace(/[^a-z0-9-]+/gi, '-').replace(/^-+|-+$/g, '').toLowerCase() || 'ugc-item';
-    return `/images/ugc/${safeId}${field === 'poster' ? '-poster' : ''}.${extension}`;
   }
 
   if (uploadPath.startsWith('/')) {
@@ -670,6 +670,17 @@ export class AdminStore {
     }
 
     await this.setPendingUgcAsset(item, 'poster', file, buildUgcUploadPath(item.id, 'poster', file));
+  }
+
+  clearUgcPortfolioPoster(itemId: string): void {
+    const item = this.getMutableUgcPortfolio().find((candidate) => candidate.id === itemId);
+    if (!item) return;
+
+    delete this.pendingImages[getUgcPendingKey(item.id, 'poster')];
+    item.poster = null;
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
   }
 
   async setImage(key: string, file: File, uploadPath: string): Promise<void> {

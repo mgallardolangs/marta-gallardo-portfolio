@@ -89,19 +89,28 @@ export default function EditableUgcPortfolio() {
                         <p>The slot stays in place even when the public filter hides it.</p>
                       </div>
 
-                      {item.type === 'video' ? (
-                        <EditableMedia
-                          src={item.poster ?? ''}
-                          mediaType="image"
-                          acceptKind="image"
-                          alt={`${item.alt.es} poster`}
-                          label="🖼 Change poster"
-                          emptyLabel="Poster required"
-                          className="aspect-[4/5] border border-ink/10 bg-paper"
-                          onSelect={async (file) => {
-                            await store.setUgcPortfolioPoster(item.id, file);
-                          }}
-                        />
+                      {item.type === 'video' || Boolean(item.poster) ? (
+                        <div className="space-y-3">
+                          <EditableMedia
+                            src={item.poster ?? ''}
+                            mediaType="image"
+                            acceptKind="image"
+                            alt={`${item.alt.es} poster`}
+                            label="🖼 Change poster"
+                            emptyLabel={item.type === 'video' ? 'Poster required' : 'Poster can be cleared or replaced'}
+                            className="aspect-[4/5] border border-ink/10 bg-paper"
+                            onSelect={async (file) => {
+                              await store.setUgcPortfolioPoster(item.id, file);
+                            }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => store.clearUgcPortfolioPoster(item.id)}
+                            className="inline-flex items-center justify-center border border-ink/12 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink transition hover:border-amaranth hover:text-amaranth"
+                          >
+                            Clear poster
+                          </button>
+                        </div>
                       ) : (
                         <div className="rounded-sm border border-dashed border-ink/10 bg-paper px-4 py-3 text-sm leading-6 text-ink/52">
                           Poster upload appears only when the slot type is video.
