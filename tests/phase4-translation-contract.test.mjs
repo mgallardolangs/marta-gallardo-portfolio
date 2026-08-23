@@ -65,10 +65,31 @@ test('all locale files expose the approved Phase 4 translation page chrome and t
     assert.equal(dictionary.translationPage.hero.title, expectedHeroTitles[locale]);
     assert.equal(typeof dictionary.translationPage.hero.ctaPrimary, 'string');
     assert.equal(typeof dictionary.translationPage.hero.ctaSecondary, 'string');
+    assert.equal(typeof dictionary.translationPage.heroMark, 'string');
+    assert.notEqual(dictionary.translationPage.heroMark.trim(), '', `${locale} should expose a localized hero mark`);
+    assert.equal(typeof dictionary.translationPage.servicesEyebrow, 'string');
+    assert.notEqual(dictionary.translationPage.servicesEyebrow.trim(), '', `${locale} should expose a localized services eyebrow`);
+    assert.equal(typeof dictionary.translationPage.arsenalEyebrow, 'string');
+    assert.notEqual(dictionary.translationPage.arsenalEyebrow.trim(), '', `${locale} should expose a localized arsenal eyebrow`);
+    assert.equal(typeof dictionary.translationPage.experienceSectionTitle, 'string');
+    assert.notEqual(dictionary.translationPage.experienceSectionTitle.trim(), '', `${locale} should expose a localized experience section title`);
+    assert.equal(typeof dictionary.translationPage.experienceEyebrow, 'string');
+    assert.notEqual(dictionary.translationPage.experienceEyebrow.trim(), '', `${locale} should expose a localized experience eyebrow`);
+    assert.equal(typeof dictionary.translationPage.methodologyEyebrow, 'string');
+    assert.notEqual(dictionary.translationPage.methodologyEyebrow.trim(), '', `${locale} should expose a localized methodology eyebrow`);
+    assert.equal(typeof dictionary.translationPage.methodologyDisplayTitle, 'string');
+    assert.notEqual(dictionary.translationPage.methodologyDisplayTitle.trim(), '', `${locale} should expose a localized methodology display title`);
+    assert.equal(typeof dictionary.translationPage.whyEyebrow, 'string');
+    assert.notEqual(dictionary.translationPage.whyEyebrow.trim(), '', `${locale} should expose a localized why eyebrow`);
     assert.equal(typeof dictionary.translationPage.arsenal.title, 'string');
     assert.equal(typeof dictionary.translationPage.arsenal.languagesTitle, 'string');
     assert.equal(typeof dictionary.translationPage.arsenal.toolsTitle, 'string');
     assert.equal(typeof dictionary.translationPage.arsenal.skillsTitle, 'string');
+    assert.deepEqual(
+      Object.keys(dictionary.translationPage.skillGroups ?? {}).sort(),
+      ['seo', 'translation'],
+      `${locale} should expose exactly two localized skill-group titles`,
+    );
     assert.deepEqual(
       Object.keys(dictionary.translationPage.browserTabs).sort(),
       ['education', 'experience'],
@@ -76,6 +97,11 @@ test('all locale files expose the approved Phase 4 translation page chrome and t
     );
     assert.equal(typeof dictionary.translationPage.browserTabsAriaLabel, 'string');
     assert.equal(dictionary.translationPage.whyChooseMe.title, expectedWhyChooseMeTitles[locale]);
+    assert.equal(dictionary.translationPage.services.items.length, 3, `${locale} should keep exactly three service entries`);
+    dictionary.translationPage.services.items.forEach((item, index) => {
+      assert.equal(typeof item.headline, 'string', `${locale} service ${index + 1} should expose a headline`);
+      assert.notEqual(item.headline.trim(), '', `${locale} service ${index + 1} headline should not be empty`);
+    });
     assert.equal(dictionary.translationPage.methodology.steps.length, 4, `${locale} should keep four methodology steps`);
   }
 });
@@ -446,6 +472,7 @@ test('translation admin store mutations enforce ES\/EN\/FR inputs, add Spanish f
     level: { es: 'Intermedio', en: 'Intermediate', fr: 'Intermédiaire' },
   });
   const skillIndex = store.addEditableCollectionItem('skills', {
+    group: 'seo',
     label: { es: 'SEO técnico', en: 'Technical SEO', fr: 'SEO technique' },
   });
 
@@ -462,6 +489,8 @@ test('translation admin store mutations enforce ES\/EN\/FR inputs, add Spanish f
   assert.equal(addedTool.label.de, 'Screaming Frog');
   assert.equal(addedTool.label.it, 'Screaming Frog');
   assert.equal(addedTool.label.ca, 'Screaming Frog');
+  const groupedSkill = snapshot.getEditableCollection('skills')[0];
+  assert.equal(groupedSkill.group, 'seo', 'new skills should persist their translation|seo group');
 
   const fetchCalls = [];
   const originalFetch = globalThis.fetch;
