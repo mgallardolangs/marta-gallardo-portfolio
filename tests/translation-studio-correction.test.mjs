@@ -114,6 +114,15 @@ const expectedSkillGroups = {
   },
 };
 
+const expectedProfileLabels = {
+  es: 'Perfil de traducción',
+  en: 'Translation profile',
+  fr: 'Profil de traduction',
+  de: 'Übersetzungsprofil',
+  it: 'Profilo di traduzione',
+  ca: 'Perfil de traducció',
+};
+
 function assertNonEmptyString(value, label) {
   assert.equal(typeof value, 'string', `${label} should be a string`);
   assert.notEqual(value.trim(), '', `${label} should not be empty`);
@@ -183,6 +192,11 @@ test('all six locale files add the correction-only translation display keys and 
       Object.keys(page.skillGroups ?? {}).sort(),
       ['seo', 'translation'],
       `${locale} translationPage.skillGroups should expose exactly translation and seo titles`,
+    );
+    assert.equal(
+      page.browserTabs.profileLabel,
+      expectedProfileLabels[locale],
+      `${locale} translationPage.browserTabs.profileLabel should keep the approved chrome copy`,
     );
     assert.equal(
       page.skillGroups.translation,
@@ -340,13 +354,12 @@ test('ServiceSwitcher keeps the 6-second behavior but swaps to open layout and r
   );
 });
 
-test('public arsenal uses the exact flush frame ratio, six language rows, three-column tool cells, and two skill groups', async () => {
+test('public arsenal uses the exact flush frame ratio, six language rows, three-column tool cells, and two skill groups while admin mounts the live preview island', async () => {
   const [source, adminSource] = await Promise.all([
     readSource('src/views/TranslationSeoPage.astro'),
     readSource('src/pages/admin/translation-seo.astro'),
   ]);
   const arsenalSection = extractSectionByDataAttribute(source, 'data-arsenal-section', 'public arsenal section');
-  const adminArsenalSection = extractWindowAround(adminSource, 'arsenalColumns.languages.map', 'admin arsenal preview', 5000);
 
   assert.match(arsenalSection, /page\.arsenalEyebrow/, 'public arsenal should render the new localized eyebrow');
   assert.match(arsenalSection, /lg:grid-cols-\[0\.82fr_0\.88fr_1\.3fr\]/, 'public arsenal should keep the approved column ratio');
@@ -361,10 +374,49 @@ test('public arsenal uses the exact flush frame ratio, six language rows, three-
   assert.match(arsenalSection, /text-sm font-medium text-amaranth/, 'public arsenal language level should sit right in amaranth');
   assert.match(arsenalSection, /group flex aspect-square flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink/, 'public arsenal tools should use dark square tiles with amaranth hover');
   assert.doesNotMatch(arsenalSection, /bg-paper px-3 py-4/, 'public arsenal tools should not reintroduce light paper tiles');
-  assert.match(adminArsenalSection, /flex items-center justify-between gap-4 border-b border-ink\/10 py-3/, 'admin arsenal preview should mirror the compact language row layout');
-  assert.match(adminArsenalSection, /grid grid-cols-3 gap-2/, 'admin arsenal preview should mirror the three-column tool grid with 8px gaps');
-  assert.match(adminArsenalSection, /bg-ink px-3 py-4 text-center text-paper/, 'admin arsenal preview should mirror the dark tool tiles');
-  assert.doesNotMatch(adminArsenalSection, /bg-paper px-3 py-4 text-center/, 'admin arsenal preview should not reintroduce light paper tiles');
+  assert.match(adminSource, /import\s+AdminTranslationArsenalPreview\s+from\s+['"]..\/..\/components\/admin\/AdminTranslationArsenalPreview['"]/, 'admin translation page should import the live arsenal preview island');
+  assert.match(adminSource, /<AdminTranslationArsenalPreview\s+client:load\s*\/>/, 'admin translation page should mount the live arsenal preview island');
+  assert.doesNotMatch(adminSource, /arsenalColumns\.languages\.map/, 'admin translation page should stop using static Astro loops for arsenal languages');
+  assert.doesNotMatch(adminSource, /arsenalColumns\.tools\.map/, 'admin translation page should stop using static Astro loops for arsenal tools');
+  assert.doesNotMatch(adminSource, /arsenalColumns\.skillGroups\.translation/, 'admin translation page should stop using static Astro loops for translation skills');
+});
+
+test('experience browser profile chrome is localized in source and built translation pages without English leaks', async (t) => {
+  const [experienceTabsSource, publicSource, adminSource] = await Promise.all([
+    readSource('src/components/translation/ExperienceTabs.tsx'),
+    readSource('src/views/TranslationSeoPage.astro'),
+    readSource('src/pages/admin/translation-seo.astro'),
+  ]);
+
+  assert.match(experienceTabsSource, /profileLabel:\s*string/, 'ExperienceTabs should require a localized profile label prop');
+  assert.match(experienceTabsSource, /\{profileLabel\}/, 'ExperienceTabs should render the localized profile label prop');
+  assert.doesNotMatch(experienceTabsSource, /Translation profile/, 'ExperienceTabs should not hardcode the English profile label');
+  assert.match(publicSource, /profileLabel=\{page\.browserTabs\.profileLabel\}/, 'public translation page should pass the localized profile label');
+  assert.match(adminSource, /i18nKey="translationPage\.browserTabs\.profileLabel"/, 'admin translation page should expose the editable profile label key in browser chrome');
+
+  if (process.env.CHECK_DIST !== '1') {
+    t.skip('Set CHECK_DIST=1 after npm run build to verify built translation profile labels.');
+    return;
+  }
+
+  for (const locale of locales) {
+    const relativePath = locale === 'es' ? 'dist/translation-seo/index.html' : `dist/${locale}/translation-seo/index.html`;
+    const html = await readBuiltHtml(relativePath);
+
+    assert.match(
+      html,
+      new RegExp(escapeForRegex(expectedProfileLabels[locale])),
+      `${relativePath} should contain the localized profile label`,
+    );
+
+    if (locale !== 'en') {
+      assert.doesNotMatch(
+        html,
+        /Translation profile/,
+        `${relativePath} should not leak the English profile label`,
+      );
+    }
+  }
 });
 
 test('tool logos rendered on ink arsenal tiles keep sufficient default contrast', async () => {

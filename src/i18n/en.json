@@ -310,7 +310,8 @@
     },
     "browserTabs": {
       "education": "Education",
-      "experience": "Experience"
+      "experience": "Experience",
+      "profileLabel": "Translation profile"
     },
     "browserTabsAriaLabel": "Education and experience tabs",
     "experience": {

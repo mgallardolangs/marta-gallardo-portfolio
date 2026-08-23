@@ -62,7 +62,8 @@
     },
     "browserTabs": {
       "education": "Formación",
-      "experience": "Experiencia"
+      "experience": "Experiencia",
+      "profileLabel": "Perfil de traducción"
     },
     "browserTabsAriaLabel": "Pestañas de formación y experiencia",
     "experience": {

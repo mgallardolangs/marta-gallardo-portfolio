@@ -14,6 +14,7 @@ type ExperienceCard = {
 
 interface Props {
   tabListAriaLabel: string;
+  profileLabel: string;
   statement: string;
   tabs: {
     education: {
@@ -29,7 +30,7 @@ interface Props {
   };
 }
 
-export default function ExperienceTabs({ tabListAriaLabel, statement, tabs }: Props) {
+export default function ExperienceTabs({ tabListAriaLabel, profileLabel, statement, tabs }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [panelHeight, setPanelHeight] = useState<number | null>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -133,7 +134,7 @@ export default function ExperienceTabs({ tabListAriaLabel, statement, tabs }: Pr
               })}
             </div>
           </div>
-          <span className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-paper/42">Translation profile</span>
+          <span className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-paper/42">{profileLabel}</span>
         </div>
       </div>
 

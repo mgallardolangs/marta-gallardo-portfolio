@@ -310,7 +310,8 @@
     },
     "browserTabs": {
       "education": "Ausbildung",
-      "experience": "Erfahrung"
+      "experience": "Erfahrung",
+      "profileLabel": "Übersetzungsprofil"
     },
     "browserTabsAriaLabel": "Tabs für Ausbildung und Erfahrung",
     "experience": {

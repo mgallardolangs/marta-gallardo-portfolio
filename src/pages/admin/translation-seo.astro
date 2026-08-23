@@ -2,14 +2,12 @@
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import EditableText from '../../components/admin/EditableText';
 import EditableCollection from '../../components/admin/EditableCollection';
+import AdminTranslationArsenalPreview from '../../components/admin/AdminTranslationArsenalPreview';
 import { getLangFromUrl, t } from '../../i18n';
-import { siteData as imagesData } from '../../lib/siteData';
-import { getTranslationArsenalColumns } from '../../lib/translationPage.js';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
 const page = i.translationPage;
-const arsenalColumns = getTranslationArsenalColumns(lang, imagesData);
 ---
 
 <AdminLayout title={`Admin — ${i.nav.translationSeo}`} description={page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' ').trim()}>
@@ -87,60 +85,7 @@ const arsenalColumns = getTranslationArsenalColumns(lang, imagesData);
           />
         </div>
 
-        <div class="border border-ink">
-          <div class="grid gap-0 lg:grid-cols-[0.82fr_0.88fr_1.3fr]">
-            <article class="border-b border-ink p-5 lg:border-b-0 lg:border-r">
-              <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.languagesTitle}</p>
-              <span class="mt-4 block h-px bg-ink/12"></span>
-              <div class="mt-5">
-                {arsenalColumns.languages.map((language) => (
-                  <div class="flex items-center justify-between gap-4 border-b border-ink/10 py-3 last:border-b-0">
-                    <p class="font-heading text-2xl text-ink">{language.label}</p>
-                    <p class="text-sm font-medium text-amaranth">{language.level}</p>
-                  </div>
-                ))}
-              </div>
-            </article>
-
-            <article class="border-b border-ink p-5 lg:border-b-0 lg:border-r">
-              <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.toolsTitle}</p>
-              <span class="mt-4 block h-px bg-ink/12"></span>
-              <div class="mt-5 grid grid-cols-3 gap-2">
-                {arsenalColumns.tools.map((tool) => (
-                  <div class="group flex aspect-square flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink">
-                    <div class="flex h-10 w-10 items-center justify-center">
-                      <img src={tool.logoSrc} alt={tool.label} class="h-6 max-h-[24px] w-6 max-w-[24px] object-contain" />
-                    </div>
-                    <p class="text-[0.68rem] font-medium uppercase tracking-[0.12em] text-paper transition group-hover:text-ink">{tool.label}</p>
-                  </div>
-                ))}
-              </div>
-            </article>
-
-            <article class="p-5">
-              <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.skillsTitle}</p>
-              <span class="mt-4 block h-px bg-ink/12"></span>
-              <div class="mt-5 grid gap-6 md:grid-cols-2">
-                <div class="space-y-3">
-                  <EditableText client:load i18nKey="translationPage.skillGroups.translation" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-muted" />
-                  <div class="flex flex-col gap-2">
-                    {arsenalColumns.skillGroups.translation.map((skill) => (
-                      <span class="border border-ink/12 px-3 py-2 text-[0.68rem] uppercase tracking-[0.08em] text-ink">{skill.label}</span>
-                    ))}
-                  </div>
-                </div>
-                <div class="space-y-3">
-                  <EditableText client:load i18nKey="translationPage.skillGroups.seo" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-muted" />
-                  <div class="flex flex-col gap-2">
-                    {arsenalColumns.skillGroups.seo.map((skill) => (
-                      <span class="border border-ink/12 px-3 py-2 text-[0.68rem] uppercase tracking-[0.08em] text-ink">{skill.label}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
+        <AdminTranslationArsenalPreview client:load />
       </div>
     </section>
 
@@ -153,12 +98,15 @@ const arsenalColumns = getTranslationArsenalColumns(lang, imagesData);
 
         <section class="border border-ink bg-ink text-paper" data-admin-experience-browser>
           <div class="border-b border-paper/16 bg-paper/8 px-4 pt-4 md:px-6">
-            <div class="flex flex-wrap items-start gap-3">
-              <span class="h-2 w-2 rounded-full bg-amaranth" aria-hidden="true"></span>
-              <div class="flex flex-wrap items-end gap-2">
-                <button type="button" class="rounded-t-[7px] border border-b-0 border-paper bg-paper px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink transition" data-admin-experience-trigger="education"> {page.browserTabs.education} </button>
-                <button type="button" class="rounded-t-[7px] border border-b-0 border-paper/18 bg-paper/14 px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-paper/62 transition hover:bg-paper/18 hover:text-paper focus-visible:bg-paper/18 focus-visible:text-paper" data-admin-experience-trigger="experience"> {page.browserTabs.experience} </button>
+            <div class="flex flex-wrap items-start justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <span class="h-2 w-2 rounded-full bg-amaranth" aria-hidden="true"></span>
+                <div class="flex flex-wrap items-end gap-2">
+                  <button type="button" class="rounded-t-[7px] border border-b-0 border-paper bg-paper px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink transition" data-admin-experience-trigger="education"> {page.browserTabs.education} </button>
+                  <button type="button" class="rounded-t-[7px] border border-b-0 border-paper/18 bg-paper/14 px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-paper/62 transition hover:bg-paper/18 hover:text-paper focus-visible:bg-paper/18 focus-visible:text-paper" data-admin-experience-trigger="experience"> {page.browserTabs.experience} </button>
+                </div>
               </div>
+              <EditableText client:load i18nKey="translationPage.browserTabs.profileLabel" as="span" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-paper/42" />
             </div>
           </div>
 

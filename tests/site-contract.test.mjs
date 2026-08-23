@@ -339,6 +339,7 @@ test('code-managed DE/IT/CA translation page chrome no longer reuses obvious Eng
     'translationPage.arsenal.skillsTitle',
     'translationPage.browserTabs.education',
     'translationPage.browserTabs.experience',
+    'translationPage.browserTabs.profileLabel',
     'translationPage.experience.intro',
     'translationPage.education.intro',
     'translationPage.methodology.title',
@@ -465,8 +466,10 @@ test('translation page tool tiles preserve intentionally blank editable labels i
 test('admin translation SEO page uses stable site-data collections for arsenal content', async () => {
   const source = await readFile(path.join(rootDir, 'src/pages/admin/translation-seo.astro'), 'utf8');
 
-  assert.match(source, /import\s+\{\s*getTranslationArsenalColumns\s*\}\s+from\s+['"]..\/..\/lib\/translationPage\.js['"]/);
-  assert.match(source, /const arsenalColumns = getTranslationArsenalColumns\(lang, imagesData\);/);
+  assert.match(source, /import\s+AdminTranslationArsenalPreview\s+from\s+['"]..\/..\/components\/admin\/AdminTranslationArsenalPreview['"]/);
+  assert.match(source, /<AdminTranslationArsenalPreview\s+client:load\s*\/>/);
+  assert.doesNotMatch(source, /getTranslationArsenalColumns\(lang,\s*imagesData\)/);
+  assert.doesNotMatch(source, /arsenalColumns\.languages\.map/);
   assert.doesNotMatch(source, /translationPage\.skills\.tools\.items/);
 });
 

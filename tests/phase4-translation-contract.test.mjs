@@ -92,8 +92,8 @@ test('all locale files expose the approved Phase 4 translation page chrome and t
     );
     assert.deepEqual(
       Object.keys(dictionary.translationPage.browserTabs).sort(),
-      ['education', 'experience'],
-      `${locale} browser tabs should expose exactly education and experience labels`,
+      ['education', 'experience', 'profileLabel'],
+      `${locale} browser tabs should expose exactly education, experience, and profile labels`,
     );
     assert.equal(typeof dictionary.translationPage.browserTabsAriaLabel, 'string');
     assert.equal(dictionary.translationPage.whyChooseMe.title, expectedWhyChooseMeTitles[locale]);

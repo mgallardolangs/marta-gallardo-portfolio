@@ -310,7 +310,8 @@
     },
     "browserTabs": {
       "education": "Formació",
-      "experience": "Experiència"
+      "experience": "Experiència",
+      "profileLabel": "Perfil de traducció"
     },
     "browserTabsAriaLabel": "Pestanyes de formació i experiència",
     "experience": {

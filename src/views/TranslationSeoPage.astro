@@ -161,6 +161,7 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
         <ExperienceTabs
           client:load
           tabListAriaLabel={page.browserTabsAriaLabel}
+          profileLabel={page.browserTabs.profileLabel}
           statement={page.experienceStatement ?? page.experienceSectionTitle}
           tabs={{
             education: {
