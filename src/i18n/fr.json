@@ -55,7 +55,17 @@
     "title": "Blog",
     "readMore": "Lire la suite",
     "backToList": "Retour au blog",
-    "emptyState": "Aucun article pour le moment. Bientôt plus."
+    "emptyState": "Aucun article pour le moment. Bientôt plus.",
+    "eyebrow": "NOTES · PROCESSUS · IDÉES",
+    "subtitle": "UNE ARCHIVE D’IDÉES AUTOUR DU CONTENU, DES LANGUES, DE LA CRÉATIVITÉ ET DE LA STRATÉGIE.",
+    "latestStory": "Dernière histoire",
+    "archive": "Archive",
+    "comingSoonTitle": "D’AUTRES HISTOIRES TRÈS BIENTÔT",
+    "comingSoonMeta": "ARCHIVE EN CONSTRUCTION",
+    "contentIndex": "Sommaire",
+    "readTime": "de lecture",
+    "nextStory": "Histoire suivante",
+    "end": "Fin de l’article"
   },
   "contact": {
     "title": "Collaborez avec moi",

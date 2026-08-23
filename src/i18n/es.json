@@ -283,7 +283,17 @@
     "title": "Blog",
     "readMore": "Leer más",
     "backToList": "Volver al blog",
-    "emptyState": "Todavía no hay posts. Muy pronto más."
+    "emptyState": "Todavía no hay posts. Muy pronto más.",
+    "eyebrow": "NOTAS · PROCESOS · IDEAS",
+    "subtitle": "UN ARCHIVO DE IDEAS SOBRE CONTENIDO, IDIOMAS, CREATIVIDAD Y ESTRATEGIA.",
+    "latestStory": "Última historia",
+    "archive": "Archivo",
+    "comingSoonTitle": "MÁS HISTORIAS MUY PRONTO",
+    "comingSoonMeta": "ARCHIVO EN CRECIMIENTO",
+    "contentIndex": "Índice",
+    "readTime": "de lectura",
+    "nextStory": "Siguiente historia",
+    "end": "Fin del artículo"
   },
   "nav": {
     "home": "Inicio",

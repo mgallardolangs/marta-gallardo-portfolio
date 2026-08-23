@@ -55,7 +55,17 @@
     "title": "Blog",
     "readMore": "Llegir més",
     "backToList": "Tornar al blog",
-    "emptyState": "Encara no hi ha articles. Aviat n’hi haurà més."
+    "emptyState": "Encara no hi ha articles. Aviat n’hi haurà més.",
+    "eyebrow": "NOTES · PROCESSOS · IDEES",
+    "subtitle": "UN ARXIU D’IDEES SOBRE CONTINGUT, LLENGÜES, CREATIVITAT I ESTRATÈGIA.",
+    "latestStory": "Última història",
+    "archive": "Arxiu",
+    "comingSoonTitle": "MÉS HISTÒRIES MOLT AVIAT",
+    "comingSoonMeta": "ARXIU EN CREIXEMENT",
+    "contentIndex": "Índex",
+    "readTime": "de lectura",
+    "nextStory": "Història següent",
+    "end": "Final de l’article"
   },
   "contact": {
     "title": "Col·laborem",

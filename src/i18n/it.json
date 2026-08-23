@@ -55,7 +55,17 @@
     "title": "Blog",
     "readMore": "Leggi di più",
     "backToList": "Torna al blog",
-    "emptyState": "Ancora nessun post. Presto ne arriveranno altri."
+    "emptyState": "Ancora nessun post. Presto ne arriveranno altri.",
+    "eyebrow": "NOTE · PROCESSI · IDEE",
+    "subtitle": "UN ARCHIVIO DI IDEE SU CONTENUTI, LINGUE, CREATIVITÀ E STRATEGIA.",
+    "latestStory": "Ultima storia",
+    "archive": "Archivio",
+    "comingSoonTitle": "ALTRE STORIE MOLTO PRESTO",
+    "comingSoonMeta": "ARCHIVIO IN CRESCITA",
+    "contentIndex": "Indice",
+    "readTime": "di lettura",
+    "nextStory": "Storia successiva",
+    "end": "Fine dell’articolo"
   },
   "contact": {
     "title": "Collaboriamo",

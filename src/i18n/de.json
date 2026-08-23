@@ -55,7 +55,17 @@
     "title": "Blog",
     "readMore": "Weiterlesen",
     "backToList": "Zurück zum Blog",
-    "emptyState": "Noch keine Beiträge. Mehr in Kürze."
+    "emptyState": "Noch keine Beiträge. Mehr in Kürze.",
+    "eyebrow": "NOTIZEN · PROZESSE · IDEEN",
+    "subtitle": "EIN ARCHIV VON IDEEN ÜBER CONTENT, SPRACHEN, KREATIVITÄT UND STRATEGIE.",
+    "latestStory": "Neueste Geschichte",
+    "archive": "Archiv",
+    "comingSoonTitle": "SEHR BALD MEHR GESCHICHTEN",
+    "comingSoonMeta": "WACHSENDES ARCHIV",
+    "contentIndex": "Inhalt",
+    "readTime": "Lesezeit",
+    "nextStory": "Nächste Geschichte",
+    "end": "Ende des Artikels"
   },
   "contact": {
     "title": "Zusammenarbeiten",

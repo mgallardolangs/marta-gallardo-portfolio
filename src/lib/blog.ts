@@ -3,13 +3,46 @@ import type { Lang } from '../i18n';
 type BlogPostLike = {
   id: string;
   data: {
+    date?: Date | string | number;
     lang: Lang;
     translationKey?: string;
   } & Record<string, unknown>;
 };
 
+function getBlogPostTimestamp(post: BlogPostLike): number {
+  const value = post.data.date;
+  if (value instanceof Date) return value.valueOf();
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string') return new Date(value).valueOf();
+  return 0;
+}
+
+export function sortBlogPostsByDateDesc<Post extends BlogPostLike>(posts: readonly Post[]): Post[] {
+  return [...posts].sort((firstPost, secondPost) => getBlogPostTimestamp(secondPost) - getBlogPostTimestamp(firstPost));
+}
+
 export function scopeBlogPostsToLocale<Post extends BlogPostLike>(posts: readonly Post[], lang: Lang): Post[] {
   return posts.filter((post) => post.data.lang === lang);
+}
+
+export function getLatestAndArchive<Post extends BlogPostLike>(posts: readonly Post[], lang?: Lang) {
+  const scopedPosts = lang ? scopeBlogPostsToLocale(posts, lang) : [...posts];
+  const sortedPosts = sortBlogPostsByDateDesc(scopedPosts);
+
+  return {
+    latest: sortedPosts[0] ?? null,
+    archive: sortedPosts.slice(1),
+  };
+}
+
+export function getAdjacentLocalePost<Post extends BlogPostLike>(posts: readonly Post[], currentPost: Post | null | undefined): Post | null {
+  if (!currentPost) return null;
+
+  const sortedLocalePosts = sortBlogPostsByDateDesc(scopeBlogPostsToLocale(posts, currentPost.data.lang));
+  const currentIndex = sortedLocalePosts.findIndex((post) => post.id === currentPost.id);
+  if (currentIndex === -1) return null;
+
+  return sortedLocalePosts[currentIndex + 1] ?? null;
 }
 
 export function getBlogStaticPathsForLocale<Post extends BlogPostLike>(posts: readonly Post[], lang: Lang) {

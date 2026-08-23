@@ -55,7 +55,17 @@
     "title": "Blog",
     "readMore": "Read more",
     "backToList": "Back to blog",
-    "emptyState": "No posts yet. More soon."
+    "emptyState": "No posts yet. More soon.",
+    "eyebrow": "NOTES · PROCESSES · IDEAS",
+    "subtitle": "AN ARCHIVE OF IDEAS ON CONTENT, LANGUAGES, CREATIVITY, AND STRATEGY.",
+    "latestStory": "Latest story",
+    "archive": "Archive",
+    "comingSoonTitle": "MORE STORIES VERY SOON",
+    "comingSoonMeta": "GROWING ARCHIVE",
+    "contentIndex": "Contents",
+    "readTime": "read time",
+    "nextStory": "Next story",
+    "end": "End of article"
   },
   "contact": {
     "title": "Let's collaborate",
