@@ -178,3 +178,43 @@ test('blog image preview helpers create preview state, clean up object URLs, and
   );
   assert.deepEqual(revokedUrls, ['blob:editorial-cover-preview'], 'image-preview cleanup helper should revoke the object URL exactly once');
 });
+
+test('BlogPostForm forwards the selected featuredImage file to createBlogPost and only clears that state after success', async () => {
+  const formSource = await readSource('src/components/admin/BlogPostForm.tsx');
+  const createCallBlock = extractWindowAround(
+    formSource,
+    'const path = await store.createBlogPost({',
+    'BlogPostForm createBlogPost payload block',
+    1400,
+  );
+
+  assert.match(
+    createCallBlock,
+    /featuredImage:\s*(featuredImage(?:State)?(?:\.file)?|imagePreview(?:State)?\.file)/,
+    'BlogPostForm should pass the selected featured-image state/file as featuredImage in the createBlogPost payload',
+  );
+
+  assert.match(
+    createCallBlock,
+    /setSuccessPath\(path\);[\s\S]*?(setFeaturedImage(?:State)?|setImagePreview(?:State)?)\([\s\S]*?clearBlogImagePreviewState/,
+    'BlogPostForm should clear the selected featured-image state only after createBlogPost succeeds',
+  );
+
+  const catchIndex = formSource.indexOf('} catch');
+  assert.notEqual(catchIndex, -1, 'BlogPostForm submit flow should keep an explicit catch block for failed blog creation');
+  const finallyIndex = formSource.indexOf('} finally');
+  assert.notEqual(finallyIndex, -1, 'BlogPostForm submit flow should keep an explicit finally block for submission cleanup');
+  const catchBlock = formSource.slice(catchIndex, finallyIndex);
+  const finallyBlock = formSource.slice(finallyIndex);
+
+  assert.doesNotMatch(
+    catchBlock,
+    /clearBlogImagePreviewState|setFeaturedImage(?:State)?\(|setImagePreview(?:State)?\(/,
+    'BlogPostForm should preserve the selected featured-image state when createBlogPost fails',
+  );
+  assert.doesNotMatch(
+    finallyBlock,
+    /clearBlogImagePreviewState|setFeaturedImage(?:State)?\(|setImagePreview(?:State)?\(/,
+    'BlogPostForm should not clear featured-image state from the finally block before success is known',
+  );
+});
