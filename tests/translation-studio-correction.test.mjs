@@ -31,6 +31,16 @@ function extractSectionByDataAttribute(source, attribute, label) {
   return match[0];
 }
 
+function extractBetween(source, startNeedle, endNeedle, label) {
+  const startIndex = source.indexOf(startNeedle);
+  assert.notEqual(startIndex, -1, `${label} should include start marker ${startNeedle}`);
+
+  const endIndex = source.indexOf(endNeedle, startIndex + startNeedle.length);
+  assert.notEqual(endIndex, -1, `${label} should include end marker ${endNeedle}`);
+
+  return source.slice(startIndex, endIndex + endNeedle.length);
+}
+
 function extractWindowAround(source, needle, label, radius = 1400) {
   const index = source.indexOf(needle);
   assert.notEqual(index, -1, `${label} should include ${needle}`);
@@ -187,7 +197,59 @@ test('admin skill creation contracts require group-aware data and grouped editor
     /<select[\s\S]*translation[\s\S]*seo/s,
     'skill editing UI should expose a translation-vs-seo group selector',
   );
-  assert.match(editorSource, /border-dashed/, 'tool adding UI should reserve a same-size dashed tile inside the tool grid');
+});
+
+test('language editor keeps its add marker inside the collection grid after authored items', async () => {
+  const editorSource = await readSource('src/components/admin/EditableCollection.tsx');
+  const collectionGrid = extractBetween(
+    editorSource,
+    '<div className={`grid gap-5',
+    '    </section>',
+    'editable collection item grid',
+  );
+
+  assert.match(
+    collectionGrid,
+    /items\.map\(\(item, index\) => \([\s\S]*kind === 'languages'[\s\S]*data-collection-add="languages"/s,
+    'language editor should render data-collection-add="languages" after the mapped language items within the language collection grid',
+  );
+});
+
+test('tool editor reserves a dashed add tile inside the same tool grid as existing logos', async () => {
+  const editorSource = await readSource('src/components/admin/EditableCollection.tsx');
+  const collectionGrid = extractBetween(
+    editorSource,
+    '<div className={`grid gap-5',
+    '    </section>',
+    'editable collection item grid',
+  );
+
+  assert.match(
+    collectionGrid,
+    /items\.map\(\(item, index\) => \([\s\S]*kind === 'tools'[\s\S]*border-dashed[\s\S]*aspect-\[3\/2\]/s,
+    'tool editor should render a dashed same-size add tile inside the tool collection grid',
+  );
+});
+
+test('skill editor splits translation and seo into separate contained groups with their own add markers', async () => {
+  const editorSource = await readSource('src/components/admin/EditableCollection.tsx');
+  const collectionGrid = extractBetween(
+    editorSource,
+    '<div className={`grid gap-5',
+    '    </section>',
+    'editable collection item grid',
+  );
+
+  assert.match(
+    collectionGrid,
+    /data-skill-group="translation"[\s\S]*data-collection-add="skills-translation"/s,
+    'translation skill group should contain its own skills-translation add marker',
+  );
+  assert.match(
+    collectionGrid,
+    /data-skill-group="seo"[\s\S]*data-collection-add="skills-seo"/s,
+    'seo skill group should contain its own skills-seo add marker',
+  );
 });
 
 test('experience browser chrome plus methodology and why sections expose the new correction markers', async () => {
