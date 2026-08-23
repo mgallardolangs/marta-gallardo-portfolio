@@ -354,15 +354,17 @@ test('ServiceSwitcher keeps the 6-second behavior but swaps to open layout and r
   );
 });
 
-test('public arsenal uses the exact flush frame ratio, six language rows, three-column tool cells, and two skill groups while admin mounts the live preview island', async () => {
-  const [source, adminSource] = await Promise.all([
+test('public arsenal uses exact equal thirds, square tool cells, and two skill groups while admin mounts the live preview island', async () => {
+  const [source, adminSource, adminPreviewSource] = await Promise.all([
     readSource('src/views/TranslationSeoPage.astro'),
     readSource('src/pages/admin/translation-seo.astro'),
+    readSource('src/components/admin/AdminTranslationArsenalPreview.tsx'),
   ]);
   const arsenalSection = extractSectionByDataAttribute(source, 'data-arsenal-section', 'public arsenal section');
 
   assert.match(arsenalSection, /page\.arsenalEyebrow/, 'public arsenal should render the new localized eyebrow');
-  assert.match(arsenalSection, /lg:grid-cols-\[0\.82fr_0\.88fr_1\.3fr\]/, 'public arsenal should keep the approved column ratio');
+  assert.match(arsenalSection, /lg:grid-cols-3/, 'public arsenal should keep the approved equal-third desktop grid');
+  assert.doesNotMatch(arsenalSection, /lg:grid-cols-\[/, 'public arsenal should not revert to weighted fraction columns');
   assert.doesNotMatch(arsenalSection, /sm:grid-cols-2/, 'public arsenal languages/tools should stop using the old two-column card grids');
   assert.match(arsenalSection, /grid-cols-3 gap-2/, 'public arsenal tools should use the approved three-column equal-cell grid with 8px gaps');
   assert.match(arsenalSection, /page\.skillGroups\.translation/, 'public arsenal should render the translation skill-group title');
@@ -372,13 +374,15 @@ test('public arsenal uses the exact flush frame ratio, six language rows, three-
   assert.doesNotMatch(arsenalSection, /shadow-\[/, 'public arsenal should not revert to separate shadow cards');
   assert.match(arsenalSection, /flex items-center justify-between gap-4 border-b border-ink\/10 py-3/, 'public arsenal languages should render compact flex rows');
   assert.match(arsenalSection, /text-sm font-medium text-amaranth/, 'public arsenal language level should sit right in amaranth');
-  assert.match(arsenalSection, /group flex aspect-square flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink/, 'public arsenal tools should use dark square tiles with amaranth hover');
+  assert.match(arsenalSection, /group flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink/, 'public arsenal tools should use dark square tiles with amaranth hover');
   assert.doesNotMatch(arsenalSection, /bg-paper px-3 py-4/, 'public arsenal tools should not reintroduce light paper tiles');
   assert.match(adminSource, /import\s+AdminTranslationArsenalPreview\s+from\s+['"]..\/..\/components\/admin\/AdminTranslationArsenalPreview['"]/, 'admin translation page should import the live arsenal preview island');
   assert.match(adminSource, /<AdminTranslationArsenalPreview\s+client:load\s*\/>/, 'admin translation page should mount the live arsenal preview island');
   assert.doesNotMatch(adminSource, /arsenalColumns\.languages\.map/, 'admin translation page should stop using static Astro loops for arsenal languages');
   assert.doesNotMatch(adminSource, /arsenalColumns\.tools\.map/, 'admin translation page should stop using static Astro loops for arsenal tools');
   assert.doesNotMatch(adminSource, /arsenalColumns\.skillGroups\.translation/, 'admin translation page should stop using static Astro loops for translation skills');
+  assert.match(adminPreviewSource, /lg:grid-cols-3/, 'admin live preview should mirror the equal-third desktop grid');
+  assert.match(adminPreviewSource, /group flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink/, 'admin live preview should mirror the public square tool tiles');
 });
 
 test('experience browser profile chrome is localized in source and built translation pages without English leaks', async (t) => {
@@ -485,7 +489,7 @@ test('tool editor reserves a dashed add tile inside the same tool grid as existi
 
   assert.match(
     collectionGrid,
-    /items\.map\(\(item, index\) => \([\s\S]*kind === 'tools'[\s\S]*border-dashed[\s\S]*aspect-\[3\/2\]/s,
+    /items\.map\(\(item, index\) => \([\s\S]*kind === 'tools'[\s\S]*border-dashed[\s\S]*aspect-square w-full min-w-0/s,
     'tool editor should render a dashed same-size add tile inside the tool collection grid',
   );
 });

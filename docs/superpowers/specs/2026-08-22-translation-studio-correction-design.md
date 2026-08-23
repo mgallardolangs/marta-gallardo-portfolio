@@ -78,10 +78,11 @@ Do not change Home, UGC, Blog, Contact, shared navbar, shared footer, or their d
 - Amaranth eyebrow: `02 · PERFIL Y HERRAMIENTAS`.
 - Typed `Mi arsenal técnico`.
 - One flush outer ink frame divided into three columns:
-  - Languages: `0.82fr`
-  - Tools: `0.88fr`
-  - Skills: `1.3fr`
+  - Languages: `1fr`
+  - Tools: `1fr`
+  - Skills: `1fr`
 - No card gaps, radius, shadows, or white card backgrounds.
+- Final live refinement: public plus admin live preview use exact `lg:grid-cols-3` equal thirds.
 
 ### Languages
 
@@ -94,6 +95,7 @@ Do not change Home, UGC, Blog, Contact, shared navbar, shared footer, or their d
 
 - Three-column grid with the original roomy equal-cell layout.
 - Small logo/glyph centered inside each ink square.
+- Each public/admin preview tile is `aspect-square w-full min-w-0`; the dashed admin add-tool tile keeps that same square footprint.
 - Existing real logos remain editable.
 - Hover changes the square to amaranth/ink.
 
@@ -157,6 +159,8 @@ Add `group: 'translation' | 'seo'` to every skill record.
 - Four equal desktop steps.
 - Amaranth connector draws left-to-right.
 - Steps enter in sequence.
+- Final live refinement: methodology wrappers stay overflow-visible and the motion source animates only `autoAlpha`/`y`, never `clipPath`, so the 4px badge lift does not clip.
+- Public and admin desktop cards keep equal heights with an exact `md:min-h-[170px]`.
 - Number circles stay ink with paper border and amaranth number.
 - Hover/focus:
   - Number turns amaranth/ink and lifts.

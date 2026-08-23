@@ -165,6 +165,8 @@ The authored grid is fixed at 12 interleaved slots:
 ### Checkpoint 2 — compact arsenal
 - arsenal content renders from shared site-data helpers, not duplicated translation-only arrays
 - skills are stored with `group: 'translation' | 'seo'` and render as two in-column subgroups
+- public and admin live-preview outer grids use exact `lg:grid-cols-3` equal thirds rather than weighted fractions
+- public/admin tool tiles stay `aspect-square w-full min-w-0` with logos constrained to a 24px max footprint, and the dashed admin add-tool tile keeps the same square size
 - admin collection editing keeps the add actions inside their owning column/group:
   - languages add below the authored rows
   - tools add from the dashed in-grid tile
@@ -178,6 +180,8 @@ The authored grid is fixed at 12 interleaved slots:
 ### Checkpoint 4 — methodology
 - methodology keeps the ink section, typed display title, four bordered steps, and connector that draws horizontally on desktop and vertically on mobile
 - `translationPageMotion.ts` reveals the methodology connector first, then staggers the four steps
+- methodology step wrappers stay overflow-visible and animate with only `autoAlpha`/`y` so the 4px hover lift never clips the numbered badge
+- public and admin methodology cards use equal-height desktop steps with `md:min-h-[170px]`
 
 ### Checkpoint 5 — why choose me
 - why cards stay in one flush three-column grid with inline bracket numbers `[ 01 ]`, `[ 02 ]`, `[ 03 ]`

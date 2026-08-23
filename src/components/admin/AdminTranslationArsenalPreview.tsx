@@ -7,7 +7,7 @@ export default function AdminTranslationArsenalPreview() {
 
   return (
     <div className="border border-ink" data-admin-arsenal-preview>
-      <div className="grid gap-0 lg:grid-cols-[0.82fr_0.88fr_1.3fr]">
+      <div className="grid gap-0 lg:grid-cols-3">
         <article className="border-b border-ink p-5 lg:border-b-0 lg:border-r" data-admin-arsenal-panel="languages">
           <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{preview.titles.languages}</p>
           <span className="mt-4 block h-px bg-ink/12"></span>
@@ -28,7 +28,7 @@ export default function AdminTranslationArsenalPreview() {
             {preview.tools.map((tool) => (
               <div
                 key={tool.id}
-                className="group flex aspect-square flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink"
+                className="group flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink"
               >
                 <div className="flex h-10 w-10 items-center justify-center">
                   <img

@@ -31,10 +31,15 @@ function applyReducedMotionState(root: HTMLElement) {
     line.style.transformOrigin = 'left center';
   });
 
-  root.querySelectorAll<HTMLElement>('[data-arsenal-item],[data-methodology-step],[data-why-card]').forEach((item) => {
+  root.querySelectorAll<HTMLElement>('[data-arsenal-item],[data-why-card]').forEach((item) => {
     item.style.opacity = '1';
     item.style.transform = 'none';
     item.style.clipPath = 'inset(0 0 0% 0)';
+  });
+
+  root.querySelectorAll<HTMLElement>('[data-methodology-step]').forEach((step) => {
+    step.style.opacity = '1';
+    step.style.transform = 'none';
   });
 
   root.querySelectorAll<HTMLElement>('[data-methodology-connector]').forEach((connector) => {
@@ -123,7 +128,7 @@ export async function initTranslationPageMotion({
         scaleY: isDesktop ? 1 : 0,
         transformOrigin: isDesktop ? 'left center' : 'center top',
       });
-      gsap.set(methodologySteps, { autoAlpha: 0, y: 26, clipPath: 'inset(0 0 100% 0)' });
+      gsap.set(methodologySteps, { autoAlpha: 0, y: 26 });
 
       gsap.timeline({
         scrollTrigger: {
@@ -141,7 +146,6 @@ export async function initTranslationPageMotion({
         .to(methodologySteps, {
           autoAlpha: 1,
           y: 0,
-          clipPath: 'inset(0 0 0% 0)',
           duration: 0.5,
           stagger: 0.12,
           ease: 'power2.out',

@@ -358,7 +358,7 @@ export default function EditableCollection({ kind, title, description }: Props) 
         {kind === 'tools' && (
           <div
             data-collection-add="tools"
-            className="aspect-[3/2] border border-dashed border-black/20 bg-paper p-5 text-left transition hover:border-amaranth hover:text-amaranth"
+            className="aspect-square w-full min-w-0 border border-dashed border-black/20 bg-paper p-5 text-left transition hover:border-amaranth hover:text-amaranth"
           >
             <span className="block font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink-faint">Add tool</span>
             <span className="mt-3 block font-heading text-2xl text-ink">New logo tile</span>
