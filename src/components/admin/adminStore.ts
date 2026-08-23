@@ -207,13 +207,57 @@ function getSkillInsertIndex(skills: SkillItem[], group: SkillGroup): number {
   return skills.length;
 }
 
-function fileToDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result ?? ''));
-    reader.onerror = () => reject(new Error('Failed to read file'));
-    reader.readAsDataURL(file);
+const BLOG_FEATURED_IMAGE_MAX_BYTES = 2 * 1024 * 1024;
+const BLOG_FEATURED_IMAGE_MIME_TYPES = new Map<string, string>([
+  ['image/jpeg', 'jpeg'],
+  ['image/png', 'png'],
+  ['image/webp', 'webp'],
+  ['image/gif', 'gif'],
+]);
+
+async function fileToDataUrl(file: File): Promise<string> {
+  const mimeType = file.type || 'application/octet-stream';
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  let binary = '';
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
   });
+  return `data:${mimeType};base64,${btoa(binary)}`;
+}
+
+function validateBlogFeaturedImage(featuredImage: File): void {
+  if (!BLOG_FEATURED_IMAGE_MIME_TYPES.has(featuredImage.type)) {
+    throw new Error('Featured image must be a JPEG, PNG, WebP, or GIF file.');
+  }
+
+  if (featuredImage.size > BLOG_FEATURED_IMAGE_MAX_BYTES) {
+    throw new Error(`Featured image must be 2 MB or smaller (${BLOG_FEATURED_IMAGE_MAX_BYTES} bytes max).`);
+  }
+}
+
+function getBlogFeaturedImageExtension(featuredImage: File): string {
+  const filenameExtension = featuredImage.name.split('.').pop()?.toLowerCase() ?? '';
+  if (['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(filenameExtension)) {
+    return filenameExtension;
+  }
+
+  return BLOG_FEATURED_IMAGE_MIME_TYPES.get(featuredImage.type) ?? 'webp';
+}
+
+function getBlogFeaturedImagePaths(slug: string, featuredImage: File) {
+  const safeSlug = slug
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'blog-post';
+  const extension = getBlogFeaturedImageExtension(featuredImage);
+
+  return {
+    repositoryPath: `public/images/blog/${safeSlug}.${extension}`,
+    publicPath: `/images/blog/${safeSlug}.${extension}`,
+  };
 }
 
 function buildMarkdownPost(post: {
@@ -223,10 +267,12 @@ function buildMarkdownPost(post: {
   tags: string[];
   lang: AdminBlogLang;
   body: string;
+  image?: string;
 }): string {
   const quoted = (value: string) => JSON.stringify(value);
   const tags = `[${post.tags.map((tag) => JSON.stringify(tag)).join(', ')}]`;
-  return `---\ntitle: ${quoted(post.title)}\ndescription: ${quoted(post.description)}\ndate: ${quoted(post.date)}\ntags: ${tags}\nlang: ${quoted(post.lang)}\n---\n\n${post.body.trim()}\n`;
+  const imageLine = post.image ? `image: ${quoted(post.image)}\n` : '';
+  return `---\ntitle: ${quoted(post.title)}\ndescription: ${quoted(post.description)}\ndate: ${quoted(post.date)}\n${imageLine}tags: ${tags}\nlang: ${quoted(post.lang)}\n---\n\n${post.body.trim()}\n`;
 }
 
 function getDuplicateBlogPostSlugMessage(slug: string, lang: SupportedLang | AdminBlogLang): string {
@@ -899,6 +945,7 @@ export class AdminStore {
     tags: string[];
     lang: AdminBlogLang;
     body: string;
+    featuredImage?: File | null;
   }): Promise<string> {
     if (!this.token) {
       throw new Error('Login required before creating blog posts.');
@@ -911,13 +958,35 @@ export class AdminStore {
     const slug = post.slug.trim();
     if (!slug) throw new Error('A slug is required.');
 
+    if (post.featuredImage) {
+      validateBlogFeaturedImage(post.featuredImage);
+    }
+
     const path = `src/content/blog/${slug}.md`;
-    const markdown = buildMarkdownPost(post);
     const existingSha = await this.fetchFileSha(path);
     if (existingSha !== null) {
       const errorLang = isAdminBlogLang(this.currentLang) ? this.currentLang : post.lang;
       throw new Error(getDuplicateBlogPostSlugMessage(slug, errorLang));
     }
+
+    let imagePath: string | undefined;
+    if (post.featuredImage) {
+      const { repositoryPath, publicPath } = getBlogFeaturedImagePaths(slug, post.featuredImage);
+      const dataUrl = await fileToDataUrl(post.featuredImage);
+      const base64Content = dataUrl.includes(',') ? dataUrl.split(',')[1] ?? '' : dataUrl;
+      await this.createRepositoryFile(repositoryPath, base64Content, `feat(blog): upload ${slug} image`, null);
+      imagePath = publicPath;
+    }
+
+    const markdown = buildMarkdownPost({
+      title: post.title,
+      description: post.description,
+      date: post.date,
+      tags: post.tags,
+      lang: post.lang,
+      body: post.body,
+      image: imagePath,
+    });
 
     await this.createRepositoryFile(path, utf8ToBase64(markdown), `feat(blog): create ${slug}`, existingSha);
     return path;

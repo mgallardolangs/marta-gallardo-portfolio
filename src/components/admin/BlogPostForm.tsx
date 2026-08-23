@@ -1,15 +1,25 @@
-import { useMemo, useState } from 'react';
-import type { FormEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
+import { parseMarkdownOutline, insertMarkdownHeading } from '../../lib/blogOutline.ts';
+import {
+  applyBlogToolbarAction,
+  clearBlogImagePreviewState,
+  createBlogImagePreviewState,
+  type BlogImagePreviewState,
+  type BlogToolbarAction,
+} from '../../lib/blogPostFormState.ts';
 import { ADMIN_BLOG_LANGS, isAdminBlogLang, type AdminBlogLang } from './adminStore';
 import { useAdminStore } from './useAdminStore';
 
-const inputClass = 'w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-charcoal outline-none transition focus:border-amaranth focus:ring-2 focus:ring-amaranth/20';
-const labelClass = 'mb-2 block text-sm font-medium text-warm-gray';
+const inputClass = 'w-full border border-black/10 bg-paper px-4 py-3 text-sm text-charcoal outline-none transition focus:border-amaranth';
+const labelClass = 'mb-2 block text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-warm-gray';
+const toolbarButtonClass = 'border border-black/10 px-3 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-ink transition hover:border-amaranth hover:text-amaranth';
 const blogLanguageLabels: Record<AdminBlogLang, string> = {
   es: 'Español',
   en: 'English',
   fr: 'Français',
 };
+const emptyFeaturedImageState: BlogImagePreviewState = { file: null, previewUrl: '' };
 
 function slugify(value: string): string {
   return value
@@ -23,17 +33,63 @@ function slugify(value: string): string {
 
 export default function BlogPostForm() {
   const store = useAdminStore();
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [tags, setTags] = useState('');
   const [lang, setLang] = useState<AdminBlogLang>(() => (isAdminBlogLang(store.currentLang) ? store.currentLang : 'es'));
   const [body, setBody] = useState('# Nuevo post\n\nEscribe aquí...');
+  const [featuredImageState, setFeaturedImageState] = useState<BlogImagePreviewState>(emptyFeaturedImageState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [successPath, setSuccessPath] = useState('');
 
   const slug = useMemo(() => slugify(title), [title]);
+  const outline = useMemo(() => parseMarkdownOutline(body), [body]);
+
+  const createPreviewUrl = useCallback((file: File) => URL.createObjectURL(file), []);
+  const revokePreviewUrl = useCallback((url: string) => URL.revokeObjectURL(url), []);
+
+  useEffect(() => () => {
+    clearBlogImagePreviewState(featuredImageState, revokePreviewUrl);
+  }, [featuredImageState, revokePreviewUrl]);
+
+  const handleToolbarAction = useCallback((action: BlogToolbarAction) => {
+    const textarea = bodyRef.current;
+    if (!textarea) return;
+
+    const selection = {
+      start: textarea.selectionStart,
+      end: textarea.selectionEnd,
+    };
+
+    if (action === 'h2' || action === 'h3') {
+      insertMarkdownHeading(body, selection.start, selection.end, action === 'h2' ? 2 : 3);
+    }
+
+    const nextState = applyBlogToolbarAction(body, selection, action);
+    setBody(nextState.markdown);
+
+    requestAnimationFrame(() => {
+      textarea.focus();
+      textarea.setSelectionRange(nextState.selection.start, nextState.selection.end);
+    });
+  }, [body]);
+
+  const handleFeaturedImageChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    const nextFile = event.target.files?.[0] ?? null;
+
+    setFeaturedImageState((currentState) => {
+      const clearedState = clearBlogImagePreviewState(currentState, revokePreviewUrl);
+      if (!nextFile) return clearedState;
+      return createBlogImagePreviewState(nextFile, createPreviewUrl);
+    });
+  }, [createPreviewUrl, revokePreviewUrl]);
+
+  const clearFeaturedImage = useCallback(() => {
+    setFeaturedImageState((currentState) => clearBlogImagePreviewState(currentState, revokePreviewUrl));
+  }, [revokePreviewUrl]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -60,12 +116,14 @@ export default function BlogPostForm() {
         tags: tags.split(',').map((tag) => tag.trim()).filter(Boolean),
         lang,
         body,
+        featuredImage: featuredImageState.file,
       });
       setSuccessPath(path);
       setTitle('');
       setDescription('');
       setTags('');
       setBody('# Nuevo post\n\nEscribe aquí...');
+      setFeaturedImageState((currentState) => clearBlogImagePreviewState(currentState, revokePreviewUrl));
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Could not create the post.');
     } finally {
@@ -74,7 +132,7 @@ export default function BlogPostForm() {
   };
 
   return (
-    <form onSubmit={(event) => void handleSubmit(event)} className="space-y-6 rounded-[2rem] border border-black/10 bg-white p-6 shadow-sm md:p-8">
+    <form onSubmit={(event) => void handleSubmit(event)} className="space-y-6 border border-black/10 bg-paper p-6 md:p-8">
       <div className="grid gap-6 md:grid-cols-2">
         <div className="md:col-span-2">
           <label className={labelClass} htmlFor="blog-title">Title</label>
@@ -117,21 +175,82 @@ export default function BlogPostForm() {
 
         <div className="md:col-span-2">
           <label className={labelClass} htmlFor="blog-slug">Slug</label>
-          <input id="blog-slug" value={slug} readOnly className={`${inputClass} bg-paper text-warm-gray`} />
+          <input id="blog-slug" value={slug} readOnly className={`${inputClass} text-warm-gray`} />
         </div>
 
         <div className="md:col-span-2">
-          <label className={labelClass} htmlFor="blog-body">Markdown body</label>
-          <textarea id="blog-body" value={body} onChange={(event) => setBody(event.target.value)} className={`${inputClass} min-h-[20rem] font-mono text-xs`} />
+          <label className={labelClass} htmlFor="blog-featured-image">Featured image</label>
+          <input id="blog-featured-image" type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={handleFeaturedImageChange} className={inputClass} />
+          <p className="mt-2 text-xs text-warm-gray">JPEG, PNG, WebP, or GIF · max 2 MB · uploaded before the Markdown file.</p>
+        </div>
+
+        {featuredImageState.previewUrl && (
+          <div className="md:col-span-2 border border-black/10 p-4" data-blog-image-preview>
+            <img src={featuredImageState.previewUrl} alt="Featured image preview" className="aspect-[16/10] w-full object-cover" />
+            <div className="mt-3 flex items-center justify-between gap-4 text-xs uppercase tracking-[0.18em] text-warm-gray">
+              <span>{featuredImageState.file?.name}</span>
+              <button type="button" onClick={clearFeaturedImage} className={toolbarButtonClass}>Remove image</button>
+            </div>
+          </div>
+        )}
+
+        <div className="md:col-span-2 space-y-4">
+          <div className="flex flex-wrap gap-2 border-b border-black/10 pb-3">
+            <button type="button" onClick={() => handleToolbarAction('h2')} className={toolbarButtonClass}>H2 Section</button>
+            <button type="button" onClick={() => handleToolbarAction('h3')} className={toolbarButtonClass}>H3 Subsection</button>
+            <button type="button" onClick={() => handleToolbarAction('bold')} className={toolbarButtonClass}>Bold</button>
+            <button type="button" onClick={() => handleToolbarAction('link')} className={toolbarButtonClass}>Link</button>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[1.35fr_0.65fr]">
+            <div>
+              <label className={labelClass} htmlFor="blog-body">Markdown body</label>
+              <textarea
+                id="blog-body"
+                ref={bodyRef}
+                value={body}
+                onChange={(event) => setBody(event.target.value)}
+                className={`${inputClass} min-h-[22rem] font-mono text-xs`}
+              />
+            </div>
+
+            <aside className="border border-black/10 p-4">
+              <p className="font-body text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-accent-ink">Live outline</p>
+              {outline.length > 0 ? (
+                <ol className="mt-4 space-y-3">
+                  {outline.map((section) => (
+                    <li key={section.id} className="space-y-2">
+                      <div className="font-body text-sm text-ink">
+                        <span className="mr-2 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-accent-ink">{section.number}</span>
+                        {section.text}
+                      </div>
+                      {section.children.length > 0 && (
+                        <ol className="space-y-2 pl-4">
+                          {section.children.map((child) => (
+                            <li key={child.id} className="font-body text-sm text-warm-gray">
+                              <span className="mr-2 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-accent-ink">{child.number}</span>
+                              {child.text}
+                            </li>
+                          ))}
+                        </ol>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                <p className="mt-4 text-sm text-warm-gray">Add H2 and H3 headings to build the outline.</p>
+              )}
+            </aside>
+          </div>
         </div>
       </div>
 
-      {error && <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
-      {successPath && <p className="rounded-2xl bg-green-50 px-4 py-3 text-sm text-green-700">Created {successPath}. Publish the site to rebuild the blog.</p>}
+      {error && <p className="border border-amaranth px-4 py-3 text-sm text-amaranth">{error}</p>}
+      {successPath && <p className="border border-black px-4 py-3 text-sm text-ink">Created {successPath}. Publish the site to rebuild the blog.</p>}
 
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col gap-4 border-t border-black/10 pt-4 md:flex-row md:items-center md:justify-between">
         <p className="text-xs text-warm-gray">Posts are committed through Netlify Git Gateway.</p>
-        <button type="submit" disabled={isSubmitting} className="rounded-full bg-amaranth px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50">
+        <button type="submit" disabled={isSubmitting} className="border border-black bg-black px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-paper transition hover:border-amaranth hover:bg-amaranth hover:text-ink disabled:cursor-not-allowed disabled:opacity-50">
           {isSubmitting ? 'Creating...' : 'Create post'}
         </button>
       </div>
