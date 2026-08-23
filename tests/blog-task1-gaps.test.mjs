@@ -200,12 +200,14 @@ test('BlogPostForm forwards the selected featuredImage file to createBlogPost an
     'BlogPostForm should clear the selected featured-image state only after createBlogPost succeeds',
   );
 
-  const catchIndex = formSource.indexOf('} catch');
-  assert.notEqual(catchIndex, -1, 'BlogPostForm submit flow should keep an explicit catch block for failed blog creation');
-  const finallyIndex = formSource.indexOf('} finally');
-  assert.notEqual(finallyIndex, -1, 'BlogPostForm submit flow should keep an explicit finally block for submission cleanup');
-  const catchBlock = formSource.slice(catchIndex, finallyIndex);
-  const finallyBlock = formSource.slice(finallyIndex);
+  const submitFlowMatch = formSource.match(
+    /}\s*catch\s*\([^)]*\)\s*\{([\s\S]*?)\n\s*}\s*finally\s*\{([\s\S]*?)\n\s*}\n\s*};/,
+  );
+  assert.ok(
+    submitFlowMatch,
+    'BlogPostForm submit flow should keep explicit catch/finally blocks for failed blog creation and submission cleanup',
+  );
+  const [, catchBlock, finallyBlock] = submitFlowMatch;
 
   assert.doesNotMatch(
     catchBlock,
