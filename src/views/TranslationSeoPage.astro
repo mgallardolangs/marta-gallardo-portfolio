@@ -41,14 +41,14 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
             <a
               href={getLocalizedPath('/ugc', lang)}
               data-translation-cta="portfolio"
-              class="inline-flex items-center gap-3 border border-amaranth bg-amaranth px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink transition hover:-translate-y-0.5 hover:bg-ink hover:text-paper"
+              class="inline-flex items-center gap-3 border border-amaranth bg-amaranth px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_0_var(--color-ink)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_4px_0_var(--color-ink)] focus-visible:outline-none"
             >
               {page.hero.ctaPrimary}
             </a>
             <a
               href={getLocalizedPath('/contact', lang)}
               data-translation-cta="contact"
-              class="inline-flex items-center gap-3 border border-ink bg-paper px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink transition hover:-translate-y-0.5 hover:border-amaranth hover:text-amaranth"
+              class="inline-flex items-center gap-3 border border-ink bg-paper px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_0_var(--color-ink)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_4px_0_var(--color-ink)] focus-visible:outline-none"
             >
               {page.hero.ctaSecondary}
             </a>
@@ -94,11 +94,11 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
             <article class="border-b border-ink p-5 lg:border-b-0 lg:border-r" data-arsenal-panel="languages">
               <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.languagesTitle}</p>
               <span class="mt-4 block h-px bg-ink/12" data-arsenal-line></span>
-              <div class="mt-5 divide-y divide-ink/10" data-arsenal-items>
+              <div class="mt-5" data-arsenal-items>
                 {arsenalColumns.languages.map((language) => (
-                  <div class="grid gap-1 py-3" data-arsenal-item>
+                  <div class="flex items-center justify-between gap-4 border-b border-ink/10 py-3 last:border-b-0" data-arsenal-item>
                     <p class="font-heading text-2xl text-ink">{language.label}</p>
-                    <p class="text-sm text-ink-muted">{language.level}</p>
+                    <p class="text-sm font-medium text-amaranth">{language.level}</p>
                   </div>
                 ))}
               </div>
@@ -107,13 +107,13 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
             <article class="border-b border-ink p-5 lg:border-b-0 lg:border-r" data-arsenal-panel="tools">
               <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.toolsTitle}</p>
               <span class="mt-4 block h-px bg-ink/12" data-arsenal-line></span>
-              <div class="mt-5 grid grid-cols-3 gap-px bg-ink/10" data-arsenal-items>
+              <div class="mt-5 grid grid-cols-3 gap-2" data-arsenal-items>
                 {arsenalColumns.tools.map((tool) => (
-                  <div class="group flex aspect-square flex-col items-center justify-center gap-3 bg-paper px-3 py-4 text-center transition hover:text-amaranth" data-arsenal-item>
-                    <div class="flex h-12 w-12 items-center justify-center">
-                      <img src={tool.logoSrc} alt="" width="28" height="28" loading="lazy" decoding="async" class="h-7 max-h-[28px] w-7 max-w-[28px] object-contain" />
+                  <div class="group flex aspect-square flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink" data-arsenal-item>
+                    <div class="flex h-10 w-10 items-center justify-center">
+                      <img src={tool.logoSrc} alt="" width="24" height="24" loading="lazy" decoding="async" class="h-6 max-h-[24px] w-6 max-w-[24px] object-contain" />
                     </div>
-                    <p class="text-[0.68rem] font-medium uppercase tracking-[0.12em] text-ink transition group-hover:text-amaranth">{tool.label}</p>
+                    <p class="text-[0.68rem] font-medium uppercase tracking-[0.12em] text-paper transition group-hover:text-ink">{tool.label}</p>
                   </div>
                 ))}
               </div>

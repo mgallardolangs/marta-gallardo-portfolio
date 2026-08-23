@@ -380,15 +380,15 @@
         }
       ]
     },
-    "heroMark": "TRADUCTION · SEO · LOCALISATION",
-    "servicesEyebrow": "Ce que je peux faire pour votre contenu",
-    "arsenalEyebrow": "Langues, outils et discernement",
-    "experienceSectionTitle": "Formation et expérience appliquées",
-    "experienceEyebrow": "Parcours",
+    "heroMark": "ELCHE · DISPONIBLE DANS LE MONDE ENTIER",
+    "servicesEyebrow": "01 · COMMENT JE PEUX VOUS AIDER",
+    "arsenalEyebrow": "02 · PROFIL & OUTILS",
+    "experienceSectionTitle": "Expérience et formation",
+    "experienceEyebrow": "03 · PARCOURS",
     "experienceStatement": "Base académique + pratique de terrain",
-    "methodologyEyebrow": "Ma méthode de travail",
-    "methodologyDisplayTitle": "Un processus clair, du brief à la livraison",
-    "whyEyebrow": "Pourquoi me confier votre projet",
+    "methodologyEyebrow": "04 · MÉTHODOLOGIE & INFOGRAPHIE",
+    "methodologyDisplayTitle": "Un processus clair, du début à la fin",
+    "whyEyebrow": "05 · CE QUI ME DISTINGUE",
     "skillGroups": {
       "translation": "Traduction & localisation",
       "seo": "SEO & contenu"

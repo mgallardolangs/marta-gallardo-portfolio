@@ -24,6 +24,69 @@ async function readBuiltHtml(relativePath) {
   return readFile(path.join(rootDir, relativePath.replace(/^dist[\\/]/, 'dist/')), 'utf8');
 }
 
+const expectedExactChrome = {
+  es: {
+    heroMark: 'ELCHE · WORKING WORLDWIDE',
+    servicesEyebrow: '01 · CÓMO PUEDO AYUDARTE',
+    arsenalEyebrow: '02 · PERFIL Y HERRAMIENTAS',
+    experienceEyebrow: '03 · TRAYECTORIA',
+    experienceSectionTitle: 'Experiencia y Formación',
+    methodologyEyebrow: '04 · METODOLOGÍA E INFOGRAFÍA',
+    methodologyDisplayTitle: 'Un proceso claro, de principio a fin',
+    whyEyebrow: '05 · VALOR DIFERENCIAL',
+  },
+  en: {
+    heroMark: 'ELCHE · WORKING WORLDWIDE',
+    servicesEyebrow: '01 · HOW I CAN HELP',
+    arsenalEyebrow: '02 · PROFILE & TOOLS',
+    experienceEyebrow: '03 · EXPERIENCE',
+    experienceSectionTitle: 'Experience & Education',
+    methodologyEyebrow: '04 · METHODOLOGY & INFOGRAPHICS',
+    methodologyDisplayTitle: 'A clear process, from start to finish',
+    whyEyebrow: '05 · WHAT SETS ME APART',
+  },
+  fr: {
+    heroMark: 'ELCHE · DISPONIBLE DANS LE MONDE ENTIER',
+    servicesEyebrow: '01 · COMMENT JE PEUX VOUS AIDER',
+    arsenalEyebrow: '02 · PROFIL & OUTILS',
+    experienceEyebrow: '03 · PARCOURS',
+    experienceSectionTitle: 'Expérience et formation',
+    methodologyEyebrow: '04 · MÉTHODOLOGIE & INFOGRAPHIE',
+    methodologyDisplayTitle: 'Un processus clair, du début à la fin',
+    whyEyebrow: '05 · CE QUI ME DISTINGUE',
+  },
+  de: {
+    heroMark: 'ELCHE · WELTWEIT TÄTIG',
+    servicesEyebrow: '01 · WIE ICH SIE UNTERSTÜTZEN KANN',
+    arsenalEyebrow: '02 · PROFIL & TOOLS',
+    experienceEyebrow: '03 · WERDEGANG',
+    experienceSectionTitle: 'Erfahrung und Ausbildung',
+    methodologyEyebrow: '04 · METHODIK & INFOGRAFIK',
+    methodologyDisplayTitle: 'Ein klarer Prozess, von Anfang bis Ende',
+    whyEyebrow: '05 · WAS MICH AUSZEICHNET',
+  },
+  it: {
+    heroMark: 'ELCHE · OPERATIVA IN TUTTO IL MONDO',
+    servicesEyebrow: '01 · COME POSSO AIUTARTI',
+    arsenalEyebrow: '02 · PROFILO & STRUMENTI',
+    experienceEyebrow: '03 · PERCORSO',
+    experienceSectionTitle: 'Esperienza e formazione',
+    methodologyEyebrow: '04 · METODOLOGIA & INFOGRAFICA',
+    methodologyDisplayTitle: 'Un processo chiaro, dall’inizio alla fine',
+    whyEyebrow: '05 · IL MIO VALORE AGGIUNTO',
+  },
+  ca: {
+    heroMark: 'ELCHE · TREBALLANT ARREU DEL MÓN',
+    servicesEyebrow: '01 · COM ET PUC AJUDAR',
+    arsenalEyebrow: '02 · PERFIL I EINES',
+    experienceEyebrow: '03 · TRAJECTÒRIA',
+    experienceSectionTitle: 'Experiència i formació',
+    methodologyEyebrow: '04 · METODOLOGIA I INFOGRAFIA',
+    methodologyDisplayTitle: 'Un procés clar, de principi a fi',
+    whyEyebrow: '05 · VALOR DIFERENCIAL',
+  },
+};
+
 function assertNonEmptyString(value, label) {
   assert.equal(typeof value, 'string', `${label} should be a string`);
   assert.notEqual(value.trim(), '', `${label} should not be empty`);
@@ -68,15 +131,16 @@ test('all six locale files add the correction-only translation display keys and 
 
   for (const [locale, dictionary] of dictionaries) {
     const page = dictionary.translationPage;
+    const exactChrome = expectedExactChrome[locale];
 
-    assertNonEmptyString(page.heroMark, `${locale} translationPage.heroMark`);
-    assertNonEmptyString(page.servicesEyebrow, `${locale} translationPage.servicesEyebrow`);
-    assertNonEmptyString(page.arsenalEyebrow, `${locale} translationPage.arsenalEyebrow`);
-    assertNonEmptyString(page.experienceSectionTitle, `${locale} translationPage.experienceSectionTitle`);
-    assertNonEmptyString(page.experienceEyebrow, `${locale} translationPage.experienceEyebrow`);
-    assertNonEmptyString(page.methodologyEyebrow, `${locale} translationPage.methodologyEyebrow`);
-    assertNonEmptyString(page.methodologyDisplayTitle, `${locale} translationPage.methodologyDisplayTitle`);
-    assertNonEmptyString(page.whyEyebrow, `${locale} translationPage.whyEyebrow`);
+    assert.equal(page.heroMark, exactChrome.heroMark, `${locale} translationPage.heroMark should keep the approved chrome copy`);
+    assert.equal(page.servicesEyebrow, exactChrome.servicesEyebrow, `${locale} translationPage.servicesEyebrow should keep the approved chrome copy`);
+    assert.equal(page.arsenalEyebrow, exactChrome.arsenalEyebrow, `${locale} translationPage.arsenalEyebrow should keep the approved chrome copy`);
+    assert.equal(page.experienceSectionTitle, exactChrome.experienceSectionTitle, `${locale} translationPage.experienceSectionTitle should keep the approved chrome copy`);
+    assert.equal(page.experienceEyebrow, exactChrome.experienceEyebrow, `${locale} translationPage.experienceEyebrow should keep the approved chrome copy`);
+    assert.equal(page.methodologyEyebrow, exactChrome.methodologyEyebrow, `${locale} translationPage.methodologyEyebrow should keep the approved chrome copy`);
+    assert.equal(page.methodologyDisplayTitle, exactChrome.methodologyDisplayTitle, `${locale} translationPage.methodologyDisplayTitle should keep the approved chrome copy`);
+    assert.equal(page.whyEyebrow, exactChrome.whyEyebrow, `${locale} translationPage.whyEyebrow should keep the approved chrome copy`);
     assert.equal(page.methodology.steps.length, 4, `${locale} translationPage.methodology.steps should keep exactly four steps`);
     page.methodology.steps.forEach((step, index) => {
       assertNonEmptyString(step.title, `${locale} translationPage.methodology.steps.${index}.title`);
@@ -160,9 +224,19 @@ test('public translation hero source/build contract keeps two localized CTA anch
   assert.match(contactCta, /href=\{getLocalizedPath\('\/contact', lang\)\}/, 'public translation hero should keep the localized contact CTA anchor');
   assert.doesNotMatch(heroWindow, /bg-\[radial-gradient/i, 'public translation hero should not restore the radial gradient');
   assert.doesNotMatch(source, /page\.hero\.backgroundLabel/, 'public translation hero should remove the old right-side background label card');
-  assert.doesNotMatch(heroWindow, /backdrop-blur|shadow-\[/, 'public translation hero should stay flat without the right-side card chrome');
+  assert.doesNotMatch(heroWindow, /backdrop-blur/, 'public translation hero should stay flat without blur chrome');
   assert.doesNotMatch(portfolioCta, /rounded-full/, 'public translation portfolio CTA should be rectangular instead of pill-shaped');
   assert.doesNotMatch(contactCta, /rounded-full/, 'public translation contact CTA should be rectangular instead of pill-shaped');
+  assert.match(portfolioCta, /hover:-translate-y-0\.5/, 'public translation portfolio CTA should lift on hover');
+  assert.match(portfolioCta, /focus-visible:-translate-y-0\.5/, 'public translation portfolio CTA should lift on focus');
+  assert.match(portfolioCta, /hover:shadow-\[0_4px_0_var\(--color-ink\)\]/, 'public translation portfolio CTA should add the exact bottom shadow on hover');
+  assert.match(portfolioCta, /focus-visible:shadow-\[0_4px_0_var\(--color-ink\)\]/, 'public translation portfolio CTA should add the exact bottom shadow on focus');
+  assert.match(contactCta, /hover:-translate-y-0\.5/, 'public translation contact CTA should lift on hover');
+  assert.match(contactCta, /focus-visible:-translate-y-0\.5/, 'public translation contact CTA should lift on focus');
+  assert.match(contactCta, /hover:shadow-\[0_4px_0_var\(--color-ink\)\]/, 'public translation contact CTA should add the exact bottom shadow on hover');
+  assert.match(contactCta, /focus-visible:shadow-\[0_4px_0_var\(--color-ink\)\]/, 'public translation contact CTA should add the exact bottom shadow on focus');
+  assert.doesNotMatch(portfolioCta, /hover:bg-|hover:text-paper|focus-visible:bg-|focus-visible:text-paper/, 'public translation portfolio CTA should keep strict colors');
+  assert.doesNotMatch(contactCta, /hover:border-amaranth|hover:text-amaranth|focus-visible:border-amaranth|focus-visible:text-amaranth/, 'public translation contact CTA should keep strict colors');
 
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built translation hero CTA anchors.');
@@ -231,18 +305,37 @@ test('ServiceSwitcher keeps the 6-second behavior but swaps to open layout and r
 });
 
 test('public arsenal uses the exact flush frame ratio, six language rows, three-column tool cells, and two skill groups', async () => {
-  const source = await readSource('src/views/TranslationSeoPage.astro');
+  const [source, adminSource] = await Promise.all([
+    readSource('src/views/TranslationSeoPage.astro'),
+    readSource('src/pages/admin/translation-seo.astro'),
+  ]);
   const arsenalSection = extractSectionByDataAttribute(source, 'data-arsenal-section', 'public arsenal section');
+  const adminArsenalSection = extractWindowAround(adminSource, 'arsenalColumns.languages.map', 'admin arsenal preview', 5000);
 
   assert.match(arsenalSection, /page\.arsenalEyebrow/, 'public arsenal should render the new localized eyebrow');
   assert.match(arsenalSection, /lg:grid-cols-\[0\.82fr_0\.88fr_1\.3fr\]/, 'public arsenal should keep the approved column ratio');
   assert.doesNotMatch(arsenalSection, /sm:grid-cols-2/, 'public arsenal languages/tools should stop using the old two-column card grids');
-  assert.match(arsenalSection, /grid-cols-3/, 'public arsenal tools should use the approved three-column equal-cell grid');
+  assert.match(arsenalSection, /grid-cols-3 gap-2/, 'public arsenal tools should use the approved three-column equal-cell grid with 8px gaps');
   assert.match(arsenalSection, /page\.skillGroups\.translation/, 'public arsenal should render the translation skill-group title');
   assert.match(arsenalSection, /page\.skillGroups\.seo/, 'public arsenal should render the seo skill-group title');
   assert.match(arsenalSection, /arsenalColumns\.skillGroups\.translation/, 'public arsenal should render grouped translation skills from the helper');
   assert.match(arsenalSection, /arsenalColumns\.skillGroups\.seo/, 'public arsenal should render grouped seo skills from the helper');
   assert.doesNotMatch(arsenalSection, /shadow-\[/, 'public arsenal should not revert to separate shadow cards');
+  assert.match(arsenalSection, /flex items-center justify-between gap-4 border-b border-ink\/10 py-3/, 'public arsenal languages should render compact flex rows');
+  assert.match(arsenalSection, /text-sm font-medium text-amaranth/, 'public arsenal language level should sit right in amaranth');
+  assert.match(arsenalSection, /group flex aspect-square flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink/, 'public arsenal tools should use dark square tiles with amaranth hover');
+  assert.doesNotMatch(arsenalSection, /bg-paper px-3 py-4/, 'public arsenal tools should not reintroduce light paper tiles');
+  assert.match(adminArsenalSection, /flex items-center justify-between gap-4 border-b border-ink\/10 py-3/, 'admin arsenal preview should mirror the compact language row layout');
+  assert.match(adminArsenalSection, /grid grid-cols-3 gap-2/, 'admin arsenal preview should mirror the three-column tool grid with 8px gaps');
+  assert.match(adminArsenalSection, /bg-ink px-3 py-4 text-center text-paper/, 'admin arsenal preview should mirror the dark tool tiles');
+  assert.doesNotMatch(adminArsenalSection, /bg-paper px-3 py-4 text-center/, 'admin arsenal preview should not reintroduce light paper tiles');
+});
+
+test('tool logos rendered on ink arsenal tiles keep sufficient default contrast', async () => {
+  const notionLogo = await readSource('public/images/tools/notion.svg');
+
+  assert.match(notionLogo, /#F4F5F1/i, 'Notion logo should switch to the paper tone for dark arsenal tiles');
+  assert.doesNotMatch(notionLogo, /#2D2D2D/i, 'Notion logo should not keep the old near-black stroke on ink tiles');
 });
 
 test('admin skill creation contracts require group-aware data and grouped editor controls', async () => {
@@ -344,10 +437,13 @@ test('experience browser chrome plus methodology and why sections expose the new
   assert.match(publicSource, /page\.experienceSectionTitle/, 'public translation page should render the typed experience section title');
   assert.match(adminSource, /i18nKey="translationPage\.experienceEyebrow"/, 'admin translation page should expose the editable experience eyebrow');
   assert.match(adminSource, /i18nKey="translationPage\.experienceSectionTitle"/, 'admin translation page should expose the editable experience title');
+  assert.match(experienceTabsSource, /rounded-t-\[7px\]/, 'public browser tabs should use modest browser-tab corners');
+  assert.match(experienceTabsSource, /bg-paper\/14/, 'public browser tabs should keep the paper/14 inactive fill');
+  assert.match(experienceTabsSource, /border-paper bg-paper text-ink/, 'public browser tabs should keep the paper active fill');
   assert.doesNotMatch(
     experienceTabsSource,
-    /role="tab"[\s\S]{0,220}rounded-full/s,
-    'browser tabs should remove the rounded pill controls while allowing the chrome indicator dot',
+    /role="tab"[\s\S]{0,260}(rounded-full|rounded-t-2xl)/s,
+    'browser tabs should remove pill or oversized rounded tab controls while allowing the chrome indicator dot',
   );
   assert.doesNotMatch(experienceTabsSource, /shadow-\[/, 'browser tabs should remove the floating shadow card');
   assert.match(
@@ -355,6 +451,12 @@ test('experience browser chrome plus methodology and why sections expose the new
     /role="tablist"[\s\S]{0,260}h-2 w-2 rounded-full bg-amaranth/s,
     'browser tab chrome should add the small amaranth browser dot ahead of the tabs',
   );
+  assert.match(adminSource, /data-admin-experience-trigger="education"/, 'admin browser tabs should keep the education trigger');
+  assert.match(adminSource, /data-admin-experience-trigger="experience"/, 'admin browser tabs should keep the experience trigger');
+  assert.match(adminSource, /rounded-t-\[7px\]/, 'admin browser tabs should mirror the modest top-corner radius');
+  assert.match(adminSource, /bg-paper\/14/, 'admin browser tabs should mirror the paper\/14 inactive fill');
+  assert.match(adminSource, /border-paper bg-paper px-4 py-3/, 'admin browser tabs should mirror the paper active fill');
+  assert.doesNotMatch(adminSource, /data-admin-experience-trigger="education"[\s\S]{0,220}rounded-t-2xl/s, 'admin browser tabs should not use the old pill radius');
 
   assert.match(methodologySection, /page\.methodologyEyebrow/, 'methodology should render the new eyebrow');
   assert.match(methodologySection, /page\.methodologyDisplayTitle/, 'methodology should render the new display title');

@@ -92,11 +92,11 @@ const arsenalColumns = getTranslationArsenalColumns(lang, imagesData);
             <article class="border-b border-ink p-5 lg:border-b-0 lg:border-r">
               <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.languagesTitle}</p>
               <span class="mt-4 block h-px bg-ink/12"></span>
-              <div class="mt-5 divide-y divide-ink/10">
+              <div class="mt-5">
                 {arsenalColumns.languages.map((language) => (
-                  <div class="grid gap-1 py-3">
+                  <div class="flex items-center justify-between gap-4 border-b border-ink/10 py-3 last:border-b-0">
                     <p class="font-heading text-2xl text-ink">{language.label}</p>
-                    <p class="text-sm text-ink-muted">{language.level}</p>
+                    <p class="text-sm font-medium text-amaranth">{language.level}</p>
                   </div>
                 ))}
               </div>
@@ -105,13 +105,13 @@ const arsenalColumns = getTranslationArsenalColumns(lang, imagesData);
             <article class="border-b border-ink p-5 lg:border-b-0 lg:border-r">
               <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.toolsTitle}</p>
               <span class="mt-4 block h-px bg-ink/12"></span>
-              <div class="mt-5 grid grid-cols-3 gap-px bg-ink/10">
+              <div class="mt-5 grid grid-cols-3 gap-2">
                 {arsenalColumns.tools.map((tool) => (
-                  <div class="flex aspect-square flex-col items-center justify-center gap-3 bg-paper px-3 py-4 text-center">
-                    <div class="flex h-12 w-12 items-center justify-center">
-                      <img src={tool.logoSrc} alt={tool.label} class="h-7 max-h-[28px] w-7 max-w-[28px] object-contain" />
+                  <div class="group flex aspect-square flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink">
+                    <div class="flex h-10 w-10 items-center justify-center">
+                      <img src={tool.logoSrc} alt={tool.label} class="h-6 max-h-[24px] w-6 max-w-[24px] object-contain" />
                     </div>
-                    <p class="text-[0.68rem] font-medium uppercase tracking-[0.12em] text-ink">{tool.label}</p>
+                    <p class="text-[0.68rem] font-medium uppercase tracking-[0.12em] text-paper transition group-hover:text-ink">{tool.label}</p>
                   </div>
                 ))}
               </div>
@@ -156,8 +156,8 @@ const arsenalColumns = getTranslationArsenalColumns(lang, imagesData);
             <div class="flex flex-wrap items-start gap-3">
               <span class="h-2 w-2 rounded-full bg-amaranth" aria-hidden="true"></span>
               <div class="flex flex-wrap items-end gap-2">
-                <button type="button" class="rounded-t-2xl border border-b-0 border-paper bg-paper px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink" data-admin-experience-trigger="education"> {page.browserTabs.education} </button>
-                <button type="button" class="rounded-t-2xl border border-b-0 border-paper/18 bg-paper/12 px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-paper/62" data-admin-experience-trigger="experience"> {page.browserTabs.experience} </button>
+                <button type="button" class="rounded-t-[7px] border border-b-0 border-paper bg-paper px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink transition" data-admin-experience-trigger="education"> {page.browserTabs.education} </button>
+                <button type="button" class="rounded-t-[7px] border border-b-0 border-paper/18 bg-paper/14 px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-paper/62 transition hover:bg-paper/18 hover:text-paper focus-visible:bg-paper/18 focus-visible:text-paper" data-admin-experience-trigger="experience"> {page.browserTabs.experience} </button>
               </div>
             </div>
           </div>
@@ -263,7 +263,7 @@ const arsenalColumns = getTranslationArsenalColumns(lang, imagesData);
           trigger.classList.toggle('bg-paper', isActive);
           trigger.classList.toggle('text-ink', isActive);
           trigger.classList.toggle('border-paper/18', !isActive);
-          trigger.classList.toggle('bg-paper/12', !isActive);
+          trigger.classList.toggle('bg-paper/14', !isActive);
           trigger.classList.toggle('text-paper/62', !isActive);
         });
 

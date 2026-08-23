@@ -125,7 +125,7 @@ export default function ExperienceTabs({ tabListAriaLabel, statement, tabs }: Pr
                       setActiveIndex(nextIndex);
                       tabRefs.current[nextIndex]?.focus();
                     }}
-                    className={`rounded-t-2xl border border-b-0 px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] transition ${isActive ? 'border-paper bg-paper text-ink' : 'border-paper/18 bg-paper/12 text-paper/62 hover:text-paper focus-visible:text-paper'}`}
+                    className={`rounded-t-[7px] border border-b-0 px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] transition ${isActive ? 'border-paper bg-paper text-ink' : 'border-paper/18 bg-paper/14 text-paper/62 hover:bg-paper/18 hover:text-paper focus-visible:bg-paper/18 focus-visible:text-paper'}`}
                   >
                     {panel.label}
                   </button>
