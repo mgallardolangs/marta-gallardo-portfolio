@@ -179,10 +179,12 @@ test('Phase 2 article detail pages stay static and preserve locale-aware blog na
 
   for (const [relativePath, source] of sources) {
     assert.doesNotMatch(source, /TypedTitle/, `${relativePath} should not type article titles`);
-    assert.match(source, /import\s+\{\s*getLangFromUrl,\s*getLocalizedPath,\s*t\s*\}\s+from\s+['"].+i18n['"]/,
-      `${relativePath} should import locale-aware path helpers`);
-    assert.match(source, /href=\{getLocalizedPath\('\/blog',\s*lang\)\}/,
-      `${relativePath} should keep the blog back link localized`);
+    assert.match(source, /import\s+BlogArticleLayout\s+from\s+['"].+BlogArticleLayout\.astro['"]/,
+      `${relativePath} should render the shared BlogArticleLayout shell`);
+    assert.match(source, /const\s+\{\s*Content\s*,\s*headings\s*\}\s*=\s*await\s+render\(post\)/,
+      `${relativePath} should keep render\\(post\\) heading data available`);
+    assert.match(source, /<BlogArticleLayout\b[\s\S]*headings=\{headings\}[\s\S]*>\s*<Content\s*\/>\s*<\/BlogArticleLayout>/,
+      `${relativePath} should pass Content through BlogArticleLayout instead of inlining the article shell`);
   }
 });
 
@@ -194,7 +196,8 @@ test('Phase 2 blog index keeps locale-aware hrefs and localized empty state', as
 
   assert.match(viewSource, /import\s+\{\s*getLangFromUrl,\s*getLocalizedPath,\s*t\s*\}\s+from\s+['"]..\/i18n['"]/);
   assert.match(viewSource, /href=\{getLocalizedPath\(`\/blog\/\$\{post\.id\}`,\s*lang\)\}/);
-  assert.match(viewSource, /i\.blog\.emptyState/);
+  assert.match(viewSource, /const\s+emptyBlogState\s*=\s*i\.blog\['emptyState'\]/);
+  assert.match(viewSource, /\{emptyBlogState\}/);
 
   localeFiles.forEach((dictionary, index) => {
     assert.equal(typeof dictionary.blog.emptyState, 'string', `${locales[index]} blog.emptyState should exist`);

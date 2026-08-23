@@ -1,9 +1,7 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
-import { getLangFromUrl, getLocalizedPath, t } from '../../../i18n';
+import BlogArticleLayout from '../../../components/BlogArticleLayout.astro';
 import { getBlogAlternateLinksForPost, getBlogStaticPathsForLocale } from '../../../lib/blog';
-import ScrollReveal from '../../../components/ScrollReveal';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -12,49 +10,9 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const posts = await getCollection('blog');
-const { Content } = await render(post);
-const lang = getLangFromUrl(Astro.url);
-const i = t(lang);
+const { Content, headings } = await render(post);
 const blogAlternateLinks = getBlogAlternateLinksForPost(posts, post);
 ---
-<BaseLayout
-  title={`${post.data.title} — ${i.hero.name}`}
-  description={post.data.description}
-  alternateLinks={blogAlternateLinks}
->
-    <article class="bg-paper">
-      <div class="mx-auto max-w-4xl px-6 pt-28 pb-16 md:pt-32 md:pb-20">
-        <ScrollReveal client:visible>
-          <a href={getLocalizedPath('/blog', lang)} class="text-accent-ink inline-flex items-center gap-3 border-b border-amaranth pb-1 font-body text-xs font-semibold uppercase tracking-[0.28em] transition hover:text-ink">
-            <span aria-hidden="true">←</span>
-            {i.blog.backToList}
-          </a>
-
-          <header class="mt-8 border-t border-black/10 pt-8">
-            <div class="flex flex-wrap items-center gap-3 text-sm text-ink-muted">
-              <time class="font-body uppercase tracking-[0.18em]">
-                {post.data.date.toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' })}
-              </time>
-              {post.data.tags.map((tag: string) => (
-                <span class="text-accent-ink border border-black/10 px-2.5 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.24em]">{tag}</span>
-              ))}
-            </div>
-            <h1 class="mt-6 font-heading text-4xl leading-tight text-ink md:text-6xl">
-              {post.data.title}
-            </h1>
-            {post.data.image && (
-              <div class="mt-8 overflow-hidden border border-black/10 bg-paper">
-                <img src={post.data.image} alt={post.data.title} width={1600} height={900} loading="eager" fetchpriority="high" decoding="async" class="aspect-[16/9] w-full object-cover" />
-              </div>
-            )}
-          </header>
-        </ScrollReveal>
-
-        <ScrollReveal client:visible delay={0.2}>
-          <div class="prose prose-lg mt-10 max-w-none font-body text-ink prose-headings:font-heading prose-headings:text-ink prose-headings:font-normal prose-a:text-amaranth prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-black/20 prose-blockquote:text-ink-muted prose-strong:text-ink">
-            <Content />
-          </div>
-        </ScrollReveal>
-      </div>
-    </article>
-</BaseLayout>
+<BlogArticleLayout post={post} posts={posts} headings={headings} alternateLinks={blogAlternateLinks}>
+  <Content />
+</BlogArticleLayout>

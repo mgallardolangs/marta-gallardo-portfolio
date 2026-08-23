@@ -267,7 +267,7 @@ test('public media surfaces keep eager hero loading, lazy below-fold loading, an
     readSource('src/components/UgcContactSheet.tsx'),
     readSource('src/components/OvalMediaOrbit.tsx'),
     readSource('src/views/BlogIndexPage.astro'),
-    readSource('src/pages/blog/[slug].astro'),
+    readSource('src/components/BlogArticleLayout.astro'),
     readSource('src/components/PhotoMasonry.tsx'),
     readSource('src/components/VideoGallery.tsx'),
   ]);
