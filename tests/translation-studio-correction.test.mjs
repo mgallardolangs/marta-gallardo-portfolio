@@ -87,6 +87,33 @@ const expectedExactChrome = {
   },
 };
 
+const expectedSkillGroups = {
+  es: {
+    translation: 'Traducción y localización',
+    seo: 'SEO y contenido web',
+  },
+  en: {
+    translation: 'Translation & localization',
+    seo: 'SEO & web content',
+  },
+  fr: {
+    translation: 'Traduction & localisation',
+    seo: 'SEO et contenu web',
+  },
+  de: {
+    translation: 'Übersetzung & Lokalisierung',
+    seo: 'SEO und Web-Inhalte',
+  },
+  it: {
+    translation: 'Traduzione e localizzazione',
+    seo: 'SEO e contenuti web',
+  },
+  ca: {
+    translation: 'Traducció i localització',
+    seo: 'SEO i contingut web',
+  },
+};
+
 function assertNonEmptyString(value, label) {
   assert.equal(typeof value, 'string', `${label} should be a string`);
   assert.notEqual(value.trim(), '', `${label} should not be empty`);
@@ -132,6 +159,7 @@ test('all six locale files add the correction-only translation display keys and 
   for (const [locale, dictionary] of dictionaries) {
     const page = dictionary.translationPage;
     const exactChrome = expectedExactChrome[locale];
+    const exactSkillGroups = expectedSkillGroups[locale];
 
     assert.equal(page.heroMark, exactChrome.heroMark, `${locale} translationPage.heroMark should keep the approved chrome copy`);
     assert.equal(page.servicesEyebrow, exactChrome.servicesEyebrow, `${locale} translationPage.servicesEyebrow should keep the approved chrome copy`);
@@ -156,8 +184,16 @@ test('all six locale files add the correction-only translation display keys and 
       ['seo', 'translation'],
       `${locale} translationPage.skillGroups should expose exactly translation and seo titles`,
     );
-    assertNonEmptyString(page.skillGroups.translation, `${locale} translationPage.skillGroups.translation`);
-    assertNonEmptyString(page.skillGroups.seo, `${locale} translationPage.skillGroups.seo`);
+    assert.equal(
+      page.skillGroups.translation,
+      exactSkillGroups.translation,
+      `${locale} translationPage.skillGroups.translation should keep the approved group title`,
+    );
+    assert.equal(
+      page.skillGroups.seo,
+      exactSkillGroups.seo,
+      `${locale} translationPage.skillGroups.seo should keep the approved group title`,
+    );
 
     assert.equal(page.services.items.length, 3, `${locale} should keep exactly three service items`);
     page.services.items.forEach((item, index) => {
