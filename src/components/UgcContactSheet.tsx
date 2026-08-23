@@ -232,129 +232,131 @@ export default function UgcContactSheet({
   const categoryLabel = (category: UgcCategory) => copy.filters[category];
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-wrap items-center gap-3">
-        {FILTERS.map((currentFilter) => {
-          const isActive = currentFilter === filter;
+    <>
+      <div className="mx-auto w-full max-w-6xl space-y-5">
+        <div className="flex flex-wrap items-center gap-2">
+          {FILTERS.map((currentFilter) => {
+            const isActive = currentFilter === filter;
 
-          return (
-            <button
-              key={currentFilter}
-              type="button"
-              aria-pressed={isActive}
-              onClick={() => setFilter(currentFilter)}
-              className={`group inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.32em] transition ${
-                isActive ? 'text-amaranth' : 'text-ink hover:text-amaranth'
-              }`}
-            >
-              <span className={`transition ${isActive ? 'text-amaranth' : 'text-ink/24 group-hover:text-amaranth'}`}>[</span>
-              <span>{copy.filters[currentFilter]}</span>
-              <span className={`transition ${isActive ? 'text-amaranth' : 'text-ink/24 group-hover:text-amaranth'}`}>]</span>
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
-        {items.map((item, index) => {
-          const visibility = getUgcTileVisibility(item, filter);
-          const isVisible = visibility === 'visible';
-          const localizedLabel = localize(item.label, lang);
-          const localizedAlt = localize(item.alt, lang);
-
-          return (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.28, delay: diagonalDelay(index), ease: 'easeOut' }}
-              className={`relative aspect-square overflow-hidden bg-paper ${isVisible ? '' : 'pointer-events-none'}`}
-            >
+            return (
               <button
+                key={currentFilter}
                 type="button"
-                disabled={!canOpenUgcItem({ visibility })}
-                tabIndex={isVisible ? 0 : -1}
-                onClick={(event) => {
-                  if (!canOpenUgcItem({ visibility })) return;
-
-                  if (item.type === 'video') {
-                    stopPreviewVideoPlayback(previewVideoRefs.current[item.id]);
-                  }
-                  stopAllPreviewVideoPlayback(previewVideoRefs.current);
-
-                  flushSync(() => {
-                    restoreFocusRef.current = event.currentTarget;
-                    setNavigationDirection(1);
-                    setActiveId(item.id);
-                  });
-
-                  if (item.type === 'video') {
-                    gesturePlaybackItemRef.current = item.id;
-                    void playFocusedVideoPlayback(focusedVideoRef.current, setFocusedVideoPlaying);
-                  }
-                }}
-                onKeyDown={(event) => {
-                  if (!canOpenUgcItem({ visibility })) return;
-                  if (!['Enter', ' ', 'Space', 'Spacebar', 'NumpadEnter'].includes(event.key)) return;
-                  event.preventDefault();
-
-                  if (item.type === 'video') {
-                    stopPreviewVideoPlayback(previewVideoRefs.current[item.id]);
-                  }
-                  stopAllPreviewVideoPlayback(previewVideoRefs.current);
-
-                  flushSync(() => {
-                    restoreFocusRef.current = event.currentTarget as HTMLButtonElement;
-                    setNavigationDirection(1);
-                    setActiveId(item.id);
-                  });
-
-                  if (item.type === 'video') {
-                    gesturePlaybackItemRef.current = item.id;
-                    void playFocusedVideoPlayback(focusedVideoRef.current, setFocusedVideoPlaying);
-                  }
-                }}
-                onPointerEnter={() => handlePreviewEnter(item, visibility)}
-                onPointerLeave={() => handlePreviewLeave(item)}
-                className={`group relative h-full w-full text-left ${isVisible ? '' : 'pointer-events-none'} bg-paper`}
+                aria-pressed={isActive}
+                onClick={() => setFilter(currentFilter)}
+                className={`group inline-flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-[0.24em] transition ${
+                  isActive ? 'text-amaranth' : 'text-ink hover:text-amaranth'
+                }`}
               >
-                {item.type === 'video' ? (
-                  <video
-                    ref={(node) => {
-                      previewVideoRefs.current[item.id] = node;
-                    }}
-                    src={item.src}
-                    poster={item.poster ?? undefined}
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    className={`h-full w-full object-cover transition duration-300 ${
-                      isVisible ? 'opacity-100 group-hover:scale-[1.055]' : 'opacity-0'
-                    }`}
-                  />
-                ) : (
-                  <img
-                    src={item.src}
-                    alt={localizedAlt}
-                    loading="lazy"
-                    className={`h-full w-full object-cover transition duration-300 ${
-                      isVisible ? 'opacity-100 group-hover:scale-[1.055]' : 'opacity-0'
-                    }`}
-                  />
-                )}
-
-                <span
-                  className={`absolute inset-x-3 bottom-3 inline-flex max-w-[calc(100%-1.5rem)] items-center justify-start bg-ink px-3 py-2 text-[0.65rem] font-semibold uppercase tracking-[0.24em] text-paper transition ${
-                    isVisible ? 'translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100' : 'opacity-0'
-                  }`}
-                >
-                  {localizedLabel}
-                </span>
+                <span className={`transition ${isActive ? 'text-amaranth' : 'text-ink/24 group-hover:text-amaranth'}`}>[</span>
+                <span>{copy.filters[currentFilter]}</span>
+                <span className={`transition ${isActive ? 'text-amaranth' : 'text-ink/24 group-hover:text-amaranth'}`}>]</span>
               </button>
-            </motion.div>
-          );
-        })}
+            );
+          })}
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-3">
+          {items.map((item, index) => {
+            const visibility = getUgcTileVisibility(item, filter);
+            const isVisible = visibility === 'visible';
+            const localizedLabel = localize(item.label, lang);
+            const localizedAlt = localize(item.alt, lang);
+
+            return (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.28, delay: diagonalDelay(index), ease: 'easeOut' }}
+                className={`relative aspect-square overflow-hidden bg-paper ${isVisible ? '' : 'pointer-events-none'}`}
+              >
+                <button
+                  type="button"
+                  disabled={!canOpenUgcItem({ visibility })}
+                  tabIndex={isVisible ? 0 : -1}
+                  onClick={(event) => {
+                    if (!canOpenUgcItem({ visibility })) return;
+
+                    if (item.type === 'video') {
+                      stopPreviewVideoPlayback(previewVideoRefs.current[item.id]);
+                    }
+                    stopAllPreviewVideoPlayback(previewVideoRefs.current);
+
+                    flushSync(() => {
+                      restoreFocusRef.current = event.currentTarget;
+                      setNavigationDirection(1);
+                      setActiveId(item.id);
+                    });
+
+                    if (item.type === 'video') {
+                      gesturePlaybackItemRef.current = item.id;
+                      void playFocusedVideoPlayback(focusedVideoRef.current, setFocusedVideoPlaying);
+                    }
+                  }}
+                  onKeyDown={(event) => {
+                    if (!canOpenUgcItem({ visibility })) return;
+                    if (!['Enter', ' ', 'Space', 'Spacebar', 'NumpadEnter'].includes(event.key)) return;
+                    event.preventDefault();
+
+                    if (item.type === 'video') {
+                      stopPreviewVideoPlayback(previewVideoRefs.current[item.id]);
+                    }
+                    stopAllPreviewVideoPlayback(previewVideoRefs.current);
+
+                    flushSync(() => {
+                      restoreFocusRef.current = event.currentTarget as HTMLButtonElement;
+                      setNavigationDirection(1);
+                      setActiveId(item.id);
+                    });
+
+                    if (item.type === 'video') {
+                      gesturePlaybackItemRef.current = item.id;
+                      void playFocusedVideoPlayback(focusedVideoRef.current, setFocusedVideoPlaying);
+                    }
+                  }}
+                  onPointerEnter={() => handlePreviewEnter(item, visibility)}
+                  onPointerLeave={() => handlePreviewLeave(item)}
+                  className={`group relative h-full w-full text-left ${isVisible ? '' : 'pointer-events-none'} bg-paper`}
+                >
+                  {item.type === 'video' ? (
+                    <video
+                      ref={(node) => {
+                        previewVideoRefs.current[item.id] = node;
+                      }}
+                      src={item.src}
+                      poster={item.poster ?? undefined}
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      className={`h-full w-full object-cover transition duration-300 ${
+                        isVisible ? 'opacity-100 group-hover:scale-[1.055]' : 'opacity-0'
+                      }`}
+                    />
+                  ) : (
+                    <img
+                      src={item.src}
+                      alt={localizedAlt}
+                      loading="lazy"
+                      className={`h-full w-full object-cover transition duration-300 ${
+                        isVisible ? 'opacity-100 group-hover:scale-[1.055]' : 'opacity-0'
+                      }`}
+                    />
+                  )}
+
+                  <span
+                    className={`absolute inset-x-3 bottom-3 inline-flex max-w-[calc(100%-1.5rem)] items-center justify-start bg-ink px-2 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.24em] text-paper transition ${
+                      isVisible ? 'translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100' : 'opacity-0'
+                    }`}
+                  >
+                    {localizedLabel}
+                  </span>
+                </button>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
 
       <AnimatePresence mode="wait" initial={false}>
@@ -465,6 +467,6 @@ export default function UgcContactSheet({
           </motion.div>
         ) : null}
       </AnimatePresence>
-    </div>
+    </>
   );
 }

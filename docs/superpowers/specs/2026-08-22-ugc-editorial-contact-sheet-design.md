@@ -209,6 +209,13 @@ Admin rules:
 
 No new dependencies are needed. Use existing Framer Motion for the interactive grid/viewer and existing TypedTitle/ScrollReveal for page entrance.
 
+## Live refinement 1
+
+- Reduce the hero top padding to approximately `5rem` on mobile and `6rem` on desktop, with a shallower bottom edge and the rule pulled closer to the copy.
+- Keep the eyebrow above the hero content, but place `@marttelier` and the contact-sheet headline on one desktop row using a denser `0.75 / 1.25` split while mobile still stacks them.
+- Shrink the typed title to the `text-4xl` / `md:text-6xl` range and the uppercase value line to a `text-lg` → `md:text-2xl` → `lg:text-3xl` progression with tracking around `0.13em` and right-column alignment.
+- Constrain the filter-and-grid composition to `max-w-6xl`, tighten the filter/grid gaps, and keep the fullscreen focus viewer outside that width lock so its fixed overlay still spans the full viewport.
+
 ## Verification
 
 1. Exactly 12 slots exist and category counts are 4/4/4.

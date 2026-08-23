@@ -1,8 +1,8 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import ScrollReveal from '../../components/ScrollReveal';
-import TypedTitle from '../../components/TypedTitle.astro';
 import UgcContactSheet from '../../components/UgcContactSheet';
+import EditableText from '../../components/admin/EditableText';
 import EditableUgcPortfolio from '../../components/admin/EditableUgcPortfolio';
 import { getLangFromUrl, t } from '../../i18n';
 import { siteData } from '../../lib/siteData';
@@ -13,24 +13,19 @@ const i = t(lang);
 
 <AdminLayout title={`Admin — ${i.ugc.title}`} description={i.ugcPage.pageDescription}>
   <div class="bg-paper">
-    <section class="px-6 pt-28 pb-8 md:pt-32 md:pb-10">
+    <section class="px-6 pt-20 pb-5 md:pt-24 md:pb-6">
       <div class="site-container">
         <ScrollReveal client:visible className="max-w-6xl">
           <p class="text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">
             {i.ugcPage.contactSheet.eyebrow}
           </p>
-          <TypedTitle
-            as="h1"
-            text={i.ugcPage.hero.headline}
-            trigger="load"
-            class="mt-5 block max-w-[9ch] text-5xl leading-none text-ink md:text-7xl"
-          />
-          <p class="mt-8 max-w-5xl text-balance text-2xl font-semibold uppercase leading-[1.18] tracking-[0.18em] text-ink md:text-4xl">
-            {i.ugcPage.contactSheet.headline}
-          </p>
+          <div class="mt-5 grid gap-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:items-end">
+            <EditableText client:load i18nKey="ugcPage.hero.headline" as="h1" className="block text-4xl leading-none text-ink md:text-6xl" />
+            <EditableText client:load i18nKey="ugcPage.contactSheet.headline" as="p" className="text-balance text-lg font-semibold uppercase leading-[1.18] tracking-[0.13em] text-ink md:text-2xl lg:justify-self-end lg:text-right lg:text-3xl" />
+          </div>
         </ScrollReveal>
 
-        <div class="mt-8 overflow-hidden" aria-hidden="true">
+        <div class="mt-5 overflow-hidden" aria-hidden="true">
           <div class="ugc-hero-rule h-px bg-ink/20" />
         </div>
       </div>

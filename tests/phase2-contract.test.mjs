@@ -208,7 +208,12 @@ test('Phase 2 removes top-level pt-24 spacers from shared and admin destination 
   );
 
   for (const [relativePath, source] of sources) {
-    if (relativePath === 'src/views/HomePage.astro' || relativePath === 'src/pages/admin/index.astro') {
+    if (
+      relativePath === 'src/views/HomePage.astro'
+      || relativePath === 'src/pages/admin/index.astro'
+      || relativePath === 'src/views/UgcPage.astro'
+      || relativePath === 'src/pages/admin/ugc.astro'
+    ) {
       assert.match(source, /\bmd:pt-24\b/, `${relativePath} should keep the approved tighter hero top padding`);
       continue;
     }
