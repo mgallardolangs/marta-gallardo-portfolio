@@ -20,14 +20,28 @@ async function readSource(relativePath) {
   return readFile(path.join(rootDir, relativePath), 'utf8');
 }
 
+async function readBuiltHtml(relativePath) {
+  return readFile(path.join(rootDir, relativePath.replace(/^dist[\\/]/, 'dist/')), 'utf8');
+}
+
 function assertNonEmptyString(value, label) {
   assert.equal(typeof value, 'string', `${label} should be a string`);
   assert.notEqual(value.trim(), '', `${label} should not be empty`);
 }
 
+function escapeForRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function extractSectionByDataAttribute(source, attribute, label) {
   const match = source.match(new RegExp(`<section\\b(?=[^>]*\\b${attribute}\\b)[\\s\\S]*?<\\/section>`));
   assert.ok(match, `${label} should expose ${attribute}`);
+  return match[0];
+}
+
+function extractElementByDataAttribute(source, tagName, attribute, value, label) {
+  const match = source.match(new RegExp(`<${tagName}\\b(?=[^>]*\\b${attribute}=["']${value}["'])[^>]*>[\\s\\S]*?<\\/${tagName}>`));
+  assert.ok(match, `${label} should expose ${attribute}="${value}"`);
   return match[0];
 }
 
@@ -63,6 +77,16 @@ test('all six locale files add the correction-only translation display keys and 
     assertNonEmptyString(page.methodologyEyebrow, `${locale} translationPage.methodologyEyebrow`);
     assertNonEmptyString(page.methodologyDisplayTitle, `${locale} translationPage.methodologyDisplayTitle`);
     assertNonEmptyString(page.whyEyebrow, `${locale} translationPage.whyEyebrow`);
+    assert.equal(page.methodology.steps.length, 4, `${locale} translationPage.methodology.steps should keep exactly four steps`);
+    page.methodology.steps.forEach((step, index) => {
+      assertNonEmptyString(step.title, `${locale} translationPage.methodology.steps.${index}.title`);
+      assertNonEmptyString(step.description, `${locale} translationPage.methodology.steps.${index}.description`);
+    });
+    assert.equal(page.whyChooseMe.cards.length, 3, `${locale} translationPage.whyChooseMe.cards should keep exactly three cards`);
+    page.whyChooseMe.cards.forEach((card, index) => {
+      assertNonEmptyString(card.title, `${locale} translationPage.whyChooseMe.cards.${index}.title`);
+      assertNonEmptyString(card.text, `${locale} translationPage.whyChooseMe.cards.${index}.text`);
+    });
     assert.deepEqual(
       Object.keys(page.skillGroups ?? {}).sort(),
       ['seo', 'translation'],
@@ -125,15 +149,67 @@ test('site arsenal skills keep the exact 4/4 translation-vs-seo split and groupe
   assert.equal(columns.skillGroups.seo.length, 4, 'seo helper column should keep four skills');
 });
 
-test('public translation hero stays flat and replaces the side card with a vertical mark plus rectangular CTAs', async () => {
+test('public translation hero source/build contract keeps two localized CTA anchors with stable markers and rectangular shape', async (t) => {
   const source = await readSource('src/views/TranslationSeoPage.astro');
   const heroWindow = extractWindowAround(source, 'page.hero.title', 'public translation hero');
+  const portfolioCta = extractElementByDataAttribute(source, 'a', 'data-translation-cta', 'portfolio', 'public translation portfolio CTA');
+  const contactCta = extractElementByDataAttribute(source, 'a', 'data-translation-cta', 'contact', 'public translation contact CTA');
 
   assert.match(source, /page\.heroMark/, 'public translation hero should render the new localized vertical hero mark');
+  assert.match(portfolioCta, /href=\{getLocalizedPath\('\/ugc', lang\)\}/, 'public translation hero should keep the localized portfolio CTA anchor');
+  assert.match(contactCta, /href=\{getLocalizedPath\('\/contact', lang\)\}/, 'public translation hero should keep the localized contact CTA anchor');
   assert.doesNotMatch(heroWindow, /bg-\[radial-gradient/i, 'public translation hero should not restore the radial gradient');
   assert.doesNotMatch(source, /page\.hero\.backgroundLabel/, 'public translation hero should remove the old right-side background label card');
   assert.doesNotMatch(heroWindow, /backdrop-blur|shadow-\[/, 'public translation hero should stay flat without the right-side card chrome');
-  assert.doesNotMatch(heroWindow, /rounded-full/, 'public translation hero CTAs should be rectangular instead of pill-shaped');
+  assert.doesNotMatch(portfolioCta, /rounded-full/, 'public translation portfolio CTA should be rectangular instead of pill-shaped');
+  assert.doesNotMatch(contactCta, /rounded-full/, 'public translation contact CTA should be rectangular instead of pill-shaped');
+
+  if (process.env.CHECK_DIST !== '1') {
+    t.skip('Set CHECK_DIST=1 after npm run build to verify built translation hero CTA anchors.');
+    return;
+  }
+
+  for (const locale of locales) {
+    const relativePath = locale === 'es' ? 'dist/translation-seo/index.html' : `dist/${locale}/translation-seo/index.html`;
+    const portfolioHref = locale === 'es' ? '/ugc' : `/${locale}/ugc`;
+    const contactHref = locale === 'es' ? '/contact' : `/${locale}/contact`;
+    const html = await readBuiltHtml(relativePath);
+    const builtPortfolioCta = extractElementByDataAttribute(
+      html,
+      'a',
+      'data-translation-cta',
+      'portfolio',
+      `${locale} built translation portfolio CTA`,
+    );
+    const builtContactCta = extractElementByDataAttribute(
+      html,
+      'a',
+      'data-translation-cta',
+      'contact',
+      `${locale} built translation contact CTA`,
+    );
+
+    assert.match(
+      builtPortfolioCta,
+      new RegExp(`href="${escapeForRegex(portfolioHref)}"`),
+      `${relativePath} should keep the localized portfolio CTA href`,
+    );
+    assert.match(
+      builtContactCta,
+      new RegExp(`href="${escapeForRegex(contactHref)}"`),
+      `${relativePath} should keep the localized contact CTA href`,
+    );
+    assert.doesNotMatch(
+      builtPortfolioCta,
+      /rounded-full/,
+      `${relativePath} should keep the portfolio CTA rectangular in built HTML`,
+    );
+    assert.doesNotMatch(
+      builtContactCta,
+      /rounded-full/,
+      `${relativePath} should keep the contact CTA rectangular in built HTML`,
+    );
+  }
 });
 
 test('ServiceSwitcher keeps the 6-second behavior but swaps to open layout and right-side headline copy', async () => {
@@ -192,6 +268,8 @@ test('admin skill creation contracts require group-aware data and grouped editor
 
   assert.match(adminSource, /i18nKey={`translationPage\.services\.items\.\$\{index\}\.headline`}/, 'admin services should expose editable service headlines');
   assert.match(adminSource, /i18nKey="translationPage\.heroMark"/, 'admin hero should expose the editable vertical hero mark');
+  assert.match(adminSource, /i18nKey="translationPage\.hero\.ctaPrimary"/, 'admin hero should expose the editable primary CTA key');
+  assert.match(adminSource, /i18nKey="translationPage\.hero\.ctaSecondary"/, 'admin hero should expose the editable secondary CTA key');
   assert.match(
     editorSource,
     /<select[\s\S]*translation[\s\S]*seo/s,
@@ -283,6 +361,40 @@ test('experience browser chrome plus methodology and why sections expose the new
   assert.match(whySection, /\[\s*0\$\{index \+ 1\}\s*\]/, 'why cards should switch to inline bracketed numbers');
   assert.doesNotMatch(whySection, /gap-6/, 'why cards should become a flush grid without the old gaps');
   assert.doesNotMatch(whySection, /shadow-\[/, 'why cards should remove the old white card shadows');
+});
+
+test('admin methodology and why sections keep editable parity markers, headings, and indexed loops', async () => {
+  const adminSource = await readSource('src/pages/admin/translation-seo.astro');
+  const adminMethodologySection = extractSectionByDataAttribute(adminSource, 'data-admin-methodology', 'admin methodology section');
+  const adminWhySection = extractSectionByDataAttribute(adminSource, 'data-admin-why', 'admin why section');
+
+  assert.match(adminMethodologySection, /i18nKey="translationPage\.methodologyEyebrow"/, 'admin methodology should expose the editable eyebrow key');
+  assert.match(adminMethodologySection, /i18nKey="translationPage\.methodologyDisplayTitle"/, 'admin methodology should expose the editable display title key');
+  assert.match(adminMethodologySection, /page\.methodology\.steps\.map/, 'admin methodology should keep looping the methodology steps collection');
+  assert.match(
+    adminMethodologySection,
+    /i18nKey={`translationPage\.methodology\.steps\.\$\{index\}\.title`}/,
+    'admin methodology should expose editable methodology step titles for every indexed step',
+  );
+  assert.match(
+    adminMethodologySection,
+    /i18nKey={`translationPage\.methodology\.steps\.\$\{index\}\.description`}/,
+    'admin methodology should expose editable methodology step descriptions for every indexed step',
+  );
+
+  assert.match(adminWhySection, /i18nKey="translationPage\.whyEyebrow"/, 'admin why section should expose the editable eyebrow key');
+  assert.match(adminWhySection, /i18nKey="translationPage\.whyChooseMe\.title"/, 'admin why section should expose the editable title key');
+  assert.match(adminWhySection, /page\.whyChooseMe\.cards\.map/, 'admin why section should keep looping the why cards collection');
+  assert.match(
+    adminWhySection,
+    /i18nKey={`translationPage\.whyChooseMe\.cards\.\$\{index\}\.title`}/,
+    'admin why section should expose editable why card titles for every indexed card',
+  );
+  assert.match(
+    adminWhySection,
+    /i18nKey={`translationPage\.whyChooseMe\.cards\.\$\{index\}\.text`}/,
+    'admin why section should expose editable why card text for every indexed card',
+  );
 });
 
 test('existing Home and UGC stable markers stay untouched by the translation correction work', async () => {
