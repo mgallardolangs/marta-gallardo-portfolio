@@ -2,16 +2,19 @@ import { applySpanishFallbackToCodeManagedLocales } from './orbitMedia.ts';
 import type {
   LanguageItem,
   LocalizedText,
+  SkillGroup,
   SiteData,
   SkillItem,
   ToolItem,
 } from './siteData.ts';
 
 export const EDITABLE_COLLECTION_LOCALES = ['es', 'en', 'fr'] as const;
+export const EDITABLE_SKILL_GROUPS = ['translation', 'seo'] as const;
 export const TOOL_LOGO_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'] as const;
 export const TOOL_LOGO_MAX_BYTES = 2 * 1024 * 1024;
 export type EditableCollectionLocale = (typeof EDITABLE_COLLECTION_LOCALES)[number];
 export type EditableCollectionKind = 'languages' | 'tools' | 'skills';
+export type EditableSkillGroup = (typeof EDITABLE_SKILL_GROUPS)[number];
 
 type EditableLocaleSeed = Record<EditableCollectionLocale, string>;
 
@@ -26,6 +29,7 @@ export type AddToolCollectionItemInput = {
 };
 
 export type AddSkillCollectionItemInput = {
+  group: SkillGroup;
   label: EditableLocaleSeed;
 };
 
@@ -47,6 +51,10 @@ function normalizeIdSegment(value: string) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
+}
+
+function isSkillGroup(value: string): value is SkillGroup {
+  return EDITABLE_SKILL_GROUPS.includes(value as EditableSkillGroup);
 }
 
 function isToolLogoType(type: string) {
@@ -171,6 +179,9 @@ export function getEditableCollectionValidationErrors(siteData: SiteData) {
     if (validateEditableLocaleSeed(`Skill ${item.id} label`, item.label as EditableLocaleSeed)) {
       errors.push(`Skill ${item.id} requires ES/EN/FR labels.`);
     }
+    if (!isSkillGroup(item.group)) {
+      errors.push(`Skill ${item.id} requires a translation or seo group.`);
+    }
   });
 
   return errors;
@@ -213,9 +224,13 @@ export function createEditableCollectionItem(
   const skillInput = input as AddSkillCollectionItemInput;
   const labelError = validateEditableLocaleSeed('Skill label', skillInput.label);
   if (labelError) throw new Error(labelError);
+  if (!isSkillGroup(skillInput.group)) {
+    throw new Error('Skill group is required and must be translation or seo.');
+  }
 
   return {
     id: buildEditableCollectionId(kind, skillInput.label.es, existingIds),
+    group: skillInput.group,
     label: createCollectionLocalizedText(skillInput.label),
   };
 }

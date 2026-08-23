@@ -12,6 +12,7 @@ import {
 import {
   buildToolLogoUploadPath,
   createEditableCollectionItem,
+  EDITABLE_SKILL_GROUPS,
   getEditableCollectionValidationErrors,
   validateToolLogoUpload,
   type AddEditableCollectionItemInput,
@@ -23,6 +24,7 @@ import type {
   LanguageItem,
   LocalizedText,
   OrbitMedia,
+  SkillGroup,
   SiteData,
   SkillItem,
   ToolItem,
@@ -188,6 +190,21 @@ function utf8ToBase64(value: string): string {
     binary += String.fromCharCode(byte);
   });
   return btoa(binary);
+}
+
+function getSkillInsertIndex(skills: SkillItem[], group: SkillGroup): number {
+  if (group === 'translation') {
+    const firstSeoIndex = skills.findIndex((skill) => skill.group === 'seo');
+    return firstSeoIndex === -1 ? skills.length : firstSeoIndex;
+  }
+
+  for (let index = skills.length - 1; index >= 0; index -= 1) {
+    if (skills[index]?.group === 'seo') {
+      return index + 1;
+    }
+  }
+
+  return skills.length;
 }
 
 function fileToDataUrl(file: File): Promise<string> {
@@ -415,7 +432,13 @@ export class AdminStore {
       collection.map((item) => String((item as { id: string }).id)),
     );
 
-    collection.push(nextItem);
+    if (kind === 'skills') {
+      const skills = collection as SkillItem[];
+      const insertIndex = getSkillInsertIndex(skills, (nextItem as SkillItem).group);
+      skills.splice(insertIndex, 0, nextItem as SkillItem);
+    } else {
+      collection.push(nextItem);
+    }
 
     if (kind === 'tools') {
       const tool = nextItem as ToolItem;
@@ -425,6 +448,9 @@ export class AdminStore {
     this.publishSuccessState = false;
     this.publishErrorState = '';
     this.emit();
+    if (kind === 'skills') {
+      return (collection as SkillItem[]).findIndex((item) => item.id === (nextItem as SkillItem).id);
+    }
     return collection.length - 1;
   }
 
@@ -478,6 +504,22 @@ export class AdminStore {
     if (!localized || typeof localized !== 'object') return;
 
     item[field] = updateCollectionLocalizedText(localized as LocalizedText, lang, value) as never;
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  updateEditableCollectionSkillGroup(index: number, group: SkillGroup): void {
+    if (!this.initialized || !EDITABLE_SKILL_GROUPS.includes(group)) return;
+    const collection = this.getMutableEditableCollection('skills') as SkillItem[];
+    const item = collection[index];
+    if (!item || item.group === group) return;
+
+    const [nextItem] = collection.splice(index, 1);
+    nextItem.group = group;
+    const insertIndex = getSkillInsertIndex(collection, group);
+    collection.splice(insertIndex, 0, nextItem);
+
     this.publishSuccessState = false;
     this.publishErrorState = '';
     this.emit();

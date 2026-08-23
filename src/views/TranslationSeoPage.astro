@@ -21,182 +21,223 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
 <BaseLayout title={pageTitle} description={pageDescription}>
   <GsapPageRuntime />
   <div class="bg-paper" data-translation-page>
-      <section class="relative overflow-hidden border-b border-black/10 bg-paper px-6 pb-20 pt-28 md:pb-24 md:pt-32">
-        <div class="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgb(232_50_86_/_0.14),transparent_68%)]"></div>
-        <div class="site-container relative grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
-          <div class="max-w-4xl space-y-6">
-            <div class="inline-flex items-center gap-4 border-y border-black/12 py-3">
-              <p class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.28em]">{page.hero.eyebrow}</p>
-            </div>
+    <section class="relative overflow-hidden border-b border-ink px-6 pb-18 pt-28 md:pb-20 md:pt-32">
+      <div class="site-container relative">
+        <div class="max-w-4xl space-y-6 pr-12 md:pr-20">
+          <p class="inline-flex border border-ink px-3 py-2 font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">
+            {page.hero.eyebrow}
+          </p>
 
-            <TypedTitle
-              as="h1"
-              text={page.hero.title}
-              trigger="load"
-              class="max-w-[14ch] font-heading text-5xl leading-[0.92] tracking-[-0.04em] text-ink md:text-7xl"
-            />
+          <TypedTitle
+            as="h1"
+            text={page.hero.title}
+            trigger="load"
+            class="max-w-[14ch] font-heading text-5xl leading-[0.92] tracking-[-0.04em] text-ink md:text-7xl"
+          />
 
-            <RichText text={page.hero.text} class="max-w-3xl text-lg leading-8 text-ink-muted" />
+          <RichText text={page.hero.text} class="max-w-3xl text-lg leading-8 text-ink-muted" />
 
-            <div class="flex flex-wrap items-center gap-4 pt-2">
-              <a
-                href={getLocalizedPath('/ugc', lang)}
-                class="inline-flex items-center gap-3 rounded-full border border-amaranth bg-amaranth px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink transition hover:-translate-y-0.5 hover:bg-ink hover:text-paper"
-              >
-                {page.hero.ctaPrimary}
-              </a>
-              <a
-                href={getLocalizedPath('/contact', lang)}
-                class="inline-flex items-center gap-3 rounded-full border border-black/10 bg-white px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink transition hover:-translate-y-0.5 hover:border-amaranth hover:text-ink"
-              >
-                {page.hero.ctaSecondary}
-              </a>
-            </div>
-          </div>
-
-          <div class="border border-black/10 bg-white/84 p-6 shadow-[0_18px_40px_rgba(6,4,3,0.06)] backdrop-blur md:p-8">
-            <RichText text={page.hero.backgroundLabel} class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.24em]" />
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <a
+              href={getLocalizedPath('/ugc', lang)}
+              data-translation-cta="portfolio"
+              class="inline-flex items-center gap-3 border border-amaranth bg-amaranth px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink transition hover:-translate-y-0.5 hover:bg-ink hover:text-paper"
+            >
+              {page.hero.ctaPrimary}
+            </a>
+            <a
+              href={getLocalizedPath('/contact', lang)}
+              data-translation-cta="contact"
+              class="inline-flex items-center gap-3 border border-ink bg-paper px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink transition hover:-translate-y-0.5 hover:border-amaranth hover:text-amaranth"
+            >
+              {page.hero.ctaSecondary}
+            </a>
           </div>
         </div>
-      </section>
 
-      <section class="bg-ink px-6 py-14 text-paper md:py-18">
-        <div class="site-container space-y-6">
-          <div class="max-w-2xl">
-            <p class="font-body text-xs font-semibold uppercase tracking-[0.28em] text-paper">{page.services.title}</p>
-          </div>
-          <ServiceSwitcher client:load items={page.services.items} title={page.services.title} />
+        <p class="pointer-events-none absolute bottom-0 right-0 origin-bottom-right -rotate-90 font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-ink/38">
+          {page.heroMark}
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-ink px-6 py-14 text-paper md:py-18">
+      <div class="site-container space-y-8">
+        <div class="space-y-3">
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.servicesEyebrow}</p>
+          <TypedTitle
+            as="h2"
+            text={page.services.title}
+            trigger="visible"
+            class="font-heading text-4xl text-paper md:text-5xl"
+          />
         </div>
-      </section>
 
-      <section class="px-6 py-14 md:py-18" data-arsenal-section>
-        <div class="site-container space-y-10">
+        <ServiceSwitcher client:load items={page.services.items} title={page.services.title} />
+      </div>
+    </section>
+
+    <section class="px-6 py-14 md:py-18" data-arsenal-section>
+      <div class="site-container space-y-8">
+        <div class="space-y-3">
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.arsenalEyebrow}</p>
           <TypedTitle
             as="h2"
             text={page.arsenal.title}
             trigger="visible"
             class="font-heading text-4xl text-ink md:text-5xl"
           />
+        </div>
 
-          <div class="grid gap-6 lg:grid-cols-3">
-            <article class="border border-black/10 bg-white p-6 shadow-[0_16px_36px_rgba(6,4,3,0.05)]">
-              <p class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.26em]">{page.arsenal.languagesTitle}</p>
-              <span class="mt-4 block h-px bg-black/10" data-arsenal-line></span>
-              <div class="mt-6 grid gap-4 sm:grid-cols-2" data-arsenal-items>
+        <div class="border border-ink">
+          <div class="grid gap-0 lg:grid-cols-[0.82fr_0.88fr_1.3fr]">
+            <article class="border-b border-ink p-5 lg:border-b-0 lg:border-r" data-arsenal-panel="languages">
+              <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.languagesTitle}</p>
+              <span class="mt-4 block h-px bg-ink/12" data-arsenal-line></span>
+              <div class="mt-5 divide-y divide-ink/10" data-arsenal-items>
                 {arsenalColumns.languages.map((language) => (
-                  <div class="border border-black/10 bg-paper px-4 py-4" data-arsenal-item>
+                  <div class="grid gap-1 py-3" data-arsenal-item>
                     <p class="font-heading text-2xl text-ink">{language.label}</p>
-                    <p class="mt-2 text-sm text-ink-muted">{language.level}</p>
+                    <p class="text-sm text-ink-muted">{language.level}</p>
                   </div>
                 ))}
               </div>
             </article>
 
-            <article class="border border-black/10 bg-white p-6 shadow-[0_16px_36px_rgba(6,4,3,0.05)]">
-              <p class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.26em]">{page.arsenal.toolsTitle}</p>
-              <span class="mt-4 block h-px bg-black/10" data-arsenal-line></span>
-              <div class="mt-6 grid gap-4 sm:grid-cols-2" data-arsenal-items>
+            <article class="border-b border-ink p-5 lg:border-b-0 lg:border-r" data-arsenal-panel="tools">
+              <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.toolsTitle}</p>
+              <span class="mt-4 block h-px bg-ink/12" data-arsenal-line></span>
+              <div class="mt-5 grid grid-cols-3 gap-px bg-ink/10" data-arsenal-items>
                 {arsenalColumns.tools.map((tool) => (
-                  <div class="flex items-center gap-4 border border-black/10 bg-paper px-4 py-4" data-arsenal-item>
-                    <div class="flex h-12 w-12 items-center justify-center border border-black/10 bg-white">
-                      <img src={tool.logoSrc} alt="" width="28" height="28" loading="lazy" decoding="async" class="h-7 w-7 object-contain" />
+                  <div class="group flex aspect-square flex-col items-center justify-center gap-3 bg-paper px-3 py-4 text-center transition hover:text-amaranth" data-arsenal-item>
+                    <div class="flex h-12 w-12 items-center justify-center">
+                      <img src={tool.logoSrc} alt="" width="28" height="28" loading="lazy" decoding="async" class="h-7 max-h-[28px] w-7 max-w-[28px] object-contain" />
                     </div>
-                    <p class="text-sm leading-6 text-ink">{tool.label}</p>
+                    <p class="text-[0.68rem] font-medium uppercase tracking-[0.12em] text-ink transition group-hover:text-amaranth">{tool.label}</p>
                   </div>
                 ))}
               </div>
             </article>
 
-            <article class="border border-black/10 bg-white p-6 shadow-[0_16px_36px_rgba(6,4,3,0.05)]">
-              <p class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.26em]">{page.arsenal.skillsTitle}</p>
-              <span class="mt-4 block h-px bg-black/10" data-arsenal-line></span>
-              <div class="mt-6 flex flex-wrap gap-3" data-arsenal-items>
-                {arsenalColumns.skills.map((skill) => (
-                  <span class="border border-black/10 bg-paper px-4 py-2 text-sm text-ink" data-arsenal-item>{skill.label}</span>
-                ))}
+            <article class="p-5" data-arsenal-panel="skills">
+              <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.skillsTitle}</p>
+              <span class="mt-4 block h-px bg-ink/12" data-arsenal-line></span>
+              <div class="mt-5 grid gap-6 md:grid-cols-2" data-arsenal-items>
+                <div class="space-y-3">
+                  <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-muted">{page.skillGroups.translation}</p>
+                  <div class="flex flex-col gap-2">
+                    {arsenalColumns.skillGroups.translation.map((skill) => (
+                      <span class="border border-ink/12 px-3 py-2 text-[0.68rem] uppercase tracking-[0.08em] text-ink" data-arsenal-item>{skill.label}</span>
+                    ))}
+                  </div>
+                </div>
+                <div class="space-y-3">
+                  <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-muted">{page.skillGroups.seo}</p>
+                  <div class="flex flex-col gap-2">
+                    {arsenalColumns.skillGroups.seo.map((skill) => (
+                      <span class="border border-ink/12 px-3 py-2 text-[0.68rem] uppercase tracking-[0.08em] text-ink" data-arsenal-item>{skill.label}</span>
+                    ))}
+                  </div>
+                </div>
               </div>
             </article>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="px-6 py-14 md:py-18">
-        <div class="site-container">
-          <ExperienceTabs
-            client:load
-            tabListAriaLabel={page.browserTabsAriaLabel}
-            tabs={{
-              education: {
-                label: page.browserTabs.education,
-                intro: page.education.intro,
-                studies: page.education.studies,
-              },
-              experience: {
-                label: page.browserTabs.experience,
-                intro: page.experience.intro,
-                cards: page.experience.cards,
-              },
-            }}
-          />
-        </div>
-      </section>
-
-      <section class="bg-ink px-6 py-14 text-paper md:py-18" data-methodology-section>
-        <div class="site-container space-y-10">
+    <section class="px-6 py-14 md:py-18">
+      <div class="site-container space-y-8">
+        <div class="space-y-3">
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.experienceEyebrow}</p>
           <TypedTitle
             as="h2"
-            text={page.methodology.title}
+            text={page.experienceSectionTitle}
             trigger="visible"
-            class="font-heading text-4xl text-paper md:text-5xl"
+            class="font-heading text-4xl text-ink md:text-5xl"
           />
+        </div>
 
-          <div class="relative">
-            <span class="absolute left-6 top-4 block h-[calc(100%-2rem)] w-px bg-white/12 md:hidden" data-methodology-connector></span>
-            <span class="absolute left-10 right-10 top-10 hidden h-px bg-white/12 md:block" data-methodology-connector></span>
+        <ExperienceTabs
+          client:load
+          tabListAriaLabel={page.browserTabsAriaLabel}
+          statement={page.experienceStatement ?? page.experienceSectionTitle}
+          tabs={{
+            education: {
+              label: page.browserTabs.education,
+              intro: page.education.intro,
+              studies: page.education.studies,
+            },
+            experience: {
+              label: page.browserTabs.experience,
+              intro: page.experience.intro,
+              cards: page.experience.cards,
+            },
+          }}
+        />
+      </div>
+    </section>
 
-            <div class="grid gap-6 md:grid-cols-4">
-              {page.methodology.steps.map((step, index) => (
-                <article class="group relative pl-16 md:pl-0" data-methodology-step tabindex="0">
-                  <div class="absolute left-0 top-0 flex h-12 w-12 items-center justify-center rounded-full border border-white/12 bg-white/6 font-body text-sm font-semibold uppercase tracking-[0.16em] text-amaranth transition group-hover:-translate-y-1 group-hover:border-amaranth group-hover:bg-amaranth group-hover:text-ink group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth group-focus-visible:bg-amaranth group-focus-visible:text-ink md:relative md:mx-auto">
-                    0{index + 1}
-                  </div>
-                  <div class="border border-white/10 bg-white/5 p-6 transition group-hover:-translate-y-1 group-hover:border-amaranth/50 group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth/50 md:mt-6">
-                    <h3 class="font-heading text-2xl text-paper">{step.title}</h3>
-                    <p class="mt-4 text-sm leading-7 text-white/72">{step.description}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
+    <section class="bg-ink px-6 py-14 text-paper md:py-18" data-methodology-section>
+      <div class="site-container space-y-8">
+        <div class="space-y-3">
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.methodologyEyebrow}</p>
+          <TypedTitle
+            as="h2"
+            text={page.methodologyDisplayTitle}
+            trigger="visible"
+            class="max-w-4xl font-heading text-4xl text-paper md:text-5xl"
+          />
+        </div>
+
+        <div class="relative">
+          <span class="absolute left-6 top-4 block h-[calc(100%-2rem)] w-px bg-paper/18 md:hidden" data-methodology-connector></span>
+          <span class="absolute left-10 right-10 top-8 hidden h-px bg-paper/18 md:block" data-methodology-connector></span>
+
+          <div class="grid gap-6 md:grid-cols-4">
+            {page.methodology.steps.map((step, index) => (
+              <article class="group relative pl-16 md:pl-0" data-methodology-step tabindex="0">
+                <div class="absolute left-0 top-0 flex h-12 w-12 items-center justify-center rounded-full border border-paper/24 font-body text-sm font-semibold uppercase tracking-[0.16em] text-amaranth transition group-hover:-translate-y-1 group-hover:border-amaranth group-hover:bg-amaranth group-hover:text-ink group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth group-focus-visible:bg-amaranth group-focus-visible:text-ink md:relative md:mx-auto">
+                  0{index + 1}
+                </div>
+                <div class="border border-paper/18 px-5 py-6 transition group-hover:-translate-y-1 group-hover:border-amaranth/60 group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth/60 md:mt-6">
+                  <h3 class="font-heading text-2xl text-paper">{step.title}</h3>
+                  <p class="mt-4 text-sm leading-7 text-paper/72">{step.description}</p>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="px-6 py-14 md:py-18" data-why-section>
-        <div class="site-container space-y-10">
+    <section class="px-6 py-14 md:py-18" data-why-section>
+      <div class="site-container space-y-8">
+        <div class="space-y-3">
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.whyEyebrow}</p>
           <TypedTitle
             as="h2"
             text={page.whyChooseMe.title}
             trigger="visible"
             class="max-w-3xl font-heading text-4xl text-ink md:text-5xl"
           />
-
-          <div class="grid gap-6 md:grid-cols-3">
-            {page.whyChooseMe.cards.map((card) => (
-              <article class="group border border-black/10 bg-white p-6 shadow-[0_16px_36px_rgba(6,4,3,0.05)]" data-why-card tabindex="0">
-                <div class="flex items-start gap-3">
-                  <span class="text-amaranth transition group-hover:opacity-100 group-focus-visible:opacity-100">[</span>
-                  <div class="space-y-4">
-                    <h3 class="font-heading text-3xl text-ink">{card.title}</h3>
-                    <p class="text-sm leading-7 text-ink-muted">{card.text}</p>
-                  </div>
-                  <span class="text-amaranth transition group-hover:opacity-100 group-focus-visible:opacity-100">]</span>
-                </div>
-              </article>
-            ))}
-          </div>
         </div>
-      </section>
-    </div>
+
+        <div class="grid gap-0 border border-ink md:grid-cols-3 md:divide-x md:divide-ink">
+          {page.whyChooseMe.cards.map((card, index) => (
+            <article class="group relative overflow-hidden border-b border-ink last:border-b-0 md:border-b-0" data-why-card tabindex="0">
+              <span class="absolute inset-x-0 bottom-0 h-full origin-bottom scale-y-0 bg-ink transition duration-300 group-hover:scale-y-100 group-focus-visible:scale-y-100"></span>
+              <div class="relative space-y-5 px-5 py-6 transition duration-300 group-hover:text-paper group-focus-visible:text-paper">
+                <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-amaranth">{`[ 0${index + 1} ]`}</p>
+                <h3 class="font-heading text-3xl text-ink transition duration-300 group-hover:text-paper group-focus-visible:text-paper">{card.title}</h3>
+                <p class="text-sm leading-7 text-ink-muted transition duration-300 group-hover:text-paper/76 group-focus-visible:text-paper/76">{card.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
 
   <script>
     import { cleanupTranslationPageMotion, initTranslationPageMotion } from '../lib/translationPageMotion.ts';

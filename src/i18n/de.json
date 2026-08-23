@@ -285,17 +285,20 @@
         {
           "id": "translation",
           "name": "Übersetzung",
-          "description": "Ich übersetze nicht nur Wörter, sondern passe Botschaften so an, dass sie ihre Bedeutung, ihren Ton und ihre Verbindungskraft behalten."
+          "description": "Ich übersetze nicht nur Wörter, sondern passe Botschaften so an, dass sie ihre Bedeutung, ihren Ton und ihre Verbindungskraft behalten.",
+          "headline": "Sinn und Ton bleiben erhalten."
         },
         {
           "id": "localization",
           "name": "Lokalisierung",
-          "description": "Jeder Markt hat eigene Referenzen, Ausdrucksweisen und Kommunikationscodes. Ich passe Inhalte so an, dass sie in ihrem jeweiligen Kontext natürlich wirken."
+          "description": "Jeder Markt hat eigene Referenzen, Ausdrucksweisen und Kommunikationscodes. Ich passe Inhalte so an, dass sie in ihrem jeweiligen Kontext natürlich wirken.",
+          "headline": "Damit es sich vor Ort richtig anfühlt."
         },
         {
           "id": "multilingual-seo",
           "name": "Mehrsprachiges SEO",
-          "description": "Ich optimiere Inhalte für Suchmaschinen, ohne Natürlichkeit, Markenstimme oder Lesbarkeit zu beeinträchtigen."
+          "description": "Ich optimiere Inhalte für Suchmaschinen, ohne Natürlichkeit, Markenstimme oder Lesbarkeit zu beeinträchtigen.",
+          "headline": "Sichtbar, ohne unnatürlich zu klingen."
         }
       ]
     },
@@ -376,6 +379,19 @@
           "text": "Ich halte Fristen ein, kommuniziere während des gesamten Prozesses klar und liefere überarbeitete Inhalte, die direkt einsatzbereit sind."
         }
       ]
+    },
+    "heroMark": "ÜBERSETZUNG · SEO · LOKALISIERUNG",
+    "servicesEyebrow": "Was ich für Ihre Inhalte leisten kann",
+    "arsenalEyebrow": "Sprachen, Tools und Sprachgefühl",
+    "experienceSectionTitle": "Ausbildung und praktische Erfahrung",
+    "experienceEyebrow": "Werdegang",
+    "experienceStatement": "Akademische Grundlage + echte Praxiserfahrung",
+    "methodologyEyebrow": "So arbeite ich",
+    "methodologyDisplayTitle": "Ein klarer Ablauf vom Briefing bis zur Abgabe",
+    "whyEyebrow": "Warum Sie mir Ihr Projekt anvertrauen können",
+    "skillGroups": {
+      "translation": "Übersetzung & Lokalisierung",
+      "seo": "SEO & Content"
     }
   }
 }

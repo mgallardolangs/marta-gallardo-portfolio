@@ -30,6 +30,7 @@ export function useAdminStore() {
     removeEditableCollectionItem: adminStore.removeEditableCollectionItem.bind(adminStore),
     moveEditableCollectionItem: adminStore.moveEditableCollectionItem.bind(adminStore),
     updateEditableCollectionText: adminStore.updateEditableCollectionText.bind(adminStore),
+    updateEditableCollectionSkillGroup: adminStore.updateEditableCollectionSkillGroup.bind(adminStore),
     setEditableToolLogo: adminStore.setEditableToolLogo.bind(adminStore),
     setLang: adminStore.setLang.bind(adminStore),
     publish: adminStore.publish.bind(adminStore),

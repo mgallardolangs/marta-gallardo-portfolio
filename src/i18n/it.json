@@ -285,17 +285,20 @@
         {
           "id": "translation",
           "name": "Traduzione",
-          "description": "Non mi limito a tradurre parole: adatto i messaggi affinché mantengano significato, tono e capacità di creare connessione."
+          "description": "Non mi limito a tradurre parole: adatto i messaggi affinché mantengano significato, tono e capacità di creare connessione.",
+          "headline": "Senso e tono restano intatti."
         },
         {
           "id": "localization",
           "name": "Localizzazione",
-          "description": "Ogni mercato ha riferimenti, espressioni e codici comunicativi diversi. Adatto i contenuti perché risultino naturali nel loro contesto."
+          "description": "Ogni mercato ha riferimenti, espressioni e codici comunicativi diversi. Adatto i contenuti perché risultino naturali nel loro contesto.",
+          "headline": "Per sembrare davvero locale."
         },
         {
           "id": "multilingual-seo",
           "name": "SEO multilingue",
-          "description": "Ottimizzo i contenuti per i motori di ricerca senza sacrificare naturalezza, voce del brand o esperienza di lettura."
+          "description": "Ottimizzo i contenuti per i motori di ricerca senza sacrificare naturalezza, voce del brand o esperienza di lettura.",
+          "headline": "Più visibilità, in modo naturale."
         }
       ]
     },
@@ -376,6 +379,19 @@
           "text": "Rispetto le scadenze, mantengo una comunicazione chiara durante tutto il processo e consegno contenuti rivisti e pronti per essere pubblicati."
         }
       ]
+    },
+    "heroMark": "TRADUZIONE · SEO · LOCALIZZAZIONE",
+    "servicesEyebrow": "Cosa posso fare per i tuoi contenuti",
+    "arsenalEyebrow": "Lingue, strumenti e criterio",
+    "experienceSectionTitle": "Formazione ed esperienza applicate",
+    "experienceEyebrow": "Percorso",
+    "experienceStatement": "Base accademica + pratica reale",
+    "methodologyEyebrow": "Come lavoro",
+    "methodologyDisplayTitle": "Un processo chiaro, dal brief alla consegna",
+    "whyEyebrow": "Perché affidarmi il tuo progetto",
+    "skillGroups": {
+      "translation": "Traduzione e localizzazione",
+      "seo": "SEO e contenuti"
     }
   }
 }

@@ -43,8 +43,11 @@ export type ToolItem = {
   label: LocalizedText;
 };
 
+export type SkillGroup = 'translation' | 'seo';
+
 export type SkillItem = {
   id: string;
+  group: SkillGroup;
   label: LocalizedText;
 };
 

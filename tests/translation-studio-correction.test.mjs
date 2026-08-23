@@ -344,7 +344,11 @@ test('experience browser chrome plus methodology and why sections expose the new
   assert.match(publicSource, /page\.experienceSectionTitle/, 'public translation page should render the typed experience section title');
   assert.match(adminSource, /i18nKey="translationPage\.experienceEyebrow"/, 'admin translation page should expose the editable experience eyebrow');
   assert.match(adminSource, /i18nKey="translationPage\.experienceSectionTitle"/, 'admin translation page should expose the editable experience title');
-  assert.doesNotMatch(experienceTabsSource, /rounded-full/, 'browser tabs should remove the rounded pill controls');
+  assert.doesNotMatch(
+    experienceTabsSource,
+    /role="tab"[\s\S]{0,220}rounded-full/s,
+    'browser tabs should remove the rounded pill controls while allowing the chrome indicator dot',
+  );
   assert.doesNotMatch(experienceTabsSource, /shadow-\[/, 'browser tabs should remove the floating shadow card');
   assert.match(
     experienceTabsSource,

@@ -285,17 +285,20 @@
         {
           "id": "translation",
           "name": "Traduction",
-          "description": "Au-delà des mots, j’adapte les messages pour qu’ils conservent leur sens, leur ton et leur capacité à créer du lien."
+          "description": "Au-delà des mots, j’adapte les messages pour qu’ils conservent leur sens, leur ton et leur capacité à créer du lien.",
+          "headline": "Le sens, sans perdre la voix."
         },
         {
           "id": "localization",
           "name": "Localisation",
-          "description": "Chaque marché a ses références, ses expressions et ses codes de communication. J’adapte le contenu pour qu’il paraisse naturel dans son contexte."
+          "description": "Chaque marché a ses références, ses expressions et ses codes de communication. J’adapte le contenu pour qu’il paraisse naturel dans son contexte.",
+          "headline": "Que cela sonne local."
         },
         {
           "id": "multilingual-seo",
           "name": "SEO multilingue",
-          "description": "J’optimise les contenus pour qu’ils soient visibles sur les moteurs de recherche sans sacrifier le naturel ni le confort de lecture."
+          "description": "J’optimise les contenus pour qu’ils soient visibles sur les moteurs de recherche sans sacrifier le naturel ni le confort de lecture.",
+          "headline": "Être visible sans forcer le texte."
         }
       ]
     },
@@ -376,6 +379,19 @@
           "text": "Je respecte les délais, je garde une communication claire tout au long du processus et je livre un contenu révisé, prêt à être publié."
         }
       ]
+    },
+    "heroMark": "TRADUCTION · SEO · LOCALISATION",
+    "servicesEyebrow": "Ce que je peux faire pour votre contenu",
+    "arsenalEyebrow": "Langues, outils et discernement",
+    "experienceSectionTitle": "Formation et expérience appliquées",
+    "experienceEyebrow": "Parcours",
+    "experienceStatement": "Base académique + pratique de terrain",
+    "methodologyEyebrow": "Ma méthode de travail",
+    "methodologyDisplayTitle": "Un processus clair, du brief à la livraison",
+    "whyEyebrow": "Pourquoi me confier votre projet",
+    "skillGroups": {
+      "translation": "Traduction & localisation",
+      "seo": "SEO & contenu"
     }
   }
 }

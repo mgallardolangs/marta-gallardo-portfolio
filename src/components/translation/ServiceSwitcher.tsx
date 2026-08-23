@@ -11,6 +11,7 @@ import {
 type ServiceItem = {
   id: string;
   name: string;
+  headline: string;
   description: string;
 };
 
@@ -82,7 +83,6 @@ export default function ServiceSwitcher({ items, title = '' }: Props) {
     let animationFrame = 0;
     let previousTime = performance.now();
 
-    // The timer runs in rAF so hover/focus/visibility pauses keep the visible progress line exact.
     const tick = (now: number) => {
       const deltaMs = now - previousTime;
       previousTime = now;
@@ -147,10 +147,10 @@ export default function ServiceSwitcher({ items, title = '' }: Props) {
           selectService(nextIndex);
           tabRefs.current[nextIndex]?.focus();
         }}
-        className={`group flex w-full flex-col gap-4 border-b border-white/10 pb-5 text-left transition ${isActive ? 'text-paper' : 'text-white/58 hover:text-paper focus-visible:text-paper'}`}
+        className={`group flex w-full flex-col gap-4 border-b border-paper/18 pb-5 text-left transition ${isActive ? 'text-paper' : 'text-paper/58 hover:text-paper focus-visible:text-paper'}`}
       >
         <span className="font-heading text-3xl md:text-4xl">{item.name}</span>
-        <span className="relative block h-px overflow-hidden bg-amaranth/20">
+        <span className="relative block h-px overflow-hidden bg-paper/18">
           <span
             className="absolute inset-y-0 left-0 bg-amaranth"
             style={{ width: `${progressValue * 100}%` }}
@@ -163,7 +163,7 @@ export default function ServiceSwitcher({ items, title = '' }: Props) {
   return (
     <section
       aria-label={title || 'Services'}
-      className="border border-white/10 bg-ink text-paper shadow-[0_24px_80px_rgba(6,4,3,0.18)]"
+      className="text-paper"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onFocusCapture={() => setIsFocusWithin(true)}
@@ -173,13 +173,12 @@ export default function ServiceSwitcher({ items, title = '' }: Props) {
         }
       }}
     >
-      {/* Only one mode stays exposed to assistive tech at a time even though CSS swaps layouts responsively. */}
-      <div hidden={!isDesktop} aria-hidden={!isDesktop} className="grid gap-10 p-6 md:grid-cols-[0.95fr_1.05fr] md:p-10">
+      <div hidden={!isDesktop} aria-hidden={!isDesktop} className="grid gap-10 border-t border-paper/18 pt-8 md:grid-cols-[0.76fr_1.24fr] md:pt-10">
         <div role="tablist" aria-label={title || 'Services'} className="space-y-6">
           {desktopTabs}
         </div>
 
-        <div>
+        <div className="min-h-[20rem] border-l border-paper/18 pl-8 md:pl-10">
           {items.map((item, index) => {
             const isActive = index === activeIndex;
 
@@ -192,11 +191,12 @@ export default function ServiceSwitcher({ items, title = '' }: Props) {
                 hidden={!isActive}
                 aria-hidden={!isActive}
                 tabIndex={isActive ? 0 : -1}
-                className="flex min-h-[18rem] items-center border border-white/10 bg-white/5 p-6 md:p-8"
+                className="flex min-h-[20rem] items-center"
               >
-                <div className="max-w-2xl space-y-4">
-                  <p className="font-body text-xs font-semibold uppercase tracking-[0.3em] text-paper">{item.name}</p>
-                  <p className="text-lg leading-8 text-white/78">{item.description}</p>
+                <div className="max-w-2xl space-y-5">
+                  <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-paper/60">{item.name}</p>
+                  <h3 className="font-heading text-4xl leading-[0.96] text-paper md:text-5xl">{item.headline}</h3>
+                  <p className="text-base leading-8 text-paper/74 md:text-lg">{item.description}</p>
                 </div>
               </div>
             );
@@ -204,13 +204,13 @@ export default function ServiceSwitcher({ items, title = '' }: Props) {
         </div>
       </div>
 
-      <div hidden={isDesktop} aria-hidden={isDesktop} className="divide-y divide-white/10">
+      <div hidden={isDesktop} aria-hidden={isDesktop} className="border-t border-paper/18">
         {items.map((item, index) => {
           const isActive = index === activeIndex;
           const progressValue = isActive ? progress : 0;
 
           return (
-            <div key={item.id} className="p-5">
+            <div key={item.id} className="border-b border-paper/18 py-5">
               <button
                 id={`service-mobile-trigger-${item.id}`}
                 type="button"
@@ -219,8 +219,8 @@ export default function ServiceSwitcher({ items, title = '' }: Props) {
                 className="flex w-full flex-col gap-4 text-left"
                 onClick={() => selectService(index)}
               >
-                <span className={`font-heading text-2xl transition ${isActive ? 'text-paper' : 'text-white/72'}`}>{item.name}</span>
-                <span className="relative block h-px overflow-hidden bg-amaranth/20">
+                <span className={`font-heading text-2xl transition ${isActive ? 'text-paper' : 'text-paper/72'}`}>{item.name}</span>
+                <span className="relative block h-px overflow-hidden bg-paper/18">
                   <span
                     className="absolute inset-y-0 left-0 bg-amaranth"
                     style={{ width: `${progressValue * 100}%` }}
@@ -234,9 +234,11 @@ export default function ServiceSwitcher({ items, title = '' }: Props) {
                 aria-labelledby={`service-mobile-trigger-${item.id}`}
                 hidden={!isActive}
                 aria-hidden={!isActive}
-                className="pt-4"
+                className="space-y-4 pt-4"
               >
-                <p className="text-base leading-7 text-white/78">{item.description}</p>
+                <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-paper/60">{item.name}</p>
+                <h3 className="font-heading text-3xl leading-[0.98] text-paper">{item.headline}</h3>
+                <p className="text-base leading-7 text-paper/76">{item.description}</p>
               </div>
             </div>
           );

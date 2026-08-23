@@ -37,17 +37,20 @@
         {
           "id": "translation",
           "name": "Traducción",
-          "description": "Más que traducir palabras, adapto mensajes para que mantengan su significado, su tono y su capacidad de conectar."
+          "description": "Más que traducir palabras, adapto mensajes para que mantengan su significado, su tono y su capacidad de conectar.",
+          "headline": "Cada matiz importa."
         },
         {
           "id": "localization",
           "name": "Localización",
-          "description": "Cada mercado tiene referencias, expresiones y formas de comunicar diferentes. Ajusto el contenido para que resulte natural en su contexto."
+          "description": "Cada mercado tiene referencias, expresiones y formas de comunicar diferentes. Ajusto el contenido para que resulte natural en su contexto.",
+          "headline": "Que suene de allí."
         },
         {
           "id": "multilingual-seo",
           "name": "SEO Multilingüe",
-          "description": "Optimizo el contenido para que sea visible en buscadores sin comprometer la naturalidad ni la experiencia de lectura."
+          "description": "Optimizo el contenido para que sea visible en buscadores sin comprometer la naturalidad ni la experiencia de lectura.",
+          "headline": "Que te encuentren con naturalidad."
         }
       ]
     },
@@ -128,6 +131,19 @@
           "text": "Cumplo plazos, mantengo comunicación clara durante todo el proceso y entrego contenido revisado y listo para publicar."
         }
       ]
+    },
+    "heroMark": "TRADUCCIÓN · SEO · LOCALIZACIÓN",
+    "servicesEyebrow": "Lo que puedo hacer por tu contenido",
+    "arsenalEyebrow": "Idiomas, herramientas y criterio",
+    "experienceSectionTitle": "Formación y experiencia aplicadas",
+    "experienceEyebrow": "Recorrido",
+    "experienceStatement": "Base académica + práctica real",
+    "methodologyEyebrow": "Cómo trabajo",
+    "methodologyDisplayTitle": "Un proceso claro, del briefing a la entrega",
+    "whyEyebrow": "Por qué confiar en mí",
+    "skillGroups": {
+      "translation": "Traducción y localización",
+      "seo": "SEO y contenido"
     }
   },
   "ugcPage": {

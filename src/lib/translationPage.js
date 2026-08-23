@@ -33,7 +33,15 @@ export function getTranslationToolTiles(lang, siteData, translatedLabels = []) {
   });
 }
 
-export function getTranslationArsenalColumns(lang, siteData) {
+function localizeSkill(skill, lang) {
+  return {
+    id: skill.id,
+    group: skill.group,
+    label: localize(skill.label, lang),
+  };
+}
+
+export function getTranslationArsenalColumns(lang, siteData, filter) {
   const languages = (siteData?.arsenal?.languages ?? []).map((language) => ({
     id: language.id,
     code: language.code,
@@ -43,14 +51,25 @@ export function getTranslationArsenalColumns(lang, siteData) {
 
   const tools = getTranslationToolTiles(lang, siteData);
 
-  const skills = (siteData?.arsenal?.skills ?? []).map((skill) => ({
-    id: skill.id,
-    label: localize(skill.label, lang),
-  }));
+  const skills = (siteData?.arsenal?.skills ?? []).map((skill) => localizeSkill(skill, lang));
+  const groupedSkills = {
+    translation: skills.filter((skill) => skill.group === 'translation'),
+    seo: skills.filter((skill) => skill.group === 'seo'),
+  };
+
+  if (filter === 'translation' || filter === 'seo') {
+    return {
+      languages,
+      tools,
+      skills: groupedSkills[filter],
+      skillGroups: { [filter]: groupedSkills[filter] },
+    };
+  }
 
   return {
     languages,
     tools,
     skills,
+    skillGroups: groupedSkills,
   };
 }

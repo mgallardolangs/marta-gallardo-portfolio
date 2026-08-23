@@ -285,17 +285,20 @@
         {
           "id": "translation",
           "name": "Traducció",
-          "description": "No em limite a traduir paraules: adapte els missatges perquè mantinguen el seu significat, el seu to i la seua capacitat de connectar."
+          "description": "No em limite a traduir paraules: adapte els missatges perquè mantinguen el seu significat, el seu to i la seua capacitat de connectar.",
+          "headline": "Cada matís compta."
         },
         {
           "id": "localization",
           "name": "Localització",
-          "description": "Cada mercat té referències, expressions i codis de comunicació diferents. Adapte el contingut perquè resulte natural dins del seu context."
+          "description": "Cada mercat té referències, expressions i codis de comunicació diferents. Adapte el contingut perquè resulte natural dins del seu context.",
+          "headline": "Que soni d’aquí."
         },
         {
           "id": "multilingual-seo",
           "name": "SEO multilingüe",
-          "description": "Optimitze continguts per als cercadors sense sacrificar naturalitat, veu de marca ni experiència de lectura."
+          "description": "Optimitze continguts per als cercadors sense sacrificar naturalitat, veu de marca ni experiència de lectura.",
+          "headline": "Més visibilitat, amb naturalitat."
         }
       ]
     },
@@ -376,6 +379,19 @@
           "text": "Respecte terminis, mantinc una comunicació clara durant tot el procés i entregue contingut revisat i llest per publicar."
         }
       ]
+    },
+    "heroMark": "TRADUCCIÓ · SEO · LOCALITZACIÓ",
+    "servicesEyebrow": "Què puc fer pel teu contingut",
+    "arsenalEyebrow": "Idiomes, eines i criteri",
+    "experienceSectionTitle": "Formació i experiència aplicades",
+    "experienceEyebrow": "Recorregut",
+    "experienceStatement": "Base acadèmica + pràctica real",
+    "methodologyEyebrow": "Com treballo",
+    "methodologyDisplayTitle": "Un procés clar, del briefing al lliurament",
+    "whyEyebrow": "Per què confiar-me el teu projecte",
+    "skillGroups": {
+      "translation": "Traducció i localització",
+      "seo": "SEO i contingut"
     }
   }
 }

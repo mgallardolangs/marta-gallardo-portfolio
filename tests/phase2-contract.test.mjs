@@ -52,7 +52,7 @@ const sharedViews = [
 const typedViewSpecs = [
   ['src/views/HomePage.astro', /text=\{i\.hero\.name\}/, 1],
   ['src/views/UgcPage.astro', /text=\{i\.ugcPage\.hero\.headline\}/, 1],
-  ['src/views/TranslationSeoPage.astro', /text=\{page\.hero\.title\}/, 4],
+  ['src/views/TranslationSeoPage.astro', /text=\{page\.hero\.title\}/, 6],
   ['src/views/BlogIndexPage.astro', /text=\{i\.blog\.title\}/, 1],
   ['src/views/ContactPage.astro', /text=\{i\.contact\.title\}/, 1],
 ];
