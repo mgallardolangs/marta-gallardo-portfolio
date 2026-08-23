@@ -98,6 +98,9 @@ test('BlogIndexPage keeps the approved hero, latest-story, archive, and empty-ro
   assert.match(source, /aspect-\[16\/10\]/, 'BlogIndexPage latest feature should keep the approved 16:10 landscape frame');
   assert.match(source, /i\.blog\.comingSoonTitle/, 'BlogIndexPage should render the localized archive empty-row title');
   assert.match(source, /i\.blog\.comingSoonMeta/, 'BlogIndexPage should render the localized archive empty-row meta');
+  assert.match(source, /\{\s*latest\s*&&\s*\(/, 'BlogIndexPage should make the latest feature optional inside the persistent editorial shell');
+  assert.match(source, /String\(latest\s*\?\s*2\s*:\s*1\)\.padStart\(2,\s*['"]0['"]\)/, 'BlogIndexPage should reuse the approved archive placeholder row even when there is no latest story');
+  assert.doesNotMatch(source, /\{\s*(?:post|latest)\s*\?\s*\(/, 'BlogIndexPage should not hide the archive shell when the latest story is null');
   assert.doesNotMatch(source, /i\.blog\.emptyState/, 'BlogIndexPage should replace the old emptyState paragraph with the editorial archive row');
 
   const latestBlock = extractWindowAround(source, 'data-blog-latest-story', 'BlogIndexPage latest-story block');
@@ -294,6 +297,13 @@ test('createBlogPost uploads the featured asset first, writes public image front
       });
     }
 
+    if (method === 'GET' && url.includes('public/images/blog/editorial-feature.webp')) {
+      return new Response(JSON.stringify({ message: 'Not Found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     if (method === 'PUT' && url.includes('public/images/blog/editorial-feature.webp')) {
       return new Response(JSON.stringify({ content: { sha: 'image-sha' } }), {
         status: 200,
@@ -335,6 +345,7 @@ test('createBlogPost uploads the featured asset first, writes public image front
     calls.map((call) => `${call.method} ${call.url}`),
     [
       'GET /.netlify/git/github/contents/src/content/blog/editorial-feature.md',
+      'GET /.netlify/git/github/contents/public/images/blog/editorial-feature.webp',
       'PUT /.netlify/git/github/contents/public/images/blog/editorial-feature.webp',
       'PUT /.netlify/git/github/contents/src/content/blog/editorial-feature.md',
     ],
@@ -348,6 +359,128 @@ test('createBlogPost uploads the featured asset first, writes public image front
   const markdown = Buffer.from(payload.content, 'base64').toString('utf8');
 
   assert.match(markdown, /^image:\s*["']\/images\/blog\/editorial-feature\.webp["']$/m, 'created markdown frontmatter should include the public featured image path');
+});
+
+test('createBlogPost reuses an orphaned featured image on retry by upserting with the fetched sha before creating markdown', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const store = new AdminStore();
+  store.init({ es: {}, en: {}, fr: {} }, {}, 'es', 'publish-token');
+
+  const calls = [];
+  let imageShaAvailable = false;
+  let markdownAttempt = 0;
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input, init = {}) => {
+    const method = init.method ?? 'GET';
+    const url = String(input);
+    const body = init.body ?? null;
+    calls.push({ method, url, body });
+
+    if (method === 'GET' && url.includes('src/content/blog/retry-feature.md')) {
+      return new Response(JSON.stringify({ message: 'Not Found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    if (method === 'GET' && url.includes('public/images/blog/retry-feature.webp')) {
+      if (!imageShaAvailable) {
+        return new Response(JSON.stringify({ message: 'Not Found' }), {
+          status: 404,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      return new Response(JSON.stringify({ sha: 'orphan-image-sha' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    if (method === 'PUT' && url.includes('public/images/blog/retry-feature.webp')) {
+      imageShaAvailable = true;
+      return new Response(JSON.stringify({ content: { sha: 'saved-image-sha' } }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    if (method === 'PUT' && url.includes('src/content/blog/retry-feature.md')) {
+      markdownAttempt += 1;
+
+      if (markdownAttempt === 1) {
+        return new Response(JSON.stringify({ message: 'Simulated markdown failure' }), {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      return new Response(JSON.stringify({ content: { sha: 'markdown-sha' } }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    return new Response(JSON.stringify({ message: `Unexpected ${method} ${url}` }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+
+  try {
+    await assert.rejects(
+      store.createBlogPost({
+        slug: 'retry-feature',
+        title: 'Retry feature',
+        description: 'First attempt leaves the image behind',
+        date: '2026-08-24',
+        tags: ['blog'],
+        lang: 'es',
+        body: '# Retry feature',
+        featuredImage: new File(['retry-image'], 'retry-feature.webp', { type: 'image/webp' }),
+      }),
+      /Simulated markdown failure/,
+      'the first publish attempt should expose the markdown failure after the image upload succeeds',
+    );
+
+    const createdPath = await store.createBlogPost({
+      slug: 'retry-feature',
+      title: 'Retry feature',
+      description: 'Second attempt should reuse the existing image',
+      date: '2026-08-24',
+      tags: ['blog'],
+      lang: 'es',
+      body: '# Retry feature',
+      featuredImage: new File(['retry-image'], 'retry-feature.webp', { type: 'image/webp' }),
+    });
+
+    assert.equal(createdPath, 'src/content/blog/retry-feature.md');
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.deepEqual(
+    calls.map((call) => `${call.method} ${call.url}`),
+    [
+      'GET /.netlify/git/github/contents/src/content/blog/retry-feature.md',
+      'GET /.netlify/git/github/contents/public/images/blog/retry-feature.webp',
+      'PUT /.netlify/git/github/contents/public/images/blog/retry-feature.webp',
+      'PUT /.netlify/git/github/contents/src/content/blog/retry-feature.md',
+      'GET /.netlify/git/github/contents/src/content/blog/retry-feature.md',
+      'GET /.netlify/git/github/contents/public/images/blog/retry-feature.webp',
+      'PUT /.netlify/git/github/contents/public/images/blog/retry-feature.webp',
+      'PUT /.netlify/git/github/contents/src/content/blog/retry-feature.md',
+    ],
+    'retrying should still check the markdown slug first, then upsert the orphaned image before retrying the markdown create',
+  );
+
+  const imagePuts = calls.filter((call) => call.method === 'PUT' && call.url.includes('public/images/blog/retry-feature.webp'));
+  assert.equal(imagePuts.length, 2, 'the featured image should be written once per attempt');
+
+  const firstImagePayload = JSON.parse(String(imagePuts[0].body));
+  const secondImagePayload = JSON.parse(String(imagePuts[1].body));
+  assert.equal(firstImagePayload.sha, undefined, 'the first image create should not include a sha when the file does not exist yet');
+  assert.equal(secondImagePayload.sha, 'orphan-image-sha', 'the retry image upsert should include the fetched sha so the orphan asset can be safely reused');
 });
 
 test('Blog Task 1 protects the approved Home, UGC, and Translation source contracts', async () => {

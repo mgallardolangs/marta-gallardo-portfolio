@@ -233,6 +233,17 @@ test('build only emits the Spanish root route for the Spanish-only blog post', a
   }
 });
 
+test('all five non-ES localized blog index routes build', async (t) => {
+  if (process.env.CHECK_DIST !== '1') {
+    t.skip('Set CHECK_DIST=1 after npm run build to verify built localized blog index routes.');
+    return;
+  }
+
+  await Promise.all(
+    nonSpanishLocales.map((locale) => access(path.join(rootDir, 'dist', locale, 'blog', 'index.html'))),
+  );
+});
+
 test('built Spanish-only blog post only advertises built alternates', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built blog SEO alternates.');

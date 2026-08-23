@@ -974,7 +974,7 @@ export class AdminStore {
       const { repositoryPath, publicPath } = getBlogFeaturedImagePaths(slug, post.featuredImage);
       const dataUrl = await fileToDataUrl(post.featuredImage);
       const base64Content = dataUrl.includes(',') ? dataUrl.split(',')[1] ?? '' : dataUrl;
-      await this.createRepositoryFile(repositoryPath, base64Content, `feat(blog): upload ${slug} image`, null);
+      await this.writeRepositoryFile(repositoryPath, base64Content, `feat(blog): upload ${slug} image`);
       imagePath = publicPath;
     }
 

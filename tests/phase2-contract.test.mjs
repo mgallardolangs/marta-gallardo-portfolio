@@ -188,7 +188,7 @@ test('Phase 2 article detail pages stay static and preserve locale-aware blog na
   }
 });
 
-test('Phase 2 blog index keeps locale-aware hrefs and localized empty state', async () => {
+test('Phase 2 blog index keeps locale-aware hrefs and the editorial empty-archive shell', async () => {
   const [viewSource, ...localeFiles] = await Promise.all([
     readSource('src/views/BlogIndexPage.astro'),
     ...locales.map((locale) => readJson(`src/i18n/${locale}.json`)),
@@ -196,12 +196,18 @@ test('Phase 2 blog index keeps locale-aware hrefs and localized empty state', as
 
   assert.match(viewSource, /import\s+\{\s*getLangFromUrl,\s*getLocalizedPath,\s*t\s*\}\s+from\s+['"]..\/i18n['"]/);
   assert.match(viewSource, /href=\{getLocalizedPath\(`\/blog\/\$\{post\.id\}`,\s*lang\)\}/);
-  assert.match(viewSource, /const\s+emptyBlogState\s*=\s*i\.blog\['emptyState'\]/);
-  assert.match(viewSource, /\{emptyBlogState\}/);
+  assert.match(viewSource, /data-blog-archive/);
+  assert.match(viewSource, /i\.blog\.comingSoonTitle/);
+  assert.match(viewSource, /i\.blog\.comingSoonMeta/);
+  assert.match(viewSource, /String\(latest\s*\?\s*2\s*:\s*1\)\.padStart\(2,\s*['"]0['"]\)/);
+  assert.doesNotMatch(viewSource, /const\s+emptyBlogState\s*=\s*i\.blog\['emptyState'\]/);
+  assert.doesNotMatch(viewSource, /\{emptyBlogState\}/);
 
   localeFiles.forEach((dictionary, index) => {
-    assert.equal(typeof dictionary.blog.emptyState, 'string', `${locales[index]} blog.emptyState should exist`);
-    assert.notEqual(dictionary.blog.emptyState.trim(), '', `${locales[index]} blog.emptyState should not be empty`);
+    assert.equal(typeof dictionary.blog.comingSoonTitle, 'string', `${locales[index]} blog.comingSoonTitle should exist`);
+    assert.notEqual(dictionary.blog.comingSoonTitle.trim(), '', `${locales[index]} blog.comingSoonTitle should not be empty`);
+    assert.equal(typeof dictionary.blog.comingSoonMeta, 'string', `${locales[index]} blog.comingSoonMeta should exist`);
+    assert.notEqual(dictionary.blog.comingSoonMeta.trim(), '', `${locales[index]} blog.comingSoonMeta should not be empty`);
   });
 });
 
