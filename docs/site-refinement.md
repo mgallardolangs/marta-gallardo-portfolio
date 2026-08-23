@@ -152,13 +152,37 @@ The authored grid is fixed at 12 interleaved slots:
 - accepted images: JPEG, PNG, WebP, GIF; accepted videos: MP4, WebM, QuickTime/MOV
 - pending binary uploads stay memory-only and must be reselected after reload
 
-## 6. Translation page behavior
+## 6. Translation page checkpoints and behavior
 
-- Typed hero title remains SSR-readable
-- `ServiceSwitcher` is the only rotating service control; hover/focus/document-hidden/reduced-motion all pause its timer
-- arsenal cards render from shared site data helpers, not duplicated translation-only arrays
-- `ExperienceTabs` owns the two-panel education/experience browser tab UI
-- `translationPageMotion.ts` owns GSAP section lines/cards/connectors and must revert cleanly on Astro navigation
+### Checkpoint 1 — hero and services
+- Hero stays flat on paper with no gradient, side card, or extra media
+- Typed hero title remains SSR-readable and keeps the lower-right vertical `heroMark`
+- CTAs stay rectangular with ink bottom-shadow lift on hover/focus
+- `ServiceSwitcher` is the only rotating service control
+- each service item carries a localized `headline` plus description
+- the service switcher keeps the precise 6-second rAF timer and pauses on hover, focus, hidden document, and reduced motion
+
+### Checkpoint 2 — compact arsenal
+- arsenal content renders from shared site-data helpers, not duplicated translation-only arrays
+- skills are stored with `group: 'translation' | 'seo'` and render as two in-column subgroups
+- admin collection editing keeps the add actions inside their owning column/group:
+  - languages add below the authored rows
+  - tools add from the dashed in-grid tile
+  - skills add from separate translation and SEO group composers
+
+### Checkpoint 3 — experience and education
+- `ExperienceTabs` owns the two-panel education/experience browser-window tab UI
+- the public shell keeps the ink browser chrome, amaranth dot, upper-left tabs, stable panel height, and keyboard tab semantics
+- `/admin/translation-seo` mirrors the same browser-tab structure with editable education and experience panels
+
+### Checkpoint 4 — methodology
+- methodology keeps the ink section, typed display title, four bordered steps, and connector that draws horizontally on desktop and vertically on mobile
+- `translationPageMotion.ts` reveals the methodology connector first, then staggers the four steps
+
+### Checkpoint 5 — why choose me
+- why cards stay in one flush three-column grid with inline bracket numbers `[ 01 ]`, `[ 02 ]`, `[ 03 ]`
+- the cards keep the ink wipe hover/focus treatment and stagger upward on scroll
+- `translationPageMotion.ts` owns the Arsenal line/item draws plus the methodology and why stagger motion, and must revert cleanly on Astro navigation
 
 ## 7. Admin collection semantics
 
