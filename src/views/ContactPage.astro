@@ -12,7 +12,7 @@ const fieldClass =
 const labelClass = 'flex items-center justify-between gap-4 border-b border-paper/10 pb-2 font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-paper';
 const hintClass = 'text-[0.62rem] tracking-[0.18em] text-paper/52';
 const tabClass = 'inline-flex items-center border-b border-transparent px-0 pb-3 font-body text-[0.72rem] font-semibold uppercase tracking-[0.28em] transition';
-const panelClass = 'border-t border-paper/14 pt-8';
+const panelClass = 'pt-8';
 const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-paper';
 ---
 
@@ -32,13 +32,8 @@ const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-
 
   <section data-contact-desk class="bg-ink px-6 py-14 text-paper md:py-18">
     <div class="site-container border border-paper/14 px-6 py-8 md:px-8 md:py-10">
-      <div class="flex flex-col gap-6 border-b border-paper/14 pb-6 md:flex-row md:items-end md:justify-between">
-        <div class="space-y-3">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-amaranth">{i.contact.eyebrow}</p>
-          <p class="max-w-2xl font-body text-sm leading-7 text-paper/72">{i.contact.responseNote}</p>
-        </div>
-
-        <div data-contact-tablist role="tablist" aria-label={i.contact.title} class="flex flex-wrap gap-6 md:gap-8">
+      <div class="border-b border-paper/14 pb-6">
+        <div data-contact-tablist role="tablist" aria-label={i.contact.title} class="flex flex-wrap items-start justify-start gap-6 md:gap-8">
           <button
             type="button"
             id="contact-tab-ugc"

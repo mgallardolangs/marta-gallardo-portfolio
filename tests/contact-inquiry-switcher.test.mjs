@@ -20,6 +20,12 @@ function countMatches(source, expression) {
   return [...source.matchAll(expression)].length;
 }
 
+function extractWindowAround(source, needle, label, radius = 320) {
+  const index = source.indexOf(needle);
+  assert.notEqual(index, -1, `${label} should include ${needle}`);
+  return source.slice(Math.max(0, index - radius), Math.min(source.length, index + radius));
+}
+
 function extractForm(source, formName) {
   const match = source.match(new RegExp(`<form[^>]*name="${formName}"[\\s\\S]*?<\\/form>`, 's'));
   assert.ok(match, `expected to find ${formName} form`);
@@ -130,7 +136,14 @@ test('public and admin contact pages lock the switcher desk, exact forms, strict
   assert.match(globalCss, /\.contact-tab::before\s*,\s*\.contact-tab::after\s*\{/);
   assert.match(globalCss, /\.contact-tab\[aria-selected='true'\]\s*\{/);
   assert.match(globalCss, /\.contact-tab\[aria-selected='true'\]::before\s*,\s*\.contact-tab\[aria-selected='true'\]::after\s*\{/);
-  assert.doesNotMatch(globalCss, /\.contact-tab:hover/);
+  assert.match(
+    globalCss,
+    /\.contact-tab:hover,\s*\.contact-tab:focus-visible\s*\{[^}]*color:\s*var\(--color-amaranth\);/s,
+  );
+  assert.match(
+    globalCss,
+    /\.contact-tab:hover::before,\s*\.contact-tab:hover::after,\s*\.contact-tab:focus-visible::before,\s*\.contact-tab:focus-visible::after\s*\{[^}]*opacity:\s*1;/s,
+  );
 
   for (const key of [
     'contact.tabs.ugc',
@@ -168,6 +181,60 @@ test('admin contact buttons keep editable labels through portal targets without 
   assert.match(source, /<span id="admin-contact-seo-tab-edit" \/>/);
   assert.match(source, /<span id="admin-contact-ugc-submit-edit" \/>/);
   assert.match(source, /<span id="admin-contact-seo-submit-edit" \/>/);
+});
+
+test('contact desk polish keeps one header divider, one response note per panel, and editable admin bottom notes', async () => {
+  const [publicSource, adminSource, globalCss] = await Promise.all([
+    readSource('src/views/ContactPage.astro'),
+    readSource('src/pages/admin/contact.astro'),
+    readSource('src/styles/global.css'),
+  ]);
+
+  for (const [label, source] of [
+    ['public', publicSource],
+    ['admin', adminSource],
+  ]) {
+    const tabHeaderWindow = extractWindowAround(source, 'data-contact-tablist', `${label} contact tab header`);
+
+    assert.equal(
+      countMatches(source, /(?:i\.contact\.responseNote|i18nKey="contact\.responseNote")/g),
+      2,
+      `${label} contact page should render contact.responseNote exactly once per panel`,
+    );
+    assert.equal(
+      countMatches(source, /border-b border-paper\/14 pb-6/g),
+      1,
+      `${label} contact page should keep exactly one header divider under the tabs`,
+    );
+    assert.match(source, /const panelClass = 'pt-8';/);
+    assert.doesNotMatch(source, /const panelClass = 'border-t/);
+    assert.doesNotMatch(
+      tabHeaderWindow,
+      /(?:i\.contact\.eyebrow|i\.contact\.responseNote|i18nKey="contact\.eyebrow"|i18nKey="contact\.responseNote")/,
+      `${label} contact tab header should not repeat the eyebrow or response note`,
+    );
+  }
+
+  assert.equal(
+    countMatches(adminSource, /<EditableText client:load i18nKey="contact\.responseNote" as="p" className="max-w-xl font-body text-\[0\.68rem\] uppercase tracking-\[0\.22em\] text-paper\/58" \/>/g),
+    2,
+    'admin contact page should keep the removed top note editable through the two bottom action-row EditableText instances',
+  );
+  assert.match(
+    globalCss,
+    /\.contact-tab\s*\{[^}]*transition:\s*color 0\.2s ease,\s*transform 0\.2s ease;/s,
+    'contact tabs should animate color and lift on hover/focus',
+  );
+  assert.match(
+    globalCss,
+    /\.contact-tab:hover,\s*\.contact-tab:focus-visible\s*\{[^}]*color:\s*var\(--color-amaranth\);[^}]*transform:\s*translateY\(-1px\);/s,
+    'inactive and active contact tabs should turn amaranth and lift slightly on hover/focus',
+  );
+  assert.match(
+    globalCss,
+    /\.contact-tab:hover::before,\s*\.contact-tab:hover::after,\s*\.contact-tab:focus-visible::before,\s*\.contact-tab:focus-visible::after\s*\{[^}]*opacity:\s*1;/s,
+    'contact tab brackets should become fully opaque on hover and focus',
+  );
 });
 
 test('contact switcher work leaves the approved Home, UGC, and Translation markers untouched', async () => {

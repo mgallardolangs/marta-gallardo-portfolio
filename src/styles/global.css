@@ -101,6 +101,9 @@ svg {
 
 .contact-tab {
   color: rgb(244 245 241 / 0.58);
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .contact-tab::before,
@@ -121,8 +124,21 @@ svg {
   margin-left: 0.45rem;
 }
 
+.contact-tab:hover,
+.contact-tab:focus-visible {
+  color: var(--color-amaranth);
+  transform: translateY(-1px);
+}
+
 .contact-tab[aria-selected='true'] {
   color: var(--color-amaranth);
+}
+
+.contact-tab:hover::before,
+.contact-tab:hover::after,
+.contact-tab:focus-visible::before,
+.contact-tab:focus-visible::after {
+  opacity: 1;
 }
 
 .contact-tab[aria-selected='true']::before,
