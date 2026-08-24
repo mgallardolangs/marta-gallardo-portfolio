@@ -7,27 +7,27 @@ const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
 
 const fieldClass =
-  'w-full border-b border-paper/22 bg-transparent px-0 py-3 font-body text-base text-paper outline-none transition placeholder:text-paper/42 focus:border-amaranth';
+  'w-full border-b border-paper/22 bg-transparent px-0 py-2.5 font-body text-base text-paper outline-none transition placeholder:text-paper/42 focus:border-amaranth';
 const labelClass = 'flex items-center justify-between gap-4 border-b border-paper/10 pb-2 font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-paper';
 const hintClass = 'text-[0.62rem] tracking-[0.18em] text-paper/52';
-const tabClass = 'inline-flex items-center border-b border-transparent px-0 pb-3 font-body text-[0.72rem] font-semibold uppercase tracking-[0.28em] transition';
-const panelClass = 'pt-8';
+const tabClass = 'font-body text-[0.72rem] font-semibold uppercase tracking-[0.28em]';
+const panelClass = 'pt-6';
 const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-paper';
 ---
 
 <AdminLayout title={`Admin — ${i.contact.title}`} description={i.contact.subtitle}>
-  <section data-contact-hero class="bg-paper px-6 pb-14 pt-28 text-ink md:pb-18 md:pt-32">
-    <div class="site-container max-w-5xl space-y-6">
+  <section data-contact-hero class="bg-paper px-6 pb-8 pt-20 text-ink md:pb-10 md:pt-24">
+    <div class="site-container max-w-5xl space-y-4">
       <EditableText client:load i18nKey="contact.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-amaranth" />
-      <EditableText client:load i18nKey="contact.title" as="h1" className="max-w-[10ch] font-heading text-5xl leading-[0.92] tracking-[-0.04em] text-ink md:text-7xl" />
-      <EditableText client:load i18nKey="contact.subtitle" as="div" className="max-w-3xl font-body text-sm leading-7 tracking-[0.12em] text-ink/72 uppercase md:text-base" />
+      <EditableText client:load i18nKey="contact.title" as="h1" className="max-w-[10ch] font-heading text-4xl leading-[0.92] tracking-[-0.04em] text-ink md:text-6xl" />
+      <EditableText client:load i18nKey="contact.subtitle" as="div" className="max-w-2xl font-body text-xs leading-5 tracking-[0.12em] text-ink/72 uppercase md:text-sm md:leading-6" />
     </div>
   </section>
 
-  <section data-contact-desk class="bg-ink px-6 py-14 text-paper md:py-18">
-    <div class="site-container border border-paper/14 px-6 py-8 md:px-8 md:py-10">
-      <div class="border-b border-paper/14 pb-6">
-        <div data-contact-tablist role="tablist" aria-label={i.contact.title} class="flex flex-wrap items-start justify-start gap-6 md:gap-8">
+  <section data-contact-desk class="bg-ink px-6 py-8 text-paper md:py-10">
+    <div class="site-container border border-paper/14 px-5 py-6 md:px-6 md:py-8">
+      <div class="border-b border-paper/14 pb-4">
+        <div data-contact-tablist role="tablist" aria-label={i.contact.title} class="flex flex-wrap items-start justify-start gap-4 md:gap-5">
           <div class="group/edit relative">
             <button
               type="button"
@@ -39,7 +39,12 @@ const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-
               tabindex="0"
               class={`${tabClass} contact-tab`}
             >
-              <EditableText client:load i18nKey="contact.tabs.ugc" as="span" className="" clickToEdit={false} editButtonTargetId="admin-contact-ugc-tab-edit" />
+              <span class="contact-tab__bracket contact-tab__bracket--left" aria-hidden="true">[</span>
+              <div class="contact-tab__line">
+                <EditableText client:load i18nKey="contact.tabs.ugc" as="span" className="" clickToEdit={false} editButtonTargetId="admin-contact-ugc-tab-edit" />
+                <span aria-hidden="true">{i.contact.tabs.ugc}</span>
+              </div>
+              <span class="contact-tab__bracket contact-tab__bracket--right" aria-hidden="true">]</span>
             </button>
             <span id="admin-contact-ugc-tab-edit" />
           </div>
@@ -54,19 +59,24 @@ const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-
               tabindex="-1"
               class={`${tabClass} contact-tab`}
             >
-              <EditableText client:load i18nKey="contact.tabs.seo" as="span" className="" clickToEdit={false} editButtonTargetId="admin-contact-seo-tab-edit" />
+              <span class="contact-tab__bracket contact-tab__bracket--left" aria-hidden="true">[</span>
+              <div class="contact-tab__line">
+                <EditableText client:load i18nKey="contact.tabs.seo" as="span" className="" clickToEdit={false} editButtonTargetId="admin-contact-seo-tab-edit" />
+                <span aria-hidden="true">{i.contact.tabs.seo}</span>
+              </div>
+              <span class="contact-tab__bracket contact-tab__bracket--right" aria-hidden="true">]</span>
             </button>
             <span id="admin-contact-seo-tab-edit" />
           </div>
         </div>
       </div>
 
-      <div class="mt-8 space-y-8">
+      <div class="mt-4 space-y-4">
         <section data-contact-panel="ugc" id="contact-panel-ugc" role="tabpanel" aria-labelledby="contact-tab-ugc" class={panelClass}>
-          <form name="ugc-contact" method="POST" data-netlify="true" data-error-msg={i.contact.errorRequired} class="contact-form space-y-6">
+          <form name="ugc-contact" method="POST" data-netlify="true" data-error-msg={i.contact.errorRequired} class="contact-form space-y-4">
             <input type="hidden" name="form-name" value="ugc-contact" />
 
-            <div class="grid gap-6 md:grid-cols-2">
+            <div class="grid gap-4 md:grid-cols-2">
               <div>
                 <label for="ugc-email" class={labelClass}><EditableText client:load i18nKey="contact.fields.email" as="span" className="" /></label>
                 <input id="ugc-email" name="Email" type="email" required class={fieldClass} />
@@ -83,15 +93,15 @@ const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-
 
             <div>
               <label for="ugc-details" class={labelClass}><EditableText client:load i18nKey="contact.fields.ugcDetails" as="span" className="" /></label>
-              <textarea id="ugc-details" name="Project Description" rows="6" required class={`${fieldClass} min-h-[10rem] resize-y`}></textarea>
+              <textarea id="ugc-details" name="Project Description" rows="4" required class={`${fieldClass} min-h-[7rem] resize-y`}></textarea>
             </div>
 
-            <div class="flex flex-col gap-4 border-t border-paper/14 pt-6 md:flex-row md:items-end md:justify-between">
+            <div class="flex flex-col gap-3 border-t border-paper/14 pt-4 md:flex-row md:items-end md:justify-between">
               <EditableText client:load i18nKey="contact.responseNote" as="p" className="max-w-xl font-body text-[0.68rem] uppercase tracking-[0.22em] text-paper/58" />
               <div class="group/edit relative">
                 <button
                   type="submit"
-                  class="inline-flex items-center justify-center border border-amaranth bg-amaranth px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] text-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_0_var(--color-paper)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_4px_0_var(--color-paper)] focus-visible:outline-none"
+                  class="inline-flex items-center justify-center border border-amaranth bg-amaranth px-5 py-2.5 font-body text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_0_var(--color-paper)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_4px_0_var(--color-paper)] focus-visible:outline-none"
                 >
                   <EditableText client:load i18nKey="contact.send" as="span" className="" clickToEdit={false} editButtonTargetId="admin-contact-ugc-submit-edit" />
                 </button>
@@ -110,10 +120,10 @@ const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-
         </section>
 
         <section data-contact-panel="seo" id="contact-panel-seo" role="tabpanel" aria-labelledby="contact-tab-seo" class={panelClass} hidden>
-          <form name="seo-contact" method="POST" data-netlify="true" data-error-msg={i.contact.errorRequired} class="contact-form space-y-6">
+          <form name="seo-contact" method="POST" data-netlify="true" data-error-msg={i.contact.errorRequired} class="contact-form space-y-4">
             <input type="hidden" name="form-name" value="seo-contact" />
 
-            <div class="grid gap-6 md:grid-cols-2">
+            <div class="grid gap-4 md:grid-cols-2">
               <div>
                 <label for="seo-email" class={labelClass}><EditableText client:load i18nKey="contact.fields.email" as="span" className="" /></label>
                 <input id="seo-email" name="Email" type="email" required class={fieldClass} />
@@ -130,15 +140,15 @@ const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-
 
             <div>
               <label for="seo-details" class={labelClass}><EditableText client:load i18nKey="contact.fields.seoDetails" as="span" className="" /></label>
-              <textarea id="seo-details" name="Work Description" rows="6" required class={`${fieldClass} min-h-[10rem] resize-y`}></textarea>
+              <textarea id="seo-details" name="Work Description" rows="4" required class={`${fieldClass} min-h-[7rem] resize-y`}></textarea>
             </div>
 
-            <div class="flex flex-col gap-4 border-t border-paper/14 pt-6 md:flex-row md:items-end md:justify-between">
+            <div class="flex flex-col gap-3 border-t border-paper/14 pt-4 md:flex-row md:items-end md:justify-between">
               <EditableText client:load i18nKey="contact.responseNote" as="p" className="max-w-xl font-body text-[0.68rem] uppercase tracking-[0.22em] text-paper/58" />
               <div class="group/edit relative">
                 <button
                   type="submit"
-                  class="inline-flex items-center justify-center border border-amaranth bg-amaranth px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] text-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_0_var(--color-paper)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_4px_0_var(--color-paper)] focus-visible:outline-none"
+                  class="inline-flex items-center justify-center border border-amaranth bg-amaranth px-5 py-2.5 font-body text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_0_var(--color-paper)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_4px_0_var(--color-paper)] focus-visible:outline-none"
                 >
                   <EditableText client:load i18nKey="contact.send" as="span" className="" clickToEdit={false} editButtonTargetId="admin-contact-seo-submit-edit" />
                 </button>

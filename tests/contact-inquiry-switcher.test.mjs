@@ -84,15 +84,26 @@ test('all six locale files expose the new Contact tabs, field, and response key 
 });
 
 test('public Contact hero keeps stable markers, a Typed title, and no old black intro card', async () => {
-  const source = await readSource('src/views/ContactPage.astro');
+  const [publicSource, adminSource] = await Promise.all([
+    readSource('src/views/ContactPage.astro'),
+    readSource('src/pages/admin/contact.astro'),
+  ]);
 
-  assert.match(source, /<section data-contact-hero\b/);
-  assert.match(source, /<TypedTitle[\s\S]{0,240}\btext=\{i\.contact\.title\}/s);
-  assert.doesNotMatch(source, /border border-white\/10 bg-ink p-8 text-paper/);
-  assert.doesNotMatch(source, /lg:grid-cols-\[0\.9fr_1\.1fr\]/);
+  for (const source of [publicSource, adminSource]) {
+    assert.match(source, /<section data-contact-hero\b/);
+    assert.match(source, /class="bg-paper px-6 pb-8 pt-20 text-ink md:pb-10 md:pt-24"/);
+    assert.doesNotMatch(source, /pt-28|md:pt-32|pb-14|md:pb-18/);
+    assert.doesNotMatch(source, /border border-white\/10 bg-ink p-8 text-paper/);
+    assert.doesNotMatch(source, /lg:grid-cols-\[0\.9fr_1\.1fr\]/);
+  }
+
+  assert.match(publicSource, /<TypedTitle[\s\S]{0,320}\btext=\{i\.contact\.title\}[\s\S]{0,240}class="max-w-\[10ch\] font-heading text-4xl leading-\[0\.92\] tracking-\[-0\.04em\] text-ink md:text-6xl"/s);
+  assert.match(publicSource, /<RichText text=\{i\.contact\.subtitle\} class="max-w-2xl font-body text-xs leading-5 tracking-\[0\.12em\] text-ink\/72 uppercase md:text-sm md:leading-6" \/>/);
+  assert.match(adminSource, /i18nKey="contact\.title" as="h1" className="max-w-\[10ch\] font-heading text-4xl leading-\[0\.92\] tracking-\[-0\.04em\] text-ink md:text-6xl"/);
+  assert.match(adminSource, /i18nKey="contact\.subtitle" as="div" className="max-w-2xl font-body text-xs leading-5 tracking-\[0\.12em\] text-ink\/72 uppercase md:text-sm md:leading-6"/);
 });
 
-test('public and admin contact pages lock the switcher desk, exact forms, strict field set, and editable key parity', async () => {
+test('public and admin contact pages keep the denser contact desk, exact forms, strict field set, and editable key parity', async () => {
   const [publicSource, adminSource, globalCss] = await Promise.all([
     readSource('src/views/ContactPage.astro'),
     readSource('src/pages/admin/contact.astro'),
@@ -103,6 +114,8 @@ test('public and admin contact pages lock the switcher desk, exact forms, strict
     assert.match(source, /import \{ initContactForms, initContactInquirySwitcher \} from /);
     assert.match(source, /data-contact-desk/);
     assert.match(source, /data-contact-tablist/);
+    assert.match(source, /class="bg-ink px-6 py-8 text-paper md:py-10"/);
+    assert.match(source, /class="site-container border border-paper\/14 px-5 py-6 md:px-6 md:py-8"/);
     assert.equal(countMatches(source, /data-contact-tab="ugc"/g), 1);
     assert.equal(countMatches(source, /data-contact-tab="seo"/g), 1);
     assert.equal(countMatches(source, /data-contact-panel="ugc"/g), 1);
@@ -120,6 +133,11 @@ test('public and admin contact pages lock the switcher desk, exact forms, strict
     assert.equal(countMatches(source, /name="seo-contact"/g), 1);
     assert.equal(countMatches(source, /<input type="hidden" name="form-name" value="ugc-contact" \/>/g), 1);
     assert.equal(countMatches(source, /<input type="hidden" name="form-name" value="seo-contact" \/>/g), 1);
+    assert.equal(countMatches(source, /rows="4"/g), 2, 'each contact page should keep both textareas at four rows');
+    assert.equal(countMatches(source, /min-h-\[7rem\]/g), 2, 'each contact page should use the shorter textarea minimum height');
+    assert.doesNotMatch(source, /rows="6"/);
+    assert.doesNotMatch(source, /min-h-\[10rem\]/);
+    assert.doesNotMatch(source, /py-14|md:py-18|px-6 py-8 md:px-8 md:py-10|pb-6|space-y-6|gap-6|py-3/);
     assert.doesNotMatch(source, /\b(?:ugc|seo)-(?:budget|name)\b/);
     assert.doesNotMatch(source, /\bname="Budget"\b/);
     assert.doesNotMatch(source, /\bname="Name"\b/);
@@ -132,18 +150,27 @@ test('public and admin contact pages lock the switcher desk, exact forms, strict
     assertContactFieldContract(source, 'seo');
   }
 
+  assert.match(publicSource, /const fieldClass =\s+'w-full border-b border-paper\/22 bg-transparent px-0 py-2\.5 font-body text-base text-paper outline-none transition placeholder:text-paper\/42 focus:border-amaranth';/);
+  assert.match(adminSource, /const fieldClass =\s+'w-full border-b border-paper\/22 bg-transparent px-0 py-2\.5 font-body text-base text-paper outline-none transition placeholder:text-paper\/42 focus:border-amaranth';/);
+  assert.match(publicSource, /const panelClass = 'pt-6';/);
+  assert.match(adminSource, /const panelClass = 'pt-6';/);
+  assert.match(publicSource, /<div class="border-b border-paper\/14 pb-4">/);
+  assert.match(adminSource, /<div class="border-b border-paper\/14 pb-4">/);
+  assert.equal(countMatches(publicSource, /class="contact-form space-y-4"/g), 2);
+  assert.equal(countMatches(adminSource, /class="contact-form space-y-4"/g), 2);
+  assert.equal(countMatches(publicSource, /class="grid gap-4 md:grid-cols-2"/g), 2);
+  assert.equal(countMatches(adminSource, /class="grid gap-4 md:grid-cols-2"/g), 2);
+  assert.equal(countMatches(publicSource, /class="flex flex-col gap-3 border-t border-paper\/14 pt-4 md:flex-row md:items-end md:justify-between"/g), 2);
+  assert.equal(countMatches(adminSource, /class="flex flex-col gap-3 border-t border-paper\/14 pt-4 md:flex-row md:items-end md:justify-between"/g), 2);
+
   assert.match(globalCss, /\.contact-tab\s*\{/);
-  assert.match(globalCss, /\.contact-tab::before\s*,\s*\.contact-tab::after\s*\{/);
-  assert.match(globalCss, /\.contact-tab\[aria-selected='true'\]\s*\{/);
-  assert.match(globalCss, /\.contact-tab\[aria-selected='true'\]::before\s*,\s*\.contact-tab\[aria-selected='true'\]::after\s*\{/);
-  assert.match(
-    globalCss,
-    /\.contact-tab:hover,\s*\.contact-tab:focus-visible\s*\{[^}]*color:\s*var\(--color-amaranth\);/s,
-  );
-  assert.match(
-    globalCss,
-    /\.contact-tab:hover::before,\s*\.contact-tab:hover::after,\s*\.contact-tab:focus-visible::before,\s*\.contact-tab:focus-visible::after\s*\{[^}]*opacity:\s*1;/s,
-  );
+  assert.match(globalCss, /\.contact-tab__line\s*\{[^}]*height:\s*1\.05rem;[^}]*overflow:\s*hidden;[^}]*transition:\s*color 0\.2s ease;/s);
+  assert.match(globalCss, /\.contact-tab__line > \*\s*\{[^}]*min-height:\s*1\.05rem;[^}]*transform:\s*translateY\(0\);[^}]*transition:\s*transform 0\.24s ease;/s);
+  assert.match(globalCss, /\.contact-tab__bracket\s*\{[^}]*font-size:\s*0\.9rem;[^}]*opacity:\s*0;[^}]*transform:\s*translateY\(0\.3rem\);[^}]*transition:\s*opacity 0\.2s ease, transform 0\.2s ease;/s);
+  assert.match(globalCss, /\.contact-tab:hover \.contact-tab__line,\s*\.contact-tab:focus-visible \.contact-tab__line,\s*\.contact-tab\[aria-selected='true'\] \.contact-tab__line\s*\{[^}]*color:\s*var\(--color-amaranth\);/s);
+  assert.match(globalCss, /\.contact-tab:hover \.contact-tab__line > \*,\s*\.contact-tab:focus-visible \.contact-tab__line > \*,\s*\.contact-tab\[aria-selected='true'\] \.contact-tab__line > \*\s*\{[^}]*transform:\s*translateY\(-100%\);/s);
+  assert.match(globalCss, /\.contact-tab:hover \.contact-tab__bracket,\s*\.contact-tab:focus-visible \.contact-tab__bracket,\s*\.contact-tab\[aria-selected='true'\] \.contact-tab__bracket\s*\{[^}]*opacity:\s*1;[^}]*transform:\s*translateY\(0\);/s);
+  assert.doesNotMatch(globalCss, /\.contact-tab::before|\.contact-tab::after/);
 
   for (const key of [
     'contact.tabs.ugc',
@@ -172,8 +199,8 @@ test('admin contact buttons keep editable labels through portal targets without 
   assert.equal(countMatches(source, /clickToEdit=\{false\}/g), 4);
   assert.equal(countMatches(source, /class="group\/edit relative"/g), 4);
 
-  assert.match(source, /<EditableText client:load i18nKey="contact\.tabs\.ugc" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-ugc-tab-edit" \/>/);
-  assert.match(source, /<EditableText client:load i18nKey="contact\.tabs\.seo" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-seo-tab-edit" \/>/);
+  assert.match(source, /class="contact-tab__line"[\s\S]{0,220}<EditableText client:load i18nKey="contact\.tabs\.ugc" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-ugc-tab-edit" \/>\s*<span aria-hidden="true">\{i\.contact\.tabs\.ugc\}<\/span>/s);
+  assert.match(source, /class="contact-tab__line"[\s\S]{0,220}<EditableText client:load i18nKey="contact\.tabs\.seo" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-seo-tab-edit" \/>\s*<span aria-hidden="true">\{i\.contact\.tabs\.seo\}<\/span>/s);
   assert.match(source, /<EditableText client:load i18nKey="contact\.send" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-ugc-submit-edit" \/>/);
   assert.match(source, /<EditableText client:load i18nKey="contact\.send" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-seo-submit-edit" \/>/);
 
@@ -181,6 +208,25 @@ test('admin contact buttons keep editable labels through portal targets without 
   assert.match(source, /<span id="admin-contact-seo-tab-edit" \/>/);
   assert.match(source, /<span id="admin-contact-ugc-submit-edit" \/>/);
   assert.match(source, /<span id="admin-contact-seo-submit-edit" \/>/);
+});
+
+test('contact tabs use duplicated label lines with explicit brackets in public and admin', async () => {
+  const [publicSource, adminSource] = await Promise.all([
+    readSource('src/views/ContactPage.astro'),
+    readSource('src/pages/admin/contact.astro'),
+  ]);
+
+  for (const [label, source] of [
+    ['public', publicSource],
+    ['admin', adminSource],
+  ]) {
+    assert.equal(countMatches(source, /class="contact-tab__bracket contact-tab__bracket--left"/g), 2, `${label} contact tabs should render explicit left brackets`);
+    assert.equal(countMatches(source, /class="contact-tab__bracket contact-tab__bracket--right"/g), 2, `${label} contact tabs should render explicit right brackets`);
+    assert.equal(countMatches(source, /class="contact-tab__line"/g), 2, `${label} contact tabs should render duplicated rolling label lines`);
+  }
+
+  assert.match(publicSource, /class="contact-tab__line"[\s\S]{0,80}<span>\{i\.contact\.tabs\.ugc\}<\/span>\s*<span aria-hidden="true">\{i\.contact\.tabs\.ugc\}<\/span>/s);
+  assert.match(publicSource, /class="contact-tab__line"[\s\S]{0,80}<span>\{i\.contact\.tabs\.seo\}<\/span>\s*<span aria-hidden="true">\{i\.contact\.tabs\.seo\}<\/span>/s);
 });
 
 test('contact desk polish keeps one header divider, one response note per panel, and editable admin bottom notes', async () => {
@@ -202,11 +248,11 @@ test('contact desk polish keeps one header divider, one response note per panel,
       `${label} contact page should render contact.responseNote exactly once per panel`,
     );
     assert.equal(
-      countMatches(source, /border-b border-paper\/14 pb-6/g),
+      countMatches(source, /border-b border-paper\/14 pb-4/g),
       1,
       `${label} contact page should keep exactly one header divider under the tabs`,
     );
-    assert.match(source, /const panelClass = 'pt-8';/);
+    assert.match(source, /const panelClass = 'pt-6';/);
     assert.doesNotMatch(source, /const panelClass = 'border-t/);
     assert.doesNotMatch(
       tabHeaderWindow,
@@ -220,21 +266,7 @@ test('contact desk polish keeps one header divider, one response note per panel,
     2,
     'admin contact page should keep the removed top note editable through the two bottom action-row EditableText instances',
   );
-  assert.match(
-    globalCss,
-    /\.contact-tab\s*\{[^}]*transition:\s*color 0\.2s ease,\s*transform 0\.2s ease;/s,
-    'contact tabs should animate color and lift on hover/focus',
-  );
-  assert.match(
-    globalCss,
-    /\.contact-tab:hover,\s*\.contact-tab:focus-visible\s*\{[^}]*color:\s*var\(--color-amaranth\);[^}]*transform:\s*translateY\(-1px\);/s,
-    'inactive and active contact tabs should turn amaranth and lift slightly on hover/focus',
-  );
-  assert.match(
-    globalCss,
-    /\.contact-tab:hover::before,\s*\.contact-tab:hover::after,\s*\.contact-tab:focus-visible::before,\s*\.contact-tab:focus-visible::after\s*\{[^}]*opacity:\s*1;/s,
-    'contact tab brackets should become fully opaque on hover and focus',
-  );
+  assert.equal(countMatches(globalCss, /\.contact-tab::before|\.contact-tab::after/g), 0, 'contact tabs should no longer rely on pseudo-element brackets');
 });
 
 test('contact switcher work leaves the approved Home, UGC, and Translation markers untouched', async () => {
