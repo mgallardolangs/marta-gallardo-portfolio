@@ -147,14 +147,17 @@ class MockFormElement extends MockElement {
 }
 
 class MockRoot {
-  constructor({ forms = [], tabs = [], panels = [] }) {
+  constructor({ forms = [], tablists = [], tabs = [], panels = [] }) {
     this.forms = forms;
+    this.tablists = tablists;
     this.tabs = tabs;
     this.panels = panels;
   }
 
   querySelectorAll(selector) {
     if (selector === '.contact-form') return this.forms;
+    if (selector === '[data-contact-tablist]') return this.tablists;
+    if (selector === '[role="tablist"]') return this.tablists;
     if (selector === '[data-contact-tab]') return this.tabs;
     if (selector === '[role="tab"]') return this.tabs;
     if (selector === '[data-contact-panel]') return this.panels;
@@ -163,6 +166,10 @@ class MockRoot {
   }
 
   querySelector(selector) {
+    if (selector === '[data-contact-tablist]' || selector === '[role="tablist"]') {
+      return this.tablists[0] ?? null;
+    }
+
     if (selector.startsWith('#')) {
       const id = selector.slice(1);
       return [...this.tabs, ...this.panels].find((element) => element.id === id) ?? null;
@@ -176,6 +183,34 @@ class MockRoot {
     const dataPanelMatch = selector.match(/^\[data-contact-panel="(.+)"\]$/);
     if (dataPanelMatch) {
       return this.panels.find((panel) => panel.dataset.contactPanel === dataPanelMatch[1]) ?? null;
+    }
+
+    return this.querySelectorAll(selector)[0] ?? null;
+  }
+}
+
+class MockTablistElement extends MockElement {
+  constructor(tabs = []) {
+    super({ dataset: { contactTablist: '' }, role: 'tablist' });
+    this.tabs = tabs;
+    this.setAttribute('data-contact-tablist', '');
+  }
+
+  querySelectorAll(selector) {
+    if (selector === '[data-contact-tab]') return this.tabs;
+    if (selector === '[role="tab"]') return this.tabs;
+    return [];
+  }
+
+  querySelector(selector) {
+    if (selector.startsWith('#')) {
+      const id = selector.slice(1);
+      return this.tabs.find((tab) => tab.id === id) ?? null;
+    }
+
+    const dataTabMatch = selector.match(/^\[data-contact-tab="(.+)"\]$/);
+    if (dataTabMatch) {
+      return this.tabs.find((tab) => tab.dataset.contactTab === dataTabMatch[1]) ?? null;
     }
 
     return this.querySelectorAll(selector)[0] ?? null;
@@ -231,16 +266,38 @@ function createContactForm(formName) {
 function createInquiryRoot() {
   const ugcTab = new MockButtonElement('ugc', 'contact-panel-ugc');
   const seoTab = new MockButtonElement('seo', 'contact-panel-seo');
+  const tablist = new MockTablistElement([ugcTab, seoTab]);
   const ugcPanel = new MockPanelElement('ugc');
   const seoPanel = new MockPanelElement('seo');
 
   return {
     root: new MockRoot({
+      tablists: [tablist],
       tabs: [ugcTab, seoTab],
       panels: [ugcPanel, seoPanel],
     }),
+    tablist,
     tabs: { ugc: ugcTab, seo: seoTab },
     panels: { ugc: ugcPanel, seo: seoPanel },
+  };
+}
+
+function createIntegratedContactRoot() {
+  const inquiry = createInquiryRoot();
+  const ugc = createContactForm('ugc-contact');
+  const seo = createContactForm('seo-contact');
+
+  return {
+    root: new MockRoot({
+      forms: [ugc.form, seo.form],
+      tablists: [inquiry.tablist],
+      tabs: Object.values(inquiry.tabs),
+      panels: Object.values(inquiry.panels),
+    }),
+    tablist: inquiry.tablist,
+    tabs: inquiry.tabs,
+    panels: inquiry.panels,
+    contacts: { ugc, seo },
   };
 }
 
@@ -397,4 +454,71 @@ test('contact form init stays root-scoped across public and admin and success hi
   assert.equal(publicContact.successMessage.classList.contains('hidden'), false);
   assert.equal(adminContact.form.classList.contains('hidden'), false);
   assert.equal(adminContact.successMessage.classList.contains('hidden'), true);
+});
+
+test('contact task1 keeps ugc success visible after switching to seo and back inside one shared contact desk root', async (t) => {
+  const originalFetch = globalThis.fetch;
+  const originalHTMLElement = globalThis.HTMLElement;
+  const originalHTMLButtonElement = globalThis.HTMLButtonElement;
+  const originalHTMLFormElement = globalThis.HTMLFormElement;
+  const originalHTMLInputElement = globalThis.HTMLInputElement;
+  const originalHTMLTextAreaElement = globalThis.HTMLTextAreaElement;
+  const originalHTMLSelectElement = globalThis.HTMLSelectElement;
+  const originalFormData = globalThis.FormData;
+
+  globalThis.fetch = async () => ({ ok: true, status: 200 });
+  globalThis.HTMLElement = MockElement;
+  globalThis.HTMLButtonElement = MockButtonElement;
+  globalThis.HTMLFormElement = MockFormElement;
+  globalThis.HTMLInputElement = MockField;
+  globalThis.HTMLTextAreaElement = MockField;
+  globalThis.HTMLSelectElement = MockField;
+  globalThis.FormData = MockFormData;
+
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+    globalThis.HTMLElement = originalHTMLElement;
+    globalThis.HTMLButtonElement = originalHTMLButtonElement;
+    globalThis.HTMLFormElement = originalHTMLFormElement;
+    globalThis.HTMLInputElement = originalHTMLInputElement;
+    globalThis.HTMLTextAreaElement = originalHTMLTextAreaElement;
+    globalThis.HTMLSelectElement = originalHTMLSelectElement;
+    globalThis.FormData = originalFormData;
+  });
+
+  const integrated = createIntegratedContactRoot();
+
+  contactForms.initContactInquirySwitcher(integrated.root);
+  initContactForms(integrated.root);
+
+  assert.equal(integrated.root.querySelector('[data-contact-tablist]'), integrated.tablist);
+  assert.equal(integrated.root.querySelectorAll('[role="tabpanel"]').length, 2);
+  assert.equal(integrated.root.querySelectorAll('.contact-form').length, 2);
+  assert.equal(integrated.contacts.ugc.form.listenerCount('submit'), 1);
+  assert.equal(integrated.contacts.seo.form.listenerCount('submit'), 1);
+
+  await integrated.contacts.ugc.form.dispatch('submit');
+
+  assert.equal(integrated.contacts.ugc.form.classList.contains('hidden'), true);
+  assert.equal(integrated.contacts.ugc.successMessage.classList.contains('hidden'), false);
+  assert.equal(integrated.contacts.seo.form.classList.contains('hidden'), false);
+  assert.equal(integrated.contacts.seo.successMessage.classList.contains('hidden'), true);
+
+  integrated.tabs.seo.dispatch('click');
+
+  assert.equal(integrated.tabs.seo.getAttribute('aria-selected'), 'true');
+  assert.equal(integrated.panels.seo.hidden, false);
+  assert.equal(integrated.panels.ugc.hidden, true);
+  assert.equal(integrated.contacts.seo.form.classList.contains('hidden'), false);
+  assert.equal(integrated.contacts.seo.form.listenerCount('submit'), 1);
+  assert.equal(integrated.contacts.ugc.successMessage.classList.contains('hidden'), false);
+  assert.equal(integrated.contacts.ugc.form.classList.contains('hidden'), true);
+
+  integrated.tabs.ugc.dispatch('click');
+
+  assert.equal(integrated.tabs.ugc.getAttribute('aria-selected'), 'true');
+  assert.equal(integrated.panels.ugc.hidden, false);
+  assert.equal(integrated.panels.seo.hidden, true);
+  assert.equal(integrated.contacts.ugc.successMessage.classList.contains('hidden'), false);
+  assert.equal(integrated.contacts.ugc.form.classList.contains('hidden'), true);
 });
