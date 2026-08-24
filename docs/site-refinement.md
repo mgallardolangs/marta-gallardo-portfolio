@@ -220,7 +220,25 @@ The authored grid is fixed at 12 interleaved slots:
 - the generated Markdown frontmatter writes the public image path so the article and latest-story card can reuse the same asset
 - featured-image retries upsert the existing asset by fetching its current SHA first, which lets a second publish attempt reuse an orphaned uploaded image instead of failing before the Markdown write
 
-## 8. Admin collection semantics
+## 8. Contact inquiry desk contract
+
+### Switcher, tabs, and forms
+- `src/views/ContactPage.astro` renders the paper editorial hero plus one ink inquiry desk with a two-tab switcher.
+- `src/pages/admin/contact.astro` mirrors the same public structure and keeps ES/EN/FR `EditableText` controls for hero copy, tabs, field labels, response note, send label, and success copy.
+- `src/lib/contactSwitcher.ts` owns `CONTACT_TAB_IDS`, `getContactTabTargetIndex()`, `getContactPanelState()`, and the rerun-safe tab initializer/cleanup pair.
+- `UGC` is always the initial active tab. Only one panel is visible at a time, and hidden panels use the `hidden` attribute rather than unmounting.
+- The desk uses `tablist` / `tab` / `tabpanel` relationships, click switching, and keyboard switching for `ArrowLeft`, `ArrowRight`, `Home`, and `End`. Selection is per-visit only; there is no persisted storage.
+- Both Netlify forms must remain in the server-rendered and built HTML so form detection still finds `ugc-contact` and `seo-contact`. Each form keeps its hidden `form-name` input.
+- Each inquiry form contains exactly three authored fields: required email/contact, optional company, and required project-details textarea. There is no Budget field and no Name field.
+- UGC uses the localized creative-project details label, while Translation/SEO uses the localized adaptation/localization details label.
+
+### Submission lifecycle
+- `src/lib/contactForms.js` re-exports the switcher helpers and keeps submission behavior separate from tab state.
+- Successful AJAX submission hides only the submitted `.contact-form` and reveals that panel’s sibling `.contact-success` block, leaving the other tab usable.
+- Non-OK responses or network errors fall back to native form submission so Netlify handling still works without JavaScript fetch success.
+- Validation keeps required-field custom messages localized and preserves entered values on error.
+
+## 9. Admin collection semantics
 
 ### Inline locales
 Editable in admin:
@@ -241,7 +259,7 @@ When an admin adds new orbit/tool/skill/language copy, Spanish is the fallback s
 - Publish writes changed locale JSON, changed `src/data/site.json`, uploaded assets, and blog markdown files
 - Blog creation is restricted to ES/EN/FR
 
-## 9. Locale scope and fallback
+## 10. Locale scope and fallback
 
 Astro config:
 - default locale: `es`
@@ -250,15 +268,15 @@ Astro config:
 
 Header language controls must expose all six locales.
 
-## 10. Astro lifecycle cleanup rules
+## 11. Astro lifecycle cleanup rules
 
 - `TypedTitle.astro` destroys Typed instances on `astro:before-preparation` and re-inits on `astro:page-load`
 - `Header.astro` cleans listeners before swaps and restores focus when overlays close
-- `ContactPage.astro` and `UgcPage.astro` re-run their client initializers on `astro:page-load` and clean them up on `astro:before-preparation`
+- `ContactPage.astro`, `src/pages/admin/contact.astro`, and `UgcPage.astro` re-run their client initializers on `astro:page-load` and clean them up on `astro:before-preparation`
 - `GsapPageRuntime.astro` kills ScrollTriggers on route cleanup
 - `translationPageMotion.ts` must be cancellable across async imports and revisits
 
-## 11. Performance and reduced-motion rules
+## 12. Performance and reduced-motion rules
 
 ### Performance
 - referenced raster assets should stay in WebP unless SVG/video behavior requires otherwise
@@ -277,7 +295,7 @@ Header language controls must expose all six locales.
 - translation GSAP sections render their final state directly
 - footer has no continuous animation loop
 
-## 12. Tests and commands
+## 13. Tests and commands
 
 Run from repository root:
 
@@ -298,8 +316,10 @@ Important contracts live in:
 - `tests/phase5-refinement-contract.test.mjs`
 - `tests/blog-editorial-contract.test.mjs`
 - `tests/blog-locale-contract.test.mjs`
+- `tests/contact-inquiry-switcher.test.mjs`
+- `tests/contact-forms.test.mjs`
 
-## 13. External references
+## 14. External references
 
 Use as references only:
 - Astro routing: https://docs.astro.build/en/guides/routing/
@@ -307,6 +327,6 @@ Use as references only:
 - Astro styling: https://docs.astro.build/en/guides/styling/
 - Astro i18n: https://docs.astro.build/en/guides/internationalization/
 
-## 14. No-copy boundary
+## 15. No-copy boundary
 
 Do not copy external code, templates, or third-party assets into this repository. External URLs above are implementation references only; design, copy, and assets in this project must stay original and repository-owned.
