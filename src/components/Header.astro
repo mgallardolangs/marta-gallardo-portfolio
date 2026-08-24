@@ -1,19 +1,26 @@
 ---
 import { getLocalizedPath, langNames, stripLocaleFromPath, t, visibleLangs, type Lang } from '../i18n';
+import { resolveHeaderLanguageLinks } from '../lib/headerLanguageLinks';
 import { siteData } from '../lib/siteData';
 
 interface Props {
   lang: Lang;
   adminMode?: boolean;
+  alternateLinks?: Partial<Record<Lang, string>>;
 }
 
-const { lang, adminMode = false } = Astro.props;
+const { lang, adminMode = false, alternateLinks } = Astro.props;
 const i = t(lang);
 const pathname = Astro.url.pathname;
 const publicPath = stripLocaleFromPath(pathname).replace(/^\/admin(?=\/|$)/, '') || '/';
 const strippedPath = publicPath === '/' ? '/' : publicPath.replace(/\/$/, '');
 const navPath = (path: string) => (adminMode ? `/admin${path === '/' ? '' : path}` : getLocalizedPath(path, lang));
-const languagePath = (nextLang: Lang) => getLocalizedPath(strippedPath === '' ? '/' : strippedPath, nextLang);
+const availableLanguages = resolveHeaderLanguageLinks({
+  path: strippedPath === '' ? '/' : strippedPath,
+  visibleLangs,
+  getLocalizedPath,
+  alternateLinks,
+});
 
 const navItems = [
   { href: '/', label: i.nav.home },
@@ -112,9 +119,9 @@ const isActive = (path: string) => {
     <div class="language-popover-wrap mx-auto w-full max-w-7xl px-4 md:px-6">
       <div class="relative flex justify-end">
         <div class="language-menu" id="site-language-menu" data-lang-menu hidden role="menu" aria-label={i.language.label}>
-          {visibleLangs.map((locale) => (
+        {availableLanguages.map(({ lang: locale, href }) => (
             <a
-              href={languagePath(locale)}
+            href={href}
               class:list={['language-menu__link', locale === lang && 'is-active']}
               role="menuitem"
             >
@@ -160,8 +167,8 @@ const isActive = (path: string) => {
 
       {!adminMode && (
         <div class="mt-10 flex items-center gap-3">
-          {visibleLangs.map((locale) => (
-            <a href={languagePath(locale)} class:list={['language-chip', locale === lang && 'is-active']}>
+          {availableLanguages.map(({ lang: locale, href }) => (
+            <a href={href} class:list={['language-chip', locale === lang && 'is-active']}>
               {langNames[locale]}
             </a>
           ))}
