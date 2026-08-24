@@ -35,7 +35,7 @@
 - `src/views/UgcPage.astro` — editorial hero, fixed 12-slot UGC contact sheet, mixed-media focus viewer
 - `src/views/TranslationSeoPage.astro` — typed hero, service switcher, arsenal, tabs, methodology, why section
 - `src/views/BlogIndexPage.astro` — locale-scoped blog index
-- `src/views/ContactPage.astro` — twin contact forms
+- `src/views/ContactPage.astro` — editorial contact hero + tabbed inquiry desk
 - `src/components/BlogArticleLayout.astro` — shared article shell for every locale blog detail route
 
 ### Public interactive components
@@ -254,7 +254,7 @@ Header language controls must expose all six locales.
 
 - `TypedTitle.astro` destroys Typed instances on `astro:before-preparation` and re-inits on `astro:page-load`
 - `Header.astro` cleans listeners before swaps and restores focus when overlays close
-- `ContactPage.astro` and `UgcPage.astro` re-run their client initializers on `astro:page-load`
+- `ContactPage.astro` and `UgcPage.astro` re-run their client initializers on `astro:page-load` and clean them up on `astro:before-preparation`
 - `GsapPageRuntime.astro` kills ScrollTriggers on route cleanup
 - `translationPageMotion.ts` must be cancellable across async imports and revisits
 

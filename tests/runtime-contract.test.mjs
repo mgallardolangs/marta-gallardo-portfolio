@@ -190,14 +190,18 @@ test('shared contact view reruns form setup on astro:page-load without duplicate
   );
 
   for (const [relativePath, source] of sources) {
-    assert.match(source, /import\s+\{\s*initContactForms\s*\}\s+from\s+['"].+contactForms\.js['"]/,
-      `${relativePath} should use the shared contact form initializer`);
-    assert.match(source, /const initContactPage = \(\) => initContactForms\(\);/,
-      `${relativePath} should wrap form setup in a named init function`);
+    assert.match(source, /import\s+\{\s*initContactForms,\s*initContactInquirySwitcher\s*\}\s+from\s+['"].+contactForms\.js['"]/,
+      `${relativePath} should use the shared contact switcher and form initializers`);
+    assert.match(source, /const initContactPage = \(\) => \{\s*initContactInquirySwitcher\(\);\s*initContactForms\(\);\s*\}/s,
+      `${relativePath} should wrap switcher setup before form setup in a named init function`);
+    assert.match(source, /const cleanupContactPage = \(\) => \{\s*cleanupContactInquirySwitcher\(\);\s*cleanupContactForms\(\);\s*\}/s,
+      `${relativePath} should keep a named cleanup function for Astro reruns`);
     assert.match(source, /initContactPage\(\);/,
       `${relativePath} should initialize the forms on first load`);
     assert.match(source, /document\.addEventListener\('astro:page-load', initContactPage\);/,
       `${relativePath} should re-run form setup after Astro client navigation`);
+    assert.match(source, /document\.addEventListener\('astro:before-preparation', cleanupContactPage\);/,
+      `${relativePath} should clean up contact listeners before Astro swaps the page`);
   }
 });
 

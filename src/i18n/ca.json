@@ -70,23 +70,23 @@
   "contact": {
     "title": "Col·laborem",
     "subtitle": "Explica’m què vols crear, adaptar o posicionar. Et respondré amb una proposta clara per donar forma al projecte.",
-    "ugcForm": {
-      "title": "Col·laboració UGC",
+    "tabs": {
+      "ugc": "UGC",
+      "seo": "Traducció / SEO"
+    },
+    "fields": {
       "company": "Empresa",
       "email": "Email",
-      "budget": "Pressupost",
-      "description": "Descripció del projecte"
+      "ugcDetails": "Explica’m més sobre el projecte creatiu",
+      "seoDetails": "Quin contingut necessites traduir, localitzar o optimitzar?"
     },
-    "seoForm": {
-      "title": "Traducció + SEO",
-      "company": "Empresa",
-      "email": "Email",
-      "budget": "Pressupost",
-      "description": "Descripció del treball"
-    },
+    "companyOptional": "Opcional",
+    "responseNote": "Resposta clara · contacte directe",
     "send": "Enviar",
-    "successTitle": "Missatge enviat!",
-    "successMessage": "Gràcies per contactar-me. Et respondré el més aviat possible.",
+    "response": {
+      "title": "Missatge enviat",
+      "message": "Gràcies per contactar-me. Et respondré el més aviat possible."
+    },
     "eyebrow": "Parlem",
     "errorRequired": "Si us plau, ompliu aquest camp."
   },

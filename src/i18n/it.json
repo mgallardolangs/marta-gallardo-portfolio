@@ -70,23 +70,23 @@
   "contact": {
     "title": "Collaboriamo",
     "subtitle": "Raccontami cosa vuoi creare, adattare o posizionare. Ti risponderò con una proposta chiara per dare forma al progetto.",
-    "ugcForm": {
-      "title": "Collaborazione UGC",
+    "tabs": {
+      "ugc": "UGC",
+      "seo": "Traduzione / SEO"
+    },
+    "fields": {
       "company": "Azienda",
       "email": "Email",
-      "budget": "Budget",
-      "description": "Descrizione del progetto"
+      "ugcDetails": "Raccontami di più del progetto creativo",
+      "seoDetails": "Quali contenuti devono essere tradotti, localizzati o ottimizzati?"
     },
-    "seoForm": {
-      "title": "Traduzione + SEO",
-      "company": "Azienda",
-      "email": "Email",
-      "budget": "Budget",
-      "description": "Descrizione del lavoro"
-    },
+    "companyOptional": "Facoltativo",
+    "responseNote": "Risposta chiara · contatto diretto",
     "send": "Invia",
-    "successTitle": "Messaggio inviato!",
-    "successMessage": "Grazie per avermi contattata. Ti risponderò il prima possibile.",
+    "response": {
+      "title": "Messaggio inviato",
+      "message": "Grazie per avermi contattata. Ti risponderò il prima possibile."
+    },
     "eyebrow": "Parliamo",
     "errorRequired": "Si prega di compilare questo campo."
   },

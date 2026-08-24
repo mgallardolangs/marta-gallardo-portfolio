@@ -1,5 +1,15 @@
+export {
+  CONTACT_INQUIRY_TAB_IDS,
+  CONTACT_TAB_IDS,
+  cleanupContactInquirySwitcher,
+  getContactPanelState,
+  getContactTabTargetIndex,
+  getNextContactInquiryTabIndex,
+  initContactInquirySwitcher,
+} from './contactSwitcher.ts';
+
 const contactFormCleanups = new WeakMap();
-const activeContactFormCleanups = new Set();
+const contactFormRootCleanups = new WeakMap();
 
 function cleanupContactForm(form) {
   contactFormCleanups.get(form)?.();
@@ -7,17 +17,30 @@ function cleanupContactForm(form) {
   delete form.dataset.contactFormInitialized;
 }
 
-function cleanupAllContactForms() {
-  activeContactFormCleanups.forEach((cleanup) => cleanup());
-  activeContactFormCleanups.clear();
+function getDefaultRoot() {
+  return typeof document === 'undefined' ? undefined : document;
+}
+
+export function cleanupContactForms(root = getDefaultRoot()) {
+  if (!root || typeof root !== 'object') {
+    return;
+  }
+
+  contactFormRootCleanups.get(root)?.();
 }
 
 function setCustomValidity(input, message) {
   input.setCustomValidity(message);
 }
 
-export function initContactForms(root = document) {
-  cleanupAllContactForms();
+export function initContactForms(root = getDefaultRoot()) {
+  if (!root || typeof root !== 'object' || typeof root.querySelectorAll !== 'function') {
+    return () => undefined;
+  }
+
+  cleanupContactForms(root);
+
+  const rootCleanups = [];
 
   root.querySelectorAll('.contact-form').forEach((form) => {
     if (!(form instanceof HTMLFormElement)) {
@@ -93,10 +116,18 @@ export function initContactForms(root = document) {
     const cleanup = () => {
       cleanupCallbacks.forEach((callback) => callback());
       delete form.dataset.contactFormInitialized;
-      activeContactFormCleanups.delete(cleanup);
     };
 
     contactFormCleanups.set(form, cleanup);
-    activeContactFormCleanups.add(cleanup);
+    rootCleanups.push(() => cleanupContactForm(form));
   });
+
+  const cleanupRoot = () => {
+    rootCleanups.forEach((cleanup) => cleanup());
+    contactFormRootCleanups.delete(root);
+  };
+
+  contactFormRootCleanups.set(root, cleanupRoot);
+
+  return () => cleanupContactForms(root);
 }

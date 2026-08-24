@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import * as contactForms from '../src/lib/contactForms.js';
+import * as contactSwitcher from '../src/lib/contactSwitcher.ts';
 
 const { initContactForms } = contactForms;
 
@@ -347,6 +348,18 @@ test('resolved non-ok contact submissions fall back to native submit instead of 
 });
 
 test('contact inquiry helper exports a pure two-tab keyboard contract', () => {
+  assert.deepEqual(contactSwitcher.CONTACT_TAB_IDS, ['ugc', 'seo']);
+  assert.equal(typeof contactSwitcher.getContactTabTargetIndex, 'function');
+  assert.equal(typeof contactSwitcher.getContactPanelState, 'function');
+  assert.equal(contactSwitcher.getContactTabTargetIndex(0, 'ArrowRight'), 1);
+  assert.equal(contactSwitcher.getContactTabTargetIndex(1, 'ArrowRight'), 0);
+  assert.equal(contactSwitcher.getContactTabTargetIndex(0, 'ArrowLeft'), 1);
+  assert.equal(contactSwitcher.getContactTabTargetIndex(1, 'ArrowLeft'), 0);
+  assert.equal(contactSwitcher.getContactTabTargetIndex(1, 'Home'), 0);
+  assert.equal(contactSwitcher.getContactTabTargetIndex(0, 'End'), 1);
+  assert.deepEqual(contactSwitcher.getContactPanelState('ugc', 'ugc'), { hidden: false });
+  assert.deepEqual(contactSwitcher.getContactPanelState('ugc', 'seo'), { hidden: true });
+
   assert.deepEqual(contactForms.CONTACT_INQUIRY_TAB_IDS, ['ugc', 'seo']);
   assert.equal(typeof contactForms.getNextContactInquiryTabIndex, 'function');
   assert.equal(contactForms.getNextContactInquiryTabIndex(0, 'ArrowRight'), 1);

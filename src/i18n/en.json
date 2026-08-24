@@ -70,23 +70,23 @@
   "contact": {
     "title": "Let's collaborate",
     "subtitle": "Tell me what you want to create, adapt or position. I’ll reply with a clear proposal to shape the project.",
-    "ugcForm": {
-      "title": "UGC Collaboration",
+    "tabs": {
+      "ugc": "UGC",
+      "seo": "Translation / SEO"
+    },
+    "fields": {
       "company": "Company",
       "email": "Email",
-      "budget": "Budget",
-      "description": "Project description"
+      "ugcDetails": "Tell me more about the creative project",
+      "seoDetails": "What content needs translating, localizing, or optimizing?"
     },
-    "seoForm": {
-      "title": "Translation / SEO",
-      "company": "Company",
-      "email": "Email",
-      "budget": "Budget",
-      "description": "Work description"
-    },
+    "companyOptional": "Optional",
+    "responseNote": "Clear reply · direct contact",
     "send": "Send",
-    "successTitle": "Message sent!",
-    "successMessage": "Thanks for reaching out. I'll get back to you as soon as possible.",
+    "response": {
+      "title": "Message sent",
+      "message": "Thanks for reaching out. I'll get back to you as soon as possible."
+    },
     "eyebrow": "Let's talk",
     "errorRequired": "Please fill in this field."
   },

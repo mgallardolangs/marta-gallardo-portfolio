@@ -34,11 +34,11 @@ function assertContactFieldContract(source, prefix) {
   assert.match(source, new RegExp(`<label[^>]*for="${prefix}-email"`));
   assert.match(source, new RegExp(`<label[^>]*for="${prefix}-company"`));
   assert.match(source, new RegExp(`<label[^>]*for="${prefix}-details"`));
-  assert.match(emailTag, /\bname="Email"\b/);
-  assert.match(emailTag, /\btype="email"\b/);
+  assert.match(emailTag, /name="Email"/);
+  assert.match(emailTag, /type="email"/);
   assert.match(emailTag, /\brequired\b/);
-  assert.match(companyTag, /\bname="Company"\b/);
-  assert.match(companyTag, /\btype="text"\b/);
+  assert.match(companyTag, /name="Company"/);
+  assert.match(companyTag, /type="text"/);
   assert.doesNotMatch(companyTag, /\brequired\b/);
   assert.match(detailsTag, /\brequired\b/);
 
@@ -100,13 +100,13 @@ test('public and admin contact pages lock the switcher desk, exact forms, strict
     assert.equal(countMatches(source, /data-contact-tab="seo"/g), 1);
     assert.equal(countMatches(source, /data-contact-panel="ugc"/g), 1);
     assert.equal(countMatches(source, /data-contact-panel="seo"/g), 1);
-    assert.equal(countMatches(source, /\brole="tab"\b/g), 2);
-    assert.equal(countMatches(source, /\brole="tabpanel"\b/g), 2);
+    assert.equal(countMatches(source, /role="tab"/g), 2);
+    assert.equal(countMatches(source, /role="tabpanel"/g), 2);
     assert.match(source, /data-contact-tab="ugc"[\s\S]{0,220}aria-selected="true"[\s\S]{0,120}tabindex="0"/s);
     assert.match(source, /data-contact-tab="seo"[\s\S]{0,220}aria-selected="false"[\s\S]{0,120}tabindex="-1"/s);
     assert.match(source, /data-contact-panel="seo"[\s\S]{0,200}\bhidden\b/s);
-    assert.equal(countMatches(source, /\bname="ugc-contact"\b/g), 1);
-    assert.equal(countMatches(source, /\bname="seo-contact"\b/g), 1);
+    assert.equal(countMatches(source, /name="ugc-contact"/g), 1);
+    assert.equal(countMatches(source, /name="seo-contact"/g), 1);
     assert.equal(countMatches(source, /<input type="hidden" name="form-name" value="ugc-contact" \/>/g), 1);
     assert.equal(countMatches(source, /<input type="hidden" name="form-name" value="seo-contact" \/>/g), 1);
     assert.doesNotMatch(source, /\b(?:ugc|seo)-(?:budget|name)\b/);
