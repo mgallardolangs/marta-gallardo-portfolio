@@ -87,9 +87,10 @@ test('public Contact hero keeps stable markers, a Typed title, and no old black 
 });
 
 test('public and admin contact pages lock the switcher desk, exact forms, strict field set, and editable key parity', async () => {
-  const [publicSource, adminSource] = await Promise.all([
+  const [publicSource, adminSource, globalCss] = await Promise.all([
     readSource('src/views/ContactPage.astro'),
     readSource('src/pages/admin/contact.astro'),
+    readSource('src/styles/global.css'),
   ]);
 
   for (const source of [publicSource, adminSource]) {
@@ -104,6 +105,7 @@ test('public and admin contact pages lock the switcher desk, exact forms, strict
     assert.equal(countMatches(source, /role="tabpanel"/g), 2);
     assert.match(source, /data-contact-tab="ugc"[\s\S]{0,220}aria-selected="true"[\s\S]{0,120}tabindex="0"/s);
     assert.match(source, /data-contact-tab="seo"[\s\S]{0,220}aria-selected="false"[\s\S]{0,120}tabindex="-1"/s);
+    assert.equal(countMatches(source, /class=\{`\$\{tabClass\} contact-tab`\}/g), 2);
     assert.match(source, /data-contact-panel="seo"[\s\S]{0,200}\bhidden\b/s);
     assert.equal(countMatches(source, /name="ugc-contact"/g), 1);
     assert.equal(countMatches(source, /name="seo-contact"/g), 1);
@@ -120,6 +122,12 @@ test('public and admin contact pages lock the switcher desk, exact forms, strict
     assertContactFieldContract(source, 'ugc');
     assertContactFieldContract(source, 'seo');
   }
+
+  assert.match(globalCss, /\.contact-tab\s*\{/);
+  assert.match(globalCss, /\.contact-tab::before\s*,\s*\.contact-tab::after\s*\{/);
+  assert.match(globalCss, /\.contact-tab\[aria-selected='true'\]\s*\{/);
+  assert.match(globalCss, /\.contact-tab\[aria-selected='true'\]::before\s*,\s*\.contact-tab\[aria-selected='true'\]::after\s*\{/);
+  assert.doesNotMatch(globalCss, /\.contact-tab:hover/);
 
   for (const key of [
     'contact.tabs.ugc',
@@ -140,6 +148,23 @@ test('public and admin contact pages lock the switcher desk, exact forms, strict
   assert.doesNotMatch(publicSource, /i\.contact\.success(?:Title|Message)/);
   assert.doesNotMatch(adminSource, /i18nKey="contact\.(?:ugcForm|seoForm)\.(?:title|company|email|budget|description)"/);
   assert.doesNotMatch(adminSource, /i18nKey="contact\.success(?:Title|Message)"/);
+});
+
+test('admin contact buttons keep editable labels through portal targets without stealing tab or submit clicks', async () => {
+  const source = await readSource('src/pages/admin/contact.astro');
+
+  assert.equal(countMatches(source, /clickToEdit=\{false\}/g), 4);
+  assert.equal(countMatches(source, /class="group\/edit relative"/g), 4);
+
+  assert.match(source, /<EditableText client:load i18nKey="contact\.tabs\.ugc" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-ugc-tab-edit" \/>/);
+  assert.match(source, /<EditableText client:load i18nKey="contact\.tabs\.seo" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-seo-tab-edit" \/>/);
+  assert.match(source, /<EditableText client:load i18nKey="contact\.send" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-ugc-submit-edit" \/>/);
+  assert.match(source, /<EditableText client:load i18nKey="contact\.send" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-seo-submit-edit" \/>/);
+
+  assert.match(source, /<span id="admin-contact-ugc-tab-edit" \/>/);
+  assert.match(source, /<span id="admin-contact-seo-tab-edit" \/>/);
+  assert.match(source, /<span id="admin-contact-ugc-submit-edit" \/>/);
+  assert.match(source, /<span id="admin-contact-seo-submit-edit" \/>/);
 });
 
 test('contact switcher work leaves the approved Home, UGC, and Translation markers untouched', async () => {

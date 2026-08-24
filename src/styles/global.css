@@ -99,6 +99,37 @@ svg {
   color: var(--color-amaranth);
 }
 
+.contact-tab {
+  color: rgb(244 245 241 / 0.58);
+}
+
+.contact-tab::before,
+.contact-tab::after {
+  opacity: 0.38;
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease;
+}
+
+.contact-tab::before {
+  content: '[';
+  margin-right: 0.45rem;
+}
+
+.contact-tab::after {
+  content: ']';
+  margin-left: 0.45rem;
+}
+
+.contact-tab[aria-selected='true'] {
+  color: var(--color-amaranth);
+}
+
+.contact-tab[aria-selected='true']::before,
+.contact-tab[aria-selected='true']::after {
+  opacity: 1;
+}
+
 .home-hero {
   position: relative;
   overflow: hidden;

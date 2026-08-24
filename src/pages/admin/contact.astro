@@ -33,30 +33,36 @@ const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-
         </div>
 
         <div data-contact-tablist role="tablist" aria-label={i.contact.title} class="flex flex-wrap gap-6 md:gap-8">
-          <button
-            type="button"
-            id="contact-tab-ugc"
-            data-contact-tab="ugc"
-            role="tab"
-            aria-controls="contact-panel-ugc"
-            aria-selected="true"
-            tabindex="0"
-            class={`${tabClass} text-amaranth`}
-          >
-            [ <EditableText client:load i18nKey="contact.tabs.ugc" as="span" className="" /> ]
-          </button>
-          <button
-            type="button"
-            id="contact-tab-seo"
-            data-contact-tab="seo"
-            role="tab"
-            aria-controls="contact-panel-seo"
-            aria-selected="false"
-            tabindex="-1"
-            class={`${tabClass} text-paper/58 hover:text-paper`}
-          >
-            [ <EditableText client:load i18nKey="contact.tabs.seo" as="span" className="" /> ]
-          </button>
+          <div class="group/edit relative">
+            <button
+              type="button"
+              id="contact-tab-ugc"
+              data-contact-tab="ugc"
+              role="tab"
+              aria-controls="contact-panel-ugc"
+              aria-selected="true"
+              tabindex="0"
+              class={`${tabClass} contact-tab`}
+            >
+              <EditableText client:load i18nKey="contact.tabs.ugc" as="span" className="" clickToEdit={false} editButtonTargetId="admin-contact-ugc-tab-edit" />
+            </button>
+            <span id="admin-contact-ugc-tab-edit" />
+          </div>
+          <div class="group/edit relative">
+            <button
+              type="button"
+              id="contact-tab-seo"
+              data-contact-tab="seo"
+              role="tab"
+              aria-controls="contact-panel-seo"
+              aria-selected="false"
+              tabindex="-1"
+              class={`${tabClass} contact-tab`}
+            >
+              <EditableText client:load i18nKey="contact.tabs.seo" as="span" className="" clickToEdit={false} editButtonTargetId="admin-contact-seo-tab-edit" />
+            </button>
+            <span id="admin-contact-seo-tab-edit" />
+          </div>
         </div>
       </div>
 
@@ -87,12 +93,15 @@ const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-
 
             <div class="flex flex-col gap-4 border-t border-paper/14 pt-6 md:flex-row md:items-end md:justify-between">
               <EditableText client:load i18nKey="contact.responseNote" as="p" className="max-w-xl font-body text-[0.68rem] uppercase tracking-[0.22em] text-paper/58" />
-              <button
-                type="submit"
-                class="inline-flex items-center justify-center border border-amaranth bg-amaranth px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] text-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_0_var(--color-paper)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_4px_0_var(--color-paper)] focus-visible:outline-none"
-              >
-                <EditableText client:load i18nKey="contact.send" as="span" className="" />
-              </button>
+              <div class="group/edit relative">
+                <button
+                  type="submit"
+                  class="inline-flex items-center justify-center border border-amaranth bg-amaranth px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] text-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_0_var(--color-paper)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_4px_0_var(--color-paper)] focus-visible:outline-none"
+                >
+                  <EditableText client:load i18nKey="contact.send" as="span" className="" clickToEdit={false} editButtonTargetId="admin-contact-ugc-submit-edit" />
+                </button>
+                <span id="admin-contact-ugc-submit-edit" />
+              </div>
             </div>
           </form>
 
@@ -131,12 +140,15 @@ const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-
 
             <div class="flex flex-col gap-4 border-t border-paper/14 pt-6 md:flex-row md:items-end md:justify-between">
               <EditableText client:load i18nKey="contact.responseNote" as="p" className="max-w-xl font-body text-[0.68rem] uppercase tracking-[0.22em] text-paper/58" />
-              <button
-                type="submit"
-                class="inline-flex items-center justify-center border border-amaranth bg-amaranth px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] text-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_0_var(--color-paper)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_4px_0_var(--color-paper)] focus-visible:outline-none"
-              >
-                <EditableText client:load i18nKey="contact.send" as="span" className="" />
-              </button>
+              <div class="group/edit relative">
+                <button
+                  type="submit"
+                  class="inline-flex items-center justify-center border border-amaranth bg-amaranth px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.26em] text-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_0_var(--color-paper)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_4px_0_var(--color-paper)] focus-visible:outline-none"
+                >
+                  <EditableText client:load i18nKey="contact.send" as="span" className="" clickToEdit={false} editButtonTargetId="admin-contact-seo-submit-edit" />
+                </button>
+                <span id="admin-contact-seo-submit-edit" />
+              </div>
             </div>
           </form>
 
