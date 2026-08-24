@@ -10,6 +10,7 @@ export {
 
 const contactFormCleanups = new WeakMap();
 const contactFormRootCleanups = new WeakMap();
+const CONTACT_SUCCESS_SELECTOR = '[data-contact-success]';
 
 function cleanupContactForm(form) {
   contactFormCleanups.get(form)?.();
@@ -100,8 +101,13 @@ export function initContactForms(root = getDefaultRoot()) {
           form.submit();
           return;
         }
+
+        const success = form.parentElement?.querySelector(CONTACT_SUCCESS_SELECTOR);
         form.classList.add('hidden');
-        form.parentElement?.querySelector('.contact-success')?.classList.remove('hidden');
+        success?.classList.remove('hidden');
+        queueMicrotask(() => {
+          success?.focus?.({ preventScroll: false });
+        });
       } catch {
         form.submit();
       }

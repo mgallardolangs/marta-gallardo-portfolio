@@ -105,8 +105,12 @@ class MockElement {
     return this.attributes.get(name) ?? null;
   }
 
-  focus() {
+  focus(options) {
     this.focusCount = (this.focusCount ?? 0) + 1;
+    this.lastFocusOptions = options;
+    if (this.ownerDocument) {
+      this.ownerDocument.activeElement = this;
+    }
   }
 }
 
@@ -245,6 +249,10 @@ class MockFormData {
 
 function createContactForm(formName) {
   const successMessage = new MockElement({ hidden: true });
+  const submitButton = new MockElement();
+  const documentState = { activeElement: submitButton };
+  successMessage.ownerDocument = documentState;
+  submitButton.ownerDocument = documentState;
   const form = new MockFormElement({
     formName,
     fields: [
@@ -257,11 +265,11 @@ function createContactForm(formName) {
 
   form.parentElement = {
     querySelector(selector) {
-      return selector === '.contact-success' ? successMessage : null;
+      return selector === '.contact-success' || selector === '[data-contact-success]' ? successMessage : null;
     },
   };
 
-  return { form, successMessage };
+  return { form, successMessage, submitButton, documentState };
 }
 
 function createInquiryRoot() {
@@ -469,6 +477,53 @@ test('contact form init stays root-scoped across public and admin and success hi
   assert.equal(adminContact.successMessage.classList.contains('hidden'), true);
 });
 
+test('successful contact submission focuses only the submitted success panel and rerun init preserves success state', async (t) => {
+  const originalFetch = globalThis.fetch;
+  const originalHTMLFormElement = globalThis.HTMLFormElement;
+  const originalHTMLInputElement = globalThis.HTMLInputElement;
+  const originalHTMLTextAreaElement = globalThis.HTMLTextAreaElement;
+  const originalHTMLSelectElement = globalThis.HTMLSelectElement;
+  const originalFormData = globalThis.FormData;
+
+  globalThis.fetch = async () => ({ ok: true, status: 200 });
+  globalThis.HTMLFormElement = MockFormElement;
+  globalThis.HTMLInputElement = MockField;
+  globalThis.HTMLTextAreaElement = MockField;
+  globalThis.HTMLSelectElement = MockField;
+  globalThis.FormData = MockFormData;
+
+  t.after(() => {
+    globalThis.fetch = originalFetch;
+    globalThis.HTMLFormElement = originalHTMLFormElement;
+    globalThis.HTMLInputElement = originalHTMLInputElement;
+    globalThis.HTMLTextAreaElement = originalHTMLTextAreaElement;
+    globalThis.HTMLSelectElement = originalHTMLSelectElement;
+    globalThis.FormData = originalFormData;
+  });
+
+  const integrated = createIntegratedContactRoot();
+  integrated.contacts.ugc.submitButton.focus();
+
+  initContactForms(integrated.root);
+  await integrated.contacts.ugc.form.dispatch('submit');
+  await Promise.resolve();
+
+  assert.equal(integrated.contacts.ugc.form.classList.contains('hidden'), true);
+  assert.equal(integrated.contacts.ugc.successMessage.classList.contains('hidden'), false);
+  assert.equal(integrated.contacts.ugc.documentState.activeElement, integrated.contacts.ugc.successMessage);
+  assert.equal(integrated.contacts.ugc.successMessage.focusCount, 1);
+  assert.deepEqual(integrated.contacts.ugc.successMessage.lastFocusOptions, { preventScroll: false });
+  assert.equal(integrated.contacts.seo.successMessage.focusCount ?? 0, 0);
+
+  initContactForms(integrated.root);
+  await Promise.resolve();
+
+  assert.equal(integrated.contacts.ugc.form.classList.contains('hidden'), true);
+  assert.equal(integrated.contacts.ugc.successMessage.classList.contains('hidden'), false);
+  assert.equal(integrated.contacts.ugc.documentState.activeElement, integrated.contacts.ugc.successMessage);
+  assert.equal(integrated.contacts.ugc.successMessage.focusCount, 1);
+});
+
 test('contact task1 keeps ugc success visible after switching to seo and back inside one shared contact desk root', async (t) => {
   const originalFetch = globalThis.fetch;
   const originalHTMLElement = globalThis.HTMLElement;
@@ -511,9 +566,11 @@ test('contact task1 keeps ugc success visible after switching to seo and back in
   assert.equal(integrated.contacts.seo.form.listenerCount('submit'), 1);
 
   await integrated.contacts.ugc.form.dispatch('submit');
+  await Promise.resolve();
 
   assert.equal(integrated.contacts.ugc.form.classList.contains('hidden'), true);
   assert.equal(integrated.contacts.ugc.successMessage.classList.contains('hidden'), false);
+  assert.equal(integrated.contacts.ugc.successMessage.focusCount, 1);
   assert.equal(integrated.contacts.seo.form.classList.contains('hidden'), false);
   assert.equal(integrated.contacts.seo.successMessage.classList.contains('hidden'), true);
 
@@ -525,6 +582,7 @@ test('contact task1 keeps ugc success visible after switching to seo and back in
   assert.equal(integrated.contacts.seo.form.classList.contains('hidden'), false);
   assert.equal(integrated.contacts.seo.form.listenerCount('submit'), 1);
   assert.equal(integrated.contacts.ugc.successMessage.classList.contains('hidden'), false);
+  assert.equal(integrated.contacts.ugc.successMessage.focusCount, 1);
   assert.equal(integrated.contacts.ugc.form.classList.contains('hidden'), true);
 
   integrated.tabs.ugc.dispatch('click');
@@ -533,5 +591,6 @@ test('contact task1 keeps ugc success visible after switching to seo and back in
   assert.equal(integrated.panels.ugc.hidden, false);
   assert.equal(integrated.panels.seo.hidden, true);
   assert.equal(integrated.contacts.ugc.successMessage.classList.contains('hidden'), false);
+  assert.equal(integrated.contacts.ugc.successMessage.focusCount, 1);
   assert.equal(integrated.contacts.ugc.form.classList.contains('hidden'), true);
 });

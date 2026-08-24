@@ -103,8 +103,11 @@ test('public and admin contact pages lock the switcher desk, exact forms, strict
     assert.equal(countMatches(source, /data-contact-panel="seo"/g), 1);
     assert.equal(countMatches(source, /role="tab"/g), 2);
     assert.equal(countMatches(source, /role="tabpanel"/g), 2);
+    assert.equal(countMatches(source, /data-contact-success=/g), 2);
     assert.match(source, /data-contact-tab="ugc"[\s\S]{0,220}aria-selected="true"[\s\S]{0,120}tabindex="0"/s);
     assert.match(source, /data-contact-tab="seo"[\s\S]{0,220}aria-selected="false"[\s\S]{0,120}tabindex="-1"/s);
+    assert.match(source, /<div data-contact-success="ugc" role="status" aria-live="polite" tabindex="-1" class=\{successClass\}>/);
+    assert.match(source, /<div data-contact-success="seo" role="status" aria-live="polite" tabindex="-1" class=\{successClass\}>/);
     assert.equal(countMatches(source, /class=\{`\$\{tabClass\} contact-tab`\}/g), 2);
     assert.match(source, /data-contact-panel="seo"[\s\S]{0,200}\bhidden\b/s);
     assert.equal(countMatches(source, /name="ugc-contact"/g), 1);
