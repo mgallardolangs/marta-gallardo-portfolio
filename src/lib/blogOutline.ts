@@ -23,6 +23,12 @@ export type BlogOutlineEntry = {
   children: BlogOutlineChild[];
 };
 
+export type InsertMarkdownHeadingResult = {
+  markdown: string;
+  selectionStart: number;
+  selectionEnd: number;
+};
+
 function stripInlineMarkup(value: string): string {
   return value
     .replace(/<[^>]+>/g, ' ')
@@ -112,10 +118,65 @@ export function parseMarkdownOutline(markdown: string): BlogOutlineEntry[] {
   return buildBlogOutline(headings);
 }
 
-export function insertMarkdownHeading(markdown: string, selectionStart: number, selectionEnd: number, level: 2 | 3): string {
+function getLineStart(markdown: string, index: number): number {
+  return markdown.lastIndexOf('\n', Math.max(0, index) - 1) + 1;
+}
+
+function getLineEnd(markdown: string, index: number): number {
+  const lineEnd = markdown.indexOf('\n', index);
+  return lineEnd === -1 ? markdown.length : lineEnd;
+}
+
+function ensureStandalonePrefix(text: string): string {
+  if (!text) return '';
+  if (text.endsWith('\n\n')) return text;
+  if (text.endsWith('\n')) return `${text}\n`;
+  return `${text}\n\n`;
+}
+
+function ensureStandaloneSuffix(text: string): string {
+  if (!text) return '';
+  if (text.startsWith('\n\n')) return text;
+  if (text.startsWith('\n')) return `\n${text}`;
+  return `\n\n${text}`;
+}
+
+function createInsertedHeading(markdown: string, headingText: string, selectionStart: number): InsertMarkdownHeadingResult {
+  return {
+    markdown,
+    selectionStart,
+    selectionEnd: selectionStart + headingText.length,
+  };
+}
+
+export function insertMarkdownHeading(markdown: string, selectionStart: number, selectionEnd: number, level: 2 | 3): InsertMarkdownHeadingResult {
+  const start = Math.max(0, selectionStart);
+  const end = Math.max(start, selectionEnd);
   const prefix = `${'#'.repeat(level)} `;
   const fallbackText = level === 2 ? 'Section title' : 'Subsection title';
-  const selectedText = markdown.slice(selectionStart, selectionEnd).trim() || fallbackText;
+  const selectedText = markdown.slice(start, end).trim();
 
-  return `${markdown.slice(0, selectionStart)}${prefix}${selectedText}${markdown.slice(selectionEnd)}`;
+  if (!markdown.trim()) {
+    const headingText = selectedText || fallbackText;
+    return createInsertedHeading(`${prefix}${headingText}`, headingText, prefix.length);
+  }
+
+  const lineStart = getLineStart(markdown, start);
+  const lineEnd = getLineEnd(markdown, end);
+  const currentLine = markdown.slice(lineStart, lineEnd);
+  const existingHeadingMatch = currentLine.match(/^\s*#{1,6}\s+(.+?)\s*#*\s*$/);
+  const headingText = selectedText || existingHeadingMatch?.[1]?.trim() || fallbackText;
+
+  if (existingHeadingMatch) {
+    const nextMarkdown = `${markdown.slice(0, lineStart)}${prefix}${headingText}${markdown.slice(lineEnd)}`;
+    return {
+      markdown: nextMarkdown,
+      selectionStart: lineStart + prefix.length,
+      selectionEnd: lineStart + prefix.length + headingText.length,
+    };
+  }
+
+  const beforeHeading = ensureStandalonePrefix(markdown.slice(0, start).replace(/[ \t]+$/, ''));
+  const nextMarkdown = `${beforeHeading}${prefix}${headingText}${ensureStandaloneSuffix(markdown.slice(end).replace(/^[ \t]+/, ''))}`;
+  return createInsertedHeading(nextMarkdown, headingText, beforeHeading.length + prefix.length);
 }

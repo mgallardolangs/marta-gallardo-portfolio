@@ -97,6 +97,7 @@ test('all localized blog article routes slot rendered Content through BlogArticl
 
 test('applyBlogToolbarAction returns the next markdown and selection contract for H2, H3, bold, and link toolbar actions', async () => {
   const { applyBlogToolbarAction } = await importModule('src/lib/blogPostFormState.ts');
+  const { parseMarkdownOutline } = await importModule('src/lib/blogOutline.ts');
 
   assert.equal(typeof applyBlogToolbarAction, 'function', 'src/lib/blogPostFormState.ts should export applyBlogToolbarAction(markdown, selection, action)');
 
@@ -118,6 +119,21 @@ test('applyBlogToolbarAction returns the next markdown and selection contract fo
       selection: { start: 11, end: 24 },
     },
     'H3 toolbar action should prefix the current selection and return the next selection range',
+  );
+
+  const inlineHeading = applyBlogToolbarAction('Intro marker outro', { start: 6, end: 12 }, 'h2');
+  assert.deepEqual(
+    inlineHeading,
+    {
+      markdown: 'Intro\n\n## marker\n\noutro',
+      selection: { start: 10, end: 16 },
+    },
+    'H2 toolbar action should lift mid-paragraph selections onto their own standalone heading line and select the heading text',
+  );
+  assert.deepEqual(
+    parseMarkdownOutline(inlineHeading.markdown).map((entry) => entry.text),
+    ['marker'],
+    'the lifted standalone heading should be recognized by parseMarkdownOutline as a real H2 heading',
   );
 
   const bold = applyBlogToolbarAction('Need focus now', { start: 5, end: 10 }, 'bold');

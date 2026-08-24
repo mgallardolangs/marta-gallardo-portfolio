@@ -83,6 +83,16 @@ function normalizeInsertedMarkdown(result) {
   return '';
 }
 
+function normalizeInsertedSelection(result) {
+  if (!result || typeof result !== 'object') {
+    return { start: -1, end: -1 };
+  }
+
+  const start = result.selectionStart ?? result.start ?? result.selection?.start ?? -1;
+  const end = result.selectionEnd ?? result.end ?? result.selection?.end ?? -1;
+  return { start, end };
+}
+
 test('BlogIndexPage keeps the approved hero, latest-story, archive, and empty-row editorial contract', async () => {
   const source = await readSource('src/views/BlogIndexPage.astro');
 
@@ -135,6 +145,7 @@ test('blog article routes use rendered heading data and the shared BlogArticleLa
 
 test('BlogTableOfContents keeps sticky desktop navigation, mobile chips, active-state tracking, and nested H2/H3 numbering', async () => {
   const tocSource = await readSource('src/components/BlogTableOfContents.tsx');
+  const { decodeBlogHash } = await importModule('src/lib/blogTableOfContents.ts');
 
   assert.match(tocSource, /heading\.depth\s*===\s*2|heading\.level\s*===\s*2/, 'BlogTableOfContents should treat H2 headings as top-level entries');
   assert.match(tocSource, /heading\.depth\s*===\s*3|heading\.level\s*===\s*3/, 'BlogTableOfContents should treat H3 headings as nested entries');
@@ -145,6 +156,28 @@ test('BlogTableOfContents keeps sticky desktop navigation, mobile chips, active-
   assert.match(tocSource, /aria-current|data-active/, 'BlogTableOfContents should expose an active-state contract');
   assert.match(tocSource, /sticky/, 'BlogTableOfContents should stay sticky on desktop');
   assert.match(tocSource, /overflow-x-auto/, 'BlogTableOfContents should expose mobile horizontal chips');
+  assert.match(tocSource, /decodeBlogHash/, 'BlogTableOfContents should route location hashes through the shared decodeBlogHash helper before activating a heading');
+
+  assert.equal(typeof decodeBlogHash, 'function', 'src/lib/blogTableOfContents.ts should export decodeBlogHash(hash, validIds)');
+  assert.equal(
+    decodeBlogHash('#qu%C3%A9-tal', ['qué-tal', 'otra-seccion']),
+    'qué-tal',
+    'decodeBlogHash should decode encoded accented heading ids before matching them',
+  );
+  assert.doesNotThrow(
+    () => decodeBlogHash('#qu%E0%A4%A', ['qu%E0%A4%A']),
+    'decodeBlogHash should swallow malformed URI fragments instead of throwing',
+  );
+  assert.equal(
+    decodeBlogHash('#qu%E0%A4%A', ['qu%E0%A4%A']),
+    'qu%E0%A4%A',
+    'decodeBlogHash should fall back to the raw fragment when decoding fails but the raw heading id is valid',
+  );
+  assert.equal(
+    decodeBlogHash('#unknown-heading', ['qué-tal', 'otra-seccion']),
+    null,
+    'decodeBlogHash should ignore hashes that do not correspond to a rendered heading id',
+  );
 });
 
 test('blog outline helpers stay pure for H2/H3 parsing and markdown heading insertion', async () => {
@@ -187,9 +220,30 @@ test('blog outline helpers stay pure for H2/H3 parsing and markdown heading inse
 
   const insertedH2 = normalizeInsertedMarkdown(insertMarkdownHeading('Intro\n\nBody', 0, 5, 2));
   const insertedH3 = normalizeInsertedMarkdown(insertMarkdownHeading('Intro\n\nBody', 7, 11, 3));
+  const blankHeading = insertMarkdownHeading('', 0, 0, 2);
+  const retaggedHeading = insertMarkdownHeading('## Existing title\n\nBody', 3, 17, 3);
 
   assert.match(insertedH2, /^##\s+Intro\b/m, 'insertMarkdownHeading should promote the selected text to an H2 heading');
   assert.match(insertedH3, /\n###\s+Body\b/m, 'insertMarkdownHeading should promote the selected text to an H3 heading');
+  assert.deepEqual(
+    blankHeading,
+    {
+      markdown: '## Section title',
+      selectionStart: 3,
+      selectionEnd: 16,
+    },
+    'insertMarkdownHeading should preserve the blank-textarea placeholder contract and select the placeholder text',
+  );
+  assert.equal(
+    normalizeInsertedMarkdown(retaggedHeading),
+    '### Existing title\n\nBody',
+    'insertMarkdownHeading should keep existing heading lines as single standalone heading lines when changing depth',
+  );
+  assert.deepEqual(
+    normalizeInsertedSelection(retaggedHeading),
+    { start: 4, end: 18 },
+    'insertMarkdownHeading should return the inserted heading text selection range for existing heading lines',
+  );
 });
 
 test('admin blog list and new-post shell keep the strict editorial chrome with no rounded or pastel cards', async () => {

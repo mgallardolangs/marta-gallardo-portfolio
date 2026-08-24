@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { BlogOutlineEntry } from '../lib/blogOutline';
+import { decodeBlogHash } from '../lib/blogTableOfContents';
 
 type TocHeading = BlogOutlineEntry & {
   depth?: number;
@@ -56,7 +57,7 @@ export default function BlogTableOfContents({ headings, title, readTimeLabel, re
     if (elements.length === 0) return undefined;
 
     const applyHash = () => {
-      const hashId = window.location.hash.replace(/^#/, '');
+      const hashId = decodeBlogHash(window.location.hash, headingIds);
       if (hashId) {
         setActiveId(hashId);
         return;

@@ -13,15 +13,13 @@ export function applyBlogToolbarAction(markdown: string, selection: BlogSelectio
 
   if (action === 'h2' || action === 'h3') {
     const level = action === 'h2' ? 2 : 3;
-    const prefix = `${'#'.repeat(level)} `;
-    const nextMarkdown = insertMarkdownHeading(markdown, start, end, level);
-    const nextText = selectedText.trim() || (level === 2 ? 'Section title' : 'Subsection title');
+    const nextHeading = insertMarkdownHeading(markdown, start, end, level);
 
     return {
-      markdown: nextMarkdown,
+      markdown: nextHeading.markdown,
       selection: {
-        start: start + prefix.length,
-        end: start + prefix.length + nextText.length,
+        start: nextHeading.selectionStart,
+        end: nextHeading.selectionEnd,
       },
     };
   }
