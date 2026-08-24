@@ -36,6 +36,7 @@
 - `src/views/TranslationSeoPage.astro` — typed hero, service switcher, arsenal, tabs, methodology, why section
 - `src/views/BlogIndexPage.astro` — locale-scoped blog index
 - `src/views/ContactPage.astro` — twin contact forms
+- `src/components/BlogArticleLayout.astro` — shared article shell for every locale blog detail route
 
 ### Public interactive components
 - `TypedTitle.astro` — Typed.js SSR-safe headings
@@ -43,6 +44,7 @@
 - `UgcContactSheet.tsx` — fixed UGC contact sheet grid, hover previews, and filter-scoped focus viewer
 - `ServiceSwitcher.tsx` — translation route only
 - `ExperienceTabs.tsx` — translation route only
+- `BlogTableOfContents.tsx` — sticky desktop article navigation and mobile TOC chips for H2/H3 headings
 - `Header.astro`, `Footer.astro` — shared chrome
 
 ### Admin components
@@ -52,6 +54,7 @@
 - `EditableOrbitCollection.tsx` — orbit schema editing
 - `EditableCollection.tsx` — translation arsenal editing
 - `EditableUgcPortfolio.tsx` — fixed-slot UGC portfolio editor with per-slot media and ES/EN/FR fields
+- `BlogPostForm.tsx` — strict editorial blog composer with featured-image upload, Markdown toolbar, and live outline
 - `AdminOrbitPreview.tsx` — static orbit preview without autoplay runtime or visible controls
 
 ## 3. Library ownership
@@ -188,7 +191,36 @@ The authored grid is fixed at 12 interleaved slots:
 - the cards keep the ink wipe hover/focus treatment and stagger upward on scroll
 - `translationPageMotion.ts` owns the Arsenal line/item draws plus the methodology and why stagger motion, and must revert cleanly on Astro navigation
 
-## 7. Admin collection semantics
+## 7. Blog editorial contract
+
+### Index and archive
+- `src/lib/blog.ts` scopes each index to the active locale, sorts descending by date, promotes exactly one latest story, and keeps the remaining archive newest-first
+- the featured latest story never repeats inside the archive list
+- `BlogIndexPage.astro` keeps the approved eyebrow, typed `Blog` title, one featured row, and the localized `Archive` rail
+- the latest story uses the larger `1.05fr / 0.95fr` editorial split and eager hero-media loading when an image exists
+- archive rows keep numbering from `02` onward when a latest story exists, and the localized empty placeholder row still renders when there is only one post or none
+
+### Article layout and TOC
+- every locale detail route renders through `src/components/BlogArticleLayout.astro`; locale wrappers only provide the scoped post, rendered headings, and alternate links
+- article navigation is built from rendered headings, but only H2/H3 entries become outline items
+- `src/lib/blogOutline.ts` generates deterministic Astro-compatible IDs and nested numbering (`01`, `01.1`, `01.2`, ...)
+- `BlogTableOfContents.tsx` owns the sticky desktop rail, mobile horizontal chips, hash decoding, and IntersectionObserver-driven active state
+- when there is no adjacent older locale post, the article footer falls back to the localized `/blog` archive instead of a dead next-story link
+
+### Admin editorial workflow
+- `/admin/blog` mirrors the approved numbered editorial list with no rounded or pastel card chrome
+- `/admin/blog/new` uses `BlogPostForm.tsx` for a strict-palette field grid, ES/EN/FR language restriction, and publish-through-Git-Gateway flow
+- toolbar actions are limited to `H2 Section`, `H3 Subsection`, `Bold`, and `Link`
+- the live outline panel parses the current Markdown body and mirrors the same nested H2/H3 structure that the public TOC will render
+
+### Featured image assets-first and retry behavior
+- featured images accept JPEG, PNG, WebP, and GIF only, with a hard `2 MB` max
+- duplicate slugs are rejected before any repository write
+- `createBlogPost()` uploads the featured image to `public/images/blog/<slug>.<ext>` before creating `src/content/blog/<slug>.md`
+- the generated Markdown frontmatter writes the public image path so the article and latest-story card can reuse the same asset
+- featured-image retries upsert the existing asset by fetching its current SHA first, which lets a second publish attempt reuse an orphaned uploaded image instead of failing before the Markdown write
+
+## 8. Admin collection semantics
 
 ### Inline locales
 Editable in admin:
@@ -209,7 +241,7 @@ When an admin adds new orbit/tool/skill/language copy, Spanish is the fallback s
 - Publish writes changed locale JSON, changed `src/data/site.json`, uploaded assets, and blog markdown files
 - Blog creation is restricted to ES/EN/FR
 
-## 8. Locale scope and fallback
+## 9. Locale scope and fallback
 
 Astro config:
 - default locale: `es`
@@ -218,7 +250,7 @@ Astro config:
 
 Header language controls must expose all six locales.
 
-## 9. Astro lifecycle cleanup rules
+## 10. Astro lifecycle cleanup rules
 
 - `TypedTitle.astro` destroys Typed instances on `astro:before-preparation` and re-inits on `astro:page-load`
 - `Header.astro` cleans listeners before swaps and restores focus when overlays close
@@ -226,7 +258,7 @@ Header language controls must expose all six locales.
 - `GsapPageRuntime.astro` kills ScrollTriggers on route cleanup
 - `translationPageMotion.ts` must be cancellable across async imports and revisits
 
-## 10. Performance and reduced-motion rules
+## 11. Performance and reduced-motion rules
 
 ### Performance
 - referenced raster assets should stay in WebP unless SVG/video behavior requires otherwise
@@ -245,7 +277,7 @@ Header language controls must expose all six locales.
 - translation GSAP sections render their final state directly
 - footer has no continuous animation loop
 
-## 11. Tests and commands
+## 12. Tests and commands
 
 Run from repository root:
 
@@ -264,8 +296,10 @@ Important contracts live in:
 - `tests/phase3-orbit-contract.test.mjs`
 - `tests/phase4-translation-contract.test.mjs`
 - `tests/phase5-refinement-contract.test.mjs`
+- `tests/blog-editorial-contract.test.mjs`
+- `tests/blog-locale-contract.test.mjs`
 
-## 12. External references
+## 13. External references
 
 Use as references only:
 - Astro routing: https://docs.astro.build/en/guides/routing/
@@ -273,6 +307,6 @@ Use as references only:
 - Astro styling: https://docs.astro.build/en/guides/styling/
 - Astro i18n: https://docs.astro.build/en/guides/internationalization/
 
-## 13. No-copy boundary
+## 14. No-copy boundary
 
 Do not copy external code, templates, or third-party assets into this repository. External URLs above are implementation references only; design, copy, and assets in this project must stay original and repository-owned.
