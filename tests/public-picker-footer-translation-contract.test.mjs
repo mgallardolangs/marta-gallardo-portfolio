@@ -55,35 +55,38 @@ function installWindow(mockWindow) {
   };
 }
 
-function createStore() {
+function createStore(options = {}) {
+  const initialPicker = options.initialPicker ?? ['es', 'en', 'fr'];
+  const i18n = options.i18n ?? {
+    es: { translationPage: { heroMark: heroMarks.es } },
+    en: { translationPage: { heroMark: heroMarks.en } },
+    fr: { translationPage: { heroMark: heroMarks.fr } },
+  };
+  const images = options.images ?? {
+    heroMainPhoto: '/images/site/hero.webp',
+    galleryCutouts: {},
+    videoPlaceholderOrEmbedUrl: '',
+    ugcHeaderImage: '',
+    instagramScreenshot: '',
+    socialLinks: { linkedin: '', instagram: '' },
+    publicLanguagePicker: initialPicker,
+    nicheBackgrounds: {},
+    ugcVideos: {},
+    ugcPhotos: {},
+    nicheIcons: {},
+    aboutPhotos: [],
+    brandVideo: '',
+    toolLogos: {},
+    videoStickers: {},
+    orbitMedia: [],
+    ugcPortfolio: [],
+    arsenal: { languages: [], tools: [], skills: [] },
+    person: { name: 'Marta', location: 'Elche', socialProfiles: { linkedin: '', instagram: '' } },
+  };
   const store = new AdminStore();
   store.init(
-    {
-      es: { translationPage: { heroMark: heroMarks.es } },
-      en: { translationPage: { heroMark: heroMarks.en } },
-      fr: { translationPage: { heroMark: heroMarks.fr } },
-    },
-    {
-      heroMainPhoto: '/images/site/hero.webp',
-      galleryCutouts: {},
-      videoPlaceholderOrEmbedUrl: '',
-      ugcHeaderImage: '',
-      instagramScreenshot: '',
-      socialLinks: { linkedin: '', instagram: '' },
-      publicLanguagePicker: ['es', 'en', 'fr'],
-      nicheBackgrounds: {},
-      ugcVideos: {},
-      ugcPhotos: {},
-      nicheIcons: {},
-      aboutPhotos: [],
-      brandVideo: '',
-      toolLogos: {},
-      videoStickers: {},
-      orbitMedia: [],
-      ugcPortfolio: [],
-      arsenal: { languages: [], tools: [], skills: [] },
-      person: { name: 'Marta', location: 'Elche', socialProfiles: { linkedin: '', instagram: '' } },
-    },
+    i18n,
+    images,
     'es',
     'publish-token',
   );
@@ -129,6 +132,248 @@ test('AdminStore guards ES in the public picker and preserves picker changes in 
     reloadedStore.loadDraft();
     assert.deepEqual(reloadedStore.getPublicLanguagePicker(), ['es', 'en', 'de'], 'draft reload should restore picker visibility');
   } finally {
+    restoreWindow();
+  }
+});
+
+test('legacy draft load restores code-managed hero marks and current picker while preserving editable draft text and site values', () => {
+  const draftPayload = JSON.stringify({
+    i18n: {
+      es: {
+        translationPage: { heroMark: '' },
+        home: { hero: { kicker: 'Titular heredado' } },
+      },
+      en: {
+        translationPage: { heroMark: '' },
+        home: { hero: { kicker: 'Legacy headline' } },
+      },
+      fr: {
+        translationPage: { heroMark: '' },
+        home: { hero: { kicker: 'Titre hérité' } },
+      },
+    },
+    images: {
+      heroMainPhoto: '/images/site/draft-hero.webp',
+      galleryCutouts: {},
+      videoPlaceholderOrEmbedUrl: '',
+      ugcHeaderImage: '',
+      instagramScreenshot: '',
+      socialLinks: { linkedin: '', instagram: '@draft' },
+      nicheBackgrounds: {},
+      ugcVideos: {},
+      ugcPhotos: {},
+      nicheIcons: {},
+      aboutPhotos: [],
+      brandVideo: '',
+      toolLogos: {},
+      videoStickers: {},
+      orbitMedia: [],
+      ugcPortfolio: [],
+      arsenal: { languages: [], tools: [], skills: [] },
+      person: { name: 'Marta', location: 'Draft City', socialProfiles: { linkedin: '', instagram: '' } },
+    },
+    currentLang: 'fr',
+    pendingUploads: [{ key: 'heroMainPhoto' }],
+  });
+  const restoreWindow = installWindow(createWindowStorage({
+    getItem: () => draftPayload,
+  }));
+  const store = createStore({
+    initialPicker: ['es', 'de', 'it'],
+    i18n: {
+      es: { translationPage: { heroMark: heroMarks.es }, home: { hero: { kicker: 'Original titular' } } },
+      en: { translationPage: { heroMark: heroMarks.en }, home: { hero: { kicker: 'Original headline' } } },
+      fr: { translationPage: { heroMark: heroMarks.fr }, home: { hero: { kicker: 'Titre original' } } },
+    },
+  });
+
+  try {
+    store.loadDraft();
+
+    assert.equal(store.getSnapshot().currentLang, 'fr');
+    assert.match(store.getSnapshot().draftMessage ?? '', /reselected before publishing/i);
+    assert.equal(store.getSnapshot().getImageSrc('heroMainPhoto'), '/images/site/draft-hero.webp');
+    assert.deepEqual(store.getPublicLanguagePicker(), ['es', 'de', 'it']);
+
+    store.setLang('es');
+    assert.equal(store.getText('translationPage.heroMark'), heroMarks.es);
+    assert.equal(store.getText('home.hero.kicker'), 'Titular heredado');
+
+    store.setLang('en');
+    assert.equal(store.getText('translationPage.heroMark'), heroMarks.en);
+    assert.equal(store.getText('home.hero.kicker'), 'Legacy headline');
+
+    store.setLang('fr');
+    assert.equal(store.getText('translationPage.heroMark'), heroMarks.fr);
+    assert.equal(store.getText('home.hero.kicker'), 'Titre hérité');
+  } finally {
+    restoreWindow();
+  }
+});
+
+test('legacy draft load preserves a valid custom picker while normalizing known locales and forcing ES', () => {
+  const draftPayload = JSON.stringify({
+    i18n: {
+      es: { translationPage: { heroMark: '' } },
+      en: { translationPage: { heroMark: '' } },
+      fr: { translationPage: { heroMark: '' } },
+    },
+    images: {
+      heroMainPhoto: '/images/site/custom-picker-hero.webp',
+      galleryCutouts: {},
+      videoPlaceholderOrEmbedUrl: '',
+      ugcHeaderImage: '',
+      instagramScreenshot: '',
+      socialLinks: { linkedin: '', instagram: '' },
+      publicLanguagePicker: ['ca', 'it', 'de', 'de', 'zz'],
+      nicheBackgrounds: {},
+      ugcVideos: {},
+      ugcPhotos: {},
+      nicheIcons: {},
+      aboutPhotos: [],
+      brandVideo: '',
+      toolLogos: {},
+      videoStickers: {},
+      orbitMedia: [],
+      ugcPortfolio: [],
+      arsenal: { languages: [], tools: [], skills: [] },
+      person: { name: 'Marta', location: 'Elche', socialProfiles: { linkedin: '', instagram: '' } },
+    },
+    currentLang: 'es',
+    pendingUploads: [],
+  });
+  const restoreWindow = installWindow(createWindowStorage({
+    getItem: () => draftPayload,
+  }));
+  const store = createStore();
+
+  try {
+    store.loadDraft();
+
+    assert.deepEqual(store.getPublicLanguagePicker(), ['es', 'de', 'it', 'ca']);
+    assert.equal(store.getSnapshot().getImageSrc('heroMainPhoto'), '/images/site/custom-picker-hero.webp');
+  } finally {
+    restoreWindow();
+  }
+});
+
+test('legacy draft heroMark diffs alone do not keep the admin store dirty after draft load', () => {
+  const draftPayload = JSON.stringify({
+    i18n: {
+      es: { translationPage: { heroMark: '' } },
+      en: { translationPage: { heroMark: '' } },
+      fr: { translationPage: { heroMark: '' } },
+    },
+    images: {
+      heroMainPhoto: '/images/site/hero.webp',
+      galleryCutouts: {},
+      videoPlaceholderOrEmbedUrl: '',
+      ugcHeaderImage: '',
+      instagramScreenshot: '',
+      socialLinks: { linkedin: '', instagram: '' },
+      publicLanguagePicker: [],
+      nicheBackgrounds: {},
+      ugcVideos: {},
+      ugcPhotos: {},
+      nicheIcons: {},
+      aboutPhotos: [],
+      brandVideo: '',
+      toolLogos: {},
+      videoStickers: {},
+      orbitMedia: [],
+      ugcPortfolio: [],
+      arsenal: { languages: [], tools: [], skills: [] },
+      person: { name: 'Marta', location: 'Elche', socialProfiles: { linkedin: '', instagram: '' } },
+    },
+    currentLang: 'es',
+    pendingUploads: [],
+  });
+  const restoreWindow = installWindow(createWindowStorage({
+    getItem: () => draftPayload,
+  }));
+  const store = createStore();
+
+  try {
+    store.loadDraft();
+
+    assert.equal(store.getText('translationPage.heroMark'), heroMarks.es);
+    assert.deepEqual(store.getPublicLanguagePicker(), publicPickerFallback);
+    assert.equal(store.getSnapshot().isDirty, false);
+    assert.equal(store.getSnapshot().pendingCount, 0);
+  } finally {
+    restoreWindow();
+  }
+});
+
+test('legacy draft load merges partial i18n and site trees before publish', async () => {
+  const draftPayload = JSON.stringify({
+    i18n: {
+      es: {
+        translationPage: { heroMark: '' },
+        home: { hero: { kicker: 'Titular parcial' } },
+      },
+    },
+    images: {
+      socialLinks: { linkedin: '', instagram: '@draft' },
+    },
+    currentLang: 'es',
+    pendingUploads: [],
+  });
+  const restoreWindow = installWindow(createWindowStorage({
+    getItem: () => draftPayload,
+  }));
+  const store = createStore({
+    initialPicker: ['es', 'de'],
+    i18n: {
+      es: { translationPage: { heroMark: heroMarks.es }, home: { hero: { kicker: 'Original titular' } } },
+      en: { translationPage: { heroMark: heroMarks.en }, home: { hero: { kicker: 'Original headline' } } },
+      fr: { translationPage: { heroMark: heroMarks.fr }, home: { hero: { kicker: 'Titre original' } } },
+    },
+  });
+  const fetchCalls = [];
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input, init = {}) => {
+    fetchCalls.push({ input: String(input), init });
+
+    if (!init.method || init.method === 'GET') {
+      return new Response(JSON.stringify({ sha: 'file-sha-1' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    return new Response(JSON.stringify({ content: { sha: 'next-sha' } }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+
+  try {
+    store.loadDraft();
+    await store.publish();
+
+    store.setLang('en');
+    assert.equal(store.getText('home.hero.kicker'), 'Original headline');
+
+    const putCalls = fetchCalls.filter((call) => call.init?.method === 'PUT');
+    assert.deepEqual(
+      putCalls.map((call) => call.input),
+      [
+        '/.netlify/git/github/contents/src/i18n/es.json',
+        '/.netlify/git/github/contents/src/data/site.json',
+      ],
+    );
+
+    const publishedEs = JSON.parse(Buffer.from(JSON.parse(String(putCalls[0].init?.body)).content, 'base64').toString('utf8'));
+    assert.equal(publishedEs.home.hero.kicker, 'Titular parcial');
+    assert.equal(publishedEs.translationPage.heroMark, heroMarks.es);
+
+    const publishedSite = JSON.parse(Buffer.from(JSON.parse(String(putCalls[1].init?.body)).content, 'base64').toString('utf8'));
+    assert.equal(publishedSite.heroMainPhoto, '/images/site/hero.webp');
+    assert.equal(publishedSite.socialLinks.instagram, '@draft');
+    assert.deepEqual(publishedSite.publicLanguagePicker, ['es', 'de']);
+  } finally {
+    globalThis.fetch = originalFetch;
     restoreWindow();
   }
 });

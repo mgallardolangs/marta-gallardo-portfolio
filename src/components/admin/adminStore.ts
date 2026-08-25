@@ -95,6 +95,26 @@ function cloneValue<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
 }
 
+function isObjectRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function mergeDraftValue(base: unknown, draft: unknown): unknown {
+  if (Array.isArray(draft)) {
+    return cloneValue(draft);
+  }
+
+  if (!isObjectRecord(draft)) {
+    return draft;
+  }
+
+  const merged = isObjectRecord(base) ? cloneValue(base) : {};
+  Object.entries(draft).forEach(([key, value]) => {
+    merged[key] = mergeDraftValue(merged[key], value);
+  });
+  return merged;
+}
+
 function pathSegments(path: string): Array<string | number> {
   return path
     .split('.')
@@ -331,6 +351,24 @@ function getDraftRestoreMessage(count: number) {
   return count === 1
     ? 'Draft restored. 1 pending upload was not saved locally and must be reselected before publishing.'
     : `Draft restored. ${count} pending uploads were not saved locally and must be reselected before publishing.`;
+}
+
+function normalizeDraftPublicLanguagePicker(
+  draftPicker: unknown,
+  originalImages: ImagesTree,
+): SupportedLang[] {
+  if (Array.isArray(draftPicker)) {
+    const selectedLocales = new Set(
+      draftPicker.filter((locale): locale is SupportedLang => SUPPORTED_LANGS.includes(locale as SupportedLang)),
+    );
+
+    if (selectedLocales.size > 0) {
+      selectedLocales.add('es');
+      return SUPPORTED_LANGS.filter((locale) => selectedLocales.has(locale));
+    }
+  }
+
+  return getPublicLanguagePicker(originalImages as Partial<SiteData>) as SupportedLang[];
 }
 
 export class AdminStore {
@@ -858,9 +896,18 @@ export class AdminStore {
 
     try {
       const draft = JSON.parse(raw) as Partial<LegacyDraftPayload>;
-      if (draft.i18n) this.i18n = draft.i18n;
+      if (draft.i18n) this.i18n = mergeDraftValue(this.i18n, draft.i18n) as Record<string, I18nTree>;
+      this.restoreCodeManagedHeroMarks();
       if (draft.images) {
-        this.images = cloneValue(draft.images);
+        this.images = mergeDraftValue(this.images, draft.images) as ImagesTree;
+        deepSet(
+          this.images,
+          'publicLanguagePicker',
+          normalizeDraftPublicLanguagePicker(
+            deepGet(draft.images, 'publicLanguagePicker'),
+            this.originalImages,
+          ),
+        );
       }
       if (draft.currentLang) this.currentLang = draft.currentLang;
       this.pendingImages = {};
@@ -1226,6 +1273,15 @@ export class AdminStore {
       currentLang: this.currentLang,
       pendingUploads,
     };
+  }
+
+  private restoreCodeManagedHeroMarks(): void {
+    SUPPORTED_LANGS.forEach((lang) => {
+      const originalHeroMark = deepGet(this.originalI18n[lang], 'translationPage.heroMark');
+      if (typeof originalHeroMark !== 'string') return;
+
+      deepSet(this.i18n, `${lang}.translationPage.heroMark`, originalHeroMark);
+    });
   }
 
   private scrubLegacyPendingDraftImages(pendingImages: Record<string, PendingImage>): void {
