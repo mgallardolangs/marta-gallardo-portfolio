@@ -4,8 +4,34 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { AdminStore } from '../src/components/admin/adminStore.ts';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
+const navKeys = ['nav.home', 'nav.ugc', 'nav.translationSeo', 'nav.blog', 'nav.contact'];
+const navLabelsByLang = {
+  es: {
+    home: 'Inicio',
+    ugc: 'Contenido creativo',
+    translationSeo: 'Comunicación multilingüe y SEO',
+    blog: 'Blog',
+    contact: 'Contacto',
+  },
+  en: {
+    home: 'Home',
+    ugc: 'UGC',
+    translationSeo: 'SEO Translation',
+    blog: 'Blog',
+    contact: 'Contact',
+  },
+  fr: {
+    home: 'Accueil',
+    ugc: 'UGC',
+    translationSeo: 'Traduction SEO',
+    blog: 'Blog',
+    contact: 'Contact',
+  },
+};
 
 async function readSource(relativePath) {
   return readFile(path.join(rootDir, relativePath), 'utf8');
@@ -26,6 +52,48 @@ function countMatches(source, pattern) {
 
 function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function createMinimalNavI18n() {
+  return {
+    es: { nav: { ...navLabelsByLang.es } },
+    en: { nav: { ...navLabelsByLang.en } },
+    fr: { nav: { ...navLabelsByLang.fr } },
+  };
+}
+
+function createMinimalSiteData() {
+  return {
+    heroMainPhoto: '/images/site/hero.webp',
+    galleryCutouts: {},
+    videoPlaceholderOrEmbedUrl: '',
+    ugcHeaderImage: '',
+    instagramScreenshot: '',
+    socialLinks: { linkedin: '', instagram: '' },
+    publicLanguagePicker: ['es', 'en', 'fr'],
+    nicheBackgrounds: {},
+    ugcVideos: {},
+    ugcPhotos: {},
+    nicheIcons: {},
+    aboutPhotos: [],
+    brandVideo: '',
+    toolLogos: {},
+    videoStickers: {},
+    orbitMedia: [],
+    ugcPortfolio: [],
+    arsenal: { languages: [], tools: [], skills: [] },
+    person: {
+      name: 'Marta Gallardo',
+      location: 'Elche',
+      socialProfiles: { linkedin: '', instagram: '' },
+    },
+  };
+}
+
+function createAdminStore() {
+  const store = new AdminStore();
+  store.init(createMinimalNavI18n(), createMinimalSiteData(), 'es', 'publish-token');
+  return store;
 }
 
 function findArrayDeclarationContaining(source, requiredPatterns) {
@@ -146,9 +214,61 @@ function extractComponentTags(source, componentName) {
   ].map(([tag]) => tag);
 }
 
+function extractHeader(html, label) {
+  const match = html.match(/<header\b[\s\S]*?<\/header>/);
+  assert.ok(match, `${label} should render a header element`);
+  return match[0];
+}
+
+function extractAstroIslandBlocks(html) {
+  return [...html.matchAll(/<astro-island\b[\s\S]*?<\/astro-island>/g)].map(([block]) => block);
+}
+
+test('AdminStore keeps shared navigation label edits scoped to the active locale', () => {
+  const store = createAdminStore();
+
+  for (const [key, value] of Object.entries(navLabelsByLang.es)) {
+    assert.equal(
+      store.getText(`nav.${key}`),
+      value,
+      `AdminStore should expose the current Spanish value for nav.${key}`,
+    );
+  }
+
+  store.setText('nav.home', 'Portada');
+
+  assert.equal(store.getText('nav.home'), 'Portada', 'setText should immediately update the active locale value');
+  assert.equal(store.getText('nav.contact'), navLabelsByLang.es.contact, 'editing nav.home should not rewrite sibling Spanish labels');
+  assert.equal(store.getSnapshot().isDirty, true, 'editing a navigation label should mark the store dirty');
+  assert.ok(store.getSnapshot().pendingCount > 0, 'editing a navigation label should increase the pending diff count');
+
+  store.setLang('en');
+
+  assert.equal(store.getSnapshot().currentLang, 'en', 'setLang should switch the active locale');
+  for (const [key, value] of Object.entries(navLabelsByLang.en)) {
+    assert.equal(
+      store.getText(`nav.${key}`),
+      value,
+      `switching to English should expose the English nav.${key} value`,
+    );
+  }
+
+  store.setText('nav.home', 'Homepage');
+
+  assert.equal(store.getText('nav.home'), 'Homepage', 'setText should update the English value once EN is active');
+  assert.equal(store.getText('nav.contact'), navLabelsByLang.en.contact, 'editing the English home label should not rewrite sibling English labels');
+
+  store.setLang('es');
+
+  assert.equal(store.getText('nav.home'), 'Portada', 'switching back to Spanish should preserve the Spanish edit');
+  assert.equal(store.getText('nav.contact'), navLabelsByLang.es.contact, 'switching locales should leave the original Spanish sibling labels intact');
+
+  store.setLang('fr');
+  assert.equal(store.getText('nav.home'), navLabelsByLang.fr.home, 'the untouched French locale should keep its original nav.home value');
+});
+
 test('AdminToolbar keeps the shared navigation labels editable from one metadata list', async () => {
   const source = await readSource('src/components/admin/AdminToolbar.tsx');
-  const navKeys = ['nav.home', 'nav.ugc', 'nav.translationSeo', 'nav.blog', 'nav.contact'];
   const navMetadata = findArrayDeclarationContaining(
     source,
     navKeys.map((key) => new RegExp(`key\\s*:\\s*['"]${escapeRegex(key)}['"]`)),
@@ -215,7 +335,6 @@ test('AdminToolbar keeps the shared navigation labels editable from one metadata
 
 test('Header mirrors nav labels only under adminMode', async () => {
   const source = await readSource('src/components/Header.astro');
-  const navKeys = ['nav.home', 'nav.ugc', 'nav.translationSeo', 'nav.blog', 'nav.contact'];
   const navMetadata = findArrayDeclarationContaining(
     source,
     navKeys.map((key) => new RegExp(`i18nKey\\s*:\\s*['"]${escapeRegex(key)}['"]`)),
@@ -326,6 +445,57 @@ test('Header mirrors nav labels only under adminMode', async () => {
       countMatches(labelRegion, /:\s*\(?\s*item\.label\s*\)?/g),
       2,
       `Header should keep two static item.label public fallbacks in the ${description} label region.`,
+    );
+  }
+});
+
+test('built header keeps public nav static and limits AdminTextMirror islands to the admin header', async (t) => {
+  if (process.env.CHECK_DIST !== '1') {
+    t.skip('Set CHECK_DIST=1 after npm run build to verify built header HTML.');
+    return;
+  }
+
+  const [publicHtml, adminHtml] = await Promise.all([
+    readSource('dist/index.html'),
+    readSource('dist/admin/index.html'),
+  ]);
+
+  const publicHeader = extractHeader(publicHtml, 'public home HTML');
+  const adminHeader = extractHeader(adminHtml, 'admin home HTML');
+
+  assert.doesNotMatch(publicHeader, /AdminTextMirror/, 'public header should not ship AdminTextMirror markers');
+  assert.doesNotMatch(publicHeader, /<astro-island\b/, 'public header should stay static without hydrated admin text islands');
+
+  for (const label of Object.values(navLabelsByLang.es)) {
+    assert.match(
+      publicHeader,
+      new RegExp(escapeRegex(label)),
+      `public header should keep the static Spanish nav label "${label}"`,
+    );
+  }
+
+  const adminMirrorIslands = extractAstroIslandBlocks(adminHeader).filter((block) => block.includes('AdminTextMirror'));
+
+  assert.ok(
+    adminMirrorIslands.length >= navKeys.length * 4,
+    'admin header should hydrate AdminTextMirror islands for both desktop and mobile nav label copies',
+  );
+
+  for (const island of adminMirrorIslands) {
+    assert.match(island, /client="load"/, 'admin header nav mirrors should hydrate with client="load"');
+  }
+
+  for (const [i18nKey, fallback] of [
+    ['nav.home', navLabelsByLang.es.home],
+    ['nav.contact', navLabelsByLang.es.contact],
+  ]) {
+    const matchingIslands = adminMirrorIslands.filter((island) => (
+      island.includes(i18nKey) && island.includes(fallback)
+    ));
+
+    assert.ok(
+      matchingIslands.length >= 4,
+      `admin header should include desktop and mobile hydrated AdminTextMirror copies for ${i18nKey} with the ${fallback} fallback`,
     );
   }
 });
