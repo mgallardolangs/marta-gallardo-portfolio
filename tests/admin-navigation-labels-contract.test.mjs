@@ -180,6 +180,27 @@ test('AdminToolbar keeps the shared navigation labels editable from one metadata
     ),
     `AdminToolbar should render the nav rows specifically from ${navMetadata.name}.map((item) => ...) with controlled text inputs.`,
   );
+  const toolbarRenderBlock = extractMapRenderBlock(
+    source,
+    navMetadata.name,
+    'shared navigation labels editor',
+  );
+
+  assert.doesNotMatch(
+    toolbarRenderBlock,
+    /item\.key\s*===/,
+    'AdminToolbar should not gate the controlled input on one specific navigation key.',
+  );
+  assert.doesNotMatch(
+    toolbarRenderBlock,
+    /item\.key\s*!==/,
+    'AdminToolbar should not exclude a navigation key from the controlled input.',
+  );
+  assert.doesNotMatch(
+    toolbarRenderBlock,
+    /\.filter\(/,
+    'AdminToolbar should render the controlled input for every mapped metadata item instead of filtering the metadata collection.',
+  );
   assert.equal(
     countMatches(source, /value=\{\s*store\.getText\(item\.key\)\s*\}/g),
     1,
@@ -269,6 +290,16 @@ test('Header mirrors nav labels only under adminMode', async () => {
       countMatches(labelRegion, /adminMode\s*\?\s*(?:\(\s*)?<AdminTextMirror\b/g),
       2,
       `Header should keep two admin mirror branches in the ${description} label region.`,
+    );
+    assert.doesNotMatch(
+      labelRegion,
+      /item\.i18nKey\s*===|item\.i18nKey\s*!==/,
+      `Header should not branch on a navigation i18n key in the ${description} label region.`,
+    );
+    assert.match(
+      labelRegion,
+      /adminMode\s*\?\s*(?:\(\s*)?<AdminTextMirror[\s\S]*?:\s*\(?\s*item\.label\s*\)?/s,
+      `Header should use adminMode ? hydrated AdminTextMirror : item.label for each mapped navigation label in the ${description} label region.`,
     );
     const adminMirrors = extractComponentTags(labelRegion, 'AdminTextMirror');
 
