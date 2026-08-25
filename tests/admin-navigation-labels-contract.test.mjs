@@ -345,8 +345,8 @@ test('AdminTextMirror renders fallback until initialized and then mirrors store 
   );
   assert.match(
     source,
-    /(?:store\.initialized[\s\S]{0,120}fallback|fallback[\s\S]{0,120}store\.initialized)/s,
-    'AdminTextMirror should render the fallback before initialization and the store text after initialization.',
+    /store\.initialized\s*\?\s*(?:\(\s*)?store\.getText\(i18nKey\)\s*(?:\))?\s*:\s*(?:\(\s*)?fallback\s*(?:\))?/s,
+    'AdminTextMirror should render store.getText(i18nKey) when initialized and fallback otherwise.',
   );
   assert.doesNotMatch(source, /\bEditableText\b/, 'AdminTextMirror should not depend on EditableText.');
   assert.doesNotMatch(source, /\binput\b/, 'AdminTextMirror should not render inputs.');
