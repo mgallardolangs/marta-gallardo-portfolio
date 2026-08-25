@@ -16,6 +16,14 @@ const PUBLIC_PICKER_LANGS = [
   { code: 'ca' as const, label: 'CA' },
 ];
 
+const NAV_LABELS = [
+  { key: 'nav.home', label: 'Home' },
+  { key: 'nav.ugc', label: 'Creative Content' },
+  { key: 'nav.translationSeo', label: 'Translation / SEO' },
+  { key: 'nav.blog', label: 'Blog' },
+  { key: 'nav.contact', label: 'Contact' },
+] as const;
+
 export default function AdminToolbar() {
   const store = useAdminStore();
   const [expanded, setExpanded] = useState(false);
@@ -34,7 +42,7 @@ export default function AdminToolbar() {
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}
-        className="bg-gray-900 text-white rounded-full px-4 py-2 shadow-2xl flex items-center gap-2 text-sm hover:bg-gray-800 transition-colors cursor-pointer"
+        className="bg-gray-900 text-white rounded-full px-4 py-2 shadow-2xl flex items-center gap-2 text-sm hover:bg-gray-800 transition-colors"
       >
         ✏️ Edit
         {store.isDirty && (
@@ -44,12 +52,12 @@ export default function AdminToolbar() {
 
       {/* Expanded panel */}
       {expanded && (
-        <div className="absolute bottom-full right-0 mb-2 bg-gray-900 text-white rounded-2xl shadow-2xl p-4 min-w-[240px]">
+        <div className="absolute bottom-full right-0 mb-2 bg-gray-900 text-white rounded-2xl shadow-2xl p-4 min-w-[288px]">
           {/* Language switcher */}
           <div className="mb-3">
             <p className="text-[10px] text-gray-400 uppercase mb-1">Idioma</p>
             <div className="flex gap-1">
-              {LANGS.map(l => (
+              {LANGS.map((l) => (
                 <button
                   key={l.code}
                   type="button"
@@ -58,6 +66,26 @@ export default function AdminToolbar() {
                 >
                   {l.label}
                 </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-3">
+            <p className="mb-2 text-[10px] text-gray-400">Navigation labels</p>
+            <div className="space-y-2">
+              {NAV_LABELS.map((item) => (
+                <label key={item.key} className="flex items-center gap-2 text-[11px] text-gray-200">
+                  <span className="w-24 shrink-0 text-[10px] uppercase tracking-[0.16em] text-gray-400">
+                    {item.label}
+                  </span>
+                  <input
+                    type="text"
+                    aria-label={item.label}
+                    value={store.getText(item.key)}
+                    onChange={(event) => store.setText(item.key, event.target.value)}
+                    className="min-w-0 flex-1 rounded-md border border-white/10 bg-gray-800 px-2 py-1.5 text-xs text-white outline-none placeholder:text-gray-500"
+                  />
+                </label>
               ))}
             </div>
           </div>
@@ -78,7 +106,7 @@ export default function AdminToolbar() {
                       isVisible
                         ? 'bg-white text-gray-900 font-semibold'
                         : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
-                    } ${pickerLang.code === 'es' ? 'cursor-not-allowed opacity-70' : ''}`}
+                    } ${pickerLang.code === 'es' ? 'opacity-70' : ''}`}
                   >
                     <span aria-hidden="true">{isVisible ? '✓' : '○'}</span>
                     {pickerLang.label}
@@ -99,7 +127,7 @@ export default function AdminToolbar() {
               type="button"
               onClick={() => void store.publish()}
               disabled={!store.isDirty || store.isPublishing || store.orbitValidationErrors.length > 0}
-              className={`w-full text-xs px-3 py-2 rounded-lg font-bold transition-colors text-left ${store.isDirty && store.orbitValidationErrors.length === 0 ? 'bg-green-500 hover:bg-green-400' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}`}
+              className={`w-full text-xs px-3 py-2 rounded-lg font-bold transition-colors text-left ${store.isDirty && store.orbitValidationErrors.length === 0 ? 'bg-green-500 hover:bg-green-400' : 'bg-gray-700 text-gray-500'}`}
             >
               {store.isPublishing ? '⏳ Publishing...' : '🚀 Publish changes'}
             </button>

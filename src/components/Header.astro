@@ -2,6 +2,7 @@
 import { getLocalizedPath, langNames, stripLocaleFromPath, t, type Lang } from '../i18n';
 import { resolveHeaderLanguageLinks } from '../lib/headerLanguageLinks';
 import { getPublicLanguagePicker, siteData } from '../lib/siteData';
+import AdminTextMirror from './admin/AdminTextMirror';
 
 interface Props {
   lang: Lang;
@@ -24,11 +25,11 @@ const availableLanguages = resolveHeaderLanguageLinks({
 });
 
 const navItems = [
-  { href: '/', label: i.nav.home },
-  { href: '/ugc', label: i.nav.ugc },
-  { href: '/translation-seo', label: i.nav.translationSeo },
-  { href: '/blog', label: i.nav.blog },
-  { href: '/contact', label: i.nav.contact },
+  { href: '/', label: i.nav.home, i18nKey: 'nav.home' },
+  { href: '/ugc', label: i.nav.ugc, i18nKey: 'nav.ugc' },
+  { href: '/translation-seo', label: i.nav.translationSeo, i18nKey: 'nav.translationSeo' },
+  { href: '/blog', label: i.nav.blog, i18nKey: 'nav.blog' },
+  { href: '/contact', label: i.nav.contact, i18nKey: 'nav.contact' },
 ];
 
 const isActive = (path: string) => {
@@ -58,8 +59,8 @@ const isActive = (path: string) => {
           >
             <span class="nav-link__bracket nav-link__bracket--left" aria-hidden="true">[</span>
             <span class="nav-link__text">
-              <span>{item.label}</span>
-              <span aria-hidden="true">{item.label}</span>
+              <span>{adminMode ? <AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} /> : item.label}</span>
+              <span aria-hidden="true">{adminMode ? <AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} /> : item.label}</span>
             </span>
             <span class="nav-link__bracket nav-link__bracket--right" aria-hidden="true">]</span>
           </a>
@@ -150,8 +151,8 @@ const isActive = (path: string) => {
         {navItems.map((item) => (
           <a href={navPath(item.href)} class="mobile-nav-link" aria-current={isActive(item.href) ? 'page' : undefined}>
             <span class="mobile-nav-link__line">
-              <span>{item.label}</span>
-              <span aria-hidden="true">{item.label}</span>
+              <span>{adminMode ? <AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} /> : item.label}</span>
+              <span aria-hidden="true">{adminMode ? <AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} /> : item.label}</span>
             </span>
           </a>
         ))}
