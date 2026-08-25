@@ -153,6 +153,22 @@ export function buildToolLogoUploadPath(id: string, file: File) {
   return `/images/tools/${normalizeIdSegment(id) || 'tool-item'}.${getToolLogoExtension(file)}`;
 }
 
+/**
+ * Gate used by the arsenal editor's drag-and-drop drop handler: skills may only
+ * reorder within their own translation/seo group, so a drop across groups is
+ * rejected (returns null) instead of silently reshuffling groups.
+ */
+export function resolveSkillReorderIndices(
+  skills: SkillItem[],
+  fromIndex: number,
+  targetIndex: number,
+): { fromIndex: number; targetIndex: number } | null {
+  const source = skills[fromIndex];
+  const target = skills[targetIndex];
+  if (!source || !target || source.group !== target.group) return null;
+  return { fromIndex, targetIndex };
+}
+
 export function getEditableCollectionValidationErrors(siteData: SiteData) {
   const errors: string[] = [];
   const arsenal = siteData.arsenal ?? { languages: [], tools: [], skills: [] };

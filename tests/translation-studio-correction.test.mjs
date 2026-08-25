@@ -144,16 +144,6 @@ function extractElementByDataAttribute(source, tagName, attribute, value, label)
   return match[0];
 }
 
-function extractBetween(source, startNeedle, endNeedle, label) {
-  const startIndex = source.indexOf(startNeedle);
-  assert.notEqual(startIndex, -1, `${label} should include start marker ${startNeedle}`);
-
-  const endIndex = source.indexOf(endNeedle, startIndex + startNeedle.length);
-  assert.notEqual(endIndex, -1, `${label} should include end marker ${endNeedle}`);
-
-  return source.slice(startIndex, endIndex + endNeedle.length);
-}
-
 function extractWindowAround(source, needle, label, radius = 1400) {
   const index = source.indexOf(needle);
   assert.notEqual(index, -1, `${label} should include ${needle}`);
@@ -359,11 +349,11 @@ test('ServiceSwitcher keeps the 6-second behavior but swaps to open layout and r
   );
 });
 
-test('public arsenal uses exact equal thirds, square tool cells, and two skill groups while admin mounts the live preview island', async () => {
-  const [source, adminSource, adminPreviewSource] = await Promise.all([
+test('public arsenal uses exact equal thirds, square tool cells, and two skill groups while admin mounts the integrated arsenal editor', async () => {
+  const [source, adminSource, adminEditorSource] = await Promise.all([
     readSource('src/views/TranslationSeoPage.astro'),
     readSource('src/pages/admin/translation-seo.astro'),
-    readSource('src/components/admin/AdminTranslationArsenalPreview.tsx'),
+    readSource('src/components/admin/AdminTranslationArsenalEditor.tsx'),
   ]);
   const arsenalSection = extractSectionByDataAttribute(source, 'data-arsenal-section', 'public arsenal section');
 
@@ -381,13 +371,13 @@ test('public arsenal uses exact equal thirds, square tool cells, and two skill g
   assert.match(arsenalSection, /text-sm font-medium text-amaranth/, 'public arsenal language level should sit right in amaranth');
   assert.match(arsenalSection, /group flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink/, 'public arsenal tools should use dark square tiles with amaranth hover');
   assert.doesNotMatch(arsenalSection, /bg-paper px-3 py-4/, 'public arsenal tools should not reintroduce light paper tiles');
-  assert.match(adminSource, /import\s+AdminTranslationArsenalPreview\s+from\s+['"]..\/..\/components\/admin\/AdminTranslationArsenalPreview['"]/, 'admin translation page should import the live arsenal preview island');
-  assert.match(adminSource, /<AdminTranslationArsenalPreview\s+client:load\s*\/>/, 'admin translation page should mount the live arsenal preview island');
+  assert.match(adminSource, /import\s+AdminTranslationArsenalEditor\s+from\s+['"]..\/..\/components\/admin\/AdminTranslationArsenalEditor['"]/, 'admin translation page should import the integrated arsenal editor');
+  assert.match(adminSource, /<AdminTranslationArsenalEditor\s+client:load\s*\/>/, 'admin translation page should mount the integrated arsenal editor');
   assert.doesNotMatch(adminSource, /arsenalColumns\.languages\.map/, 'admin translation page should stop using static Astro loops for arsenal languages');
   assert.doesNotMatch(adminSource, /arsenalColumns\.tools\.map/, 'admin translation page should stop using static Astro loops for arsenal tools');
   assert.doesNotMatch(adminSource, /arsenalColumns\.skillGroups\.translation/, 'admin translation page should stop using static Astro loops for translation skills');
-  assert.match(adminPreviewSource, /lg:grid-cols-3/, 'admin live preview should mirror the equal-third desktop grid');
-  assert.match(adminPreviewSource, /group flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink/, 'admin live preview should mirror the public square tool tiles');
+  assert.match(adminEditorSource, /lg:grid-cols-3/, 'admin editor should mirror the equal-third desktop grid');
+  assert.match(adminEditorSource, /group relative flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink/, 'admin editor should mirror the public square tool tiles');
 });
 
 test('experience browser profile chrome is localized in source and built translation pages without English leaks', async (t) => {
@@ -453,7 +443,7 @@ test('admin skill creation contracts require group-aware data and grouped editor
 
   const [adminSource, editorSource] = await Promise.all([
     readSource('src/pages/admin/translation-seo.astro'),
-    readSource('src/components/admin/EditableCollection.tsx'),
+    readSource('src/components/admin/AdminTranslationArsenalEditor.tsx'),
   ]);
 
   assert.match(adminSource, /i18nKey={`translationPage\.services\.items\.\$\{index\}\.headline`}/, 'admin services should expose editable service headlines');
@@ -467,54 +457,47 @@ test('admin skill creation contracts require group-aware data and grouped editor
   );
 });
 
-test('language editor keeps its add marker inside the collection grid after authored items', async () => {
-  const editorSource = await readSource('src/components/admin/EditableCollection.tsx');
-  const collectionGrid = extractBetween(
-    editorSource,
-    '<div className={`grid gap-5',
-    '    </section>',
-    'editable collection item grid',
-  );
+function extractArsenalPanel(source, panelKind, label) {
+  const start = source.indexOf(`data-admin-arsenal-panel="${panelKind}"`);
+  assert.notEqual(start, -1, `expected to find ${label} panel marker`);
+  const end = source.indexOf('</article>', start);
+  assert.notEqual(end, -1, `expected to find ${label} panel closing tag`);
+  return source.slice(start, end);
+}
+
+test('language editor keeps its add marker inside the languages panel after the authored rows', async () => {
+  const editorSource = await readSource('src/components/admin/AdminTranslationArsenalEditor.tsx');
+  const languagesPanel = extractArsenalPanel(editorSource, 'languages', 'languages');
 
   assert.match(
-    collectionGrid,
-    /items\.map\(\(item, index\) => \([\s\S]*kind === 'languages'[\s\S]*data-collection-add="languages"/s,
-    'language editor should render data-collection-add="languages" after the mapped language items within the language collection grid',
+    languagesPanel,
+    /languages\.map\(\(language, index\) => \([\s\S]*data-collection-add="languages"/s,
+    'language editor should render data-collection-add="languages" after the mapped language rows within the languages panel',
   );
 });
 
 test('tool editor reserves a dashed add tile inside the same tool grid as existing logos', async () => {
-  const editorSource = await readSource('src/components/admin/EditableCollection.tsx');
-  const collectionGrid = extractBetween(
-    editorSource,
-    '<div className={`grid gap-5',
-    '    </section>',
-    'editable collection item grid',
-  );
+  const editorSource = await readSource('src/components/admin/AdminTranslationArsenalEditor.tsx');
+  const toolsPanel = extractArsenalPanel(editorSource, 'tools', 'tools');
 
   assert.match(
-    collectionGrid,
-    /items\.map\(\(item, index\) => \([\s\S]*kind === 'tools'[\s\S]*border-dashed[\s\S]*aspect-square w-full min-w-0/s,
+    toolsPanel,
+    /tools\.map\(\(tool, index\) => \([\s\S]*data-collection-add="tools"[\s\S]*aspect-square w-full min-w-0[\s\S]*border-dashed/s,
     'tool editor should render a dashed same-size add tile inside the tool collection grid',
   );
 });
 
 test('skill editor splits translation and seo into separate contained groups with their own add markers', async () => {
-  const editorSource = await readSource('src/components/admin/EditableCollection.tsx');
-  const collectionGrid = extractBetween(
-    editorSource,
-    '<div className={`grid gap-5',
-    '    </section>',
-    'editable collection item grid',
-  );
+  const editorSource = await readSource('src/components/admin/AdminTranslationArsenalEditor.tsx');
+  const skillsPanel = extractArsenalPanel(editorSource, 'skills', 'skills');
 
   assert.match(
-    collectionGrid,
+    skillsPanel,
     /data-skill-group="translation"[\s\S]*data-collection-add="skills-translation"/s,
     'translation skill group should contain its own skills-translation add marker',
   );
   assert.match(
-    collectionGrid,
+    skillsPanel,
     /data-skill-group="seo"[\s\S]*data-collection-add="skills-seo"/s,
     'seo skill group should contain its own skills-seo add marker',
   );

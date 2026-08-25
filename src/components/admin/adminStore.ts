@@ -564,14 +564,24 @@ export class AdminStore {
 
   moveEditableCollectionItem(kind: EditableCollectionKind, index: number, delta: number): void {
     if (!this.initialized || delta === 0) return;
-    const collection = this.getMutableEditableCollection(kind);
-    const targetIndex = index + delta;
+    this.reorderEditableCollectionItem(kind, index, index + delta);
+  }
 
-    if (index < 0 || index >= collection.length || targetIndex < 0 || targetIndex >= collection.length) {
+  reorderEditableCollectionItem(kind: EditableCollectionKind, fromIndex: number, targetIndex: number): void {
+    if (!this.initialized) return;
+    const collection = this.getMutableEditableCollection(kind);
+
+    if (
+      fromIndex === targetIndex ||
+      fromIndex < 0 ||
+      fromIndex >= collection.length ||
+      targetIndex < 0 ||
+      targetIndex >= collection.length
+    ) {
       return;
     }
 
-    const [item] = collection.splice(index, 1);
+    const [item] = collection.splice(fromIndex, 1);
     collection.splice(targetIndex, 0, item);
     this.publishSuccessState = false;
     this.publishErrorState = '';

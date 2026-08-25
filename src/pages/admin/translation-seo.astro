@@ -1,8 +1,7 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import EditableText from '../../components/admin/EditableText';
-import EditableCollection from '../../components/admin/EditableCollection';
-import AdminTranslationArsenalPreview from '../../components/admin/AdminTranslationArsenalPreview';
+import AdminTranslationArsenalEditor from '../../components/admin/AdminTranslationArsenalEditor';
 import { getLangFromUrl, t } from '../../i18n';
 
 const lang = getLangFromUrl(Astro.url);
@@ -62,28 +61,7 @@ const page = i.translationPage;
           <EditableText client:load i18nKey="translationPage.arsenal.title" as="h2" className="font-heading text-4xl text-ink md:text-5xl" />
         </div>
 
-        <div class="grid gap-6">
-          <EditableCollection
-            client:load
-            kind="languages"
-            title={page.arsenal.languagesTitle}
-            description="Edit ES/EN/FR names and levels. Additions appear after the authored rows and inherit Spanish for DE/IT/CA until those locales are edited."
-          />
-          <EditableCollection
-            client:load
-            kind="tools"
-            title={page.arsenal.toolsTitle}
-            description="Edit ES/EN/FR labels and upload logos. New tools open from the dashed tile inside the logo grid and keep stable publish IDs."
-          />
-          <EditableCollection
-            client:load
-            kind="skills"
-            title={page.arsenal.skillsTitle}
-            description="Edit grouped translation/localization and SEO/content skills. Each group keeps its own add path while preserving remove and reorder controls."
-          />
-        </div>
-
-        <AdminTranslationArsenalPreview client:load />
+        <AdminTranslationArsenalEditor client:load />
       </div>
     </section>
 

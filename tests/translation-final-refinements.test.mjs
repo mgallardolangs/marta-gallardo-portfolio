@@ -90,11 +90,10 @@ test('public and admin methodology cards keep equal-height unclipped desktop car
   );
 });
 
-test('translation arsenal source keeps equal thirds plus exact square tool tiles in public, admin preview, and add-tile controls', async () => {
-  const [publicSource, adminPreviewSource, editableCollectionSource] = await Promise.all([
+test('translation arsenal source keeps equal thirds plus exact square tool tiles in public and the integrated admin editor', async () => {
+  const [publicSource, adminEditorSource] = await Promise.all([
     readSource('src/views/TranslationSeoPage.astro'),
-    readSource('src/components/admin/AdminTranslationArsenalPreview.tsx'),
-    readSource('src/components/admin/EditableCollection.tsx'),
+    readSource('src/components/admin/AdminTranslationArsenalEditor.tsx'),
   ]);
 
   const publicArsenal = extractSectionByDataAttribute(publicSource, 'data-arsenal-section', 'public arsenal section');
@@ -112,22 +111,23 @@ test('translation arsenal source keeps equal thirds plus exact square tool tiles
     'public tool logos should stay visually constrained inside equal tiles',
   );
 
-  assert.match(adminPreviewSource, /<div className="grid gap-0 lg:grid-cols-3">/);
-  assert.doesNotMatch(adminPreviewSource, /lg:grid-cols-\[0\.82fr_0\.88fr_1\.3fr\]/);
-  assert.match(adminPreviewSource, /<div className="mt-5 grid grid-cols-3 gap-2">/);
+  assert.match(adminEditorSource, /<div className="grid gap-0 lg:grid-cols-3">/);
+  assert.doesNotMatch(adminEditorSource, /lg:grid-cols-\[0\.82fr_0\.88fr_1\.3fr\]/);
+  assert.match(adminEditorSource, /<div className="mt-5 grid grid-cols-3 gap-2" data-arsenal-items>/);
   assert.match(
-    adminPreviewSource,
-    /className="group flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink"/,
+    adminEditorSource,
+    /className="group relative flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink"/,
+    'the integrated editor should mirror the public square tool tiles while adding its own hover affordances',
   );
   assert.match(
-    adminPreviewSource,
+    adminEditorSource,
     /className="h-6 max-h-\[24px\] w-6 max-w-\[24px\] object-contain"/,
-    'admin preview tool logos should stay visually constrained inside equal tiles',
+    'admin editor tool logos should stay visually constrained inside equal tiles',
   );
 
   assert.match(
-    editableCollectionSource,
-    /data-collection-add="tools"[\s\S]*className="aspect-square w-full min-w-0 border border-dashed border-black\/20 bg-paper p-5 text-left transition hover:border-amaranth hover:text-amaranth"/,
+    adminEditorSource,
+    /data-collection-add="tools"[\s\S]*className="flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-2 border border-dashed border-ink\/30/,
     'the dashed add-tool tile should use the same square footprint as the live tool tiles',
   );
 });
