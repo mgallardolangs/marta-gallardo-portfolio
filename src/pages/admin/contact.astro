@@ -42,7 +42,9 @@ const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-
               <span class="contact-tab__bracket contact-tab__bracket--left" aria-hidden="true">[</span>
               <div class="contact-tab__line">
                 <EditableText client:load i18nKey="contact.tabs.ugc" as="span" className="" clickToEdit={false} editButtonTargetId="admin-contact-ugc-tab-edit" />
-                <span aria-hidden="true">{i.contact.tabs.ugc}</span>
+                <span aria-hidden="true">
+                  <EditableText client:load i18nKey="contact.tabs.ugc" as="span" className="" clickToEdit={false} />
+                </span>
               </div>
               <span class="contact-tab__bracket contact-tab__bracket--right" aria-hidden="true">]</span>
             </button>
@@ -62,7 +64,9 @@ const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-
               <span class="contact-tab__bracket contact-tab__bracket--left" aria-hidden="true">[</span>
               <div class="contact-tab__line">
                 <EditableText client:load i18nKey="contact.tabs.seo" as="span" className="" clickToEdit={false} editButtonTargetId="admin-contact-seo-tab-edit" />
-                <span aria-hidden="true">{i.contact.tabs.seo}</span>
+                <span aria-hidden="true">
+                  <EditableText client:load i18nKey="contact.tabs.seo" as="span" className="" clickToEdit={false} />
+                </span>
               </div>
               <span class="contact-tab__bracket contact-tab__bracket--right" aria-hidden="true">]</span>
             </button>

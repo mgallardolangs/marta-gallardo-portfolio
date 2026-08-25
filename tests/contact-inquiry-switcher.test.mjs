@@ -196,11 +196,12 @@ test('public and admin contact pages keep the denser contact desk, exact forms, 
 test('admin contact buttons keep editable labels through portal targets without stealing tab or submit clicks', async () => {
   const source = await readSource('src/pages/admin/contact.astro');
 
-  assert.equal(countMatches(source, /clickToEdit=\{false\}/g), 4);
+  assert.equal(countMatches(source, /clickToEdit=\{false\}/g), 6);
   assert.equal(countMatches(source, /class="group\/edit relative"/g), 4);
 
-  assert.match(source, /class="contact-tab__line"[\s\S]{0,220}<EditableText client:load i18nKey="contact\.tabs\.ugc" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-ugc-tab-edit" \/>\s*<span aria-hidden="true">\{i\.contact\.tabs\.ugc\}<\/span>/s);
-  assert.match(source, /class="contact-tab__line"[\s\S]{0,220}<EditableText client:load i18nKey="contact\.tabs\.seo" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-seo-tab-edit" \/>\s*<span aria-hidden="true">\{i\.contact\.tabs\.seo\}<\/span>/s);
+  assert.match(source, /class="contact-tab__line"[\s\S]{0,320}<EditableText client:load i18nKey="contact\.tabs\.ugc" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-ugc-tab-edit" \/>\s*<span aria-hidden="true">\s*<EditableText client:load i18nKey="contact\.tabs\.ugc" as="span" className="" clickToEdit=\{false\} \/>\s*<\/span>/s);
+  assert.match(source, /class="contact-tab__line"[\s\S]{0,320}<EditableText client:load i18nKey="contact\.tabs\.seo" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-seo-tab-edit" \/>\s*<span aria-hidden="true">\s*<EditableText client:load i18nKey="contact\.tabs\.seo" as="span" className="" clickToEdit=\{false\} \/>\s*<\/span>/s);
+  assert.doesNotMatch(source, /<span aria-hidden="true">\{i\.contact\.tabs\.(?:ugc|seo)\}<\/span>/);
   assert.match(source, /<EditableText client:load i18nKey="contact\.send" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-ugc-submit-edit" \/>/);
   assert.match(source, /<EditableText client:load i18nKey="contact\.send" as="span" className="" clickToEdit=\{false\} editButtonTargetId="admin-contact-seo-submit-edit" \/>/);
 
