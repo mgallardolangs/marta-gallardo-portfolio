@@ -176,6 +176,15 @@ test('AdminTranslationArsenalEditor keeps ES\/EN\/FR label fields, language leve
   assert.match(source, /updateEditableCollectionSkillGroup/, 'skill item editor group selector should call the existing store mutation');
 });
 
+test('tool logo replacement surfaces validation and upload errors in its item editor', async () => {
+  const source = await readSource('src/components/admin/AdminTranslationArsenalEditor.tsx');
+
+  assert.match(source, /setItemError\(/, 'tool replacement failures should update visible item-editor error state');
+  assert.match(source, /data-item-editor-error/, 'the active item editor should render its error state');
+  assert.match(source, /role="alert"/, 'tool replacement errors should be announced');
+  assert.doesNotMatch(source, /catch\s*\{\s*\/\*[\s\S]*?\*\/\s*\}/, 'tool replacement must not silently swallow errors');
+});
+
 test('AdminTranslationArsenalEditor keeps remove and up\/down reorder fallback inside the active item editor drawer', async () => {
   const source = await readSource('src/components/admin/AdminTranslationArsenalEditor.tsx');
 

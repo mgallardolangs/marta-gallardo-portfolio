@@ -114,7 +114,7 @@ export default function EditableText({ i18nKey, as: Tag = 'span', className = ''
     <button
       type="button"
       onClick={startEdit}
-      tabIndex={clickToEdit ? 0 : -1}
+      tabIndex={0}
       className="absolute -top-3 -right-3 opacity-0 group-hover/edit:opacity-100 transition-opacity bg-blue-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow-lg z-[60] hover:bg-blue-600"
     >
       ✏️

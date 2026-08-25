@@ -75,6 +75,7 @@ export default function AdminTranslationArsenalEditor() {
   const [addLevelFields, setAddLevelFields] = useState<LocaleFieldState>(createEmptyFields);
   const [addToolFile, setAddToolFile] = useState<File | null>(null);
   const [addError, setAddError] = useState('');
+  const [itemError, setItemError] = useState('');
   const dragSourceRef = useRef<DragSource | null>(null);
 
   const groupedSkills = useMemo(() => ({
@@ -110,10 +111,14 @@ export default function AdminTranslationArsenalEditor() {
 
   const openItemEditor = (kind: EditableCollectionKind, id: string) => {
     setActiveAdd(null);
+    setItemError('');
     setEditingItem({ kind, id });
   };
 
-  const closeItemEditor = () => setEditingItem(null);
+  const closeItemEditor = () => {
+    setItemError('');
+    setEditingItem(null);
+  };
 
   const submitAdd = async () => {
     if (!activeAdd) return;
@@ -299,15 +304,21 @@ export default function AdminTranslationArsenalEditor() {
               const file = event.target.files?.[0];
               event.target.value = '';
               if (!file) return;
+              setItemError('');
               try {
                 await store.setEditableToolLogo(index, file);
-              } catch {
-                // validation errors are surfaced via the shared upload validator; nothing to persist here
+              } catch (error) {
+                setItemError(error instanceof Error ? error.message : 'Could not replace this logo.');
               }
             }}
             className="border border-ink/15 bg-white px-2 py-1.5 text-sm text-ink"
           />
         </label>
+        {itemError && (
+          <p role="alert" data-item-editor-error className="text-xs text-amaranth">
+            {itemError}
+          </p>
+        )}
         <div className="flex flex-wrap items-center gap-2">
           <button type="button" data-move-item="up" disabled={index === 0} onClick={() => store.moveEditableCollectionItem('tools', index, -1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↑ Move</button>
           <button type="button" data-move-item="down" disabled={index === tools.length - 1} onClick={() => store.moveEditableCollectionItem('tools', index, 1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↓ Move</button>

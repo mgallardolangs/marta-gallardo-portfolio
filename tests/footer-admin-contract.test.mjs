@@ -80,6 +80,17 @@ test('footer admin source makes every visible text editable without hard-coded f
   );
 });
 
+test('external footer edit pencils remain keyboard reachable when link text is not click-to-edit', async () => {
+  const source = await readSource('src/components/admin/EditableText.tsx');
+
+  assert.match(source, /tabIndex=\{0\}/, 'external edit pencils should remain in the keyboard tab order');
+  assert.doesNotMatch(
+    source,
+    /tabIndex=\{clickToEdit\s*\?\s*0\s*:\s*-1\}/,
+    'clickToEdit should control the text surface, not keyboard access to its pencil button',
+  );
+});
+
 test('all locale files define footer.brand with the shared MG mark', async () => {
   const dictionaries = await Promise.all(locales.map(async (locale) => [locale, await readJson(`src/i18n/${locale}.json`)]));
 
