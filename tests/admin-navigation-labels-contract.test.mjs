@@ -47,17 +47,17 @@ test('AdminToolbar keeps the shared navigation labels editable from one metadata
   const navKeys = ['nav.home', 'nav.ugc', 'nav.translationSeo', 'nav.blog', 'nav.contact'];
   const navMetadataBody = findArrayBodyContaining(
     source,
-    navKeys.map((key) => new RegExp(`i18nKey\\s*:\\s*['"]${escapeRegex(key)}['"]`)),
+    navKeys.map((key) => new RegExp(`key\\s*:\\s*['"]${escapeRegex(key)}['"]`)),
   );
 
   assert.ok(
     navMetadataBody,
-    'AdminToolbar should keep the five shared navigation i18n keys together in one metadata list.',
+    'AdminToolbar should keep the five shared navigation keys together in one metadata list.',
   );
 
   for (const key of navKeys) {
     assert.equal(
-      countMatches(navMetadataBody, new RegExp(`i18nKey\\s*:\\s*['"]${escapeRegex(key)}['"]`, 'g')),
+      countMatches(navMetadataBody, new RegExp(`key\\s*:\\s*['"]${escapeRegex(key)}['"]`, 'g')),
       1,
       `AdminToolbar should list ${key} exactly once in the shared navigation metadata.`,
     );
