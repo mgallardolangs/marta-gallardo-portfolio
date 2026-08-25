@@ -116,6 +116,36 @@ function extractMapRenderBlock(source, arrayName, description) {
   return renderBlock;
 }
 
+function extractTagBlock(source, startPattern, tagName, description) {
+  const start = findPattern(source, startPattern);
+  assert.ok(start, `Expected to find the start of the ${description}.`);
+
+  const tagPattern = new RegExp(`<${escapeRegex(tagName)}(?=\\s|>)|</${escapeRegex(tagName)}>`, 'g');
+  tagPattern.lastIndex = start.index;
+
+  let depth = 0;
+  let match;
+
+  while ((match = tagPattern.exec(source))) {
+    if (match[0].startsWith(`</${tagName}`)) {
+      depth -= 1;
+      if (depth === 0) {
+        return source.slice(start.index, match.index + match[0].length);
+      }
+    } else {
+      depth += 1;
+    }
+  }
+
+  return null;
+}
+
+function extractComponentTags(source, componentName) {
+  return [
+    ...source.matchAll(new RegExp(`<${escapeRegex(componentName)}\\b[\\s\\S]*?/>`, 'g')),
+  ].map(([tag]) => tag);
+}
+
 test('AdminToolbar keeps the shared navigation labels editable from one metadata list', async () => {
   const source = await readSource('src/components/admin/AdminToolbar.tsx');
   const navKeys = ['nav.home', 'nav.ugc', 'nav.translationSeo', 'nav.blog', 'nav.contact'];
@@ -213,40 +243,58 @@ test('Header mirrors nav labels only under adminMode', async () => {
     navMetadata.name,
     'mobile navigation section',
   );
+  const desktopLabelRegion = extractTagBlock(
+    desktopRenderBlock,
+    /<span class="nav-link__text">/,
+    'span',
+    'desktop primary navigation label region',
+  );
+  const mobileLabelRegion = extractTagBlock(
+    mobileRenderBlock,
+    /<span class="mobile-nav-link__line">/,
+    'span',
+    'mobile navigation label region',
+  );
 
-  for (const [description, renderBlock, expectedClass] of [
-    ['desktop primary navigation section', desktopRenderBlock, 'nav-link group'],
-    ['mobile navigation section', mobileRenderBlock, 'mobile-nav-link'],
+  for (const [description, renderBlock, labelRegion, expectedClass] of [
+    ['desktop primary navigation section', desktopRenderBlock, desktopLabelRegion, 'nav-link group'],
+    ['mobile navigation section', mobileRenderBlock, mobileLabelRegion, 'mobile-nav-link'],
   ]) {
     assert.match(
       renderBlock,
       new RegExp(`class=["']${escapeRegex(expectedClass)}["']`),
       `Header should keep the ${description} anchored to the ${expectedClass} link markup.`,
     );
-    assert.match(
-      renderBlock,
-      /adminMode\s*\?/,
-      `Header should make the ${description} label rendering conditional on adminMode.`,
-    );
     assert.equal(
-      countMatches(renderBlock, /<AdminTextMirror\b/g),
+      countMatches(labelRegion, /adminMode\s*\?\s*(?:\(\s*)?<AdminTextMirror\b/g),
       2,
-      `Header should render exactly two AdminTextMirror copies in the ${description}.`,
+      `Header should keep two admin mirror branches in the ${description} label region.`,
     );
+    const adminMirrors = extractComponentTags(labelRegion, 'AdminTextMirror');
+
+    assert.equal(adminMirrors.length, 2, `Header should render exactly two AdminTextMirror copies in the ${description} label region.`);
+
+    for (const mirrorTag of adminMirrors) {
+      assert.match(
+        mirrorTag,
+        /\bclient:load\b/,
+        `Header should hydrate each AdminTextMirror copy with client:load in the ${description} label region.`,
+      );
+      assert.match(
+        mirrorTag,
+        /i18nKey=\{\s*item\.i18nKey\s*\}/,
+        `Header should pass item.i18nKey into each AdminTextMirror copy in the ${description} label region.`,
+      );
+      assert.match(
+        mirrorTag,
+        /fallback=\{\s*item\.label\s*\}/,
+        `Header should pass item.label as the fallback for each AdminTextMirror copy in the ${description} label region.`,
+      );
+    }
     assert.equal(
-      countMatches(renderBlock, /i18nKey=\{\s*item\.i18nKey\s*\}/g),
+      countMatches(labelRegion, /:\s*\(?\s*item\.label\s*\)?/g),
       2,
-      `Header should pass item.i18nKey into both AdminTextMirror copies in the ${description}.`,
-    );
-    assert.equal(
-      countMatches(renderBlock, /fallback=\{\s*item\.label\s*\}/g),
-      2,
-      `Header should pass item.label as the fallback for both AdminTextMirror copies in the ${description}.`,
-    );
-    assert.equal(
-      countMatches(renderBlock, /:\s*\(?\s*item\.label\s*\)?/g),
-      2,
-      `Header should keep item.label as the public branch for both visible label copies in the ${description}.`,
+      `Header should keep two static item.label public fallbacks in the ${description} label region.`,
     );
   }
 });
