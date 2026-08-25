@@ -1,4 +1,4 @@
-import rawSiteData from '../data/site.json';
+import rawSiteData from '../data/site.json' with { type: 'json' };
 
 export const siteLocales = ['es', 'en', 'fr', 'de', 'it', 'ca'] as const;
 export type Locale = (typeof siteLocales)[number];
@@ -61,6 +61,7 @@ export type SiteData = {
     linkedin: string;
     instagram: string;
   };
+  publicLanguagePicker: Locale[];
   nicheBackgrounds: Record<string, string>;
   ugcVideos: Record<string, string[]>;
   ugcPhotos: Record<string, string[]>;
@@ -90,6 +91,25 @@ export function localize(value: LocalizedText | string | null | undefined, lang:
   if (typeof value === 'string') return value;
   if (!value) return '';
   return value[lang] ?? value.es ?? '';
+}
+
+export const publicLanguagePickerFallback: Locale[] = ['es', 'en', 'fr'];
+
+export function getPublicLanguagePicker(site: Partial<SiteData> | null | undefined): Locale[] {
+  if (!Array.isArray(site?.publicLanguagePicker)) {
+    return [...publicLanguagePickerFallback];
+  }
+
+  const hasUnsupportedLocale = site.publicLanguagePicker.some((locale) => !siteLocales.includes(locale as Locale));
+  const selectedLocales = new Set(
+    site.publicLanguagePicker.filter((locale): locale is Locale => siteLocales.includes(locale as Locale)),
+  );
+
+  if (hasUnsupportedLocale || !selectedLocales.has('es') || selectedLocales.size === 0) {
+    return [...publicLanguagePickerFallback];
+  }
+
+  return siteLocales.filter((locale) => selectedLocales.has(locale));
 }
 
 export const siteData = rawSiteData as SiteData;

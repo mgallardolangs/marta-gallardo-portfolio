@@ -1,5 +1,8 @@
 import { useEffect } from 'react';
 import { adminStore } from './adminStore';
+import originalEs from '../../i18n/es.json';
+import originalEn from '../../i18n/en.json';
+import originalFr from '../../i18n/fr.json';
 import {
   ADMIN_INIT_FALLBACK_DELAY_MS,
   ADMIN_INIT_MAX_RETRIES,
@@ -19,6 +22,30 @@ export default function AdminInit({ i18nJson, siteJson, lang }: Props) {
   useEffect(() => {
     const parsedI18n = JSON.parse(i18nJson) as Record<string, unknown>;
     const parsedSite = JSON.parse(siteJson) as Record<string, unknown>;
+    const restoredI18n = {
+      ...parsedI18n,
+      es: {
+        ...(parsedI18n.es as Record<string, unknown>),
+        translationPage: {
+          ...(((parsedI18n.es as Record<string, unknown>)?.translationPage as Record<string, unknown>) ?? {}),
+          heroMark: originalEs.translationPage.heroMark,
+        },
+      },
+      en: {
+        ...(parsedI18n.en as Record<string, unknown>),
+        translationPage: {
+          ...(((parsedI18n.en as Record<string, unknown>)?.translationPage as Record<string, unknown>) ?? {}),
+          heroMark: originalEn.translationPage.heroMark,
+        },
+      },
+      fr: {
+        ...(parsedI18n.fr as Record<string, unknown>),
+        translationPage: {
+          ...(((parsedI18n.fr as Record<string, unknown>)?.translationPage as Record<string, unknown>) ?? {}),
+          heroMark: originalFr.translationPage.heroMark,
+        },
+      },
+    };
     let draftLoaded = adminStore.isInitialized();
     let identityListenersCleanup: (() => void) | null = null;
     let identityInitStarted = false;
@@ -42,7 +69,7 @@ export default function AdminInit({ i18nJson, siteJson, lang }: Props) {
       });
 
       if (decision === 'init-with-token' || decision === 'init-without-token') {
-        adminStore.init(parsedI18n, parsedSite, lang, token);
+        adminStore.init(restoredI18n, parsedSite, lang, token);
         if (!draftLoaded) {
           adminStore.loadDraft();
           draftLoaded = true;

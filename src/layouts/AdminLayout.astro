@@ -18,7 +18,20 @@ interface Props {
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
 const { title = `Admin — ${i.hero.name}`, description = '' } = Astro.props;
-const allI18n = JSON.stringify({ es, en, fr });
+const sanitizeAdminTranslations = <T extends { translationPage?: Record<string, unknown> }>(dictionary: T) => ({
+  ...dictionary,
+  translationPage: dictionary.translationPage
+    ? {
+        ...dictionary.translationPage,
+        heroMark: '',
+      }
+    : dictionary.translationPage,
+});
+const allI18n = JSON.stringify({
+  es: sanitizeAdminTranslations(es),
+  en: sanitizeAdminTranslations(en),
+  fr: sanitizeAdminTranslations(fr),
+});
 const allSite = JSON.stringify(siteData);
 ---
 <!DOCTYPE html>

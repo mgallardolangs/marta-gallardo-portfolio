@@ -1,7 +1,7 @@
 ---
-import { getLocalizedPath, langNames, stripLocaleFromPath, t, visibleLangs, type Lang } from '../i18n';
+import { getLocalizedPath, langNames, stripLocaleFromPath, t, type Lang } from '../i18n';
 import { resolveHeaderLanguageLinks } from '../lib/headerLanguageLinks';
-import { siteData } from '../lib/siteData';
+import { getPublicLanguagePicker, siteData } from '../lib/siteData';
 
 interface Props {
   lang: Lang;
@@ -15,9 +15,10 @@ const pathname = Astro.url.pathname;
 const publicPath = stripLocaleFromPath(pathname).replace(/^\/admin(?=\/|$)/, '') || '/';
 const strippedPath = publicPath === '/' ? '/' : publicPath.replace(/\/$/, '');
 const navPath = (path: string) => (adminMode ? `/admin${path === '/' ? '' : path}` : getLocalizedPath(path, lang));
+const publicLanguagePicker = getPublicLanguagePicker(siteData);
 const availableLanguages = resolveHeaderLanguageLinks({
   path: strippedPath === '' ? '/' : strippedPath,
-  visibleLangs,
+  visibleLangs: publicLanguagePicker,
   getLocalizedPath,
   alternateLinks,
 });

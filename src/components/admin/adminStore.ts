@@ -31,6 +31,7 @@ import type {
   UgcCategory,
   UgcPortfolioItem,
 } from '../../lib/siteData.ts';
+import { getPublicLanguagePicker } from '../../lib/siteData.ts';
 
 type Listener = () => void;
 export const SUPPORTED_LANGS = ['es', 'en', 'fr', 'de', 'it', 'ca'] as const;
@@ -452,6 +453,10 @@ export class AdminStore {
     }));
   }
 
+  getPublicLanguagePicker(): SupportedLang[] {
+    return getPublicLanguagePicker(this.images as Partial<SiteData>) as SupportedLang[];
+  }
+
   private getPersistedOrbitMedia(): OrbitMedia[] {
     const orbitMedia = deepGet(this.images, 'orbitMedia');
     if (!Array.isArray(orbitMedia)) return [];
@@ -587,6 +592,32 @@ export class AdminStore {
     if (pending) return pending.previewSrc;
     const value = deepGet(this.images, key);
     return typeof value === 'string' ? value : '';
+  }
+
+  setPublicLanguageVisibility(lang: SupportedLang, visible: boolean): void {
+    if (!this.initialized) return;
+
+    const nextVisibleLangs = new Set(this.getPublicLanguagePicker());
+    if (lang === 'es') {
+      nextVisibleLangs.add('es');
+    } else if (visible) {
+      nextVisibleLangs.add(lang);
+    } else {
+      nextVisibleLangs.delete(lang);
+    }
+
+    const nextPicker = getPublicLanguagePicker({
+      publicLanguagePicker: SUPPORTED_LANGS.filter((locale) => nextVisibleLangs.has(locale)),
+    }) as SupportedLang[];
+
+    if (JSON.stringify(nextPicker) === JSON.stringify(this.getPublicLanguagePicker())) {
+      return;
+    }
+
+    deepSet(this.images, 'publicLanguagePicker', nextPicker);
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
   }
 
   addOrbitMediaItem(): void {

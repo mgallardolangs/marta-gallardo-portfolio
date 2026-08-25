@@ -269,7 +269,7 @@ test('public translation hero source/build contract keeps two localized CTA anch
   const portfolioCta = extractElementByDataAttribute(source, 'a', 'data-translation-cta', 'portfolio', 'public translation portfolio CTA');
   const contactCta = extractElementByDataAttribute(source, 'a', 'data-translation-cta', 'contact', 'public translation contact CTA');
 
-  assert.match(source, /page\.heroMark/, 'public translation hero should render the new localized vertical hero mark');
+  assert.doesNotMatch(source, /page\.heroMark/, 'public translation hero should stop rendering the vertical hero mark');
   assert.match(portfolioCta, /href=\{getLocalizedPath\('\/ugc', lang\)\}/, 'public translation hero should keep the localized portfolio CTA anchor');
   assert.match(contactCta, /href=\{getLocalizedPath\('\/contact', lang\)\}/, 'public translation hero should keep the localized contact CTA anchor');
   assert.doesNotMatch(heroWindow, /bg-\[radial-gradient/i, 'public translation hero should not restore the radial gradient');
@@ -332,6 +332,11 @@ test('public translation hero source/build contract keeps two localized CTA anch
       builtContactCta,
       /rounded-full/,
       `${relativePath} should keep the contact CTA rectangular in built HTML`,
+    );
+    assert.doesNotMatch(
+      html,
+      new RegExp(escapeForRegex(expectedExactChrome[locale].heroMark)),
+      `${relativePath} should not render the hidden hero mark text in built HTML`,
     );
   }
 });
@@ -452,7 +457,7 @@ test('admin skill creation contracts require group-aware data and grouped editor
   ]);
 
   assert.match(adminSource, /i18nKey={`translationPage\.services\.items\.\$\{index\}\.headline`}/, 'admin services should expose editable service headlines');
-  assert.match(adminSource, /i18nKey="translationPage\.heroMark"/, 'admin hero should expose the editable vertical hero mark');
+  assert.doesNotMatch(adminSource, /i18nKey="translationPage\.heroMark"/, 'admin hero should stop exposing the hidden vertical hero mark');
   assert.match(adminSource, /i18nKey="translationPage\.hero\.ctaPrimary"/, 'admin hero should expose the editable primary CTA key');
   assert.match(adminSource, /i18nKey="translationPage\.hero\.ctaSecondary"/, 'admin hero should expose the editable secondary CTA key');
   assert.match(

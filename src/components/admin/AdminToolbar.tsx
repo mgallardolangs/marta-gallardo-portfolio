@@ -7,9 +7,19 @@ const LANGS = [
   { code: 'fr' as const, label: 'FR' },
 ];
 
+const PUBLIC_PICKER_LANGS = [
+  { code: 'es' as const, label: 'ES' },
+  { code: 'en' as const, label: 'EN' },
+  { code: 'fr' as const, label: 'FR' },
+  { code: 'de' as const, label: 'DE' },
+  { code: 'it' as const, label: 'IT' },
+  { code: 'ca' as const, label: 'CA' },
+];
+
 export default function AdminToolbar() {
   const store = useAdminStore();
   const [expanded, setExpanded] = useState(false);
+  const publicLanguagePicker = store.getPublicLanguagePicker();
   const draftToneClass = store.draftTone === 'success'
     ? 'text-green-400'
     : store.draftTone === 'warning'
@@ -49,6 +59,32 @@ export default function AdminToolbar() {
                   {l.label}
                 </button>
               ))}
+            </div>
+          </div>
+
+          <div className="mb-3">
+            <p className="text-[10px] text-gray-400 uppercase mb-1">Public language picker</p>
+            <div className="flex flex-wrap gap-1.5">
+              {PUBLIC_PICKER_LANGS.map((pickerLang) => {
+                const isVisible = publicLanguagePicker.includes(pickerLang.code);
+
+                return (
+                  <button
+                    key={pickerLang.code}
+                    type="button"
+                    disabled={pickerLang.code === 'es'}
+                    onClick={() => store.setPublicLanguageVisibility(pickerLang.code, !isVisible)}
+                    className={`inline-flex items-center gap-1 rounded px-2 py-1 text-[11px] transition-colors ${
+                      isVisible
+                        ? 'bg-white text-gray-900 font-semibold'
+                        : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
+                    } ${pickerLang.code === 'es' ? 'cursor-not-allowed opacity-70' : ''}`}
+                  >
+                    <span aria-hidden="true">{isVisible ? '✓' : '○'}</span>
+                    {pickerLang.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
 

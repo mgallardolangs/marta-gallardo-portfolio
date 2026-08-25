@@ -548,6 +548,6 @@ test('Blog Task 1 protects the approved Home, UGC, and Translation source contra
   assert.match(ugcSource, /data-ugc-hero/, 'UGC should keep the approved editorial hero marker untouched');
   assert.match(ugcSource, /i\.ugcPage\.contactSheet\.headline/, 'UGC should keep the approved contact sheet copy contract untouched');
   assert.match(translationSource, /data-translation-page/, 'Translation should keep the approved page shell marker untouched');
-  assert.match(translationSource, /page\.heroMark/, 'Translation should keep the approved hero chrome untouched');
+  assert.doesNotMatch(translationSource, /page\.heroMark/, 'Translation should stop rendering the hidden hero mark while keeping the rest of the shell untouched');
   assert.match(translationSource, /page\.methodologyDisplayTitle/, 'Translation should keep the approved methodology display title untouched');
 });
