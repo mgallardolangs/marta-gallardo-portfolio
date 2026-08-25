@@ -29,7 +29,7 @@ function escapeRegex(value) {
 }
 
 function findArrayBodyContaining(source, requiredPatterns) {
-  const arrayPattern = /const\s+\w+\s*=\s*\[((?:[\s\S]*?))\]\s*(?:as\s+const)?\s*;/g;
+  const arrayPattern = /const\s+\w+(?:\s*:\s*[^=]+?)?\s*=\s*\[((?:[\s\S]*?))\]\s*(?:as\s+const)?\s*;/g;
   let match;
 
   while ((match = arrayPattern.exec(source))) {
