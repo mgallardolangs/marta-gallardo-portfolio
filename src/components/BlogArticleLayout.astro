@@ -38,6 +38,7 @@ const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+
 <BaseLayout
   title={`${post.data.title} — ${i.hero.name}`}
   description={post.data.description}
+  image={post.data.image}
   alternateLinks={alternateLinks}
 >
   <article data-blog-article class="bg-paper">

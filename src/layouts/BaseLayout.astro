@@ -10,6 +10,7 @@ import { getLangFromUrl, t, type Lang } from '../i18n';
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
   alternateLocales?: Lang[];
   alternateLinks?: Partial<Record<Lang, string>>;
   xDefaultPath?: string;
@@ -20,6 +21,7 @@ const i = t(lang);
 const {
   title = `${i.hero.name} — UGC & SEO`,
   description = i.about.text,
+  image,
   alternateLocales,
   alternateLinks,
   xDefaultPath,
@@ -38,6 +40,7 @@ const {
     title={title}
     description={description}
     pathname={Astro.url.pathname}
+    image={image}
     alternateLocales={alternateLocales}
     alternateLinks={alternateLinks}
     xDefaultPath={xDefaultPath}

@@ -7,17 +7,19 @@ interface Props {
   title: string;
   description: string;
   pathname: string;
+  image?: string;
   alternateLocales?: Lang[];
   alternateLinks?: Partial<Record<Lang, string>>;
   xDefaultPath?: string;
 }
 
-const { lang, title, description, pathname, alternateLocales, alternateLinks, xDefaultPath } = Astro.props;
+const { lang, title, description, pathname, image, alternateLocales, alternateLinks, xDefaultPath } = Astro.props;
 const pagePath = pathname === '/' ? '/' : pathname.replace(/\/$/, '') || '/';
 const normalizedPublicPath = stripLocaleFromPath(pagePath);
 const absolute = (target: string) => new URL(target, Astro.site);
 const canonical = absolute(pagePath);
-const heroImage = absolute(siteData.heroMainPhoto);
+const personImage = absolute(siteData.heroMainPhoto);
+const socialImage = absolute(image ?? siteData.heroMainPhoto);
 const languageNames = siteData.arsenal.languages.map(({ label }) => localize(label, lang));
 const socialProfiles = [
   siteData.person.socialProfiles.linkedin,
@@ -53,7 +55,7 @@ const personJsonLd = {
   '@type': 'Person',
   name: siteData.person.name,
   url: absolute(getLocalizedPath('/', lang)).toString(),
-  image: heroImage.toString(),
+  image: personImage.toString(),
   homeLocation: {
     '@type': 'Place',
     name: siteData.person.location,
@@ -82,11 +84,11 @@ const personJsonLd = {
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical.toString()} />
-<meta property="og:image" content={heroImage.toString()} />
+<meta property="og:image" content={socialImage.toString()} />
 
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={heroImage.toString()} />
+<meta name="twitter:image" content={socialImage.toString()} />
 
 <script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />
