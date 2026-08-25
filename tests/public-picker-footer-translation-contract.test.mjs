@@ -485,7 +485,12 @@ test('footer source stops rendering footer.location while all locale keys stay i
     for (const location of footerLocations) {
       assert.doesNotMatch(footer, new RegExp(location.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), `${label} footer should not render ${location}`);
     }
-    assert.match(footer, />MG</, `${label} footer should keep the MG mark`);
+    if (label === 'home') {
+      assert.match(footer, />MG</, 'home footer should keep the MG mark in static HTML');
+      continue;
+    }
+
+    assert.match(footer, /footer\.brand/, 'admin footer should expose the editable footer.brand island');
   }
 });
 

@@ -1,6 +1,7 @@
 ---
 import { getLocalizedPath, t, type Lang } from '../i18n';
 import { siteData } from '../lib/siteData';
+import EditableText from './admin/EditableText';
 
 interface Props {
   lang: Lang;
@@ -12,11 +13,11 @@ const i = t(lang);
 const year = new Date().getFullYear();
 const navPath = (path: string) => (adminMode ? `/admin${path === '/' ? '' : path}` : getLocalizedPath(path, lang));
 const navItems = [
-  { href: '/', label: i.nav.home },
-  { href: '/ugc', label: i.nav.ugc },
-  { href: '/translation-seo', label: i.nav.translationSeo },
-  { href: '/blog', label: i.nav.blog },
-  { href: '/contact', label: i.nav.contact },
+  { key: 'home', href: '/', label: i.nav.home, i18nKey: 'nav.home' },
+  { key: 'ugc', href: '/ugc', label: i.nav.ugc, i18nKey: 'nav.ugc' },
+  { key: 'translationSeo', href: '/translation-seo', label: i.nav.translationSeo, i18nKey: 'nav.translationSeo' },
+  { key: 'blog', href: '/blog', label: i.nav.blog, i18nKey: 'nav.blog' },
+  { key: 'contact', href: '/contact', label: i.nav.contact, i18nKey: 'nav.contact' },
 ];
 ---
 <footer class="footer-shell bg-ink text-paper">
@@ -24,30 +25,69 @@ const navItems = [
     <div class="site-container footer-shell__reveal" data-footer-reveal data-reveal-mode="idle">
       <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
         <div class="space-y-5">
-          <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-paper">{i.footer.eyebrow}</p>
-          <h2 class="font-heading text-5xl uppercase leading-none text-white md:text-7xl">{i.footer.headline}</h2>
-          <p class="max-w-2xl text-base leading-7 text-white/70 md:text-lg">{i.footer.support}</p>
+          {adminMode ? (
+            <EditableText client:load i18nKey="footer.eyebrow" as="p" className="font-body text-xs font-semibold uppercase tracking-[0.34em] text-paper" />
+          ) : (
+            <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-paper">{i.footer.eyebrow}</p>
+          )}
+          {adminMode ? (
+            <EditableText client:load i18nKey="footer.headline" as="h2" className="font-heading text-5xl uppercase leading-none text-white md:text-7xl" />
+          ) : (
+            <h2 class="font-heading text-5xl uppercase leading-none text-white md:text-7xl">{i.footer.headline}</h2>
+          )}
+          {adminMode ? (
+            <EditableText client:load i18nKey="footer.support" as="p" className="max-w-2xl text-base leading-7 text-white/70 md:text-lg" />
+          ) : (
+            <p class="max-w-2xl text-base leading-7 text-white/70 md:text-lg">{i.footer.support}</p>
+          )}
         </div>
 
-        <div class="lg:justify-self-end">
-          <a href={navPath('/contact')} class="footer-cta">
-            {i.footer.cta}
-          </a>
-        </div>
+        {adminMode ? (
+          <div class="group/edit relative overflow-visible lg:justify-self-end">
+            <a href={navPath('/contact')} class="footer-cta">
+              <EditableText client:load i18nKey="footer.cta" as="span" className="" clickToEdit={false} editButtonTargetId="admin-footer-cta-edit" />
+            </a>
+            <span id="admin-footer-cta-edit" />
+          </div>
+        ) : (
+          <div class="lg:justify-self-end">
+            <a href={navPath('/contact')} class="footer-cta">
+              {i.footer.cta}
+            </a>
+          </div>
+        )}
       </div>
 
       <div class="mt-12 flex flex-col gap-10 border-t border-white/10 pt-10">
         <div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
           <nav aria-label="Footer" class="flex flex-wrap gap-x-6 gap-y-4">
             {navItems.map((item) => (
-              <a href={navPath(item.href)} class="footer-nav-link group">
-                <span class="footer-nav-link__bracket" aria-hidden="true">[</span>
-                <span class="footer-nav-link__line">
-                  <span>{item.label}</span>
-                  <span aria-hidden="true">{item.label}</span>
-                </span>
-                <span class="footer-nav-link__bracket" aria-hidden="true">]</span>
-              </a>
+              adminMode ? (
+                <div class="group/edit relative overflow-visible">
+                  <a href={navPath(item.href)} class="footer-nav-link group">
+                    <span class="footer-nav-link__bracket" aria-hidden="true">[</span>
+                    <span class="footer-nav-link__line">
+                      <span>
+                        <EditableText client:load i18nKey={item.i18nKey} as="span" className="" clickToEdit={false} editButtonTargetId={`admin-footer-nav-${item.key}-edit`} />
+                      </span>
+                      <span aria-hidden="true">
+                        <EditableText client:load i18nKey={item.i18nKey} as="span" className="" clickToEdit={false} showEditButton={false} />
+                      </span>
+                    </span>
+                    <span class="footer-nav-link__bracket" aria-hidden="true">]</span>
+                  </a>
+                  <span id={`admin-footer-nav-${item.key}-edit`} />
+                </div>
+              ) : (
+                <a href={navPath(item.href)} class="footer-nav-link group">
+                  <span class="footer-nav-link__bracket" aria-hidden="true">[</span>
+                  <span class="footer-nav-link__line">
+                    <span>{item.label}</span>
+                    <span aria-hidden="true">{item.label}</span>
+                  </span>
+                  <span class="footer-nav-link__bracket" aria-hidden="true">]</span>
+                </a>
+              )
             ))}
           </nav>
 
@@ -62,8 +102,22 @@ const navItems = [
         </div>
 
         <div class="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-6 text-sm text-white/60">
-          <span class="font-heading text-base uppercase tracking-[0.34em] text-white">MG</span>
-          <p>© {year} Marta Gallardo. {i.footer.rights}.</p>
+          {adminMode ? (
+            <EditableText client:load i18nKey="footer.brand" as="span" className="font-heading text-base uppercase tracking-[0.34em] text-white" />
+          ) : (
+            <span class="font-heading text-base uppercase tracking-[0.34em] text-white">{i.footer.brand}</span>
+          )}
+          {adminMode ? (
+            <div class="flex flex-wrap items-center gap-x-1 gap-y-1">
+              <span>© {year}</span>
+              <EditableText client:load i18nKey="hero.name" as="span" className="" />
+              <span>.</span>
+              <EditableText client:load i18nKey="footer.rights" as="span" className="" />
+              <span>.</span>
+            </div>
+          ) : (
+            <p>© {year} {i.hero.name}. {i.footer.rights}.</p>
+          )}
         </div>
       </div>
     </div>
