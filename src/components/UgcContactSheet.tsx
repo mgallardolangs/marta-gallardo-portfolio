@@ -239,19 +239,38 @@ export default function UgcContactSheet({
             const isActive = currentFilter === filter;
 
             return (
-              <button
-                key={currentFilter}
-                type="button"
-                aria-pressed={isActive}
-                onClick={() => setFilter(currentFilter)}
-                className={`group inline-flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-[0.24em] transition ${
-                  isActive ? 'text-amaranth' : 'text-ink hover:text-amaranth'
-                }`}
-              >
-                <span className={`transition ${isActive ? 'text-amaranth' : 'text-ink/24 group-hover:text-amaranth'}`}>[</span>
-                <span>{copy.filters[currentFilter]}</span>
-                <span className={`transition ${isActive ? 'text-amaranth' : 'text-ink/24 group-hover:text-amaranth'}`}>]</span>
-              </button>
+              adminPreview ? (
+                <button
+                  key={currentFilter}
+                  type="button"
+                  aria-pressed={isActive}
+                  onClick={() => setFilter(currentFilter)}
+                  className={`ugc-admin-filter group inline-flex items-center justify-center gap-1 overflow-hidden text-[0.65rem] font-semibold uppercase tracking-[0.18em] transition ${
+                    isActive ? 'text-amaranth' : 'text-ink'
+                  }`}
+                >
+                  <span className="ugc-admin-filter__bracket ugc-admin-filter__bracket--left" aria-hidden="true">[</span>
+                  <span className="ugc-admin-filter__line">
+                    <span>{copy.filters[currentFilter]}</span>
+                    <span aria-hidden="true">{copy.filters[currentFilter]}</span>
+                  </span>
+                  <span className="ugc-admin-filter__bracket ugc-admin-filter__bracket--right" aria-hidden="true">]</span>
+                </button>
+              ) : (
+                <button
+                  key={currentFilter}
+                  type="button"
+                  aria-pressed={isActive}
+                  onClick={() => setFilter(currentFilter)}
+                  className={`group inline-flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-[0.24em] transition ${
+                    isActive ? 'text-amaranth' : 'text-ink hover:text-amaranth'
+                  }`}
+                >
+                  <span className={`transition ${isActive ? 'text-amaranth' : 'text-ink/24 group-hover:text-amaranth'}`}>[</span>
+                  <span>{copy.filters[currentFilter]}</span>
+                  <span className={`transition ${isActive ? 'text-amaranth' : 'text-ink/24 group-hover:text-amaranth'}`}>]</span>
+                </button>
+              )
             );
           })}
         </div>
@@ -467,6 +486,54 @@ export default function UgcContactSheet({
           </motion.div>
         ) : null}
       </AnimatePresence>
+      {adminPreview ? (
+        <style>{`
+          .ugc-admin-filter__line {
+            display: grid;
+            height: 1.05rem;
+            overflow: hidden;
+            color: rgb(6 4 3 / 0.8);
+            transition: color 0.2s ease;
+          }
+
+          .ugc-admin-filter__line > span {
+            display: flex;
+            min-height: 1.05rem;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(0);
+            transition: transform 0.24s ease;
+          }
+
+          .ugc-admin-filter__bracket {
+            color: var(--color-amaranth);
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: translateY(0.3rem);
+            transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+          }
+
+          .ugc-admin-filter:hover .ugc-admin-filter__line,
+          .ugc-admin-filter:focus-visible .ugc-admin-filter__line,
+          .ugc-admin-filter[aria-pressed='true'] .ugc-admin-filter__line {
+            color: var(--color-amaranth);
+          }
+
+          .ugc-admin-filter:hover .ugc-admin-filter__line > span,
+          .ugc-admin-filter:focus-visible .ugc-admin-filter__line > span,
+          .ugc-admin-filter[aria-pressed='true'] .ugc-admin-filter__line > span {
+            transform: translateY(-100%);
+          }
+
+          .ugc-admin-filter:hover .ugc-admin-filter__bracket,
+          .ugc-admin-filter:focus-visible .ugc-admin-filter__bracket,
+          .ugc-admin-filter[aria-pressed='true'] .ugc-admin-filter__bracket {
+            color: var(--color-amaranth);
+            opacity: 1;
+            transform: translateY(0);
+          }
+        `}</style>
+      ) : null}
     </>
   );
 }
