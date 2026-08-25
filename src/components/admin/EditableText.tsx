@@ -8,6 +8,7 @@ interface Props {
   className?: string;
   clickToEdit?: boolean;
   editButtonTargetId?: string;
+  showEditButton?: boolean;
 }
 
 function formatText(value: string): string {
@@ -33,7 +34,7 @@ function htmlToText(html: string): string {
  * - All DOM manipulation via refs
  * - Store subscription only updates when NOT editing
  */
-export default function EditableText({ i18nKey, as: Tag = 'span', className = '', clickToEdit = true, editButtonTargetId }: Props) {
+export default function EditableText({ i18nKey, as: Tag = 'span', className = '', clickToEdit = true, editButtonTargetId, showEditButton = true }: Props) {
   const elRef = useRef<HTMLDivElement>(null);
   const editingRef = useRef(false);
   const [editing, setEditing] = useState(false);
@@ -109,7 +110,7 @@ export default function EditableText({ i18nKey, as: Tag = 'span', className = ''
   }, [i18nKey]);
 
   const isBlock = ['div','p','h1','h2','h3','h4','h5','h6','section','li'].includes(Tag);
-  const editButton = !editing ? (
+  const editButton = !editing && showEditButton ? (
     <button
       type="button"
       onClick={startEdit}
