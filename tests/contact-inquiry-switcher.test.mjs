@@ -150,8 +150,8 @@ test('public and admin contact pages keep the denser contact desk, exact forms, 
     assertContactFieldContract(source, 'seo');
   }
 
-  assert.match(publicSource, /const fieldClass =\s+'w-full border-b border-paper\/22 bg-transparent px-0 py-2\.5 font-body text-base text-paper outline-none transition placeholder:text-paper\/42 focus:border-amaranth';/);
-  assert.match(adminSource, /const fieldClass =\s+'w-full border-b border-paper\/22 bg-transparent px-0 py-2\.5 font-body text-base text-paper outline-none transition placeholder:text-paper\/42 focus:border-amaranth';/);
+  assert.match(publicSource, /const fieldClass =\s+'w-full border-b border-paper\/22 bg-transparent px-2 py-2\.5 font-body text-base text-paper outline-none transition placeholder:text-paper\/42 focus:border-amaranth';/);
+  assert.match(adminSource, /const fieldClass =\s+'w-full border-b border-paper\/22 bg-transparent px-2 py-2\.5 font-body text-base text-paper outline-none transition placeholder:text-paper\/42 focus:border-amaranth';/);
   assert.match(publicSource, /const panelClass = 'pt-6';/);
   assert.match(adminSource, /const panelClass = 'pt-6';/);
   assert.match(publicSource, /<div class="border-b border-paper\/14 pb-4">/);
@@ -291,4 +291,19 @@ test('contact switcher work leaves the approved Home, UGC, and Translation marke
   assert.match(ugcSource, /<UgcContactSheet/);
   assert.match(translationSource, /data-translation-page/);
   assert.match(translationSource, /data-translation-cta="contact"/);
+});
+
+test('Contact desk and footer share explicit ink background while fields keep a small typing inset', async () => {
+  const [publicSource, adminSource, footerSource] = await Promise.all([
+    readSource('src/views/ContactPage.astro'),
+    readSource('src/pages/admin/contact.astro'),
+    readSource('src/components/Footer.astro'),
+  ]);
+
+  assert.match(publicSource, /const fieldClass =\s*\n\s*'[^']*\bpx-2\b[^']*'/);
+  assert.match(adminSource, /const fieldClass =\s*\n\s*'[^']*\bpx-2\b[^']*'/);
+  assert.doesNotMatch(publicSource, /const fieldClass =\s*\n\s*'[^']*\bpx-0\b[^']*'/);
+  assert.doesNotMatch(adminSource, /const fieldClass =\s*\n\s*'[^']*\bpx-0\b[^']*'/);
+  assert.match(footerSource, /<footer class="footer-shell bg-ink text-paper">/);
+  assert.doesNotMatch(footerSource, /<footer class="footer-shell bg-charcoal text-cream">/);
 });

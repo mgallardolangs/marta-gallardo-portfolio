@@ -134,7 +134,7 @@ test('orbit hover playback exposes a helper for immediate pause and resume while
 test('footer becomes a seamless black section and keeps the single-row label reveal contract', async () => {
   const footerSource = await readSource('src/components/Footer.astro');
 
-  assert.match(footerSource, /<footer class="footer-shell bg-charcoal text-cream">/);
+  assert.match(footerSource, /<footer class="footer-shell bg-ink text-paper">/);
   assert.doesNotMatch(footerSource, /rounded-\[2\.25rem\]/);
   assert.doesNotMatch(footerSource, /border border-white\/10 bg-charcoal/);
   assert.match(footerSource, /\.footer-nav-link__line\s*\{[^}]*display:\s*block;[^}]*height:\s*1rem;[^}]*overflow:\s*hidden;[^}]*\}/s);
