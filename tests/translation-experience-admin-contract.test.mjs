@@ -572,3 +572,188 @@ test('AdminTranslationExperienceEditor source uses the shared admin store, local
   assert.match(source, /role="alert"/, 'experience editor should render inline validation errors accessibly');
   assert.match(source, /(?:sm|md):grid-cols-2[^"]*(?:xl|2xl):grid-cols-3/, 'experience editor should preview experience cards in the responsive approved grid');
 });
+
+test('admin translation page passes a typed initialContent prop built from page.* into the integrated experience editor', async () => {
+  const [adminSource, editorSource] = await Promise.all([
+    readSource('src/pages/admin/translation-seo.astro'),
+    readRequiredSource('src/components/admin/AdminTranslationExperienceEditor.tsx'),
+  ]);
+
+  assert.match(
+    adminSource,
+    /<AdminTranslationExperienceEditor\b[^>]*\binitialContent=\{\{[\s\S]{0,600}?\}\}[^>]*\/>/,
+    'admin translation page should pass a literal initialContent prop object to the experience editor island',
+  );
+
+  const mountMatch = adminSource.match(/<AdminTranslationExperienceEditor\b[\s\S]{0,900}?\/>/);
+  assert.ok(mountMatch, 'admin translation page should mount the experience editor with props');
+  const mountSource = mountMatch[0];
+
+  assert.match(mountSource, /page\.browserTabsAriaLabel/, 'initialContent should seed the tablist aria label from page.browserTabsAriaLabel');
+  assert.match(mountSource, /page\.browserTabs\.education/, 'initialContent should seed the education tab label from page.browserTabs.education');
+  assert.match(mountSource, /page\.browserTabs\.experience/, 'initialContent should seed the experience tab label from page.browserTabs.experience');
+  assert.match(mountSource, /page\.experienceStatement/, 'initialContent should seed the experience statement from page.experienceStatement');
+  assert.match(mountSource, /page\.education\.intro/, 'initialContent should seed the education intro from page.education.intro');
+  assert.match(mountSource, /page\.education\.studies/, 'initialContent should seed the education studies from page.education.studies');
+  assert.match(mountSource, /page\.experience\.intro/, 'initialContent should seed the experience intro from page.experience.intro');
+  assert.match(mountSource, /page\.experience\.cards/, 'initialContent should seed the experience cards from page.experience.cards');
+
+  assert.match(
+    editorSource,
+    /type\s+AdminTranslationExperienceInitialContent\s*=\s*\{[\s\S]{0,600}?\}/,
+    'experience editor should declare a typed shape for the initialContent prop',
+  );
+  assert.match(
+    editorSource,
+    /initialContent\s*:\s*AdminTranslationExperienceInitialContent/,
+    'experience editor should type the initialContent prop with the declared shape',
+  );
+});
+
+test('experience editor renders initialContent while the store is not initialized, then switches to live store getters/text', async () => {
+  const source = await readRequiredSource('src/components/admin/AdminTranslationExperienceEditor.tsx');
+
+  assert.match(
+    source,
+    /store\.initialized\s*\?\s*store\.getText\(\s*['"]translationPage\.browserTabsAriaLabel['"]\s*\)\s*:\s*initialContent\.browserTabsAriaLabel/,
+    'tablist aria label should fall back to initialContent.browserTabsAriaLabel until the store initializes',
+  );
+  assert.match(
+    source,
+    /store\.initialized\s*\?\s*store\.getText\(\s*['"]translationPage\.browserTabs\.education['"]\s*\)\s*:\s*initialContent\.browserTabs\.education/,
+    'education tab text should fall back to initialContent.browserTabs.education until the store initializes',
+  );
+  assert.match(
+    source,
+    /store\.initialized\s*\?\s*store\.getText\(\s*['"]translationPage\.browserTabs\.experience['"]\s*\)\s*:\s*initialContent\.browserTabs\.experience/,
+    'experience tab text should fall back to initialContent.browserTabs.experience until the store initializes',
+  );
+
+  assert.match(
+    source,
+    /const\s+studies\s*=\s*store\.initialized\s*\?\s*store\.getEducationStudies\(\)\s*:\s*initialContent\.education\.studies/,
+    'education studies list should read from initialContent.education.studies until the store initializes',
+  );
+  assert.match(
+    source,
+    /const\s+cards\s*=\s*store\.initialized\s*\?\s*store\.getExperienceCards\(\)\s*:\s*initialContent\.experience\.cards/,
+    'experience cards list should read from initialContent.experience.cards until the store initializes',
+  );
+
+  assert.match(
+    source,
+    /store\.initialized[\s\S]{0,400}?initialContent\.experienceStatement/,
+    'experience statement should render initialContent.experienceStatement before the store initializes',
+  );
+  assert.match(
+    source,
+    /store\.initialized[\s\S]{0,400}?initialContent\.education\.intro/,
+    'education intro should render initialContent.education.intro before the store initializes',
+  );
+  assert.match(
+    source,
+    /store\.initialized[\s\S]{0,400}?initialContent\.experience\.intro/,
+    'experience intro should render initialContent.experience.intro before the store initializes',
+  );
+});
+
+test('experience editor submit handlers guard an uninitialized store without resetting typed form values, and disable add buttons until ready', async () => {
+  const source = await readRequiredSource('src/components/admin/AdminTranslationExperienceEditor.tsx');
+
+  const submitStudyMatch = source.match(/const\s+submitStudy\s*=\s*\(\)\s*=>\s*\{[\s\S]*?\n  \};/);
+  assert.ok(submitStudyMatch, 'experience editor should define a submitStudy handler');
+  const submitStudyBody = submitStudyMatch[0];
+
+  assert.match(
+    submitStudyBody,
+    /if\s*\(\s*!store\.initialized\s*\)\s*\{[^}]*return;?[^}]*\}/,
+    'submitStudy should guard and return early when the store is not initialized',
+  );
+  assert.doesNotMatch(
+    submitStudyBody.slice(0, submitStudyBody.search(/if\s*\(\s*!store\.initialized\s*\)/)),
+    /resetStudyForm\(\)/,
+    'submitStudy should check store.initialized before any reset of the study form',
+  );
+  const guardIndex = submitStudyBody.search(/if\s*\(\s*!store\.initialized\s*\)\s*\{[^}]*\}/);
+  const guardBlockMatch = submitStudyBody.slice(guardIndex).match(/if\s*\(\s*!store\.initialized\s*\)\s*\{([^}]*)\}/);
+  assert.ok(guardBlockMatch, 'submitStudy uninitialized guard block should be present');
+  assert.doesNotMatch(guardBlockMatch[1], /resetStudyForm\(\)/, 'submitStudy uninitialized guard should not reset the typed study fields');
+
+  const submitCardMatch = source.match(/const\s+submitCard\s*=\s*\(\)\s*=>\s*\{[\s\S]*?\n  \};/);
+  assert.ok(submitCardMatch, 'experience editor should define a submitCard handler');
+  const submitCardBody = submitCardMatch[0];
+
+  assert.match(
+    submitCardBody,
+    /if\s*\(\s*!store\.initialized\s*\)\s*\{[^}]*return;?[^}]*\}/,
+    'submitCard should guard and return early when the store is not initialized',
+  );
+  const cardGuardIndex = submitCardBody.search(/if\s*\(\s*!store\.initialized\s*\)\s*\{[^}]*\}/);
+  const cardGuardBlockMatch = submitCardBody.slice(cardGuardIndex).match(/if\s*\(\s*!store\.initialized\s*\)\s*\{([^}]*)\}/);
+  assert.ok(cardGuardBlockMatch, 'submitCard uninitialized guard block should be present');
+  assert.doesNotMatch(cardGuardBlockMatch[1], /resetCardForm\(\)/, 'submitCard uninitialized guard should not reset the typed card fields');
+
+  assert.match(
+    source,
+    /onClick=\{submitStudy\}[\s\S]{0,120}?disabled=\{!store\.initialized\}/,
+    'add-study submit button should be disabled until the store initializes',
+  );
+  assert.match(
+    source,
+    /onClick=\{submitCard\}[\s\S]{0,160}?disabled=\{!store\.initialized\}/,
+    'add-card submit button should be disabled until the store initializes',
+  );
+});
+
+test('built admin translation HTML seeds the experience browser tablist and lists before hydration', async (t) => {
+  if (process.env.CHECK_DIST !== '1') {
+    t.skip('Set CHECK_DIST=1 after npm run build to verify built admin experience browser HTML.');
+    return;
+  }
+
+  const [adminHtml, esDictionary] = await Promise.all([
+    readSource('dist/admin/translation-seo/index.html'),
+    readJson('src/i18n/es.json'),
+  ]);
+
+  const browserStart = adminHtml.indexOf('data-admin-experience-browser');
+  assert.ok(browserStart !== -1, 'built admin HTML should contain the experience browser section');
+  const browserSection = adminHtml.slice(browserStart, browserStart + 20000);
+
+  const tablistMatch = browserSection.match(/<div role="tablist" aria-label="([^"]*)"/);
+  assert.ok(tablistMatch, 'built admin HTML should render the experience browser tablist');
+  assert.notEqual(tablistMatch[1].trim(), '', 'experience browser tablist aria-label should not be blank in SSR');
+  assert.equal(tablistMatch[1], esDictionary.translationPage.browserTabsAriaLabel, 'tablist aria-label should render the localized Spanish copy');
+
+  const educationTabMatch = browserSection.match(/data-admin-experience-trigger="education"[^>]*>([^<]*)</);
+  assert.ok(educationTabMatch, 'built admin HTML should render the education tab trigger');
+  assert.notEqual(educationTabMatch[1].trim(), '', 'education tab text should not be blank in SSR');
+  assert.equal(educationTabMatch[1], esDictionary.translationPage.browserTabs.education, 'education tab text should render the localized Spanish copy');
+
+  const experienceTabMatch = browserSection.match(/data-admin-experience-trigger="experience"[^>]*>([^<]*)</);
+  assert.ok(experienceTabMatch, 'built admin HTML should render the experience tab trigger');
+  assert.notEqual(experienceTabMatch[1].trim(), '', 'experience tab text should not be blank in SSR');
+  assert.equal(experienceTabMatch[1], esDictionary.translationPage.browserTabs.experience, 'experience tab text should render the localized Spanish copy');
+
+  const educationPanelStart = browserSection.indexOf('data-admin-experience-panel="education"');
+  const experiencePanelStart = browserSection.indexOf('data-admin-experience-panel="experience"');
+  assert.ok(educationPanelStart !== -1 && experiencePanelStart !== -1, 'built admin HTML should render both experience browser panels');
+  const educationPanel = browserSection.slice(educationPanelStart, experiencePanelStart);
+  const experiencePanel = browserSection.slice(experiencePanelStart);
+
+  const studyBulletMatches = educationPanel.match(/mt-3 h-2 w-2 rounded-full bg-amaranth/g) ?? [];
+  assert.equal(
+    studyBulletMatches.length,
+    esDictionary.translationPage.education.studies.length,
+    'seeded education studies should render one bullet per study in SSR, not a blank list',
+  );
+  assert.ok(studyBulletMatches.length > 0, 'education studies list should not be blank in SSR');
+
+  const cardArticleMatches = experiencePanel.match(/<article class="bg-ink px-5 py-6">/g) ?? [];
+  assert.equal(
+    cardArticleMatches.length,
+    esDictionary.translationPage.experience.cards.length,
+    'seeded experience cards should render one article per card in SSR, not a blank list',
+  );
+  assert.ok(cardArticleMatches.length > 0, 'experience cards list should not be blank in SSR');
+});

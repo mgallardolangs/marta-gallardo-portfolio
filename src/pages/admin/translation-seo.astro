@@ -72,7 +72,25 @@ const page = i.translationPage;
           <EditableText client:load i18nKey="translationPage.experienceSectionTitle" as="h2" className="font-heading text-4xl text-ink md:text-5xl" />
         </div>
 
-        <AdminTranslationExperienceEditor client:load />
+        <AdminTranslationExperienceEditor
+          client:load
+          initialContent={{
+            browserTabsAriaLabel: page.browserTabsAriaLabel,
+            browserTabs: {
+              education: page.browserTabs.education,
+              experience: page.browserTabs.experience,
+            },
+            experienceStatement: page.experienceStatement,
+            education: {
+              intro: page.education.intro,
+              studies: page.education.studies,
+            },
+            experience: {
+              intro: page.experience.intro,
+              cards: page.experience.cards,
+            },
+          }}
+        />
       </div>
     </section>
 
