@@ -400,7 +400,7 @@ test('admin skill creation contracts require group-aware data and grouped editor
     () => createEditableCollectionItem('skills', {
       label: { es: 'SEO técnico', en: 'Technical SEO', fr: 'SEO technique' },
     }, []),
-    /group/i,
+    /grupo/i,
     'skill creation should require choosing translation vs seo before the item is created',
   );
 

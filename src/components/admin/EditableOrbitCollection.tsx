@@ -16,9 +16,9 @@ export default function EditableOrbitCollection() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-4 border border-black/10 bg-white/70 p-5">
         <div className="space-y-2">
-          <p className="font-body text-xs font-semibold uppercase tracking-[0.32em] text-amaranth">Orbit collection</p>
+          <p className="font-body text-xs font-semibold uppercase tracking-[0.32em] text-amaranth">Colección del orbit</p>
           <p className="max-w-2xl text-sm leading-6 text-ink-muted">
-            Edit ES/EN/FR copy here. DE/IT/CA stay code-managed; new entries inherit the Spanish value until those locales are updated in code.
+            Edita aquí el contenido en ES/EN/FR. DE/IT/CA se gestionan desde el código; las entradas nuevas heredan el valor en español hasta que esos idiomas se actualicen en el código.
           </p>
         </div>
         <button
@@ -26,7 +26,7 @@ export default function EditableOrbitCollection() {
           onClick={() => store.addOrbitMediaItem()}
           className="inline-flex items-center gap-2 border border-black/10 bg-ink px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-paper transition hover:bg-amaranth"
         >
-          Add orbit item
+          Añadir elemento al orbit
         </button>
       </div>
 
@@ -40,7 +40,7 @@ export default function EditableOrbitCollection() {
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <p className="font-heading text-xl text-ink">{item.id}</p>
-                  <p className="text-xs uppercase tracking-[0.24em] text-ink-faint">Item {index + 1} of {orbitMedia.length}</p>
+                  <p className="text-xs uppercase tracking-[0.24em] text-ink-faint">Elemento {index + 1} de {orbitMedia.length}</p>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
@@ -50,7 +50,7 @@ export default function EditableOrbitCollection() {
                     disabled={index === 0}
                     className="border border-black/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-ink transition disabled:cursor-not-allowed disabled:opacity-40"
                   >
-                    ↑ Move
+                    ↑ Subir
                   </button>
                   <button
                     type="button"
@@ -58,14 +58,14 @@ export default function EditableOrbitCollection() {
                     disabled={index === orbitMedia.length - 1}
                     className="border border-black/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-ink transition disabled:cursor-not-allowed disabled:opacity-40"
                   >
-                    ↓ Move
+                    ↓ Bajar
                   </button>
                   <button
                     type="button"
                     onClick={() => store.removeOrbitMediaItem(index)}
                     className="border border-amaranth/30 bg-paper px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-amaranth transition hover:bg-amaranth hover:text-ink"
                   >
-                    Remove
+                    Quitar
                   </button>
                 </div>
               </div>
@@ -78,8 +78,8 @@ export default function EditableOrbitCollection() {
                       mediaType={item.type}
                       acceptKind={item.type}
                       alt={previewAlt}
-                      label={item.type === 'video' ? '🎬 Change video' : '📷 Change image'}
-                      emptyLabel={item.type === 'video' ? 'Upload MP4/WebM/MOV' : 'Upload JPG/PNG/WebP/GIF'}
+                      label={item.type === 'video' ? '🎬 Cambiar vídeo' : '📷 Cambiar imagen'}
+                      emptyLabel={item.type === 'video' ? 'Sube un MP4/WebM/MOV' : 'Sube un JPG/PNG/WebP/GIF'}
                       className="aspect-[96/122]"
                       poster={item.poster}
                       onSelect={async (file) => {
@@ -89,19 +89,19 @@ export default function EditableOrbitCollection() {
 
                     <div className="space-y-3">
                       <label className="flex flex-col gap-2 text-sm text-ink">
-                        <span className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink-faint">Media type</span>
+                        <span className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink-faint">Tipo de contenido</span>
                         <select
                           value={item.type}
                           onChange={(event) => store.updateOrbitMediaType(index, event.target.value as 'image' | 'video')}
                           className="border border-black/10 bg-paper px-3 py-2 text-sm text-ink"
                         >
-                          <option value="image">Image</option>
-                          <option value="video">Video</option>
+                          <option value="image">Imagen</option>
+                          <option value="video">Vídeo</option>
                         </select>
                       </label>
 
                       <label className="flex flex-col gap-2 text-sm text-ink">
-                        <span className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink-faint">Internal href</span>
+                        <span className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink-faint">Enlace interno</span>
                         <input
                           value={item.href ?? ''}
                           onChange={(event) => store.updateOrbitMediaHref(index, event.target.value)}
@@ -119,16 +119,16 @@ export default function EditableOrbitCollection() {
                         mediaType="image"
                         acceptKind="image"
                         alt={`${getLocalizedOrbitText(item.alt, 'es')} poster`}
-                        label="🖼 Change poster"
-                        emptyLabel="Poster required"
+                        label="🖼 Cambiar póster"
+                        emptyLabel="Póster obligatorio"
                         className="aspect-[4/5]"
                         onSelect={async (file) => {
                           await store.setOrbitMediaFile(index, 'poster', file, buildOrbitUploadPath(item.id, 'poster', file));
                         }}
                       />
                       <div className="space-y-2 rounded-sm border border-black/10 bg-paper p-3 text-sm leading-6 text-ink-muted">
-                        <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink-faint">Video poster</p>
-                        <p>Every orbit video needs a poster image for loading, reduced motion, and muted autoplay fallbacks.</p>
+                        <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink-faint">Póster del vídeo</p>
+                        <p>Todos los vídeos del orbit necesitan una imagen de póster para la carga, el modo de movimiento reducido y la reproducción automática silenciada.</p>
                       </div>
                     </div>
                   )}
@@ -147,7 +147,7 @@ export default function EditableOrbitCollection() {
                     {EDITABLE_LANGS.map((language) => (
                       <label key={`${item.id}-label-${language.code}`} className="flex flex-col gap-2 text-sm text-ink">
                         <span className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink-faint">
-                          Label {language.label}
+                          Etiqueta {language.label}
                         </span>
                         <input
                           value={item.label[language.code]}

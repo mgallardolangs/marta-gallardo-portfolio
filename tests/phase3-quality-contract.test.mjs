@@ -438,7 +438,7 @@ test('draft save and restore warn when pending uploads must be reselected', asyn
       '/images/site/pending-video-poster.jpg',
     );
     savingStore.saveDraft();
-    assert.match(savingStore.getSnapshot().draftMessage ?? '', /reselected after reload/i);
+    assert.match(savingStore.getSnapshot().draftMessage ?? '', /tendrás que volver a seleccionar/i);
   } finally {
     restoreSavingWindow();
     restoreFileReader();
@@ -452,7 +452,7 @@ test('draft save and restore warn when pending uploads must be reselected', asyn
   try {
     loadingStore.loadDraft();
     const snapshot = loadingStore.getSnapshot();
-    assert.match(snapshot.draftMessage ?? '', /reselected before publishing/i);
+    assert.match(snapshot.draftMessage ?? '', /deberás volver a seleccionarl?o?s? antes de publicar/i);
     assert.equal(snapshot.getOrbitMedia()[1].poster, '/images/site/original-video-poster.jpg');
   } finally {
     restoreLoadingWindow();
@@ -539,7 +539,7 @@ test('legacy drafts with persisted pending paths are scrubbed back to original a
     assert.equal(snapshot.getImageSrc('heroMainPhoto'), '/images/site/original-hero.jpg');
     assert.equal(snapshot.getOrbitMedia()[0].src, '/images/site/original-image.jpg');
     assert.equal(snapshot.getOrbitMedia()[1].poster, '/images/site/original-video-poster.jpg');
-    assert.match(snapshot.draftMessage ?? '', /reselected before publishing/i);
+    assert.match(snapshot.draftMessage ?? '', /deberás volver a seleccionarl?o?s? antes de publicar/i);
   } finally {
     restoreWindow();
   }
@@ -559,7 +559,7 @@ test('draft save storage failures surface a clear error without dropping in-memo
     store.setText('home.hero.kicker', 'texto pendiente');
     assert.doesNotThrow(() => store.saveDraft());
     assert.equal(store.getText('home.hero.kicker'), 'texto pendiente');
-    assert.match(store.getSnapshot().draftMessage ?? '', /copy.*before reloading/i);
+    assert.match(store.getSnapshot().draftMessage ?? '', /copia.*antes de recargar/i);
   } finally {
     restoreWindow();
   }
@@ -592,8 +592,8 @@ test('localized orbit copy trims and falls back to Spanish while validation stil
       poster: null,
     }),
     [
-      'Orbit label needs Spanish, English, and French values.',
-      'Orbit alt needs Spanish, English, and French values.',
+      'El campo etiqueta del orbit necesita valores en español, inglés y francés.',
+      'El campo alt del orbit necesita valores en español, inglés y francés.',
     ],
   );
 

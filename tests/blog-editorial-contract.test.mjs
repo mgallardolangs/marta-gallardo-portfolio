@@ -269,10 +269,10 @@ test('BlogPostForm adds featured-image upload, H2/H3/bold/link toolbar controls,
 
   assert.match(source, /type=["']file["']/, 'BlogPostForm should expose a featured-image file input');
   assert.match(source, /accept=["'][^"']*image\/(?:jpeg|png|webp|gif)/, 'BlogPostForm file input should limit uploads to JPEG, PNG, WebP, and GIF');
-  assert.match(source, />\s*H2 Section\s*</, 'BlogPostForm should expose an H2 Section toolbar action');
-  assert.match(source, />\s*H3 Subsection\s*</, 'BlogPostForm should expose an H3 Subsection toolbar action');
-  assert.match(source, />\s*Bold\s*</, 'BlogPostForm should expose a Bold toolbar action');
-  assert.match(source, />\s*Link\s*</, 'BlogPostForm should expose a Link toolbar action');
+  assert.match(source, />\s*Sección H2\s*</, 'BlogPostForm should expose an H2 Section toolbar action');
+  assert.match(source, />\s*Subsección H3\s*</, 'BlogPostForm should expose an H3 Subsection toolbar action');
+  assert.match(source, />\s*Negrita\s*</, 'BlogPostForm should expose a Bold toolbar action');
+  assert.match(source, />\s*Enlace\s*</, 'BlogPostForm should expose a Link toolbar action');
   assert.match(source, /parseMarkdownOutline/, 'BlogPostForm should parse a live markdown outline while typing');
   assert.match(source, /insertMarkdownHeading/, 'BlogPostForm should use the shared heading insertion helper');
   assert.match(source, /lg:grid-cols-\[1\.35fr_0\.65fr\]/, 'BlogPostForm should keep the approved textarea / outline desktop split');

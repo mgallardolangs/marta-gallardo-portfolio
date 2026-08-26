@@ -69,16 +69,16 @@ export function validateUgcMediaUpload(file: File, expectedKind: 'image' | 'vide
 
   if (!acceptedTypes.includes(file.type as (typeof acceptedTypes)[number])) {
     return expectedKind === 'image'
-      ? 'Use JPG, PNG, WebP, or GIF format.'
-      : 'Use MP4, WebM, or QuickTime format.';
+      ? 'Usa formato JPG, PNG, WebP o GIF.'
+      : 'Usa formato MP4, WebM o QuickTime.';
   }
 
   if (expectedKind === 'image' && file.size > ORBIT_IMAGE_MAX_BYTES) {
-    return 'Images must be 2MB or smaller.';
+    return 'Las imágenes deben pesar 2MB o menos.';
   }
 
   if (expectedKind === 'video' && file.size > ORBIT_VIDEO_MAX_BYTES) {
-    return 'Videos must be 8MB or smaller.';
+    return 'Los vídeos deben pesar 8MB o menos.';
   }
 
   return null;
@@ -88,36 +88,44 @@ export function validateUgcPortfolioItem(item: UgcPortfolioItem) {
   const errors: string[] = [];
 
   if (!item.src.trim()) {
-    errors.push('UGC items require a source file.');
+    errors.push('Los elementos UGC necesitan un archivo de origen.');
   }
 
   if (item.type === 'image' && item.src.trim() && !UGC_IMAGE_SOURCE_PATTERN.test(item.src)) {
-    errors.push('UGC images must use a JPG, PNG, WebP, or GIF source.');
+    errors.push('Las imágenes UGC deben usar un archivo de origen JPG, PNG, WebP o GIF.');
   }
 
   if (item.type === 'video' && item.src.trim() && !UGC_VIDEO_SOURCE_PATTERN.test(item.src)) {
-    errors.push('UGC videos must use an MP4, WebM, or MOV source.');
+    errors.push('Los vídeos UGC deben usar un archivo de origen MP4, WebM o MOV.');
   }
 
   if (item.type === 'video' && !item.poster?.trim()) {
-    errors.push('UGC videos require a poster image.');
+    errors.push('Los vídeos UGC necesitan una imagen de póster.');
   }
 
   if (item.type === 'image' && item.poster !== null) {
-    errors.push('UGC images should not keep a poster value.');
+    errors.push('Las imágenes UGC no deben conservar un valor de póster.');
   }
+
+  const ugcFieldLabels: Record<UgcLocalizedField, string> = {
+    label: 'etiqueta',
+    title: 'título',
+    description: 'descripción',
+    format: 'formato',
+    alt: 'alt',
+  };
 
   for (const field of ['label', 'title', 'description', 'format', 'alt'] as const) {
     const value = item[field];
 
     if (UGC_EDITABLE_LANGS.some((lang) => !value[lang]?.trim())) {
-      errors.push(`UGC ${field} needs Spanish, English, and French values.`);
+      errors.push(`El campo ${ugcFieldLabels[field]} de UGC necesita valores en español, inglés y francés.`);
     }
 
     if (field === 'description') {
       for (const locale of Object.keys(value) as Array<keyof LocalizedText>) {
         if (getSentenceCount(value[locale]) > 2) {
-          errors.push(`UGC description must stay within two sentences for ${locale}.`);
+          errors.push(`La descripción UGC debe tener como máximo dos frases en ${locale}.`);
         }
       }
     }

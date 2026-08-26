@@ -273,11 +273,11 @@ async function fileToDataUrl(file: File): Promise<string> {
 
 function validateBlogFeaturedImage(featuredImage: File): void {
   if (!BLOG_FEATURED_IMAGE_MIME_TYPES.has(featuredImage.type)) {
-    throw new Error('Featured image must be a JPEG, PNG, WebP, or GIF file.');
+    throw new Error('La imagen destacada debe ser un archivo JPEG, PNG, WebP o GIF.');
   }
 
   if (featuredImage.size > BLOG_FEATURED_IMAGE_MAX_BYTES) {
-    throw new Error(`Featured image must be 2 MB or smaller (${BLOG_FEATURED_IMAGE_MAX_BYTES} bytes max).`);
+    throw new Error(`La imagen destacada debe pesar 2 MB o menos (máximo ${BLOG_FEATURED_IMAGE_MAX_BYTES} bytes).`);
   }
 }
 
@@ -369,13 +369,13 @@ function normalizeUploadPath(uploadPath: string) {
 }
 
 function getPendingUploadCountLabel(count: number) {
-  return `${count} pending upload${count === 1 ? '' : 's'}`;
+  return count === 1 ? '1 archivo pendiente' : `${count} archivos pendientes`;
 }
 
 function getDraftRestoreMessage(count: number) {
   return count === 1
-    ? 'Draft restored. 1 pending upload was not saved locally and must be reselected before publishing.'
-    : `Draft restored. ${count} pending uploads were not saved locally and must be reselected before publishing.`;
+    ? 'Borrador restaurado. 1 archivo pendiente no se guardó localmente; deberás volver a seleccionarlo antes de publicar.'
+    : `Borrador restaurado. Los ${count} archivos pendientes no se guardaron localmente; deberás volver a seleccionarlos antes de publicar.`;
 }
 
 function normalizeDraftPublicLanguagePicker(
@@ -990,7 +990,7 @@ export class AdminStore {
     const item = this.getMutableUgcPortfolio().find((candidate) => candidate.id === itemId);
     if (!item) return;
     if (item.type !== 'video') {
-      throw new Error('Poster uploads are only available for video UGC items.');
+      throw new Error('La carga de póster solo está disponible para elementos UGC de vídeo.');
     }
 
     const validationError = validateUgcMediaUpload(file, 'image');
@@ -1044,16 +1044,14 @@ export class AdminStore {
       window.localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(payload));
       if (payload.pendingUploads.length > 0) {
         this.draftToneState = 'warning';
-        this.draftMessageState = `Draft saved locally. ${getPendingUploadCountLabel(payload.pendingUploads.length)} must be reselected after reload before publishing.`;
+        this.draftMessageState = `Borrador guardado localmente. Si recargas antes de publicar, tendrás que volver a seleccionar ${getPendingUploadCountLabel(payload.pendingUploads.length)}.`;
       } else {
         this.draftToneState = 'success';
-        this.draftMessageState = 'Draft saved locally.';
+        this.draftMessageState = 'Borrador guardado localmente.';
       }
-    } catch (error) {
+    } catch {
       this.draftToneState = 'error';
-      this.draftMessageState = error instanceof Error && error.name === 'QuotaExceededError'
-        ? 'Draft could not be saved locally. Changes are still open in this tab; copy important text before reloading.'
-        : 'Draft could not be saved locally. Changes are still open in this tab; copy important text before reloading.';
+      this.draftMessageState = 'No se pudo guardar el borrador localmente. Los cambios siguen abiertos en esta pestaña; copia el texto importante antes de recargar.';
     }
     this.emit();
   }
@@ -1132,7 +1130,7 @@ export class AdminStore {
     try {
       await this.refreshIdentityToken();
       if (!this.token) {
-        throw new Error('Login required before publishing.');
+        throw new Error('Debes iniciar sesión antes de publicar.');
       }
 
       for (const [imageKey, pendingImage] of Object.entries(this.pendingImages)) {
@@ -1174,7 +1172,7 @@ export class AdminStore {
         window.localStorage.removeItem(DRAFT_STORAGE_KEY);
       }
     } catch (error) {
-      this.publishErrorState = error instanceof Error ? error.message : 'Publish failed';
+      this.publishErrorState = error instanceof Error ? error.message : 'Error al publicar';
       this.publishSuccessState = false;
     } finally {
       this.isPublishingState = false;
@@ -1195,15 +1193,15 @@ export class AdminStore {
     await this.refreshIdentityToken();
 
     if (!this.token) {
-      throw new Error('Login required before creating blog posts.');
+      throw new Error('Debes iniciar sesión antes de crear entradas de blog.');
     }
 
     if (!isAdminBlogLang(post.lang)) {
-      throw new Error('Blog posts can only be created in ES, EN, or FR.');
+      throw new Error('Las entradas de blog solo se pueden crear en ES, EN o FR.');
     }
 
     const slug = post.slug.trim();
-    if (!slug) throw new Error('A slug is required.');
+    if (!slug) throw new Error('El slug es obligatorio.');
 
     if (post.featuredImage) {
       validateBlogFeaturedImage(post.featuredImage);
@@ -1256,13 +1254,13 @@ export class AdminStore {
       if (!token) throw new Error('Missing refreshed token');
       this.token = token;
     } catch {
-      throw new Error('Admin session expired. Sign out and sign in again; your unsaved changes are still open.');
+      throw new Error('La sesión de administrador ha expirado. Cierra sesión y vuelve a iniciarla; tus cambios sin publicar siguen abiertos.');
     }
   }
 
   private async createRepositoryFile(path: string, content: string, message: string, sha: string | null): Promise<void> {
     if (sha !== null) {
-      throw new Error(`Failed to create ${path}: file already exists.`);
+      throw new Error(`No se pudo crear ${path}: el archivo ya existe.`);
     }
 
     await this.putRepositoryFile(path, content, message);
@@ -1295,7 +1293,7 @@ export class AdminStore {
       } catch {
         details = await response.text();
       }
-      throw new Error(`Failed to publish ${path}: ${details}`);
+      throw new Error(`No se pudo publicar ${path}: ${details}`);
     }
   }
 
@@ -1315,7 +1313,7 @@ export class AdminStore {
       } catch {
         details = await response.text();
       }
-      throw new Error(`Failed to load ${path}: ${details}`);
+      throw new Error(`No se pudo cargar ${path}: ${details}`);
     }
 
     const data = (await response.json()) as { sha?: string };

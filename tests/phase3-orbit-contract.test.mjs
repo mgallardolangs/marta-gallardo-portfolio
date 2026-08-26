@@ -275,11 +275,11 @@ test('orbit media helpers validate caps, video poster requirements, and stable I
   );
   assert.match(
     orbit.validateOrbitMediaUpload(new File([Buffer.alloc(1)], 'tile.svg', { type: 'image/svg+xml' }), 'image') ?? '',
-    /JPG, PNG, WebP, or GIF/,
+    /JPG, PNG, WebP o GIF/,
   );
   assert.match(
     orbit.validateOrbitMediaUpload(new File([Buffer.alloc(1)], 'tile.svg', { type: 'image/svg+xml' }), 'video') ?? '',
-    /MP4, WebM, or QuickTime/,
+    /MP4, WebM o QuickTime/,
   );
 
   const videoErrors = orbit.validateOrbitMediaItem({
@@ -291,7 +291,7 @@ test('orbit media helpers validate caps, video poster requirements, and stable I
     label: orbit.createLocalizedText('Vídeo'),
     alt: orbit.createLocalizedText('Vídeo sin póster'),
   });
-  assert.deepEqual(videoErrors, ['Orbit videos require a poster image.']);
+  assert.deepEqual(videoErrors, ['Los vídeos del orbit necesitan una imagen de póster.']);
 
   assert.match(
     orbit.validateOrbitMediaItem({
@@ -303,7 +303,7 @@ test('orbit media helpers validate caps, video poster requirements, and stable I
       label: orbit.createLocalizedText('Vídeo'),
       alt: orbit.createLocalizedText('Vídeo con archivo incorrecto'),
     }).join(' '),
-    /must use an MP4, WebM, or MOV source/,
+    /deben usar un archivo de origen MP4, WebM o MOV/,
   );
 });
 
@@ -371,7 +371,7 @@ test('admin orbit type switches keep existing media paths and posters until an e
   assert.equal(snapshot.getOrbitMedia()[0].poster, null);
   assert.match(
     snapshot.getOrbitItemValidationErrors('mock-01').join(' '),
-    /must use an MP4, WebM, or MOV source/,
+    /deben usar un archivo de origen MP4, WebM o MOV/,
     'switching an image placeholder to video should preserve the path and surface the existing validation error',
   );
 
@@ -384,7 +384,7 @@ test('admin orbit type switches keep existing media paths and posters until an e
   snapshot = store.getSnapshot();
   assert.equal(snapshot.getOrbitMedia()[1].src, '/images/site/original-video.mp4');
   assert.equal(snapshot.getOrbitMedia()[1].poster, '/images/site/original-video-poster.jpg');
-  assert.match(snapshot.getOrbitItemValidationErrors('orbit-video').join(' '), /must use a JPG, PNG, WebP, GIF, or SVG source/);
+  assert.match(snapshot.getOrbitItemValidationErrors('orbit-video').join(' '), /deben usar un archivo de origen JPG, PNG, WebP, GIF o SVG/);
 
   store.updateOrbitMediaType(1, 'video');
   snapshot = store.getSnapshot();
@@ -589,7 +589,7 @@ test('admin store exposes orbit collection mutations and publishes site data upd
 
   try {
     await store.publish();
-    assert.match(store.getSnapshot().publishError, /Orbit videos must use an MP4, WebM, or MOV source/);
+    assert.match(store.getSnapshot().publishError, /deben usar un archivo de origen MP4, WebM o MOV/);
     assert.equal(fetchCalls.length, 0, 'invalid orbit data should block publish before any repo writes');
 
     store.updateOrbitMediaType(0, 'image');

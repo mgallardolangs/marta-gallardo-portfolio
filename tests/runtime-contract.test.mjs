@@ -95,7 +95,7 @@ test('hosted admin preview falls back to tokenless init and late identity tokens
   assert.equal(store.getSnapshot().getImageSrc('hero.portrait'), '/images/marta.png');
 
   await store.publish();
-  assert.equal(store.getSnapshot().publishError, 'Login required before publishing.');
+  assert.equal(store.getSnapshot().publishError, 'Debes iniciar sesión antes de publicar.');
 
   store.setLang('fr');
   assert.equal(typeof store.setAuthToken, 'function', 'adminStore should expose a late-token upgrade path');

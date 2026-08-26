@@ -28,8 +28,8 @@ function SkillGroupSelect({ value, onChange }: { value: SkillGroup; onChange: (g
       className="border border-ink/15 bg-white px-2 py-1.5 text-xs text-ink"
       data-item-editor-field="group"
     >
-      <option value="translation">translation — Translation / localization</option>
-      <option value="seo">seo — SEO / content</option>
+      <option value="translation">translation — Traducción / localización</option>
+      <option value="seo">seo — SEO / contenido</option>
     </select>
   );
 }
@@ -125,17 +125,17 @@ export default function AdminTranslationArsenalEditor() {
     const kind: EditableCollectionKind = activeAdd === 'languages' || activeAdd === 'tools' ? activeAdd : 'skills';
 
     if (!addLabelFields.es.trim() || !addLabelFields.en.trim() || !addLabelFields.fr.trim()) {
-      setAddError('Complete ES/EN/FR values before adding this item.');
+      setAddError('Completa los valores en ES/EN/FR antes de añadir este elemento.');
       return;
     }
 
     if (kind === 'languages' && (!addLevelFields.es.trim() || !addLevelFields.en.trim() || !addLevelFields.fr.trim())) {
-      setAddError('Complete ES/EN/FR levels before adding this language.');
+      setAddError('Completa los niveles en ES/EN/FR antes de añadir este idioma.');
       return;
     }
 
     if (kind === 'tools' && !addToolFile) {
-      setAddError('Select a logo before adding this tool.');
+      setAddError('Selecciona un logo antes de añadir esta herramienta.');
       return;
     }
 
@@ -163,7 +163,7 @@ export default function AdminTranslationArsenalEditor() {
 
       resetAddForm();
     } catch (error) {
-      setAddError(error instanceof Error ? error.message : 'Could not add this item.');
+      setAddError(error instanceof Error ? error.message : 'No se pudo añadir este elemento.');
     }
   };
 
@@ -205,10 +205,10 @@ export default function AdminTranslationArsenalEditor() {
 
     return (
       <div className="mt-3 space-y-3 border border-dashed border-ink/30 bg-paper/70 p-4" data-add-composer={activeAdd}>
-        <LocaleLabelFields idPrefix={`add-${activeAdd}`} legend="Label" values={addLabelFields} onChange={(locale, value) => setAddLabelFields((current) => ({ ...current, [locale]: value }))} />
+        <LocaleLabelFields idPrefix={`add-${activeAdd}`} legend="Etiqueta" values={addLabelFields} onChange={(locale, value) => setAddLabelFields((current) => ({ ...current, [locale]: value }))} />
 
         {isLanguage && (
-          <LocaleLabelFields idPrefix="add-language-level" legend="Level" values={addLevelFields} onChange={(locale, value) => setAddLevelFields((current) => ({ ...current, [locale]: value }))} />
+          <LocaleLabelFields idPrefix="add-language-level" legend="Nivel" values={addLevelFields} onChange={(locale, value) => setAddLevelFields((current) => ({ ...current, [locale]: value }))} />
         )}
 
         {isTool && (
@@ -229,14 +229,14 @@ export default function AdminTranslationArsenalEditor() {
             onClick={() => void submitAdd()}
             className="border border-ink/10 bg-amaranth px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink transition hover:bg-ink hover:text-paper"
           >
-            Save
+            Guardar
           </button>
           <button
             type="button"
             onClick={resetAddForm}
             className="border border-ink/10 bg-white px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink"
           >
-            Cancel
+            Cancelar
           </button>
           {addError && <p className="text-xs text-amaranth">{addError}</p>}
         </div>
@@ -254,27 +254,27 @@ export default function AdminTranslationArsenalEditor() {
       <div className="mt-3 space-y-3 border border-dashed border-ink/30 bg-paper/70 p-4" data-item-editor="languages">
         <LocaleLabelFields
           idPrefix={`edit-language-${item.id}`}
-          legend="Label"
+          legend="Etiqueta"
           values={{ es: item.label.es, en: item.label.en, fr: item.label.fr }}
           onChange={(locale, value) => store.updateEditableCollectionText('languages', index, 'label', locale, value)}
         />
         <LocaleLabelFields
           idPrefix={`edit-language-level-${item.id}`}
-          legend="Level"
+          legend="Nivel"
           values={{ es: item.level.es, en: item.level.en, fr: item.level.fr }}
           onChange={(locale, value) => store.updateEditableCollectionText('languages', index, 'level', locale, value)}
         />
         <div className="flex flex-wrap items-center gap-2">
-          <button type="button" data-move-item="up" disabled={index === 0} onClick={() => store.moveEditableCollectionItem('languages', index, -1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↑ Move</button>
-          <button type="button" data-move-item="down" disabled={index === languages.length - 1} onClick={() => store.moveEditableCollectionItem('languages', index, 1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↓ Move</button>
-          <button type="button" onClick={closeItemEditor} className="border border-ink/10 bg-white px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink">Done</button>
+          <button type="button" data-move-item="up" disabled={index === 0} onClick={() => store.moveEditableCollectionItem('languages', index, -1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↑ Subir</button>
+          <button type="button" data-move-item="down" disabled={index === languages.length - 1} onClick={() => store.moveEditableCollectionItem('languages', index, 1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↓ Bajar</button>
+          <button type="button" onClick={closeItemEditor} className="border border-ink/10 bg-white px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink">Hecho</button>
           <button
             type="button"
             data-remove-item
             onClick={() => { store.removeEditableCollectionItem('languages', index); closeItemEditor(); }}
             className="border border-amaranth/30 bg-paper px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-amaranth transition hover:bg-amaranth hover:text-ink"
           >
-            Remove
+            Quitar
           </button>
         </div>
       </div>
@@ -291,12 +291,12 @@ export default function AdminTranslationArsenalEditor() {
       <div className="mt-3 space-y-3 border border-dashed border-ink/30 bg-paper/70 p-4" data-item-editor="tools">
         <LocaleLabelFields
           idPrefix={`edit-tool-${item.id}`}
-          legend="Label"
+          legend="Etiqueta"
           values={{ es: item.label.es, en: item.label.en, fr: item.label.fr }}
           onChange={(locale, value) => store.updateEditableCollectionText('tools', index, 'label', locale, value)}
         />
         <label className="flex flex-col gap-1 text-xs text-ink">
-          <span className="font-body text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-ink-faint">Replace logo</span>
+          <span className="font-body text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-ink-faint">Cambiar logo</span>
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
@@ -308,7 +308,7 @@ export default function AdminTranslationArsenalEditor() {
               try {
                 await store.setEditableToolLogo(index, file);
               } catch (error) {
-                setItemError(error instanceof Error ? error.message : 'Could not replace this logo.');
+                setItemError(error instanceof Error ? error.message : 'No se pudo cambiar este logo.');
               }
             }}
             className="border border-ink/15 bg-white px-2 py-1.5 text-sm text-ink"
@@ -320,16 +320,16 @@ export default function AdminTranslationArsenalEditor() {
           </p>
         )}
         <div className="flex flex-wrap items-center gap-2">
-          <button type="button" data-move-item="up" disabled={index === 0} onClick={() => store.moveEditableCollectionItem('tools', index, -1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↑ Move</button>
-          <button type="button" data-move-item="down" disabled={index === tools.length - 1} onClick={() => store.moveEditableCollectionItem('tools', index, 1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↓ Move</button>
-          <button type="button" onClick={closeItemEditor} className="border border-ink/10 bg-white px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink">Done</button>
+          <button type="button" data-move-item="up" disabled={index === 0} onClick={() => store.moveEditableCollectionItem('tools', index, -1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↑ Subir</button>
+          <button type="button" data-move-item="down" disabled={index === tools.length - 1} onClick={() => store.moveEditableCollectionItem('tools', index, 1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↓ Bajar</button>
+          <button type="button" onClick={closeItemEditor} className="border border-ink/10 bg-white px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink">Hecho</button>
           <button
             type="button"
             data-remove-item
             onClick={() => { store.removeEditableCollectionItem('tools', index); closeItemEditor(); }}
             className="border border-amaranth/30 bg-paper px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-amaranth transition hover:bg-amaranth hover:text-ink"
           >
-            Remove
+            Quitar
           </button>
         </div>
       </div>
@@ -346,26 +346,26 @@ export default function AdminTranslationArsenalEditor() {
     return (
       <div className="mt-3 space-y-3 border border-dashed border-ink/30 bg-paper/70 p-4" data-item-editor="skills">
         <label className="flex flex-col gap-1 text-xs text-ink">
-          <span className="font-body text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-ink-faint">Group</span>
+          <span className="font-body text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-ink-faint">Grupo</span>
           <SkillGroupSelect value={item.group} onChange={(nextGroup) => store.updateEditableCollectionSkillGroup(index, nextGroup)} />
         </label>
         <LocaleLabelFields
           idPrefix={`edit-skill-${item.id}`}
-          legend="Label"
+          legend="Etiqueta"
           values={{ es: item.label.es, en: item.label.en, fr: item.label.fr }}
           onChange={(locale, value) => store.updateEditableCollectionText('skills', index, 'label', locale, value)}
         />
         <div className="flex flex-wrap items-center gap-2">
-          <button type="button" data-move-item="up" disabled={position === 0} onClick={() => store.moveEditableCollectionItem('skills', index, -1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↑ Move</button>
-          <button type="button" data-move-item="down" disabled={position === groupedSkills[group].length - 1} onClick={() => store.moveEditableCollectionItem('skills', index, 1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↓ Move</button>
-          <button type="button" onClick={closeItemEditor} className="border border-ink/10 bg-white px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink">Done</button>
+          <button type="button" data-move-item="up" disabled={position === 0} onClick={() => store.moveEditableCollectionItem('skills', index, -1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↑ Subir</button>
+          <button type="button" data-move-item="down" disabled={position === groupedSkills[group].length - 1} onClick={() => store.moveEditableCollectionItem('skills', index, 1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↓ Bajar</button>
+          <button type="button" onClick={closeItemEditor} className="border border-ink/10 bg-white px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink">Hecho</button>
           <button
             type="button"
             data-remove-item
             onClick={() => { store.removeEditableCollectionItem('skills', index); closeItemEditor(); }}
             className="border border-amaranth/30 bg-paper px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-amaranth transition hover:bg-amaranth hover:text-ink"
           >
-            Remove
+            Quitar
           </button>
         </div>
       </div>
@@ -401,7 +401,7 @@ export default function AdminTranslationArsenalEditor() {
                   type="button"
                   data-edit-item
                   onClick={() => openItemEditor('languages', language.id)}
-                  aria-label={`Edit ${localize(language.label, store.currentLang)}`}
+                  aria-label={`Editar ${localize(language.label, store.currentLang)}`}
                   className="absolute right-0 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center bg-paper text-xs text-ink opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100"
                 >
                   ✎
@@ -418,7 +418,7 @@ export default function AdminTranslationArsenalEditor() {
             onClick={() => openAdd('languages')}
             className="mt-4 flex w-full items-center justify-center gap-2 border border-dashed border-ink/30 px-3 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-ink-faint transition hover:border-amaranth hover:text-amaranth"
           >
-            + Add language
+            + Añadir idioma
           </button>
           {activeAdd === 'languages' && renderAddComposer()}
         </article>
@@ -459,7 +459,7 @@ export default function AdminTranslationArsenalEditor() {
                   type="button"
                   data-edit-item
                   onClick={() => openItemEditor('tools', tool.id)}
-                  aria-label={`Edit ${localize(tool.label, store.currentLang)}`}
+                  aria-label={`Editar ${localize(tool.label, store.currentLang)}`}
                   className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center bg-paper text-[0.65rem] text-ink opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100"
                 >
                   ✎
@@ -474,7 +474,7 @@ export default function AdminTranslationArsenalEditor() {
               className="flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-2 border border-dashed border-ink/30 px-3 py-4 text-center text-ink-faint transition hover:border-amaranth hover:text-amaranth"
             >
               <span className="text-2xl leading-none">+</span>
-              <span className="text-[0.65rem] font-medium uppercase tracking-[0.12em]">Add tool</span>
+              <span className="text-[0.65rem] font-medium uppercase tracking-[0.12em]">Añadir herramienta</span>
             </button>
           </div>
 
@@ -510,7 +510,7 @@ export default function AdminTranslationArsenalEditor() {
                       type="button"
                       data-edit-item
                       onClick={() => openItemEditor('skills', item.id)}
-                      aria-label={`Edit ${localize(item.label, store.currentLang)}`}
+                      aria-label={`Editar ${localize(item.label, store.currentLang)}`}
                       className="absolute inset-y-0 right-0 flex items-center bg-paper px-2 text-ink opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100"
                     >
                       ✎
@@ -524,7 +524,7 @@ export default function AdminTranslationArsenalEditor() {
                   onClick={() => openAdd('translation')}
                   className="border border-dashed border-ink/25 px-3 py-2 text-left text-[0.68rem] uppercase tracking-[0.08em] text-ink-faint transition hover:border-amaranth hover:text-amaranth"
                 >
-                  + Add skill
+                  + Añadir habilidad
                 </button>
                 {activeAdd === 'translation' && renderAddComposer()}
               </div>
@@ -554,7 +554,7 @@ export default function AdminTranslationArsenalEditor() {
                       type="button"
                       data-edit-item
                       onClick={() => openItemEditor('skills', item.id)}
-                      aria-label={`Edit ${localize(item.label, store.currentLang)}`}
+                      aria-label={`Editar ${localize(item.label, store.currentLang)}`}
                       className="absolute inset-y-0 right-0 flex items-center bg-paper px-2 text-ink opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100"
                     >
                       ✎
@@ -568,7 +568,7 @@ export default function AdminTranslationArsenalEditor() {
                   onClick={() => openAdd('seo')}
                   className="border border-dashed border-ink/25 px-3 py-2 text-left text-[0.68rem] uppercase tracking-[0.08em] text-ink-faint transition hover:border-amaranth hover:text-amaranth"
                 >
-                  + Add skill
+                  + Añadir habilidad
                 </button>
                 {activeAdd === 'seo' && renderAddComposer()}
               </div>

@@ -227,16 +227,16 @@ export function validateOrbitMediaUpload(file: File, expectedKind: 'image' | 'vi
 
   if (!kind || (kind === 'image' && !isImageType(file.type)) || (kind === 'video' && !isVideoType(file.type))) {
     return expectedKind === 'video'
-      ? 'Use MP4, WebM, or QuickTime format.'
-      : 'Use JPG, PNG, WebP, or GIF format.';
+      ? 'Usa formato MP4, WebM o QuickTime.'
+      : 'Usa formato JPG, PNG, WebP o GIF.';
   }
 
   if (kind === 'image' && file.size > ORBIT_IMAGE_MAX_BYTES) {
-    return 'Images must be 2MB or smaller.';
+    return 'Las imágenes deben pesar 2MB o menos.';
   }
 
   if (kind === 'video' && file.size > ORBIT_VIDEO_MAX_BYTES) {
-    return 'Videos must be 8MB or smaller.';
+    return 'Los vídeos deben pesar 8MB o menos.';
   }
 
   return null;
@@ -246,25 +246,26 @@ export function validateOrbitMediaItem(item: OrbitMedia) {
   const errors: string[] = [];
 
   if (!item.src.trim()) {
-    errors.push('Orbit media requires a source file.');
+    errors.push('El elemento del orbit necesita un archivo de origen.');
   }
 
   if (item.type === 'image' && item.src.trim() && !IMAGE_SOURCE_PATTERN.test(item.src)) {
-    errors.push('Orbit images must use a JPG, PNG, WebP, GIF, or SVG source.');
+    errors.push('Las imágenes del orbit deben usar un archivo de origen JPG, PNG, WebP, GIF o SVG.');
   }
 
   if (item.type === 'video' && item.src.trim() && !VIDEO_SOURCE_PATTERN.test(item.src)) {
-    errors.push('Orbit videos must use an MP4, WebM, or MOV source.');
+    errors.push('Los vídeos del orbit deben usar un archivo de origen MP4, WebM o MOV.');
   }
 
   if (item.type === 'video' && !item.poster?.trim()) {
-    errors.push('Orbit videos require a poster image.');
+    errors.push('Los vídeos del orbit necesitan una imagen de póster.');
   }
 
+  const orbitFieldLabels: Record<'label' | 'alt', string> = { label: 'etiqueta', alt: 'alt' };
   for (const field of ['label', 'alt'] as const) {
     const value = item[field];
     if (ORBIT_ADMIN_LANGS.some((lang) => !value[lang]?.trim())) {
-      errors.push(`Orbit ${field} needs Spanish, English, and French values.`);
+      errors.push(`El campo ${orbitFieldLabels[field]} del orbit necesita valores en español, inglés y francés.`);
     }
   }
 

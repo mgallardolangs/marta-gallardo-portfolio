@@ -97,12 +97,12 @@ export default function BlogPostForm() {
     setSuccessPath('');
 
     if (!title.trim() || !description.trim() || !body.trim()) {
-      setError('Complete title, description, and body before publishing.');
+      setError('Completa el título, la descripción y el cuerpo antes de publicar.');
       return;
     }
 
     if (!isAdminBlogLang(lang)) {
-      setError('Blog posts can only be created in ES, EN, or FR.');
+      setError('Las entradas de blog solo se pueden crear en ES, EN o FR.');
       return;
     }
 
@@ -125,7 +125,7 @@ export default function BlogPostForm() {
       setBody('# Nuevo post\n\nEscribe aquí...');
       setFeaturedImageState((currentState) => clearBlogImagePreviewState(currentState, revokePreviewUrl));
     } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : 'Could not create the post.');
+      setError(submitError instanceof Error ? submitError.message : 'No se pudo crear la entrada.');
     } finally {
       setIsSubmitting(false);
     }
@@ -135,22 +135,22 @@ export default function BlogPostForm() {
     <form onSubmit={(event) => void handleSubmit(event)} className="space-y-6 border border-black/10 bg-paper p-6 md:p-8">
       <div className="grid gap-6 md:grid-cols-2">
         <div className="md:col-span-2">
-          <label className={labelClass} htmlFor="blog-title">Title</label>
+          <label className={labelClass} htmlFor="blog-title">Título</label>
           <input id="blog-title" value={title} onChange={(event) => setTitle(event.target.value)} className={inputClass} />
         </div>
 
         <div className="md:col-span-2">
-          <label className={labelClass} htmlFor="blog-description">Description</label>
+          <label className={labelClass} htmlFor="blog-description">Descripción</label>
           <textarea id="blog-description" value={description} onChange={(event) => setDescription(event.target.value)} className={`${inputClass} min-h-28`} />
         </div>
 
         <div>
-          <label className={labelClass} htmlFor="blog-date">Date</label>
+          <label className={labelClass} htmlFor="blog-date">Fecha</label>
           <input id="blog-date" type="date" value={date} onChange={(event) => setDate(event.target.value)} className={inputClass} />
         </div>
 
         <div>
-          <label className={labelClass} htmlFor="blog-language">Language</label>
+          <label className={labelClass} htmlFor="blog-language">Idioma</label>
           <select
             id="blog-language"
             value={lang}
@@ -169,7 +169,7 @@ export default function BlogPostForm() {
         </div>
 
         <div className="md:col-span-2">
-          <label className={labelClass} htmlFor="blog-tags">Tags (comma separated)</label>
+          <label className={labelClass} htmlFor="blog-tags">Etiquetas (separadas por comas)</label>
           <input id="blog-tags" value={tags} onChange={(event) => setTags(event.target.value)} className={inputClass} placeholder="ugc, seo, translation" />
         </div>
 
@@ -179,32 +179,32 @@ export default function BlogPostForm() {
         </div>
 
         <div className="md:col-span-2">
-          <label className={labelClass} htmlFor="blog-featured-image">Featured image</label>
+          <label className={labelClass} htmlFor="blog-featured-image">Imagen destacada</label>
           <input id="blog-featured-image" type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={handleFeaturedImageChange} className={inputClass} />
-          <p className="mt-2 text-xs text-warm-gray">JPEG, PNG, WebP, or GIF · max 2 MB · uploaded before the Markdown file.</p>
+          <p className="mt-2 text-xs text-warm-gray">JPEG, PNG, WebP o GIF · máx. 2 MB · se sube antes del archivo Markdown.</p>
         </div>
 
         {featuredImageState.previewUrl && (
           <div className="md:col-span-2 border border-black/10 p-4" data-blog-image-preview>
-            <img src={featuredImageState.previewUrl} alt="Featured image preview" className="aspect-[16/10] w-full object-cover" />
+            <img src={featuredImageState.previewUrl} alt="Vista previa de la imagen destacada" className="aspect-[16/10] w-full object-cover" />
             <div className="mt-3 flex items-center justify-between gap-4 text-xs uppercase tracking-[0.18em] text-warm-gray">
               <span>{featuredImageState.file?.name}</span>
-              <button type="button" onClick={clearFeaturedImage} className={toolbarButtonClass}>Remove image</button>
+              <button type="button" onClick={clearFeaturedImage} className={toolbarButtonClass}>Quitar imagen</button>
             </div>
           </div>
         )}
 
         <div className="md:col-span-2 space-y-4">
           <div className="flex flex-wrap gap-2 border-b border-black/10 pb-3">
-            <button type="button" onClick={() => handleToolbarAction('h2')} className={toolbarButtonClass}>H2 Section</button>
-            <button type="button" onClick={() => handleToolbarAction('h3')} className={toolbarButtonClass}>H3 Subsection</button>
-            <button type="button" onClick={() => handleToolbarAction('bold')} className={toolbarButtonClass}>Bold</button>
-            <button type="button" onClick={() => handleToolbarAction('link')} className={toolbarButtonClass}>Link</button>
+            <button type="button" onClick={() => handleToolbarAction('h2')} className={toolbarButtonClass}>Sección H2</button>
+            <button type="button" onClick={() => handleToolbarAction('h3')} className={toolbarButtonClass}>Subsección H3</button>
+            <button type="button" onClick={() => handleToolbarAction('bold')} className={toolbarButtonClass}>Negrita</button>
+            <button type="button" onClick={() => handleToolbarAction('link')} className={toolbarButtonClass}>Enlace</button>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[1.35fr_0.65fr]">
             <div>
-              <label className={labelClass} htmlFor="blog-body">Markdown body</label>
+              <label className={labelClass} htmlFor="blog-body">Cuerpo en Markdown</label>
               <textarea
                 id="blog-body"
                 ref={bodyRef}
@@ -215,7 +215,7 @@ export default function BlogPostForm() {
             </div>
 
             <aside className="border border-black/10 p-4">
-              <p className="font-body text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-accent-ink">Live outline</p>
+              <p className="font-body text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-accent-ink">Índice en vivo</p>
               {outline.length > 0 ? (
                 <ol className="mt-4 space-y-3">
                   {outline.map((section) => (
@@ -238,7 +238,7 @@ export default function BlogPostForm() {
                   ))}
                 </ol>
               ) : (
-                <p className="mt-4 text-sm text-warm-gray">Add H2 and H3 headings to build the outline.</p>
+                <p className="mt-4 text-sm text-warm-gray">Añade encabezados H2 y H3 para construir el índice.</p>
               )}
             </aside>
           </div>
@@ -246,12 +246,12 @@ export default function BlogPostForm() {
       </div>
 
       {error && <p className="border border-amaranth px-4 py-3 text-sm text-amaranth">{error}</p>}
-      {successPath && <p className="border border-black px-4 py-3 text-sm text-ink">Created {successPath}. Publish the site to rebuild the blog.</p>}
+      {successPath && <p className="border border-black px-4 py-3 text-sm text-ink">Se creó {successPath}. Publica el sitio para reconstruir el blog.</p>}
 
       <div className="flex flex-col gap-4 border-t border-black/10 pt-4 md:flex-row md:items-center md:justify-between">
-        <p className="text-xs text-warm-gray">Posts are committed through Netlify Git Gateway.</p>
+        <p className="text-xs text-warm-gray">Las entradas se confirman mediante Netlify Git Gateway.</p>
         <button type="submit" disabled={isSubmitting} className="border border-black bg-black px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-paper transition hover:border-amaranth hover:bg-amaranth hover:text-ink disabled:cursor-not-allowed disabled:opacity-50">
-          {isSubmitting ? 'Creating...' : 'Create post'}
+          {isSubmitting ? 'Creando…' : 'Crear entrada'}
         </button>
       </div>
     </form>

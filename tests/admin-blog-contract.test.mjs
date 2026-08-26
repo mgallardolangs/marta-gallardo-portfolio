@@ -34,7 +34,7 @@ test('admin blog creation stays scoped to approved ES/EN/FR locales', async () =
   );
   assert.match(
     storeSource,
-    /if \(!isAdminBlogLang\(post\.lang\)\) \{\s*throw new Error\('Blog posts can only be created in ES, EN, or FR\.'\);\s*\}/s,
+    /if \(!isAdminBlogLang\(post\.lang\)\) \{\s*throw new Error\('Las entradas de blog solo se pueden crear en ES, EN o FR\.'\);\s*\}/s,
     'createBlogPost should reject non-admin blog locales at runtime',
   );
 
@@ -107,7 +107,7 @@ test('createBlogPost rejects duplicate slug targets before writing and BlogPostF
   );
   assert.match(
     formSource,
-    /catch \(submitError\) \{\s*setError\(submitError instanceof Error \? submitError\.message : 'Could not create the post\.'\);\s*\}/s,
+    /catch \(submitError\) \{\s*setError\(submitError instanceof Error \? submitError\.message : 'No se pudo crear la entrada\.'\);\s*\}/s,
     'BlogPostForm should surface createBlogPost errors to the admin UI',
   );
   assert.match(
