@@ -550,6 +550,84 @@ test('publicLanguagePicker can make DE a required create/edit locale, and BlogPo
   ]);
 
   const dynamicVisibleLocales = ['es', 'en', 'fr', 'de'];
+  const slug = 'mi-post-con-de';
+  const localePaths = getLocaleMarkdownPaths(slug);
+  const createTranslations = {
+    ...makeTranslationsFixture(),
+    de: makeLocaleTranslation('de'),
+  };
+  const updateTranslations = {
+    es: makeLocaleTranslation('es', {
+      title: 'Título ES actualizado',
+      description: 'Descripción ES actualizada',
+      tags: ['seo', 'actualizado'],
+      body: '# Cuerpo ES actualizado',
+    }),
+    en: makeLocaleTranslation('en', {
+      title: 'Updated Title EN',
+      description: 'Updated Description EN',
+      tags: ['seo', 'updated'],
+      body: '# Updated Body EN',
+    }),
+    fr: makeLocaleTranslation('fr', {
+      title: 'Titre FR mis à jour',
+      description: 'Description FR mise à jour',
+      tags: ['seo', 'maj'],
+      body: '# Corps FR mis à jour',
+    }),
+    de: makeLocaleTranslation('de', {
+      title: 'Titel DE aktualisiert',
+      description: 'Beschreibung DE aktualisiert',
+      tags: ['seo', 'aktualisiert'],
+      body: '# Inhalt DE aktualisiert',
+    }),
+  };
+  const existingUpdateTranslations = {
+    es: makeLocaleTranslation('es', {
+      title: 'Título ES previo',
+      description: 'Descripción ES previa',
+      tags: ['seo', 'previo-es'],
+      body: '# Cuerpo ES previo',
+    }),
+    en: makeLocaleTranslation('en', {
+      title: 'Title EN previous',
+      description: 'Description EN previous',
+      tags: ['seo', 'previous-en'],
+      body: '# Body EN previous',
+    }),
+    fr: makeLocaleTranslation('fr', {
+      title: 'Titre FR précédent',
+      description: 'Description FR précédente',
+      tags: ['seo', 'precedent-fr'],
+      body: '# Corps FR précédent',
+    }),
+    de: makeLocaleTranslation('de', {
+      title: 'Titel DE vorher',
+      description: 'Beschreibung DE vorher',
+      tags: ['seo', 'vorher-de'],
+      body: '# Inhalt DE vorher',
+    }),
+    it: makeLocaleTranslation('it', {
+      title: 'Titolo IT preservato',
+      description: 'Descrizione IT preservata',
+      tags: ['seo', 'preserva-it'],
+      body: '# Corpo IT preservato',
+    }),
+    ca: makeLocaleTranslation('ca', {
+      title: 'Títol CA preservat',
+      description: 'Descripció CA preservada',
+      tags: ['seo', 'preserva-ca'],
+      body: '# Cos CA preservat',
+    }),
+  };
+  const existingUpdateShaByLocale = {
+    es: 'es-existing-sha',
+    en: 'en-existing-sha',
+    fr: 'fr-existing-sha',
+    de: 'de-existing-sha',
+    it: 'it-existing-sha',
+    ca: 'ca-existing-sha',
+  };
   const store = createAdminStore(
     AdminStore,
     'es',
@@ -568,20 +646,61 @@ test('publicLanguagePicker can make DE a required create/edit locale, and BlogPo
     'once DE is visible, only IT and CA should remain hidden for fallback behavior',
   );
 
-  const fetchCalls = [];
   const originalFetch = globalThis.fetch;
+  const createFetchCalls = [];
+  const updateFetchCalls = [];
+  let currentPhase = 'create';
   globalThis.fetch = async (input, init = {}) => {
     const call = { method: init.method ?? 'GET', url: String(input), body: init.body ?? null };
-    fetchCalls.push(call);
-    if (call.method === 'GET') {
-      return new Response(JSON.stringify({ message: 'Not Found' }), {
-        status: 404,
-        headers: { 'Content-Type': 'application/json' },
-      });
+
+    if (currentPhase === 'update') {
+      updateFetchCalls.push(call);
+    } else {
+      createFetchCalls.push(call);
     }
 
-    return new Response(JSON.stringify({ content: { sha: 'written-sha' } }), {
-      status: 200,
+    for (const [locale, filePath] of Object.entries(localePaths)) {
+      if (!call.url.includes(filePath)) continue;
+
+      if (call.method === 'GET') {
+        if (currentPhase === 'update') {
+          const existingMarkdown = buildFrontmatterFixture({
+            slug,
+            translationKey: 'tk-mi-post-con-de',
+            date: '2026-08-26',
+            image: '/images/blog/mi-post-con-de.webp',
+            ...existingUpdateTranslations[locale],
+            lang: locale,
+          });
+          return new Response(JSON.stringify({
+            sha: existingUpdateShaByLocale[locale],
+            content: Buffer.from(existingMarkdown, 'utf8').toString('base64'),
+          }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+
+        return new Response(JSON.stringify({ message: 'Not Found' }), {
+          status: 404,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      if (call.method === 'PUT') {
+        return new Response(JSON.stringify({
+          content: {
+            sha: `${locale}-${currentPhase === 'update' ? 'updated' : 'created'}-sha`,
+          },
+        }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+    }
+
+    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), {
+      status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
   };
@@ -589,7 +708,7 @@ test('publicLanguagePicker can make DE a required create/edit locale, and BlogPo
   try {
     await assertRejectsWithMessage(
       store.createBlogPost({
-        slug: 'mi-post-con-de',
+        slug,
         date: '2026-08-26',
         translations: makeTranslationsFixture(),
       }),
@@ -599,7 +718,7 @@ test('publicLanguagePicker can make DE a required create/edit locale, and BlogPo
 
     await assertRejectsWithMessage(
       store.updateBlogPost({
-        slug: 'mi-post-con-de',
+        slug,
         date: '2026-09-01',
         currentImage: '/images/blog/mi-post-con-de.webp',
         translations: makeTranslationsFixture(),
@@ -608,35 +727,42 @@ test('publicLanguagePicker can make DE a required create/edit locale, and BlogPo
       'making DE visible should require a DE translation during edit before any repository access',
     );
 
-    assert.deepEqual(fetchCalls, [], 'missing DE should fail validation before any Git Gateway call');
-    fetchCalls.length = 0;
+    assert.deepEqual(createFetchCalls, [], 'missing DE should fail validation before any Git Gateway call');
     await assert.doesNotReject(
       store.createBlogPost({
-        slug: 'mi-post-con-de',
+        slug,
         date: '2026-08-26',
-        translations: {
-          ...makeTranslationsFixture(),
-          de: makeLocaleTranslation('de'),
-        },
+        translations: createTranslations,
       }),
       'once DE is supplied, the create flow should treat IT/CA as the only hidden locales and proceed to repository IO',
+    );
+
+    currentPhase = 'update';
+    await assert.doesNotReject(
+      store.updateBlogPost({
+        slug,
+        date: '2026-09-01',
+        currentImage: '/images/blog/mi-post-con-de.webp',
+        translations: updateTranslations,
+      }),
+      'once DE is supplied, the edit flow should treat IT/CA as the only hidden locales and proceed to repository IO',
     );
   } finally {
     globalThis.fetch = originalFetch;
   }
 
   assert.ok(
-    fetchCalls.length > 0,
+    createFetchCalls.length > 0,
     'once DE is present, create should no longer fail validation as if DE were hidden and should proceed to Git Gateway IO',
   );
   assert.ok(
-    fetchCalls.every((call) => Object.values(getLocaleMarkdownPaths('mi-post-con-de')).some((filePath) => call.url.includes(filePath))),
+    createFetchCalls.every((call) => Object.values(localePaths).some((filePath) => call.url.includes(filePath))),
     'the DE-visible create flow should probe/write locale-specific Markdown paths rather than an old singleton slug file',
   );
 
-  const putCalls = fetchCalls.filter((call) => call.method === 'PUT');
+  const putCalls = createFetchCalls.filter((call) => call.method === 'PUT');
   const payloadsByLocale = Object.fromEntries(
-    Object.entries(getLocaleMarkdownPaths('mi-post-con-de')).map(([locale, filePath]) => {
+    Object.entries(localePaths).map(([locale, filePath]) => {
       const putCall = putCalls.find((call) => call.url.includes(filePath));
       assert.ok(putCall, `the DE-visible create flow should write ${filePath}`);
       return [locale, decodeRepositoryPayload(putCall.body)];
@@ -653,6 +779,53 @@ test('publicLanguagePicker can make DE a required create/edit locale, and BlogPo
       lang: locale,
     });
   }
+
+  assert.ok(
+    updateFetchCalls.length > 0,
+    'once DE is present, edit should no longer fail validation as if DE were hidden and should proceed to Git Gateway IO',
+  );
+  assert.ok(
+    updateFetchCalls.every((call) => Object.values(localePaths).some((filePath) => call.url.includes(filePath))),
+    'the DE-visible edit flow should probe/write locale-specific Markdown paths rather than an old singleton slug file',
+  );
+
+  const updatePutCalls = updateFetchCalls.filter((call) => call.method === 'PUT');
+  assert.equal(updatePutCalls.length, 6, 'updateBlogPost should still upsert all six locale Markdown files when DE becomes visible');
+
+  for (const [locale, filePath] of Object.entries(localePaths)) {
+    const getCall = updateFetchCalls.find((call) => call.method === 'GET' && call.url.includes(filePath));
+    const putCall = updatePutCalls.find((call) => call.url.includes(filePath));
+    assert.ok(getCall, `updateBlogPost should read the current sha for the ${locale} locale file when DE is visible`);
+    assert.ok(putCall, `updateBlogPost should upsert the ${locale} locale file when DE is visible`);
+
+    const payload = decodeRepositoryPayload(putCall.body);
+    assert.equal(payload.sha, existingUpdateShaByLocale[locale], `the ${locale} locale upsert should use its own freshly-fetched sha`);
+    assertMarkdownFrontmatter(payload.markdown, {
+      slug,
+      date: '2026-09-01',
+      image: '/images/blog/mi-post-con-de.webp',
+      lang: locale,
+    });
+  }
+
+  for (const locale of dynamicVisibleLocales) {
+    const putCall = updatePutCalls.find((call) => call.url.includes(localePaths[locale]));
+    assertMarkdownFrontmatter(decodeRepositoryPayload(putCall.body).markdown, updateTranslations[locale]);
+  }
+
+  for (const locale of getHiddenLocales(dynamicVisibleLocales)) {
+    const putCall = updatePutCalls.find((call) => call.url.includes(localePaths[locale]));
+    assertMarkdownFrontmatter(decodeRepositoryPayload(putCall.body).markdown, {
+      ...existingUpdateTranslations[locale],
+      lang: locale,
+    });
+  }
+
+  const updateSlugSegments = new Set(
+    updatePutCalls.map((call) => call.url.replace(/^.*\/contents\//, '').split('/').slice(0, -1).join('/')),
+  );
+  assert.equal(updateSlugSegments.size, 1, 'every DE-visible locale upsert should still live under the same fixed slug');
+  assert.ok([...updateSlugSegments][0].includes(slug), 'the DE-visible edit flow should keep the original slug directory during update');
 
   assert.match(
     formSource,
