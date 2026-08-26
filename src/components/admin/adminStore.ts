@@ -306,23 +306,151 @@ function getBlogFeaturedImagePaths(slug: string, featuredImage: File) {
   };
 }
 
-function buildMarkdownPost(post: {
+export type BlogLocaleTranslation = {
+  title: string;
+  description: string;
+  tags: string[];
+  body: string;
+};
+
+export type BlogTranslationsInput = Partial<Record<SupportedLang, Partial<BlogLocaleTranslation>>>;
+
+export type BlogPostCreateInput = {
+  slug: string;
+  date: string;
+  translations: BlogTranslationsInput;
+  featuredImage?: File | null;
+};
+
+export type BlogPostUpdateInput = BlogPostCreateInput & {
+  currentImage?: string;
+  removeImage?: boolean;
+};
+
+export type BlogPostDeleteInput = {
+  slug: string;
+  translationKey?: string;
+  image?: string;
+};
+
+export type BlogPostDeleteStatus = 'post-deleted' | 'locale-delete-failed' | 'image-cleanup-failed';
+
+export type BlogPostDeleteResult = {
+  status: BlogPostDeleteStatus;
+  message: string;
+  remainingPaths: string[];
+};
+
+const BLOG_LOCALE_FIELD_MESSAGES: Record<'title' | 'description' | 'tags' | 'body', (locale: string) => string> = {
+  title: (locale) => `Completa el título de la traducción ${locale}.`,
+  description: (locale) => `Completa la descripción de la traducción ${locale}.`,
+  tags: (locale) => `Completa las etiquetas de la traducción ${locale}.`,
+  body: (locale) => `Completa el cuerpo de la traducción ${locale}.`,
+};
+
+function validateBlogSlug(slug: string): string {
+  const trimmedSlug = slug.trim();
+  if (!trimmedSlug) throw new Error('El slug es obligatorio.');
+  return trimmedSlug;
+}
+
+function validateBlogDate(date: string): void {
+  if (!date || !date.trim()) throw new Error('La fecha es obligatoria.');
+}
+
+/**
+ * Ensures every currently-visible locale (per publicLanguagePicker) has a complete
+ * translation before any repository read/write, naming the missing field and the
+ * uppercase locale code in the thrown Spanish error.
+ */
+function validateVisibleBlogTranslations(translations: BlogTranslationsInput, visibleLocales: SupportedLang[]): void {
+  for (const locale of visibleLocales) {
+    const localeLabel = locale.toUpperCase();
+    const translation = translations[locale];
+
+    if (!translation?.title?.trim()) throw new Error(BLOG_LOCALE_FIELD_MESSAGES.title(localeLabel));
+    if (!translation.description?.trim()) throw new Error(BLOG_LOCALE_FIELD_MESSAGES.description(localeLabel));
+    if (!Array.isArray(translation.tags) || translation.tags.length === 0) {
+      throw new Error(BLOG_LOCALE_FIELD_MESSAGES.tags(localeLabel));
+    }
+    if (!translation.body?.trim()) throw new Error(BLOG_LOCALE_FIELD_MESSAGES.body(localeLabel));
+  }
+}
+
+function getBlogLocaleMarkdownPaths(slug: string): Record<SupportedLang, string> {
+  return Object.fromEntries(
+    SUPPORTED_LANGS.map((locale) => [locale, `src/content/blog/${slug}/${locale}.md`]),
+  ) as Record<SupportedLang, string>;
+}
+
+function publicImagePathToRepositoryPath(publicPath: string): string {
+  return `public${publicPath.startsWith('/') ? publicPath : `/${publicPath}`}`;
+}
+
+function buildBlogLocaleMarkdown(post: {
+  slug: string;
+  translationKey: string;
   title: string;
   description: string;
   date: string;
-  tags: string[];
-  lang: AdminBlogLang;
-  body: string;
   image?: string;
+  tags: string[];
+  lang: SupportedLang;
+  body: string;
 }): string {
   const quoted = (value: string) => JSON.stringify(value);
   const tags = `[${post.tags.map((tag) => JSON.stringify(tag)).join(', ')}]`;
   const imageLine = post.image ? `image: ${quoted(post.image)}\n` : '';
-  return `---\ntitle: ${quoted(post.title)}\ndescription: ${quoted(post.description)}\ndate: ${quoted(post.date)}\n${imageLine}tags: ${tags}\nlang: ${quoted(post.lang)}\n---\n\n${post.body.trim()}\n`;
+  return `---\nslug: ${quoted(post.slug)}\ntranslationKey: ${quoted(post.translationKey)}\ntitle: ${quoted(post.title)}\ndescription: ${quoted(post.description)}\ndate: ${quoted(post.date)}\n${imageLine}tags: ${tags}\nlang: ${quoted(post.lang)}\n---\n\n${post.body.trim()}\n`;
 }
 
-function getDuplicateBlogPostSlugMessage(slug: string): string {
-  return `Ya existe una entrada del blog con el slug "${slug}". Usa otro slug antes de publicar.`;
+/**
+ * Reads back a locale Markdown file written by buildBlogLocaleMarkdown so hidden
+ * locales can preserve their own localized title/description/tags/body untouched
+ * (and every locale can agree on the same translationKey) during an edit.
+ */
+function parseBlogLocaleMarkdown(markdown: string): BlogLocaleTranslation & { translationKey: string } {
+  const frontmatterMatch = markdown.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+  const frontmatterBlock = frontmatterMatch?.[1] ?? '';
+  const body = (frontmatterMatch?.[2] ?? markdown).replace(/^\n+/, '').trimEnd();
+
+  const getStringField = (field: string): string => {
+    const match = frontmatterBlock.match(new RegExp(`^${field}:\\s*(.+)$`, 'm'));
+    if (!match) return '';
+    try {
+      return JSON.parse(match[1].trim());
+    } catch {
+      return match[1].trim();
+    }
+  };
+
+  const tagsMatch = frontmatterBlock.match(/^tags:\s*(\[.*\])\s*$/m);
+  let tags: string[] = [];
+  if (tagsMatch) {
+    try {
+      const parsed = JSON.parse(tagsMatch[1]);
+      if (Array.isArray(parsed)) tags = parsed.map(String);
+    } catch {
+      tags = [];
+    }
+  }
+
+  return {
+    translationKey: getStringField('translationKey'),
+    title: getStringField('title'),
+    description: getStringField('description'),
+    tags,
+    body,
+  };
+}
+
+function base64ToUtf8(value: string): string {
+  const binary = atob(value);
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+  return new TextDecoder().decode(bytes);
 }
 
 function getOrbitPendingKey(itemId: string, field: 'src' | 'poster') {
@@ -1172,37 +1300,25 @@ export class AdminStore {
     }
   }
 
-  async createBlogPost(post: {
-    slug: string;
-    title: string;
-    description: string;
-    date: string;
-    tags: string[];
-    lang: AdminBlogLang;
-    body: string;
-    featuredImage?: File | null;
-  }): Promise<string> {
+  /**
+   * Creates (or retry-upserts) every locale Markdown file for one logical blog post.
+   * Visible locales (per getPublicLanguagePicker) use their submitted translation;
+   * every hidden locale always gets the fresh Spanish translation as a fallback.
+   */
+  async createBlogPost(post: BlogPostCreateInput): Promise<string> {
     await this.refreshIdentityToken();
 
     if (!this.token) {
       throw new Error('Debes iniciar sesión antes de crear entradas de blog.');
     }
 
-    if (!isAdminBlogLang(post.lang)) {
-      throw new Error('Las entradas de blog solo se pueden crear en ES, EN o FR.');
-    }
-
-    const slug = post.slug.trim();
-    if (!slug) throw new Error('El slug es obligatorio.');
+    const slug = validateBlogSlug(post.slug);
+    validateBlogDate(post.date);
+    const visibleLocales = this.getPublicLanguagePicker();
+    validateVisibleBlogTranslations(post.translations, visibleLocales);
 
     if (post.featuredImage) {
       validateBlogFeaturedImage(post.featuredImage);
-    }
-
-    const path = `src/content/blog/${slug}.md`;
-    const existingSha = await this.fetchFileSha(path);
-    if (existingSha !== null) {
-      throw new Error(getDuplicateBlogPostSlugMessage(slug));
     }
 
     let imagePath: string | undefined;
@@ -1214,18 +1330,162 @@ export class AdminStore {
       imagePath = publicPath;
     }
 
-    const markdown = buildMarkdownPost({
-      title: post.title,
-      description: post.description,
-      date: post.date,
-      tags: post.tags,
-      lang: post.lang,
-      body: post.body,
-      image: imagePath,
-    });
+    const translationKey = slug;
+    const localePaths = getBlogLocaleMarkdownPaths(slug);
+    const esTranslation = post.translations.es as BlogLocaleTranslation;
 
-    await this.createRepositoryFile(path, utf8ToBase64(markdown), `feat(blog): create ${slug}`, existingSha);
-    return path;
+    for (const locale of SUPPORTED_LANGS) {
+      const path = localePaths[locale];
+      const sha = await this.fetchFileSha(path);
+      const translation = (visibleLocales.includes(locale) ? post.translations[locale] : esTranslation) as BlogLocaleTranslation;
+
+      const markdown = buildBlogLocaleMarkdown({
+        slug,
+        translationKey,
+        title: translation.title,
+        description: translation.description,
+        date: post.date,
+        image: imagePath,
+        tags: translation.tags,
+        lang: locale,
+        body: translation.body,
+      });
+
+      await this.putRepositoryFile(path, utf8ToBase64(markdown), `feat(blog): create ${path}`, sha);
+    }
+
+    return translationKey;
+  }
+
+  /**
+   * Upserts every locale Markdown file for an existing logical post. The slug and
+   * translationKey stay fixed; visible locales apply the submitted translation while
+   * hidden locales preserve their own existing localized content (Spanish-falling-back
+   * only when a hidden locale file doesn't exist yet). The shared image is replaced
+   * before any locale write and, when explicitly removed, the previously owned asset
+   * is only deleted after every locale file has been rewritten without it.
+   */
+  async updateBlogPost(post: BlogPostUpdateInput): Promise<string> {
+    await this.refreshIdentityToken();
+
+    if (!this.token) {
+      throw new Error('Debes iniciar sesión antes de editar entradas de blog.');
+    }
+
+    const slug = validateBlogSlug(post.slug);
+    validateBlogDate(post.date);
+    const visibleLocales = this.getPublicLanguagePicker();
+    validateVisibleBlogTranslations(post.translations, visibleLocales);
+
+    if (post.featuredImage) {
+      validateBlogFeaturedImage(post.featuredImage);
+    }
+
+    let imagePath = post.currentImage;
+    let ownedImageRepositoryPathToRemove: string | null = null;
+
+    if (post.featuredImage) {
+      const { repositoryPath, publicPath } = getBlogFeaturedImagePaths(slug, post.featuredImage);
+      const dataUrl = await fileToDataUrl(post.featuredImage);
+      const base64Content = dataUrl.includes(',') ? dataUrl.split(',')[1] ?? '' : dataUrl;
+      await this.writeRepositoryFile(repositoryPath, base64Content, `feat(blog): upload ${slug} image`);
+      imagePath = publicPath;
+    } else if (post.removeImage) {
+      imagePath = undefined;
+      if (post.currentImage) {
+        ownedImageRepositoryPathToRemove = publicImagePathToRepositoryPath(post.currentImage);
+      }
+    }
+
+    const localePaths = getBlogLocaleMarkdownPaths(slug);
+    const esTranslation = post.translations.es as BlogLocaleTranslation;
+    let sharedTranslationKey = '';
+
+    for (const locale of SUPPORTED_LANGS) {
+      const path = localePaths[locale];
+      const existingFile = await this.fetchRepositoryFile(path);
+      const existingTranslation = existingFile ? parseBlogLocaleMarkdown(existingFile.content) : null;
+
+      if (existingTranslation?.translationKey && !sharedTranslationKey) {
+        sharedTranslationKey = existingTranslation.translationKey;
+      }
+
+      const submittedTranslation = post.translations[locale];
+      const translation = (visibleLocales.includes(locale) && submittedTranslation
+        ? submittedTranslation
+        : existingTranslation ?? esTranslation) as BlogLocaleTranslation;
+
+      const markdown = buildBlogLocaleMarkdown({
+        slug,
+        translationKey: sharedTranslationKey || slug,
+        title: translation.title,
+        description: translation.description,
+        date: post.date,
+        image: imagePath,
+        tags: translation.tags,
+        lang: locale,
+        body: translation.body,
+      });
+
+      await this.putRepositoryFile(path, utf8ToBase64(markdown), `feat(blog): update ${path}`, existingFile?.sha ?? null);
+    }
+
+    if (ownedImageRepositoryPathToRemove) {
+      await this.deleteRepositoryFile(ownedImageRepositoryPathToRemove, `chore(blog): remove ${slug} image`);
+    }
+
+    return sharedTranslationKey || slug;
+  }
+
+  /**
+   * Deletes every locale Markdown file belonging to one logical post, then the owned
+   * shared image (only once every locale file is gone). A locale delete failure keeps
+   * the post row intact by returning the still-remaining paths in Spanish instead of
+   * throwing, so the admin UI can retry; deletions already missing (404) count as done.
+   */
+  async deleteBlogPost(post: BlogPostDeleteInput): Promise<BlogPostDeleteResult> {
+    await this.refreshIdentityToken();
+
+    if (!this.token) {
+      throw new Error('Debes iniciar sesión antes de eliminar entradas de blog.');
+    }
+
+    const slug = validateBlogSlug(post.slug);
+    const localePaths = getBlogLocaleMarkdownPaths(slug);
+    const remainingPaths: string[] = [];
+
+    for (const locale of SUPPORTED_LANGS) {
+      const path = localePaths[locale];
+      try {
+        await this.deleteRepositoryFile(path, `chore(blog): delete ${path}`);
+      } catch {
+        remainingPaths.push(path);
+      }
+    }
+
+    if (remainingPaths.length > 0) {
+      return {
+        status: 'locale-delete-failed',
+        message: `No se pudieron eliminar todos los idiomas de la entrada. Quedan pendientes: ${remainingPaths.join(', ')}.`,
+        remainingPaths,
+      };
+    }
+
+    if (post.image) {
+      const imageRepositoryPath = publicImagePathToRepositoryPath(post.image);
+      try {
+        await this.deleteRepositoryFile(imageRepositoryPath, `chore(blog): remove ${slug} image`);
+      } catch (error) {
+        const details = error instanceof Error ? error.message : 'la imagen destacada no se pudo eliminar';
+        return {
+          status: 'image-cleanup-failed',
+          message: `La entrada se eliminó, pero no se pudo eliminar la imagen destacada: ${details}`,
+          remainingPaths: [imageRepositoryPath],
+        };
+      }
+    }
+
+    return { status: 'post-deleted', message: 'La entrada del blog se eliminó correctamente.', remainingPaths: [] };
   }
 
   private async refreshIdentityToken(): Promise<void> {
@@ -1247,14 +1507,6 @@ export class AdminStore {
     } catch {
       throw new Error('La sesión de administrador ha expirado. Cierra sesión y vuelve a iniciarla; tus cambios sin publicar siguen abiertos.');
     }
-  }
-
-  private async createRepositoryFile(path: string, content: string, message: string, sha: string | null): Promise<void> {
-    if (sha !== null) {
-      throw new Error(`No se pudo crear ${path}: el archivo ya existe.`);
-    }
-
-    await this.putRepositoryFile(path, content, message);
   }
 
   private async writeRepositoryFile(path: string, content: string, message: string): Promise<void> {
@@ -1309,6 +1561,57 @@ export class AdminStore {
 
     const data = (await response.json()) as { sha?: string };
     return data.sha ?? null;
+  }
+
+  private async fetchRepositoryFile(path: string): Promise<{ sha: string; content: string } | null> {
+    const response = await fetch(`/.netlify/git/github/contents/${encodeURI(path)}`, {
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      },
+    });
+
+    if (response.status === 404) return null;
+    if (!response.ok) {
+      let details = response.statusText;
+      try {
+        const data = (await response.json()) as { message?: string };
+        if (data?.message) details = data.message;
+      } catch {
+        details = await response.text();
+      }
+      throw new Error(`No se pudo cargar ${path}: ${details}`);
+    }
+
+    const data = (await response.json()) as { sha?: string; content?: string };
+    return {
+      sha: data.sha ?? '',
+      content: typeof data.content === 'string' ? base64ToUtf8(data.content) : '',
+    };
+  }
+
+  private async deleteRepositoryFile(path: string, message: string): Promise<void> {
+    const sha = await this.fetchFileSha(path);
+    if (sha === null) return;
+
+    const response = await fetch(`/.netlify/git/github/contents/${encodeURI(path)}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message, sha }),
+    });
+
+    if (!response.ok && response.status !== 404) {
+      let details = response.statusText;
+      try {
+        const data = (await response.json()) as { message?: string };
+        if (data?.message) details = data.message;
+      } catch {
+        details = await response.text();
+      }
+      throw new Error(`No se pudo eliminar ${path}: ${details}`);
+    }
   }
 
   private getMutableOrbitMedia(): OrbitMedia[] {

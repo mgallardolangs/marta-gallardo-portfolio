@@ -270,13 +270,16 @@ test('AdminStore login/session/blog/publish operational errors are in Spanish', 
 
   assert.match(source, /Debes iniciar sesión antes de publicar\./);
   assert.match(source, /Debes iniciar sesión antes de crear entradas de blog\./);
-  assert.match(source, /Las entradas de blog solo se pueden crear en ES, EN o FR\./);
+  assert.match(source, /Debes iniciar sesión antes de editar entradas de blog\./);
+  assert.match(source, /Debes iniciar sesión antes de eliminar entradas de blog\./);
+  assert.match(source, /Completa el título de la traducción \$\{locale\}\.`/);
   assert.match(source, /El slug es obligatorio\./);
+  assert.match(source, /La fecha es obligatoria\./);
   assert.match(source, /La imagen destacada debe ser un archivo JPEG, PNG, WebP o GIF\./);
   assert.match(source, /La imagen destacada debe pesar 2 ?MB o menos/i);
   assert.match(source, /La sesión de administrador ha expirado\./);
   assert.match(source, /No se pudo guardar el borrador localmente\./);
-  assert.match(source, /No se pudo (crear|publicar|cargar) \$\{path\}/);
+  assert.match(source, /No se pudo (crear|publicar|cargar|eliminar) \$\{path\}/);
 
   assertEnglishUiStringsAbsent(source, [
     [/Login required before publishing\./, 'publish auth error should no longer be English'],
@@ -293,14 +296,14 @@ test('AdminStore login/session/blog/publish operational errors are in Spanish', 
   ]);
 });
 
-test('AdminStore duplicate blog slug errors stay in Spanish across ES, EN, and FR blog creation', async () => {
-  const duplicateMessage = 'Ya existe una entrada del blog con el slug "mi-primer-post". Usa otro slug antes de publicar.';
+test('AdminStore blog CRUD keeps duplicate/retry-safe, group-aware behavior and every Spanish error in ES, EN, and FR blog creation', async () => {
   const localeCases = ['es', 'en', 'fr'];
   const originalFetch = globalThis.fetch;
   const fetchCalls = [];
 
   globalThis.fetch = async (input, init = {}) => {
-    fetchCalls.push({ input: String(input), init });
+    const method = init.method ?? 'GET';
+    fetchCalls.push({ method, input: String(input), body: init.body ?? null });
     return new Response(JSON.stringify({ sha: 'existing-post-sha' }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
@@ -312,32 +315,41 @@ test('AdminStore duplicate blog slug errors stay in Spanish across ES, EN, and F
       const store = new AdminStore();
       store.init({ es: {}, en: {}, fr: {} }, {}, locale, 'publish-token');
 
+      const translationKey = await store.createBlogPost({
+        slug: 'mi-primer-post',
+        date: '2026-08-26',
+        translations: {
+          es: { title: `Post ${locale.toUpperCase()} ES`, description: 'Duplicate slug contract', tags: ['ugc'], body: '# Duplicate slug' },
+          en: { title: `Post ${locale.toUpperCase()} EN`, description: 'Duplicate slug contract', tags: ['ugc'], body: '# Duplicate slug' },
+          fr: { title: `Post ${locale.toUpperCase()} FR`, description: 'Duplicate slug contract', tags: ['ugc'], body: '# Duplicate slug' },
+        },
+      });
+
+      assert.equal(
+        translationKey,
+        'mi-primer-post',
+        `retry-upserting the same slug should stay safe (group/path aware, not duplicate-rejected) for ${locale.toUpperCase()} admin writes`,
+      );
+
       await assert.rejects(
         store.createBlogPost({
           slug: 'mi-primer-post',
-          title: `Post ${locale.toUpperCase()}`,
-          description: 'Duplicate slug contract',
           date: '2026-08-26',
-          tags: ['ugc'],
-          lang: locale,
-          body: '# Duplicate slug',
+          translations: {
+            es: { title: '', description: '', tags: [], body: '' },
+          },
         }),
-        new Error(duplicateMessage),
-        `duplicate blog slug errors should stay in Spanish for ${locale.toUpperCase()} admin writes`,
+        (error) => error instanceof Error && /Completa el título de la traducción ES\./.test(error.message),
+        `missing required visible-locale fields should still stay in Spanish for ${locale.toUpperCase()} admin writes`,
       );
     }
   } finally {
     globalThis.fetch = originalFetch;
   }
 
-  assert.deepEqual(
-    fetchCalls.map((call) => `${call.init?.method ?? 'GET'} ${call.input}`),
-    [
-      'GET /.netlify/git/github/contents/src/content/blog/mi-primer-post.md',
-      'GET /.netlify/git/github/contents/src/content/blog/mi-primer-post.md',
-      'GET /.netlify/git/github/contents/src/content/blog/mi-primer-post.md',
-    ],
-    'duplicate blog slug detection should still stop before any write attempt in every admin locale',
+  assert.ok(
+    fetchCalls.some((call) => call.method === 'PUT' && call.input.includes('src/content/blog/mi-primer-post/es.md')),
+    'the same slug should be safely upserted across every locale path instead of being duplicate-rejected',
   );
 });
 

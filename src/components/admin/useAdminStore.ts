@@ -44,5 +44,7 @@ export function useAdminStore() {
     saveDraft: adminStore.saveDraft.bind(adminStore),
     loadDraft: adminStore.loadDraft.bind(adminStore),
     createBlogPost: adminStore.createBlogPost.bind(adminStore),
+    updateBlogPost: adminStore.updateBlogPost.bind(adminStore),
+    deleteBlogPost: adminStore.deleteBlogPost.bind(adminStore),
   };
 }

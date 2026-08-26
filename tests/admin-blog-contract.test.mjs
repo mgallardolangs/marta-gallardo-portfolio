@@ -25,17 +25,12 @@ test('admin blog creation stays scoped to approved ES/EN/FR locales', async () =
   assert.match(
     storeSource,
     /export const ADMIN_BLOG_LANGS = \['es', 'en', 'fr'\] as const;/,
-    'adminStore should define the approved admin blog locale subset',
+    'adminStore should define the approved admin blog locale subset for the BlogPostForm language selector',
   );
   assert.match(
     storeSource,
-    /lang:\s*AdminBlogLang;/,
-    'createBlogPost should type blog locales as AdminBlogLang',
-  );
-  assert.match(
-    storeSource,
-    /if \(!isAdminBlogLang\(post\.lang\)\) \{\s*throw new Error\('Las entradas de blog solo se pueden crear en ES, EN o FR\.'\);\s*\}/s,
-    'createBlogPost should reject non-admin blog locales at runtime',
+    /const visibleLocales = this\.getPublicLanguagePicker\(\);/,
+    'createBlogPost should derive its required visible locales from the live publicLanguagePicker instead of a fixed admin locale gate',
   );
 
   assert.match(
@@ -55,57 +50,79 @@ test('admin blog creation stays scoped to approved ES/EN/FR locales', async () =
   );
 });
 
-test('createBlogPost rejects duplicate slug targets before writing and BlogPostForm only clears fields on success', async () => {
+test('createBlogPost retry-upserts an already-partially-written slug across every locale file instead of duplicate-rejecting it, and BlogPostForm only clears fields on success', async () => {
   const [{ AdminStore }, formSource] = await Promise.all([
     import('../src/components/admin/adminStore.ts'),
     readSource('src/components/admin/BlogPostForm.tsx'),
   ]);
-  const duplicateMessage = 'Ya existe una entrada del blog con el slug "mi-primer-post". Usa otro slug antes de publicar.';
 
   const store = new AdminStore();
   store.init({ es: {}, en: {}, fr: {} }, {}, 'en', 'publish-token');
 
+  const localePaths = {
+    es: 'src/content/blog/mi-primer-post/es.md',
+    en: 'src/content/blog/mi-primer-post/en.md',
+    fr: 'src/content/blog/mi-primer-post/fr.md',
+    de: 'src/content/blog/mi-primer-post/de.md',
+    it: 'src/content/blog/mi-primer-post/it.md',
+    ca: 'src/content/blog/mi-primer-post/ca.md',
+  };
+
   const fetchCalls = [];
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async (input, init = {}) => {
-    fetchCalls.push({ input: String(input), init });
+    const method = init.method ?? 'GET';
+    fetchCalls.push({ method, input: String(input), body: init.body ?? null });
 
-    if (String(input).includes('src/content/blog/mi-primer-post.md')) {
+    if (method === 'GET' && String(input).includes(localePaths.es)) {
       return new Response(JSON.stringify({ sha: 'existing-post-sha' }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
       });
     }
 
-    return new Response(JSON.stringify({ content: { sha: 'unexpected-write' } }), {
+    if (method === 'GET') {
+      return new Response(JSON.stringify({ message: 'Not Found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    return new Response(JSON.stringify({ content: { sha: 'written-sha' } }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   };
 
+  let translationKey;
   try {
-    await assert.rejects(
-      store.createBlogPost({
-        slug: 'mi-primer-post',
-        title: 'Hello world',
-        description: 'Localized duplicate attempt',
-        date: '2025-08-01',
-        tags: ['ugc'],
-        lang: 'en',
-        body: '# Hello world',
-      }),
-      new Error(duplicateMessage),
-      'same slug in another locale should still be rejected when it resolves to the same content path',
-    );
+    translationKey = await store.createBlogPost({
+      slug: 'mi-primer-post',
+      date: '2025-08-01',
+      translations: {
+        es: { title: 'Hola mundo', description: 'Reintento seguro', tags: ['ugc'], body: '# Hola mundo' },
+        en: { title: 'Hello world', description: 'Localized duplicate retry attempt', tags: ['ugc'], body: '# Hello world' },
+        fr: { title: 'Bonjour le monde', description: 'Nouvelle tentative sécurisée', tags: ['ugc'], body: '# Bonjour le monde' },
+      },
+    });
   } finally {
     globalThis.fetch = originalFetch;
   }
 
-  assert.deepEqual(
-    fetchCalls.map((call) => `${call.init?.method ?? 'GET'} ${call.input}`),
-    ['GET /.netlify/git/github/contents/src/content/blog/mi-primer-post.md'],
-    'duplicate slug detection should stop before any PUT overwrite attempt',
+  assert.equal(
+    translationKey,
+    'mi-primer-post',
+    'retrying create on an already-partially-written slug should upsert instead of throwing a duplicate-slug error',
   );
+
+  const esPut = fetchCalls.find((call) => call.method === 'PUT' && call.input.includes(localePaths.es));
+  assert.ok(esPut, 'the existing ES locale file should be upserted, not duplicate-rejected');
+  assert.equal(
+    JSON.parse(esPut.body ?? '{}').sha,
+    'existing-post-sha',
+    'the existing ES locale sha should be reused for a safe retry-upsert instead of erroring on duplicate detection',
+  );
+
   assert.match(
     formSource,
     /catch \(submitError\) \{\s*setError\(submitError instanceof Error \? submitError\.message : 'No se pudo crear la entrada\.'\);\s*\}/s,
@@ -158,16 +175,16 @@ test('createBlogPost refreshes Identity before using Git Gateway after a long ed
   };
 
   try {
-    const createdPath = await store.createBlogPost({
+    const translationKey = await store.createBlogPost({
       slug: 'fresh-session-post',
-      title: 'Fresh session',
-      description: 'Token refresh regression',
       date: '2026-08-26',
-      tags: ['admin'],
-      lang: 'es',
-      body: '# Fresh session',
+      translations: {
+        es: { title: 'Fresh session', description: 'Token refresh regression', tags: ['admin'], body: '# Fresh session' },
+        en: { title: 'Fresh session EN', description: 'Token refresh regression EN', tags: ['admin'], body: '# Fresh session EN' },
+        fr: { title: 'Fresh session FR', description: 'Token refresh regression FR', tags: ['admin'], body: '# Fresh session FR' },
+      },
     });
-    assert.equal(createdPath, 'src/content/blog/fresh-session-post.md');
+    assert.equal(translationKey, 'fresh-session-post');
   } finally {
     globalThis.fetch = originalFetch;
     if (previousWindow === undefined) {

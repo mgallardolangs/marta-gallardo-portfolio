@@ -295,16 +295,18 @@ test('createBlogPost rejects invalid featured images before network writes', asy
     });
   };
 
+  const validTranslations = {
+    es: { title: 'Rasgo editorial', description: 'Contrato de validación del blog', tags: ['blog'], body: '# Rasgo editorial' },
+    en: { title: 'Editorial feature', description: 'Blog validation contract', tags: ['blog'], body: '# Editorial feature' },
+    fr: { title: 'Fonctionnalité éditoriale', description: 'Contrat de validation du blog', tags: ['blog'], body: '# Fonctionnalité éditoriale' },
+  };
+
   try {
     await assert.rejects(
       store.createBlogPost({
         slug: 'editorial-feature',
-        title: 'Editorial feature',
-        description: 'Blog validation contract',
         date: '2026-08-22',
-        tags: ['blog'],
-        lang: 'es',
-        body: '# Editorial feature',
+        translations: validTranslations,
         featuredImage: new File(['svg'], 'feature.svg', { type: 'image/svg+xml' }),
       }),
       /JPEG|PNG|WebP|GIF/i,
@@ -314,12 +316,8 @@ test('createBlogPost rejects invalid featured images before network writes', asy
     await assert.rejects(
       store.createBlogPost({
         slug: 'editorial-feature-oversized',
-        title: 'Editorial feature oversized',
-        description: 'Blog validation contract',
         date: '2026-08-22',
-        tags: ['blog'],
-        lang: 'es',
-        body: '# Editorial feature',
+        translations: validTranslations,
         featuredImage: new File([new Uint8Array(2 * 1024 * 1024 + 1)], 'feature.webp', { type: 'image/webp' }),
       }),
       /2\s*MB|2097152/i,
@@ -332,10 +330,20 @@ test('createBlogPost rejects invalid featured images before network writes', asy
   assert.deepEqual(fetchCalls, [], 'image validation should fail before any Git Gateway fetch call');
 });
 
-test('createBlogPost uploads the featured asset first, writes public image frontmatter, and keeps markdown second', async () => {
+test('createBlogPost uploads the featured asset first, writes public image frontmatter, and keeps every locale markdown write second', async () => {
   const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
   const store = new AdminStore();
   store.init({ es: {}, en: {}, fr: {} }, {}, 'es', 'publish-token');
+
+  const localePaths = {
+    es: 'src/content/blog/editorial-feature/es.md',
+    en: 'src/content/blog/editorial-feature/en.md',
+    fr: 'src/content/blog/editorial-feature/fr.md',
+    de: 'src/content/blog/editorial-feature/de.md',
+    it: 'src/content/blog/editorial-feature/it.md',
+    ca: 'src/content/blog/editorial-feature/ca.md',
+  };
+  const imagePath = 'public/images/blog/editorial-feature.webp';
 
   const calls = [];
   const originalFetch = globalThis.fetch;
@@ -344,28 +352,28 @@ test('createBlogPost uploads the featured asset first, writes public image front
     const url = String(input);
     calls.push({ method, url, body: init.body ?? null });
 
-    if (method === 'GET' && url.includes('src/content/blog/editorial-feature.md')) {
+    if (method === 'GET' && Object.values(localePaths).some((localePath) => url.includes(localePath))) {
       return new Response(JSON.stringify({ message: 'Not Found' }), {
         status: 404,
         headers: { 'Content-Type': 'application/json' },
       });
     }
 
-    if (method === 'GET' && url.includes('public/images/blog/editorial-feature.webp')) {
+    if (method === 'GET' && url.includes(imagePath)) {
       return new Response(JSON.stringify({ message: 'Not Found' }), {
         status: 404,
         headers: { 'Content-Type': 'application/json' },
       });
     }
 
-    if (method === 'PUT' && url.includes('public/images/blog/editorial-feature.webp')) {
+    if (method === 'PUT' && url.includes(imagePath)) {
       return new Response(JSON.stringify({ content: { sha: 'image-sha' } }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
       });
     }
 
-    if (method === 'PUT' && url.includes('src/content/blog/editorial-feature.md')) {
+    if (method === 'PUT' && Object.values(localePaths).some((localePath) => url.includes(localePath))) {
       return new Response(JSON.stringify({ content: { sha: 'markdown-sha' } }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
@@ -379,40 +387,52 @@ test('createBlogPost uploads the featured asset first, writes public image front
   };
 
   try {
-    const createdPath = await store.createBlogPost({
+    const translationKey = await store.createBlogPost({
       slug: 'editorial-feature',
-      title: 'Editorial feature',
-      description: 'Blog upload ordering contract',
       date: '2026-08-22',
-      tags: ['blog'],
-      lang: 'es',
-      body: '# Editorial feature',
+      translations: {
+        es: { title: 'Rasgo editorial', description: 'Contrato de orden de subida', tags: ['blog'], body: '# Rasgo editorial' },
+        en: { title: 'Editorial feature', description: 'Blog upload ordering contract', tags: ['blog'], body: '# Editorial feature' },
+        fr: { title: 'Fonctionnalité éditoriale', description: "Contrat d'ordre de téléversement", tags: ['blog'], body: '# Fonctionnalité éditoriale' },
+      },
       featuredImage: new File(['image-binary'], 'editorial-feature.webp', { type: 'image/webp' }),
     });
 
-    assert.equal(createdPath, 'src/content/blog/editorial-feature.md', 'createBlogPost should still resolve to the markdown path');
+    assert.equal(translationKey, 'editorial-feature', 'createBlogPost should still resolve to the shared translationKey');
   } finally {
     globalThis.fetch = originalFetch;
   }
 
+  const imageCallIndexes = calls
+    .map((call, index) => ({ call, index }))
+    .filter(({ call }) => call.url.includes(imagePath))
+    .map(({ index }) => index);
+  const localeCallIndexes = calls
+    .map((call, index) => ({ call, index }))
+    .filter(({ call }) => Object.values(localePaths).some((localePath) => call.url.includes(localePath)))
+    .map(({ index }) => index);
+
   assert.deepEqual(
-    calls.map((call) => `${call.method} ${call.url}`),
+    calls.slice(0, 2).map((call) => `${call.method} ${call.url}`),
     [
-      'GET /.netlify/git/github/contents/src/content/blog/editorial-feature.md',
-      'GET /.netlify/git/github/contents/public/images/blog/editorial-feature.webp',
-      'PUT /.netlify/git/github/contents/public/images/blog/editorial-feature.webp',
-      'PUT /.netlify/git/github/contents/src/content/blog/editorial-feature.md',
+      `GET /.netlify/git/github/contents/${imagePath}`,
+      `PUT /.netlify/git/github/contents/${imagePath}`,
     ],
-    'createBlogPost should check the duplicate slug first, upload the featured asset, and only then create the markdown file',
+    'createBlogPost should upload the featured asset before touching any locale markdown file',
   );
+  assert.ok(
+    Math.max(...imageCallIndexes) < Math.min(...localeCallIndexes),
+    'every locale markdown fetch/write should happen strictly after the shared featured image upload',
+  );
+  assert.equal(localeCallIndexes.length, 12, 'all six locale files should be read then written (GET+PUT each)');
 
-  const markdownPut = calls.find((call) => call.method === 'PUT' && call.url.includes('src/content/blog/editorial-feature.md'));
-  assert.ok(markdownPut?.body, 'createBlogPost should write markdown content');
+  const esMarkdownPut = calls.find((call) => call.method === 'PUT' && call.url.includes(localePaths.es));
+  assert.ok(esMarkdownPut?.body, 'createBlogPost should write markdown content for the visible ES locale');
 
-  const payload = JSON.parse(String(markdownPut.body));
+  const payload = JSON.parse(String(esMarkdownPut.body));
   const markdown = Buffer.from(payload.content, 'base64').toString('utf8');
 
-  assert.match(markdown, /^image:\s*["']\/images\/blog\/editorial-feature\.webp["']$/m, 'created markdown frontmatter should include the public featured image path');
+  assert.match(markdown, /^image:\s*["']\/images\/blog\/editorial-feature\.webp["']$/m, 'created markdown frontmatter should include the shared public featured image path');
 });
 
 test('createBlogPost reuses an orphaned featured image on retry by upserting with the fetched sha before creating markdown', async () => {
@@ -420,9 +440,19 @@ test('createBlogPost reuses an orphaned featured image on retry by upserting wit
   const store = new AdminStore();
   store.init({ es: {}, en: {}, fr: {} }, {}, 'es', 'publish-token');
 
+  const localePaths = {
+    es: 'src/content/blog/retry-feature/es.md',
+    en: 'src/content/blog/retry-feature/en.md',
+    fr: 'src/content/blog/retry-feature/fr.md',
+    de: 'src/content/blog/retry-feature/de.md',
+    it: 'src/content/blog/retry-feature/it.md',
+    ca: 'src/content/blog/retry-feature/ca.md',
+  };
+  const imagePath = 'public/images/blog/retry-feature.webp';
+
   const calls = [];
   let imageShaAvailable = false;
-  let markdownAttempt = 0;
+  let esMarkdownAttempt = 0;
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async (input, init = {}) => {
     const method = init.method ?? 'GET';
@@ -430,14 +460,7 @@ test('createBlogPost reuses an orphaned featured image on retry by upserting wit
     const body = init.body ?? null;
     calls.push({ method, url, body });
 
-    if (method === 'GET' && url.includes('src/content/blog/retry-feature.md')) {
-      return new Response(JSON.stringify({ message: 'Not Found' }), {
-        status: 404,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (method === 'GET' && url.includes('public/images/blog/retry-feature.webp')) {
+    if (method === 'GET' && url.includes(imagePath)) {
       if (!imageShaAvailable) {
         return new Response(JSON.stringify({ message: 'Not Found' }), {
           status: 404,
@@ -451,7 +474,7 @@ test('createBlogPost reuses an orphaned featured image on retry by upserting wit
       });
     }
 
-    if (method === 'PUT' && url.includes('public/images/blog/retry-feature.webp')) {
+    if (method === 'PUT' && url.includes(imagePath)) {
       imageShaAvailable = true;
       return new Response(JSON.stringify({ content: { sha: 'saved-image-sha' } }), {
         status: 200,
@@ -459,17 +482,38 @@ test('createBlogPost reuses an orphaned featured image on retry by upserting wit
       });
     }
 
-    if (method === 'PUT' && url.includes('src/content/blog/retry-feature.md')) {
-      markdownAttempt += 1;
+    if (method === 'GET' && url.includes(localePaths.es)) {
+      return new Response(JSON.stringify({ message: 'Not Found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
-      if (markdownAttempt === 1) {
+    if (method === 'PUT' && url.includes(localePaths.es)) {
+      esMarkdownAttempt += 1;
+
+      if (esMarkdownAttempt === 1) {
         return new Response(JSON.stringify({ message: 'Simulated markdown failure' }), {
           status: 500,
           headers: { 'Content-Type': 'application/json' },
         });
       }
 
-      return new Response(JSON.stringify({ content: { sha: 'markdown-sha' } }), {
+      return new Response(JSON.stringify({ content: { sha: 'es-markdown-sha' } }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    if (method === 'GET' && Object.values(localePaths).some((localePath) => url.includes(localePath))) {
+      return new Response(JSON.stringify({ message: 'Not Found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    if (method === 'PUT' && Object.values(localePaths).some((localePath) => url.includes(localePath))) {
+      return new Response(JSON.stringify({ content: { sha: 'locale-markdown-sha' } }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
       });
@@ -481,60 +525,51 @@ test('createBlogPost reuses an orphaned featured image on retry by upserting wit
     });
   };
 
+  const translations = {
+    es: { title: 'Rasgo de reintento', description: 'La primera vez deja la imagen huérfana', tags: ['blog'], body: '# Rasgo de reintento' },
+    en: { title: 'Retry feature', description: 'First attempt leaves the image behind', tags: ['blog'], body: '# Retry feature' },
+    fr: { title: 'Fonctionnalité de nouvelle tentative', description: "La première tentative laisse l'image orpheline", tags: ['blog'], body: '# Fonctionnalité de nouvelle tentative' },
+  };
+
   try {
     await assert.rejects(
       store.createBlogPost({
         slug: 'retry-feature',
-        title: 'Retry feature',
-        description: 'First attempt leaves the image behind',
         date: '2026-08-24',
-        tags: ['blog'],
-        lang: 'es',
-        body: '# Retry feature',
+        translations,
         featuredImage: new File(['retry-image'], 'retry-feature.webp', { type: 'image/webp' }),
       }),
       /Simulated markdown failure/,
-      'the first publish attempt should expose the markdown failure after the image upload succeeds',
+      'the first create attempt should expose the ES markdown failure after the image upload succeeds',
     );
 
-    const createdPath = await store.createBlogPost({
+    const translationKey = await store.createBlogPost({
       slug: 'retry-feature',
-      title: 'Retry feature',
-      description: 'Second attempt should reuse the existing image',
       date: '2026-08-24',
-      tags: ['blog'],
-      lang: 'es',
-      body: '# Retry feature',
+      translations,
       featuredImage: new File(['retry-image'], 'retry-feature.webp', { type: 'image/webp' }),
     });
 
-    assert.equal(createdPath, 'src/content/blog/retry-feature.md');
+    assert.equal(translationKey, 'retry-feature');
   } finally {
     globalThis.fetch = originalFetch;
   }
 
-  assert.deepEqual(
-    calls.map((call) => `${call.method} ${call.url}`),
-    [
-      'GET /.netlify/git/github/contents/src/content/blog/retry-feature.md',
-      'GET /.netlify/git/github/contents/public/images/blog/retry-feature.webp',
-      'PUT /.netlify/git/github/contents/public/images/blog/retry-feature.webp',
-      'PUT /.netlify/git/github/contents/src/content/blog/retry-feature.md',
-      'GET /.netlify/git/github/contents/src/content/blog/retry-feature.md',
-      'GET /.netlify/git/github/contents/public/images/blog/retry-feature.webp',
-      'PUT /.netlify/git/github/contents/public/images/blog/retry-feature.webp',
-      'PUT /.netlify/git/github/contents/src/content/blog/retry-feature.md',
-    ],
-    'retrying should still check the markdown slug first, then upsert the orphaned image before retrying the markdown create',
-  );
-
-  const imagePuts = calls.filter((call) => call.method === 'PUT' && call.url.includes('public/images/blog/retry-feature.webp'));
-  assert.equal(imagePuts.length, 2, 'the featured image should be written once per attempt');
+  const imagePuts = calls.filter((call) => call.method === 'PUT' && call.url.includes(imagePath));
+  assert.equal(imagePuts.length, 2, 'the featured image should be upserted once per create attempt');
 
   const firstImagePayload = JSON.parse(String(imagePuts[0].body));
   const secondImagePayload = JSON.parse(String(imagePuts[1].body));
   assert.equal(firstImagePayload.sha, undefined, 'the first image create should not include a sha when the file does not exist yet');
   assert.equal(secondImagePayload.sha, 'orphan-image-sha', 'the retry image upsert should include the fetched sha so the orphan asset can be safely reused');
+
+  const esPuts = calls.filter((call) => call.method === 'PUT' && call.url.includes(localePaths.es));
+  assert.equal(esPuts.length, 2, 'the ES locale file should be attempted once per create attempt (failing, then succeeding)');
+
+  const totalLocalePutAttempts = calls.filter(
+    (call) => call.method === 'PUT' && Object.values(localePaths).some((localePath) => call.url.includes(localePath)),
+  );
+  assert.equal(totalLocalePutAttempts.length, 7, 'across both attempts, ES should be PUT twice (fail then succeed) and the other five locales PUT once each on the retry');
 });
 
 test('Blog Task 1 protects the approved Home, UGC, and Translation source contracts', async () => {
