@@ -437,5 +437,10 @@ test('built public and admin HTML keep SEO/noindex classes, local media referenc
 
   assert.ok(sitemapRoutePaths.has('/blog/mi-primer-post'), 'sitemap should include the built Spanish article route');
   assert.ok(!sitemapRoutePaths.has('/admin/blog/new'), 'sitemap should exclude the inline admin new-post route');
-  assert.ok(!sitemapRoutePaths.has('/en/blog/mi-primer-post'), 'sitemap should not invent unbuilt localized article routes');
+  for (const locale of ['en', 'fr', 'de', 'it', 'ca']) {
+    assert.ok(
+      sitemapRoutePaths.has(`/${locale}/blog/mi-primer-post`),
+      `sitemap should include the built ${locale} fallback article route now that every locale is migrated`,
+    );
+  }
 });

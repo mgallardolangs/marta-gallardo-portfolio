@@ -10,6 +10,7 @@ type BlogPost = {
   id: string;
   body?: string;
   data: {
+    slug: string;
     title: string;
     description: string;
     date: Date;
@@ -99,7 +100,7 @@ const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+
               <p class="text-accent-ink font-body text-[0.72rem] font-semibold uppercase tracking-[0.28em]">{i.blog.end}</p>
 
               {nextPost ? (
-                <a href={getLocalizedPath(`/blog/${nextPost.id}`, lang)} class="mt-5 inline-flex flex-col gap-2 border-b border-black/10 pb-2 transition hover:border-amaranth hover:text-amaranth">
+                <a href={getLocalizedPath(`/blog/${nextPost.data.slug}`, lang)} class="mt-5 inline-flex flex-col gap-2 border-b border-black/10 pb-2 transition hover:border-amaranth hover:text-amaranth">
                   <span class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-ink-faint">{i.blog.nextStory}</span>
                   <span class="font-heading text-2xl leading-tight text-ink">{nextPost.data.title}</span>
                 </a>

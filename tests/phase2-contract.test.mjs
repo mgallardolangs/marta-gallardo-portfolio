@@ -195,7 +195,7 @@ test('Phase 2 blog index keeps locale-aware hrefs and the editorial empty-archiv
   ]);
 
   assert.match(viewSource, /import\s+\{\s*getLangFromUrl,\s*getLocalizedPath,\s*t\s*\}\s+from\s+['"]..\/i18n['"]/);
-  assert.match(viewSource, /href=\{getLocalizedPath\(`\/blog\/\$\{post\.id\}`,\s*lang\)\}/);
+  assert.match(viewSource, /href=\{getLocalizedPath\(`\/blog\/\$\{post\.data\.slug\}`,\s*lang\)\}/);
   assert.match(viewSource, /data-blog-archive/);
   assert.match(viewSource, /i\.blog\.comingSoonTitle/);
   assert.match(viewSource, /i\.blog\.comingSoonMeta/);
