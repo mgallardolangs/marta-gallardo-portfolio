@@ -153,6 +153,12 @@ function makeTranslationsFixture(overrides = {}) {
   };
 }
 
+function makeAllLocaleTranslationsFixture(overrides = {}) {
+  return Object.fromEntries(
+    SIX_LOCALES.map((locale) => [locale, makeLocaleTranslation(locale, overrides[locale])]),
+  );
+}
+
 function makeFakePost({ id, slug, translationKey, lang, date, image, title, description, tags = [], body = '' }) {
   return {
     id,
@@ -723,8 +729,8 @@ test('publicLanguagePicker can make DE a required create/edit locale, and BlogPo
         currentImage: '/images/blog/mi-post-con-de.webp',
         translations: makeTranslationsFixture(),
       }),
-      /obligatori|requerid|falta|completa|rellena/i,
-      'making DE visible should require a DE translation during edit before any repository access',
+      [/obligatori|requerid|falta|required/i, /\bde\b/i],
+      'making DE visible should require update validation to name the missing DE locale before any repository access',
     );
 
     assert.deepEqual(createFetchCalls, [], 'missing DE should fail validation before any Git Gateway call');
@@ -1238,7 +1244,37 @@ test('updateBlogPost uploads a replacement shared image before any locale writes
   const store = createAdminStore(AdminStore);
 
   const localePaths = getLocaleMarkdownPaths('mi-post');
-  const { repositoryPath: imagePath } = getSharedImagePaths('mi-post', 'png');
+  const { repositoryPath: imagePath, publicPath: imagePublicPath } = getSharedImagePaths('mi-post', 'png');
+  const existingTranslationsByLocale = makeAllLocaleTranslationsFixture({
+    de: {
+      title: 'Titel DE versteckt',
+      description: 'Beschreibung DE bleibt unverändert',
+      tags: ['seo', 'behalten-de'],
+      body: '# Inhalt DE bleibt exakt',
+    },
+    it: {
+      title: 'Titolo IT nascosto',
+      description: 'Descrizione IT resta invariata',
+      tags: ['seo', 'mantieni-it'],
+      body: '# Corpo IT resta identico',
+    },
+    ca: {
+      title: 'Títol CA ocult',
+      description: 'Descripció CA es manté intacta',
+      tags: ['seo', 'mantenir-ca'],
+      body: '# Cos CA es manté exacte',
+    },
+  });
+  const existingMarkdownByLocale = Object.fromEntries(
+    SIX_LOCALES.map((locale) => [locale, buildFrontmatterFixture({
+      slug: 'mi-post',
+      translationKey: 'tk-mi-post',
+      date: '2026-08-26',
+      image: '/images/blog/mi-post.webp',
+      ...existingTranslationsByLocale[locale],
+      lang: locale,
+    })]),
+  );
 
   const originalFetch = globalThis.fetch;
   const fetchCalls = [];
@@ -1261,8 +1297,14 @@ test('updateBlogPost uploads a replacement shared image before any locale writes
     }
 
     for (const filePath of Object.values(localePaths)) {
-      if (call.url.includes(filePath)) {
-        if (call.method === 'GET') return new Response(JSON.stringify({ sha: `${filePath}-sha` }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      const locale = Object.entries(localePaths).find(([, candidatePath]) => candidatePath === filePath)?.[0];
+      if (call.url.includes(filePath) && locale) {
+        if (call.method === 'GET') {
+          return new Response(JSON.stringify({
+            sha: `${filePath}-sha`,
+            content: Buffer.from(existingMarkdownByLocale[locale], 'utf8').toString('base64'),
+          }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
         if (call.method === 'PUT') return new Response(JSON.stringify({ content: { sha: `${filePath}-updated-sha` } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
       }
     }
@@ -1281,15 +1323,30 @@ test('updateBlogPost uploads a replacement shared image before any locale writes
   try {
     await performUpdate();
     const firstCallCount = fetchCalls.length;
+    const firstBatch = fetchCalls.slice(0, firstCallCount);
     await performUpdate();
     const secondBatch = fetchCalls.slice(firstCallCount);
 
-    const firstSequence = fetchCalls.slice(0, firstCallCount).map(getCallSummary);
+    const firstSequence = firstBatch.map(getCallSummary);
     const firstImagePutIndex = firstSequence.indexOf(`PUT /.netlify/git/github/contents/${imagePath}`);
     assert.ok(firstImagePutIndex > -1, 'the first update should upload the replacement image');
     for (const filePath of Object.values(localePaths)) {
       const markdownPutIndex = firstSequence.indexOf(`PUT /.netlify/git/github/contents/${filePath}`);
       assert.ok(markdownPutIndex > firstImagePutIndex, `the ${filePath} write should happen after the image upload on the first call`);
+    }
+
+    for (const hiddenLocale of HIDDEN_LOCALES) {
+      const putCall = firstBatch.find((call) => call.method === 'PUT' && call.url.includes(localePaths[hiddenLocale]));
+      assert.ok(putCall, `the first replacement-image update should still upsert the hidden ${hiddenLocale} locale file`);
+      const payload = decodeRepositoryPayload(putCall.body);
+      assert.equal(
+        payload.markdown,
+        existingMarkdownByLocale[hiddenLocale].replace(
+          'image: "/images/blog/mi-post.webp"\n',
+          `image: ${JSON.stringify(imagePublicPath)}\n`,
+        ),
+        `the hidden ${hiddenLocale} locale should preserve its localized title/description/tags/body when only the shared image changes`,
+      );
     }
 
     const secondImageGet = secondBatch.find((call) => call.method === 'GET' && call.url.includes(imagePath));
@@ -1340,8 +1397,8 @@ test('updateBlogPost validates missing or blank required fields for currently vi
           fr: makeLocaleTranslation('fr'),
         },
       }),
-      /obligatori|requerid|falta|completa|rellena/i,
-      'editing without every visible-locale translation should reject in Spanish before any repository access',
+      [/obligatori|requerid|falta|required/i, /\ben\b/i],
+      'editing without every visible-locale translation (missing EN here) should reject with the exact locale before any repository access',
     );
 
     await assertRejectsWithMessage(
@@ -1351,8 +1408,8 @@ test('updateBlogPost validates missing or blank required fields for currently vi
         currentImage: '/images/blog/mi-post.webp',
         translations: makeTranslationsFixture({ en: { title: '   ' } }),
       }),
-      /obligatori|requerid|falta|completa|rellena/i,
-      'a blank required field for a visible edit locale should reject in Spanish before any repository mutation',
+      [/obligatori|requerid|falta|required/i, /\ben\b/i, /t[ií]tulo|title/i],
+      'a blank EN title should reject with the exact locale and field before any repository mutation',
     );
   } finally {
     globalThis.fetch = originalFetch;
@@ -1367,6 +1424,36 @@ test('updateBlogPost removing the shared image clears the image frontmatter on e
 
   const localePaths = getLocaleMarkdownPaths('mi-post');
   const { repositoryPath: imagePath } = getSharedImagePaths('mi-post', 'webp');
+  const existingTranslationsByLocale = makeAllLocaleTranslationsFixture({
+    de: {
+      title: 'Titel DE versteckt',
+      description: 'Beschreibung DE bleibt unverändert',
+      tags: ['seo', 'behalten-de'],
+      body: '# Inhalt DE bleibt exakt',
+    },
+    it: {
+      title: 'Titolo IT nascosto',
+      description: 'Descrizione IT resta invariata',
+      tags: ['seo', 'mantieni-it'],
+      body: '# Corpo IT resta identico',
+    },
+    ca: {
+      title: 'Títol CA ocult',
+      description: 'Descripció CA es manté intacta',
+      tags: ['seo', 'mantenir-ca'],
+      body: '# Cos CA es manté exacte',
+    },
+  });
+  const existingMarkdownByLocale = Object.fromEntries(
+    SIX_LOCALES.map((locale) => [locale, buildFrontmatterFixture({
+      slug: 'mi-post',
+      translationKey: 'tk-mi-post',
+      date: '2026-08-26',
+      image: '/images/blog/mi-post.webp',
+      ...existingTranslationsByLocale[locale],
+      lang: locale,
+    })]),
+  );
 
   const originalFetch = globalThis.fetch;
   const fetchCalls = [];
@@ -1376,8 +1463,14 @@ test('updateBlogPost removing the shared image clears the image frontmatter on e
     fetchCalls.push(call);
 
     for (const filePath of Object.values(localePaths)) {
-      if (call.url.includes(filePath)) {
-        if (call.method === 'GET') return new Response(JSON.stringify({ sha: `${filePath}-sha` }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      const locale = Object.entries(localePaths).find(([, candidatePath]) => candidatePath === filePath)?.[0];
+      if (call.url.includes(filePath) && locale) {
+        if (call.method === 'GET') {
+          return new Response(JSON.stringify({
+            sha: `${filePath}-sha`,
+            content: Buffer.from(existingMarkdownByLocale[locale], 'utf8').toString('base64'),
+          }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
         if (call.method === 'PUT') return new Response(JSON.stringify({ content: { sha: `${filePath}-updated-sha` } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
       }
     }
@@ -1406,6 +1499,17 @@ test('updateBlogPost removing the shared image clears the image frontmatter on e
     const putCall = fetchCalls.find((call) => call.method === 'PUT' && call.url.includes(filePath));
     assert.ok(putCall, `updateBlogPost should still upsert ${filePath} when removing the shared image`);
     assertMarkdownFrontmatter(decodeRepositoryPayload(putCall.body).markdown, { image: null });
+  }
+
+  for (const hiddenLocale of HIDDEN_LOCALES) {
+    const putCall = fetchCalls.find((call) => call.method === 'PUT' && call.url.includes(localePaths[hiddenLocale]));
+    assert.ok(putCall, `removing the shared image should still upsert the hidden ${hiddenLocale} locale file`);
+    const payload = decodeRepositoryPayload(putCall.body);
+    assert.equal(
+      payload.markdown,
+      existingMarkdownByLocale[hiddenLocale].replace('image: "/images/blog/mi-post.webp"\n', ''),
+      `the hidden ${hiddenLocale} locale should preserve its localized title/description/tags/body when only the shared image is removed`,
+    );
   }
 
   const sequence = fetchCalls.map(getCallSummary);
