@@ -30,6 +30,84 @@ async function readRequiredSource(relativePath) {
   }
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function captureLocaleFieldRenderer(source) {
+  const helperDefinitions = [...source.matchAll(/^(?:export\s+)?(?:function\s+([A-Za-z_$][\w$]*)\s*\(|const\s+([A-Za-z_$][\w$]*)\s*=)/gm)];
+  const localeFieldDefinition = helperDefinitions.find((definition, index) =>
+    source
+      .slice(definition.index ?? 0, helperDefinitions[index + 1]?.index ?? source.length)
+      .includes('EDITABLE_COLLECTION_LOCALES.map'),
+  );
+
+  assert.ok(
+    localeFieldDefinition?.[1] || localeFieldDefinition?.[2],
+    'experience editor should define a locale-field helper or render block driven by EDITABLE_COLLECTION_LOCALES',
+  );
+
+  const helperStart = localeFieldDefinition.index ?? 0;
+  const helperIndex = helperDefinitions.indexOf(localeFieldDefinition);
+  const helperBlock = source.slice(helperStart, helperDefinitions[helperIndex + 1]?.index ?? source.length);
+
+  return {
+    block: helperBlock,
+    name: localeFieldDefinition[1] ?? localeFieldDefinition[2],
+  };
+}
+
+function captureExperienceEditorRenderPath(source) {
+  const directDefaultExport = source.match(
+    /export\s+default\s+function\s+AdminTranslationExperienceEditor\s*\([^)]*\)\s*\{[\s\S]*$/,
+  );
+
+  if (directDefaultExport) {
+    return directDefaultExport[0];
+  }
+
+  const namedDefaultExport = source.match(
+    /(?<renderPath>(?:function|const)\s+AdminTranslationExperienceEditor\b[\s\S]*?export\s+default\s+AdminTranslationExperienceEditor\s*;?)/,
+  );
+
+  assert.ok(
+    namedDefaultExport?.groups?.renderPath,
+    'experience editor should default export the AdminTranslationExperienceEditor render path',
+  );
+
+  return namedDefaultExport.groups.renderPath;
+}
+
+function assertRenderPathUsesLocaleFieldHelper(renderPath, helperName) {
+  const escapedHelperName = escapeRegExp(helperName);
+  const invocationMatches = renderPath.match(new RegExp(`(?:<${escapedHelperName}\\b|\\b${escapedHelperName}\\s*\\()`, 'g')) ?? [];
+
+  assert.ok(
+    invocationMatches.length >= 2,
+    `experience editor render path should invoke ${helperName} for both education and experience add flows`,
+  );
+
+  const educationUsagePattern = new RegExp(
+    `(?:<${escapedHelperName}\\b[\\s\\S]{0,1200}?\\b(?:value|values|field|fields|state)\\s*=\\{[\\s\\S]{0,400}?(?:education|stud(?:y|ies))[\\s\\S]{0,400}?\\}|\\b${escapedHelperName}\\s*\\([\\s\\S]{0,1200}?\\b(?:value|values|field|fields|state)\\s*:\\s*[\\s\\S]{0,400}?(?:education|stud(?:y|ies))[\\s\\S]{0,400}?(?:,|\\n|\\)))`,
+    'i',
+  );
+  const experienceUsagePattern = new RegExp(
+    `(?:<${escapedHelperName}\\b[\\s\\S]{0,1200}?\\b(?:value|values|field|fields|state)\\s*=\\{[\\s\\S]{0,400}?(?:experience|card|highlight|title|text)[\\s\\S]{0,400}?\\}|\\b${escapedHelperName}\\s*\\([\\s\\S]{0,1200}?\\b(?:value|values|field|fields|state)\\s*:\\s*[\\s\\S]{0,400}?(?:experience|card|highlight|title|text)[\\s\\S]{0,400}?(?:,|\\n|\\)))`,
+    'i',
+  );
+
+  assert.match(
+    renderPath,
+    educationUsagePattern,
+    `experience editor should render ${helperName} with education/study state for the add-study form`,
+  );
+  assert.match(
+    renderPath,
+    experienceUsagePattern,
+    `experience editor should render ${helperName} with experience/card state for the add-card form`,
+  );
+}
+
 function createLocalizedText(es, en, fr, de = es, it = es, ca = es) {
   return { es, en, fr, de, it, ca };
 }
@@ -399,23 +477,18 @@ test('AdminTranslationExperienceEditor source uses the shared admin store, local
   assert.match(source, /addExperienceCard/, 'experience editor should create cards through the store API');
   assert.match(source, /translationPage\.education\.intro/, 'experience editor should keep the education intro editable');
   assert.match(source, /translationPage\.experience\.intro/, 'experience editor should keep the experience intro editable');
-  const localeFieldRenderBlock = source.match(
-    /(?:function|const)\s+\w+\s*(?:=\s*)?(?:\([^)]*\)\s*=>|\([^)]*\)\s*\{[\s\S]*?return\s*\(|\([^)]*\)\s*\{)[\s\S]*?EDITABLE_COLLECTION_LOCALES\.map\(\s*(?:\(\s*locale(?:\s*,[^)]*)?\s*\)|locale)\s*=>\s*\([\s\S]*?\)\s*\)/,
-  );
-  assert.ok(
-    localeFieldRenderBlock,
-    'experience editor should define a locale-field helper or render block driven by EDITABLE_COLLECTION_LOCALES',
-  );
+  const { block: localeFieldRenderBlock, name: localeFieldHelperName } = captureLocaleFieldRenderer(source);
   assert.match(
-    localeFieldRenderBlock[0],
+    localeFieldRenderBlock,
     /locale\.toUpperCase\(\)/,
     'experience editor locale-field block should render locale labels with locale.toUpperCase()',
   );
   assert.match(
-    localeFieldRenderBlock[0],
+    localeFieldRenderBlock,
     /<(?:input|textarea)\b[\s\S]*?\bvalue=\{\s*[A-Za-z_$][\w$]*\[locale\]\s*\}/,
     'experience editor locale-field block should render a controlled input or textarea keyed by locale',
   );
+  assertRenderPathUsesLocaleFieldHelper(captureExperienceEditorRenderPath(source), localeFieldHelperName);
   assert.match(source, /role="alert"/, 'experience editor should render inline validation errors accessibly');
   assert.match(source, /(?:sm|md):grid-cols-2[^"]*(?:xl|2xl):grid-cols-3/, 'experience editor should preview experience cards in the responsive approved grid');
 });
