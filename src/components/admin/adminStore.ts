@@ -114,6 +114,7 @@ export type TranslationExperienceCardInput = {
 const DRAFT_STORAGE_KEY = 'marta-inline-editor-draft';
 const EXPERIENCE_EDITOR_LANGS = ['es', 'en', 'fr'] as const;
 const EXPERIENCE_FALLBACK_LANGS = ['de', 'it', 'ca'] as const;
+const TRANSLATION_EXPERIENCE_FALLBACK_SYNC_KEY_PATTERN = /^(?:translationPage\.education\.studies\.\d+|translationPage\.experience\.cards\.\d+\.(?:highlight|title|text))$/;
 
 function cloneValue<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
@@ -586,11 +587,29 @@ export class AdminStore {
     return nextCards;
   }
 
+  private syncTranslationExperienceFallbacks(key: string, previousSpanishValue: unknown, nextSpanishValue: string): void {
+    EXPERIENCE_FALLBACK_LANGS.forEach((lang) => {
+      const langTree = this.i18n[lang];
+      if (!langTree) return;
+
+      const parkedValue = deepGet(langTree, key);
+      if ((typeof parkedValue === 'string' && parkedValue.trim() === '') || parkedValue === previousSpanishValue) {
+        deepSet(langTree, key, nextSpanishValue);
+      }
+    });
+  }
+
   setText(key: string, value: string): void {
     if (!this.initialized) return;
     const langTree = this.i18n[this.currentLang];
     if (!langTree) return;
+    const shouldSyncTranslationExperienceFallbacks = this.currentLang === 'es'
+      && TRANSLATION_EXPERIENCE_FALLBACK_SYNC_KEY_PATTERN.test(key);
+    const previousSpanishValue = shouldSyncTranslationExperienceFallbacks ? deepGet(langTree, key) : undefined;
     deepSet(langTree, key, value);
+    if (shouldSyncTranslationExperienceFallbacks) {
+      this.syncTranslationExperienceFallbacks(key, previousSpanishValue, value);
+    }
     this.publishSuccessState = false;
     this.publishErrorState = '';
     this.emit();

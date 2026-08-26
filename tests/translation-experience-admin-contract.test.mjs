@@ -361,11 +361,6 @@ test('AdminStore adds education studies and experience cards across all locale t
     text: createLocalizedText('Nuevo resumen ES', 'New summary EN', 'Nouveau résumé FR'),
   });
   assert.equal(emitCount, 2, 'adding an experience card should emit exactly once');
-  unsubscribe();
-
-  const snapshot = store.getSnapshot();
-  assert.equal(snapshot.isDirty, true, 'adding translation experience content should mark the draft dirty');
-  assert.ok(snapshot.pendingCount > 0, 'adding translation experience content should increase the dirty diff count');
 
   assert.deepEqual(captureExperienceState(store), {
     es: {
@@ -420,6 +415,91 @@ test('AdminStore adds education studies and experience cards across all locale t
       cards: [
         { highlight: 'Client existent CA', title: 'Rol existent CA', text: 'Resum existent CA' },
         { highlight: 'Nuevo cliente ES', title: 'Nuevo rol ES', text: 'Nuevo resumen ES' },
+      ],
+    },
+  });
+
+  store.setLang('de');
+  const emitCountBeforeGermanSeed = emitCount;
+  store.setText('translationPage.experience.cards.1.title', 'Lokalisierte Rolle DE');
+  assert.equal(emitCount, emitCountBeforeGermanSeed + 1, 'seeding a distinct DE experience title should emit exactly once');
+
+  store.setLang('es');
+
+  const emitCountBeforeStudyEdit = emitCount;
+  store.setText('translationPage.education.studies.1', 'Formación ajustada ES');
+  assert.equal(emitCount, emitCountBeforeStudyEdit + 1, 'editing the new education study in ES should emit exactly once');
+
+  const emitCountBeforeHighlightEdit = emitCount;
+  store.setText('translationPage.experience.cards.1.highlight', 'Cliente ajustado ES');
+  assert.equal(emitCount, emitCountBeforeHighlightEdit + 1, 'editing the new experience highlight in ES should emit exactly once');
+
+  const emitCountBeforeTitleEdit = emitCount;
+  store.setText('translationPage.experience.cards.1.title', 'Rol ajustado ES');
+  assert.equal(emitCount, emitCountBeforeTitleEdit + 1, 'editing the new experience title in ES should emit exactly once');
+
+  const emitCountBeforeTextEdit = emitCount;
+  store.setText('translationPage.experience.cards.1.text', 'Resumen ajustado ES');
+  assert.equal(emitCount, emitCountBeforeTextEdit + 1, 'editing the new experience text in ES should emit exactly once');
+  unsubscribe();
+
+  const snapshot = store.getSnapshot();
+  assert.equal(snapshot.isDirty, true, 'adding translation experience content should mark the draft dirty');
+  assert.ok(snapshot.pendingCount > 0, 'adding translation experience content should increase the dirty diff count');
+
+  assert.deepEqual(captureExperienceState(store), {
+    es: {
+      studiesLength: 2,
+      studies: ['Formación base ES', 'Formación ajustada ES'],
+      cardsLength: 2,
+      cards: [
+        { highlight: 'Cliente base ES', title: 'Rol base ES', text: 'Resumen base ES' },
+        { highlight: 'Cliente ajustado ES', title: 'Rol ajustado ES', text: 'Resumen ajustado ES' },
+      ],
+    },
+    en: {
+      studiesLength: 2,
+      studies: ['Existing study EN', 'New study EN'],
+      cardsLength: 2,
+      cards: [
+        { highlight: 'Existing client EN', title: 'Existing role EN', text: 'Existing summary EN' },
+        { highlight: 'New client EN', title: 'New role EN', text: 'New summary EN' },
+      ],
+    },
+    fr: {
+      studiesLength: 2,
+      studies: ['Étude existante FR', 'Nouvelle étude FR'],
+      cardsLength: 2,
+      cards: [
+        { highlight: 'Client existant FR', title: 'Rôle existant FR', text: 'Résumé existant FR' },
+        { highlight: 'Nouveau client FR', title: 'Nouveau rôle FR', text: 'Nouveau résumé FR' },
+      ],
+    },
+    de: {
+      studiesLength: 2,
+      studies: ['Bestehendes Studium DE', 'Formación ajustada ES'],
+      cardsLength: 2,
+      cards: [
+        { highlight: 'Bestehender Kunde DE', title: 'Bestehende Rolle DE', text: 'Bestehende Zusammenfassung DE' },
+        { highlight: 'Cliente ajustado ES', title: 'Lokalisierte Rolle DE', text: 'Resumen ajustado ES' },
+      ],
+    },
+    it: {
+      studiesLength: 2,
+      studies: ['Studio esistente IT', 'Formación ajustada ES'],
+      cardsLength: 2,
+      cards: [
+        { highlight: 'Cliente esistente IT', title: 'Ruolo esistente IT', text: 'Riepilogo esistente IT' },
+        { highlight: 'Cliente ajustado ES', title: 'Rol ajustado ES', text: 'Resumen ajustado ES' },
+      ],
+    },
+    ca: {
+      studiesLength: 2,
+      studies: ['Estudi existent CA', 'Formación ajustada ES'],
+      cardsLength: 2,
+      cards: [
+        { highlight: 'Client existent CA', title: 'Rol existent CA', text: 'Resum existent CA' },
+        { highlight: 'Cliente ajustado ES', title: 'Rol ajustado ES', text: 'Resumen ajustado ES' },
       ],
     },
   });
