@@ -571,7 +571,7 @@ test('publicLanguagePicker can make DE a required create/edit locale, and BlogPo
   const fetchCalls = [];
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async (input, init = {}) => {
-    const call = { method: init.method ?? 'GET', url: String(input) };
+    const call = { method: init.method ?? 'GET', url: String(input), body: init.body ?? null };
     fetchCalls.push(call);
     if (call.method === 'GET') {
       return new Response(JSON.stringify({ message: 'Not Found' }), {
@@ -633,6 +633,27 @@ test('publicLanguagePicker can make DE a required create/edit locale, and BlogPo
     fetchCalls.every((call) => Object.values(getLocaleMarkdownPaths('mi-post-con-de')).some((filePath) => call.url.includes(filePath))),
     'the DE-visible create flow should probe/write locale-specific Markdown paths rather than an old singleton slug file',
   );
+
+  const putCalls = fetchCalls.filter((call) => call.method === 'PUT');
+  const payloadsByLocale = Object.fromEntries(
+    Object.entries(getLocaleMarkdownPaths('mi-post-con-de')).map(([locale, filePath]) => {
+      const putCall = putCalls.find((call) => call.url.includes(filePath));
+      assert.ok(putCall, `the DE-visible create flow should write ${filePath}`);
+      return [locale, decodeRepositoryPayload(putCall.body)];
+    }),
+  );
+
+  assertMarkdownFrontmatter(payloadsByLocale.de.markdown, {
+    ...makeLocaleTranslation('de'),
+    lang: 'de',
+  });
+  for (const locale of ['it', 'ca']) {
+    assertMarkdownFrontmatter(payloadsByLocale[locale].markdown, {
+      ...makeLocaleTranslation('es'),
+      lang: locale,
+    });
+  }
+
   assert.match(
     formSource,
     /getPublicLanguagePicker\(\)|store\.getPublicLanguagePicker/,
