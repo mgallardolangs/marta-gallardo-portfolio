@@ -49,10 +49,11 @@
 
 ### Admin components
 - `AdminInit.tsx` — Netlify Identity bootstrap + tokenless preview fallback
-- `AdminToolbar.tsx` — draft/publish controls and ES/EN/FR switcher
+- `AdminToolbar.tsx` — Spanish draft/publish controls and ES/EN/FR switcher
 - `EditableText.tsx`, `EditableImage.tsx`, `EditableMedia.tsx` — inline editing primitives
 - `EditableOrbitCollection.tsx` — orbit schema editing
-- `EditableCollection.tsx` — translation arsenal editing
+- `AdminTranslationArsenalEditor.tsx` — integrated translation arsenal editing
+- `AdminTranslationExperienceEditor.tsx` — expandable education/experience browser editor
 - `EditableUgcPortfolio.tsx` — fixed-slot UGC portfolio editor with per-slot media and ES/EN/FR fields
 - `BlogPostForm.tsx` — strict editorial blog composer with featured-image upload, Markdown toolbar, and live outline
 - `AdminOrbitPreview.tsx` — static orbit preview without autoplay runtime or visible controls
@@ -178,7 +179,9 @@ The authored grid is fixed at 12 interleaved slots:
 ### Checkpoint 3 — experience and education
 - `ExperienceTabs` owns the two-panel education/experience browser-window tab UI
 - the public shell keeps the ink browser chrome, amaranth dot, upper-left tabs, stable panel height, and keyboard tab semantics
-- `/admin/translation-seo` mirrors the same browser-tab structure with editable education and experience panels
+- public experience cards wrap through one, two, and three responsive columns as entries grow
+- `/admin/translation-seo` mirrors the browser-tab structure and can add Education bullets or Experience cards with required ES/EN/FR fields
+- new DE/IT/CA entries inherit Spanish; later Spanish edits continue updating only parked fallback values, never distinct localized copy
 
 ### Checkpoint 4 — methodology
 - methodology keeps the ink section, typed display title, four bordered steps, and connector that draws horizontally on desktop and vertically on mobile
@@ -251,11 +254,16 @@ Code-managed:
 - IT
 - CA
 
-When an admin adds new orbit/tool/skill/language copy, Spanish is the fallback source for code-managed locales until code updates those values explicitly.
+When an admin adds new orbit/tool/skill/language/education/experience copy, Spanish is the fallback source for code-managed locales until code updates those values explicitly.
+
+Fixed admin controls, help text, validation errors, upload guidance, and publish
+messages are written directly in Spanish. Editable multilingual website content
+remains in the locale JSON files.
 
 ### Drafts and publish
 - Drafts live in local storage under the admin store
 - Pending binary uploads are not stored fully in local storage; they must be reselected after reload
+- Spanish draft warnings clarify that files only need reselection if the page reloads before publishing
 - Publish refreshes the Netlify Identity JWT before Git Gateway reads and writes, so editing sessions longer than one hour remain publishable
 - If the Identity session cannot refresh, the editor keeps all in-memory changes and asks the user to sign in again
 - Publish writes changed locale JSON, changed `src/data/site.json`, uploaded assets, and blog markdown files
