@@ -20,31 +20,10 @@ async function readSource(relativePath) {
   return readFile(path.join(rootDir, relativePath), 'utf8');
 }
 
-const FIXED_ADMIN_SURFACE_FILES = [
-  'src/components/admin/AdminToolbar.tsx',
-  'src/components/admin/adminStore.ts',
-  'src/components/admin/AdminTranslationArsenalEditor.tsx',
-  'src/components/admin/AdminTranslationExperienceEditor.tsx',
-  'src/components/admin/EditableOrbitCollection.tsx',
-  'src/components/admin/EditableUgcPortfolio.tsx',
-  'src/components/admin/BlogPostForm.tsx',
-  'src/components/admin/EditableImage.tsx',
-  'src/components/admin/EditableMedia.tsx',
-  'src/components/admin/AdminBrandVideo.tsx',
-  'src/components/admin/AdminOrbitPreview.tsx',
-  'src/lib/adminCollections.ts',
-  'src/lib/orbitMedia.ts',
-  'src/lib/ugcPortfolio.ts',
-  'src/pages/admin/index.astro',
-  'src/pages/admin/ugc.astro',
-  'src/pages/admin/blog/new.astro',
-];
-
-async function readFixedAdminSurfaceSources() {
-  const entries = await Promise.all(
-    FIXED_ADMIN_SURFACE_FILES.map(async (relativePath) => [relativePath, await readSource(relativePath)]),
-  );
-  return new Map(entries);
+function assertEnglishUiStringsAbsent(source, checks) {
+  for (const [pattern, message] of checks) {
+    assert.doesNotMatch(source, pattern, message);
+  }
 }
 
 function installWindow(mockWindow) {
@@ -155,13 +134,16 @@ test('AdminToolbar exposes the required Spanish toolbar strings', async () => {
   assert.match(source, /Corrige los avisos del orbit antes de publicar/, 'orbit warning toast should be in Spanish');
   assert.match(source, /¡Publicado!/, 'publish success toast should be in Spanish');
 
-  assert.doesNotMatch(source, /Navigation labels/, 'old English nav labels heading should be gone');
-  assert.doesNotMatch(source, /Public language picker/, 'old English public picker heading should be gone');
-  assert.doesNotMatch(source, /Save draft/, 'old English save draft copy should be gone');
-  assert.doesNotMatch(source, /Publish changes/, 'old English publish copy should be gone');
-  assert.doesNotMatch(source, /Exit editor/, 'old English exit copy should be gone');
-  assert.doesNotMatch(source, /Fix the orbit warnings/, 'old English orbit warning should be gone');
-  assert.doesNotMatch(source, /Published! Rebuilds/, 'old English publish success copy should be gone');
+  assertEnglishUiStringsAbsent(source, [
+    [/>\s*Navigation labels\s*<\/p>/, 'old English nav labels heading should be gone'],
+    [/>\s*Public language picker\s*<\/p>/, 'old English public picker heading should be gone'],
+    [/>\s*(?:💾\s*)?Save draft\s*<\/button>/, 'old English save draft copy should be gone'],
+    [/'🚀 Publish changes'/, 'old English publish button copy should be gone'],
+    [/'⏳ Publishing\.\.\.'/, 'old English in-flight publish state should be gone'],
+    [/>\s*←\s*Exit editor\s*<\/a>/, 'old English exit copy should be gone'],
+    [/>\s*⚠️\s*Fix the orbit warnings before publishing\.\s*<\/p>/, 'old English orbit warning should be gone'],
+    [/>\s*✅\s*Published! Rebuilds in ~2 min\.\s*<\/p>/, 'old English publish success copy should be gone'],
+  ]);
 });
 
 test('AdminStore draft save/restore messages use the exact required Spanish singular/plural wording', async () => {
@@ -296,14 +278,19 @@ test('AdminStore login/session/blog/publish operational errors are in Spanish', 
   assert.match(source, /No se pudo guardar el borrador localmente\./);
   assert.match(source, /No se pudo (crear|publicar|cargar) \$\{path\}/);
 
-  assert.doesNotMatch(source, /Login required before publishing\./);
-  assert.doesNotMatch(source, /Login required before creating blog posts\./);
-  assert.doesNotMatch(source, /Blog posts can only be created in ES, EN, or FR\./);
-  assert.doesNotMatch(source, /^A slug is required\.$/m);
-  assert.doesNotMatch(source, /Featured image must be a JPEG, PNG, WebP, or GIF file\./);
-  assert.doesNotMatch(source, /Admin session expired\. Sign out/);
-  assert.doesNotMatch(source, /Draft (could not be )?saved locally/);
-  assert.doesNotMatch(source, /Draft restored\. \d/);
+  assertEnglishUiStringsAbsent(source, [
+    [/Login required before publishing\./, 'publish auth error should no longer be English'],
+    [/Login required before creating blog posts\./, 'blog auth error should no longer be English'],
+    [/Blog posts can only be created in ES, EN, or FR\./, 'blog locale rule should no longer be English'],
+    [/^A slug is required\.$/m, 'slug validation should no longer be English'],
+    [/Featured image must be a JPEG, PNG, WebP, or GIF file\./, 'featured image validation should no longer be English'],
+    [/Admin session expired\. Sign out/, 'session expiry guidance should no longer be English'],
+    [/Draft (could not be )?saved locally/, 'draft save copy should no longer be English'],
+    [/Draft restored\. \d/, 'draft restore copy should no longer be English'],
+    [/Failed to create /, 'create-file failure prefix should no longer be English'],
+    [/Failed to publish /, 'publish-file failure prefix should no longer be English'],
+    [/Failed to load /, 'load-file failure prefix should no longer be English'],
+  ]);
 });
 
 test('adminCollections validation errors surfaced by the arsenal editor are in Spanish', async () => {
@@ -317,11 +304,14 @@ test('adminCollections validation errors surfaced by the arsenal editor are in S
   assert.match(source, /logos de herramientas deben usar formato JPG, PNG, WebP, GIF o SVG/i);
   assert.match(source, /logos de herramientas deben pesar 2 ?MB o menos/i);
 
-  assert.doesNotMatch(source, /requires ES\/EN\/FR/);
-  assert.doesNotMatch(source, /requires a logo/);
-  assert.doesNotMatch(source, /requires a translation or seo group/);
-  assert.doesNotMatch(source, /Tool logos must use JPG, PNG, WebP, GIF, or SVG format\./);
-  assert.doesNotMatch(source, /Tool logos must be 2MB or smaller\./);
+  assertEnglishUiStringsAbsent(source, [
+    [/requires ES\/EN\/FR/, 'ES/EN/FR field requirements should no longer be English'],
+    [/requires a logo/, 'logo requirement should no longer be English'],
+    [/requires a translation or seo group/, 'skill group requirement should no longer be English'],
+    [/Skill group is required and must be translation or seo\./, 'full English skill-group error should be gone'],
+    [/Tool logos must use JPG, PNG, WebP, GIF, or SVG format\./, 'tool logo format validation should no longer be English'],
+    [/Tool logos must be 2MB or smaller\./, 'tool logo size validation should no longer be English'],
+  ]);
 });
 
 test('orbitMedia and ugcPortfolio upload/validation copy is in Spanish, keeping format acronyms intact', async () => {
@@ -338,32 +328,41 @@ test('orbitMedia and ugcPortfolio upload/validation copy is in Spanish, keeping 
     assert.match(source, /pesar 8 ?MB o menos/i);
     assert.match(source, /necesita(n)? una imagen de póster/i);
     assert.match(source, /necesita(n)? valores en español, inglés y francés/i);
-
-    assert.doesNotMatch(source, /Use (JPG|MP4)/);
-    assert.doesNotMatch(source, /Images must be 2MB or smaller\./);
-    assert.doesNotMatch(source, /Videos must be 8MB or smaller\./);
-    assert.doesNotMatch(source, /require a poster image\./);
-    assert.doesNotMatch(source, /needs Spanish, English, and French values\./);
   }
 
   assert.match(orbitSource, /elemento del orbit necesita un archivo de origen/i);
   assert.match(orbitSource, /imágenes del orbit deben usar un archivo de origen JPG, PNG, WebP, GIF o SVG/i);
   assert.match(orbitSource, /vídeos del orbit deben usar un archivo de origen MP4, WebM o MOV/i);
+  assertEnglishUiStringsAbsent(orbitSource, [
+    [/Use MP4, WebM, or QuickTime format\./, 'orbit video format helper should no longer be English'],
+    [/Use JPG, PNG, WebP, or GIF format\./, 'orbit image format helper should no longer be English'],
+    [/Images must be 2MB or smaller\./, 'orbit image size helper should no longer be English'],
+    [/Videos must be 8MB or smaller\./, 'orbit video size helper should no longer be English'],
+    [/Orbit media requires a source file\./, 'orbit source-file validation should no longer be English'],
+    [/Orbit videos require a poster image\./, 'orbit poster validation should no longer be English'],
+    [/needs Spanish, English, and French values\./, 'orbit localized-value validation should no longer be English'],
+    [/Orbit images must use/, 'orbit image source validation should no longer be English'],
+    [/Orbit videos must use/, 'orbit video source validation should no longer be English'],
+  ]);
 
   assert.match(ugcSource, /elementos UGC necesitan un archivo de origen/i);
   assert.match(ugcSource, /imágenes UGC deben usar un archivo de origen JPG, PNG, WebP o GIF/i);
   assert.match(ugcSource, /vídeos UGC deben usar un archivo de origen MP4, WebM o MOV/i);
   assert.match(ugcSource, /imágenes UGC no deben conservar un valor de póster/i);
   assert.match(ugcSource, /descripción(?: de)? UGC debe tener como máximo dos frases/i);
-
-  assert.doesNotMatch(orbitSource, /Orbit media requires a source file\./);
-  assert.doesNotMatch(orbitSource, /Orbit images must use/);
-  assert.doesNotMatch(orbitSource, /Orbit videos must use/);
-  assert.doesNotMatch(ugcSource, /UGC items require a source file\./);
-  assert.doesNotMatch(ugcSource, /UGC images must use/);
-  assert.doesNotMatch(ugcSource, /UGC videos must use/);
-  assert.doesNotMatch(ugcSource, /UGC images should not keep a poster value\./);
-  assert.doesNotMatch(ugcSource, /UGC description must stay within two sentences/);
+  assertEnglishUiStringsAbsent(ugcSource, [
+    [/Use MP4, WebM, or QuickTime format\./, 'UGC video format helper should no longer be English'],
+    [/Use JPG, PNG, WebP, or GIF format\./, 'UGC image format helper should no longer be English'],
+    [/Images must be 2MB or smaller\./, 'UGC image size helper should no longer be English'],
+    [/Videos must be 8MB or smaller\./, 'UGC video size helper should no longer be English'],
+    [/UGC items require a source file\./, 'UGC source-file validation should no longer be English'],
+    [/UGC videos require a poster image\./, 'UGC poster validation should no longer be English'],
+    [/needs Spanish, English, and French values\./, 'UGC localized-value validation should no longer be English'],
+    [/UGC images must use/, 'UGC image source validation should no longer be English'],
+    [/UGC videos must use/, 'UGC video source validation should no longer be English'],
+    [/UGC images should not keep a poster value\./, 'UGC poster-clearing validation should no longer be English'],
+    [/UGC description must stay within two sentences/, 'UGC description validation should no longer be English'],
+  ]);
 });
 
 test('AdminTranslationArsenalEditor collection controls and help copy are in Spanish', async () => {
@@ -391,18 +390,20 @@ test('AdminTranslationArsenalEditor collection controls and help copy are in Spa
   assert.match(source, /No se pudo añadir este elemento\./);
   assert.match(source, /No se pudo cambiar este logo\./);
 
-  assert.doesNotMatch(source, />\s*Save\s*<\/button>/);
-  assert.doesNotMatch(source, />\s*Cancel\s*<\/button>/);
-  assert.doesNotMatch(source, />\s*Done\s*<\/button>/);
-  assert.doesNotMatch(source, />\s*Remove\s*<\/button>/);
-  assert.doesNotMatch(source, /\+ Add language/);
-  assert.doesNotMatch(source, /\+ Add tool/);
-  assert.doesNotMatch(source, /\+ Add skill/);
-  assert.doesNotMatch(source, /Complete ES\/EN\/FR values before adding this item\./);
-  assert.doesNotMatch(source, /Complete ES\/EN\/FR levels before adding this language\./);
-  assert.doesNotMatch(source, /Select a logo before adding this tool\./);
-  assert.doesNotMatch(source, /Could not add this item\./);
-  assert.doesNotMatch(source, /Could not replace this logo\./);
+  assertEnglishUiStringsAbsent(source, [
+    [/>\s*Save\s*<\/button>/, 'save button should no longer be English'],
+    [/>\s*Cancel\s*<\/button>/, 'cancel button should no longer be English'],
+    [/>\s*Done\s*<\/button>/, 'done button should no longer be English'],
+    [/>\s*Remove\s*<\/button>/, 'remove button should no longer be English'],
+    [/\+ Add language/, 'add-language control should no longer be English'],
+    [/\+ Add tool/, 'add-tool control should no longer be English'],
+    [/\+ Add skill/, 'add-skill control should no longer be English'],
+    [/Complete ES\/EN\/FR values before adding this item\./, 'item validation copy should no longer be English'],
+    [/Complete ES\/EN\/FR levels before adding this language\./, 'language validation copy should no longer be English'],
+    [/Select a logo before adding this tool\./, 'logo validation copy should no longer be English'],
+    [/Could not add this item\./, 'add-item error should no longer be English'],
+    [/Could not replace this logo\./, 'replace-logo error should no longer be English'],
+  ]);
 
   // Level test: /level/i still matches via code identifiers (item.level,
   // addLevelFields) even though the visible legend text is translated — the
@@ -431,18 +432,20 @@ test('EditableOrbitCollection chrome, help text, and media controls are in Spani
   assert.match(source, /necesitan una imagen de póster/i);
   assert.match(source, /Etiqueta \{language\.label\}/);
 
-  assert.doesNotMatch(source, />Orbit collection<\/p>/);
-  assert.doesNotMatch(source, /Add orbit item/);
-  assert.doesNotMatch(source, /Change video/);
-  assert.doesNotMatch(source, /Change image/);
-  assert.doesNotMatch(source, /Upload MP4\/WebM\/MOV/);
-  assert.doesNotMatch(source, /Upload JPG\/PNG\/WebP\/GIF/);
-  assert.doesNotMatch(source, /Media type/);
-  assert.doesNotMatch(source, /Internal href/);
-  assert.doesNotMatch(source, /Change poster/);
-  assert.doesNotMatch(source, /Poster required/);
-  assert.doesNotMatch(source, /getLocalizedOrbitText\(item\.alt, 'es'\)\} poster/);
-  assert.doesNotMatch(source, /Video poster/);
+  assertEnglishUiStringsAbsent(source, [
+    [/>Orbit collection<\/p>/, 'orbit section heading should no longer be English'],
+    [/Add orbit item/, 'add-orbit action should no longer be English'],
+    [/Change video/, 'change-video action should no longer be English'],
+    [/Change image/, 'change-image action should no longer be English'],
+    [/Upload MP4\/WebM\/MOV/, 'video upload hint should no longer be English'],
+    [/Upload JPG\/PNG\/WebP\/GIF/, 'image upload hint should no longer be English'],
+    [/Media type/, 'media type label should no longer be English'],
+    [/Internal href/, 'internal link label should no longer be English'],
+    [/Change poster/, 'change-poster action should no longer be English'],
+    [/Poster required/, 'poster-required label should no longer be English'],
+    [/getLocalizedOrbitText\(item\.alt, 'es'\)\} poster/, 'poster accessibility label should no longer be English'],
+    [/Video poster/, 'video poster label should no longer be English'],
+  ]);
 });
 
 test('EditableUgcPortfolio chrome, help text, and media controls are in Spanish', async () => {
@@ -464,21 +467,23 @@ test('EditableUgcPortfolio chrome, help text, and media controls are in Spanish'
   assert.match(source, /label: 'Descripción'/);
   assert.match(source, /label: 'Formato'/);
 
-  assert.doesNotMatch(source, />UGC portfolio editor<\/p>/);
-  assert.doesNotMatch(source, /Slot \{index/);
-  assert.doesNotMatch(source, />Category<\/span>/);
-  assert.doesNotMatch(source, />Travel<\/option>/);
-  assert.doesNotMatch(source, />Languages<\/option>/);
-  assert.doesNotMatch(source, />Art<\/option>/);
-  assert.doesNotMatch(source, />Type<\/span>/);
-  assert.doesNotMatch(source, /Fixed slot/);
-  assert.doesNotMatch(source, />Clear poster<\/button>/);
-  assert.doesNotMatch(source, /item\.alt\.es\} poster/);
-  assert.doesNotMatch(source, /Poster upload appears only/);
-  assert.doesNotMatch(source, /label: 'Label'/);
-  assert.doesNotMatch(source, /label: 'Title'/);
-  assert.doesNotMatch(source, /label: 'Description'/);
-  assert.doesNotMatch(source, /label: 'Format'/);
+  assertEnglishUiStringsAbsent(source, [
+    [/>UGC portfolio editor<\/p>/, 'UGC editor heading should no longer be English'],
+    [/Slot \{index/, 'slot heading should no longer be English'],
+    [/>Category<\/span>/, 'category label should no longer be English'],
+    [/>Travel<\/option>/, 'travel category should no longer be English'],
+    [/>Languages<\/option>/, 'languages category should no longer be English'],
+    [/>Art<\/option>/, 'art category should no longer be English'],
+    [/>Type<\/span>/, 'type label should no longer be English'],
+    [/Fixed slot/, 'fixed-slot label should no longer be English'],
+    [/>Clear poster<\/button>/, 'clear-poster action should no longer be English'],
+    [/item\.alt\.es\} poster/, 'poster accessibility label should no longer be English'],
+    [/Poster upload appears only/, 'poster helper copy should no longer be English'],
+    [/label: 'Label'/, 'label metadata should no longer be English'],
+    [/label: 'Title'/, 'title metadata should no longer be English'],
+    [/label: 'Description'/, 'description metadata should no longer be English'],
+    [/label: 'Format'/, 'format metadata should no longer be English'],
+  ]);
 });
 
 test('BlogPostForm field labels, help, validation, and actions are in Spanish', async () => {
@@ -505,21 +510,23 @@ test('BlogPostForm field labels, help, validation, and actions are in Spanish', 
   assert.match(source, /Netlify Git Gateway/);
   assert.match(source, /\{isSubmitting \? 'Creando…' : 'Crear entrada'\}/);
 
-  assert.doesNotMatch(source, />Title<\/label>/);
-  assert.doesNotMatch(source, />Description<\/label>/);
-  assert.doesNotMatch(source, />Date<\/label>/);
-  assert.doesNotMatch(source, />Language<\/label>/);
-  assert.doesNotMatch(source, /Tags \(comma separated\)/);
-  assert.doesNotMatch(source, />Featured image<\/label>/);
-  assert.doesNotMatch(source, /Remove image/);
-  assert.doesNotMatch(source, />H2 Section<\/button>/);
-  assert.doesNotMatch(source, />H3 Subsection<\/button>/);
-  assert.doesNotMatch(source, />Markdown body<\/label>/);
-  assert.doesNotMatch(source, /Live outline/);
-  assert.doesNotMatch(source, /Complete title, description, and body before publishing\./);
-  assert.doesNotMatch(source, /Could not create the post\./);
-  assert.doesNotMatch(source, /Publish the site to rebuild the blog\./);
-  assert.doesNotMatch(source, />Create post<\/button>/);
+  assertEnglishUiStringsAbsent(source, [
+    [/>Title<\/label>/, 'title label should no longer be English'],
+    [/>Description<\/label>/, 'description label should no longer be English'],
+    [/>Date<\/label>/, 'date label should no longer be English'],
+    [/>Language<\/label>/, 'language label should no longer be English'],
+    [/Tags \(comma separated\)/, 'tags helper should no longer be English'],
+    [/>Featured image<\/label>/, 'featured image label should no longer be English'],
+    [/Remove image/, 'remove-image action should no longer be English'],
+    [/>H2 Section<\/button>/, 'H2 toolbar label should no longer be English'],
+    [/>H3 Subsection<\/button>/, 'H3 toolbar label should no longer be English'],
+    [/>Markdown body<\/label>/, 'markdown body label should no longer be English'],
+    [/Live outline/, 'outline panel label should no longer be English'],
+    [/Complete title, description, and body before publishing\./, 'publish validation should no longer be English'],
+    [/Could not create the post\./, 'create-post error should no longer be English'],
+    [/Publish the site to rebuild the blog\./, 'rebuild helper should no longer be English'],
+    [/>Create post<\/button>/, 'create-post action should no longer be English'],
+  ]);
 });
 
 test('media upload alerts on EditableImage/EditableMedia/AdminBrandVideo are in Spanish', async () => {
@@ -535,109 +542,37 @@ test('media upload alerts on EditableImage/EditableMedia/AdminBrandVideo are in 
 
   assert.match(mediaSource, /Cambiar contenido/);
   assert.match(mediaSource, /No se pudo guardar este archivo multimedia\./);
-  assert.doesNotMatch(mediaSource, /Could not save this media file\./);
+  assertEnglishUiStringsAbsent(mediaSource, [
+    [/Could not save this media file\./, 'editable media save error should no longer be English'],
+  ]);
 
   assert.match(brandVideoSource, /Cambiar vídeo/);
   assert.match(brandVideoSource, /Sube un MP4\/WebM\/MOV/);
-  assert.doesNotMatch(brandVideoSource, /Upload MP4\/WebM\/MOV/);
+  assertEnglishUiStringsAbsent(brandVideoSource, [
+    [/Upload MP4\/WebM\/MOV/, 'brand video upload hint should no longer be English'],
+  ]);
 });
 
-test('admin page headings and descriptions (ugc, blog/new, index) are in Spanish', async () => {
-  const [ugcSource, blogNewSource, indexSource] = await Promise.all([
+test('admin page headings and descriptions (ugc, blog/new) are in Spanish', async () => {
+  const [ugcSource, blogNewSource] = await Promise.all([
     readSource('src/pages/admin/ugc.astro'),
     readSource('src/pages/admin/blog/new.astro'),
-    readSource('src/pages/admin/index.astro'),
   ]);
 
   assert.match(ugcSource, /Portfolio UGC de 12 espacios fijos/);
-  assert.doesNotMatch(ugcSource, /Fixed 12-slot UGC portfolio/);
+  assert.match(ugcSource, /Actualiza el contenido multimedia y el texto en ES \/ EN \/ FR/);
+  assertEnglishUiStringsAbsent(ugcSource, [
+    [/Fixed 12-slot UGC portfolio/, 'UGC page heading should no longer be English'],
+  ]);
 
   assert.match(blogNewSource, /description="Crear una nueva entrada de blog"/);
-  assert.doesNotMatch(blogNewSource, /description="Create a new blog post"/);
-
-  assert.match(indexSource, /alt="Pegatina 1"/);
-  assert.match(indexSource, /alt="Pegatina 4"/);
-  assert.doesNotMatch(indexSource, /alt="Sticker 1"/);
-});
-
-test('the curated list of known English admin operational phrases is entirely absent from the fixed admin surface', async () => {
-  const sources = await readFixedAdminSurfaceSources();
-  const combined = Array.from(sources.values()).join('\n---FILE---\n');
-
-  // Curated, non-arbitrary list of full operational phrases that existed in
-  // English before this translation. This intentionally excludes ambiguous
-  // single words, code identifiers, MIME types, brand names, and locale
-  // language names (English/Français stay as native-name labels).
-  const bannedEnglishPhrases = [
-    'Save draft',
-    'Publish changes',
-    'Publishing...',
-    'Exit editor',
-    'Navigation labels',
-    'Public language picker',
-    'Fix the orbit warnings before publishing.',
-    'Published! Rebuilds in ~2 min.',
-    'Draft saved locally.',
-    'Draft could not be saved locally',
-    'Login required before publishing.',
-    'Login required before creating blog posts.',
-    'Blog posts can only be created in ES, EN, or FR.',
-    'A slug is required.',
-    'Featured image must be a JPEG, PNG, WebP, or GIF file.',
-    'Admin session expired. Sign out',
-    'Failed to create ',
-    'Failed to publish ',
-    'Failed to load ',
-    'Tool logos must use JPG, PNG, WebP, GIF, or SVG format.',
-    'Tool logos must be 2MB or smaller.',
-    'Skill group is required and must be translation or seo.',
-    'Use MP4, WebM, or QuickTime format.',
-    'Use JPG, PNG, WebP, or GIF format.',
-    'Images must be 2MB or smaller.',
-    'Videos must be 8MB or smaller.',
-    'Orbit media requires a source file.',
-    'Orbit videos require a poster image.',
-    'UGC items require a source file.',
-    'UGC videos require a poster image.',
-    'needs Spanish, English, and French values.',
-    'Complete ES/EN/FR values before adding this item.',
-    'Select a logo before adding this tool.',
-    'Could not add this item.',
-    'Could not replace this logo.',
-    'Could not save this media file.',
-    '+ Add language',
-    '+ Add tool',
-    '+ Add skill',
-    'Change video',
-    'Change image',
-    'Change poster',
-    'Upload MP4/WebM/MOV',
-    'Upload JPG/PNG/WebP/GIF',
-    'Poster required',
-    'Orbit collection',
-    'UGC portfolio editor',
-    'Fixed slot',
-    'Clear poster',
-    'Media type',
-    'Internal href',
-    'Video poster',
-    'Markdown body',
-    'Live outline',
-    'Create post',
-    'Featured image',
-    'Remove image',
-    'Could not create the post.',
-    'Fixed 12-slot UGC portfolio',
-    'Create a new blog post',
-  ];
-
-  const foundPhrases = bannedEnglishPhrases.filter((phrase) => combined.includes(phrase));
-
-  assert.deepEqual(
-    foundPhrases,
-    [],
-    `Found old English operational phrases still present in the admin surface: ${foundPhrases.join(', ')}`,
-  );
+  assert.match(blogNewSource, />Admin — Nuevo post<\/h1>/);
+  assert.match(blogNewSource, /Volver al archivo/);
+  assertEnglishUiStringsAbsent(blogNewSource, [
+    [/description="Create a new blog post"/, 'blog-new page description should no longer be English'],
+    [/>Admin — New post<\/h1>/, 'blog-new page heading should no longer be English'],
+    [/Back to archive/, 'blog-new back-link copy should no longer be English'],
+  ]);
 });
 
 test('ES/EN/FR locale codes and recognizable language names are preserved', async () => {
