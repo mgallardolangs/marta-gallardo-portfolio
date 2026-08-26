@@ -1,0 +1,132 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getLangFromUrl, getLocalizedPath, t } from '../i18n';
+import { getLatestAndArchive } from '../lib/blog';
+import { scopeBlogPostsToLocale } from '../lib/blog';
+import ScrollReveal from '../components/ScrollReveal';
+import TypedTitle from '../components/TypedTitle.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const i = t(lang);
+const localizedPosts = scopeBlogPostsToLocale(await getCollection('blog'), lang);
+const { latest, archive } = getLatestAndArchive(localizedPosts);
+const archivePlaceholderIndex = String(latest ? 2 : 1).padStart(2, '0');
+---
+
+<BaseLayout title={`${i.blog.title} — ${i.hero.name}`}>
+  <section data-blog-hero class="bg-paper px-6 pb-12 pt-28 md:pb-16 md:pt-32">
+    <div class="site-container max-w-6xl">
+      <ScrollReveal client:visible>
+        <div class="max-w-4xl">
+          <p class="text-accent-ink font-body text-xs font-semibold uppercase tracking-[0.34em]">{i.blog.eyebrow}</p>
+          <TypedTitle as="h1" text={i.blog.title} trigger="load" class="mt-6 font-heading text-5xl leading-none text-ink md:text-7xl" />
+          <p class="mt-6 max-w-3xl font-body text-sm font-semibold uppercase tracking-[0.22em] text-ink-muted md:text-[0.82rem]">
+            {i.blog.subtitle}
+          </p>
+          <div class="mt-8 h-px w-full max-w-4xl bg-black/10"></div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </section>
+
+  <section class="bg-paper px-6 pb-16 pt-10 md:pb-20 md:pt-12">
+    <div class="site-container max-w-6xl">
+      {latest && (
+        <ScrollReveal client:visible>
+          <article data-blog-latest-story class="border-y border-black/10 py-6 md:py-8">
+            <div class="grid gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+              <a href={getLocalizedPath(`/blog/${latest.id}`, lang)} class="group block overflow-hidden border border-black/10">
+                {latest.data.image ? (
+                  <img src={latest.data.image} alt={latest.data.title} width={1600} height={1200} loading="eager" fetchpriority="high" decoding="async" class="aspect-[16/10] w-full object-cover transition duration-300 group-hover:scale-[1.02]" />
+                ) : (
+                  <div class="flex aspect-[16/10] items-center justify-center bg-paper px-6 text-center text-accent-ink">
+                    <span class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.28em]">{i.blog.latestStory}</span>
+                  </div>
+                )}
+              </a>
+
+              <div class="flex flex-col gap-4 md:gap-5">
+                <div class="flex items-center gap-3 text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-ink-faint">
+                  <span>{String(1).padStart(2, '0')}</span>
+                  <span class="text-accent-ink">{i.blog.latestStory}</span>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-3 text-sm text-ink-muted">
+                  <time class="font-body uppercase tracking-[0.18em]">
+                    {latest.data.date.toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </time>
+                  {latest.data.tags.map((tag) => (
+                    <span class="border border-black/10 px-2 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-accent-ink">{tag}</span>
+                  ))}
+                </div>
+
+                <div class="space-y-4">
+                  <a href={getLocalizedPath(`/blog/${latest.id}`, lang)} class="block transition hover:text-amaranth">
+                    <h2 class="font-heading text-3xl leading-[0.94] text-ink md:text-[3.35rem]">{latest.data.title}</h2>
+                  </a>
+                  <p class="max-w-xl font-body text-base leading-8 text-ink-muted md:text-lg">{latest.data.description}</p>
+                </div>
+
+                <a href={getLocalizedPath(`/blog/${latest.id}`, lang)} class="text-accent-ink inline-flex items-center gap-3 border-b border-amaranth pb-1 font-body text-xs font-semibold uppercase tracking-[0.28em] transition hover:text-ink">
+                  {i.blog.readMore}
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        </ScrollReveal>
+      )}
+
+      <ScrollReveal client:visible delay={0.08}>
+        <section data-blog-archive class:list={['border-t border-black/10', latest && 'mt-10']}>
+          <div class="border-b border-black/10 py-4">
+            <p class="text-accent-ink font-body text-[0.72rem] font-semibold uppercase tracking-[0.28em]">{i.blog.archive}</p>
+          </div>
+
+          {archive.length > 0 ? (
+            archive.map((post, index) => (
+              <article class="group relative grid gap-4 border-b border-black/10 py-5 md:grid-cols-[auto_minmax(0,1fr)] md:items-start md:gap-6">
+                <p class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-ink-faint">{String(index + 2).padStart(2, '0')}</p>
+
+                <div class="grid gap-3 md:grid-cols-[minmax(0,1fr)_140px] md:items-start">
+                  <div class="space-y-2">
+                    <a href={getLocalizedPath(`/blog/${post.id}`, lang)} class="block transition hover:text-amaranth">
+                      <h3 class="font-heading text-2xl leading-tight text-ink">{post.data.title}</h3>
+                    </a>
+                    <div class="flex flex-wrap items-center gap-3 text-sm text-ink-muted">
+                      <time class="font-body uppercase tracking-[0.18em]">
+                        {post.data.date.toLocaleDateString(lang, { year: 'numeric', month: 'short', day: 'numeric' })}
+                      </time>
+                      {post.data.tags.map((tag) => (
+                        <span class="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-accent-ink">{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {post.data.image ? (
+                    <a href={getLocalizedPath(`/blog/${post.id}`, lang)} class="hidden border border-black/10 md:block md:opacity-0 md:transition md:duration-200 md:group-hover:opacity-100 md:group-focus-within:opacity-100">
+                      <img src={post.data.image} alt={post.data.title} width={420} height={260} loading="lazy" decoding="async" class="aspect-[16/10] w-full object-cover" />
+                    </a>
+                  ) : (
+                    <div class="hidden border border-black/10 md:flex md:aspect-[16/10] md:items-center md:justify-center md:px-3 md:opacity-0 md:transition md:duration-200 md:group-hover:opacity-100 md:group-focus-within:opacity-100">
+                      <span class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-accent-ink">{i.blog.archive}</span>
+                    </div>
+                  )}
+                </div>
+              </article>
+            ))
+          ) : (
+            <article class="grid gap-3 border-b border-black/10 py-5 md:grid-cols-[auto_minmax(0,1fr)] md:items-start md:gap-6">
+              <p class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-ink-faint">{archivePlaceholderIndex}</p>
+              <div>
+                <p class="font-heading text-2xl leading-tight text-ink">{i.blog.comingSoonTitle}</p>
+                <p class="mt-2 font-body text-sm uppercase tracking-[0.18em] text-ink-muted">{i.blog.comingSoonMeta}</p>
+              </div>
+            </article>
+          )}
+        </section>
+      </ScrollReveal>
+    </div>
+  </section>
+</BaseLayout>

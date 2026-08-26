@@ -1,0 +1,18 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`home-hero__portrait ${className}`.trim()} data-home-hero-portrait>
+  <div class="home-hero__portrait-media" data-home-hero-portrait-media>
+    <slot />
+  </div>
+  <span class="home-hero__portrait-corner home-hero__portrait-corner--top-left" aria-hidden="true"></span>
+  <span class="home-hero__portrait-corner home-hero__portrait-corner--top-right" aria-hidden="true"></span>
+  <span class="home-hero__portrait-corner home-hero__portrait-corner--bottom-right" aria-hidden="true"></span>
+  <span class="home-hero__portrait-corner home-hero__portrait-corner--bottom-left" aria-hidden="true"></span>
+  <span class="home-hero__portrait-rule" aria-hidden="true"></span>
+</div>

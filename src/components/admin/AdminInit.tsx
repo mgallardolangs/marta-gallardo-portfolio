@@ -1,55 +1,156 @@
 import { useEffect } from 'react';
 import { adminStore } from './adminStore';
+import originalEs from '../../i18n/es.json';
+import originalEn from '../../i18n/en.json';
+import originalFr from '../../i18n/fr.json';
+import {
+  ADMIN_INIT_FALLBACK_DELAY_MS,
+  ADMIN_INIT_MAX_RETRIES,
+  ADMIN_INIT_RETRY_DELAY_MS,
+  getAdminInitDecision,
+  getNetlifyIdentityToken,
+  shouldAllowTokenlessAdminInit,
+} from '../../lib/adminInit.js';
 
 interface Props {
   i18nJson: string;
-  imagesJson: string;
+  siteJson: string;
   lang: string;
 }
 
-export default function AdminInit({ i18nJson, imagesJson, lang }: Props) {
+export default function AdminInit({ i18nJson, siteJson, lang }: Props) {
   useEffect(() => {
-    // Only init once — never re-init (would reset language selection)
-    if (adminStore.isInitialized()) return;
-
     const parsedI18n = JSON.parse(i18nJson) as Record<string, unknown>;
-    const parsedImages = JSON.parse(imagesJson) as Record<string, unknown>;
+    const parsedSite = JSON.parse(siteJson) as Record<string, unknown>;
+    const restoredI18n = {
+      ...parsedI18n,
+      es: {
+        ...(parsedI18n.es as Record<string, unknown>),
+        translationPage: {
+          ...(((parsedI18n.es as Record<string, unknown>)?.translationPage as Record<string, unknown>) ?? {}),
+          heroMark: originalEs.translationPage.heroMark,
+        },
+      },
+      en: {
+        ...(parsedI18n.en as Record<string, unknown>),
+        translationPage: {
+          ...(((parsedI18n.en as Record<string, unknown>)?.translationPage as Record<string, unknown>) ?? {}),
+          heroMark: originalEn.translationPage.heroMark,
+        },
+      },
+      fr: {
+        ...(parsedI18n.fr as Record<string, unknown>),
+        translationPage: {
+          ...(((parsedI18n.fr as Record<string, unknown>)?.translationPage as Record<string, unknown>) ?? {}),
+          heroMark: originalFr.translationPage.heroMark,
+        },
+      },
+    };
+    let draftLoaded = adminStore.isInitialized();
+    let identityListenersCleanup: (() => void) | null = null;
+    let identityInitStarted = false;
+    let retryAttempts = 0;
+    let retryTimeout: number | undefined;
 
-    const tryInit = () => {
-      if (adminStore.isInitialized()) return true;
-
+    const applyIdentityState = (allowTokenlessFallback: boolean) => {
       const w = window as typeof window & {
-        netlifyIdentity?: { currentUser?: () => { token?: { access_token?: string } } | null };
+        netlifyIdentity?: {
+          init?: () => void;
+          currentUser?: () => { token?: { access_token?: string } } | null;
+          on?: (event: 'init' | 'login', callback: () => void) => void;
+          off?: (event: 'init' | 'login', callback: () => void) => void;
+        };
       };
-      const user = w.netlifyIdentity?.currentUser?.();
+      const token = getNetlifyIdentityToken(w.netlifyIdentity?.currentUser?.());
+      const decision = getAdminInitDecision({
+        isInitialized: adminStore.isInitialized(),
+        identityToken: token,
+        allowTokenlessFallback,
+      });
 
-      if (user?.token?.access_token) {
-        adminStore.init(parsedI18n, parsedImages, lang, user.token.access_token);
-        adminStore.loadDraft();
+      if (decision === 'init-with-token' || decision === 'init-without-token') {
+        adminStore.init(restoredI18n, parsedSite, lang, token);
+        if (!draftLoaded) {
+          adminStore.loadDraft();
+          draftLoaded = true;
+        }
         return true;
       }
+
+      if (decision === 'update-token') {
+        adminStore.setAuthToken(token);
+        return true;
+      }
+
       return false;
     };
 
-    // Try immediately
-    if (tryInit()) return;
+    const allowTokenlessFallback = shouldAllowTokenlessAdminInit(window.location.hostname);
+    const bindIdentityListeners = () => {
+      const identity = (window as typeof window & {
+        netlifyIdentity?: {
+          init?: () => void;
+          on?: (event: 'init' | 'login', callback: () => void) => void;
+          off?: (event: 'init' | 'login', callback: () => void) => void;
+        };
+      }).netlifyIdentity;
 
-    // Retry until auth is available (but stop once initialized)
-    const interval = window.setInterval(() => {
-      if (tryInit()) window.clearInterval(interval);
-    }, 1000);
+      if (!identity?.on) return false;
+      if (identityListenersCleanup) return true;
 
-    // Fallback for local dev: init without token after 2s
-    const fallback = window.setTimeout(() => {
-      if (!adminStore.isInitialized()) {
-        adminStore.init(parsedI18n, parsedImages, lang, '');
+      const onIdentityChange = () => {
+        applyIdentityState(false);
+      };
+
+      identity.on('init', onIdentityChange);
+      identity.on('login', onIdentityChange);
+      identityListenersCleanup = () => {
+        identity.off?.('init', onIdentityChange);
+        identity.off?.('login', onIdentityChange);
+        identityListenersCleanup = null;
+      };
+
+      if (identity.init && !identityInitStarted) {
+        identity.init();
+        identityInitStarted = true;
       }
-      window.clearInterval(interval);
-    }, 2000);
+
+      return true;
+    };
+
+    const syncIdentity = () => {
+      const listenersBound = bindIdentityListeners();
+      const identityApplied = applyIdentityState(false);
+      return listenersBound || identityApplied;
+    };
+
+    const attemptIdentitySync = () => {
+      if (syncIdentity()) {
+        return;
+      }
+
+      retryAttempts += 1;
+      if (retryAttempts >= ADMIN_INIT_MAX_RETRIES) {
+        return;
+      }
+
+      retryTimeout = window.setTimeout(attemptIdentitySync, ADMIN_INIT_RETRY_DELAY_MS);
+    };
+
+    attemptIdentitySync();
+
+    const fallback = allowTokenlessFallback
+      ? window.setTimeout(() => {
+          applyIdentityState(true);
+        }, ADMIN_INIT_FALLBACK_DELAY_MS)
+      : undefined;
 
     return () => {
-      window.clearInterval(interval);
-      window.clearTimeout(fallback);
+      if (retryTimeout) {
+        window.clearTimeout(retryTimeout);
+      }
+      if (fallback) window.clearTimeout(fallback);
+      identityListenersCleanup?.();
     };
   }, []); // empty deps — run once only
 

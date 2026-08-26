@@ -1,0 +1,94 @@
+---
+import { defaultLang, getLocalizedPath, stripLocaleFromPath, visibleLangs, type Lang } from '../i18n';
+import { localize, siteData } from '../lib/siteData';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  pathname: string;
+  image?: string;
+  alternateLocales?: Lang[];
+  alternateLinks?: Partial<Record<Lang, string>>;
+  xDefaultPath?: string;
+}
+
+const { lang, title, description, pathname, image, alternateLocales, alternateLinks, xDefaultPath } = Astro.props;
+const pagePath = pathname === '/' ? '/' : pathname.replace(/\/$/, '') || '/';
+const normalizedPublicPath = stripLocaleFromPath(pagePath);
+const absolute = (target: string) => new URL(target, Astro.site);
+const canonical = absolute(pagePath);
+const personImage = absolute(siteData.heroMainPhoto);
+const socialImage = absolute(image ?? siteData.heroMainPhoto);
+const languageNames = siteData.arsenal.languages.map(({ label }) => localize(label, lang));
+const socialProfiles = [
+  siteData.person.socialProfiles.linkedin,
+  siteData.person.socialProfiles.instagram,
+];
+const normalizeSeoPath = (target: string) => {
+  const withLeadingSlash = target.startsWith('/') ? target : `/${target}`;
+  return withLeadingSlash === '/' ? '/' : withLeadingSlash.replace(/\/$/, '') || '/';
+};
+const localizedAlternateLinks = alternateLinks
+  ? visibleLangs.reduce<Partial<Record<Lang, string>>>((alternates, locale) => {
+      const path = alternateLinks[locale];
+      if (typeof path === 'string' && path.trim()) {
+        alternates[locale] = normalizeSeoPath(path);
+      }
+      return alternates;
+    }, {})
+  : null;
+const resolvedAlternateLinks = localizedAlternateLinks
+  ? localizedAlternateLinks
+  : (alternateLocales ?? visibleLangs).reduce<Partial<Record<Lang, string>>>((alternates, locale) => {
+      alternates[locale] = getLocalizedPath(normalizedPublicPath, locale);
+      return alternates;
+    }, {});
+const xDefaultHref = absolute(
+  xDefaultPath
+    ? normalizeSeoPath(xDefaultPath)
+    : resolvedAlternateLinks[defaultLang] ?? pagePath,
+).toString();
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: siteData.person.name,
+  url: absolute(getLocalizedPath('/', lang)).toString(),
+  image: personImage.toString(),
+  homeLocation: {
+    '@type': 'Place',
+    name: siteData.person.location,
+  },
+  knowsLanguage: languageNames,
+  sameAs: socialProfiles,
+};
+---
+<link rel="canonical" href={canonical.toString()} />
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+{(['es', 'en', 'fr', 'de', 'it', 'ca'] as const).map((locale) => (
+  resolvedAlternateLinks[locale] && (
+    <link
+      rel="alternate"
+      hreflang={locale}
+      href={absolute(resolvedAlternateLinks[locale] ?? pagePath).toString()}
+    />
+  )
+))}
+<link rel="alternate" hreflang="x-default" href={xDefaultHref} />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={siteData.person.name} />
+<meta property="og:locale" content={lang} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical.toString()} />
+<meta property="og:image" content={socialImage.toString()} />
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={socialImage.toString()} />
+
+<script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />

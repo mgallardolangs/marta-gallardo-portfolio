@@ -1,0 +1,192 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RichText from '../components/RichText.astro';
+import TypedTitle from '../components/TypedTitle.astro';
+import { getLangFromUrl, t } from '../i18n';
+
+const lang = getLangFromUrl(Astro.url);
+const i = t(lang);
+
+const fieldClass =
+  'w-full border-b border-paper/22 bg-transparent px-2 py-2.5 font-body text-base text-paper outline-none transition placeholder:text-paper/42 focus:border-amaranth';
+const labelClass = 'flex items-center justify-between gap-4 border-b border-paper/10 pb-2 font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-paper';
+const hintClass = 'text-[0.62rem] tracking-[0.18em] text-paper/52';
+const tabClass = 'font-body text-[0.72rem] font-semibold uppercase tracking-[0.28em]';
+const panelClass = 'pt-6';
+const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-paper';
+---
+
+<BaseLayout title={`${i.contact.title} — ${i.hero.name}`} description={i.contact.subtitle}>
+  <section data-contact-hero class="bg-paper px-6 pb-8 pt-20 text-ink md:pb-10 md:pt-24">
+    <div class="site-container max-w-5xl space-y-4">
+      <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-amaranth">{i.contact.eyebrow}</p>
+      <TypedTitle
+        as="h1"
+        text={i.contact.title}
+        trigger="load"
+        class="max-w-[10ch] font-heading text-4xl leading-[0.92] tracking-[-0.04em] text-ink md:text-6xl"
+      />
+      <RichText text={i.contact.subtitle} class="max-w-2xl font-body text-xs leading-5 tracking-[0.12em] text-ink/72 uppercase md:text-sm md:leading-6" />
+    </div>
+  </section>
+
+  <section data-contact-desk class="bg-ink px-6 py-8 text-paper md:py-10">
+    <div class="site-container border border-paper/14 px-5 py-6 md:px-6 md:py-8">
+      <div class="border-b border-paper/14 pb-4">
+        <div data-contact-tablist role="tablist" aria-label={i.contact.title} class="flex flex-wrap items-start justify-start gap-4 md:gap-5">
+          <button
+            type="button"
+            id="contact-tab-ugc"
+            data-contact-tab="ugc"
+            role="tab"
+            aria-controls="contact-panel-ugc"
+            aria-selected="true"
+            tabindex="0"
+            class={`${tabClass} contact-tab`}
+          >
+            <span class="contact-tab__bracket contact-tab__bracket--left" aria-hidden="true">[</span>
+            <div class="contact-tab__line">
+              <span>{i.contact.tabs.ugc}</span>
+              <span aria-hidden="true">{i.contact.tabs.ugc}</span>
+            </div>
+            <span class="contact-tab__bracket contact-tab__bracket--right" aria-hidden="true">]</span>
+          </button>
+          <button
+            type="button"
+            id="contact-tab-seo"
+            data-contact-tab="seo"
+            role="tab"
+            aria-controls="contact-panel-seo"
+            aria-selected="false"
+            tabindex="-1"
+            class={`${tabClass} contact-tab`}
+          >
+            <span class="contact-tab__bracket contact-tab__bracket--left" aria-hidden="true">[</span>
+            <div class="contact-tab__line">
+              <span>{i.contact.tabs.seo}</span>
+              <span aria-hidden="true">{i.contact.tabs.seo}</span>
+            </div>
+            <span class="contact-tab__bracket contact-tab__bracket--right" aria-hidden="true">]</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-4 space-y-4">
+        <section data-contact-panel="ugc" id="contact-panel-ugc" role="tabpanel" aria-labelledby="contact-tab-ugc" class={panelClass}>
+          <form name="ugc-contact" method="POST" data-netlify="true" data-error-msg={i.contact.errorRequired} class="contact-form space-y-4">
+            <input type="hidden" name="form-name" value="ugc-contact" />
+
+            <div class="grid gap-4 md:grid-cols-2">
+              <div>
+                <label for="ugc-email" class={labelClass}>{i.contact.fields.email}</label>
+                <input id="ugc-email" name="Email" type="email" required class={fieldClass} />
+              </div>
+
+              <div>
+                <label for="ugc-company" class={labelClass}>
+                  <span>{i.contact.fields.company}</span>
+                  <span class={hintClass}>{i.contact.companyOptional}</span>
+                </label>
+                <input id="ugc-company" name="Company" type="text" class={fieldClass} />
+              </div>
+            </div>
+
+            <div>
+              <label for="ugc-details" class={labelClass}>{i.contact.fields.ugcDetails}</label>
+              <textarea id="ugc-details" name="Project Description" rows="4" required class={`${fieldClass} min-h-[7rem] resize-y`}></textarea>
+            </div>
+
+            <div class="flex flex-col gap-3 border-t border-paper/14 pt-4 md:flex-row md:items-end md:justify-between">
+              <p class="max-w-xl font-body text-[0.68rem] uppercase tracking-[0.22em] text-paper/58">{i.contact.responseNote}</p>
+              <button
+                type="submit"
+                class="inline-flex items-center justify-center border border-amaranth bg-amaranth px-5 py-2.5 font-body text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_0_var(--color-paper)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_4px_0_var(--color-paper)] focus-visible:outline-none"
+              >
+                {i.contact.send}
+              </button>
+            </div>
+          </form>
+
+          <div data-contact-success="ugc" role="status" aria-live="polite" tabindex="-1" class={successClass}>
+            <div class="space-y-4">
+              <span class="block h-px w-16 bg-amaranth"></span>
+              <p class="font-heading text-3xl text-paper md:text-4xl">{i.contact.response.title}</p>
+              <p class="max-w-2xl font-body text-sm leading-7 text-paper/72">{i.contact.response.message}</p>
+            </div>
+          </div>
+        </section>
+
+        <section data-contact-panel="seo" id="contact-panel-seo" role="tabpanel" aria-labelledby="contact-tab-seo" class={panelClass} hidden>
+          <form name="seo-contact" method="POST" data-netlify="true" data-error-msg={i.contact.errorRequired} class="contact-form space-y-4">
+            <input type="hidden" name="form-name" value="seo-contact" />
+
+            <div class="grid gap-4 md:grid-cols-2">
+              <div>
+                <label for="seo-email" class={labelClass}>{i.contact.fields.email}</label>
+                <input id="seo-email" name="Email" type="email" required class={fieldClass} />
+              </div>
+
+              <div>
+                <label for="seo-company" class={labelClass}>
+                  <span>{i.contact.fields.company}</span>
+                  <span class={hintClass}>{i.contact.companyOptional}</span>
+                </label>
+                <input id="seo-company" name="Company" type="text" class={fieldClass} />
+              </div>
+            </div>
+
+            <div>
+              <label for="seo-details" class={labelClass}>{i.contact.fields.seoDetails}</label>
+              <textarea id="seo-details" name="Work Description" rows="4" required class={`${fieldClass} min-h-[7rem] resize-y`}></textarea>
+            </div>
+
+            <div class="flex flex-col gap-3 border-t border-paper/14 pt-4 md:flex-row md:items-end md:justify-between">
+              <p class="max-w-xl font-body text-[0.68rem] uppercase tracking-[0.22em] text-paper/58">{i.contact.responseNote}</p>
+              <button
+                type="submit"
+                class="inline-flex items-center justify-center border border-amaranth bg-amaranth px-5 py-2.5 font-body text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_0_var(--color-paper)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_4px_0_var(--color-paper)] focus-visible:outline-none"
+              >
+                {i.contact.send}
+              </button>
+            </div>
+          </form>
+
+          <div data-contact-success="seo" role="status" aria-live="polite" tabindex="-1" class={successClass}>
+            <div class="space-y-4">
+              <span class="block h-px w-16 bg-amaranth"></span>
+              <p class="font-heading text-3xl text-paper md:text-4xl">{i.contact.response.title}</p>
+              <p class="max-w-2xl font-body text-sm leading-7 text-paper/72">{i.contact.response.message}</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { initContactForms, initContactInquirySwitcher } from '../lib/contactForms.js';
+  import { cleanupContactForms, cleanupContactInquirySwitcher } from '../lib/contactForms.js';
+
+  const initContactPage = () => {
+    initContactInquirySwitcher();
+    initContactForms();
+  };
+  const cleanupContactPage = () => {
+    cleanupContactInquirySwitcher();
+    cleanupContactForms();
+  };
+  const handlerKey = '__mgInitContactPage';
+  const cleanupHandlerKey = '__mgCleanupContactPage';
+  const docWithHandler = document as Document & Record<string, (() => void) | undefined>;
+
+  docWithHandler[handlerKey] && document.removeEventListener('astro:page-load', docWithHandler[handlerKey]);
+  docWithHandler[cleanupHandlerKey]
+    && document.removeEventListener('astro:before-preparation', docWithHandler[cleanupHandlerKey]);
+  docWithHandler[handlerKey] = initContactPage;
+  docWithHandler[cleanupHandlerKey] = cleanupContactPage;
+
+  initContactPage();
+  document.addEventListener('astro:page-load', initContactPage);
+  document.addEventListener('astro:before-preparation', cleanupContactPage);
+</script>

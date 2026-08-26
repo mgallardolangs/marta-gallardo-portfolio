@@ -1,226 +1,210 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
-import ScrollReveal from '../../components/ScrollReveal';
-import PageTransition from '../../components/PageTransition';
-import StaggerContainer, { StaggerItem } from '../../components/StaggerContainer';
-import EditableImage from '../../components/admin/EditableImage';
-import { getLangFromUrl, t } from '../../i18n';
-import imagesData from '../../data/images.json';
 import EditableText from '../../components/admin/EditableText';
+import AdminTranslationArsenalEditor from '../../components/admin/AdminTranslationArsenalEditor';
+import { getLangFromUrl, t } from '../../i18n';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
-
-const toolLogoMap: Record<string, string> = {
-  'Microsoft Office': 'microsoftOffice',
-  'Google Workspace': 'googleWorkspace',
-  'Notion': 'notion',
-  'AI tools (ChatGPT, Claude)': 'aiTools',
-  'WordPress': 'wordpress',
-  'Google Search Console': 'googleSearchConsole',
-  'Google My Business': 'googleMyBusiness',
-};
 const page = i.translationPage;
 ---
+
 <AdminLayout title={`Admin — ${i.nav.translationSeo}`} description={page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' ').trim()}>
-  <PageTransition client:load className="pt-24">
-    <section class="relative overflow-hidden border-b border-blush-100 bg-gradient-to-b from-blush-50 via-cream to-white">
-      <div class="absolute inset-x-0 top-0 h-72 bg-blush-100/40 blur-3xl"></div>
-      <div class="relative mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-24">
-        <div class="max-w-4xl space-y-6">
-          <EditableText client:load i18nKey="translationPage.hero.eyebrow" as="p" className="font-accent text-sm uppercase tracking-[0.28em] text-rose-gold" />
-          <EditableText client:load i18nKey="translationPage.hero.title" as="h1" className="font-heading text-5xl font-semibold leading-none text-charcoal md:text-7xl" />
-          <EditableText client:load i18nKey="translationPage.hero.text" as="div" className="max-w-4xl text-lg leading-8 text-warm-gray" />
-          <EditableText client:load i18nKey="translationPage.hero.availability" as="p" className="max-w-3xl text-base font-medium leading-7 text-charcoal/80" />
+  <div class="bg-paper" data-admin-translation-page>
+    <section class="relative overflow-hidden border-b border-ink bg-paper px-6 pb-18 pt-28 md:pb-20 md:pt-32">
+      <div class="site-container relative">
+        <div class="max-w-4xl space-y-6 pr-12 md:pr-20">
+          <EditableText client:load i18nKey="translationPage.hero.eyebrow" as="p" className="inline-flex border border-ink px-3 py-2 font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="translationPage.hero.title" as="h1" className="max-w-[14ch] font-heading text-5xl leading-[0.92] tracking-[-0.04em] text-ink md:text-7xl" />
+          <EditableText client:load i18nKey="translationPage.hero.text" as="div" className="max-w-3xl text-lg leading-8 text-ink-muted" />
+
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <EditableText client:load i18nKey="translationPage.hero.ctaPrimary" as="span" className="inline-flex items-center gap-3 border border-amaranth bg-amaranth px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink" />
+            <EditableText client:load i18nKey="translationPage.hero.ctaSecondary" as="span" className="inline-flex items-center gap-3 border border-ink bg-paper px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink" />
+          </div>
         </div>
       </div>
     </section>
-  </PageTransition>
 
-  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-16 md:px-10 md:py-20">
-    <section class="space-y-8">
-      <div class="max-w-2xl">
-        <EditableText client:load i18nKey="translationPage.services.title" as="h2" className="font-heading text-4xl text-charcoal md:text-5xl" />
-      </div>
-      <StaggerContainer client:visible className="grid gap-6 md:grid-cols-3" staggerDelay={0.12}>
-        {page.services.items.map((service, index) => (
-          <StaggerItem>
-            <article class="h-full rounded-[1.75rem] border border-blush-100 bg-white p-8 shadow-sm transition-transform duration-300 hover:-translate-y-1">
-              <EditableText client:load i18nKey={`translationPage.services.items.${index}.name`} as="h3" className="font-heading text-3xl text-charcoal" />
-              <EditableText client:load i18nKey={`translationPage.services.items.${index}.description`} as="div" className="mt-4 text-sm leading-7 text-warm-gray" />
-            </article>
-          </StaggerItem>
-        ))}
-      </StaggerContainer>
-    </section>
-  </ScrollReveal>
+    <section class="bg-ink px-6 py-14 text-paper md:py-18">
+      <div class="site-container space-y-8">
+        <div class="space-y-3">
+          <EditableText client:load i18nKey="translationPage.servicesEyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="translationPage.services.title" as="h2" className="font-heading text-4xl text-paper md:text-5xl" />
+        </div>
 
-  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-4 md:px-10 md:py-8">
-    <section class="rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm md:p-10">
-      <div class="max-w-3xl">
-        <EditableText client:load i18nKey="translationPage.experience.eyebrow" as="p" className="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold" />
-        <EditableText client:load i18nKey="translationPage.experience.title" as="h2" className="mt-4 font-heading text-4xl text-charcoal md:text-5xl" />
-        <EditableText client:load i18nKey="translationPage.experience.text" as="div" className="mt-4 text-base leading-8 text-warm-gray" />
-      </div>
-      <div class="mt-10 grid gap-6 md:grid-cols-3">
-        {page.experience.cards.map((card, index) => (
-          <article class="rounded-[1.75rem] border border-blush-100 bg-blush-50 p-6 md:p-7">
-            <EditableText client:load i18nKey={`translationPage.experience.cards.${index}.title`} as="h3" className="font-heading text-2xl text-charcoal" />
-            <EditableText client:load i18nKey={`translationPage.experience.cards.${index}.highlight`} as="p" className="mt-4 font-accent text-xs uppercase tracking-[0.24em] text-rose-gold" />
-            <EditableText client:load i18nKey={`translationPage.experience.cards.${index}.text`} as="div" className="mt-4 text-sm leading-7 text-warm-gray" />
-          </article>
-        ))}
-      </div>
-    </section>
-  </ScrollReveal>
-
-  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-12 md:px-10 md:py-16">
-    <section class="rounded-[2rem] border border-blush-100 bg-charcoal p-8 text-cream shadow-sm md:p-10">
-      <div class="max-w-3xl">
-        <EditableText client:load i18nKey="translationPage.skills.eyebrow" as="p" className="font-accent text-sm uppercase tracking-[0.22em] text-blush-200" />
-        <EditableText client:load i18nKey="translationPage.skills.title" as="h2" className="mt-4 font-heading text-4xl text-white md:text-5xl" />
-        <EditableText client:load i18nKey="translationPage.skills.text" as="div" className="mt-4 text-base leading-8 text-blush-50/90" />
-      </div>
-      <div class="mt-10 grid gap-6 lg:grid-cols-3">
-        <article class="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-          <EditableText client:load i18nKey="translationPage.skills.linguistic.title" as="h3" className="font-heading text-2xl text-white" />
-          <div class="mt-5 flex flex-wrap gap-3">
-            {page.skills.linguistic.items.map((item, index) => (
-              <EditableText client:load i18nKey={`translationPage.skills.linguistic.items.${index}`} as="span" className="rounded-full border border-blush-200/30 bg-white/10 px-4 py-2 text-sm text-blush-50" />
+        <div class="grid gap-10 border-t border-paper/18 pt-8 md:grid-cols-[0.76fr_1.24fr] md:pt-10">
+          <div class="space-y-6">
+            {page.services.items.map((_service, index) => (
+              <div class="border-b border-paper/18 pb-5">
+                <EditableText client:load i18nKey={`translationPage.services.items.${index}.name`} as="h3" className="font-heading text-3xl text-paper md:text-4xl" />
+              </div>
             ))}
           </div>
-        </article>
-        <article class="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-          <EditableText client:load i18nKey="translationPage.skills.webOptimization.title" as="h3" className="font-heading text-2xl text-white" />
-          <div class="mt-5 flex flex-wrap gap-3">
-            {page.skills.webOptimization.items.map((item, index) => (
-              <EditableText client:load i18nKey={`translationPage.skills.webOptimization.items.${index}`} as="span" className="rounded-full border border-blush-200/30 bg-white/10 px-4 py-2 text-sm text-blush-50" />
+
+          <div class="space-y-8 border-l border-paper/18 pl-8 md:pl-10">
+            {page.services.items.map((_service, index) => (
+              <article class={index === 0 ? 'space-y-5' : 'space-y-5 border-t border-paper/18 pt-8'}>
+                <EditableText client:load i18nKey={`translationPage.services.items.${index}.headline`} as="h3" className="font-heading text-3xl leading-[0.96] text-paper md:text-4xl" />
+                <EditableText client:load i18nKey={`translationPage.services.items.${index}.description`} as="div" className="max-w-2xl text-base leading-8 text-paper/74" />
+              </article>
             ))}
           </div>
-        </article>
-        <article class="rounded-[1.75rem] border border-blush-100 bg-white p-6">
-          <EditableText client:load i18nKey="translationPage.skills.tools.title" as="h3" className="font-heading text-2xl text-charcoal" />
-          <div class="mt-5 grid grid-cols-3 gap-4 sm:grid-cols-4">
-            {page.skills.tools.items.map((item, index) => {
-              const logoKey = toolLogoMap[item];
-              return (
-                <div class="flex flex-col items-center gap-2 text-center">
-                  <div class="h-12 w-12 rounded-xl bg-blush-50 overflow-hidden">
-                    {logoKey ? (
-                      <EditableImage client:load imageKey={`toolLogos.${logoKey}`} className="h-12 w-12 p-2" alt={item} />
-                    ) : (
-                      <div class="flex h-full w-full items-center justify-center text-lg text-rose-gold">⚙️</div>
-                    )}
-                  </div>
-                  <EditableText client:load i18nKey={`translationPage.skills.tools.items.${index}`} as="span" className="text-xs leading-tight text-warm-gray" />
+        </div>
+      </div>
+    </section>
+
+    <section class="px-6 py-14 md:py-18">
+      <div class="site-container space-y-10">
+        <div class="space-y-3">
+          <EditableText client:load i18nKey="translationPage.arsenalEyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="translationPage.arsenal.title" as="h2" className="font-heading text-4xl text-ink md:text-5xl" />
+        </div>
+
+        <AdminTranslationArsenalEditor client:load />
+      </div>
+    </section>
+
+    <section class="px-6 py-14 md:py-18">
+      <div class="site-container space-y-8">
+        <div class="space-y-3">
+          <EditableText client:load i18nKey="translationPage.experienceEyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="translationPage.experienceSectionTitle" as="h2" className="font-heading text-4xl text-ink md:text-5xl" />
+        </div>
+
+        <section class="border border-ink bg-ink text-paper" data-admin-experience-browser>
+          <div class="border-b border-paper/16 bg-paper/8 px-4 pt-4 md:px-6">
+            <div class="flex flex-wrap items-start justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <span class="h-2 w-2 rounded-full bg-amaranth" aria-hidden="true"></span>
+                <div class="flex flex-wrap items-end gap-2">
+                  <button type="button" class="rounded-t-[7px] border border-b-0 border-paper bg-paper px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink transition" data-admin-experience-trigger="education"> {page.browserTabs.education} </button>
+                  <button type="button" class="rounded-t-[7px] border border-b-0 border-paper/18 bg-paper/14 px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-paper/62 transition hover:bg-paper/18 hover:text-paper focus-visible:bg-paper/18 focus-visible:text-paper" data-admin-experience-trigger="experience"> {page.browserTabs.experience} </button>
                 </div>
-              );
-            })}
+              </div>
+              <EditableText client:load i18nKey="translationPage.browserTabs.profileLabel" as="span" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-paper/42" />
+            </div>
           </div>
-        </article>
-      </div>
-    </section>
-  </ScrollReveal>
 
-  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-4 md:px-10 md:py-8">
-    <section class="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
-      <div class="rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm">
-        <EditableText client:load i18nKey="translationPage.education.eyebrow" as="p" className="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold" />
-        <EditableText client:load i18nKey="translationPage.education.title" as="h2" className="mt-4 font-heading text-4xl text-charcoal" />
-        <EditableText client:load i18nKey="translationPage.education.intro" as="div" className="mt-4 text-base leading-8 text-warm-gray" />
-        <ul class="mt-6 space-y-4 text-base leading-8 text-charcoal">
-          {page.education.studies.map((study, index) => (
-            <li class="flex gap-3">
-              <span class="mt-2 h-2.5 w-2.5 rounded-full bg-rose-gold"></span>
-              <EditableText client:load i18nKey={`translationPage.education.studies.${index}`} as="span" className="" />
-            </li>
-          ))}
-        </ul>
-      </div>
+          <div class="px-5 py-6 md:px-6 md:py-8">
+            <div class="grid gap-8 lg:grid-cols-[0.62fr_1.38fr]">
+              <div class="space-y-5 border-b border-paper/16 pb-6 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-8">
+                <EditableText client:load i18nKey="translationPage.experienceStatement" as="p" className="font-heading text-3xl leading-[0.96] text-paper md:text-4xl" />
+              </div>
 
-      <div class="rounded-[2rem] border border-blush-100 bg-blush-50 p-8 shadow-sm">
-        <EditableText client:load i18nKey="translationPage.education.languagesEyebrow" as="p" className="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold" />
-        <EditableText client:load i18nKey="translationPage.education.languagesTitle" as="h2" className="mt-4 font-heading text-4xl text-charcoal" />
-        <div class="mt-6 space-y-4">
-          {page.education.languages.map((language, index) => (
-            <div class="rounded-2xl border border-blush-100 bg-white px-5 py-4">
-              <div class="flex items-center justify-between gap-4">
-                <EditableText client:load i18nKey={`translationPage.education.languages.${index}.name`} as="span" className="font-heading text-2xl text-charcoal" />
-                <EditableText client:load i18nKey={`translationPage.education.languages.${index}.level`} as="span" className="rounded-full bg-blush-100 px-3 py-1 text-sm text-charcoal" />
+              <div class="space-y-8">
+                <div class="space-y-5" data-admin-experience-panel="education">
+                  <EditableText client:load i18nKey="translationPage.education.intro" as="div" className="text-base leading-8 text-paper/68" />
+                  <div class="space-y-4">
+                    {page.education.studies.map((_study, index) => (
+                      <div class="flex gap-3">
+                        <span class="mt-3 h-2 w-2 rounded-full bg-amaranth"></span>
+                        <EditableText client:load i18nKey={`translationPage.education.studies.${index}`} as="span" className="text-base leading-8 text-paper" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div class="hidden space-y-8" data-admin-experience-panel="experience">
+                  <EditableText client:load i18nKey="translationPage.experience.intro" as="div" className="text-base leading-8 text-paper/68" />
+                  <div class="grid gap-px bg-paper/16 lg:grid-cols-3">
+                    {page.experience.cards.map((_card, index) => (
+                      <article class="bg-ink px-5 py-6">
+                        <EditableText client:load i18nKey={`translationPage.experience.cards.${index}.highlight`} as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-amaranth" />
+                        <EditableText client:load i18nKey={`translationPage.experience.cards.${index}.title`} as="h3" className="mt-4 font-heading text-2xl text-paper" />
+                        <EditableText client:load i18nKey={`translationPage.experience.cards.${index}.text`} as="div" className="mt-4 text-sm leading-7 text-paper/72" />
+                      </article>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
-          ))}
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="bg-ink px-6 py-14 text-paper md:py-18" data-admin-methodology>
+      <div class="site-container space-y-8">
+        <div class="space-y-3">
+          <EditableText client:load i18nKey="translationPage.methodologyEyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="translationPage.methodologyDisplayTitle" as="h2" className="max-w-4xl font-heading text-4xl text-paper md:text-5xl" />
+        </div>
+
+        <div class="relative">
+          <span class="absolute left-6 top-4 block h-[calc(100%-2rem)] w-px bg-paper/18 md:hidden" data-methodology-connector></span>
+          <span class="absolute left-10 right-10 top-8 hidden h-px bg-paper/18 md:block" data-methodology-connector></span>
+
+          <div class="grid items-stretch gap-6 md:grid-cols-4">
+            {page.methodology.steps.map((_step, index) => (
+              <article class="group relative flex h-full flex-col overflow-visible pl-16 md:pl-0">
+                <div class="absolute left-0 top-0 flex h-12 w-12 items-center justify-center rounded-full border border-paper/24 font-body text-sm font-semibold uppercase tracking-[0.16em] text-amaranth transition group-hover:-translate-y-1 group-hover:border-amaranth group-hover:bg-amaranth group-hover:text-ink group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth group-focus-visible:bg-amaranth group-focus-visible:text-ink md:relative md:mx-auto">
+                  0{index + 1}
+                </div>
+                <div class="border border-paper/18 px-5 py-6 transition group-hover:-translate-y-1 group-hover:border-amaranth/60 group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth/60 md:mt-6 md:flex-1 md:h-full md:min-h-[170px]">
+                  <EditableText client:load i18nKey={`translationPage.methodology.steps.${index}.title`} as="h3" className="font-heading text-2xl text-paper" />
+                  <EditableText client:load i18nKey={`translationPage.methodology.steps.${index}.description`} as="div" className="mt-4 text-sm leading-7 text-paper/72" />
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>
-  </ScrollReveal>
 
-  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-4 md:px-10 md:py-8">
-    <section class="rounded-[2rem] border border-blush-100 bg-blush-50 p-8 shadow-sm md:p-10">
-      <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div class="max-w-3xl">
-          <EditableText client:load i18nKey="translationPage.servicesOffered.eyebrow" as="p" className="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold" />
-          <EditableText client:load i18nKey="translationPage.servicesOffered.title" as="h2" className="mt-4 font-heading text-4xl text-charcoal" />
+    <section class="px-6 py-14 md:py-18" data-admin-why>
+      <div class="site-container space-y-8">
+        <div class="space-y-3">
+          <EditableText client:load i18nKey="translationPage.whyEyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="translationPage.whyChooseMe.title" as="h2" className="max-w-3xl font-heading text-4xl text-ink md:text-5xl" />
         </div>
-        <EditableText client:load i18nKey="translationPage.servicesOffered.intro" as="div" className="max-w-xl text-sm leading-7 text-warm-gray" />
-      </div>
-      <div class="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-        {page.servicesOffered.items.map((item, index) => (
-          <article class="rounded-[1.5rem] border border-blush-100 bg-white p-6 shadow-sm">
-            <div class="flex h-12 w-12 items-center justify-center rounded-full bg-blush-100 font-accent text-lg text-rose-gold">
-              0{index + 1}
-            </div>
-            <EditableText client:load i18nKey={`translationPage.servicesOffered.items.${index}`} as="h3" className="mt-5 font-heading text-2xl text-charcoal" />
-          </article>
-        ))}
-      </div>
-    </section>
-  </ScrollReveal>
 
-  <ScrollReveal client:visible className="mx-auto max-w-6xl px-6 py-12 md:px-10">
-    <section class="rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm md:p-10">
-      <div class="max-w-3xl">
-        <EditableText client:load i18nKey="translationPage.process.eyebrow" as="p" className="font-accent text-sm uppercase tracking-[0.22em] text-rose-gold" />
-        <EditableText client:load i18nKey="translationPage.process.title" as="h2" className="mt-4 font-heading text-4xl text-charcoal" />
-        <EditableText client:load i18nKey="translationPage.process.intro" as="div" className="mt-4 text-base leading-8 text-warm-gray" />
-      </div>
-
-      <div class="relative mt-10">
-        <div class="absolute bottom-6 left-[1.45rem] top-6 w-px bg-blush-200 md:left-10 md:right-10 md:top-10 md:h-px md:w-auto"></div>
-        <div class="grid gap-6 md:grid-cols-4">
-          {page.process.steps.map((step, index) => (
-            <article class="relative pl-14 md:pl-0">
-              <div class="absolute left-0 top-0 flex h-12 w-12 items-center justify-center rounded-full border border-blush-200 bg-cream font-accent text-lg text-rose-gold md:relative md:mx-auto">
-                {index + 1}
-              </div>
-              <div class="rounded-[1.5rem] border border-blush-100 bg-blush-50 p-6 md:mt-6">
-                <p class="font-accent text-xs uppercase tracking-[0.24em] text-rose-gold">0{index + 1}</p>
-                <EditableText client:load i18nKey={`translationPage.process.steps.${index}.title`} as="h3" className="mt-3 font-heading text-2xl text-charcoal" />
-                <EditableText client:load i18nKey={`translationPage.process.steps.${index}.description`} as="div" className="mt-3 text-sm leading-7 text-warm-gray" />
+        <div class="grid gap-0 border border-ink md:grid-cols-3 md:divide-x md:divide-ink">
+          {page.whyChooseMe.cards.map((_card, index) => (
+            <article class="relative overflow-hidden border-b border-ink last:border-b-0 md:border-b-0">
+              <div class="relative space-y-5 px-5 py-6">
+                <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-amaranth">{`[ 0${index + 1} ]`}</p>
+                <EditableText client:load i18nKey={`translationPage.whyChooseMe.cards.${index}.title`} as="h3" className="font-heading text-3xl text-ink" />
+                <EditableText client:load i18nKey={`translationPage.whyChooseMe.cards.${index}.text`} as="div" className="text-sm leading-7 text-ink-muted" />
               </div>
             </article>
           ))}
         </div>
       </div>
     </section>
-  </ScrollReveal>
+  </div>
 
-  <StaggerContainer client:visible className="mx-auto grid max-w-6xl gap-6 px-6 py-4 md:grid-cols-3 md:px-10 md:py-8" staggerDelay={0.14}>
-    <StaggerItem className="md:col-span-3">
-      <section class="rounded-[2rem] border border-blush-100 bg-charcoal p-8 text-cream shadow-sm md:p-10">
-        <EditableText client:load i18nKey="translationPage.whyMe.eyebrow" as="p" className="font-accent text-sm uppercase tracking-[0.22em] text-blush-200" />
-        <EditableText client:load i18nKey="translationPage.whyMe.title" as="h2" className="mt-4 font-heading text-4xl text-white" />
-        <EditableText client:load i18nKey="translationPage.whyMe.text" as="div" className="mt-4 max-w-3xl text-base leading-8 text-blush-50/90" />
-      </section>
-    </StaggerItem>
+  <script>
+    const root = document.querySelector('[data-admin-experience-browser]');
+    if (root instanceof HTMLElement) {
+      const triggers = Array.from(root.querySelectorAll('[data-admin-experience-trigger]'));
+      const panels = Array.from(root.querySelectorAll('[data-admin-experience-panel]'));
 
-    {page.whyMe.cards.map((card, index) => (
-      <StaggerItem>
-        <article class="h-full rounded-[2rem] border border-blush-100 bg-white p-8 shadow-sm">
-          <EditableText client:load i18nKey={`translationPage.whyMe.cards.${index}.title`} as="h3" className="font-heading text-3xl text-charcoal" />
-          <EditableText client:load i18nKey={`translationPage.whyMe.cards.${index}.text`} as="div" className="mt-4 text-sm leading-7 text-warm-gray" />
-        </article>
-      </StaggerItem>
-    ))}
-  </StaggerContainer>
+      const setActivePanel = (panelId) => {
+        triggers.forEach((trigger) => {
+          const isActive = trigger.getAttribute('data-admin-experience-trigger') === panelId;
+          trigger.classList.toggle('border-paper', isActive);
+          trigger.classList.toggle('bg-paper', isActive);
+          trigger.classList.toggle('text-ink', isActive);
+          trigger.classList.toggle('border-paper/18', !isActive);
+          trigger.classList.toggle('bg-paper/14', !isActive);
+          trigger.classList.toggle('text-paper/62', !isActive);
+        });
+
+        panels.forEach((panel) => {
+          const isActive = panel.getAttribute('data-admin-experience-panel') === panelId;
+          panel.classList.toggle('hidden', !isActive);
+        });
+      };
+
+      triggers.forEach((trigger) => {
+        trigger.addEventListener('click', () => {
+          const panelId = trigger.getAttribute('data-admin-experience-trigger');
+          if (panelId) setActivePanel(panelId);
+        });
+      });
+
+      setActivePanel('education');
+    }
+  </script>
 </AdminLayout>

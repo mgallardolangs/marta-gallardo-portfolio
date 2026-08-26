@@ -8,7 +8,7 @@ import { getLangFromUrl, t } from '../i18n';
 import es from '../i18n/es.json';
 import en from '../i18n/en.json';
 import fr from '../i18n/fr.json';
-import imagesData from '../data/images.json';
+import { siteData } from '../lib/siteData';
 
 interface Props {
   title?: string;
@@ -18,8 +18,21 @@ interface Props {
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
 const { title = `Admin — ${i.hero.name}`, description = '' } = Astro.props;
-const allI18n = JSON.stringify({ es, en, fr });
-const allImages = JSON.stringify(imagesData);
+const sanitizeAdminTranslations = <T extends { translationPage?: Record<string, unknown> }>(dictionary: T) => ({
+  ...dictionary,
+  translationPage: dictionary.translationPage
+    ? {
+        ...dictionary.translationPage,
+        heroMark: '',
+      }
+    : dictionary.translationPage,
+});
+const allI18n = JSON.stringify({
+  es: sanitizeAdminTranslations(es),
+  en: sanitizeAdminTranslations(en),
+  fr: sanitizeAdminTranslations(fr),
+});
+const allSite = JSON.stringify(siteData);
 ---
 <!DOCTYPE html>
 <html lang={lang}>
@@ -31,39 +44,18 @@ const allImages = JSON.stringify(imagesData);
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
   <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <style>
-    .scroll-progress { position: fixed; top: 3.5rem; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, var(--color-blush-300), var(--color-rose-gold)); transform-origin: left; z-index: 51; }
-    @supports (animation-timeline: scroll()) { .scroll-progress { animation: scrollProgress linear; animation-timeline: scroll(); } @keyframes scrollProgress { from { transform: scaleX(0); } to { transform: scaleX(1); } } }
-  </style>
 </head>
 <body class="min-h-screen bg-cream text-charcoal">
-  <AdminInit client:load i18nJson={allI18n} imagesJson={allImages} lang={lang} />
-
-  <!-- Minimal admin toolbar — small floating pill, not a full bar -->
+  <AdminInit client:load i18nJson={allI18n} siteJson={allSite} lang={lang} />
   <div class="fixed bottom-6 right-6 z-[100] print:hidden">
     <AdminToolbar client:load />
   </div>
-
-  <!-- Site content — always visible, auth checked on publish only -->
-  <div class="scroll-progress"></div>
   <Header lang={lang} adminMode={true} />
   <main>
     <slot />
   </main>
-  <Footer lang={lang} />
-
-  <script is:inline>
-    // On production: check auth before allowing publish (not before viewing)
-    // The site always renders — auth is only needed when clicking Publish
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('init', function(user) {
-        if (!user) {
-          window.netlifyIdentity.on('login', function() { location.reload(); });
-        }
-      });
-    }
-  </script>
+  <Footer lang={lang} adminMode={true} />
 </body>
 </html>

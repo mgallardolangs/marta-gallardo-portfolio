@@ -1,0 +1,151 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ScrollReveal from './ScrollReveal';
+import BlogTableOfContents from './BlogTableOfContents';
+import { getLocalizedPath, t } from '../i18n';
+import { getAdjacentLocalePost } from '../lib/blog';
+import { buildBlogOutline, type BlogHeadingLike } from '../lib/blogOutline';
+
+type BlogPost = {
+  id: string;
+  body?: string;
+  data: {
+    title: string;
+    description: string;
+    date: Date;
+    image?: string;
+    tags: string[];
+    lang: 'es' | 'en' | 'fr' | 'de' | 'it' | 'ca';
+  };
+};
+
+interface Props {
+  post: BlogPost;
+  posts: BlogPost[];
+  headings: BlogHeadingLike[];
+  alternateLinks?: Partial<Record<'es' | 'en' | 'fr' | 'de' | 'it' | 'ca', string>>;
+}
+
+const { post, posts, headings, alternateLinks = {} } = Astro.props;
+const lang = post.data.lang;
+const i = t(lang);
+const outline = buildBlogOutline(headings ?? []);
+const nextPost = getAdjacentLocalePost(posts, post);
+const archiveHref = getLocalizedPath('/blog', lang);
+const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+/).filter(Boolean).length / 180));
+---
+
+<BaseLayout
+  title={`${post.data.title} — ${i.hero.name}`}
+  description={post.data.description}
+  image={post.data.image}
+  alternateLinks={alternateLinks}
+>
+  <article data-blog-article class="bg-paper">
+    <div class="mx-auto max-w-6xl px-6 pb-16 pt-28 md:pb-20 md:pt-32">
+      <ScrollReveal client:visible>
+        <header data-blog-article-header class="mx-auto max-w-[850px]">
+          <a href={archiveHref} class="text-accent-ink inline-flex items-center gap-3 border-b border-amaranth pb-1 font-body text-xs font-semibold uppercase tracking-[0.28em] transition hover:text-ink">
+            <span aria-hidden="true">←</span>
+            {i.blog.backToList}
+          </a>
+
+          <div class="mt-8 border-t border-black/10 pt-8">
+            <div class="flex flex-wrap items-center gap-3 text-sm text-ink-muted">
+              <time class="font-body uppercase tracking-[0.18em]">
+                {post.data.date.toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' })}
+              </time>
+              <span class="text-ink-faint">•</span>
+              <span class="font-body uppercase tracking-[0.18em]">{String(readTime).padStart(2, '0')} min {i.blog.readTime}</span>
+              {post.data.tags.map((tag) => (
+                <span class="border border-black/10 px-2 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-accent-ink">{tag}</span>
+              ))}
+            </div>
+
+            <h1 class="mt-6 font-heading text-4xl leading-[0.92] text-ink md:text-6xl">
+              {post.data.title}
+            </h1>
+            <p class="mt-5 max-w-2xl font-body text-lg leading-8 text-ink-muted">
+              {post.data.description}
+            </p>
+          </div>
+        </header>
+      </ScrollReveal>
+
+      <ScrollReveal client:visible delay={0.08}>
+        <div class="mt-10">
+          {post.data.image ? (
+            <div data-blog-feature-image class="mx-auto max-w-[850px] overflow-hidden border border-black/10">
+              <img src={post.data.image} alt={post.data.title} width={1600} height={900} loading="eager" fetchpriority="high" decoding="async" class="aspect-[16/9] w-full object-cover" />
+            </div>
+          ) : (
+            <div data-blog-feature-image class="mx-auto flex aspect-[16/9] max-w-[850px] items-center justify-center border border-black/10 bg-paper px-6 text-center text-accent-ink">
+              <span class="font-body text-xs font-semibold uppercase tracking-[0.28em]">{i.blog.end}</span>
+            </div>
+          )}
+        </div>
+      </ScrollReveal>
+
+      <ScrollReveal client:visible delay={0.14}>
+        <div data-blog-article-body class="mx-auto mt-12 grid gap-10 lg:grid-cols-[190px_minmax(0,650px)] lg:justify-center lg:gap-12">
+          <BlogTableOfContents client:load headings={outline} title={i.blog.contentIndex} readTimeLabel={i.blog.readTime} readTime={readTime} />
+
+          <div class="max-w-[650px]">
+            <div data-blog-prose class="prose prose-lg max-w-[650px] font-body text-ink prose-headings:font-heading prose-headings:text-ink prose-headings:font-normal prose-a:text-amaranth prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-black/20 prose-blockquote:text-ink-muted prose-strong:text-ink [&_h2]:scroll-mt-32 [&_h3]:scroll-mt-32">
+              <slot />
+            </div>
+
+            <footer class="mt-14 border-t border-black/10 pt-8">
+              <p class="text-accent-ink font-body text-[0.72rem] font-semibold uppercase tracking-[0.28em]">{i.blog.end}</p>
+
+              {nextPost ? (
+                <a href={getLocalizedPath(`/blog/${nextPost.id}`, lang)} class="mt-5 inline-flex flex-col gap-2 border-b border-black/10 pb-2 transition hover:border-amaranth hover:text-amaranth">
+                  <span class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-ink-faint">{i.blog.nextStory}</span>
+                  <span class="font-heading text-2xl leading-tight text-ink">{nextPost.data.title}</span>
+                </a>
+              ) : (
+                <a href={getLocalizedPath('/blog', lang)} class="mt-5 inline-flex items-center gap-3 border-b border-black/10 pb-2 font-body text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-ink transition hover:border-amaranth hover:text-amaranth">
+                  <span aria-hidden="true">←</span>
+                  {i.blog.backToList}
+                </a>
+              )}
+            </footer>
+          </div>
+        </div>
+      </ScrollReveal>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  [data-blog-prose] {
+    counter-reset: blog-h2;
+  }
+
+  [data-blog-prose] :global(h2) {
+    counter-increment: blog-h2;
+    counter-reset: blog-h3;
+  }
+
+  [data-blog-prose] :global(h2)::before {
+    content: counter(blog-h2, decimal-leading-zero) ' ';
+    margin-right: 0.75rem;
+    color: rgb(232 50 86 / 0.96);
+    font-size: 0.82rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  [data-blog-prose] :global(h3) {
+    counter-increment: blog-h3;
+  }
+
+  [data-blog-prose] :global(h3)::before {
+    content: counter(blog-h2, decimal-leading-zero) '.' counter(blog-h3) ' ';
+    margin-right: 0.7rem;
+    color: rgb(232 50 86 / 0.96);
+    font-size: 0.76rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+</style>

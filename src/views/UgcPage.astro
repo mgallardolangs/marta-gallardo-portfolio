@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ScrollReveal from '../components/ScrollReveal';
+import TypedTitle from '../components/TypedTitle.astro';
+import UgcContactSheet from '../components/UgcContactSheet';
+import { getLangFromUrl, t } from '../i18n';
+import { siteData } from '../lib/siteData';
+
+const lang = getLangFromUrl(Astro.url);
+const i = t(lang);
+const pageTitle = `${i.hero.name} | ${i.ugc.title}`;
+const pageDescription = i.ugcPage.pageDescription;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <div class="bg-paper">
+    <section data-ugc-hero class="px-6 pt-20 pb-5 md:pt-24 md:pb-6">
+      <div class="site-container">
+        <ScrollReveal client:visible className="max-w-6xl">
+          <p class="text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">
+            {i.ugcPage.contactSheet.eyebrow}
+          </p>
+          <div class="mt-5 grid gap-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:items-end">
+            <TypedTitle
+              as="h1"
+              text={i.ugcPage.hero.headline}
+              trigger="load"
+              class="block text-4xl leading-none text-ink md:text-6xl"
+            />
+            <p class="text-balance text-lg font-semibold uppercase leading-[1.18] tracking-[0.13em] text-ink md:text-2xl lg:justify-self-end lg:text-right lg:text-3xl">
+              {i.ugcPage.contactSheet.headline}
+            </p>
+          </div>
+        </ScrollReveal>
+
+        <div class="mt-5 overflow-hidden" aria-hidden="true">
+          <div class="ugc-hero-rule h-px bg-ink/20" />
+        </div>
+      </div>
+    </section>
+
+    <section class="px-6 pb-16 md:pb-20">
+      <div class="site-container">
+        <UgcContactSheet
+          client:load
+          items={siteData.ugcPortfolio}
+          lang={lang}
+          copy={i.ugcPage.contactSheet}
+        />
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .ugc-hero-rule {
+    transform-origin: left;
+    animation: ugc-hero-rule-draw 0.7s ease-out both;
+  }
+
+  @keyframes ugc-hero-rule-draw {
+    from {
+      transform: scaleX(0);
+      opacity: 0;
+    }
+
+    to {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+  }
+</style>

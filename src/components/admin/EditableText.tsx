@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { adminStore } from './adminStore';
 
 interface Props {
   i18nKey: string;
   as?: string;
   className?: string;
+  clickToEdit?: boolean;
+  editButtonTargetId?: string;
+  showEditButton?: boolean;
 }
 
 function formatText(value: string): string {
@@ -30,10 +34,11 @@ function htmlToText(html: string): string {
  * - All DOM manipulation via refs
  * - Store subscription only updates when NOT editing
  */
-export default function EditableText({ i18nKey, as: Tag = 'span', className = '' }: Props) {
+export default function EditableText({ i18nKey, as: Tag = 'span', className = '', clickToEdit = true, editButtonTargetId, showEditButton = true }: Props) {
   const elRef = useRef<HTMLDivElement>(null);
   const editingRef = useRef(false);
   const [editing, setEditing] = useState(false);
+  const [editButtonTarget, setEditButtonTarget] = useState<HTMLElement | null>(null);
 
   // Mount: set initial text + subscribe to store (but skip updates while editing)
   useEffect(() => {
@@ -46,6 +51,11 @@ export default function EditableText({ i18nKey, as: Tag = 'span', className = ''
       }
     });
   }, [i18nKey]);
+
+  useEffect(() => {
+    if (!editButtonTargetId) return;
+    setEditButtonTarget(document.getElementById(editButtonTargetId));
+  }, [editButtonTargetId]);
 
   const startEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -100,6 +110,16 @@ export default function EditableText({ i18nKey, as: Tag = 'span', className = ''
   }, [i18nKey]);
 
   const isBlock = ['div','p','h1','h2','h3','h4','h5','h6','section','li'].includes(Tag);
+  const editButton = !editing && showEditButton ? (
+    <button
+      type="button"
+      onClick={startEdit}
+      tabIndex={0}
+      className="absolute -top-3 -right-3 opacity-0 group-hover/edit:opacity-100 transition-opacity bg-blue-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow-lg z-[60] hover:bg-blue-600"
+    >
+      ✏️
+    </button>
+  ) : null;
 
   return (
     <div
@@ -109,21 +129,13 @@ export default function EditableText({ i18nKey, as: Tag = 'span', className = ''
       {/* The actual editable element — React NEVER sets its innerHTML after mount */}
       <div
         ref={elRef}
-        onClick={startEdit}
+        onClick={clickToEdit ? startEdit : undefined}
         onBlur={finishEdit}
         suppressContentEditableWarning
-        className={`${className} ${editing ? 'outline outline-2 outline-blue-400 rounded-lg bg-blue-50/20' : 'cursor-pointer'}`}
+        className={`${className} ${editing ? 'outline outline-2 outline-blue-400 rounded-lg bg-blue-50/20' : clickToEdit ? 'cursor-pointer' : ''}`}
         style={{ minWidth: '1rem' }}
       />
-      {!editing && (
-        <button
-          type="button"
-          onClick={startEdit}
-          className="absolute -top-3 -right-3 opacity-0 group-hover/edit:opacity-100 transition-opacity bg-blue-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm shadow-lg z-[60] hover:bg-blue-600"
-        >
-          ✏️
-        </button>
-      )}
+      {editButtonTargetId ? (editButtonTarget ? createPortal(editButton, editButtonTarget) : null) : editButton}
     </div>
   );
 }

@@ -1,57 +1,18 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
-import { getLangFromUrl, t } from '../../../i18n';
-import ScrollReveal from '../../../components/ScrollReveal';
-import PageTransition from '../../../components/PageTransition';
+import BlogArticleLayout from '../../../components/BlogArticleLayout.astro';
+import { getBlogAlternateLinksForPost, getBlogStaticPathsForLocale } from '../../../lib/blog';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map(post => ({ params: { slug: post.id }, props: { post } }));
+  return getBlogStaticPathsForLocale(posts, 'en');
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
-const lang = getLangFromUrl(Astro.url);
-const i = t(lang);
+const posts = await getCollection('blog');
+const { Content, headings } = await render(post);
+const blogAlternateLinks = getBlogAlternateLinksForPost(posts, post);
 ---
-<BaseLayout title={`${post.data.title} — ${i.hero.name}`} description={post.data.description}>
-  <article class="pt-24 pb-16 max-w-3xl mx-auto px-6">
-    <PageTransition client:load>
-      <ScrollReveal client:visible>
-        <a href="/blog" class="text-rose-gold hover:text-blush-300 transition-colors text-sm font-body mb-8 inline-block">
-          {i.blog.backToList}
-        </a>
-
-        <header class="mb-10">
-          <div class="flex items-center gap-3 mb-4">
-            <time class="text-sm text-warm-gray font-body">
-              {post.data.date.toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' })}
-            </time>
-            {post.data.tags.map((tag: string) => (
-              <span class="text-xs bg-blush-50 text-rose-gold px-2 py-0.5 rounded-full">{tag}</span>
-            ))}
-          </div>
-          <h1 class="font-heading text-4xl md:text-6xl font-light text-charcoal leading-tight">
-            {post.data.title}
-          </h1>
-          {post.data.image && (
-            <div class="w-full h-64 md:h-96 bg-blush-100 rounded-2xl mt-8 overflow-hidden">
-              <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover" />
-            </div>
-          )}
-        </header>
-      </ScrollReveal>
-
-      <ScrollReveal client:visible delay={0.2}>
-        <div class="prose prose-lg max-w-none font-body text-charcoal
-          prose-headings:font-heading prose-headings:text-charcoal prose-headings:font-light
-          prose-a:text-rose-gold prose-a:no-underline hover:prose-a:underline
-          prose-blockquote:border-l-blush-200 prose-blockquote:text-warm-gray
-          prose-strong:text-charcoal">
-          <Content />
-        </div>
-      </ScrollReveal>
-    </PageTransition>
-  </article>
-</BaseLayout>
+<BlogArticleLayout post={post} posts={posts} headings={headings} alternateLinks={blogAlternateLinks}>
+  <Content />
+</BlogArticleLayout>

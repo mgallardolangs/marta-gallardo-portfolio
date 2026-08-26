@@ -1,0 +1,125 @@
+---
+interface Props {
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  text: string;
+  trigger?: 'load' | 'visible';
+  class?: string;
+}
+
+const { as = 'h1', text, trigger = 'load', class: className = '' } = Astro.props;
+const Tag = as;
+---
+
+<Tag class={className} data-typed-title data-typed-trigger={trigger} data-typed-text={text}>
+  <span class="sr-only">{text}</span>
+  <span class="typed-title" aria-hidden="true">
+    <span class="typed-title__reserve">{text}</span>
+    <span class="typed-title__visual" data-typed-title-visual>{text}</span>
+    <span class="typed-title__cursor" aria-hidden="true">_</span>
+  </span>
+</Tag>
+
+<style>
+  .typed-title {
+    display: inline-grid;
+    grid-template-columns: minmax(0, max-content) 0.46em;
+    align-items: start;
+  }
+
+  .typed-title__reserve,
+  .typed-title__visual {
+    grid-area: 1 / 1;
+    white-space: pre-wrap;
+  }
+
+  .typed-title__reserve {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .typed-title__visual {
+    min-width: 1ch;
+  }
+
+  .typed-title__cursor {
+    grid-area: 1 / 2;
+    width: 0.46em;
+    align-self: end;
+    color: var(--color-amaranth);
+    margin-inline-start: 0.12em;
+    transform: translateY(0.04em);
+    animation: typed-title-cursor-blink 1s steps(1) infinite;
+  }
+
+  @keyframes typed-title-cursor-blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .typed-title__visual {
+      min-width: 0;
+    }
+  }
+</style>
+
+<script>
+  import Typed from 'typed.js';
+  import {
+    createTypedTitleState,
+    initAllTypedTitles,
+    resetAllTypedTitles,
+    type TypedTitleState,
+  } from '../lib/typedTitleRuntime.ts';
+
+  declare global {
+    interface Window {
+      __mgTypedTitleBound?: boolean;
+      __mgTypedTitleState?: TypedTitleState;
+    }
+  }
+
+  const typedState = window.__mgTypedTitleState ??= createTypedTitleState();
+
+  const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  const initAll = () => {
+    initAllTypedTitles(document, {
+      state: typedState,
+      mediaMatches: mediaQuery.matches,
+      createTyped: (_root, element, { text, trigger, onComplete }) =>
+        new Typed(element as Element, {
+          strings: [text],
+          contentType: 'null',
+          typeSpeed: trigger === 'visible' ? 32 : 42,
+          startDelay: trigger === 'visible' ? 0 : 160,
+          autoInsertCss: false,
+          showCursor: false,
+          loop: false,
+          smartBackspace: false,
+          backSpeed: 0,
+          backDelay: 0,
+          onComplete,
+        }),
+      createObserver: (callback, options) =>
+        new IntersectionObserver((entries) => callback(entries), options),
+    });
+  };
+
+  const destroyAll = () => {
+    resetAllTypedTitles(document, typedState);
+  };
+
+  if (!window.__mgTypedTitleBound) {
+    window.__mgTypedTitleBound = true;
+    document.addEventListener('astro:before-preparation', destroyAll);
+    document.addEventListener('astro:page-load', initAll);
+    mediaQuery.addEventListener?.('change', () => {
+      destroyAll();
+      initAll();
+    });
+  }
+
+  initAll();
+</script>

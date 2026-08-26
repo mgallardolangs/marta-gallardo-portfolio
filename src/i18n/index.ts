@@ -10,8 +10,7 @@ export const languages = { es, en, fr, de, it, ca } as const;
 export type Lang = keyof typeof languages;
 export const defaultLang: Lang = 'es';
 export const langNames: Record<Lang, string> = { es: 'ES', en: 'EN', fr: 'FR', de: 'DE', it: 'IT', ca: 'CA' };
-// ponytail: only these show in the language dropdown. Add de/it/ca back when translations are ready.
-export const visibleLangs: Lang[] = ['es', 'en', 'fr'];
+export const visibleLangs: Lang[] = ['es', 'en', 'fr', 'de', 'it', 'ca'];
 
 export function t(lang: Lang = defaultLang) {
   return languages[lang] ?? languages[defaultLang];
@@ -23,8 +22,22 @@ export function getLangFromUrl(url: URL): Lang {
   return defaultLang;
 }
 
+export function stripLocaleFromPath(pathname: string): string {
+  const normalizedPath = pathname.replace(/\/$/, '') || '/';
+  const segments = normalizedPath.split('/').filter(Boolean);
+  const [first, ...rest] = segments;
+
+  if (first && first in languages) {
+    const nextPath = `/${rest.join('/')}`.replace(/\/$/, '');
+    return nextPath || '/';
+  }
+
+  return normalizedPath;
+}
+
 export function getLocalizedPath(path: string, lang: Lang): string {
-  // ponytail: ES is default (no prefix), others get /en/, /fr/, etc.
-  if (lang === defaultLang) return path;
-  return `/${lang}${path}`;
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+
+  if (lang === defaultLang) return normalizedPath;
+  return `/${lang}${normalizedPath}`;
 }

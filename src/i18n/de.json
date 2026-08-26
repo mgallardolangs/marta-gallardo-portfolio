@@ -4,7 +4,9 @@
     "ugc": "UGC",
     "translationSeo": "Übersetzung + SEO",
     "blog": "Blog",
-    "contact": "Kontakt"
+    "contact": "Kontakt",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen"
   },
   "hero": {
     "name": "Marta Gallardo",
@@ -14,8 +16,8 @@
     "seoLabel": "Mehrsprachige Übersetzung & Lokalisierung + SEO"
   },
   "about": {
-    "title": "Über mich",
-    "text": "Ich bin Marta, UGC-Content-Erstellerin und Spezialistin für Übersetzung und SEO. Ich spreche Spanisch, Französisch, Deutsch, Italienisch und Englisch. Ich bin leidenschaftlich dabei, authentische Inhalte für Marken zu erstellen und Unternehmen bei der globalen Kommunikation zu unterstützen."
+    "title": "Freut mich, ich bin Marta.",
+    "text": "Ich bin Übersetzerin und Content Creatorin. Ich arbeite zwischen Sprachen, Kulturen und Formaten, damit jede Botschaft ihre Absicht behält und auf natürliche Weise ankommt.\\n\\nIch verbinde Übersetzung, Lokalisierung, mehrsprachiges SEO und UGC-Content, um Marken dabei zu helfen, klar, konsistent und kultursensibel zu kommunizieren."
   },
   "ugc": {
     "title": "UGC Portfolio",
@@ -52,33 +54,50 @@
   "blog": {
     "title": "Blog",
     "readMore": "Weiterlesen",
-    "backToList": "← Zurück zum Blog"
+    "backToList": "Zurück zum Blog",
+    "emptyState": "Noch keine Beiträge. Mehr in Kürze.",
+    "eyebrow": "NOTIZEN · PROZESSE · IDEEN",
+    "subtitle": "EIN ARCHIV VON IDEEN ÜBER CONTENT, SPRACHEN, KREATIVITÄT UND STRATEGIE.",
+    "latestStory": "Neueste Geschichte",
+    "archive": "Archiv",
+    "comingSoonTitle": "SEHR BALD MEHR GESCHICHTEN",
+    "comingSoonMeta": "WACHSENDES ARCHIV",
+    "contentIndex": "Inhalt",
+    "readTime": "Lesezeit",
+    "nextStory": "Nächste Geschichte",
+    "end": "Ende des Artikels"
   },
   "contact": {
-    "title": "Zusammenarbeiten",
-    "subtitle": "Haben Sie ein Projekt? Ich würde mich freuen, von Ihnen zu hören.",
-    "ugcForm": {
-      "title": "UGC-Zusammenarbeit",
+    "title": "Lassen Sie uns zusammenarbeiten",
+    "subtitle": "Erzähl mir, was du schaffen, anpassen oder positionieren möchtest. Ich antworte dir mit einem klaren Vorschlag, um das Projekt zu formen.",
+    "tabs": {
+      "ugc": "UGC",
+      "seo": "Übersetzung / SEO"
+    },
+    "fields": {
       "company": "Unternehmen",
       "email": "E-Mail",
-      "budget": "Budget",
-      "description": "Projektbeschreibung"
+      "ugcDetails": "Erzählen Sie mir mehr über das Kreativprojekt",
+      "seoDetails": "Welche Inhalte müssen übersetzt, lokalisiert oder optimiert werden?"
     },
-    "seoForm": {
-      "title": "Übersetzung + SEO",
-      "company": "Unternehmen",
-      "email": "E-Mail",
-      "budget": "Budget",
-      "description": "Arbeitsbeschreibung"
-    },
+    "companyOptional": "Optional",
+    "responseNote": "Klare Antwort · direkter Kontakt",
     "send": "Senden",
-    "successTitle": "Nachricht gesendet!",
-    "successMessage": "Vielen Dank für Ihre Nachricht. Ich melde mich so schnell wie möglich.",
+    "response": {
+      "title": "Nachricht gesendet",
+      "message": "Vielen Dank für Ihre Nachricht. Ich melde mich so schnell wie möglich."
+    },
     "eyebrow": "Kontakt",
     "errorRequired": "Bitte füllen Sie dieses Feld aus."
   },
   "footer": {
-    "rights": "Alle Rechte vorbehalten"
+    "rights": "Alle Rechte vorbehalten",
+    "eyebrow": "Haben Sie ein Projekt im Kopf?",
+    "headline": "Lassen Sie uns sprechen.",
+    "support": "Content, Lokalisierung und Strategie mit klarem editorischem Blick.",
+    "cta": "Kontakt aufnehmen",
+    "brand": "MG",
+    "location": "Elche, Spanien"
   },
   "language": {
     "label": "Sprache",
@@ -91,8 +110,8 @@
   },
   "home": {
     "hero": {
-      "kicker": "UGC · Übersetzung · SEO",
-      "description": "Ich entwickle Bilder, Texte und digitale Erlebnisse mit einem editorischen Gespür für Lifestyle-, Beauty-, Travel- und internationale Marken.",
+      "kicker": "Kreativität, Sprachen und Strategie",
+      "description": "Ich erstelle Inhalte und passe Botschaften so an, dass Marken echte Menschen erreichen – in jeder Sprache und auf jedem Markt. Ich verbinde Kreativität, Übersetzung und digitale Strategie mit einem internationalen Blick.",
       "mainPhoto": "Hauptfoto",
       "scrollCue": "Scrollen zum Entdecken",
       "coverLabel": "Titel-Story"
@@ -113,7 +132,7 @@
     "video": {
       "eyebrow": "Markenidentität",
       "title": "Persönliche Marke",
-      "description": "Dieser Bereich kann Martas Intro-Video zeigen: natürlich, elegant und darauf ausgelegt, Persönlichkeit, Kamerapräsenz und eine klare visuelle Welt zu vermitteln.",
+      "description": "Auf @marttelier teile ich Inhalte über Kunst, Reisen, Sprachen und kreative Prozesse. Ein persönlicher Raum, in dem ich Neugier, Beobachtung und echte Erfahrungen in visuelle Geschichten verwandle.",
       "placeholder": "Intro-Video",
       "note": "9:16-Format · Platzhalter für Reel / Vorstellung"
     },
@@ -122,16 +141,23 @@
       "shotTwo": "Beauty-Foto",
       "shotThree": "Reisefoto",
       "shotFour": "Blick hinter die Kulissen"
+    },
+    "orbit": {
+      "kicker": "KREATIVARCHIV",
+      "title": "GESCHICHTEN IN BEWEGUNG.",
+      "index": "MARTA GALLARDO · PORTFOLIO",
+      "note": "INHALTE · SPRACHEN · REISEN · KUNST"
     }
   },
   "ugcPage": {
     "hero": {
       "backgroundLabel": "MARKENPORTFOLIO",
       "eyebrow": "UGC",
-      "headline": "Klare, editoriale UGC-Konzepte für Marken — nicht für Influencer-Tagebücher.",
-      "description": "Ein kuratiertes Placeholder-Portfolio für Marta Gallardo mit Kampagnenkonzepten rund um Reisen, Sprachen und Kunst. Jede Karte ist so angelegt, dass sie Paid-Social-ready Creative simuliert: glaubwürdig, strukturiert und auf Conversion ausgerichtet.",
+      "headline": "@marttelier",
+      "description": "Ich erstelle Videos und Bilder, die sich natürlich in soziale Netzwerke und Kampagnen einfügen. Nahbarer, sorgfältiger und glaubwürdiger Content, der Aufmerksamkeit gewinnt, ohne die Markenidentität zu verlieren.",
       "nicheIntroTitle": "Jede Marke hat eine andere Geschichte.",
-      "nicheIntroText": "Meine Aufgabe ist es, zu verstehen, was sie einzigartig macht, und diese Essenz in Inhalte zu verwandeln, die natürlich, glaubwürdig und relevant für die Menschen sind, die sie erreichen möchte."
+      "nicheIntroText": "Ich verstehe, was jede Marke einzigartig macht, und übersetze das in natürlichen, relevanten Content, der bereit ist, mit ihrem Publikum in Verbindung zu treten.",
+      "highlight": ""
     },
     "pageDescription": "Professionelles UGC-Portfolio von Marta Gallardo mit editorialen Konzeptkampagnen zu Reisen, Sprachen und Kunst.",
     "nicheLabel": "Nische",
@@ -145,7 +171,7 @@
         "label": "Reisen",
         "accent": "Storytelling für Hotels und Destinationen",
         "eyebrow": "Hotellerie, Gepäck, Buchung und erlebnisorientierter Content",
-        "intro": "Eine durchdachte Mischung aus Check-in-Walkthroughs, Itinerary-Edits und produktfokussierten Travel-Assets, die sich natürlich in Paid-Social-Feeds einfügen.",
+        "intro": "Ich erstelle Content für Tourismus, Unterkünfte und Reiseprodukte, der das Erlebnis auf natürliche Weise vermittelt: Rundgänge, Empfehlungen, Integrationen und Formate, die helfen, sich das Reiseziel schon vor der Buchung vorzustellen.",
         "cards": [
           {
             "title": "Check-in-Storyboard für Boutique-Hotels",
@@ -177,7 +203,7 @@
         "label": "Sprachen",
         "accent": "Lehrreiche, nützliche und mehrsprachige Ads",
         "eyebrow": "Sprach-Apps, internationale Services und Lerntools",
-        "intro": "Beispielkonzepte für Marken, die klare und glaubwürdige Kommunikation brauchen — ideal für mehrsprachige Kampagnen, Onboarding-Flows und Produkt-Erklärformate.",
+        "intro": "Ich erstelle klaren, nahbaren Content für Apps, Bildungsplattformen und internationale Services. Ich passe die Botschaft an die Sprache, den kulturellen Kontext und die Art an, wie jedes Publikum entscheidet und Verbindungen aufbaut.",
         "cards": [
           {
             "title": "Demo einer ersten Lektion in einer Sprach-App",
@@ -209,7 +235,7 @@
         "label": "Kunst",
         "accent": "Editoriale Produktdemos für kreative Marken",
         "eyebrow": "Kreativtools, Workshops, Galerien und designorientierte Produkte",
-        "intro": "UGC-Konzepte mit editorialem Gefühl für Kunst- und Designmarken, die haptische Visuals mit informativen Hooks verbinden und im Paid-Bereich gut funktionieren.",
+        "intro": "Ich kreiere redaktionelle Inhalte für Marken aus Kunst, Design und Lifestyle. Ich achte auf Komposition, Rhythmus und Erzählung, damit jede Einstellung die Identität des Produkts stärkt.",
         "cards": [
           {
             "title": "Material-Reveal für ein Sketchbook",
@@ -237,180 +263,147 @@
           }
         ]
       }
+    },
+    "contentComingSoon": "Inhalte bald verfügbar.",
+    "contactSheet": {
+      "eyebrow": "UGC · KREATIVE LEITUNG",
+      "headline": "INHALTE, DIE ERLEBNISSE, SPRACHEN UND KUNST IN VISUELLE GESCHICHTEN VERWANDELN.",
+      "filters": {
+        "all": "ALLE",
+        "travel": "REISEN",
+        "languages": "SPRACHEN",
+        "art": "KUNST"
+      },
+      "close": "Schließen",
+      "previous": "Zurück",
+      "next": "Weiter",
+      "formatLabel": "FORMAT",
+      "pieceLabel": "BEITRAG"
     }
   },
   "translationPage": {
     "hero": {
-      "eyebrow": "Communication",
-      "title": "Word",
-      "text": "Adapting a message is not just about translating it. It is about making sure it still works wherever its audience is. \\n Every language has its own nuances, every market its context and every brand its own way of communicating. \\n I help companies adapt and optimize their content so it connects with new markets, improves visibility in search engines and feels just as natural in any language. \\n My work combines translation, localization and SEO positioning so that every piece of content keeps its intent, feels relevant to its audience and has real opportunities to rank on Google. \\n My background combines training in Translation and Interpreting, daily communication with French-speaking clients, localization projects for ecommerce and international immersion that has strengthened the way I understand languages through their cultural context, not just grammar. \\n That perspective allows me to approach each project with a clear goal: to make the content feel as if it had originally been written for the market it is targeting.",
-      "availability": "Available for freelance projects, one-off collaborations and ongoing editorial support."
+      "backgroundLabel": "Was der Text sagt → Übersetzung.\nWie jedes Publikum ihn versteht → Lokalisierung.\nWie Menschen ihn finden → SEO.",
+      "eyebrow": "Mehrsprachige Kommunikation",
+      "title": "Übersetzungs-, SEO- und Lokalisierungsdienstleistungen",
+      "text": "Ich passe Inhalte so an, dass sie natürlich klingen, mit jedem Markt in Verbindung treten und bessere Chancen haben, gefunden zu werden. Übersetzung, Lokalisierung und mehrsprachiges SEO mit einer gemeinsamen Absicht: dass deine Botschaft funktioniert, egal wo dein Publikum ist.",
+      "ctaPrimary": "PORTFOLIO ANSEHEN",
+      "ctaSecondary": "LASSEN SIE UNS SPRECHEN"
     },
     "services": {
-      "title": "How I can help",
+      "title": "Leistungen",
       "items": [
         {
-          "name": "Translation",
-          "description": "More than translating words, I adapt messages so they preserve their meaning, tone and ability to connect."
+          "id": "translation",
+          "name": "Übersetzung",
+          "description": "Ich übersetze nicht nur Wörter, sondern passe Botschaften so an, dass sie ihre Bedeutung, ihren Ton und ihre Verbindungskraft behalten.",
+          "headline": "Sinn und Ton bleiben erhalten."
         },
         {
-          "name": "Localization",
-          "description": "Every market has different references, expressions and ways of communicating. I adapt content so it feels natural in its own context."
+          "id": "localization",
+          "name": "Lokalisierung",
+          "description": "Jeder Markt hat eigene Referenzen, Ausdrucksweisen und Kommunikationscodes. Ich passe Inhalte so an, dass sie in ihrem jeweiligen Kontext natürlich wirken.",
+          "headline": "Damit es sich vor Ort richtig anfühlt."
         },
         {
-          "name": "Multilingual SEO",
-          "description": "I optimize content so it can be found in search engines without compromising natural language or the reading experience."
+          "id": "multilingual-seo",
+          "name": "Mehrsprachiges SEO",
+          "description": "Ich optimiere Inhalte für Suchmaschinen, ohne Natürlichkeit, Markenstimme oder Lesbarkeit zu beeinträchtigen.",
+          "headline": "Sichtbar, ohne unnatürlich zu klingen."
         }
       ]
     },
+    "arsenal": {
+      "title": "Mein technisches Arsenal",
+      "languagesTitle": "Sprachen",
+      "toolsTitle": "Werkzeuge",
+      "skillsTitle": "Fähigkeiten"
+    },
+    "browserTabs": {
+      "education": "Ausbildung",
+      "experience": "Erfahrung",
+      "profileLabel": "Übersetzungsprofil"
+    },
+    "browserTabsAriaLabel": "Tabs für Ausbildung und Erfahrung",
     "experience": {
-      "eyebrow": "Professional path",
-      "title": "Experience",
-      "text": "Hands-on experience in real communication, direct contact with people and language adaptation across different contexts.",
+      "intro": "Praktische Erfahrung in echter Kommunikation, im direkten Kontakt mit Menschen und in der sprachlichen Anpassung für unterschiedliche Kontexte.",
       "cards": [
         {
-          "title": "Ecommerce translation and content management + customer service in French",
+          "title": "E-Commerce-Übersetzung und Content-Management + Kundenservice auf Französisch",
           "highlight": "Las Tijeras Mágicas",
-          "text": "Daily translation of product sheets (ES→FR/DE/IT) and management of digital catalogues for haberdashery and textile products across European markets. Daily communication with French-speaking clients, issue resolution and careful handling of brand tone in real situations."
+          "text": "Tägliche Übersetzung von Produktdatenblättern (ES→FR/DE/IT), Katalogpflege und Betreuung französischsprachiger Kundschaft bei gleichbleibender Präzision und Markenton."
         },
         {
-          "title": "Freelance legal translation internship",
+          "title": "Freelance-Praktikum in juristischer Übersetzung",
           "highlight": "Cristina Auroutinova",
-          "text": "FR⇄ES translation of legal texts and post-editing of machine translations, ensuring terminological accuracy and consistency across different formats."
+          "text": "FR⇄ES-Übersetzung juristischer Texte und Post-Editing mit Fokus auf terminologische Präzision und Kohärenz."
         },
         {
-          "title": "International experience as an au pair",
+          "title": "Internationale Erfahrung als Au-pair",
           "highlight": "Aupairworld Switzerland",
-          "text": "Living and working in a multicultural environment, developing adaptability, empathy and confident communication."
+          "text": "Arbeit und Leben in der Schweiz in einem multikulturellen Umfeld, wodurch Anpassungsfähigkeit, Empathie und kommunikative Gewandtheit gestärkt wurden."
         }
       ]
-    },
-    "skills": {
-      "eyebrow": "Competencies",
-      "title": "Skills",
-      "text": "A working approach designed for texts that need to sound natural, stay aligned with the brand and perform well online.",
-      "linguistic": {
-        "title": "Language services",
-        "items": [
-          "Translation and content adaptation FR⇄ES and EN/DE/IT/CA→ES",
-          "Website localization",
-          "Proofreading, editing and style refinement",
-          "Terminology research and glossary management"
-        ]
-      },
-      "webOptimization": {
-        "title": "Web content optimization",
-        "items": [
-          "Local SEO",
-          "Search engine content optimization",
-          "Keyword planner",
-          "Copywriting"
-        ]
-      },
-      "tools": {
-        "title": "Tools",
-        "items": [
-          "Microsoft Office",
-          "Google Workspace",
-          "Notion",
-          "AI tools (ChatGPT, Claude)",
-          "WordPress",
-          "Google Search Console",
-          "Google Business Profile"
-        ]
-      }
     },
     "education": {
-      "eyebrow": "EDUCATION AND LANGUAGE PROFILE",
-      "title": "Education",
-      "intro": "An academic foundation centered on languages, intercultural communication and writing, strengthened by practical immersion in international environments.",
+      "intro": "Ein akademisches Fundament mit Fokus auf Sprachen, interkulturelle Kommunikation und Schreiben, gestärkt durch praktische Erfahrungen in internationalen Umfeldern.",
       "studies": [
-        "Degree in Translation and Interpreting, with a specialization in French and a focus on writing and content adaptation for international audiences.",
-        "Advanced French strengthened through a six-month Erasmus+ program in Paris and daily contact with francophone environments.",
-        "Ongoing interest in clear writing, terminology and content optimization for digital environments.",
-        "Freelance legal translation internship (FR→ES) alongside a specialized translator, working with legal texts and post-editing of machine translations."
-      ],
-      "languagesEyebrow": "Language skills",
-      "languagesTitle": "Languages",
-      "languages": [
-        {
-          "name": "Spanish",
-          "level": "Native"
-        },
-        {
-          "name": "French",
-          "level": "Advanced · C1"
-        },
-        {
-          "name": "Catalan",
-          "level": "Advanced"
-        },
-        {
-          "name": "English",
-          "level": "Intermediate · B1"
-        },
-        {
-          "name": "German",
-          "level": "Basic · A2"
-        },
-        {
-          "name": "Italian",
-          "level": "Basic · A2"
-        }
+        "Studium der Übersetzungs- und Dolmetschwissenschaft mit Schwerpunkt Französisch, Schreiben und Inhaltsanpassung.",
+        "Sechsmonatiges Erasmus+ in Paris und tägliche Praxis in frankophonen Umgebungen.",
+        "Kontinuierliche Weiterbildung in klarem Schreiben, Terminologie und der Optimierung digitaler Inhalte.",
+        "Praktikum in juristischer Übersetzung FR→ES und Post-Editing an der Seite einer spezialisierten Übersetzerin."
       ]
     },
-    "servicesOffered": {
-      "eyebrow": "What I offer",
-      "title": "Services I offer",
-      "intro": "Tailored support for businesses that need their content to work across languages, platforms and search contexts.",
-      "items": [
-        "Website translation",
-        "Content localization",
-        "Multilingual SEO copywriting",
-        "Proofreading and text editing"
-      ]
-    },
-    "process": {
-      "eyebrow": "Methodology",
-      "title": "How I work",
-      "intro": "A clear and structured workflow keeps every project efficient, aligned and ready to publish.",
+    "methodology": {
+      "title": "Methodik und Infografik",
       "steps": [
         {
           "title": "Briefing",
-          "description": "I analyze the project goal, the intended audience and the context (language, platform or market) before I begin."
+          "description": "Bevor ich beginne, analysiere ich das Ziel des Projekts, die Zielgruppe und den Kontext — Sprache, Plattform oder Markt."
         },
         {
-          "title": "Translation / Writing",
-          "description": "I work on the content with a focus on clarity, naturalness and commercial intent, adapting it to the format you need."
+          "title": "Übersetzung / Texterstellung",
+          "description": "Ich arbeite am Inhalt mit Fokus auf Klarheit, Natürlichkeit und kommerzielle Absicht und passe ihn an das benötigte Format an."
         },
         {
-          "title": "Review",
-          "description": "I review consistency, flow and formal details to ensure a polished result that is ready to publish."
+          "title": "Überprüfung",
+          "description": "Ich prüfe Konsistenz, Lesefluss und formale Details, damit das Ergebnis sorgfältig ausgearbeitet und veröffentlichungsbereit ist."
         },
         {
-          "title": "Delivery",
-          "description": "I deliver the final content, leaving room for adjustments or observations whenever the project requires them."
+          "title": "Lieferung",
+          "description": "Ich liefere den finalen Inhalt und lasse Raum für Anpassungen oder Anmerkungen, wenn das Projekt dies erfordert."
         }
       ]
     },
-    "whyMe": {
-      "eyebrow": "What sets me apart",
-      "title": "Why work with me?",
-      "text": "Languages, real-world experience and a strong commitment to every piece of content I deliver.",
+    "whyChooseMe": {
+      "title": "Warum sollten Sie mich für Ihr Projekt wählen?",
       "cards": [
         {
-          "title": "Languages handled with professional judgment",
-          "text": "I do not translate word for word: I adapt the message so it preserves meaning, tone and credibility in the target language."
+          "title": "Sprachen mit professionellem Urteilsvermögen eingesetzt",
+          "text": "Ich übersetze nicht Wort für Wort: Ich passe die Botschaft so an, dass sie in der Zielsprache Bedeutung, Ton und Glaubwürdigkeit bewahrt."
         },
         {
-          "title": "Results-oriented approach",
-          "text": "Every text is shaped for its final purpose — to sell, rank or inform — not just to sound good."
+          "title": "Ergebnisorientierter Ansatz",
+          "text": "Jeder Text wird für sein endgültiges Ziel gestaltet — verkaufen, ranken oder informieren — und nicht nur dafür, gut zu klingen."
         },
         {
-          "title": "Commitment in every delivery",
-          "text": "I meet deadlines, keep communication clear throughout the process and deliver revised content that is ready to publish."
+          "title": "Sorgfalt bei jeder Lieferung",
+          "text": "Ich halte Fristen ein, kommuniziere während des gesamten Prozesses klar und liefere überarbeitete Inhalte, die direkt einsatzbereit sind."
         }
       ]
+    },
+    "heroMark": "ELCHE · WELTWEIT TÄTIG",
+    "servicesEyebrow": "01 · WIE ICH SIE UNTERSTÜTZEN KANN",
+    "arsenalEyebrow": "02 · PROFIL & TOOLS",
+    "experienceSectionTitle": "Erfahrung und Ausbildung",
+    "experienceEyebrow": "03 · WERDEGANG",
+    "experienceStatement": "Akademische Grundlage + echte Praxiserfahrung",
+    "methodologyEyebrow": "04 · METHODIK & INFOGRAFIK",
+    "methodologyDisplayTitle": "Ein klarer Prozess, von Anfang bis Ende",
+    "whyEyebrow": "05 · WAS MICH AUSZEICHNET",
+    "skillGroups": {
+      "translation": "Übersetzung & Lokalisierung",
+      "seo": "SEO und Web-Inhalte"
     }
   }
 }

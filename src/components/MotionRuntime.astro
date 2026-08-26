@@ -1,0 +1,115 @@
+<script>
+  import Lenis from 'lenis';
+  import { createMotionRuntimeController } from '../lib/motionRuntime.js';
+  import { createDeferredMotionPreferenceSync, MOTION_RUNTIME_READY_EVENT } from '../lib/motionRuntime.js';
+
+  type MotionRuntimeState = {
+    lenis: Lenis | null;
+    cleanup: (() => void) | null;
+    subscribeLenis: (subscriber: (lenis: Lenis | null) => void) => () => void;
+  };
+
+  declare global {
+    interface Window {
+      __mgMotionRuntime?: MotionRuntimeState;
+    }
+  }
+
+  const mountRuntime = () => {
+    window.__mgMotionRuntime?.cleanup?.();
+
+    const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const runtimeState: MotionRuntimeState = {
+      lenis: null,
+      cleanup: null,
+      subscribeLenis: () => () => {},
+    };
+    const controller = createMotionRuntimeController({
+      createLenis: () => new Lenis({
+        autoRaf: true,
+        anchors: true,
+        lerp: 0.075,
+        syncTouch: false,
+        stopInertiaOnNavigate: true,
+      }),
+      onLenisChange: (lenis) => {
+        runtimeState.lenis = lenis;
+      },
+      setReducedMotion: (prefersReducedMotion) => {
+        document.documentElement.dataset.reducedMotion = prefersReducedMotion ? 'true' : 'false';
+      },
+      clearReducedMotion: () => {
+        delete document.documentElement.dataset.reducedMotion;
+      },
+    });
+    const deferredPreferenceSync = createDeferredMotionPreferenceSync({ controller, reducedMotionMedia });
+    const queueResizeSync = () => deferredPreferenceSync.queue();
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        deferredPreferenceSync.cancel();
+        controller.stop();
+        return;
+      }
+
+      if (reducedMotionMedia.matches) {
+        deferredPreferenceSync.cancel();
+        controller.syncPreference(true);
+        return;
+      }
+
+      controller.start();
+      queueResizeSync();
+    };
+    const onBeforePreparation = () => {
+      deferredPreferenceSync.cancel();
+      controller.stop();
+    };
+    const onPageLoad = () => {
+      if (reducedMotionMedia.matches) {
+        deferredPreferenceSync.cancel();
+        controller.syncPreference(true);
+        return;
+      }
+
+      controller.start();
+      queueResizeSync();
+    };
+
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    document.addEventListener('astro:before-preparation', onBeforePreparation);
+    document.addEventListener('astro:page-load', onPageLoad);
+
+    const onReducedMotionChange = () => {
+      if (reducedMotionMedia.matches) {
+        deferredPreferenceSync.cancel();
+        controller.syncPreference(true);
+        return;
+      }
+
+      controller.syncPreference(false);
+      controller.start();
+      queueResizeSync();
+    };
+    reducedMotionMedia.addEventListener('change', onReducedMotionChange);
+    controller.syncPreference(reducedMotionMedia.matches);
+    if (!reducedMotionMedia.matches) {
+      controller.start();
+    }
+
+    runtimeState.cleanup = () => {
+      deferredPreferenceSync.cancel();
+      controller.cleanup();
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      document.removeEventListener('astro:before-preparation', onBeforePreparation);
+      document.removeEventListener('astro:page-load', onPageLoad);
+      reducedMotionMedia.removeEventListener('change', onReducedMotionChange);
+    };
+
+    runtimeState.subscribeLenis = controller.subscribeLenis;
+    window.__mgMotionRuntime = runtimeState;
+    document.dispatchEvent(new CustomEvent(MOTION_RUNTIME_READY_EVENT));
+  };
+
+  mountRuntime();
+</script>
