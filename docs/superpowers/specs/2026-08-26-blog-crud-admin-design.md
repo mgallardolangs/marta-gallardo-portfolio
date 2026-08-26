@@ -1,60 +1,86 @@
-# Blog CRUD Admin Design
+# Multilingual Blog CRUD Admin Design
 
 ## Goal
 
-Let Marta create, edit, and delete every blog post from the Spanish admin while
-keeping post URLs, featured images, and public archive behavior safe.
+Manage each article as one logical multilingual post while preserving Astro's
+Markdown rendering, SEO metadata, headings, and table of contents.
 
-## Admin archive
+## Content model
 
-Replace the static admin list with a small React list seeded from Astro content.
-Each post row keeps its title, language, tags, and date and adds:
+Each logical post has six Markdown files, one per supported locale. Files share:
 
-- **Editar** — links to `/admin/blog/edit/<slug>`.
-- **Eliminar** — asks for confirmation, deletes through Git Gateway, and removes
-  the row immediately after success.
+- `slug`
+- `translationKey`
+- `date`
+- featured `image`
 
-## Edit route and form
+Each locale file owns its translated:
 
-Add a static admin edit route for each built blog entry. It passes the existing
-title, description, date, tags, language, Markdown body, and featured image into
-the existing `BlogPostForm`.
+- `title`
+- `description`
+- `tags`
+- Markdown body
+- `lang`
 
-`BlogPostForm` supports create and edit modes. Edit mode keeps the original slug
-read-only so public URLs and alternate links cannot break accidentally. It can:
+Internal filenames are unique per locale. Public routes use the shared
+frontmatter `slug`, never the internal filename.
 
-- Update all frontmatter fields and Markdown body.
-- Keep the current image.
-- Replace the current image.
-- Remove the current image.
+The existing initial Spanish article is migrated into the grouped six-file
+model. Its Spanish copy is preserved; other locales initially receive the
+Spanish fallback and can be translated from admin.
 
-## Repository writes
+## Language visibility and fallback
 
-All operations refresh Netlify Identity before Git Gateway requests.
+The admin derives required translation panels from `siteData.publicLanguagePicker`.
+Currently visible ES/EN/FR panels are required before create/update.
 
-Updating fetches the existing Markdown SHA and writes the same path. A
-replacement image uploads first, then Markdown points to it. Once Markdown is
-safe, an old owned image may be deleted if its path changed.
+Hidden DE/IT/CA locale files are still created using Spanish fallback content.
+If a hidden locale is later enabled in the navbar, its panel appears
+automatically in create/edit screens and its fallback can be replaced.
 
-Deleting removes the Markdown file first. If its featured image is an owned
-`/images/blog/<slug>.*` asset, delete that asset afterward. This ordering avoids
-leaving a live post with a broken image. Partial cleanup errors are surfaced
-clearly without pretending the post deletion failed.
+## Admin archive and editor
 
-## Public archive
+The archive groups locale files by `translationKey` and shows one row per
+logical post with **Editar** and **Eliminar**.
 
-The localized “More stories very soon” row appears only while the current
-language contains zero or one post. At two or more localized posts, the archive
-contains a real second story and the placeholder is absent.
+The create/edit form has:
+
+- Shared slug, date, and featured image controls.
+- One panel per currently public language.
+- Required translated title, description, tags, and body.
+- Fixed slug during edit.
+- Existing-image keep, replace, and remove controls.
+
+## Repository operations
+
+Create/update refreshes Netlify Identity and writes every locale file. Visible
+locales use submitted translations; hidden locales keep their existing content
+on edit or receive Spanish fallback on create. Writes are retry-safe because
+every path is upserted using its current SHA.
+
+Delete removes every locale Markdown file in the group before deleting the
+shared owned `/images/blog/<slug>.*` asset. Partial failures identify remaining
+files and keep the admin row visible until all locale posts are deleted.
+
+## Public routes and archive
+
+Public route generation and links use `post.data.slug`. Alternate links group by
+`translationKey`.
+
+“More stories very soon” appears only when the current locale has fewer than two
+posts. Two or more localized posts render real archive rows without the
+placeholder.
 
 ## Checks
 
 Regression coverage includes:
 
-- Existing posts render Edit/Delete controls.
-- Edit form is prefilled and writes the original Markdown path with its SHA.
-- Image keep, replace, and remove paths.
-- Delete confirmation and Markdown-before-image ordering.
-- Missing or shared/non-owned images are not deleted accidentally.
-- Failed operations keep form/list state and show Spanish errors.
-- The archive placeholder threshold is locale-specific at fewer than two posts.
+- Grouping six locale files into one admin row.
+- Dynamic required panels from the public language picker.
+- Spanish fallback creation for hidden locales.
+- Edit preservation of hidden locale translations.
+- Same-slug localized routes and alternate links.
+- Image keep/replace/remove behavior.
+- Six-file deletion before owned-image cleanup.
+- Retry-safe partial failure reporting.
+- Locale-specific archive placeholder threshold.
