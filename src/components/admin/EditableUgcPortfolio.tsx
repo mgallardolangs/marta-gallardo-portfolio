@@ -95,7 +95,7 @@ export default function EditableUgcPortfolio() {
                             src={item.poster ?? ''}
                             mediaType="image"
                             acceptKind="image"
-                            alt={`${item.alt.es} poster`}
+                            alt={`${item.alt.es} póster`}
                             label="🖼 Cambiar póster"
                             emptyLabel="Póster obligatorio"
                             className="aspect-[4/5] border border-ink/10 bg-paper"

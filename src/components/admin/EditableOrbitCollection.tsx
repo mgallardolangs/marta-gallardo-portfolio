@@ -118,7 +118,7 @@ export default function EditableOrbitCollection() {
                         src={item.poster ?? ''}
                         mediaType="image"
                         acceptKind="image"
-                        alt={`${getLocalizedOrbitText(item.alt, 'es')} poster`}
+                        alt={`${getLocalizedOrbitText(item.alt, 'es')} póster`}
                         label="🖼 Cambiar póster"
                         emptyLabel="Póster obligatorio"
                         className="aspect-[4/5]"

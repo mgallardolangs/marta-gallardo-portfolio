@@ -424,6 +424,7 @@ test('EditableOrbitCollection chrome, help text, and media controls are in Spani
   assert.match(source, />Imagen<\/option>/);
   assert.match(source, />Vídeo<\/option>/);
   assert.match(source, /Enlace interno/);
+  assert.match(source, /getLocalizedOrbitText\(item\.alt, 'es'\)\} póster/);
   assert.match(source, /Cambiar póster/);
   assert.match(source, /Póster obligatorio/);
   assert.match(source, /Póster del vídeo/);
@@ -440,6 +441,7 @@ test('EditableOrbitCollection chrome, help text, and media controls are in Spani
   assert.doesNotMatch(source, /Internal href/);
   assert.doesNotMatch(source, /Change poster/);
   assert.doesNotMatch(source, /Poster required/);
+  assert.doesNotMatch(source, /getLocalizedOrbitText\(item\.alt, 'es'\)\} poster/);
   assert.doesNotMatch(source, /Video poster/);
 });
 
@@ -454,6 +456,7 @@ test('EditableUgcPortfolio chrome, help text, and media controls are in Spanish'
   assert.match(source, />Arte<\/option>/);
   assert.match(source, />Tipo<\/span>/);
   assert.match(source, /Espacio fijo/);
+  assert.match(source, /item\.alt\.es\} póster/);
   assert.match(source, /Quitar póster/);
   assert.match(source, /solo aparece cuando el espacio es de tipo vídeo/i);
   assert.match(source, /label: 'Etiqueta'/);
@@ -470,6 +473,7 @@ test('EditableUgcPortfolio chrome, help text, and media controls are in Spanish'
   assert.doesNotMatch(source, />Type<\/span>/);
   assert.doesNotMatch(source, /Fixed slot/);
   assert.doesNotMatch(source, />Clear poster<\/button>/);
+  assert.doesNotMatch(source, /item\.alt\.es\} poster/);
   assert.doesNotMatch(source, /Poster upload appears only/);
   assert.doesNotMatch(source, /label: 'Label'/);
   assert.doesNotMatch(source, /label: 'Title'/);
