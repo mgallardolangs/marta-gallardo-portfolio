@@ -10,8 +10,12 @@ export function useAdminStore() {
 
   return {
     ...state,
+    getEducationStudies: adminStore.getEducationStudies.bind(adminStore),
+    getExperienceCards: adminStore.getExperienceCards.bind(adminStore),
     setText: adminStore.setText.bind(adminStore),
     setImage: adminStore.setImage.bind(adminStore),
+    addEducationStudy: adminStore.addEducationStudy.bind(adminStore),
+    addExperienceCard: adminStore.addExperienceCard.bind(adminStore),
     setOrbitMediaFile: adminStore.setOrbitMediaFile.bind(adminStore),
     getUgcPortfolio: adminStore.getUgcPortfolio.bind(adminStore),
     updateUgcPortfolioField: adminStore.updateUgcPortfolioField.bind(adminStore),

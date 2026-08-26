@@ -81,6 +81,8 @@ type AdminSnapshot = {
   draftMessage: string;
   orbitValidationErrors: string[];
   getText: (key: string) => string;
+  getEducationStudies: () => TranslationExperienceStudy[];
+  getExperienceCards: () => TranslationExperienceCard[];
   getImageSrc: (key: string) => string;
   getOrbitMedia: () => OrbitMedia[];
   getUgcPortfolio: () => UgcPortfolioItem[];
@@ -89,7 +91,29 @@ type AdminSnapshot = {
   getEditableCollection: (kind: EditableCollectionKind) => Array<LanguageItem | ToolItem | SkillItem>;
 };
 
+export type TranslationExperienceSeed = {
+  es: string;
+  en: string;
+  fr: string;
+};
+
+export type TranslationExperienceStudy = string;
+
+export type TranslationExperienceCard = {
+  highlight: string;
+  title: string;
+  text: string;
+};
+
+export type TranslationExperienceCardInput = {
+  highlight: TranslationExperienceSeed;
+  title: TranslationExperienceSeed;
+  text: TranslationExperienceSeed;
+};
+
 const DRAFT_STORAGE_KEY = 'marta-inline-editor-draft';
+const EXPERIENCE_EDITOR_LANGS = ['es', 'en', 'fr'] as const;
+const EXPERIENCE_FALLBACK_LANGS = ['de', 'it', 'ca'] as const;
 
 function cloneValue<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
@@ -398,6 +422,8 @@ export class AdminStore {
     draftMessage: '',
     orbitValidationErrors: [],
     getText: (key: string) => this.getText(key),
+    getEducationStudies: () => this.getEducationStudies(),
+    getExperienceCards: () => this.getExperienceCards(),
     getImageSrc: (key: string) => this.getImageSrc(key),
     getOrbitMedia: () => this.getOrbitMedia(),
     getUgcPortfolio: () => this.getUgcPortfolio(),
@@ -447,6 +473,32 @@ export class AdminStore {
     const source = this.i18n[this.currentLang] ?? this.i18n.es ?? {};
     const value = deepGet(source, key);
     return typeof value === 'string' ? value : '';
+  }
+
+  getEducationStudies(): TranslationExperienceStudy[] {
+    const studies = deepGet(this.i18n[this.currentLang] ?? this.i18n.es ?? {}, 'translationPage.education.studies');
+    if (!Array.isArray(studies)) return [];
+
+    return cloneValue(
+      studies.filter((study): study is TranslationExperienceStudy => typeof study === 'string'),
+    );
+  }
+
+  getExperienceCards(): TranslationExperienceCard[] {
+    const cards = deepGet(this.i18n[this.currentLang] ?? this.i18n.es ?? {}, 'translationPage.experience.cards');
+    if (!Array.isArray(cards)) return [];
+
+    return cloneValue(
+      cards.flatMap((card) => {
+        if (!isObjectRecord(card)) return [];
+
+        const highlight = typeof card.highlight === 'string' ? card.highlight : '';
+        const title = typeof card.title === 'string' ? card.title : '';
+        const text = typeof card.text === 'string' ? card.text : '';
+
+        return [{ highlight, title, text }];
+      }),
+    );
   }
 
   getOrbitMedia(): OrbitMedia[] {
@@ -502,11 +554,99 @@ export class AdminStore {
     return cloneValue(orbitMedia as OrbitMedia[]);
   }
 
+  private getValidatedTranslationSeed(seed: TranslationExperienceSeed, errorMessage: string): TranslationExperienceSeed {
+    const trimmedSeed = {
+      es: typeof seed.es === 'string' ? seed.es.trim() : '',
+      en: typeof seed.en === 'string' ? seed.en.trim() : '',
+      fr: typeof seed.fr === 'string' ? seed.fr.trim() : '',
+    };
+
+    if (EXPERIENCE_EDITOR_LANGS.some((locale) => !trimmedSeed[locale])) {
+      throw new Error(errorMessage);
+    }
+
+    return trimmedSeed;
+  }
+
+  private getMutableEducationStudies(lang: SupportedLang): string[] {
+    const studies = deepGet(this.i18n, `${lang}.translationPage.education.studies`);
+    if (Array.isArray(studies)) return studies as string[];
+
+    const nextStudies: string[] = [];
+    deepSet(this.i18n, `${lang}.translationPage.education.studies`, nextStudies);
+    return nextStudies;
+  }
+
+  private getMutableExperienceCards(lang: SupportedLang): TranslationExperienceCard[] {
+    const cards = deepGet(this.i18n, `${lang}.translationPage.experience.cards`);
+    if (Array.isArray(cards)) return cards as TranslationExperienceCard[];
+
+    const nextCards: TranslationExperienceCard[] = [];
+    deepSet(this.i18n, `${lang}.translationPage.experience.cards`, nextCards);
+    return nextCards;
+  }
+
   setText(key: string, value: string): void {
     if (!this.initialized) return;
     const langTree = this.i18n[this.currentLang];
     if (!langTree) return;
     deepSet(langTree, key, value);
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  addEducationStudy(seed: TranslationExperienceSeed): void {
+    if (!this.initialized) return;
+
+    const trimmedSeed = this.getValidatedTranslationSeed(
+      seed,
+      'El bloque education requiere valores ES/EN/FR no vacíos antes de añadir un estudio.',
+    );
+    const localizedStudies: Record<SupportedLang, string> = {
+      ...trimmedSeed,
+      de: trimmedSeed.es,
+      it: trimmedSeed.es,
+      ca: trimmedSeed.es,
+    };
+
+    [...EXPERIENCE_EDITOR_LANGS, ...EXPERIENCE_FALLBACK_LANGS].forEach((lang) => {
+      this.getMutableEducationStudies(lang).push(localizedStudies[lang]);
+    });
+
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  addExperienceCard(input: TranslationExperienceCardInput): void {
+    if (!this.initialized) return;
+
+    const highlight = this.getValidatedTranslationSeed(
+      input.highlight,
+      'La experience card requiere highlight con valores ES/EN/FR no vacíos.',
+    );
+    const title = this.getValidatedTranslationSeed(
+      input.title,
+      'La experience card requiere title con valores ES/EN/FR no vacíos.',
+    );
+    const text = this.getValidatedTranslationSeed(
+      input.text,
+      'La experience card requiere text con valores ES/EN/FR no vacíos.',
+    );
+    const localizedCards: Record<SupportedLang, TranslationExperienceCard> = {
+      es: { highlight: highlight.es, title: title.es, text: text.es },
+      en: { highlight: highlight.en, title: title.en, text: text.en },
+      fr: { highlight: highlight.fr, title: title.fr, text: text.fr },
+      de: { highlight: highlight.es, title: title.es, text: text.es },
+      it: { highlight: highlight.es, title: title.es, text: text.es },
+      ca: { highlight: highlight.es, title: title.es, text: text.es },
+    };
+
+    [...EXPERIENCE_EDITOR_LANGS, ...EXPERIENCE_FALLBACK_LANGS].forEach((lang) => {
+      this.getMutableExperienceCards(lang).push(cloneValue(localizedCards[lang]));
+    });
+
     this.publishSuccessState = false;
     this.publishErrorState = '';
     this.emit();
@@ -1424,6 +1564,8 @@ export class AdminStore {
       draftMessage: this.draftMessageState,
       orbitValidationErrors,
       getText: (key: string) => this.getText(key),
+      getEducationStudies: () => this.getEducationStudies(),
+      getExperienceCards: () => this.getExperienceCards(),
       getImageSrc: (key: string) => this.getImageSrc(key),
       getOrbitMedia: () => this.getOrbitMedia(),
       getUgcPortfolio: () => this.getUgcPortfolio(),
