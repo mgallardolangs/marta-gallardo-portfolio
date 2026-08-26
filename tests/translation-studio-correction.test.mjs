@@ -253,29 +253,22 @@ test('site arsenal skills keep the exact 4/4 translation-vs-seo split and groupe
   assert.equal(columns.skillGroups.seo.length, 4, 'seo helper column should keep four skills');
 });
 
-test('public translation hero source/build contract keeps two localized CTA anchors with stable markers and rectangular shape', async (t) => {
+test('public translation hero source/build contract parks the portfolio CTA and keeps the localized contact CTA anchor with stable markers and rectangular shape', async (t) => {
   const source = await readSource('src/views/TranslationSeoPage.astro');
   const heroWindow = extractWindowAround(source, 'page.hero.title', 'public translation hero');
-  const portfolioCta = extractElementByDataAttribute(source, 'a', 'data-translation-cta', 'portfolio', 'public translation portfolio CTA');
   const contactCta = extractElementByDataAttribute(source, 'a', 'data-translation-cta', 'contact', 'public translation contact CTA');
 
   assert.doesNotMatch(source, /page\.heroMark/, 'public translation hero should stop rendering the vertical hero mark');
-  assert.match(portfolioCta, /href=\{getLocalizedPath\('\/ugc', lang\)\}/, 'public translation hero should keep the localized portfolio CTA anchor');
+  assert.doesNotMatch(source, /data-translation-cta="portfolio"/, 'public translation hero should stop rendering the parked portfolio CTA anchor');
   assert.match(contactCta, /href=\{getLocalizedPath\('\/contact', lang\)\}/, 'public translation hero should keep the localized contact CTA anchor');
   assert.doesNotMatch(heroWindow, /bg-\[radial-gradient/i, 'public translation hero should not restore the radial gradient');
   assert.doesNotMatch(source, /page\.hero\.backgroundLabel/, 'public translation hero should remove the old right-side background label card');
   assert.doesNotMatch(heroWindow, /backdrop-blur/, 'public translation hero should stay flat without blur chrome');
-  assert.doesNotMatch(portfolioCta, /rounded-full/, 'public translation portfolio CTA should be rectangular instead of pill-shaped');
   assert.doesNotMatch(contactCta, /rounded-full/, 'public translation contact CTA should be rectangular instead of pill-shaped');
-  assert.match(portfolioCta, /hover:-translate-y-0\.5/, 'public translation portfolio CTA should lift on hover');
-  assert.match(portfolioCta, /focus-visible:-translate-y-0\.5/, 'public translation portfolio CTA should lift on focus');
-  assert.match(portfolioCta, /hover:shadow-\[0_4px_0_var\(--color-ink\)\]/, 'public translation portfolio CTA should add the exact bottom shadow on hover');
-  assert.match(portfolioCta, /focus-visible:shadow-\[0_4px_0_var\(--color-ink\)\]/, 'public translation portfolio CTA should add the exact bottom shadow on focus');
   assert.match(contactCta, /hover:-translate-y-0\.5/, 'public translation contact CTA should lift on hover');
   assert.match(contactCta, /focus-visible:-translate-y-0\.5/, 'public translation contact CTA should lift on focus');
   assert.match(contactCta, /hover:shadow-\[0_4px_0_var\(--color-ink\)\]/, 'public translation contact CTA should add the exact bottom shadow on hover');
   assert.match(contactCta, /focus-visible:shadow-\[0_4px_0_var\(--color-ink\)\]/, 'public translation contact CTA should add the exact bottom shadow on focus');
-  assert.doesNotMatch(portfolioCta, /hover:bg-|hover:text-paper|focus-visible:bg-|focus-visible:text-paper/, 'public translation portfolio CTA should keep strict colors');
   assert.doesNotMatch(contactCta, /hover:border-amaranth|hover:text-amaranth|focus-visible:border-amaranth|focus-visible:text-amaranth/, 'public translation contact CTA should keep strict colors');
 
   if (process.env.CHECK_DIST !== '1') {
@@ -285,16 +278,8 @@ test('public translation hero source/build contract keeps two localized CTA anch
 
   for (const locale of locales) {
     const relativePath = locale === 'es' ? 'dist/translation-seo/index.html' : `dist/${locale}/translation-seo/index.html`;
-    const portfolioHref = locale === 'es' ? '/ugc' : `/${locale}/ugc`;
     const contactHref = locale === 'es' ? '/contact' : `/${locale}/contact`;
     const html = await readBuiltHtml(relativePath);
-    const builtPortfolioCta = extractElementByDataAttribute(
-      html,
-      'a',
-      'data-translation-cta',
-      'portfolio',
-      `${locale} built translation portfolio CTA`,
-    );
     const builtContactCta = extractElementByDataAttribute(
       html,
       'a',
@@ -303,20 +288,15 @@ test('public translation hero source/build contract keeps two localized CTA anch
       `${locale} built translation contact CTA`,
     );
 
-    assert.match(
-      builtPortfolioCta,
-      new RegExp(`href="${escapeForRegex(portfolioHref)}"`),
-      `${relativePath} should keep the localized portfolio CTA href`,
+    assert.doesNotMatch(
+      html,
+      /data-translation-cta="portfolio"/,
+      `${relativePath} should stop rendering the parked portfolio CTA in built HTML`,
     );
     assert.match(
       builtContactCta,
       new RegExp(`href="${escapeForRegex(contactHref)}"`),
       `${relativePath} should keep the localized contact CTA href`,
-    );
-    assert.doesNotMatch(
-      builtPortfolioCta,
-      /rounded-full/,
-      `${relativePath} should keep the portfolio CTA rectangular in built HTML`,
     );
     assert.doesNotMatch(
       builtContactCta,
@@ -380,21 +360,19 @@ test('public arsenal uses exact equal thirds, square tool cells, and two skill g
   assert.match(adminEditorSource, /group relative flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink/, 'admin editor should mirror the public square tool tiles');
 });
 
-test('experience browser profile chrome is localized in source and built translation pages without English leaks', async (t) => {
+test('experience browser profile chrome parks the profile label so it stops rendering in source and built translation pages', async (t) => {
   const [experienceTabsSource, publicSource, adminSource] = await Promise.all([
     readSource('src/components/translation/ExperienceTabs.tsx'),
     readSource('src/views/TranslationSeoPage.astro'),
     readSource('src/pages/admin/translation-seo.astro'),
   ]);
 
-  assert.match(experienceTabsSource, /profileLabel:\s*string/, 'ExperienceTabs should require a localized profile label prop');
-  assert.match(experienceTabsSource, /\{profileLabel\}/, 'ExperienceTabs should render the localized profile label prop');
-  assert.doesNotMatch(experienceTabsSource, /Translation profile/, 'ExperienceTabs should not hardcode the English profile label');
-  assert.match(publicSource, /profileLabel=\{page\.browserTabs\.profileLabel\}/, 'public translation page should pass the localized profile label');
-  assert.match(adminSource, /i18nKey="translationPage\.browserTabs\.profileLabel"/, 'admin translation page should expose the editable profile label key in browser chrome');
+  assert.doesNotMatch(experienceTabsSource, /profileLabel/, 'ExperienceTabs should drop the profile label prop and rendering path entirely');
+  assert.doesNotMatch(publicSource, /profileLabel=\{page\.browserTabs\.profileLabel\}/, 'public translation page should stop passing the parked profile label');
+  assert.doesNotMatch(adminSource, /translationPage\.browserTabs\.profileLabel/, 'admin translation page should stop exposing the parked profile label editor');
 
   if (process.env.CHECK_DIST !== '1') {
-    t.skip('Set CHECK_DIST=1 after npm run build to verify built translation profile labels.');
+    t.skip('Set CHECK_DIST=1 after npm run build to verify built translation pages stop rendering the profile label.');
     return;
   }
 
@@ -402,19 +380,11 @@ test('experience browser profile chrome is localized in source and built transla
     const relativePath = locale === 'es' ? 'dist/translation-seo/index.html' : `dist/${locale}/translation-seo/index.html`;
     const html = await readBuiltHtml(relativePath);
 
-    assert.match(
+    assert.doesNotMatch(
       html,
       new RegExp(escapeForRegex(expectedProfileLabels[locale])),
-      `${relativePath} should contain the localized profile label`,
+      `${relativePath} should stop rendering the parked profile label`,
     );
-
-    if (locale !== 'en') {
-      assert.doesNotMatch(
-        html,
-        /Translation profile/,
-        `${relativePath} should not leak the English profile label`,
-      );
-    }
   }
 });
 
@@ -448,7 +418,7 @@ test('admin skill creation contracts require group-aware data and grouped editor
 
   assert.match(adminSource, /i18nKey={`translationPage\.services\.items\.\$\{index\}\.headline`}/, 'admin services should expose editable service headlines');
   assert.doesNotMatch(adminSource, /i18nKey="translationPage\.heroMark"/, 'admin hero should stop exposing the hidden vertical hero mark');
-  assert.match(adminSource, /i18nKey="translationPage\.hero\.ctaPrimary"/, 'admin hero should expose the editable primary CTA key');
+  assert.doesNotMatch(adminSource, /i18nKey="translationPage\.hero\.ctaPrimary"/, 'admin hero should stop exposing the parked primary CTA key');
   assert.match(adminSource, /i18nKey="translationPage\.hero\.ctaSecondary"/, 'admin hero should expose the editable secondary CTA key');
   assert.match(
     editorSource,
@@ -504,10 +474,11 @@ test('skill editor splits translation and seo into separate contained groups wit
 });
 
 test('experience browser chrome plus methodology and why sections expose the new correction markers', async () => {
-  const [publicSource, adminSource, experienceTabsSource] = await Promise.all([
+  const [publicSource, adminSource, experienceTabsSource, experienceEditorSource] = await Promise.all([
     readSource('src/views/TranslationSeoPage.astro'),
     readSource('src/pages/admin/translation-seo.astro'),
     readSource('src/components/translation/ExperienceTabs.tsx'),
+    readSource('src/components/admin/AdminTranslationExperienceEditor.tsx'),
   ]);
 
   const methodologySection = extractSectionByDataAttribute(publicSource, 'data-methodology-section', 'public methodology section');
@@ -531,12 +502,13 @@ test('experience browser chrome plus methodology and why sections expose the new
     /role="tablist"[\s\S]{0,260}h-2 w-2 rounded-full bg-amaranth/s,
     'browser tab chrome should add the small amaranth browser dot ahead of the tabs',
   );
-  assert.match(adminSource, /data-admin-experience-trigger="education"/, 'admin browser tabs should keep the education trigger');
-  assert.match(adminSource, /data-admin-experience-trigger="experience"/, 'admin browser tabs should keep the experience trigger');
-  assert.match(adminSource, /rounded-t-\[7px\]/, 'admin browser tabs should mirror the modest top-corner radius');
-  assert.match(adminSource, /bg-paper\/14/, 'admin browser tabs should mirror the paper\/14 inactive fill');
-  assert.match(adminSource, /border-paper bg-paper px-4 py-3/, 'admin browser tabs should mirror the paper active fill');
-  assert.doesNotMatch(adminSource, /data-admin-experience-trigger="education"[\s\S]{0,220}rounded-t-2xl/s, 'admin browser tabs should not use the old pill radius');
+  assert.doesNotMatch(adminSource, /data-admin-experience-trigger/, 'admin translation page should delegate browser tab triggers to the integrated experience editor');
+  assert.match(experienceEditorSource, /data-admin-experience-trigger="education"/, 'the integrated experience editor should keep the education trigger');
+  assert.match(experienceEditorSource, /data-admin-experience-trigger="experience"/, 'the integrated experience editor should keep the experience trigger');
+  assert.match(experienceEditorSource, /rounded-t-\[7px\]/, 'the integrated experience editor should mirror the modest top-corner radius');
+  assert.match(experienceEditorSource, /bg-paper\/14/, 'the integrated experience editor should mirror the paper\/14 inactive fill');
+  assert.match(experienceEditorSource, /border-paper bg-paper text-ink/, 'the integrated experience editor should mirror the paper active fill');
+  assert.doesNotMatch(experienceEditorSource, /data-admin-experience-trigger="education"[\s\S]{0,220}rounded-t-2xl/s, 'the integrated experience editor should not use the old pill radius');
 
   assert.match(methodologySection, /page\.methodologyEyebrow/, 'methodology should render the new eyebrow');
   assert.match(methodologySection, /page\.methodologyDisplayTitle/, 'methodology should render the new display title');

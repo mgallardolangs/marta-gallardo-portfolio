@@ -39,13 +39,6 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
 
           <div class="flex flex-wrap items-center gap-3 pt-2">
             <a
-              href={getLocalizedPath('/ugc', lang)}
-              data-translation-cta="portfolio"
-              class="inline-flex items-center gap-3 border border-amaranth bg-amaranth px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_0_var(--color-ink)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_4px_0_var(--color-ink)] focus-visible:outline-none"
-            >
-              {page.hero.ctaPrimary}
-            </a>
-            <a
               href={getLocalizedPath('/contact', lang)}
               data-translation-cta="contact"
               class="inline-flex items-center gap-3 border border-ink bg-paper px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_4px_0_var(--color-ink)] focus-visible:-translate-y-0.5 focus-visible:shadow-[0_4px_0_var(--color-ink)] focus-visible:outline-none"
@@ -157,7 +150,6 @@ const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' '
         <ExperienceTabs
           client:load
           tabListAriaLabel={page.browserTabsAriaLabel}
-          profileLabel={page.browserTabs.profileLabel}
           statement={page.experienceStatement ?? page.experienceSectionTitle}
           tabs={{
             education: {

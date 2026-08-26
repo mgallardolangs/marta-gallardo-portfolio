@@ -2,6 +2,7 @@
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import EditableText from '../../components/admin/EditableText';
 import AdminTranslationArsenalEditor from '../../components/admin/AdminTranslationArsenalEditor';
+import AdminTranslationExperienceEditor from '../../components/admin/AdminTranslationExperienceEditor';
 import { getLangFromUrl, t } from '../../i18n';
 
 const lang = getLangFromUrl(Astro.url);
@@ -19,7 +20,6 @@ const page = i.translationPage;
           <EditableText client:load i18nKey="translationPage.hero.text" as="div" className="max-w-3xl text-lg leading-8 text-ink-muted" />
 
           <div class="flex flex-wrap items-center gap-3 pt-2">
-            <EditableText client:load i18nKey="translationPage.hero.ctaPrimary" as="span" className="inline-flex items-center gap-3 border border-amaranth bg-amaranth px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink" />
             <EditableText client:load i18nKey="translationPage.hero.ctaSecondary" as="span" className="inline-flex items-center gap-3 border border-ink bg-paper px-5 py-3 text-xs font-semibold uppercase tracking-[0.24em] text-ink" />
           </div>
         </div>
@@ -72,55 +72,7 @@ const page = i.translationPage;
           <EditableText client:load i18nKey="translationPage.experienceSectionTitle" as="h2" className="font-heading text-4xl text-ink md:text-5xl" />
         </div>
 
-        <section class="border border-ink bg-ink text-paper" data-admin-experience-browser>
-          <div class="border-b border-paper/16 bg-paper/8 px-4 pt-4 md:px-6">
-            <div class="flex flex-wrap items-start justify-between gap-4">
-              <div class="flex items-center gap-3">
-                <span class="h-2 w-2 rounded-full bg-amaranth" aria-hidden="true"></span>
-                <div class="flex flex-wrap items-end gap-2">
-                  <button type="button" class="rounded-t-[7px] border border-b-0 border-paper bg-paper px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink transition" data-admin-experience-trigger="education"> {page.browserTabs.education} </button>
-                  <button type="button" class="rounded-t-[7px] border border-b-0 border-paper/18 bg-paper/14 px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-paper/62 transition hover:bg-paper/18 hover:text-paper focus-visible:bg-paper/18 focus-visible:text-paper" data-admin-experience-trigger="experience"> {page.browserTabs.experience} </button>
-                </div>
-              </div>
-              <EditableText client:load i18nKey="translationPage.browserTabs.profileLabel" as="span" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-paper/42" />
-            </div>
-          </div>
-
-          <div class="px-5 py-6 md:px-6 md:py-8">
-            <div class="grid gap-8 lg:grid-cols-[0.62fr_1.38fr]">
-              <div class="space-y-5 border-b border-paper/16 pb-6 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-8">
-                <EditableText client:load i18nKey="translationPage.experienceStatement" as="p" className="font-heading text-3xl leading-[0.96] text-paper md:text-4xl" />
-              </div>
-
-              <div class="space-y-8">
-                <div class="space-y-5" data-admin-experience-panel="education">
-                  <EditableText client:load i18nKey="translationPage.education.intro" as="div" className="text-base leading-8 text-paper/68" />
-                  <div class="space-y-4">
-                    {page.education.studies.map((_study, index) => (
-                      <div class="flex gap-3">
-                        <span class="mt-3 h-2 w-2 rounded-full bg-amaranth"></span>
-                        <EditableText client:load i18nKey={`translationPage.education.studies.${index}`} as="span" className="text-base leading-8 text-paper" />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div class="hidden space-y-8" data-admin-experience-panel="experience">
-                  <EditableText client:load i18nKey="translationPage.experience.intro" as="div" className="text-base leading-8 text-paper/68" />
-                  <div class="grid gap-px bg-paper/16 lg:grid-cols-3">
-                    {page.experience.cards.map((_card, index) => (
-                      <article class="bg-ink px-5 py-6">
-                        <EditableText client:load i18nKey={`translationPage.experience.cards.${index}.highlight`} as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-amaranth" />
-                        <EditableText client:load i18nKey={`translationPage.experience.cards.${index}.title`} as="h3" className="mt-4 font-heading text-2xl text-paper" />
-                        <EditableText client:load i18nKey={`translationPage.experience.cards.${index}.text`} as="div" className="mt-4 text-sm leading-7 text-paper/72" />
-                      </article>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <AdminTranslationExperienceEditor client:load />
       </div>
     </section>
 
@@ -173,38 +125,4 @@ const page = i.translationPage;
       </div>
     </section>
   </div>
-
-  <script>
-    const root = document.querySelector('[data-admin-experience-browser]');
-    if (root instanceof HTMLElement) {
-      const triggers = Array.from(root.querySelectorAll('[data-admin-experience-trigger]'));
-      const panels = Array.from(root.querySelectorAll('[data-admin-experience-panel]'));
-
-      const setActivePanel = (panelId) => {
-        triggers.forEach((trigger) => {
-          const isActive = trigger.getAttribute('data-admin-experience-trigger') === panelId;
-          trigger.classList.toggle('border-paper', isActive);
-          trigger.classList.toggle('bg-paper', isActive);
-          trigger.classList.toggle('text-ink', isActive);
-          trigger.classList.toggle('border-paper/18', !isActive);
-          trigger.classList.toggle('bg-paper/14', !isActive);
-          trigger.classList.toggle('text-paper/62', !isActive);
-        });
-
-        panels.forEach((panel) => {
-          const isActive = panel.getAttribute('data-admin-experience-panel') === panelId;
-          panel.classList.toggle('hidden', !isActive);
-        });
-      };
-
-      triggers.forEach((trigger) => {
-        trigger.addEventListener('click', () => {
-          const panelId = trigger.getAttribute('data-admin-experience-trigger');
-          if (panelId) setActivePanel(panelId);
-        });
-      });
-
-      setActivePanel('education');
-    }
-  </script>
 </AdminLayout>
