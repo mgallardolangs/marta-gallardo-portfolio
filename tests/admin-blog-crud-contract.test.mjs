@@ -529,7 +529,7 @@ test('createBlogPost validates required visible-locale translations from publicL
           fr: { title: 'Titre', description: 'Description', tags: ['seo'], body: '# Corps' },
         },
       }),
-      [/obligatori|requerid|falta|required/i, /\ben\b/i],
+      /Completa el título de la traducción EN\./,
       'creating without every visible-locale translation (missing EN here) should reject before any write',
     );
 
@@ -539,7 +539,7 @@ test('createBlogPost validates required visible-locale translations from publicL
         date: '2026-08-26',
         translations: makeTranslationsFixture({ en: { title: '   ' } }),
       }),
-      [/obligatori|requerid|falta|required/i, /t[ií]tulo|title/i],
+      /Completa el título de la traducción EN\./,
       'a blank required field for a visible locale should reject before any write',
     );
   } finally {
@@ -729,7 +729,7 @@ test('publicLanguagePicker can make DE a required create/edit locale, and BlogPo
         currentImage: '/images/blog/mi-post-con-de.webp',
         translations: makeTranslationsFixture(),
       }),
-      [/obligatori|requerid|falta|required/i, /\bde\b/i],
+      /Completa el título de la traducción DE\./,
       'making DE visible should require update validation to name the missing DE locale before any repository access',
     );
 
@@ -1397,7 +1397,7 @@ test('updateBlogPost validates missing or blank required fields for currently vi
           fr: makeLocaleTranslation('fr'),
         },
       }),
-      [/obligatori|requerid|falta|required/i, /\ben\b/i],
+      /Completa el título de la traducción EN\./,
       'editing without every visible-locale translation (missing EN here) should reject with the exact locale before any repository access',
     );
 
@@ -1408,7 +1408,7 @@ test('updateBlogPost validates missing or blank required fields for currently vi
         currentImage: '/images/blog/mi-post.webp',
         translations: makeTranslationsFixture({ en: { title: '   ' } }),
       }),
-      [/obligatori|requerid|falta|required/i, /\ben\b/i, /t[ií]tulo|title/i],
+      /Completa el título de la traducción EN\./,
       'a blank EN title should reject with the exact locale and field before any repository mutation',
     );
   } finally {
