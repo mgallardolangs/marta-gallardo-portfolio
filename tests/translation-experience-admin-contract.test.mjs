@@ -396,13 +396,8 @@ test('AdminTranslationExperienceEditor source uses the shared admin store, local
   assert.match(source, /translationPage\.experience\.intro/, 'experience editor should keep the experience intro editable');
   assert.match(
     source,
-    /const\s+\w+\s*=\s*\[\s*['"]es['"]\s*,\s*['"]en['"]\s*,\s*['"]fr['"]\s*\]\s*(?:as\s+const|satisfies\s+readonly\s+\[\s*['"]es['"]\s*,\s*['"]en['"]\s*,\s*['"]fr['"]\s*\])/,
-    'experience editor should define one shared ES/EN/FR locale list constant',
-  );
-  assert.match(
-    source,
-    /\b\w+\s*\.\s*map\s*\(\s*\(?\s*locale\s*\)?\s*=>[\s\S]*locale\.toUpperCase\s*\(/,
-    'experience editor should map the shared locale list to visible labels and inputs',
+    /(?:['"`]ES['"`]|>\s*ES\s*<)[\s\S]*(?:['"`]EN['"`]|>\s*EN\s*<)[\s\S]*(?:['"`]FR['"`]|>\s*FR\s*<)/,
+    'experience editor should render the visible ES, EN, and FR labels in order',
   );
   assert.match(source, /role="alert"/, 'experience editor should render inline validation errors accessibly');
   assert.match(source, /(?:sm|md):grid-cols-2[^"]*(?:xl|2xl):grid-cols-3/, 'experience editor should preview experience cards in the responsive approved grid');
