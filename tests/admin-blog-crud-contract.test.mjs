@@ -44,9 +44,19 @@ async function importModule(relativePath) {
   }
 }
 
-function createAdminStore(AdminStore, lang = 'es', token = 'stale-token') {
+function createAdminStore(
+  AdminStore,
+  lang = 'es',
+  token = 'stale-token',
+  images = { publicLanguagePicker: [...VISIBLE_LOCALES] },
+) {
   const store = new AdminStore();
-  store.init({ es: {}, en: {}, fr: {} }, {}, lang, token);
+  store.init(
+    Object.fromEntries(SIX_LOCALES.map((locale) => [locale, {}])),
+    images,
+    lang,
+    token,
+  );
   return store;
 }
 
@@ -111,6 +121,10 @@ function getLocaleMarkdownPaths(slug) {
   return Object.fromEntries(SIX_LOCALES.map((locale) => [locale, `src/content/blog/${slug}/${locale}.md`]));
 }
 
+function getHiddenLocales(visibleLocales) {
+  return SIX_LOCALES.filter((locale) => !visibleLocales.includes(locale));
+}
+
 function getSharedImagePaths(slug, extension = 'webp') {
   return {
     repositoryPath: `public/images/blog/${slug}.${extension}`,
@@ -118,11 +132,24 @@ function getSharedImagePaths(slug, extension = 'webp') {
   };
 }
 
+function makeLocaleTranslation(locale, overrides = {}) {
+  const fixtures = {
+    es: { title: 'Título ES', description: 'Descripción ES', tags: ['seo'], body: '# Cuerpo ES' },
+    en: { title: 'Title EN', description: 'Description EN', tags: ['seo'], body: '# Body EN' },
+    fr: { title: 'Titre FR', description: 'Description FR', tags: ['seo'], body: '# Corps FR' },
+    de: { title: 'Titel DE', description: 'Beschreibung DE', tags: ['seo'], body: '# Inhalt DE' },
+    it: { title: 'Titolo IT', description: 'Descrizione IT', tags: ['seo'], body: '# Corpo IT' },
+    ca: { title: 'Títol CA', description: 'Descripció CA', tags: ['seo'], body: '# Cos CA' },
+  };
+
+  return { ...fixtures[locale], ...overrides };
+}
+
 function makeTranslationsFixture(overrides = {}) {
   return {
-    es: { title: 'Título ES', description: 'Descripción ES', tags: ['seo'], body: '# Cuerpo ES', ...overrides.es },
-    en: { title: 'Title EN', description: 'Description EN', tags: ['seo'], body: '# Body EN', ...overrides.en },
-    fr: { title: 'Titre FR', description: 'Description FR', tags: ['seo'], body: '# Corps FR', ...overrides.fr },
+    es: makeLocaleTranslation('es', overrides.es),
+    en: makeLocaleTranslation('en', overrides.en),
+    fr: makeLocaleTranslation('fr', overrides.fr),
   };
 }
 
@@ -516,6 +543,246 @@ test('createBlogPost validates required visible-locale translations from publicL
   assert.deepEqual(fetchCalls, [], 'invalid create payloads should fail before any Git Gateway write');
 });
 
+test('publicLanguagePicker can make DE a required create/edit locale, and BlogPostForm must derive panels from the live picker instead of hardcoded ES/EN/FR', async () => {
+  const [{ AdminStore }, formSource] = await Promise.all([
+    importModule('src/components/admin/adminStore.ts'),
+    readRequiredSource('src/components/admin/BlogPostForm.tsx'),
+  ]);
+
+  const dynamicVisibleLocales = ['es', 'en', 'fr', 'de'];
+  const store = createAdminStore(
+    AdminStore,
+    'es',
+    'stale-token',
+    { publicLanguagePicker: dynamicVisibleLocales },
+  );
+
+  assert.deepEqual(
+    store.getPublicLanguagePicker(),
+    dynamicVisibleLocales,
+    'this contract fixture should allow the site picker to surface DE as a visible admin blog locale',
+  );
+  assert.deepEqual(
+    getHiddenLocales(dynamicVisibleLocales),
+    ['it', 'ca'],
+    'once DE is visible, only IT and CA should remain hidden for fallback behavior',
+  );
+
+  const fetchCalls = [];
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input, init = {}) => {
+    const call = { method: init.method ?? 'GET', url: String(input) };
+    fetchCalls.push(call);
+    if (call.method === 'GET') {
+      return new Response(JSON.stringify({ message: 'Not Found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    return new Response(JSON.stringify({ content: { sha: 'written-sha' } }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+
+  try {
+    await assertRejectsWithMessage(
+      store.createBlogPost({
+        slug: 'mi-post-con-de',
+        date: '2026-08-26',
+        translations: makeTranslationsFixture(),
+      }),
+      /obligatori|requerid|falta|completa|rellena/i,
+      'making DE visible should require a DE translation during create before any repository access',
+    );
+
+    await assertRejectsWithMessage(
+      store.updateBlogPost({
+        slug: 'mi-post-con-de',
+        date: '2026-09-01',
+        currentImage: '/images/blog/mi-post-con-de.webp',
+        translations: makeTranslationsFixture(),
+      }),
+      /obligatori|requerid|falta|completa|rellena/i,
+      'making DE visible should require a DE translation during edit before any repository access',
+    );
+
+    assert.deepEqual(fetchCalls, [], 'missing DE should fail validation before any Git Gateway call');
+    fetchCalls.length = 0;
+    await assert.doesNotReject(
+      store.createBlogPost({
+        slug: 'mi-post-con-de',
+        date: '2026-08-26',
+        translations: {
+          ...makeTranslationsFixture(),
+          de: makeLocaleTranslation('de'),
+        },
+      }),
+      'once DE is supplied, the create flow should treat IT/CA as the only hidden locales and proceed to repository IO',
+    );
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.ok(
+    fetchCalls.length > 0,
+    'once DE is present, create should no longer fail validation as if DE were hidden and should proceed to Git Gateway IO',
+  );
+  assert.ok(
+    fetchCalls.every((call) => Object.values(getLocaleMarkdownPaths('mi-post-con-de')).some((filePath) => call.url.includes(filePath))),
+    'the DE-visible create flow should probe/write locale-specific Markdown paths rather than an old singleton slug file',
+  );
+  assert.match(
+    formSource,
+    /getPublicLanguagePicker\(\)|store\.getPublicLanguagePicker/,
+    'BlogPostForm should read the visible admin blog locales from the store picker contract',
+  );
+  assert.match(
+    formSource,
+    /store\.getPublicLanguagePicker\(\)\.map\(\(locale\)|const\s+\w+\s*=\s*store\.getPublicLanguagePicker\(\)/,
+    'BlogPostForm should derive translation panels from the live picker result so DE can appear without changing the component source',
+  );
+  assert.doesNotMatch(
+    formSource,
+    /ADMIN_BLOG_LANGS\.map\(\(locale\)\s*=>/,
+    'BlogPostForm should not hardcode the translation panel loop to ADMIN_BLOG_LANGS once the picker can expose DE',
+  );
+  assert.doesNotMatch(
+    formSource,
+    /\[['"]es['"],\s*['"]en['"],\s*['"]fr['"]\]/,
+    'BlogPostForm should not inline a fixed ES/EN/FR panel list',
+  );
+});
+
+test('createBlogPost retry-upserts partially existing locale files by reading every locale path first and reusing sha only where the file already exists', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const store = createAdminStore(AdminStore);
+
+  const slug = 'mi-post-retry';
+  const localePaths = getLocaleMarkdownPaths(slug);
+  const existingShaByLocale = {
+    es: 'es-existing-sha',
+    de: 'de-existing-sha',
+    it: 'it-existing-sha',
+  };
+
+  const originalFetch = globalThis.fetch;
+  const fetchCalls = [];
+
+  globalThis.fetch = async (input, init = {}) => {
+    const call = { method: init.method ?? 'GET', url: String(input), body: init.body ?? null };
+    fetchCalls.push(call);
+
+    for (const [locale, filePath] of Object.entries(localePaths)) {
+      if (!call.url.includes(filePath)) continue;
+
+      if (call.method === 'GET') {
+        const existingSha = existingShaByLocale[locale];
+        if (existingSha) {
+          const existingMarkdown = buildFrontmatterFixture({
+            slug,
+            translationKey: 'tk-mi-post-retry',
+            date: '2026-08-20',
+            image: '/images/blog/mi-post-retry.webp',
+            lang: locale,
+            ...makeLocaleTranslation(locale),
+          });
+
+          return new Response(JSON.stringify({
+            sha: existingSha,
+            content: Buffer.from(existingMarkdown, 'utf8').toString('base64'),
+          }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
+
+        return new Response(JSON.stringify({ message: 'Not Found' }), {
+          status: 404,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      if (call.method === 'PUT') {
+        return new Response(JSON.stringify({ content: { sha: `${locale}-written-sha` } }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+    }
+
+    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+
+  try {
+    await store.createBlogPost({
+      slug,
+      date: '2026-08-26',
+      translations: makeTranslationsFixture(),
+    });
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  const getCalls = fetchCalls.filter((call) => call.method === 'GET');
+  const putCalls = fetchCalls.filter((call) => call.method === 'PUT');
+  const sequence = fetchCalls.map(getCallSummary);
+
+  assert.equal(getCalls.length, 6, 'retry-safe create should probe every locale Markdown path before writing');
+  assert.equal(putCalls.length, 6, 'retry-safe create should still upsert all six locale Markdown files');
+  assert.ok(
+    !sequence.some((summary) => summary.includes(`src/content/blog/${slug}.md`)),
+    'retry-safe create should stop using the old singleton Markdown path that caused false duplicate-slug rejections',
+  );
+
+  const payloadsByLocale = {};
+  for (const [locale, filePath] of Object.entries(localePaths)) {
+    const getCall = getCalls.find((call) => call.url.includes(filePath));
+    const putCall = putCalls.find((call) => call.url.includes(filePath));
+
+    assert.ok(getCall, `retry-safe create should read ${filePath} before deciding whether the locale needs a create or update`);
+    assert.ok(putCall, `retry-safe create should write ${filePath}`);
+
+    const payload = decodeRepositoryPayload(putCall.body);
+    payloadsByLocale[locale] = payload;
+    assertNonEmptyRepositoryMessage(payload, `${locale} retry-safe create should include a commit message`);
+
+    if (existingShaByLocale[locale]) {
+      assert.equal(
+        payload.sha,
+        existingShaByLocale[locale],
+        `retry-safe create should upsert the previously-created ${locale} locale using the fetched sha`,
+      );
+    } else {
+      assert.equal(
+        payload.sha,
+        undefined,
+        `retry-safe create should create the missing ${locale} locale without attaching an update sha`,
+      );
+    }
+
+    const getIndex = sequence.indexOf(`GET /.netlify/git/github/contents/${filePath}`);
+    const putIndex = sequence.indexOf(`PUT /.netlify/git/github/contents/${filePath}`);
+    assert.ok(getIndex > -1 && putIndex > getIndex, `${filePath} should be fetched before its corresponding retry PUT`);
+  }
+
+  const translations = makeTranslationsFixture();
+  for (const locale of VISIBLE_LOCALES) {
+    assertMarkdownFrontmatter(payloadsByLocale[locale].markdown, { ...translations[locale], lang: locale });
+  }
+
+  for (const hiddenLocale of HIDDEN_LOCALES) {
+    assertMarkdownFrontmatter(payloadsByLocale[hiddenLocale].markdown, {
+      title: translations.es.title,
+      description: translations.es.description,
+      tags: translations.es.tags,
+      body: translations.es.body,
+      lang: hiddenLocale,
+    });
+  }
+});
+
 test('createBlogPost writes six locale Markdown files sharing slug/translationKey/date, Spanish-falling-back hidden DE/IT/CA content', async () => {
   const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
   const store = createAdminStore(AdminStore, 'es', 'expired-token');
@@ -845,6 +1112,59 @@ test('updateBlogPost uploads a replacement shared image before any locale writes
   } finally {
     globalThis.fetch = originalFetch;
   }
+});
+
+test('updateBlogPost validates missing or blank required fields for currently visible locales in Spanish before any repository fetch or write', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const store = createAdminStore(AdminStore);
+
+  assert.equal(typeof store.updateBlogPost, 'function', 'AdminStore should expose updateBlogPost for the edit flow');
+  assert.deepEqual(
+    store.getPublicLanguagePicker(),
+    VISIBLE_LOCALES,
+    'this contract fixture should expose the default ES/EN/FR public picker used to derive required edit panels',
+  );
+
+  const fetchCalls = [];
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input, init = {}) => {
+    fetchCalls.push({ method: init.method ?? 'GET', url: String(input) });
+    return new Response(JSON.stringify({ message: 'Unexpected network call' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+
+  try {
+    await assertRejectsWithMessage(
+      store.updateBlogPost({
+        slug: 'mi-post',
+        date: '2026-09-01',
+        currentImage: '/images/blog/mi-post.webp',
+        translations: {
+          es: makeLocaleTranslation('es'),
+          fr: makeLocaleTranslation('fr'),
+        },
+      }),
+      /obligatori|requerid|falta|completa|rellena/i,
+      'editing without every visible-locale translation should reject in Spanish before any repository access',
+    );
+
+    await assertRejectsWithMessage(
+      store.updateBlogPost({
+        slug: 'mi-post',
+        date: '2026-09-01',
+        currentImage: '/images/blog/mi-post.webp',
+        translations: makeTranslationsFixture({ en: { title: '   ' } }),
+      }),
+      /obligatori|requerid|falta|completa|rellena/i,
+      'a blank required field for a visible edit locale should reject in Spanish before any repository mutation',
+    );
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.deepEqual(fetchCalls, [], 'invalid update payloads should fail before any Git Gateway fetch or write');
 });
 
 test('updateBlogPost removing the shared image clears the image frontmatter on every locale file and only deletes the previously owned asset after all six locale writes succeed', async () => {
