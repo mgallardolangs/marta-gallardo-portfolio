@@ -718,7 +718,7 @@ test('publicLanguagePicker can make DE a required create/edit locale, and BlogPo
         date: '2026-08-26',
         translations: makeTranslationsFixture(),
       }),
-      /obligatori|requerid|falta|completa|rellena/i,
+      /Completa el título de la traducción DE\./,
       'making DE visible should require a DE translation during create before any repository access',
     );
 
