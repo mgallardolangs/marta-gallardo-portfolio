@@ -168,32 +168,20 @@ function createSiteData() {
 }
 
 function captureExperienceState(store) {
-  const previousLang = store.getSnapshot().currentLang;
-  const state = Object.fromEntries(
+  return Object.fromEntries(
     locales.map((locale) => {
-      store.setLang(locale);
+      const localeTree = store.i18n?.[locale];
+      const studies = structuredClone(localeTree?.translationPage?.education?.studies ?? []);
+      const cards = structuredClone(localeTree?.translationPage?.experience?.cards ?? []);
+
       return [locale, {
-        studies: [
-          store.getText('translationPage.education.studies.0'),
-          store.getText('translationPage.education.studies.1'),
-        ],
-        cards: [
-          {
-            highlight: store.getText('translationPage.experience.cards.0.highlight'),
-            title: store.getText('translationPage.experience.cards.0.title'),
-            text: store.getText('translationPage.experience.cards.0.text'),
-          },
-          {
-            highlight: store.getText('translationPage.experience.cards.1.highlight'),
-            title: store.getText('translationPage.experience.cards.1.title'),
-            text: store.getText('translationPage.experience.cards.1.text'),
-          },
-        ],
+        studiesLength: studies.length,
+        studies,
+        cardsLength: cards.length,
+        cards,
       }];
     }),
   );
-  store.setLang(previousLang);
-  return state;
 }
 
 test('public translation page hero keeps only the contact CTA while parking the portfolio CTA data', async () => {
@@ -303,42 +291,54 @@ test('AdminStore adds education studies and experience cards across all locale t
 
   assert.deepEqual(captureExperienceState(store), {
     es: {
+      studiesLength: 2,
       studies: ['Formación base ES', 'Nueva formación ES'],
+      cardsLength: 2,
       cards: [
         { highlight: 'Cliente base ES', title: 'Rol base ES', text: 'Resumen base ES' },
         { highlight: 'Nuevo cliente ES', title: 'Nuevo rol ES', text: 'Nuevo resumen ES' },
       ],
     },
     en: {
+      studiesLength: 2,
       studies: ['Existing study EN', 'New study EN'],
+      cardsLength: 2,
       cards: [
         { highlight: 'Existing client EN', title: 'Existing role EN', text: 'Existing summary EN' },
         { highlight: 'New client EN', title: 'New role EN', text: 'New summary EN' },
       ],
     },
     fr: {
+      studiesLength: 2,
       studies: ['Étude existante FR', 'Nouvelle étude FR'],
+      cardsLength: 2,
       cards: [
         { highlight: 'Client existant FR', title: 'Rôle existant FR', text: 'Résumé existant FR' },
         { highlight: 'Nouveau client FR', title: 'Nouveau rôle FR', text: 'Nouveau résumé FR' },
       ],
     },
     de: {
+      studiesLength: 2,
       studies: ['Bestehendes Studium DE', 'Nueva formación ES'],
+      cardsLength: 2,
       cards: [
         { highlight: 'Bestehender Kunde DE', title: 'Bestehende Rolle DE', text: 'Bestehende Zusammenfassung DE' },
         { highlight: 'Nuevo cliente ES', title: 'Nuevo rol ES', text: 'Nuevo resumen ES' },
       ],
     },
     it: {
+      studiesLength: 2,
       studies: ['Studio esistente IT', 'Nueva formación ES'],
+      cardsLength: 2,
       cards: [
         { highlight: 'Cliente esistente IT', title: 'Ruolo esistente IT', text: 'Riepilogo esistente IT' },
         { highlight: 'Nuevo cliente ES', title: 'Nuevo rol ES', text: 'Nuevo resumen ES' },
       ],
     },
     ca: {
+      studiesLength: 2,
       studies: ['Estudi existent CA', 'Nueva formación ES'],
+      cardsLength: 2,
       cards: [
         { highlight: 'Client existent CA', title: 'Rol existent CA', text: 'Resum existent CA' },
         { highlight: 'Nuevo cliente ES', title: 'Nuevo rol ES', text: 'Nuevo resumen ES' },
@@ -387,6 +387,11 @@ test('AdminStore rejects incomplete translation experience additions atomically 
 test('AdminTranslationExperienceEditor source uses the shared admin store, localized field editors, inline errors, and a responsive card grid', async () => {
   const source = await readRequiredSource('src/components/admin/AdminTranslationExperienceEditor.tsx');
 
+  assert.match(
+    source,
+    /import\s*\{[\s\S]*\bEDITABLE_COLLECTION_LOCALES\b[\s\S]*\}\s*from\s*['"]\.\.\/\.\.\/lib\/adminCollections\.ts['"]/,
+    'experience editor should import EDITABLE_COLLECTION_LOCALES from adminCollections.ts',
+  );
   assert.match(source, /import\s+\{\s*useAdminStore\s*\}\s+from\s+['"]\.\/useAdminStore['"]/, 'experience editor should subscribe through useAdminStore');
   assert.match(source, /import\s+EditableText\s+from\s+['"]\.\/EditableText['"]/, 'experience editor should reuse EditableText for inline copy editing');
   assert.match(source, /useAdminStore\(\)/, 'experience editor should call useAdminStore');
@@ -394,13 +399,22 @@ test('AdminTranslationExperienceEditor source uses the shared admin store, local
   assert.match(source, /addExperienceCard/, 'experience editor should create cards through the store API');
   assert.match(source, /translationPage\.education\.intro/, 'experience editor should keep the education intro editable');
   assert.match(source, /translationPage\.experience\.intro/, 'experience editor should keep the experience intro editable');
-  const hasVisibleLocaleLabels = /(?:['"`]ES['"`]|>\s*ES\s*<)[\s\S]*(?:['"`]EN['"`]|>\s*EN\s*<)[\s\S]*(?:['"`]FR['"`]|>\s*FR\s*<)/.test(source);
-  const hasLowercaseLocalesWithUppercaseMechanism =
-    /(?:['"`]es['"`]|>\s*es\s*<)[\s\S]*(?:['"`]en['"`]|>\s*en\s*<)[\s\S]*(?:['"`]fr['"`]|>\s*fr\s*<)/.test(source) &&
-    /toUpperCase\(\)|\buppercase\b/.test(source);
+  const localeFieldRenderBlock = source.match(
+    /(?:function|const)\s+\w+\s*(?:=\s*)?(?:\([^)]*\)\s*=>|\([^)]*\)\s*\{[\s\S]*?return\s*\(|\([^)]*\)\s*\{)[\s\S]*?EDITABLE_COLLECTION_LOCALES\.map\(\s*(?:\(\s*locale(?:\s*,[^)]*)?\s*\)|locale)\s*=>\s*\([\s\S]*?\)\s*\)/,
+  );
   assert.ok(
-    hasVisibleLocaleLabels || hasLowercaseLocalesWithUppercaseMechanism,
-    'experience editor should render ES/EN/FR labels, or keep es/en/fr locales with a visible uppercase mechanism in the source',
+    localeFieldRenderBlock,
+    'experience editor should define a locale-field helper or render block driven by EDITABLE_COLLECTION_LOCALES',
+  );
+  assert.match(
+    localeFieldRenderBlock[0],
+    /locale\.toUpperCase\(\)/,
+    'experience editor locale-field block should render locale labels with locale.toUpperCase()',
+  );
+  assert.match(
+    localeFieldRenderBlock[0],
+    /<(?:input|textarea)\b[\s\S]*?\bvalue=\{\s*[A-Za-z_$][\w$]*\[locale\]\s*\}/,
+    'experience editor locale-field block should render a controlled input or textarea keyed by locale',
   );
   assert.match(source, /role="alert"/, 'experience editor should render inline validation errors accessibly');
   assert.match(source, /(?:sm|md):grid-cols-2[^"]*(?:xl|2xl):grid-cols-3/, 'experience editor should preview experience cards in the responsive approved grid');
