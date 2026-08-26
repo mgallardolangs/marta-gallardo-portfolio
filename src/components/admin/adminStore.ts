@@ -939,7 +939,7 @@ export class AdminStore {
   }
 
   async publish(): Promise<void> {
-    if (!this.initialized) return;
+    if (!this.initialized || this.isPublishingState) return;
     const orbitValidationErrors = this.getOrbitValidationErrors();
     if (orbitValidationErrors.length > 0) {
       this.publishErrorState = orbitValidationErrors.join(' ');
@@ -965,19 +965,17 @@ export class AdminStore {
       return;
     }
 
-    if (!this.token) {
-      this.publishErrorState = 'Login required before publishing.';
-      this.publishSuccessState = false;
-      this.emit();
-      return;
-    }
-
     this.isPublishingState = true;
     this.publishSuccessState = false;
     this.publishErrorState = '';
     this.emit();
 
     try {
+      await this.refreshIdentityToken();
+      if (!this.token) {
+        throw new Error('Login required before publishing.');
+      }
+
       for (const [imageKey, pendingImage] of Object.entries(this.pendingImages)) {
         await this.writeRepositoryFile(
           pendingImage.path,
@@ -1035,6 +1033,8 @@ export class AdminStore {
     body: string;
     featuredImage?: File | null;
   }): Promise<string> {
+    await this.refreshIdentityToken();
+
     if (!this.token) {
       throw new Error('Login required before creating blog posts.');
     }
@@ -1078,6 +1078,27 @@ export class AdminStore {
 
     await this.createRepositoryFile(path, utf8ToBase64(markdown), `feat(blog): create ${slug}`, existingSha);
     return path;
+  }
+
+  private async refreshIdentityToken(): Promise<void> {
+    if (typeof window === 'undefined') return;
+
+    const identity = (window as typeof window & {
+      netlifyIdentity?: {
+        currentUser?: () => unknown;
+        refresh?: () => Promise<string>;
+      };
+    }).netlifyIdentity;
+
+    if (!identity?.currentUser?.() || !identity.refresh) return;
+
+    try {
+      const token = await identity.refresh();
+      if (!token) throw new Error('Missing refreshed token');
+      this.token = token;
+    } catch {
+      throw new Error('Admin session expired. Sign out and sign in again; your unsaved changes are still open.');
+    }
   }
 
   private async createRepositoryFile(path: string, content: string, message: string, sha: string | null): Promise<void> {

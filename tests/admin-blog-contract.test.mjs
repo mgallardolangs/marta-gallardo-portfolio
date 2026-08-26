@@ -116,3 +116,69 @@ test('createBlogPost rejects duplicate slug targets before writing and BlogPostF
     'BlogPostForm should keep form input intact on failure and only clear fields after a successful create',
   );
 });
+
+test('createBlogPost refreshes Identity before using Git Gateway after a long editing session', async () => {
+  const { AdminStore } = await import('../src/components/admin/adminStore.ts');
+  const store = new AdminStore();
+  store.init({ es: {}, en: {}, fr: {} }, {}, 'es', 'expired-token');
+
+  const previousWindow = globalThis.window;
+  const originalFetch = globalThis.fetch;
+  let refreshCalls = 0;
+  const fetchCalls = [];
+  globalThis.window = {
+    netlifyIdentity: {
+      currentUser: () => ({ id: 'editor' }),
+      refresh: async () => {
+        refreshCalls += 1;
+        return 'fresh-blog-token';
+      },
+    },
+  };
+  globalThis.fetch = async (input, init = {}) => {
+    const call = { input: String(input), init };
+    fetchCalls.push(call);
+    if (String(init.headers?.Authorization ?? '') !== 'Bearer fresh-blog-token') {
+      return new Response(JSON.stringify({ message: 'This endpoint requires a valid bearer token' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    if (!init.method || init.method === 'GET') {
+      return new Response(JSON.stringify({ message: 'Not Found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    return new Response(JSON.stringify({ content: { sha: 'created-post-sha' } }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+
+  try {
+    const createdPath = await store.createBlogPost({
+      slug: 'fresh-session-post',
+      title: 'Fresh session',
+      description: 'Token refresh regression',
+      date: '2026-08-26',
+      tags: ['admin'],
+      lang: 'es',
+      body: '# Fresh session',
+    });
+    assert.equal(createdPath, 'src/content/blog/fresh-session-post.md');
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (previousWindow === undefined) {
+      delete globalThis.window;
+    } else {
+      globalThis.window = previousWindow;
+    }
+  }
+
+  assert.equal(refreshCalls, 1);
+  assert.ok(
+    fetchCalls.every((call) => String(call.init.headers?.Authorization ?? '') === 'Bearer fresh-blog-token'),
+    'blog reads and writes should use the refreshed token',
+  );
+});

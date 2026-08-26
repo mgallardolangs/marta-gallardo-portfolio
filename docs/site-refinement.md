@@ -256,6 +256,8 @@ When an admin adds new orbit/tool/skill/language copy, Spanish is the fallback s
 ### Drafts and publish
 - Drafts live in local storage under the admin store
 - Pending binary uploads are not stored fully in local storage; they must be reselected after reload
+- Publish refreshes the Netlify Identity JWT before Git Gateway reads and writes, so editing sessions longer than one hour remain publishable
+- If the Identity session cannot refresh, the editor keeps all in-memory changes and asks the user to sign in again
 - Publish writes changed locale JSON, changed `src/data/site.json`, uploaded assets, and blog markdown files
 - Blog creation is restricted to ES/EN/FR
 

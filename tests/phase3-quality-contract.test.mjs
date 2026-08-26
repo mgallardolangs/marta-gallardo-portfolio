@@ -236,6 +236,143 @@ test('publish uploads pending media before writing site JSON and keeps pending s
   assert.ok(store.getSnapshot().pendingCount >= 2, 'failed uploads should keep pending dirty state for retry');
 });
 
+test('publish refreshes an expired identity token before creating a tool logo and updating translations', async () => {
+  const restoreFileReader = installMockFileReader();
+  const store = createStore();
+  const windowMock = createWindowStorage();
+  let refreshCalls = 0;
+  windowMock.netlifyIdentity = {
+    currentUser: () => ({ id: 'editor' }),
+    refresh: async () => {
+      refreshCalls += 1;
+      return 'fresh-publish-token';
+    },
+  };
+  const restoreWindow = installWindow(windowMock);
+  const fetchCalls = [];
+  const originalFetch = globalThis.fetch;
+
+  try {
+    store.setText('home.hero.kicker', 'titular actualizado');
+    const toolIndex = store.addEditableCollectionItem('tools', {
+      label: {
+        es: 'Microsoft Office',
+        en: 'Microsoft Office',
+        fr: 'Microsoft Office',
+      },
+      logo: '',
+    });
+    await store.setEditableToolLogo(
+      toolIndex,
+      new File([Buffer.from('<svg></svg>')], 'microsoft-office.svg', { type: 'image/svg+xml' }),
+    );
+
+    globalThis.fetch = async (input, init = {}) => {
+      const call = { input: String(input), init };
+      fetchCalls.push(call);
+      const authorization = String(init.headers?.Authorization ?? '');
+
+      if (authorization !== 'Bearer fresh-publish-token') {
+        return new Response(JSON.stringify({ message: 'This endpoint requires a valid bearer token' }), {
+          status: 401,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      if (!init.method || init.method === 'GET') {
+        const isNewToolLogo = call.input.includes('public/images/tools/tool-microsoft-office.svg');
+        return new Response(
+          JSON.stringify(isNewToolLogo ? { message: 'Not Found' } : { sha: 'existing-file-sha' }),
+          {
+            status: isNewToolLogo ? 404 : 200,
+            headers: { 'Content-Type': 'application/json' },
+          },
+        );
+      }
+
+      return new Response(JSON.stringify({ content: { sha: 'next-sha' } }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    };
+
+    await store.publish();
+  } finally {
+    globalThis.fetch = originalFetch;
+    restoreWindow();
+    restoreFileReader();
+  }
+
+  assert.equal(refreshCalls, 1, 'a long editing session should refresh Identity once before publishing');
+  assert.equal(store.getSnapshot().publishError, '');
+  assert.equal(store.getSnapshot().publishSuccess, true);
+  assert.ok(
+    fetchCalls.every((call) => String(call.init.headers?.Authorization ?? '') === 'Bearer fresh-publish-token'),
+    'every Git Gateway read and write should use the refreshed token',
+  );
+
+  const logoWrite = fetchCalls.find(
+    (call) => call.init.method === 'PUT' && call.input.includes('public/images/tools/tool-microsoft-office.svg'),
+  );
+  assert.ok(logoWrite, 'a missing tool logo should be created through Git Gateway');
+  assert.equal(JSON.parse(String(logoWrite.init.body)).sha, undefined, 'new logo writes must omit the SHA');
+  assert.ok(
+    fetchCalls.some((call) => call.init.method === 'PUT' && call.input.includes('src/i18n/es.json')),
+    'the same publish should retain text updates after uploading the new logo',
+  );
+});
+
+test('publish closes its re-entry window before waiting for an Identity refresh', async () => {
+  const store = createStore();
+  store.setText('home.hero.kicker', 'publish once');
+
+  const windowMock = createWindowStorage();
+  let resolveRefresh;
+  let refreshCalls = 0;
+  windowMock.netlifyIdentity = {
+    currentUser: () => ({ id: 'editor' }),
+    refresh: () => {
+      refreshCalls += 1;
+      return new Promise((resolve) => {
+        resolveRefresh = resolve;
+      });
+    },
+  };
+  const restoreWindow = installWindow(windowMock);
+  const originalFetch = globalThis.fetch;
+  const fetchCalls = [];
+  globalThis.fetch = async (input, init = {}) => {
+    fetchCalls.push({ input: String(input), init });
+    if (!init.method || init.method === 'GET') {
+      return new Response(JSON.stringify({ sha: 'existing-sha' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    return new Response(JSON.stringify({ content: { sha: 'next-sha' } }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+
+  try {
+    const firstPublish = store.publish();
+    const secondPublish = store.publish();
+
+    assert.equal(store.getSnapshot().isPublishing, true, 'publish should disable re-entry before token refresh resolves');
+    assert.equal(refreshCalls, 1, 'concurrent publish attempts should share one active publish');
+
+    resolveRefresh?.('fresh-token');
+    await Promise.all([firstPublish, secondPublish]);
+  } finally {
+    globalThis.fetch = originalFetch;
+    restoreWindow();
+  }
+
+  assert.equal(fetchCalls.filter((call) => call.init.method === 'PUT').length, 1);
+  assert.equal(store.getSnapshot().publishSuccess, true);
+});
+
 test('saving a draft strips pending upload binaries but preserves text and site metadata', async () => {
   const restoreFileReader = installMockFileReader();
   const store = createStore();
