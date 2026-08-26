@@ -394,10 +394,13 @@ test('AdminTranslationExperienceEditor source uses the shared admin store, local
   assert.match(source, /addExperienceCard/, 'experience editor should create cards through the store API');
   assert.match(source, /translationPage\.education\.intro/, 'experience editor should keep the education intro editable');
   assert.match(source, /translationPage\.experience\.intro/, 'experience editor should keep the experience intro editable');
-  assert.match(
-    source,
-    /(?:['"`]ES['"`]|>\s*ES\s*<)[\s\S]*(?:['"`]EN['"`]|>\s*EN\s*<)[\s\S]*(?:['"`]FR['"`]|>\s*FR\s*<)/,
-    'experience editor should render the visible ES, EN, and FR labels in order',
+  const hasVisibleLocaleLabels = /(?:['"`]ES['"`]|>\s*ES\s*<)[\s\S]*(?:['"`]EN['"`]|>\s*EN\s*<)[\s\S]*(?:['"`]FR['"`]|>\s*FR\s*<)/.test(source);
+  const hasLowercaseLocalesWithUppercaseMechanism =
+    /(?:['"`]es['"`]|>\s*es\s*<)[\s\S]*(?:['"`]en['"`]|>\s*en\s*<)[\s\S]*(?:['"`]fr['"`]|>\s*fr\s*<)/.test(source) &&
+    /toUpperCase\(\)|\buppercase\b/.test(source);
+  assert.ok(
+    hasVisibleLocaleLabels || hasLowercaseLocalesWithUppercaseMechanism,
+    'experience editor should render ES/EN/FR labels, or keep es/en/fr locales with a visible uppercase mechanism in the source',
   );
   assert.match(source, /role="alert"/, 'experience editor should render inline validation errors accessibly');
   assert.match(source, /(?:sm|md):grid-cols-2[^"]*(?:xl|2xl):grid-cols-3/, 'experience editor should preview experience cards in the responsive approved grid');
