@@ -60,6 +60,7 @@ test('createBlogPost rejects duplicate slug targets before writing and BlogPostF
     import('../src/components/admin/adminStore.ts'),
     readSource('src/components/admin/BlogPostForm.tsx'),
   ]);
+  const duplicateMessage = 'Ya existe una entrada del blog con el slug "mi-primer-post". Usa otro slug antes de publicar.';
 
   const store = new AdminStore();
   store.init({ es: {}, en: {}, fr: {} }, {}, 'en', 'publish-token');
@@ -93,7 +94,7 @@ test('createBlogPost rejects duplicate slug targets before writing and BlogPostF
         lang: 'en',
         body: '# Hello world',
       }),
-      /already exists/i,
+      new Error(duplicateMessage),
       'same slug in another locale should still be rejected when it resolves to the same content path',
     );
   } finally {

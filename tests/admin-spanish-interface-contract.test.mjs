@@ -293,6 +293,54 @@ test('AdminStore login/session/blog/publish operational errors are in Spanish', 
   ]);
 });
 
+test('AdminStore duplicate blog slug errors stay in Spanish across ES, EN, and FR blog creation', async () => {
+  const duplicateMessage = 'Ya existe una entrada del blog con el slug "mi-primer-post". Usa otro slug antes de publicar.';
+  const localeCases = ['es', 'en', 'fr'];
+  const originalFetch = globalThis.fetch;
+  const fetchCalls = [];
+
+  globalThis.fetch = async (input, init = {}) => {
+    fetchCalls.push({ input: String(input), init });
+    return new Response(JSON.stringify({ sha: 'existing-post-sha' }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+
+  try {
+    for (const locale of localeCases) {
+      const store = new AdminStore();
+      store.init({ es: {}, en: {}, fr: {} }, {}, locale, 'publish-token');
+
+      await assert.rejects(
+        store.createBlogPost({
+          slug: 'mi-primer-post',
+          title: `Post ${locale.toUpperCase()}`,
+          description: 'Duplicate slug contract',
+          date: '2026-08-26',
+          tags: ['ugc'],
+          lang: locale,
+          body: '# Duplicate slug',
+        }),
+        new Error(duplicateMessage),
+        `duplicate blog slug errors should stay in Spanish for ${locale.toUpperCase()} admin writes`,
+      );
+    }
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.deepEqual(
+    fetchCalls.map((call) => `${call.init?.method ?? 'GET'} ${call.input}`),
+    [
+      'GET /.netlify/git/github/contents/src/content/blog/mi-primer-post.md',
+      'GET /.netlify/git/github/contents/src/content/blog/mi-primer-post.md',
+      'GET /.netlify/git/github/contents/src/content/blog/mi-primer-post.md',
+    ],
+    'duplicate blog slug detection should still stop before any write attempt in every admin locale',
+  );
+});
+
 test('adminCollections validation errors surfaced by the arsenal editor are in Spanish', async () => {
   const source = await readSource('src/lib/adminCollections.ts');
 

@@ -321,16 +321,8 @@ function buildMarkdownPost(post: {
   return `---\ntitle: ${quoted(post.title)}\ndescription: ${quoted(post.description)}\ndate: ${quoted(post.date)}\n${imageLine}tags: ${tags}\nlang: ${quoted(post.lang)}\n---\n\n${post.body.trim()}\n`;
 }
 
-function getDuplicateBlogPostSlugMessage(slug: string, lang: SupportedLang | AdminBlogLang): string {
-  if (lang === 'es') {
-    return `Ya existe una entrada del blog con el slug "${slug}". Usa otro slug antes de publicar.`;
-  }
-
-  if (lang === 'fr') {
-    return `Un article de blog existe déjà avec le slug "${slug}". Choisissez-en un autre avant de publier.`;
-  }
-
-  return `A blog post already exists with the slug "${slug}". Choose a different slug before publishing.`;
+function getDuplicateBlogPostSlugMessage(slug: string): string {
+  return `Ya existe una entrada del blog con el slug "${slug}". Usa otro slug antes de publicar.`;
 }
 
 function getOrbitPendingKey(itemId: string, field: 'src' | 'poster') {
@@ -1210,8 +1202,7 @@ export class AdminStore {
     const path = `src/content/blog/${slug}.md`;
     const existingSha = await this.fetchFileSha(path);
     if (existingSha !== null) {
-      const errorLang = isAdminBlogLang(this.currentLang) ? this.currentLang : post.lang;
-      throw new Error(getDuplicateBlogPostSlugMessage(slug, errorLang));
+      throw new Error(getDuplicateBlogPostSlugMessage(slug));
     }
 
     let imagePath: string | undefined;
