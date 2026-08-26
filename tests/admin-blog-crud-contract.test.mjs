@@ -1,11 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
+
+const SIX_LOCALES = ['es', 'en', 'fr', 'de', 'it', 'ca'];
+const VISIBLE_LOCALES = ['es', 'en', 'fr'];
+const HIDDEN_LOCALES = ['de', 'it', 'ca'];
 
 async function readSource(relativePath) {
   return readFile(path.join(rootDir, relativePath), 'utf8');
@@ -66,62 +70,85 @@ function assertNonEmptyRepositoryMessage(payload, message) {
   assert.notEqual(payload.message.trim(), '', message);
 }
 
-function assertMarkdownFields(markdown, { title, description, date, tags, lang, body, image }) {
-  assert.match(markdown, new RegExp(`^title:\\s*${escapeRegExp(JSON.stringify(title))}$`, 'm'));
-  assert.match(markdown, new RegExp(`^description:\\s*${escapeRegExp(JSON.stringify(description))}$`, 'm'));
-  assert.match(markdown, new RegExp(`^date:\\s*${escapeRegExp(JSON.stringify(date))}$`, 'm'));
-  assert.match(markdown, new RegExp(`^lang:\\s*${escapeRegExp(JSON.stringify(lang))}$`, 'm'));
-  assert.match(
-    markdown,
-    new RegExp(`^tags:\\s*\\[[^\\]]*${tags.map((tag) => escapeRegExp(JSON.stringify(tag))).join('[^\\]]*')}[^\\]]*\\]$`, 'm'),
-  );
-  assert.ok(
-    markdown.trimEnd().endsWith(body.trim()),
-    'updated markdown should keep the edited body content intact',
-  );
-
-  if (image) {
-    assert.match(markdown, new RegExp(`^image:\\s*${escapeRegExp(JSON.stringify(image))}$`, 'm'));
-  } else {
-    assert.doesNotMatch(markdown, /^image:/m);
+function assertMarkdownFrontmatter(markdown, { slug, translationKey, title, description, date, tags, lang, body, image } = {}) {
+  if (slug !== undefined) assert.match(markdown, new RegExp(`^slug:\\s*${escapeRegExp(JSON.stringify(slug))}$`, 'm'));
+  if (translationKey !== undefined) assert.match(markdown, new RegExp(`^translationKey:\\s*${escapeRegExp(JSON.stringify(translationKey))}$`, 'm'));
+  if (title !== undefined) assert.match(markdown, new RegExp(`^title:\\s*${escapeRegExp(JSON.stringify(title))}$`, 'm'));
+  if (description !== undefined) assert.match(markdown, new RegExp(`^description:\\s*${escapeRegExp(JSON.stringify(description))}$`, 'm'));
+  if (date !== undefined) assert.match(markdown, new RegExp(`^date:\\s*${escapeRegExp(JSON.stringify(date))}$`, 'm'));
+  if (lang !== undefined) assert.match(markdown, new RegExp(`^lang:\\s*${escapeRegExp(JSON.stringify(lang))}$`, 'm'));
+  if (tags !== undefined) {
+    assert.match(
+      markdown,
+      new RegExp(`^tags:\\s*\\[[^\\]]*${tags.map((tag) => escapeRegExp(JSON.stringify(tag))).join('[^\\]]*')}[^\\]]*\\]$`, 'm'),
+    );
   }
+  if (body !== undefined) {
+    assert.ok(markdown.trimEnd().endsWith(body.trim()), 'markdown should keep the intended body content intact');
+  }
+  if (image !== undefined) {
+    if (image) {
+      assert.match(markdown, new RegExp(`^image:\\s*${escapeRegExp(JSON.stringify(image))}$`, 'm'));
+    } else {
+      assert.doesNotMatch(markdown, /^image:/m);
+    }
+  }
+}
+
+function getFrontmatterField(markdown, field) {
+  const match = markdown.match(new RegExp(`^${field}:\\s*(.+)$`, 'm'));
+  return match ? match[1].trim() : undefined;
+}
+
+function buildFrontmatterFixture({ slug, translationKey, date, image, title, description, tags, lang, body }) {
+  const quoted = (value) => JSON.stringify(value);
+  const tagsLine = `[${tags.map((tag) => JSON.stringify(tag)).join(', ')}]`;
+  const imageLine = image ? `image: ${quoted(image)}\n` : '';
+  return `---\nslug: ${quoted(slug)}\ntranslationKey: ${quoted(translationKey)}\ntitle: ${quoted(title)}\ndescription: ${quoted(description)}\ndate: ${quoted(date)}\n${imageLine}tags: ${tagsLine}\nlang: ${quoted(lang)}\n---\n\n${body.trim()}\n`;
+}
+
+function getLocaleMarkdownPaths(slug) {
+  return Object.fromEntries(SIX_LOCALES.map((locale) => [locale, `src/content/blog/${slug}/${locale}.md`]));
+}
+
+function getSharedImagePaths(slug, extension = 'webp') {
+  return {
+    repositoryPath: `public/images/blog/${slug}.${extension}`,
+    publicPath: `/images/blog/${slug}.${extension}`,
+  };
+}
+
+function makeTranslationsFixture(overrides = {}) {
+  return {
+    es: { title: 'Título ES', description: 'Descripción ES', tags: ['seo'], body: '# Cuerpo ES', ...overrides.es },
+    en: { title: 'Title EN', description: 'Description EN', tags: ['seo'], body: '# Body EN', ...overrides.en },
+    fr: { title: 'Titre FR', description: 'Description FR', tags: ['seo'], body: '# Corps FR', ...overrides.fr },
+  };
+}
+
+function makeFakePost({ id, slug, translationKey, lang, date, image, title, description, tags = [], body = '' }) {
+  return {
+    id,
+    body,
+    data: {
+      slug,
+      translationKey,
+      lang,
+      date: new Date(date),
+      image,
+      title: title ?? `${slug} (${lang})`,
+      description: description ?? `${slug} description (${lang})`,
+      tags,
+    },
+  };
 }
 
 function getCallSummary(call) {
   return `${call.method} ${call.url}`;
 }
 
-function normalizeDeleteResult(result) {
-  if (Array.isArray(result)) {
-    return {
-      status: String(result[0] ?? ''),
-      message: String(result[1] ?? ''),
-    };
-  }
-
-  if (result && typeof result === 'object') {
-    return {
-      status: String(result.status ?? result.result ?? result.outcome ?? ''),
-      message: String(result.message ?? result.notice ?? result.detail ?? ''),
-    };
-  }
-
-  if (typeof result === 'string') {
-    return {
-      status: result,
-      message: result,
-    };
-  }
-
-  return { status: '', message: '' };
-}
-
-function normalizeUpdatePath(result) {
-  if (typeof result === 'string') return result;
-  if (result && typeof result === 'object') {
-    return String(result.path ?? result.markdownPath ?? result.filePath ?? '');
-  }
-  return '';
+function countMatches(source, pattern) {
+  return [...source.matchAll(pattern)].length;
 }
 
 function extractWindowAround(source, needle, radius = 2200) {
@@ -130,744 +157,271 @@ function extractWindowAround(source, needle, radius = 2200) {
   return source.slice(Math.max(0, index - radius), Math.min(source.length, index + radius));
 }
 
-function countMatches(source, pattern) {
-  return [...source.matchAll(pattern)].length;
+async function assertRejectsWithMessage(promise, patterns, failureMessage) {
+  try {
+    await promise;
+    assert.fail(failureMessage ?? 'expected the promise to reject');
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    for (const pattern of Array.isArray(patterns) ? patterns : [patterns]) {
+      assert.match(message, pattern, `${failureMessage ?? 'rejection message mismatch'} (got: "${message}")`);
+    }
+  }
 }
 
-test('updateBlogPost validates required fields and approved admin locales before any repository write', async () => {
-  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
-  const store = createAdminStore(AdminStore);
+function normalizeDeleteResult(result) {
+  const base = (() => {
+    if (Array.isArray(result)) {
+      return { status: String(result[0] ?? ''), message: String(result[1] ?? '') };
+    }
+    if (result && typeof result === 'object') {
+      return {
+        status: String(result.status ?? result.result ?? result.outcome ?? ''),
+        message: String(result.message ?? result.notice ?? result.detail ?? ''),
+      };
+    }
+    if (typeof result === 'string') {
+      return { status: result, message: result };
+    }
+    return { status: '', message: '' };
+  })();
 
-  assert.equal(typeof store.updateBlogPost, 'function', 'AdminStore should expose updateBlogPost for the edit flow');
+  const remainingSource = (result && typeof result === 'object')
+    ? (result.remainingPaths ?? result.pendingPaths ?? result.remaining ?? result.failedPaths ?? [])
+    : [];
 
-  const fetchCalls = [];
-  const originalFetch = globalThis.fetch;
-  globalThis.fetch = async (input, init = {}) => {
-    fetchCalls.push({ input: String(input), init });
-    return new Response(JSON.stringify({ message: 'Unexpected network call' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
+  return { ...base, remainingPaths: Array.isArray(remainingSource) ? remainingSource.map(String) : [] };
+}
+
+function normalizeAdminGroup(group) {
+  const translationKey = group?.translationKey ?? group?.key ?? '';
+  const slug = group?.slug ?? '';
+  const localesSource = group?.locales ?? group?.byLocale ?? group?.translations ?? group?.posts ?? {};
+  const locales = {};
+
+  if (Array.isArray(localesSource)) {
+    localesSource.forEach((entry) => {
+      const lang = entry?.data?.lang ?? entry?.lang;
+      if (lang) locales[lang] = entry;
     });
-  };
-
-  try {
-    await assert.rejects(
-      store.updateBlogPost({
-        slug: 'mi-post',
-        title: '   ',
-        description: 'Descripción preservada',
-        date: '2026-08-26',
-        tags: ['seo'],
-        lang: 'es',
-        body: '# Cuerpo',
-        currentImage: '/images/blog/mi-post.webp',
-      }),
-      /t[ií]tulo|obligatori/i,
-      'editing should reject missing required fields',
-    );
-
-    await assert.rejects(
-      store.updateBlogPost({
-        slug: 'mi-post',
-        title: 'Título válido',
-        description: 'Descripción válida',
-        date: '2026-08-26',
-        tags: ['seo'],
-        lang: 'de',
-        body: '# Cuerpo',
-        currentImage: '/images/blog/mi-post.webp',
-      }),
-      /ES,\s*EN\s*o\s*FR/i,
-      'editing should reject non-admin locales at runtime',
-    );
-  } finally {
-    globalThis.fetch = originalFetch;
+  } else if (localesSource && typeof localesSource === 'object') {
+    Object.entries(localesSource).forEach(([lang, entry]) => {
+      locales[lang] = entry;
+    });
   }
 
-  assert.deepEqual(fetchCalls, [], 'invalid edit payloads should fail before any Git Gateway write');
-});
+  return { translationKey, slug, locales };
+}
 
-test('updateBlogPost refreshes Identity, preserves the slug path, and keeps the existing image when no replacement is requested', async () => {
-  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
-  const store = createAdminStore(AdminStore, 'es', 'expired-token');
+function parseFrontmatter(markdown) {
+  const match = markdown.match(/^---\n([\s\S]*?)\n---/);
+  if (!match) return {};
 
-  assert.equal(typeof store.updateBlogPost, 'function', 'AdminStore should expose updateBlogPost for the edit flow');
-
-  const previousWindow = globalThis.window;
-  const originalFetch = globalThis.fetch;
-  const fetchCalls = [];
-  let refreshCalls = 0;
-
-  globalThis.window = {
-    netlifyIdentity: {
-      currentUser: () => ({ id: 'editor' }),
-      refresh: async () => {
-        refreshCalls += 1;
-        return 'fresh-edit-token';
-      },
-    },
-  };
-
-  globalThis.fetch = async (input, init = {}) => {
-    const call = {
-      method: init.method ?? 'GET',
-      url: String(input),
-      headers: init.headers ?? {},
-      body: init.body ?? null,
-    };
-    fetchCalls.push(call);
-
-    if (call.method === 'GET' && call.url.includes('src/content/blog/mi-post.md')) {
-      return new Response(JSON.stringify({ sha: 'existing-markdown-sha' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
+  const data = {};
+  for (const line of match[1].split('\n')) {
+    const fieldMatch = line.match(/^([A-Za-z_]+):\s*(.*)$/);
+    if (!fieldMatch) continue;
+    const [, key, rawValue] = fieldMatch;
+    if (rawValue.startsWith('[') || rawValue.startsWith('"')) {
+      try {
+        data[key] = JSON.parse(rawValue);
+        continue;
+      } catch {
+        // fall through to raw string handling below
+      }
     }
-
-    if (call.method === 'PUT' && call.url.includes('src/content/blog/mi-post.md')) {
-      return new Response(JSON.stringify({ content: { sha: 'updated-markdown-sha' } }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  };
-
-  try {
-    const result = await store.updateBlogPost({
-      slug: 'mi-post',
-      title: 'Nuevo título editorial',
-      description: 'Descripción actualizada',
-      date: '2026-08-26',
-      tags: ['seo', 'ugc'],
-      lang: 'en',
-      body: '# Nuevo cuerpo\n\nCon cambios.',
-      currentImage: '/images/blog/mi-post.webp',
-    });
-
-    assert.equal(
-      normalizeUpdatePath(result),
-      'src/content/blog/mi-post.md',
-      'edit mode should keep writing to the original markdown path instead of generating a new slug target',
-    );
-  } finally {
-    globalThis.fetch = originalFetch;
-    if (previousWindow === undefined) {
-      delete globalThis.window;
-    } else {
-      globalThis.window = previousWindow;
-    }
+    data[key] = rawValue;
   }
+  return data;
+}
 
-  assert.equal(refreshCalls, 1, 'editing should refresh Netlify Identity before touching Git Gateway');
-  assert.deepEqual(
-    fetchCalls.map(getCallSummary),
-    [
-      'GET /.netlify/git/github/contents/src/content/blog/mi-post.md',
-      'PUT /.netlify/git/github/contents/src/content/blog/mi-post.md',
-    ],
-    'editing without a replacement image should only read and rewrite the original markdown file',
-  );
-  assert.ok(
-    fetchCalls.every((call) => String(call.headers.Authorization ?? '').includes('fresh-edit-token')),
-    'edit requests should use the refreshed Identity token',
-  );
+async function listBlogMarkdownFiles() {
+  const blogDir = path.join(rootDir, 'src/content/blog');
+  const relativePaths = await readdir(blogDir, { recursive: true });
+  return relativePaths
+    .filter((relativePath) => relativePath.endsWith('.md') || relativePath.endsWith('.mdx'))
+    .map((relativePath) => ({
+      relativePath: path.posix.join('src/content/blog', relativePath.split(path.sep).join('/')),
+      absolutePath: path.join(blogDir, relativePath),
+    }));
+}
 
-  const markdownPayload = decodeRepositoryPayload(fetchCalls.at(-1)?.body);
-  assert.equal(markdownPayload.sha, 'existing-markdown-sha', 'markdown updates should include the fetched sha');
-  assertNonEmptyRepositoryMessage(markdownPayload, 'markdown updates should include a commit message');
-  assertMarkdownFields(markdownPayload.markdown, {
-    title: 'Nuevo título editorial',
-    description: 'Descripción actualizada',
-    date: '2026-08-26',
-    tags: ['seo', 'ugc'],
-    lang: 'en',
-    body: '# Nuevo cuerpo\n\nCon cambios.',
-    image: '/images/blog/mi-post.webp',
-  });
-});
+// ---------------------------------------------------------------------------
+// CONTENT MODEL
+// ---------------------------------------------------------------------------
 
-test('updateBlogPost removes image frontmatter and deletes only the old owned image after the markdown update succeeds', async () => {
-  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
-  const store = createAdminStore(AdminStore);
+test('the blog content schema requires a shared slug and translationKey on every entry', async () => {
+  const contentConfigSource = await readRequiredSource('src/content.config.ts');
 
-  assert.equal(typeof store.updateBlogPost, 'function', 'AdminStore should expose updateBlogPost for the edit flow');
-
-  const fetchCalls = [];
-  const originalFetch = globalThis.fetch;
-  globalThis.fetch = async (input, init = {}) => {
-    const call = {
-      method: init.method ?? 'GET',
-      url: String(input),
-      body: init.body ?? null,
-    };
-    fetchCalls.push(call);
-
-    if (call.method === 'GET' && call.url.includes('src/content/blog/mi-post.md')) {
-      return new Response(JSON.stringify({ sha: 'existing-markdown-sha' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (call.method === 'PUT' && call.url.includes('src/content/blog/mi-post.md')) {
-      return new Response(JSON.stringify({ content: { sha: 'updated-markdown-sha' } }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (call.method === 'GET' && call.url.includes('public/images/blog/mi-post.webp')) {
-      return new Response(JSON.stringify({ sha: 'old-owned-image-sha' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (call.method === 'DELETE' && call.url.includes('public/images/blog/mi-post.webp')) {
-      return new Response(JSON.stringify({ commit: { sha: 'deleted-image-sha' } }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  };
-
-  try {
-    await store.updateBlogPost({
-      slug: 'mi-post',
-      title: 'Post sin imagen',
-      description: 'Eliminar portada antigua',
-      date: '2026-08-26',
-      tags: ['seo'],
-      lang: 'es',
-      body: '# Sin imagen',
-      currentImage: '/images/blog/mi-post.webp',
-      removeImage: true,
-    });
-  } finally {
-    globalThis.fetch = originalFetch;
-  }
-
-  assert.deepEqual(
-    fetchCalls.map(getCallSummary),
-    [
-      'GET /.netlify/git/github/contents/src/content/blog/mi-post.md',
-      'PUT /.netlify/git/github/contents/src/content/blog/mi-post.md',
-      'GET /.netlify/git/github/contents/public/images/blog/mi-post.webp',
-      'DELETE /.netlify/git/github/contents/public/images/blog/mi-post.webp',
-    ],
-    'owned image cleanup should happen only after the markdown update succeeds',
-  );
-
-  const markdownPayload = decodeRepositoryPayload(fetchCalls[1].body);
-  assert.equal(markdownPayload.sha, 'existing-markdown-sha');
-  assertMarkdownFields(markdownPayload.markdown, {
-    title: 'Post sin imagen',
-    description: 'Eliminar portada antigua',
-    date: '2026-08-26',
-    tags: ['seo'],
-    lang: 'es',
-    body: '# Sin imagen',
-    image: null,
-  });
-
-  const imageDeletePayload = JSON.parse(String(fetchCalls[3].body));
-  assert.equal(imageDeletePayload.sha, 'old-owned-image-sha', 'owned image deletes should include the fetched sha');
-  assertNonEmptyRepositoryMessage(imageDeletePayload, 'owned image deletes should include a commit message');
-});
-
-test('updateBlogPost uploads replacement images before rewriting markdown and never deletes shared paths', async () => {
-  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
-  const store = createAdminStore(AdminStore);
-
-  assert.equal(typeof store.updateBlogPost, 'function', 'AdminStore should expose updateBlogPost for the edit flow');
-
-  const fetchCalls = [];
-  const originalFetch = globalThis.fetch;
-  globalThis.fetch = async (input, init = {}) => {
-    const call = {
-      method: init.method ?? 'GET',
-      url: String(input),
-      body: init.body ?? null,
-    };
-    fetchCalls.push(call);
-
-    if (call.method === 'GET' && call.url.includes('src/content/blog/mi-post.md')) {
-      return new Response(JSON.stringify({ sha: 'existing-markdown-sha' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (call.method === 'GET' && call.url.includes('public/images/blog/mi-post.png')) {
-      return new Response(JSON.stringify({ message: 'Not Found' }), {
-        status: 404,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (call.method === 'PUT' && call.url.includes('public/images/blog/mi-post.png')) {
-      return new Response(JSON.stringify({ content: { sha: 'replacement-image-sha' } }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (call.method === 'PUT' && call.url.includes('src/content/blog/mi-post.md')) {
-      return new Response(JSON.stringify({ content: { sha: 'updated-markdown-sha' } }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  };
-
-  try {
-    await store.updateBlogPost({
-      slug: 'mi-post',
-      title: 'Portada nueva',
-      description: 'Reemplazo sin tocar assets compartidos',
-      date: '2026-08-26',
-      tags: ['seo', 'brand'],
-      lang: 'fr',
-      body: '# Portada nueva',
-      currentImage: '/images/shared/brand-banner.webp',
-      featuredImage: new File(['replacement'], 'mi-post.png', { type: 'image/png' }),
-    });
-  } finally {
-    globalThis.fetch = originalFetch;
-  }
-
-  const sequence = fetchCalls.map(getCallSummary);
-  const replacementPutIndex = sequence.findIndex((entry) => entry === 'PUT /.netlify/git/github/contents/public/images/blog/mi-post.png');
-  const markdownPutIndex = sequence.findIndex((entry) => entry === 'PUT /.netlify/git/github/contents/src/content/blog/mi-post.md');
-
-  assert.ok(replacementPutIndex > -1, 'replacement edits should upload the new owned image');
-  assert.ok(markdownPutIndex > replacementPutIndex, 'replacement uploads should complete before the markdown rewrite');
-  assert.equal(
-    sequence.filter((entry) => entry.startsWith('DELETE /.netlify/git/github/contents/')).length,
-    0,
-    'shared or non-owned images should never be deleted during replacement edits',
-  );
-
-  const markdownPayload = decodeRepositoryPayload(fetchCalls[markdownPutIndex].body);
-  assertMarkdownFields(markdownPayload.markdown, {
-    title: 'Portada nueva',
-    description: 'Reemplazo sin tocar assets compartidos',
-    date: '2026-08-26',
-    tags: ['seo', 'brand'],
-    lang: 'fr',
-    body: '# Portada nueva',
-    image: '/images/blog/mi-post.png',
-  });
-});
-
-test('deleteBlogPost refreshes Identity, deletes markdown first, then deletes only the owned image with sha-backed payloads', async () => {
-  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
-  const store = createAdminStore(AdminStore, 'es', 'expired-token');
-
-  assert.equal(typeof store.deleteBlogPost, 'function', 'AdminStore should expose deleteBlogPost for the admin list');
-
-  const previousWindow = globalThis.window;
-  const originalFetch = globalThis.fetch;
-  const fetchCalls = [];
-  let refreshCalls = 0;
-
-  globalThis.window = {
-    netlifyIdentity: {
-      currentUser: () => ({ id: 'editor' }),
-      refresh: async () => {
-        refreshCalls += 1;
-        return 'fresh-delete-token';
-      },
-    },
-  };
-
-  globalThis.fetch = async (input, init = {}) => {
-    const call = {
-      method: init.method ?? 'GET',
-      url: String(input),
-      headers: init.headers ?? {},
-      body: init.body ?? null,
-    };
-    fetchCalls.push(call);
-
-    if (call.method === 'GET' && call.url.includes('src/content/blog/mi-post.md')) {
-      return new Response(JSON.stringify({ sha: 'markdown-sha' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (call.method === 'DELETE' && call.url.includes('src/content/blog/mi-post.md')) {
-      return new Response(JSON.stringify({ commit: { sha: 'deleted-markdown-sha' } }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (call.method === 'GET' && call.url.includes('public/images/blog/mi-post.webp')) {
-      return new Response(JSON.stringify({ sha: 'image-sha' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (call.method === 'DELETE' && call.url.includes('public/images/blog/mi-post.webp')) {
-      return new Response(JSON.stringify({ commit: { sha: 'deleted-image-sha' } }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  };
-
-  let result;
-  try {
-    result = await store.deleteBlogPost({
-      slug: 'mi-post',
-      image: '/images/blog/mi-post.webp',
-    });
-  } finally {
-    globalThis.fetch = originalFetch;
-    if (previousWindow === undefined) {
-      delete globalThis.window;
-    } else {
-      globalThis.window = previousWindow;
-    }
-  }
-
-  const normalizedResult = normalizeDeleteResult(result);
-  assert.equal(refreshCalls, 1, 'deleteBlogPost should refresh Netlify Identity before using Git Gateway');
-  assert.deepEqual(
-    fetchCalls.map(getCallSummary),
-    [
-      'GET /.netlify/git/github/contents/src/content/blog/mi-post.md',
-      'DELETE /.netlify/git/github/contents/src/content/blog/mi-post.md',
-      'GET /.netlify/git/github/contents/public/images/blog/mi-post.webp',
-      'DELETE /.netlify/git/github/contents/public/images/blog/mi-post.webp',
-    ],
-    'post deletion should remove markdown first, then clean up the owned featured image',
-  );
-  assert.ok(
-    fetchCalls.every((call) => String(call.headers.Authorization ?? '').includes('fresh-delete-token')),
-    'delete requests should use the refreshed Identity token',
-  );
-
-  const markdownDeletePayload = JSON.parse(String(fetchCalls[1].body));
-  assert.equal(markdownDeletePayload.sha, 'markdown-sha', 'markdown deletes should include the fetched sha');
-  assertNonEmptyRepositoryMessage(markdownDeletePayload, 'markdown deletes should include a commit message');
-
-  const imageDeletePayload = JSON.parse(String(fetchCalls[3].body));
-  assert.equal(imageDeletePayload.sha, 'image-sha', 'owned image deletes should include the fetched sha');
-  assertNonEmptyRepositoryMessage(imageDeletePayload, 'owned image deletes should include a commit message');
-
-  assert.equal(normalizedResult.status, 'post-deleted', 'successful deletes should report a distinct post-deleted result');
-});
-
-test('deleteBlogPost treats a missing owned image as a successful post deletion and skips shared image cleanup entirely', async () => {
-  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
-  const store = createAdminStore(AdminStore);
-
-  assert.equal(typeof store.deleteBlogPost, 'function', 'AdminStore should expose deleteBlogPost for the admin list');
-
-  const originalFetch = globalThis.fetch;
-  const fetchCalls = [];
-  globalThis.fetch = async (input, init = {}) => {
-    const call = {
-      method: init.method ?? 'GET',
-      url: String(input),
-      body: init.body ?? null,
-    };
-    fetchCalls.push(call);
-
-    if (call.method === 'GET' && call.url.includes('src/content/blog/mi-post.md')) {
-      return new Response(JSON.stringify({ sha: 'markdown-sha' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (call.method === 'DELETE' && call.url.includes('src/content/blog/mi-post.md')) {
-      return new Response(JSON.stringify({ commit: { sha: 'deleted-markdown-sha' } }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (call.method === 'GET' && call.url.includes('public/images/blog/mi-post.webp')) {
-      return new Response(JSON.stringify({ message: 'Not Found' }), {
-        status: 404,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  };
-
-  let missingOwnedImageResult;
-  let sharedImageResult;
-  try {
-    missingOwnedImageResult = await store.deleteBlogPost({
-      slug: 'mi-post',
-      image: '/images/blog/mi-post.webp',
-    });
-
-    sharedImageResult = await store.deleteBlogPost({
-      slug: 'mi-post',
-      image: '/images/shared/brand-banner.webp',
-    });
-  } finally {
-    globalThis.fetch = originalFetch;
-  }
-
-  assert.deepEqual(
-    fetchCalls.map(getCallSummary),
-    [
-      'GET /.netlify/git/github/contents/src/content/blog/mi-post.md',
-      'DELETE /.netlify/git/github/contents/src/content/blog/mi-post.md',
-      'GET /.netlify/git/github/contents/public/images/blog/mi-post.webp',
-      'GET /.netlify/git/github/contents/src/content/blog/mi-post.md',
-      'DELETE /.netlify/git/github/contents/src/content/blog/mi-post.md',
-    ],
-    'owned image cleanup should tolerate 404s, while shared image paths should be skipped entirely',
-  );
-  assert.equal(normalizeDeleteResult(missingOwnedImageResult).status, 'post-deleted');
-  assert.equal(normalizeDeleteResult(sharedImageResult).status, 'post-deleted');
-});
-
-test('deleteBlogPost returns a distinct Spanish partial-success result when image cleanup fails after the markdown deletion', async () => {
-  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
-  const store = createAdminStore(AdminStore);
-
-  assert.equal(typeof store.deleteBlogPost, 'function', 'AdminStore should expose deleteBlogPost for the admin list');
-
-  const originalFetch = globalThis.fetch;
-  const fetchCalls = [];
-  globalThis.fetch = async (input, init = {}) => {
-    const call = {
-      method: init.method ?? 'GET',
-      url: String(input),
-      body: init.body ?? null,
-    };
-    fetchCalls.push(call);
-
-    if (call.method === 'GET' && call.url.includes('src/content/blog/mi-post.md')) {
-      return new Response(JSON.stringify({ sha: 'markdown-sha' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (call.method === 'DELETE' && call.url.includes('src/content/blog/mi-post.md')) {
-      return new Response(JSON.stringify({ commit: { sha: 'deleted-markdown-sha' } }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (call.method === 'GET' && call.url.includes('public/images/blog/mi-post.webp')) {
-      return new Response(JSON.stringify({ sha: 'image-sha' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (call.method === 'DELETE' && call.url.includes('public/images/blog/mi-post.webp')) {
-      return new Response(JSON.stringify({ message: 'Image cleanup failed' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  };
-
-  let result;
-  try {
-    result = await store.deleteBlogPost({
-      slug: 'mi-post',
-      image: '/images/blog/mi-post.webp',
-    });
-  } finally {
-    globalThis.fetch = originalFetch;
-  }
-
-  const normalizedResult = normalizeDeleteResult(result);
-  assert.deepEqual(
-    fetchCalls.map(getCallSummary),
-    [
-      'GET /.netlify/git/github/contents/src/content/blog/mi-post.md',
-      'DELETE /.netlify/git/github/contents/src/content/blog/mi-post.md',
-      'GET /.netlify/git/github/contents/public/images/blog/mi-post.webp',
-      'DELETE /.netlify/git/github/contents/public/images/blog/mi-post.webp',
-    ],
-    'partial-success cleanup should still delete the markdown before attempting image cleanup',
-  );
-  assert.equal(
-    normalizedResult.status,
-    'image-cleanup-failed',
-    'image cleanup failures should report a distinct partial-success status instead of a total delete failure',
+  assert.match(
+    contentConfigSource,
+    /slug:\s*z\.string\(\)(?!\s*\.optional\(\))/,
+    'the blog schema should require a non-optional slug field shared across locale files',
   );
   assert.match(
-    normalizedResult.message,
-    /entrada|post/i,
-    'partial-success delete feedback should mention that the post was deleted',
-  );
-  assert.match(
-    normalizedResult.message,
-    /imagen|destacad/i,
-    'partial-success delete feedback should mention the image cleanup problem in Spanish',
+    contentConfigSource,
+    /translationKey:\s*z\.string\(\)(?!\s*\.optional\(\))/,
+    'the blog schema should require a non-optional translationKey field linking locale siblings',
   );
   assert.doesNotMatch(
-    normalizedResult.message,
-    /could not delete|failed to delete/i,
-    'partial-success delete feedback should stay localized instead of falling back to English total-failure copy',
+    contentConfigSource,
+    /translationKey:\s*z\.string\(\)\.optional\(\)/,
+    'translationKey should no longer be optional now that six-file admin grouping depends on it',
   );
 });
 
-test('admin blog index mounts one client-loaded AdminBlogList seeded with serialized posts and drops the static post loop', async () => {
-  const [indexSource, listSource] = await Promise.all([
-    readRequiredSource('src/pages/admin/blog/index.astro'),
-    readOptionalSource('src/components/admin/AdminBlogList.tsx'),
+test('every logical blog post is represented by six locale Markdown files sharing slug/translationKey/date/image at unique repository paths', async () => {
+  const files = await listBlogMarkdownFiles();
+  assert.ok(files.length > 0, 'src/content/blog should contain locale Markdown files for the multilingual model');
+
+  const uniquePaths = new Set(files.map((file) => file.relativePath));
+  assert.equal(uniquePaths.size, files.length, 'every locale Markdown file should live at a unique repository path');
+
+  const groups = new Map();
+  for (const file of files) {
+    const markdown = await readFile(file.absolutePath, 'utf8');
+    const frontmatter = parseFrontmatter(markdown);
+    assert.ok(frontmatter.translationKey, `${file.relativePath} should declare a translationKey linking its locale siblings`);
+    assert.ok(frontmatter.slug, `${file.relativePath} should declare the shared slug`);
+    assert.ok(frontmatter.lang, `${file.relativePath} should declare its own localized lang`);
+
+    const group = groups.get(frontmatter.translationKey) ?? [];
+    group.push({ ...frontmatter, path: file.relativePath });
+    groups.set(frontmatter.translationKey, group);
+  }
+
+  assert.ok(groups.size > 0, 'at least one logical post group should exist');
+
+  for (const [translationKey, group] of groups) {
+    assert.equal(group.length, 6, `logical post "${translationKey}" should have exactly six locale Markdown files`);
+
+    const langs = group.map((entry) => entry.lang).sort();
+    assert.deepEqual(langs, [...SIX_LOCALES].sort(), `logical post "${translationKey}" should cover all six supported locales exactly once`);
+
+    assert.equal(new Set(group.map((entry) => entry.slug)).size, 1, `logical post "${translationKey}" should share one slug across all locale files`);
+    assert.equal(new Set(group.map((entry) => entry.date)).size, 1, `logical post "${translationKey}" should share one date across all locale files`);
+    assert.equal(new Set(group.map((entry) => entry.image ?? '')).size, 1, `logical post "${translationKey}" should share one featured image across all locale files`);
+    assert.equal(new Set(group.map((entry) => entry.path)).size, 6, `logical post "${translationKey}" locale files should each live at a unique repository path`);
+  }
+});
+
+test('the initial mi-primer-post migration preserves the Spanish entry and Spanish-fallbacks the other five locales', async () => {
+  const files = await listBlogMarkdownFiles();
+  const migrated = [];
+
+  for (const file of files) {
+    const markdown = await readFile(file.absolutePath, 'utf8');
+    const frontmatter = parseFrontmatter(markdown);
+    if (frontmatter.slug === 'mi-primer-post') {
+      migrated.push({ ...frontmatter, path: file.relativePath, markdown });
+    }
+  }
+
+  assert.equal(migrated.length, 6, 'the mi-primer-post migration should produce six locale Markdown files');
+
+  const spanish = migrated.find((entry) => entry.lang === 'es');
+  assert.ok(spanish, 'the migrated group should keep a Spanish (es) locale file');
+  assert.equal(spanish.title, 'Mi primer post', 'the Spanish entry should preserve its original title');
+  assert.match(spanish.markdown, /Bienvenidos a mi blog/, 'the Spanish entry should preserve its original body content');
+
+  for (const lang of HIDDEN_LOCALES.concat('en', 'fr')) {
+    const entry = migrated.find((candidate) => candidate.lang === lang);
+    assert.ok(entry, `the migration should create a ${lang} locale file for mi-primer-post`);
+    assert.equal(entry.lang, lang, `the ${lang} locale file should declare its own lang even though the content is a fallback`);
+    assert.equal(entry.title, spanish.title, `${lang} should Spanish-fallback the title until translated`);
+    assert.equal(entry.description, spanish.description, `${lang} should Spanish-fallback the description until translated`);
+    assert.match(entry.markdown, /Bienvenidos a mi blog/, `${lang} should Spanish-fallback the body until translated`);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// BLOG HELPERS / PUBLIC ROUTES
+// ---------------------------------------------------------------------------
+
+test('groupBlogPostsForAdmin groups localized entries into one admin row per translationKey', async () => {
+  const blogModule = await importModule('src/lib/blog.ts');
+  assert.equal(
+    typeof blogModule.groupBlogPostsForAdmin,
+    'function',
+    'src/lib/blog.ts should export groupBlogPostsForAdmin(posts) for the grouped admin archive',
+  );
+
+  const posts = [
+    makeFakePost({ id: 'mi-post/es', slug: 'mi-post', translationKey: 'tk-1', lang: 'es', date: '2026-01-01', image: '/images/blog/mi-post.webp' }),
+    makeFakePost({ id: 'mi-post/en', slug: 'mi-post', translationKey: 'tk-1', lang: 'en', date: '2026-01-01', image: '/images/blog/mi-post.webp' }),
+    makeFakePost({ id: 'mi-post/fr', slug: 'mi-post', translationKey: 'tk-1', lang: 'fr', date: '2026-01-01', image: '/images/blog/mi-post.webp' }),
+    makeFakePost({ id: 'otro-post/es', slug: 'otro-post', translationKey: 'tk-2', lang: 'es', date: '2026-02-02' }),
+  ];
+
+  const groups = blogModule.groupBlogPostsForAdmin(posts);
+  assert.ok(Array.isArray(groups), 'groupBlogPostsForAdmin should return an array of admin rows');
+  assert.equal(groups.length, 2, 'groupBlogPostsForAdmin should return exactly one row per distinct translationKey');
+
+  const firstGroup = normalizeAdminGroup(groups.find((group) => (group?.translationKey ?? group?.key) === 'tk-1'));
+  assert.equal(firstGroup.slug, 'mi-post', 'the admin group should expose the shared slug');
+  assert.deepEqual(
+    Object.keys(firstGroup.locales).sort(),
+    ['en', 'es', 'fr'],
+    'the admin group should index every locale entry it was given',
+  );
+
+  const secondGroup = normalizeAdminGroup(groups.find((group) => (group?.translationKey ?? group?.key) === 'tk-2'));
+  assert.equal(secondGroup.slug, 'otro-post', 'a distinct logical post should produce a distinct admin row');
+});
+
+test('getBlogStaticPathsForLocale keys static params on the shared post.data.slug instead of the internal collection id', async () => {
+  const blogModule = await importModule('src/lib/blog.ts');
+  const posts = [
+    makeFakePost({ id: 'mi-post/es', slug: 'mi-post', translationKey: 'tk-1', lang: 'es', date: '2026-01-01' }),
+    makeFakePost({ id: 'otro-post/es', slug: 'otro-post', translationKey: 'tk-2', lang: 'es', date: '2026-02-02' }),
+  ];
+
+  const staticPaths = blogModule.getBlogStaticPathsForLocale(posts, 'es');
+  assert.equal(staticPaths.length, 2);
+  assert.deepEqual(
+    staticPaths.map((entry) => entry.params.slug).sort(),
+    ['mi-post', 'otro-post'],
+    'static paths should key the route param on the shared frontmatter slug',
+  );
+  assert.ok(
+    staticPaths.every((entry) => entry.params.slug !== entry.props.post.id),
+    'the slug route param should differ from the internal per-locale collection id',
+  );
+});
+
+test('BlogArticleLayout and BlogIndexPage build blog links from post.data.slug instead of the internal collection id', async () => {
+  const [articleLayoutSource, blogIndexSource] = await Promise.all([
+    readRequiredSource('src/components/BlogArticleLayout.astro'),
+    readRequiredSource('src/views/BlogIndexPage.astro'),
   ]);
 
-  assert.ok(listSource, 'src/components/admin/AdminBlogList.tsx should exist for the admin blog CRUD contract');
-  assert.match(indexSource, /import\s+AdminBlogList\s+from\s+['"].+AdminBlogList(?:\.tsx)?['"]/);
-  assert.equal(
-    countMatches(indexSource, /<AdminBlogList\b[^>]*client:load/g),
-    1,
-    'the admin blog index should mount exactly one client-loaded AdminBlogList',
-  );
-  assert.match(indexSource, /JSON\.stringify\(/, 'the admin blog index should serialize the server-fetched posts for the client list');
-  assert.match(
-    indexSource,
-    /<AdminBlogList\b[\s\S]*(posts|initialPosts|postsJson)=\{[A-Za-z_$][\w$]*\}/,
-    'the admin blog index should seed AdminBlogList with serialized post data',
-  );
-  assert.doesNotMatch(indexSource, /posts\.map\(/, 'the Astro page should stop rendering the post rows in a static loop');
+  for (const [label, source] of [
+    ['BlogArticleLayout', articleLayoutSource],
+    ['BlogIndexPage', blogIndexSource],
+  ]) {
+    assert.match(source, /\/blog\/\$\{[\w.]*\.data\.slug\}/, `${label} should build blog links from post.data.slug`);
+    assert.doesNotMatch(source, /\/blog\/\$\{[\w.]*\.id\}/, `${label} should stop linking blog posts by their internal collection id`);
+  }
+});
 
-  assert.match(listSource, />\s*Editar\s*</, 'AdminBlogList should render a Spanish edit action');
-  assert.match(listSource, />\s*Eliminar\s*</, 'AdminBlogList should render a Spanish delete action');
-  assert.match(listSource, /confirm\((['"`])(?:(?!\1).)*eliminar(?:(?!\1).)*\1\)/i, 'AdminBlogList should confirm deletions in Spanish');
-  assert.match(listSource, /deleteBlogPost/, 'AdminBlogList should call the store deleteBlogPost contract');
-  assert.match(listSource, /set[A-Za-z]*Error\(/, 'AdminBlogList should surface inline deletion errors');
-  assert.match(
-    listSource,
-    /set[A-Za-z]*Posts\(\(\w+\)\s*=>\s*\w+\.filter\(/,
-    'AdminBlogList should remove deleted rows from local state after a successful delete',
-  );
+test('getBlogAlternateLinksForPost groups siblings by translationKey and points every locale at the same shared slug', async () => {
+  const blogModule = await importModule('src/lib/blog.ts');
+  const posts = [
+    makeFakePost({ id: 'mi-post/es', slug: 'mi-post', translationKey: 'tk-1', lang: 'es', date: '2026-01-01' }),
+    makeFakePost({ id: 'mi-post/en', slug: 'mi-post', translationKey: 'tk-1', lang: 'en', date: '2026-01-01' }),
+    makeFakePost({ id: 'mi-post/fr', slug: 'mi-post', translationKey: 'tk-1', lang: 'fr', date: '2026-01-01' }),
+    makeFakePost({ id: 'otro-post/es', slug: 'otro-post', translationKey: 'tk-2', lang: 'es', date: '2026-02-02' }),
+  ];
 
-  const deleteHandlerWindow = extractWindowAround(listSource, 'deleteBlogPost');
-  const deleteCallIndex = deleteHandlerWindow.search(/await\s+store\.deleteBlogPost/);
-  const localRemovalIndex = deleteHandlerWindow.search(/set[A-Za-z]*Posts\(\(\w+\)\s*=>\s*\w+\.filter\(/);
-  assert.ok(deleteCallIndex > -1, 'AdminBlogList delete flow should await the store contract');
+  const alternates = blogModule.getBlogAlternateLinksForPost(posts, posts[0]);
+
+  assert.equal(alternates.es, '/blog/mi-post', 'the Spanish alternate should point at the shared slug');
+  assert.equal(alternates.en, '/en/blog/mi-post', 'the English alternate should point at the shared slug, not its own internal id');
+  assert.equal(alternates.fr, '/fr/blog/mi-post', 'the French alternate should point at the shared slug, not its own internal id');
+  assert.equal(alternates.de, undefined, 'locales without a translationKey sibling should not appear in the alternates map');
   assert.ok(
-    localRemovalIndex > deleteCallIndex,
-    'AdminBlogList should only remove the local row after the post deletion succeeds',
-  );
-});
-
-test('admin edit route exists, builds static paths for every post, and passes serializable edit data into BlogPostForm', async () => {
-  const editSource = await readOptionalSource('src/pages/admin/blog/edit/[slug].astro');
-
-  assert.ok(editSource, 'src/pages/admin/blog/edit/[slug].astro should exist for admin blog editing');
-  assert.match(editSource, /export\s+async\s+function\s+getStaticPaths\s*\(\)/, 'the edit route should define getStaticPaths');
-  assert.match(editSource, /getCollection\(\s*['"]blog['"]\s*\)/, 'the edit route should read the blog collection');
-  assert.match(
-    editSource,
-    /params:\s*\{\s*slug:\s*post\.id\s*\}/,
-    'getStaticPaths should create one edit route per blog slug',
-  );
-  assert.match(editSource, /slug:\s*post\.id/, 'the edit route should serialize the original slug into the form props');
-  assert.match(editSource, /title:\s*post\.data\.title/, 'the edit route should serialize the current title');
-  assert.match(editSource, /description:\s*post\.data\.description/, 'the edit route should serialize the current description');
-  assert.match(editSource, /date:\s*[\s\S]*post\.data\.date/, 'the edit route should serialize the current date');
-  assert.match(editSource, /tags:\s*post\.data\.tags/, 'the edit route should serialize the current tags');
-  assert.match(editSource, /lang:\s*post\.data\.lang/, 'the edit route should serialize the current language');
-  assert.match(editSource, /body:\s*(?:post\.body|body)/, 'the edit route should serialize the markdown body');
-  assert.match(editSource, /image:\s*post\.data\.image/, 'the edit route should serialize the featured image');
-  assert.match(
-    editSource,
-    /<BlogPostForm\b[\s\S]*client:load[\s\S]*mode=(?:["']edit["']|\{'edit'\})[\s\S]*initial(?:Post|Values)=\{/,
-    'the edit route should mount BlogPostForm in edit mode with serializable initial values',
-  );
-});
-
-test('BlogPostForm supports typed create/edit modes, prefilled edit state, fixed edit slugs, image keep-replace-remove controls, and create/update branching without failure resets', async () => {
-  const source = await readRequiredSource('src/components/admin/BlogPostForm.tsx');
-
-  assert.match(
-    source,
-    /mode:\s*['"]create['"]\s*\|\s*['"]edit['"]|type\s+\w+\s*=\s*\{[\s\S]*mode:\s*['"]create['"]\s*\|\s*['"]edit['"]/,
-    'BlogPostForm should type its create/edit modes explicitly',
-  );
-  assert.match(source, /initial(?:Post|Values)\??:/, 'BlogPostForm should accept serializable initial edit data');
-  assert.match(source, /slug:\s*string/, 'BlogPostForm edit data should include the original slug');
-  assert.match(source, /title:\s*string/, 'BlogPostForm edit data should include the current title');
-  assert.match(source, /description:\s*string/, 'BlogPostForm edit data should include the current description');
-  assert.match(source, /date:\s*string/, 'BlogPostForm edit data should include the current date');
-  assert.match(source, /tags:\s*(?:string\[\]|readonly string\[\])/, 'BlogPostForm edit data should include the current tags');
-  assert.match(source, /lang:\s*AdminBlogLang/, 'BlogPostForm edit data should keep admin locale typing');
-  assert.match(source, /body:\s*string/, 'BlogPostForm edit data should include the current body');
-  assert.match(source, /image\??:\s*string/, 'BlogPostForm edit data should include the current image path');
-
-  assert.match(source, /useState\(\(\)\s*=>\s*initial(?:Post|Values)\?\.title\s*\?\?/, 'edit mode should prefill the title');
-  assert.match(source, /useState\(\(\)\s*=>\s*initial(?:Post|Values)\?\.description\s*\?\?/, 'edit mode should prefill the description');
-  assert.match(source, /useState\(\(\)\s*=>\s*initial(?:Post|Values)\?\.date\s*\?\?/, 'edit mode should prefill the date');
-  assert.match(source, /useState\(\(\)\s*=>\s*initial(?:Post|Values)\?\.body\s*\?\?/, 'edit mode should prefill the body');
-  assert.match(
-    source,
-    /mode\s*===\s*['"]edit['"]\s*\?\s*initial(?:Post|Values)\.slug\s*:\s*slugify\(title\)/,
-    'edit mode should keep the original slug instead of regenerating it from the edited title',
-  );
-  assert.match(
-    source,
-    /readOnly=\{mode\s*===\s*['"]edit['"]\}/,
-    'the slug field should be fixed/read-only during editing',
-  );
-  assert.match(source, /removeImage/, 'BlogPostForm should track explicit image removal in edit mode');
-  assert.match(source, /featuredImageState/, 'BlogPostForm should keep replacement image state');
-  assert.match(source, /initial(?:Post|Values)\?\.image/, 'BlogPostForm should preserve the current image when no replacement is selected');
-  assert.match(source, /store\.createBlogPost/, 'create mode should still call createBlogPost');
-  assert.match(source, /store\.updateBlogPost/, 'edit mode should call updateBlogPost');
-  assert.match(
-    source,
-    /mode\s*===\s*['"]create['"]|if\s*\(\s*mode\s*===\s*['"]edit['"]\s*\)/,
-    'BlogPostForm submit handling should branch between create and edit mode',
-  );
-  assert.doesNotMatch(
-    source,
-    /catch\s*\([^)]*\)\s*\{[\s\S]{0,800}(?:setTitle\(''\)|setDescription\(''\)|setTags\(''\)|setBody\(|clearBlogImagePreviewState\()/s,
-    'BlogPostForm should not clear edit/create fields from the failure branch',
-  );
-  assert.doesNotMatch(
-    source,
-    /finally\s*\{[\s\S]{0,800}(?:setTitle\(''\)|setDescription\(''\)|setTags\(''\)|setBody\(|clearBlogImagePreviewState\()/s,
-    'BlogPostForm should not reset fields from finally before success is known',
+    Object.values(alternates).every((href) => !href.includes('otro-post')),
+    'alternates should never leak a different logical post\'s slug',
   );
 });
 
@@ -904,5 +458,688 @@ test('BlogIndexPage uses shouldShowBlogComingSoon with the localized post count 
     source,
     /archive\.length\s*>\s*0/,
     'BlogIndexPage should stop keying the coming-soon row off the archive array length alone',
+  );
+});
+
+// ---------------------------------------------------------------------------
+// STORE CRUD
+// ---------------------------------------------------------------------------
+
+test('createBlogPost validates required visible-locale translations from publicLanguagePicker before any repository write', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const store = createAdminStore(AdminStore);
+
+  assert.equal(typeof store.createBlogPost, 'function', 'AdminStore should expose createBlogPost for the create flow');
+  assert.deepEqual(
+    store.getPublicLanguagePicker(),
+    VISIBLE_LOCALES,
+    'this contract fixture should expose the default ES/EN/FR public picker used to derive required create panels',
+  );
+
+  const fetchCalls = [];
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input, init = {}) => {
+    fetchCalls.push({ method: init.method ?? 'GET', url: String(input) });
+    return new Response(JSON.stringify({ message: 'Unexpected network call' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+
+  try {
+    await assertRejectsWithMessage(
+      store.createBlogPost({
+        slug: 'mi-post',
+        date: '2026-08-26',
+        translations: {
+          es: { title: 'Título', description: 'Descripción', tags: ['seo'], body: '# Cuerpo' },
+          fr: { title: 'Titre', description: 'Description', tags: ['seo'], body: '# Corps' },
+        },
+      }),
+      [/obligatori|requerid|falta|required/i, /\ben\b/i],
+      'creating without every visible-locale translation (missing EN here) should reject before any write',
+    );
+
+    await assertRejectsWithMessage(
+      store.createBlogPost({
+        slug: 'mi-post',
+        date: '2026-08-26',
+        translations: makeTranslationsFixture({ en: { title: '   ' } }),
+      }),
+      [/obligatori|requerid|falta|required/i, /t[ií]tulo|title/i],
+      'a blank required field for a visible locale should reject before any write',
+    );
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.deepEqual(fetchCalls, [], 'invalid create payloads should fail before any Git Gateway write');
+});
+
+test('createBlogPost writes six locale Markdown files sharing slug/translationKey/date, Spanish-falling-back hidden DE/IT/CA content', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const store = createAdminStore(AdminStore, 'es', 'expired-token');
+
+  const previousWindow = globalThis.window;
+  const originalFetch = globalThis.fetch;
+  const fetchCalls = [];
+  let refreshCalls = 0;
+
+  globalThis.window = {
+    netlifyIdentity: {
+      currentUser: () => ({ id: 'editor' }),
+      refresh: async () => {
+        refreshCalls += 1;
+        return 'fresh-create-token';
+      },
+    },
+  };
+
+  const localePaths = getLocaleMarkdownPaths('mi-post');
+
+  globalThis.fetch = async (input, init = {}) => {
+    const call = { method: init.method ?? 'GET', url: String(input), headers: init.headers ?? {}, body: init.body ?? null };
+    fetchCalls.push(call);
+
+    for (const filePath of Object.values(localePaths)) {
+      if (call.url.includes(filePath)) {
+        if (call.method === 'GET') return new Response(JSON.stringify({ message: 'Not Found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+        if (call.method === 'PUT') return new Response(JSON.stringify({ content: { sha: 'new-sha' } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+
+    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  };
+
+  try {
+    await store.createBlogPost({
+      slug: 'mi-post',
+      date: '2026-08-26',
+      translations: makeTranslationsFixture(),
+    });
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (previousWindow === undefined) delete globalThis.window; else globalThis.window = previousWindow;
+  }
+
+  assert.equal(refreshCalls, 1, 'creating a post should refresh Netlify Identity before any Git Gateway write');
+  assert.ok(
+    fetchCalls.every((call) => String(call.headers.Authorization ?? '').includes('fresh-create-token')),
+    'create requests should use the refreshed Identity token',
+  );
+
+  const putCalls = fetchCalls.filter((call) => call.method === 'PUT');
+  assert.equal(putCalls.length, 6, 'createBlogPost should write exactly six locale Markdown files');
+
+  const payloadsByLocale = {};
+  for (const [locale, filePath] of Object.entries(localePaths)) {
+    const putCall = putCalls.find((call) => call.url.includes(filePath));
+    assert.ok(putCall, `createBlogPost should write the ${locale} locale Markdown file at ${filePath}`);
+    payloadsByLocale[locale] = decodeRepositoryPayload(putCall.body);
+    assertNonEmptyRepositoryMessage(payloadsByLocale[locale], `${locale} markdown create should include a commit message`);
+  }
+
+  assert.equal(new Set(Object.values(payloadsByLocale).map((payload) => getFrontmatterField(payload.markdown, 'slug'))).size, 1, 'every locale file should share the same slug');
+  assert.equal(new Set(Object.values(payloadsByLocale).map((payload) => getFrontmatterField(payload.markdown, 'translationKey'))).size, 1, 'every locale file should share the same translationKey');
+  assert.equal(new Set(Object.values(payloadsByLocale).map((payload) => getFrontmatterField(payload.markdown, 'date'))).size, 1, 'every locale file should share the same date');
+
+  const translations = makeTranslationsFixture();
+  for (const locale of VISIBLE_LOCALES) {
+    assertMarkdownFrontmatter(payloadsByLocale[locale].markdown, { ...translations[locale], lang: locale });
+  }
+
+  for (const hiddenLocale of HIDDEN_LOCALES) {
+    assertMarkdownFrontmatter(payloadsByLocale[hiddenLocale].markdown, {
+      title: translations.es.title,
+      description: translations.es.description,
+      tags: translations.es.tags,
+      body: translations.es.body,
+      lang: hiddenLocale,
+    });
+  }
+});
+
+test('createBlogPost uploads the shared featured image once before any locale Markdown writes', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const store = createAdminStore(AdminStore);
+
+  const localePaths = getLocaleMarkdownPaths('mi-post');
+  const { repositoryPath: imagePath, publicPath: imagePublicPath } = getSharedImagePaths('mi-post', 'png');
+
+  const originalFetch = globalThis.fetch;
+  const fetchCalls = [];
+
+  globalThis.fetch = async (input, init = {}) => {
+    const call = { method: init.method ?? 'GET', url: String(input), body: init.body ?? null };
+    fetchCalls.push(call);
+
+    if (call.url.includes(imagePath)) {
+      if (call.method === 'GET') return new Response(JSON.stringify({ message: 'Not Found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+      if (call.method === 'PUT') return new Response(JSON.stringify({ content: { sha: 'image-sha' } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    for (const filePath of Object.values(localePaths)) {
+      if (call.url.includes(filePath)) {
+        if (call.method === 'GET') return new Response(JSON.stringify({ message: 'Not Found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+        if (call.method === 'PUT') return new Response(JSON.stringify({ content: { sha: 'markdown-sha' } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+
+    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  };
+
+  try {
+    await store.createBlogPost({
+      slug: 'mi-post',
+      date: '2026-08-26',
+      translations: makeTranslationsFixture(),
+      featuredImage: new File(['image-bytes'], 'mi-post.png', { type: 'image/png' }),
+    });
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  const sequence = fetchCalls.map(getCallSummary);
+  const imagePutIndex = sequence.indexOf(`PUT /.netlify/git/github/contents/${imagePath}`);
+  assert.ok(imagePutIndex > -1, 'creating with a featured image should upload the shared image');
+
+  for (const filePath of Object.values(localePaths)) {
+    const markdownPutIndex = sequence.indexOf(`PUT /.netlify/git/github/contents/${filePath}`);
+    assert.ok(markdownPutIndex > imagePutIndex, `the ${filePath} write should happen after the shared image upload`);
+  }
+
+  const putCalls = fetchCalls.filter((call) => call.method === 'PUT' && Object.values(localePaths).some((filePath) => call.url.includes(filePath)));
+  for (const putCall of putCalls) {
+    const payload = decodeRepositoryPayload(putCall.body);
+    assertMarkdownFrontmatter(payload.markdown, { image: imagePublicPath });
+  }
+});
+
+test('updateBlogPost upserts every locale file with its own current sha, applies submitted visible translations and shared date/image updates, and preserves untouched hidden-locale content', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const store = createAdminStore(AdminStore, 'es', 'expired-token');
+
+  assert.equal(typeof store.updateBlogPost, 'function', 'AdminStore should expose updateBlogPost for the edit flow');
+
+  const previousWindow = globalThis.window;
+  const originalFetch = globalThis.fetch;
+  const fetchCalls = [];
+  let refreshCalls = 0;
+
+  globalThis.window = {
+    netlifyIdentity: {
+      currentUser: () => ({ id: 'editor' }),
+      refresh: async () => {
+        refreshCalls += 1;
+        return 'fresh-update-token';
+      },
+    },
+  };
+
+  const localePaths = getLocaleMarkdownPaths('mi-post');
+  const shaByLocale = { es: 'es-sha', en: 'en-sha', fr: 'fr-sha', de: 'de-sha', it: 'it-sha', ca: 'ca-sha' };
+  const previousFrontmatterFixture = {
+    slug: 'mi-post',
+    translationKey: 'tk-mi-post',
+    date: '2026-01-01',
+    image: '/images/blog/mi-post.webp',
+    title: 'Título ES',
+    description: 'Descripción ES',
+    tags: ['seo'],
+    body: '# Cuerpo ES',
+  };
+
+  globalThis.fetch = async (input, init = {}) => {
+    const call = { method: init.method ?? 'GET', url: String(input), headers: init.headers ?? {}, body: init.body ?? null };
+    fetchCalls.push(call);
+
+    for (const [locale, filePath] of Object.entries(localePaths)) {
+      if (!call.url.includes(filePath)) continue;
+
+      if (call.method === 'GET') {
+        const existingMarkdown = buildFrontmatterFixture({ ...previousFrontmatterFixture, lang: locale });
+        return new Response(JSON.stringify({
+          sha: shaByLocale[locale],
+          content: Buffer.from(existingMarkdown, 'utf8').toString('base64'),
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+
+      if (call.method === 'PUT') {
+        return new Response(JSON.stringify({ content: { sha: `${locale}-updated-sha` } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+
+    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  };
+
+  const updatedTranslations = {
+    es: { title: 'Título ES actualizado', description: 'Descripción ES actualizada', tags: ['seo', 'ugc'], body: '# Cuerpo ES actualizado' },
+    en: { title: 'Updated Title EN', description: 'Updated Description EN', tags: ['seo', 'ugc'], body: '# Updated Body EN' },
+    fr: { title: 'Titre FR mis à jour', description: 'Description FR mise à jour', tags: ['seo', 'ugc'], body: '# Corps FR mis à jour' },
+  };
+
+  try {
+    await store.updateBlogPost({
+      slug: 'mi-post',
+      date: '2026-09-01',
+      currentImage: '/images/blog/mi-post.webp',
+      translations: updatedTranslations,
+    });
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (previousWindow === undefined) delete globalThis.window; else globalThis.window = previousWindow;
+  }
+
+  assert.equal(refreshCalls, 1, 'editing should refresh Netlify Identity before touching Git Gateway');
+  assert.ok(
+    fetchCalls.every((call) => String(call.headers.Authorization ?? '').includes('fresh-update-token')),
+    'update requests should use the refreshed Identity token',
+  );
+
+  const putCalls = fetchCalls.filter((call) => call.method === 'PUT');
+  assert.equal(putCalls.length, 6, 'updateBlogPost should upsert all six locale Markdown files, not just the submitted ones');
+
+  for (const [locale, filePath] of Object.entries(localePaths)) {
+    const getCall = fetchCalls.find((call) => call.method === 'GET' && call.url.includes(filePath));
+    const putCall = putCalls.find((call) => call.url.includes(filePath));
+    assert.ok(getCall, `updateBlogPost should read the current sha for the ${locale} locale file`);
+    assert.ok(putCall, `updateBlogPost should upsert the ${locale} locale file`);
+
+    const payload = decodeRepositoryPayload(putCall.body);
+    assert.equal(payload.sha, shaByLocale[locale], `the ${locale} locale upsert should use its own freshly-fetched sha`);
+    assertMarkdownFrontmatter(payload.markdown, { slug: 'mi-post', date: '2026-09-01', image: '/images/blog/mi-post.webp', lang: locale });
+  }
+
+  for (const locale of VISIBLE_LOCALES) {
+    const putCall = putCalls.find((call) => call.url.includes(localePaths[locale]));
+    assertMarkdownFrontmatter(decodeRepositoryPayload(putCall.body).markdown, updatedTranslations[locale]);
+  }
+
+  for (const hiddenLocale of HIDDEN_LOCALES) {
+    const putCall = putCalls.find((call) => call.url.includes(localePaths[hiddenLocale]));
+    assertMarkdownFrontmatter(decodeRepositoryPayload(putCall.body).markdown, {
+      title: previousFrontmatterFixture.title,
+      description: previousFrontmatterFixture.description,
+      tags: previousFrontmatterFixture.tags,
+      body: previousFrontmatterFixture.body,
+    });
+  }
+
+  const slugSegments = new Set(
+    putCalls.map((call) => call.url.replace(/^.*\/contents\//, '').split('/').slice(0, -1).join('/')),
+  );
+  assert.equal(slugSegments.size, 1, 'every upserted locale path should live under the same fixed slug');
+  assert.ok([...slugSegments][0].includes('mi-post'), 'the slug directory should remain fixed to the original slug during edit');
+});
+
+test('updateBlogPost uploads a replacement shared image before any locale writes, and re-running the same update stays retry-safe by upserting the already-uploaded image', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const store = createAdminStore(AdminStore);
+
+  const localePaths = getLocaleMarkdownPaths('mi-post');
+  const { repositoryPath: imagePath } = getSharedImagePaths('mi-post', 'png');
+
+  const originalFetch = globalThis.fetch;
+  const fetchCalls = [];
+  let imageSha = null;
+
+  globalThis.fetch = async (input, init = {}) => {
+    const call = { method: init.method ?? 'GET', url: String(input), body: init.body ?? null };
+    fetchCalls.push(call);
+
+    if (call.url.includes(imagePath)) {
+      if (call.method === 'GET') {
+        return imageSha
+          ? new Response(JSON.stringify({ sha: imageSha }), { status: 200, headers: { 'Content-Type': 'application/json' } })
+          : new Response(JSON.stringify({ message: 'Not Found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+      }
+      if (call.method === 'PUT') {
+        imageSha = 'image-sha-after-upload';
+        return new Response(JSON.stringify({ content: { sha: imageSha } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+
+    for (const filePath of Object.values(localePaths)) {
+      if (call.url.includes(filePath)) {
+        if (call.method === 'GET') return new Response(JSON.stringify({ sha: `${filePath}-sha` }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        if (call.method === 'PUT') return new Response(JSON.stringify({ content: { sha: `${filePath}-updated-sha` } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+
+    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  };
+
+  const performUpdate = () => store.updateBlogPost({
+    slug: 'mi-post',
+    date: '2026-08-26',
+    currentImage: '/images/blog/mi-post.webp',
+    featuredImage: new File(['replacement'], 'mi-post.png', { type: 'image/png' }),
+    translations: makeTranslationsFixture(),
+  });
+
+  try {
+    await performUpdate();
+    const firstCallCount = fetchCalls.length;
+    await performUpdate();
+    const secondBatch = fetchCalls.slice(firstCallCount);
+
+    const firstSequence = fetchCalls.slice(0, firstCallCount).map(getCallSummary);
+    const firstImagePutIndex = firstSequence.indexOf(`PUT /.netlify/git/github/contents/${imagePath}`);
+    assert.ok(firstImagePutIndex > -1, 'the first update should upload the replacement image');
+    for (const filePath of Object.values(localePaths)) {
+      const markdownPutIndex = firstSequence.indexOf(`PUT /.netlify/git/github/contents/${filePath}`);
+      assert.ok(markdownPutIndex > firstImagePutIndex, `the ${filePath} write should happen after the image upload on the first call`);
+    }
+
+    const secondImageGet = secondBatch.find((call) => call.method === 'GET' && call.url.includes(imagePath));
+    const secondImagePut = secondBatch.find((call) => call.method === 'PUT' && call.url.includes(imagePath));
+    assert.ok(secondImageGet, 'retrying the same update should re-check the image sha instead of assuming the path is free');
+    assert.ok(secondImagePut, 'retrying the same update should still upsert the shared image');
+
+    const secondImagePayload = decodeRepositoryPayload(secondImagePut.body);
+    assert.equal(
+      secondImagePayload.sha,
+      'image-sha-after-upload',
+      'retrying the update should upsert the existing image using its current sha instead of erroring as a duplicate create',
+    );
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test('updateBlogPost removing the shared image clears the image frontmatter on every locale file and only deletes the previously owned asset after all six locale writes succeed', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const store = createAdminStore(AdminStore);
+
+  const localePaths = getLocaleMarkdownPaths('mi-post');
+  const { repositoryPath: imagePath } = getSharedImagePaths('mi-post', 'webp');
+
+  const originalFetch = globalThis.fetch;
+  const fetchCalls = [];
+
+  globalThis.fetch = async (input, init = {}) => {
+    const call = { method: init.method ?? 'GET', url: String(input), body: init.body ?? null };
+    fetchCalls.push(call);
+
+    for (const filePath of Object.values(localePaths)) {
+      if (call.url.includes(filePath)) {
+        if (call.method === 'GET') return new Response(JSON.stringify({ sha: `${filePath}-sha` }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        if (call.method === 'PUT') return new Response(JSON.stringify({ content: { sha: `${filePath}-updated-sha` } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+
+    if (call.url.includes(imagePath)) {
+      if (call.method === 'GET') return new Response(JSON.stringify({ sha: 'owned-image-sha' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      if (call.method === 'DELETE') return new Response(JSON.stringify({ commit: { sha: 'deleted-image-sha' } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  };
+
+  try {
+    await store.updateBlogPost({
+      slug: 'mi-post',
+      date: '2026-08-26',
+      currentImage: '/images/blog/mi-post.webp',
+      removeImage: true,
+      translations: makeTranslationsFixture(),
+    });
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  for (const filePath of Object.values(localePaths)) {
+    const putCall = fetchCalls.find((call) => call.method === 'PUT' && call.url.includes(filePath));
+    assert.ok(putCall, `updateBlogPost should still upsert ${filePath} when removing the shared image`);
+    assertMarkdownFrontmatter(decodeRepositoryPayload(putCall.body).markdown, { image: null });
+  }
+
+  const sequence = fetchCalls.map(getCallSummary);
+  const lastMarkdownPutIndex = Math.max(
+    ...Object.values(localePaths).map((filePath) => sequence.indexOf(`PUT /.netlify/git/github/contents/${filePath}`)),
+  );
+  const imageDeleteIndex = sequence.indexOf(`DELETE /.netlify/git/github/contents/${imagePath}`);
+  assert.ok(imageDeleteIndex > -1, 'removing the shared image should delete the previously owned asset');
+  assert.ok(imageDeleteIndex > lastMarkdownPutIndex, 'the owned image should only be deleted after every locale Markdown file is rewritten without it');
+});
+
+test('deleteBlogPost refreshes Identity, deletes all six locale Markdown files, then deletes the owned shared image', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const store = createAdminStore(AdminStore, 'es', 'expired-token');
+
+  assert.equal(typeof store.deleteBlogPost, 'function', 'AdminStore should expose deleteBlogPost for the admin list');
+
+  const previousWindow = globalThis.window;
+  const originalFetch = globalThis.fetch;
+  const fetchCalls = [];
+  let refreshCalls = 0;
+
+  globalThis.window = {
+    netlifyIdentity: {
+      currentUser: () => ({ id: 'editor' }),
+      refresh: async () => {
+        refreshCalls += 1;
+        return 'fresh-delete-token';
+      },
+    },
+  };
+
+  const localePaths = getLocaleMarkdownPaths('mi-post');
+  const { repositoryPath: imagePath } = getSharedImagePaths('mi-post', 'webp');
+
+  globalThis.fetch = async (input, init = {}) => {
+    const call = { method: init.method ?? 'GET', url: String(input), headers: init.headers ?? {}, body: init.body ?? null };
+    fetchCalls.push(call);
+
+    for (const filePath of Object.values(localePaths)) {
+      if (call.url.includes(filePath)) {
+        if (call.method === 'GET') return new Response(JSON.stringify({ sha: `${filePath}-sha` }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        if (call.method === 'DELETE') return new Response(JSON.stringify({ commit: { sha: 'deleted' } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+
+    if (call.url.includes(imagePath)) {
+      if (call.method === 'GET') return new Response(JSON.stringify({ sha: 'image-sha' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      if (call.method === 'DELETE') return new Response(JSON.stringify({ commit: { sha: 'deleted-image' } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  };
+
+  let result;
+  try {
+    result = await store.deleteBlogPost({ slug: 'mi-post', image: '/images/blog/mi-post.webp' });
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (previousWindow === undefined) delete globalThis.window; else globalThis.window = previousWindow;
+  }
+
+  assert.equal(refreshCalls, 1, 'deleteBlogPost should refresh Netlify Identity before using Git Gateway');
+  assert.ok(
+    fetchCalls.every((call) => String(call.headers.Authorization ?? '').includes('fresh-delete-token')),
+    'delete requests should use the refreshed Identity token',
+  );
+
+  const sequence = fetchCalls.map(getCallSummary);
+  for (const filePath of Object.values(localePaths)) {
+    assert.ok(
+      sequence.includes(`DELETE /.netlify/git/github/contents/${filePath}`),
+      `deleteBlogPost should delete the locale file at ${filePath}`,
+    );
+  }
+
+  const lastLocaleDeleteIndex = Math.max(
+    ...Object.values(localePaths).map((filePath) => sequence.indexOf(`DELETE /.netlify/git/github/contents/${filePath}`)),
+  );
+  const imageDeleteIndex = sequence.indexOf(`DELETE /.netlify/git/github/contents/${imagePath}`);
+  assert.ok(imageDeleteIndex > lastLocaleDeleteIndex, 'the shared image should only be deleted after every locale Markdown file is deleted');
+
+  assert.equal(normalizeDeleteResult(result).status, 'post-deleted', 'a fully successful delete should report the post-deleted status');
+});
+
+test('deleteBlogPost reports the remaining locale paths and skips image cleanup when a locale deletion fails partway through', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const store = createAdminStore(AdminStore);
+
+  const localePaths = getLocaleMarkdownPaths('mi-post');
+  const { repositoryPath: imagePath } = getSharedImagePaths('mi-post', 'webp');
+
+  const originalFetch = globalThis.fetch;
+  const fetchCalls = [];
+
+  globalThis.fetch = async (input, init = {}) => {
+    const call = { method: init.method ?? 'GET', url: String(input), body: init.body ?? null };
+    fetchCalls.push(call);
+
+    if (call.url.includes(localePaths.fr) && call.method === 'DELETE') {
+      return new Response(JSON.stringify({ message: 'Locale delete failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    for (const filePath of Object.values(localePaths)) {
+      if (call.url.includes(filePath)) {
+        if (call.method === 'GET') return new Response(JSON.stringify({ sha: `${filePath}-sha` }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        if (call.method === 'DELETE') return new Response(JSON.stringify({ commit: { sha: 'deleted' } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+
+    if (call.url.includes(imagePath)) {
+      return new Response(JSON.stringify({ commit: { sha: 'deleted-image' } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  };
+
+  let result;
+  try {
+    result = await store.deleteBlogPost({ slug: 'mi-post', image: '/images/blog/mi-post.webp' });
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  const normalized = normalizeDeleteResult(result);
+  assert.notEqual(normalized.status, 'post-deleted', 'a partial locale-delete failure should not report the full-success status');
+  assert.ok(
+    normalized.remainingPaths.some((remainingPath) => remainingPath.includes(localePaths.fr)),
+    'the partial-failure result should surface the still-remaining fr locale path',
+  );
+
+  const sequence = fetchCalls.map(getCallSummary);
+  assert.equal(
+    sequence.includes(`DELETE /.netlify/git/github/contents/${imagePath}`),
+    false,
+    'image cleanup should be skipped until every locale Markdown file has been deleted',
+  );
+});
+
+// ---------------------------------------------------------------------------
+// ADMIN UI
+// ---------------------------------------------------------------------------
+
+test('admin blog index mounts one grouped, client-loaded AdminBlogList row per translationKey and drops the static per-file loop', async () => {
+  const [indexSource, listSource] = await Promise.all([
+    readRequiredSource('src/pages/admin/blog/index.astro'),
+    readOptionalSource('src/components/admin/AdminBlogList.tsx'),
+  ]);
+
+  assert.ok(listSource, 'src/components/admin/AdminBlogList.tsx should exist for the grouped admin blog archive');
+  assert.match(indexSource, /import\s+AdminBlogList\s+from\s+['"].+AdminBlogList(?:\.tsx)?['"]/);
+  assert.equal(
+    countMatches(indexSource, /<AdminBlogList\b[^>]*client:load/g),
+    1,
+    'the admin blog index should mount exactly one client-loaded AdminBlogList',
+  );
+  assert.match(
+    indexSource,
+    /groupBlogPostsForAdmin\(/,
+    'the admin index should group the fetched posts by translationKey before serializing them into AdminBlogList',
+  );
+  assert.match(indexSource, /JSON\.stringify\(/, 'the admin blog index should serialize the grouped posts for the client list');
+  assert.doesNotMatch(indexSource, /posts\.map\(/, 'the Astro page should stop rendering post rows in a static per-file loop');
+
+  assert.match(listSource, /translationKey/, 'AdminBlogList should key its rows on translationKey');
+  assert.match(listSource, />\s*Editar\s*</, 'AdminBlogList should render a Spanish edit action');
+  assert.match(listSource, />\s*Eliminar\s*</, 'AdminBlogList should render a Spanish delete action');
+  assert.match(listSource, /confirm\((['"`])(?:(?!\1).)*eliminar(?:(?!\1).)*\1\)/i, 'AdminBlogList should confirm deletions in Spanish');
+  assert.match(listSource, /deleteBlogPost/, 'AdminBlogList should call the store deleteBlogPost contract');
+  assert.match(listSource, /set[A-Za-z]*Error\(/, 'AdminBlogList should surface inline deletion errors');
+  assert.match(
+    listSource,
+    /set[A-Za-z]*Posts\(\(\w+\)\s*=>\s*\w+\.filter\(/,
+    'AdminBlogList should remove a fully-deleted group row from local state',
+  );
+
+  const deleteHandlerWindow = extractWindowAround(listSource, 'deleteBlogPost');
+  const deleteCallIndex = deleteHandlerWindow.search(/await\s+store\.deleteBlogPost/);
+  const localRemovalIndex = deleteHandlerWindow.search(/set[A-Za-z]*Posts\(\(\w+\)\s*=>\s*\w+\.filter\(/);
+  assert.ok(deleteCallIndex > -1, 'AdminBlogList delete flow should await the store contract');
+  assert.ok(localRemovalIndex > deleteCallIndex, 'AdminBlogList should only remove the local row after the delete call resolves');
+  assert.match(
+    deleteHandlerWindow,
+    /post-deleted|remainingPaths|status/i,
+    'AdminBlogList should branch on the delete result status so a partial locale-delete failure keeps the row visible instead of always clearing it',
+  );
+});
+
+test('BlogPostForm renders one panel per publicLanguagePicker locale, requiring title/description/tags/body per visible locale with shared slug/date/image controls', async () => {
+  const source = await readRequiredSource('src/components/admin/BlogPostForm.tsx');
+
+  assert.match(
+    source,
+    /mode:\s*['"]create['"]\s*\|\s*['"]edit['"]|type\s+\w+\s*=\s*\{[\s\S]*mode:\s*['"]create['"]\s*\|\s*['"]edit['"]/,
+    'BlogPostForm should type its create/edit modes explicitly',
+  );
+  assert.match(
+    source,
+    /getPublicLanguagePicker\(\)|store\.getPublicLanguagePicker/,
+    'BlogPostForm should derive its required translation panels from the public language picker instead of a fixed locale list',
+  );
+  assert.match(source, /translations/, 'BlogPostForm should keep a translations map keyed by locale');
+  assert.match(source, /slug:\s*string/, 'BlogPostForm should keep the shared slug typed');
+  assert.match(source, /date:\s*string/, 'BlogPostForm should keep the shared date typed');
+  assert.match(source, /image\??:\s*string/, 'BlogPostForm should keep the shared image typed');
+  assert.match(
+    source,
+    /readOnly=\{mode\s*===\s*['"]edit['"]\}/,
+    'the shared slug field should be fixed/read-only during editing',
+  );
+  assert.match(source, /removeImage/, 'BlogPostForm should track explicit shared-image removal');
+  assert.match(source, /featuredImageState/, 'BlogPostForm should keep the shared replacement image state');
+  assert.match(source, /store\.createBlogPost/, 'create mode should call createBlogPost with the translations map');
+  assert.match(source, /store\.updateBlogPost/, 'edit mode should call updateBlogPost with the translations map');
+  assert.match(
+    source,
+    /mode\s*===\s*['"]create['"]|if\s*\(\s*mode\s*===\s*['"]edit['"]\s*\)/,
+    'BlogPostForm submit handling should branch between create and edit mode',
+  );
+});
+
+test('the admin blog edit route is keyed by translationKey, builds one static path per logical post, and serializes every locale translation into BlogPostForm', async () => {
+  const editSource = await readOptionalSource('src/pages/admin/blog/edit/[translationKey].astro');
+
+  assert.ok(editSource, 'src/pages/admin/blog/edit/[translationKey].astro should exist for the grouped admin blog editor');
+  assert.match(editSource, /export\s+async\s+function\s+getStaticPaths\s*\(\)/, 'the edit route should define getStaticPaths');
+  assert.match(editSource, /getCollection\(\s*['"]blog['"]\s*\)/, 'the edit route should read the blog collection');
+  assert.match(
+    editSource,
+    /groupBlogPostsForAdmin\(/,
+    'the edit route should build one static path per logical post using the shared admin grouping helper',
+  );
+  assert.match(
+    editSource,
+    /params:\s*\{\s*translationKey:/,
+    'getStaticPaths should key each edit route on translationKey instead of a single locale slug',
+  );
+  assert.match(editSource, /slug:\s*/, 'the edit route should serialize the shared slug into the form props');
+  assert.match(editSource, /date:\s*/, 'the edit route should serialize the shared date into the form props');
+  assert.match(editSource, /image:\s*/, 'the edit route should serialize the shared image into the form props');
+  assert.match(
+    editSource,
+    /translations:\s*/,
+    'the edit route should serialize a translations map covering every locale (including hidden ones) into the form props',
+  );
+  assert.match(
+    editSource,
+    /<BlogPostForm\b[\s\S]*client:load[\s\S]*mode=(?:["']edit["']|\{'edit'\})[\s\S]*initial(?:Post|Values)=\{/,
+    'the edit route should mount BlogPostForm in edit mode with serializable initial values',
   );
 });
