@@ -123,6 +123,7 @@ export default function BlogPostForm({ mode, visibleLocales: initialVisibleLocal
   });
 
   const [date, setDate] = useState(() => (mode === 'edit' && initialPost ? initialPost.date : getDefaultDate()));
+  const [currentImage, setCurrentImage] = useState<string | undefined>(() => (mode === 'edit' && initialPost ? initialPost.image : undefined));
   const [featuredImageState, setFeaturedImageState] = useState<BlogImagePreviewState>(emptyFeaturedImageState);
   const [removeImage, setRemoveImage] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -208,15 +209,18 @@ export default function BlogPostForm({ mode, visibleLocales: initialVisibleLocal
         setFeaturedImageState((currentState) => clearBlogImagePreviewState(currentState, revokePreviewUrl));
         setRemoveImage(false);
       } else {
-        const path = await store.updateBlogPost({
+        const result = await store.updateBlogPost({
           slug,
           date,
           translations: buildTranslationsPayload(translations),
           featuredImage: featuredImageState.file,
-          currentImage: initialPost?.image,
+          currentImage,
           removeImage,
         });
-        setSuccessPath(path);
+        setSuccessPath(result.translationKey);
+        setCurrentImage(result.image);
+        setFeaturedImageState((currentState) => clearBlogImagePreviewState(currentState, revokePreviewUrl));
+        setRemoveImage(false);
       }
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : (mode === 'edit' ? 'No se pudo actualizar la entrada.' : 'No se pudo crear la entrada.'));
@@ -225,7 +229,6 @@ export default function BlogPostForm({ mode, visibleLocales: initialVisibleLocal
     }
   };
 
-  const currentImage = mode === 'edit' ? initialPost?.image : undefined;
   const showCurrentImage = Boolean(currentImage) && !removeImage && !featuredImageState.previewUrl;
 
   return (

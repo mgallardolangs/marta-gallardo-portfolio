@@ -32,11 +32,14 @@ export default function AdminBlogList({ initialGroupsJson }: Props) {
   const [notices, setNotices] = useState<string[]>([]);
 
   const handleDelete = useCallback(async (group: AdminBlogListGroup) => {
+    if (pendingKey) return;
+
     const confirmed = window.confirm('¿Seguro que quieres eliminar esta entrada de blog en todos los idiomas? Esta acción no se puede deshacer.');
     if (!confirmed) return;
 
-    setPendingKey(group.translationKey);
-    setError((current) => ({ ...current, [group.translationKey]: '' }));
+    const lockedKey = group.translationKey;
+    setPendingKey(lockedKey);
+    setError((current) => ({ ...current, [lockedKey]: '' }));
 
     try {
       const result = await store.deleteBlogPost({
@@ -59,9 +62,9 @@ export default function AdminBlogList({ initialGroupsJson }: Props) {
         [group.translationKey]: deleteError instanceof Error ? deleteError.message : 'No se pudo eliminar la entrada.',
       }));
     } finally {
-      setPendingKey('');
+      setPendingKey((current) => (current === lockedKey ? '' : current));
     }
-  }, [store]);
+  }, [store, pendingKey]);
 
   if (posts.length === 0) {
     return <p className="border-b border-black/10 py-6 font-body text-sm text-ink-muted">No hay posts todavía.</p>;
@@ -107,7 +110,14 @@ export default function AdminBlogList({ initialGroupsJson }: Props) {
               {isDeleting ? (
                 <span className="text-ink-faint">Eliminando…</span>
               ) : (
-                <button type="button" onClick={() => void handleDelete(group)} className="border-b border-black/10 pb-1 text-ink transition hover:border-amaranth hover:text-amaranth">Eliminar</button>
+                <button
+                  type="button"
+                  onClick={() => void handleDelete(group)}
+                  disabled={pendingKey !== ''}
+                  className="border-b border-black/10 pb-1 text-ink transition hover:border-amaranth hover:text-amaranth disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Eliminar
+                </button>
               )}
             </div>
           </article>

@@ -1327,10 +1327,25 @@ test('updateBlogPost uploads a replacement shared image before any locale writes
   });
 
   try {
-    await performUpdate();
+    const firstResult = await performUpdate();
+    assert.equal(
+      typeof firstResult,
+      'object',
+      'updateBlogPost should resolve with a typed result object (not a bare translationKey string) so callers can read the authoritative next image path',
+    );
+    assert.equal(
+      firstResult.image,
+      imagePublicPath,
+      'updateBlogPost should report the newly-uploaded image\'s public path in its return value after a successful replace, so the edit form can update its own image state instead of trusting the stale initial prop',
+    );
     const firstCallCount = fetchCalls.length;
     const firstBatch = fetchCalls.slice(0, firstCallCount);
-    await performUpdate();
+    const secondResult = await performUpdate();
+    assert.equal(
+      secondResult.image,
+      imagePublicPath,
+      'a retried update with the same replacement image should keep reporting the same authoritative public path',
+    );
     const secondBatch = fetchCalls.slice(firstCallCount);
 
     const firstSequence = firstBatch.map(getCallSummary);
@@ -1496,8 +1511,9 @@ test('updateBlogPost removing the shared image clears the image frontmatter on e
     return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   };
 
+  let removalResult;
   try {
-    await store.updateBlogPost({
+    removalResult = await store.updateBlogPost({
       slug: 'mi-post',
       date: '2026-08-26',
       currentImage: '/images/blog/mi-post.webp',
@@ -1507,6 +1523,22 @@ test('updateBlogPost removing the shared image clears the image frontmatter on e
   } finally {
     globalThis.fetch = originalFetch;
   }
+
+  assert.equal(
+    typeof removalResult,
+    'object',
+    'updateBlogPost should resolve with a typed result object (not a bare translationKey string) so callers can read the authoritative next image path',
+  );
+  assert.equal(
+    removalResult.translationKey,
+    'tk-mi-post',
+    'the update result should still carry the shared translationKey alongside the authoritative image path',
+  );
+  assert.equal(
+    removalResult.image,
+    undefined,
+    'updateBlogPost should report no image (undefined) in its return value once the shared image is removed, so the caller can never resurrect the deleted previous path from stale local state',
+  );
 
   for (const filePath of Object.values(localePaths)) {
     const putCall = fetchCalls.find((call) => call.method === 'PUT' && call.url.includes(filePath));
@@ -2061,6 +2093,38 @@ test('admin blog index mounts one grouped, client-loaded AdminBlogList row per t
   );
 });
 
+test('AdminBlogList prevents overlapping deletes with a global pending lock: every row\'s delete control is disabled while one delete is in flight, the handler no-ops on stray clicks, and each finally can only release its own lock', async () => {
+  const listSource = await readRequiredSource('src/components/admin/AdminBlogList.tsx');
+
+  const handleDeleteWindow = extractWindowAround(listSource, 'const handleDelete');
+
+  assert.match(
+    handleDeleteWindow,
+    /if\s*\(\s*pendingKey\s*\)\s*return;/,
+    'handleDelete should no-op immediately whenever another delete is already pending, instead of allowing a second concurrent deleteBlogPost call to start',
+  );
+
+  const lockedKeyDeclaration = handleDeleteWindow.match(/const\s+(\w+)\s*=\s*group\.translationKey;/);
+  assert.ok(
+    lockedKeyDeclaration,
+    'handleDelete should capture its own operation key in a local constant before setting the pending lock',
+  );
+  const lockedKeyName = lockedKeyDeclaration[1];
+
+  assert.match(
+    handleDeleteWindow,
+    new RegExp(`finally\\s*\\{\\s*setPendingKey\\(\\s*\\(current\\)\\s*=>\\s*\\(current\\s*===\\s*${lockedKeyName}\\s*\\?\\s*''\\s*:\\s*current\\)\\s*\\)\\s*;?\\s*\\}`),
+    'the finally block should only clear pendingKey when it still equals this operation\'s own locked key, so one delete\'s cleanup can never clear a different, still-pending operation',
+  );
+
+  const eliminarButtonWindow = extractWindowAround(listSource, 'Eliminar', 400);
+  assert.match(
+    eliminarButtonWindow,
+    /disabled=\{pendingKey\s*!==\s*''\}/,
+    'every row\'s delete button should be disabled while any delete is pending (a global lock across rows), not only the row currently being deleted',
+  );
+});
+
 test('BlogPostForm renders one panel per publicLanguagePicker locale, requiring title/description/tags/body per visible locale with shared slug/date/image controls', async () => {
   const source = await readRequiredSource('src/components/admin/BlogPostForm.tsx');
 
@@ -2094,6 +2158,46 @@ test('BlogPostForm renders one panel per publicLanguagePicker locale, requiring 
   );
 });
 
+test('BlogPostForm keeps the current shared image as mutable React state driven by updateBlogPost\'s authoritative result, so a repeated edit never resubmits a replaced or removed image from the immutable initialPost prop, and a stale "Deshacer" cannot resurrect a deleted path', async () => {
+  const source = await readRequiredSource('src/components/admin/BlogPostForm.tsx');
+
+  assert.match(
+    source,
+    /const\s+\[currentImage,\s*setCurrentImage\]\s*=\s*useState/,
+    'currentImage should be mutable React state (useState), not a plain constant re-derived from the immutable initialPost prop on every render',
+  );
+
+  assert.doesNotMatch(
+    source,
+    /const\s+currentImage\s*=\s*mode\s*===\s*['"]edit['"]\s*\?\s*initialPost\?\.image\s*:\s*undefined/,
+    'currentImage must not be recomputed straight from the immutable initialPost prop on every render; it should track the authoritative value returned by updateBlogPost',
+  );
+
+  const submitWindow = extractWindowAround(source, 'store.updateBlogPost');
+  assert.match(
+    submitWindow,
+    /currentImage(?::\s*currentImage\b|,)/,
+    'the edit submit payload should send the current *state* image, not initialPost.image, so a second save after a prior replace/remove uses the freshest owned path',
+  );
+
+  const successWindow = extractWindowAround(source, 'setSuccessPath(');
+  assert.match(
+    successWindow,
+    /setCurrentImage\(/,
+    'a successful edit save should update the currentImage state from updateBlogPost\'s authoritative result, not leave it pinned to the original prop',
+  );
+  assert.match(
+    successWindow,
+    /setRemoveImage\(false\)/,
+    'a successful edit save should clear the pending-removal flag so a stale "Deshacer" control can never resurrect an already-deleted image path',
+  );
+  assert.match(
+    successWindow,
+    /setFeaturedImageState\(/,
+    'a successful edit save should clear the local replacement preview once the uploaded image becomes the authoritative current image',
+  );
+});
+
 test('the admin blog edit route is keyed by translationKey, builds one static path per logical post, and serializes every locale translation into BlogPostForm', async () => {
   const editSource = await readOptionalSource('src/pages/admin/blog/edit/[translationKey].astro');
 
@@ -2122,5 +2226,33 @@ test('the admin blog edit route is keyed by translationKey, builds one static pa
     editSource,
     /<BlogPostForm\b[\s\S]*client:load[\s\S]*mode=(?:["']edit["']|\{'edit'\})[\s\S]*initial(?:Post|Values)=\{/,
     'the edit route should mount BlogPostForm in edit mode with serializable initial values',
+  );
+
+  assert.match(
+    editSource,
+    /date:\s*group\.date\s*\?\s*new Date\(group\.date\)\.toISOString\(\)\.slice\(0,\s*10\)\s*:\s*''/,
+    'the edit route should normalize the shared date to a bare YYYY-MM-DD string (via .toISOString().slice(0, 10)), not a full ISO timestamp, so the native <input type="date"> accepts it',
+  );
+
+  assert.doesNotMatch(
+    editSource,
+    /date:\s*group\.date\s*\?\s*new Date\(group\.date\)\.toISOString\(\)\s*:\s*''/,
+    'the edit route must not serialize the full ISO timestamp (with a time component) as the shared date',
+  );
+});
+
+test('CHECK_DIST: the built admin blog edit route renders a bare YYYY-MM-DD value in the date input, not a full ISO timestamp', async (t) => {
+  if (process.env.CHECK_DIST !== '1') {
+    t.skip('Set CHECK_DIST=1 after npm run build to verify the built admin edit date input.');
+    return;
+  }
+
+  const html = await readFile(path.join(rootDir, 'dist/admin/blog/edit/mi-primer-post/index.html'), 'utf8');
+  const match = html.match(/id="blog-date"[^>]*\svalue="([^"]*)"/);
+  assert.ok(match, 'the built edit page should render the #blog-date input with a value attribute');
+  assert.match(
+    match[1],
+    /^\d{4}-\d{2}-\d{2}$/,
+    `the built date input value should be exactly YYYY-MM-DD (a valid HTML date input value), got ${JSON.stringify(match[1])}`,
   );
 });

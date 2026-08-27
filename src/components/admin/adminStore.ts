@@ -328,6 +328,17 @@ export type BlogPostUpdateInput = BlogPostCreateInput & {
   removeImage?: boolean;
 };
 
+/**
+ * The authoritative outcome of updateBlogPost: translationKey stays fixed for the
+ * logical post, while image reflects the actually-persisted shared image path after
+ * a replace, a removal (undefined), or an unchanged currentImage — callers should
+ * adopt this value as their new source of truth instead of trusting stale props.
+ */
+export type BlogPostUpdateResult = {
+  translationKey: string;
+  image?: string;
+};
+
 export type BlogPostDeleteInput = {
   slug: string;
   translationKey?: string;
@@ -1399,7 +1410,7 @@ export class AdminStore {
    * another slug's image), its cleanup is deferred until every locale file has been
    * rewritten successfully.
    */
-  async updateBlogPost(post: BlogPostUpdateInput): Promise<string> {
+  async updateBlogPost(post: BlogPostUpdateInput): Promise<BlogPostUpdateResult> {
     await this.refreshIdentityToken();
 
     if (!this.token) {
@@ -1469,7 +1480,7 @@ export class AdminStore {
       await this.deleteRepositoryFile(ownedImageRepositoryPathToRemove, `chore(blog): remove ${slug} image`);
     }
 
-    return sharedTranslationKey || slug;
+    return { translationKey: sharedTranslationKey || slug, image: imagePath };
   }
 
   /**

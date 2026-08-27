@@ -15,7 +15,7 @@ export async function getStaticPaths() {
       initialPost: {
         translationKey: group.translationKey,
         slug: group.slug,
-        date: group.date ? new Date(group.date).toISOString() : '',
+        date: group.date ? new Date(group.date).toISOString().slice(0, 10) : '',
         image: group.image,
         translations: Object.fromEntries(
           Object.entries(group.locales).map(([locale, post]) => [
