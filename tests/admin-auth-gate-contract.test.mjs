@@ -604,8 +604,8 @@ test('AdminAuthGate receives its local bypass as a prop computed by AdminLayout 
   );
   assert.doesNotMatch(
     gateSource,
-    /useState/,
-    'AdminAuthGate should not gate its bypass/wall decision behind a useState populated only after mount, or the first client render would flash null before the SSR wall appears',
+    /useState<[^>]*\bnull\b[^>]*>|useState\(\s*null\s*\)/,
+    'AdminAuthGate should not initialize its bypass/wall decision with a null useState that would flash empty before the SSR wall appears',
   );
   assert.match(
     gateSource,
@@ -928,6 +928,41 @@ test('createAdminAuthGateOpenController only suppresses duplicate automatic open
     openSources,
     ['auto', 'manual', 'manual'],
     'once the one-shot auto-open has succeeded, later deliberate manual clicks should still reopen the widget if the admin closes it and clicks again',
+  );
+});
+
+test('AdminAuthGate hides its full-screen overlay while the Netlify Identity widget modal is open so the login dialog stays visible on top', async () => {
+  const source = await readSource('src/components/admin/AdminAuthGate.tsx');
+
+  assert.match(
+    source,
+    /identity\.on\(\s*['"]open['"]/,
+    'AdminAuthGate should subscribe to the Netlify Identity widget open event so its own overlay can step aside while the login modal is visible',
+  );
+  assert.match(
+    source,
+    /identity\.on\(\s*['"]close['"]/,
+    'AdminAuthGate should subscribe to the Netlify Identity widget close event so its overlay can return when the login modal is dismissed without signing in',
+  );
+  assert.match(
+    source,
+    /identity\.off\?\.\(\s*['"]open['"]/,
+    'AdminAuthGate should clean up its widget open listener when it unmounts',
+  );
+  assert.match(
+    source,
+    /identity\.off\?\.\(\s*['"]close['"]/,
+    'AdminAuthGate should clean up its widget close listener when it unmounts',
+  );
+  assert.match(
+    source,
+    /isWidgetOpen|widgetIsOpen|identityWidgetOpen/,
+    'AdminAuthGate should track when the Netlify Identity widget modal is open so its own overlay can stay out of the way',
+  );
+  assert.match(
+    source,
+    /if\s*\(\s*(?:isWidgetOpen|widgetIsOpen|identityWidgetOpen)\s*\)\s*return\s+null/,
+    'AdminAuthGate should return null while the Netlify Identity widget modal is open so the login dialog is not covered by the gate',
   );
 });
 
