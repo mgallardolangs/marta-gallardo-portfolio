@@ -119,6 +119,20 @@ async function createDirtyStore(token = 'publish-token') {
   };
 }
 
+function makeBlogTranslationsFixture(overrides = {}) {
+  const base = {
+    es: { title: 'Título ES', description: 'Descripción ES', tags: ['seo'], body: '# Cuerpo ES' },
+    en: { title: 'Title EN', description: 'Description EN', tags: ['seo'], body: '# Body EN' },
+    fr: { title: 'Titre FR', description: 'Description FR', tags: ['seo'], body: '# Corps FR' },
+  };
+
+  return {
+    es: { ...base.es, ...overrides.es },
+    en: { ...base.en, ...overrides.en },
+    fr: { ...base.fr, ...overrides.fr },
+  };
+}
+
 test('shouldAllowTokenlessAdminInit only trusts loopback hosts', () => {
   for (const host of ['localhost', '127.0.0.1', '::1', '[::1]']) {
     assert.equal(
@@ -618,5 +632,236 @@ test('AdminToolbar shows session state, login action, draft and publish descript
     disabledExpression,
     /store\.orbitValidationErrors\.length\s*>\s*0/,
     'AdminToolbar publish button should keep its validation gate inside the same disabled expression',
+  );
+});
+
+for (const entrypoint of [
+  {
+    name: 'createBlogPost',
+    call: (store) => store.createBlogPost({
+      slug: 'mi-post',
+      date: '2026-08-26',
+      translations: makeBlogTranslationsFixture(),
+    }),
+  },
+  {
+    name: 'updateBlogPost',
+    call: (store) => store.updateBlogPost({
+      slug: 'mi-post',
+      date: '2026-08-26',
+      currentImage: '/images/blog/mi-post.webp',
+      translations: makeBlogTranslationsFixture(),
+    }),
+  },
+  {
+    name: 'deleteBlogPost',
+    call: (store) => store.deleteBlogPost({
+      slug: 'mi-post',
+      image: '/images/blog/mi-post.webp',
+    }),
+  },
+]) {
+  test(`${entrypoint.name} clears auth state and notifies subscribers immediately when Identity refresh fails, without discarding dirty edits`, async () => {
+    const { store, previewBeforeAuthChange } = await createDirtyStore();
+    const fetchCalls = [];
+    const authNotifications = [];
+    const unsubscribe = store.subscribe(() => {
+      authNotifications.push(store.getSnapshot().isAuthenticated);
+    });
+
+    const restoreWindow = mockWindow({
+      localStorage: createLocalStorage(),
+      netlifyIdentity: {
+        currentUser: () => ({ id: 'admin-editor' }),
+        refresh: async () => {
+          throw new Error('expired');
+        },
+      },
+    });
+    const restoreFetch = mockFetch(async (input, init = {}) => {
+      fetchCalls.push({ input: String(input), init });
+      return new Response(JSON.stringify({ message: `${entrypoint.name} should stop before repository writes` }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    });
+
+    try {
+      await assert.rejects(
+        () => entrypoint.call(store),
+        /La sesión de administrador ha expirado/i,
+        `${entrypoint.name} should surface the same expired-session Spanish message publish already uses`,
+      );
+    } finally {
+      unsubscribe();
+      restoreFetch();
+      restoreWindow();
+    }
+
+    assert.equal(
+      fetchCalls.length,
+      0,
+      `${entrypoint.name} should stop before any repository writes when Identity refresh fails`,
+    );
+
+    assert.ok(
+      authNotifications.length > 0,
+      `${entrypoint.name} should notify subscribers immediately when the refresh fails, not only on some later unrelated store change`,
+    );
+    assert.equal(
+      authNotifications[authNotifications.length - 1],
+      false,
+      `the most recent subscriber notification after a failed refresh inside ${entrypoint.name} should reflect the cleared auth state`,
+    );
+
+    const snapshot = store.getSnapshot();
+    assert.ok(
+      'isAuthenticated' in snapshot,
+      `${entrypoint.name} refresh failures need a snapshot auth flag so UI gates can react immediately`,
+    );
+    assert.equal(
+      snapshot.isAuthenticated,
+      false,
+      `a refresh failure inside ${entrypoint.name} should flip the snapshot to unauthenticated immediately, without waiting for another unrelated emit`,
+    );
+    assert.equal(
+      store.getText('nav.home'),
+      'Portada pendiente',
+      `a refresh failure inside ${entrypoint.name} should not discard dirty text edits`,
+    );
+    assert.equal(
+      store.getImageSrc('heroMainPhoto'),
+      previewBeforeAuthChange,
+      `a refresh failure inside ${entrypoint.name} should preserve pending image previews so the current tab keeps unsaved work`,
+    );
+  });
+}
+
+test('publish keeps using the token captured right after Identity refresh for every repository request, even when the mutable token is cleared mid-operation', async () => {
+  const { store } = await createDirtyStore('stale-publish-token');
+  const fetchCalls = [];
+
+  const restoreWindow = mockWindow({
+    localStorage: createLocalStorage(),
+    netlifyIdentity: {
+      currentUser: () => ({ id: 'admin-editor' }),
+      refresh: async () => 'fresh-publish-token',
+    },
+  });
+  const restoreFetch = mockFetch(async (input, init = {}) => {
+    const call = {
+      method: init.method ?? 'GET',
+      authorization: String(init.headers?.Authorization ?? ''),
+    };
+    fetchCalls.push(call);
+
+    if (fetchCalls.length === 1) {
+      // Simulate an external logout (or any other mutation of the mutable
+      // this.token) arriving mid-operation, right after the very first
+      // Git Gateway request already went out with the refreshed token.
+      store.clearAuthToken();
+    }
+
+    if (call.method === 'PUT') {
+      return new Response(JSON.stringify({ content: { sha: 'written-sha' } }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    return new Response(JSON.stringify({ message: 'Not Found' }), {
+      status: 404,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  });
+
+  try {
+    await store.publish();
+  } finally {
+    restoreFetch();
+    restoreWindow();
+  }
+
+  assert.ok(
+    fetchCalls.length >= 4,
+    'publish should perform multiple Git Gateway requests across the pending image, text, and site data writes',
+  );
+  assert.ok(
+    fetchCalls.every((call) => call.authorization === 'Bearer fresh-publish-token'),
+    'every Git Gateway request inside one publish operation must reuse the token captured right after the Identity refresh, never an empty or later-mutated this.token',
+  );
+
+  const snapshot = store.getSnapshot();
+  assert.equal(
+    snapshot.publishSuccess,
+    true,
+    'publish should still complete successfully end-to-end once every repository write used the operation-captured token',
+  );
+  assert.equal(
+    snapshot.isAuthenticated,
+    false,
+    'the snapshot should still reflect the real mutable auth state (cleared mid-flight) once the operation settles',
+  );
+});
+
+test('createBlogPost keeps using the token captured right after Identity refresh for every repository request, even when the mutable token is cleared mid-operation', async () => {
+  const fixtures = await loadAdminFixtures();
+  const store = new AdminStore();
+  store.init(fixtures.i18n, fixtures.site, 'es', 'stale-create-token');
+
+  const fetchCalls = [];
+  const restoreWindow = mockWindow({
+    localStorage: createLocalStorage(),
+    netlifyIdentity: {
+      currentUser: () => ({ id: 'admin-editor' }),
+      refresh: async () => 'fresh-create-token',
+    },
+  });
+  const restoreFetch = mockFetch(async (input, init = {}) => {
+    const call = {
+      method: init.method ?? 'GET',
+      authorization: String(init.headers?.Authorization ?? ''),
+    };
+    fetchCalls.push(call);
+
+    if (fetchCalls.length === 1) {
+      // Simulate an external logout arriving after the first of the six
+      // locale preflight reads that createBlogPost performs.
+      store.clearAuthToken();
+    }
+
+    if (call.method === 'GET') {
+      return new Response(JSON.stringify({ message: 'Not Found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    return new Response(JSON.stringify({ content: { sha: 'new-sha' } }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  });
+
+  let translationKey;
+  try {
+    translationKey = await store.createBlogPost({
+      slug: 'mi-post',
+      date: '2026-08-26',
+      translations: makeBlogTranslationsFixture(),
+    });
+  } finally {
+    restoreFetch();
+    restoreWindow();
+  }
+
+  assert.equal(translationKey, 'mi-post', 'createBlogPost should still resolve successfully once every write used the operation-captured token');
+  assert.ok(
+    fetchCalls.length >= 12,
+    'createBlogPost should read all six locale files and then write all six locale Markdown files',
+  );
+  assert.ok(
+    fetchCalls.every((call) => call.authorization === 'Bearer fresh-create-token'),
+    'every Git Gateway request inside one createBlogPost operation must reuse the token captured right after the Identity refresh, never an empty or later-mutated this.token',
   );
 });
