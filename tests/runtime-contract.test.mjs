@@ -50,11 +50,15 @@ test('footer reveal only animates once per browser session and skips on reduced 
   assert.equal(getFooterRevealMode({ hasSessionFlag: false, prefersReducedMotion: true }), 'skip');
 });
 
-test('hosted admin preview falls back to tokenless init and late identity tokens upgrade the existing store session', async () => {
+test('local loopback admin preview falls back to tokenless init and late identity tokens upgrade the existing store session', async () => {
   assert.equal(shouldAllowTokenlessAdminInit('localhost'), true);
   assert.equal(shouldAllowTokenlessAdminInit('127.0.0.1'), true);
   assert.equal(shouldAllowTokenlessAdminInit('::1'), true);
-  assert.equal(shouldAllowTokenlessAdminInit('studio-portfolio.netlify.app'), true);
+  assert.equal(
+    shouldAllowTokenlessAdminInit('studio-portfolio.netlify.app'),
+    false,
+    'hosted production preview domains must require a real admin session instead of silently bootstrapping a tokenless editor',
+  );
   assert.equal(ADMIN_INIT_RETRY_DELAY_MS, 500);
   assert.equal(ADMIN_INIT_MAX_RETRIES, 12);
   assert.equal(ADMIN_INIT_FALLBACK_DELAY_MS, 2000);

@@ -71,6 +71,7 @@ type LegacyDraftPayload = DraftPayload & {
 
 type AdminSnapshot = {
   initialized: boolean;
+  isAuthenticated: boolean;
   currentLang: SupportedLang;
   isDirty: boolean;
   pendingCount: number;
@@ -638,6 +639,7 @@ export class AdminStore {
   private draftMessageState = '';
   private snapshot: AdminSnapshot = {
     initialized: false,
+    isAuthenticated: false,
     currentLang: 'es',
     isDirty: false,
     pendingCount: 0,
@@ -682,6 +684,12 @@ export class AdminStore {
   setAuthToken(token: string): void {
     if (!token || token === this.token) return;
     this.token = token;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  clearAuthToken(): void {
+    this.token = '';
     this.publishErrorState = '';
     this.emit();
   }
@@ -1677,6 +1685,10 @@ export class AdminStore {
       if (!token) throw new Error('Missing refreshed token');
       this.token = token;
     } catch {
+      // The stored token is no longer valid — clear it immediately so the
+      // snapshot flips to unauthenticated. The enclosing publish() call emits
+      // once in its finally block so auth gates react to this state change.
+      this.token = '';
       throw new Error('La sesión de administrador ha expirado. Cierra sesión y vuelve a iniciarla; tus cambios sin publicar siguen abiertos.');
     }
   }
@@ -2037,6 +2049,7 @@ export class AdminStore {
 
     this.snapshot = {
       initialized: this.initialized,
+      isAuthenticated: Boolean(this.token),
       currentLang: this.currentLang,
       isDirty: pendingCount > 0,
       pendingCount,
