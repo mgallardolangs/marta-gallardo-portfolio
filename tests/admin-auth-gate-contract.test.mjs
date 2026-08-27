@@ -204,7 +204,7 @@ test('AdminInit wires host-aware init plus login and logout identity transitions
   );
   assert.match(
     source,
-    /identity\.off\?\('logout',/,
+    /identity\.off\?\.\('logout',/,
     'AdminInit should clean up the logout listener alongside init and login listeners',
   );
   assert.match(
