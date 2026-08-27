@@ -507,10 +507,33 @@ test('AdminAuthGate only bypasses local hosts and shows the production full-scre
     /useRef|autoOpen|hasAutoOpened|loginPromptOpened/i,
     'AdminAuthGate should guard the production auto-open flow so the login dialog opens only once per page load',
   );
+  const overlayIndex = source.search(/className="fixed inset-0/);
+  const loopbackEarlyReturnMatch =
+    source.match(
+      /if\s*\(\s*shouldAllowTokenlessAdminInit\([^)]*\)\s*\)\s*(?:\{\s*return\s+null;?\s*\}|return\s+null;?)/,
+    ) ??
+    source.match(
+      /const\s+(?<loopbackGuard>\w+)\s*=\s*shouldAllowTokenlessAdminInit\([^)]*\);?[\s\S]{0,300}?if\s*\(\s*\k<loopbackGuard>\s*\)\s*(?:\{\s*return\s+null;?\s*\}|return\s+null;?)/,
+    );
+  assert.ok(
+    loopbackEarlyReturnMatch,
+    'AdminAuthGate should use the loopback helper result to return null before rendering any production auth overlay markup',
+  );
+  if (loopbackEarlyReturnMatch && overlayIndex >= 0) {
+    assert.ok(
+      source.indexOf(loopbackEarlyReturnMatch[0]) < overlayIndex,
+      'AdminAuthGate should short-circuit loopback hosts before the fixed overlay markup is declared',
+    );
+  }
   assert.match(
     source,
     /if\s*\(\s*store\.isAuthenticated\s*\)\s*return\s+null|store\.isAuthenticated\s*\?\s*null\s*:/,
     'AdminAuthGate should disappear entirely once the admin becomes authenticated',
+  );
+  assert.match(
+    source,
+    /La sesión de administrador ha expirado[\s\S]{0,320}(?:cambios[\s\S]{0,160}pestaña|pestaña[\s\S]{0,160}cambios)/i,
+    'AdminAuthGate expired-session copy should explicitly say the current tab still keeps unsaved changes',
   );
 });
 
@@ -539,9 +562,43 @@ test('AdminToolbar shows session state, login action, draft and publish descript
     /open\(['"]login['"]\)/,
     'AdminToolbar login actions should route directly to netlifyIdentity.open(\'login\')',
   );
+  const publishButtonBlockMatch =
+    source.match(
+      /<button\b[\s\S]*?onClick=\{\(\)\s*=>\s*void\s+store\.publish\(\)\}[\s\S]*?<\/button>/,
+    ) ??
+    source.match(/<button\b[\s\S]*?Publicar cambios[\s\S]*?<\/button>/);
+  assert.ok(
+    publishButtonBlockMatch,
+    'AdminToolbar should keep a dedicated publish button block anchored to store.publish() or the publish label',
+  );
+  if (!publishButtonBlockMatch) return;
+
+  const disabledExpressionMatch = publishButtonBlockMatch[0].match(/disabled=\{([\s\S]*?)\}/);
+  assert.ok(
+    disabledExpressionMatch,
+    'AdminToolbar publish button should declare its own disabled expression',
+  );
+  if (!disabledExpressionMatch) return;
+
+  const disabledExpression = disabledExpressionMatch[1];
   assert.match(
-    source,
-    /disabled=\{[\s\S]*!store\.isAuthenticated[\s\S]*\}/,
+    disabledExpression,
+    /!store\.isAuthenticated/,
     'AdminToolbar should disable publishing whenever store.isAuthenticated is false',
+  );
+  assert.match(
+    disabledExpression,
+    /!store\.isDirty/,
+    'AdminToolbar publish button should keep the existing dirty-state gate inside its disabled expression',
+  );
+  assert.match(
+    disabledExpression,
+    /store\.isPublishing/,
+    'AdminToolbar publish button should keep the in-flight publishing gate inside its disabled expression',
+  );
+  assert.match(
+    disabledExpression,
+    /store\.orbitValidationErrors(?:\.length)?\s*>\s*0/,
+    'AdminToolbar publish button should keep its validation gate inside the same disabled expression',
   );
 });
