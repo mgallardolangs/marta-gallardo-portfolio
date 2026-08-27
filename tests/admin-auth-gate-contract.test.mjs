@@ -616,7 +616,7 @@ test('AdminToolbar shows session state, login action, draft and publish descript
   );
   assert.match(
     disabledExpression,
-    /store\.orbitValidationErrors(?:\.length)?\s*>\s*0/,
+    /store\.orbitValidationErrors\.length\s*>\s*0/,
     'AdminToolbar publish button should keep its validation gate inside the same disabled expression',
   );
 });
