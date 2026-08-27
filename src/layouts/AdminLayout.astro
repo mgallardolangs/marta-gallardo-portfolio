@@ -4,13 +4,11 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import AdminToolbar from '../components/admin/AdminToolbar';
 import AdminInit from '../components/admin/AdminInit';
-import AdminAuthGate from '../components/admin/AdminAuthGate';
 import { getLangFromUrl, t } from '../i18n';
 import es from '../i18n/es.json';
 import en from '../i18n/en.json';
 import fr from '../i18n/fr.json';
 import { siteData } from '../lib/siteData';
-import { shouldAllowTokenlessAdminInit } from '../lib/adminInit.js';
 
 interface Props {
   title?: string;
@@ -19,11 +17,7 @@ interface Props {
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
-const { title = `Admin — ${i.hero.name}`, description = '' } = Astro.props;
-// Computed here (server-side) instead of inside AdminAuthGate so the very
-// first server-rendered markup already matches the first client render —
-// no host-lookup effect, no flash of a bare page before the auth wall.
-const allowTokenless = shouldAllowTokenlessAdminInit(Astro.url.hostname);
+const { title = `Admin — ${i.hero.name}` } = Astro.props;
 const sanitizeAdminTranslations = <T extends { translationPage?: Record<string, unknown> }>(dictionary: T) => ({
   ...dictionary,
   translationPage: dictionary.translationPage
@@ -54,17 +48,14 @@ const allSite = JSON.stringify(siteData);
   <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body class="min-h-screen bg-cream text-charcoal">
-  <div id="admin-editing-shell" inert={allowTokenless ? undefined : true}>
-    <AdminInit client:load i18nJson={allI18n} siteJson={allSite} lang={lang} />
-    <div class="fixed bottom-6 right-6 z-[100] print:hidden">
-      <AdminToolbar client:load />
-    </div>
-    <Header lang={lang} adminMode={true} />
-    <main>
-      <slot />
-    </main>
-    <Footer lang={lang} adminMode={true} />
+  <AdminInit client:load i18nJson={allI18n} siteJson={allSite} lang={lang} />
+  <div class="fixed bottom-6 right-6 z-[100] print:hidden">
+    <AdminToolbar client:load />
   </div>
-  <AdminAuthGate client:load allowTokenless={allowTokenless} />
+  <Header lang={lang} adminMode={true} />
+  <main>
+    <slot />
+  </main>
+  <Footer lang={lang} adminMode={true} />
 </body>
 </html>
