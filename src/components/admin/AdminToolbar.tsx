@@ -1,6 +1,16 @@
 import { useState } from 'react';
 import { useAdminStore } from './useAdminStore';
 
+function openNetlifyLogin() {
+  const identity = (window as typeof window & {
+    netlifyIdentity?: { open?: (view: 'login') => void };
+  }).netlifyIdentity;
+
+  if (typeof identity?.open === 'function') {
+    identity.open('login');
+  }
+}
+
 const LANGS = [
   { code: 'es' as const, label: 'ES' },
   { code: 'en' as const, label: 'EN' },
@@ -53,6 +63,24 @@ export default function AdminToolbar() {
       {/* Expanded panel */}
       {expanded && (
         <div className="absolute bottom-full right-0 mb-2 bg-gray-900 text-white rounded-2xl shadow-2xl p-4 min-w-[288px]">
+          {/* Admin session status */}
+          <div className="mb-3 rounded-lg bg-gray-800 px-3 py-2">
+            {store.isAuthenticated ? (
+              <p className="text-[11px] font-semibold text-green-400">🟢 Sesión activa</p>
+            ) : (
+              <div className="space-y-1.5">
+                <p className="text-[11px] font-semibold text-amber-300">🔒 Inicia sesión para publicar</p>
+                <button
+                  type="button"
+                  onClick={openNetlifyLogin}
+                  className="text-[11px] font-semibold text-white underline underline-offset-2 hover:text-gray-200"
+                >
+                  Iniciar sesión
+                </button>
+              </div>
+            )}
+          </div>
+
           {/* Language switcher */}
           <div className="mb-3">
             <p className="text-[10px] text-gray-400 uppercase mb-1">Idioma</p>
@@ -119,18 +147,28 @@ export default function AdminToolbar() {
           {/* Actions */}
           <div className="flex flex-col gap-2">
             {store.isDirty && (
-              <button type="button" onClick={store.saveDraft} className="w-full text-xs px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-left">
-                💾 Guardar borrador
-              </button>
+              <div className="space-y-1">
+                <button type="button" onClick={store.saveDraft} className="w-full text-xs px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-left">
+                  💾 Guardar borrador
+                </button>
+                <p className="px-1 text-[10px] text-gray-400">
+                  Guardar borrador guarda el texto y los ajustes en este navegador; los archivos subidos solo habrá que volver a seleccionarlos si recargas la página.
+                </p>
+              </div>
             )}
-            <button
-              type="button"
-              onClick={() => void store.publish()}
-              disabled={!store.isDirty || store.isPublishing || store.orbitValidationErrors.length > 0}
-              className={`w-full text-xs px-3 py-2 rounded-lg font-bold transition-colors text-left ${store.isDirty && store.orbitValidationErrors.length === 0 ? 'bg-green-500 hover:bg-green-400' : 'bg-gray-700 text-gray-500'}`}
-            >
-              {store.isPublishing ? '⏳ Publicando…' : '🚀 Publicar cambios'}
-            </button>
+            <div className="space-y-1">
+              <button
+                type="button"
+                onClick={() => void store.publish()}
+                disabled={!store.isAuthenticated || !store.isDirty || store.isPublishing || store.orbitValidationErrors.length > 0}
+                className={`w-full text-xs px-3 py-2 rounded-lg font-bold transition-colors text-left ${store.isAuthenticated && store.isDirty && store.orbitValidationErrors.length === 0 ? 'bg-green-500 hover:bg-green-400' : 'bg-gray-700 text-gray-500'}`}
+              >
+                {store.isPublishing ? '⏳ Publicando…' : '🚀 Publicar cambios'}
+              </button>
+              <p className="px-1 text-[10px] text-gray-400">
+                Publicar cambios envía los cambios al repositorio y reconstruye el sitio público.
+              </p>
+            </div>
             <a href="/" className="text-xs text-gray-400 hover:text-white px-3 py-2">
               ← Salir del editor
             </a>

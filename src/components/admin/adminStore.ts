@@ -71,6 +71,7 @@ type LegacyDraftPayload = DraftPayload & {
 
 type AdminSnapshot = {
   initialized: boolean;
+  isAuthenticated: boolean;
   currentLang: SupportedLang;
   isDirty: boolean;
   pendingCount: number;
@@ -638,6 +639,7 @@ export class AdminStore {
   private draftMessageState = '';
   private snapshot: AdminSnapshot = {
     initialized: false,
+    isAuthenticated: false,
     currentLang: 'es',
     isDirty: false,
     pendingCount: 0,
@@ -682,6 +684,12 @@ export class AdminStore {
   setAuthToken(token: string): void {
     if (!token || token === this.token) return;
     this.token = token;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  clearAuthToken(): void {
+    this.token = '';
     this.publishErrorState = '';
     this.emit();
   }
@@ -1354,8 +1362,11 @@ export class AdminStore {
 
     try {
       await this.refreshIdentityToken();
-      if (!this.token) {
-        throw new Error('Debes iniciar sesión antes de publicar.');
+      const token = this.token;
+      if (!token) {
+        throw new Error(
+          'No hay una sesión de administrador activa. Debes iniciar sesión antes de publicar. Tus cambios de esta pestaña siguen a salvo.',
+        );
       }
 
       for (const [imageKey, pendingImage] of Object.entries(this.pendingImages)) {
@@ -1363,6 +1374,7 @@ export class AdminStore {
           pendingImage.path,
           pendingImage.base64Content,
           `chore(admin): upload ${imageKey}`,
+          token,
         );
       }
 
@@ -1375,6 +1387,7 @@ export class AdminStore {
           `src/i18n/${lang}.json`,
           utf8ToBase64(`${JSON.stringify(this.i18n[lang], null, 2)}\n`),
           `chore(admin): update ${lang} translations`,
+          token,
         );
       }
 
@@ -1383,6 +1396,7 @@ export class AdminStore {
           'src/data/site.json',
           utf8ToBase64(`${JSON.stringify(this.images, null, 2)}\n`),
           'chore(admin): update site data',
+          token,
         );
       }
 
@@ -1423,9 +1437,12 @@ export class AdminStore {
    */
   async createBlogPost(post: BlogPostCreateInput): Promise<string> {
     await this.refreshIdentityToken();
+    const token = this.token;
 
-    if (!this.token) {
-      throw new Error('Debes iniciar sesión antes de crear entradas de blog.');
+    if (!token) {
+      throw new Error(
+        'No hay una sesión de administrador activa. Debes iniciar sesión antes de crear entradas de blog. Tus cambios de esta pestaña siguen a salvo.',
+      );
     }
 
     const slug = validateBlogSlug(post.slug);
@@ -1453,7 +1470,7 @@ export class AdminStore {
     const existingFilesByLocale = {} as Record<SupportedLang, { sha: string; content: string } | null>;
     const parsedExistingFilesByLocale = {} as Record<SupportedLang, ReturnType<typeof parseBlogLocaleMarkdown> | null>;
     for (const locale of SUPPORTED_LANGS) {
-      const existingFile = await this.fetchRepositoryFile(localePaths[locale]);
+      const existingFile = await this.fetchRepositoryFile(localePaths[locale], token);
       existingFilesByLocale[locale] = existingFile;
       parsedExistingFilesByLocale[locale] = existingFile ? parseBlogLocaleMarkdown(existingFile.content) : null;
     }
@@ -1494,7 +1511,7 @@ export class AdminStore {
       const { repositoryPath, publicPath } = getBlogFeaturedImagePaths(slug, post.featuredImage);
       const dataUrl = await fileToDataUrl(post.featuredImage);
       const base64Content = dataUrl.includes(',') ? dataUrl.split(',')[1] ?? '' : dataUrl;
-      await this.writeRepositoryFile(repositoryPath, base64Content, `feat(blog): upload ${slug} image`);
+      await this.writeRepositoryFile(repositoryPath, base64Content, `feat(blog): upload ${slug} image`, token);
       imagePath = publicPath;
     }
 
@@ -1515,7 +1532,7 @@ export class AdminStore {
         body: translation.body,
       });
 
-      await this.putRepositoryFile(path, utf8ToBase64(markdown), `feat(blog): create ${path}`, existingFile?.sha || null);
+      await this.putRepositoryFile(path, utf8ToBase64(markdown), `feat(blog): create ${path}`, existingFile?.sha || null, token);
     }
 
     return translationKey;
@@ -1534,9 +1551,12 @@ export class AdminStore {
    */
   async updateBlogPost(post: BlogPostUpdateInput): Promise<BlogPostUpdateResult> {
     await this.refreshIdentityToken();
+    const token = this.token;
 
-    if (!this.token) {
-      throw new Error('Debes iniciar sesión antes de editar entradas de blog.');
+    if (!token) {
+      throw new Error(
+        'No hay una sesión de administrador activa. Debes iniciar sesión antes de editar entradas de blog. Tus cambios de esta pestaña siguen a salvo.',
+      );
     }
 
     const slug = validateBlogSlug(post.slug);
@@ -1555,7 +1575,7 @@ export class AdminStore {
       const { repositoryPath, publicPath } = getBlogFeaturedImagePaths(slug, post.featuredImage);
       const dataUrl = await fileToDataUrl(post.featuredImage);
       const base64Content = dataUrl.includes(',') ? dataUrl.split(',')[1] ?? '' : dataUrl;
-      await this.writeRepositoryFile(repositoryPath, base64Content, `feat(blog): upload ${slug} image`);
+      await this.writeRepositoryFile(repositoryPath, base64Content, `feat(blog): upload ${slug} image`, token);
       imagePath = publicPath;
       if (post.currentImage && post.currentImage !== publicPath) {
         ownedImageRepositoryPathToRemove = getOwnedBlogImageRepositoryPath(slug, post.currentImage);
@@ -1571,7 +1591,7 @@ export class AdminStore {
 
     for (const locale of SUPPORTED_LANGS) {
       const path = localePaths[locale];
-      const existingFile = await this.fetchRepositoryFile(path);
+      const existingFile = await this.fetchRepositoryFile(path, token);
       const existingTranslation = existingFile ? parseBlogLocaleMarkdown(existingFile.content) : null;
 
       if (existingTranslation?.translationKey && !sharedTranslationKey) {
@@ -1595,11 +1615,11 @@ export class AdminStore {
         body: translation.body,
       });
 
-      await this.putRepositoryFile(path, utf8ToBase64(markdown), `feat(blog): update ${path}`, existingFile?.sha ?? null);
+      await this.putRepositoryFile(path, utf8ToBase64(markdown), `feat(blog): update ${path}`, existingFile?.sha ?? null, token);
     }
 
     if (ownedImageRepositoryPathToRemove) {
-      await this.deleteRepositoryFile(ownedImageRepositoryPathToRemove, `chore(blog): remove ${slug} image`);
+      await this.deleteRepositoryFile(ownedImageRepositoryPathToRemove, `chore(blog): remove ${slug} image`, token);
     }
 
     return { translationKey: sharedTranslationKey || slug, image: imagePath };
@@ -1615,9 +1635,12 @@ export class AdminStore {
    */
   async deleteBlogPost(post: BlogPostDeleteInput): Promise<BlogPostDeleteResult> {
     await this.refreshIdentityToken();
+    const token = this.token;
 
-    if (!this.token) {
-      throw new Error('Debes iniciar sesión antes de eliminar entradas de blog.');
+    if (!token) {
+      throw new Error(
+        'No hay una sesión de administrador activa. Debes iniciar sesión antes de eliminar entradas de blog. Tus cambios de esta pestaña siguen a salvo.',
+      );
     }
 
     const slug = validateBlogSlug(post.slug);
@@ -1627,7 +1650,7 @@ export class AdminStore {
     for (const locale of SUPPORTED_LANGS) {
       const path = localePaths[locale];
       try {
-        await this.deleteRepositoryFile(path, `chore(blog): delete ${path}`);
+        await this.deleteRepositoryFile(path, `chore(blog): delete ${path}`, token);
       } catch {
         remainingPaths.push(path);
       }
@@ -1645,7 +1668,7 @@ export class AdminStore {
       const imageRepositoryPath = getOwnedBlogImageRepositoryPath(slug, post.image);
       if (imageRepositoryPath) {
         try {
-          await this.deleteRepositoryFile(imageRepositoryPath, `chore(blog): remove ${slug} image`);
+          await this.deleteRepositoryFile(imageRepositoryPath, `chore(blog): remove ${slug} image`, token);
         } catch (error) {
           const details = error instanceof Error ? error.message : 'la imagen destacada no se pudo eliminar';
           return {
@@ -1677,20 +1700,26 @@ export class AdminStore {
       if (!token) throw new Error('Missing refreshed token');
       this.token = token;
     } catch {
+      // The stored token is no longer valid — clear it and emit immediately so
+      // every entrypoint (publish, createBlogPost, updateBlogPost, deleteBlogPost)
+      // notifies subscribers and flips the snapshot to unauthenticated right away,
+      // instead of relying on a later unrelated emit() call (or none at all).
+      this.token = '';
+      this.emit();
       throw new Error('La sesión de administrador ha expirado. Cierra sesión y vuelve a iniciarla; tus cambios sin publicar siguen abiertos.');
     }
   }
 
-  private async writeRepositoryFile(path: string, content: string, message: string): Promise<void> {
-    const sha = await this.fetchFileSha(path);
-    await this.putRepositoryFile(path, content, message, sha);
+  private async writeRepositoryFile(path: string, content: string, message: string, token: string): Promise<void> {
+    const sha = await this.fetchFileSha(path, token);
+    await this.putRepositoryFile(path, content, message, sha, token);
   }
 
-  private async putRepositoryFile(path: string, content: string, message: string, sha: string | null = null): Promise<void> {
+  private async putRepositoryFile(path: string, content: string, message: string, sha: string | null, token: string): Promise<void> {
     const response = await fetch(`/.netlify/git/github/contents/${encodeURI(path)}`, {
       method: 'PUT',
       headers: {
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -1712,10 +1741,10 @@ export class AdminStore {
     }
   }
 
-  private async fetchFileSha(path: string): Promise<string | null> {
+  private async fetchFileSha(path: string, token: string): Promise<string | null> {
     const response = await fetch(`/.netlify/git/github/contents/${encodeURI(path)}`, {
       headers: {
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -1735,10 +1764,10 @@ export class AdminStore {
     return data.sha ?? null;
   }
 
-  private async fetchRepositoryFile(path: string): Promise<{ sha: string; content: string } | null> {
+  private async fetchRepositoryFile(path: string, token: string): Promise<{ sha: string; content: string } | null> {
     const response = await fetch(`/.netlify/git/github/contents/${encodeURI(path)}`, {
       headers: {
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -1761,14 +1790,14 @@ export class AdminStore {
     };
   }
 
-  private async deleteRepositoryFile(path: string, message: string): Promise<void> {
-    const sha = await this.fetchFileSha(path);
+  private async deleteRepositoryFile(path: string, message: string, token: string): Promise<void> {
+    const sha = await this.fetchFileSha(path, token);
     if (sha === null) return;
 
     const response = await fetch(`/.netlify/git/github/contents/${encodeURI(path)}`, {
       method: 'DELETE',
       headers: {
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ message, sha }),
@@ -2037,6 +2066,7 @@ export class AdminStore {
 
     this.snapshot = {
       initialized: this.initialized,
+      isAuthenticated: Boolean(this.token),
       currentLang: this.currentLang,
       isDirty: pendingCount > 0,
       pendingCount,

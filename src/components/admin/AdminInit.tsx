@@ -52,13 +52,16 @@ export default function AdminInit({ i18nJson, siteJson, lang }: Props) {
     let retryAttempts = 0;
     let retryTimeout: number | undefined;
 
+    const hostAllowsTokenlessFallback = shouldAllowTokenlessAdminInit(window.location.hostname);
+
     const applyIdentityState = (allowTokenlessFallback: boolean) => {
       const w = window as typeof window & {
         netlifyIdentity?: {
           init?: () => void;
+          open?: (view: 'login') => void;
           currentUser?: () => { token?: { access_token?: string } } | null;
-          on?: (event: 'init' | 'login', callback: () => void) => void;
-          off?: (event: 'init' | 'login', callback: () => void) => void;
+          on?: (event: 'init' | 'login' | 'logout', callback: () => void) => void;
+          off?: (event: 'init' | 'login' | 'logout', callback: () => void) => void;
         };
       };
       const token = getNetlifyIdentityToken(w.netlifyIdentity?.currentUser?.());
@@ -82,16 +85,21 @@ export default function AdminInit({ i18nJson, siteJson, lang }: Props) {
         return true;
       }
 
+      // decision === 'wait': production has no user/token yet. AdminAuthGate
+      // owns the login prompt in this case, so AdminInit only keeps polling
+      // for a future 'init'/'login' identity event instead of opening the
+      // Netlify Identity widget itself.
       return false;
     };
 
-    const allowTokenlessFallback = shouldAllowTokenlessAdminInit(window.location.hostname);
+    const allowTokenlessFallback = hostAllowsTokenlessFallback;
     const bindIdentityListeners = () => {
       const identity = (window as typeof window & {
         netlifyIdentity?: {
           init?: () => void;
-          on?: (event: 'init' | 'login', callback: () => void) => void;
-          off?: (event: 'init' | 'login', callback: () => void) => void;
+          open?: (view: 'login') => void;
+          on?: (event: 'init' | 'login' | 'logout', callback: () => void) => void;
+          off?: (event: 'init' | 'login' | 'logout', callback: () => void) => void;
         };
       }).netlifyIdentity;
 
@@ -101,12 +109,17 @@ export default function AdminInit({ i18nJson, siteJson, lang }: Props) {
       const onIdentityChange = () => {
         applyIdentityState(false);
       };
+      const onIdentityLogout = () => {
+        adminStore.clearAuthToken();
+      };
 
       identity.on('init', onIdentityChange);
       identity.on('login', onIdentityChange);
+      identity.on('logout', onIdentityLogout);
       identityListenersCleanup = () => {
         identity.off?.('init', onIdentityChange);
         identity.off?.('login', onIdentityChange);
+        identity.off?.('logout', onIdentityLogout);
         identityListenersCleanup = null;
       };
 

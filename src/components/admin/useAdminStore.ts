@@ -41,6 +41,7 @@ export function useAdminStore() {
     setPublicLanguageVisibility: adminStore.setPublicLanguageVisibility.bind(adminStore),
     setLang: adminStore.setLang.bind(adminStore),
     publish: adminStore.publish.bind(adminStore),
+    clearAuthToken: adminStore.clearAuthToken.bind(adminStore),
     saveDraft: adminStore.saveDraft.bind(adminStore),
     loadDraft: adminStore.loadDraft.bind(adminStore),
     createBlogPost: adminStore.createBlogPost.bind(adminStore),
