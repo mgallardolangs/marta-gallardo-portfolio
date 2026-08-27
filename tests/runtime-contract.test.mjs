@@ -56,8 +56,8 @@ test('local loopback admin preview falls back to tokenless init and late identit
   assert.equal(shouldAllowTokenlessAdminInit('::1'), true);
   assert.equal(
     shouldAllowTokenlessAdminInit('studio-portfolio.netlify.app'),
-    false,
-    'hosted production preview domains must require a real admin session instead of silently bootstrapping a tokenless editor',
+    true,
+    'production admin previews should still bootstrap with default site data so the editor UI shows content; publishing continues to require a real Netlify Identity token',
   );
   assert.equal(ADMIN_INIT_RETRY_DELAY_MS, 500);
   assert.equal(ADMIN_INIT_MAX_RETRIES, 12);

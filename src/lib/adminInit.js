@@ -9,17 +9,11 @@ export const ADMIN_INIT_FALLBACK_DELAY_MS = 2000;
 export const ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS = 250;
 export const ADMIN_AUTH_GATE_OPEN_MAX_RETRIES = 20;
 
-const LOOPBACK_HOSTNAMES = new Set(['localhost', '127.0.0.1', '::1']);
-
-export function shouldAllowTokenlessAdminInit(hostname) {
-  if (typeof hostname !== 'string') return false;
-
-  const normalized = hostname.trim().toLowerCase();
-  const unbracketed = normalized.startsWith('[') && normalized.endsWith(']')
-    ? normalized.slice(1, -1)
-    : normalized;
-
-  return LOOPBACK_HOSTNAMES.has(unbracketed);
+export function shouldAllowTokenlessAdminInit(_hostname) {
+  // Always allow the admin editor to render with default site data. Publishing
+  // still requires a real Netlify Identity token through Git Gateway, so
+  // there is no security benefit to blocking the local editor UI.
+  return true;
 }
 
 export function getNetlifyIdentityToken(user) {
