@@ -1,0 +1,547 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { AdminStore } from '../src/components/admin/adminStore.ts';
+import {
+  getAdminInitDecision,
+  shouldAllowTokenlessAdminInit,
+} from '../src/lib/adminInit.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const rootDir = path.resolve(__dirname, '..');
+let cachedFixturesPromise;
+
+async function readSource(relativePath) {
+  return readFile(path.join(rootDir, relativePath), 'utf8');
+}
+
+async function readOptionalSource(relativePath) {
+  try {
+    return await readSource(relativePath);
+  } catch (error) {
+    if (error?.code === 'ENOENT') return null;
+    throw error;
+  }
+}
+
+async function readJson(relativePath) {
+  return JSON.parse(await readSource(relativePath));
+}
+
+async function loadAdminFixtures() {
+  if (!cachedFixturesPromise) {
+    cachedFixturesPromise = Promise.all([
+      readJson('src/i18n/es.json'),
+      readJson('src/i18n/en.json'),
+      readJson('src/i18n/fr.json'),
+      readJson('src/data/site.json'),
+    ]).then(([es, en, fr, site]) => ({
+      i18n: { es, en, fr },
+      site,
+    }));
+  }
+
+  return cachedFixturesPromise;
+}
+
+function countMatches(source, pattern) {
+  return [...source.matchAll(pattern)].length;
+}
+
+function createLocalStorage(seed = {}) {
+  const values = new Map(Object.entries(seed));
+
+  return {
+    getItem(key) {
+      return values.has(key) ? values.get(key) : null;
+    },
+    setItem(key, value) {
+      values.set(key, String(value));
+    },
+    removeItem(key) {
+      values.delete(key);
+    },
+  };
+}
+
+function createImageFile(name = 'admin-auth-preview.png', content = 'preview') {
+  return new File([Buffer.from(content)], name, { type: 'image/png' });
+}
+
+function mockWindow(windowValue) {
+  const hadWindow = Object.prototype.hasOwnProperty.call(globalThis, 'window');
+  const previousWindow = globalThis.window;
+  globalThis.window = windowValue;
+
+  return () => {
+    if (hadWindow) {
+      globalThis.window = previousWindow;
+      return;
+    }
+
+    delete globalThis.window;
+  };
+}
+
+function mockFetch(fetchImpl) {
+  const hadFetch = Object.prototype.hasOwnProperty.call(globalThis, 'fetch');
+  const previousFetch = globalThis.fetch;
+  globalThis.fetch = fetchImpl;
+
+  return () => {
+    if (hadFetch) {
+      globalThis.fetch = previousFetch;
+      return;
+    }
+
+    delete globalThis.fetch;
+  };
+}
+
+async function createDirtyStore(token = 'publish-token') {
+  const fixtures = await loadAdminFixtures();
+  const store = new AdminStore();
+
+  store.init(fixtures.i18n, fixtures.site, 'es', token);
+  store.setText('nav.home', 'Portada pendiente');
+  await store.setImage(
+    'heroMainPhoto',
+    createImageFile(),
+    '/images/site/admin-auth-preview.png',
+  );
+
+  return {
+    store,
+    previewBeforeAuthChange: store.getImageSrc('heroMainPhoto'),
+  };
+}
+
+test('shouldAllowTokenlessAdminInit only trusts loopback hosts', () => {
+  for (const host of ['localhost', '127.0.0.1', '::1', '[::1]']) {
+    assert.equal(
+      shouldAllowTokenlessAdminInit(host),
+      true,
+      `loopback host ${host} should be the only place where admin tokenless init is allowed`,
+    );
+  }
+
+  for (const host of ['marttelier.netlify.app', 'custom.production.example.com']) {
+    assert.equal(
+      shouldAllowTokenlessAdminInit(host),
+      false,
+      `production host ${host} should require a real admin session before the editor initializes`,
+    );
+  }
+});
+
+test('admin init waits in production without a user but upgrades any valid tokenized session', () => {
+  assert.equal(
+    getAdminInitDecision({
+      isInitialized: false,
+      identityToken: '',
+      allowTokenlessFallback: false,
+    }),
+    'wait',
+    'production init without a user should wait for login instead of booting a tokenless admin store',
+  );
+
+  assert.equal(
+    getAdminInitDecision({
+      isInitialized: false,
+      identityToken: '',
+      allowTokenlessFallback: true,
+    }),
+    'init-without-token',
+    'local loopback hosts should still allow the tokenless admin bootstrap fallback',
+  );
+
+  assert.equal(
+    getAdminInitDecision({
+      isInitialized: false,
+      identityToken: 'identity-token',
+      allowTokenlessFallback: false,
+    }),
+    'init-with-token',
+    'a valid existing Netlify Identity user should initialize the admin store with its token',
+  );
+
+  assert.equal(
+    getAdminInitDecision({
+      isInitialized: true,
+      identityToken: 'fresh-token',
+      allowTokenlessFallback: false,
+    }),
+    'update-token',
+    'later login events should upgrade an already initialized store instead of rebuilding it',
+  );
+});
+
+test('AdminInit wires host-aware init plus login and logout identity transitions', async () => {
+  const source = await readSource('src/components/admin/AdminInit.tsx');
+
+  assert.match(
+    source,
+    /shouldAllowTokenlessAdminInit\(window\.location\.hostname\)/,
+    'AdminInit should derive its tokenless bypass from the current hostname helper instead of allowing production silently',
+  );
+  assert.match(
+    source,
+    /identity\.on\('init', onIdentityChange\)/,
+    'AdminInit should react when Netlify Identity finishes resolving the current user',
+  );
+  assert.match(
+    source,
+    /identity\.on\('login', onIdentityChange\)/,
+    'AdminInit should upgrade the admin store when a login event arrives',
+  );
+  assert.match(
+    source,
+    /identity\.on\('logout',/,
+    'AdminInit should subscribe to logout events so production auth can be cleared immediately',
+  );
+  assert.match(
+    source,
+    /identity\.off\?\('logout',/,
+    'AdminInit should clean up the logout listener alongside init and login listeners',
+  );
+  assert.match(
+    source,
+    /adminStore\.clearAuthToken\(\)/,
+    'AdminInit should clear the admin auth state on logout instead of leaving a stale authenticated snapshot behind',
+  );
+});
+
+test('AdminStore snapshot exposes isAuthenticated and tracks auth changes without reinitializing content', async () => {
+  const fixtures = await loadAdminFixtures();
+  const store = new AdminStore();
+
+  store.init(fixtures.i18n, fixtures.site, 'es', '');
+
+  const tokenlessSnapshot = store.getSnapshot();
+  assert.ok(
+    'isAuthenticated' in tokenlessSnapshot,
+    'AdminStore.getSnapshot() should expose isAuthenticated so React gates can block editing in production',
+  );
+  if (!('isAuthenticated' in tokenlessSnapshot)) return;
+
+  assert.equal(
+    tokenlessSnapshot.isAuthenticated,
+    false,
+    'a tokenless admin bootstrap should not present the production editor as authenticated',
+  );
+
+  store.setAuthToken('fresh-admin-token');
+
+  assert.equal(
+    store.getSnapshot().isAuthenticated,
+    true,
+    'setAuthToken should flip the snapshot to authenticated once a real admin session exists',
+  );
+});
+
+test('setAuthToken preserves initialized i18n, image previews, and draft state after a fresh login', async () => {
+  const fixtures = await loadAdminFixtures();
+  const store = new AdminStore();
+  const restoreWindow = mockWindow({
+    localStorage: createLocalStorage(),
+  });
+
+  try {
+    store.init(fixtures.i18n, fixtures.site, 'es', '');
+    store.setText('nav.home', 'Portada segura');
+    await store.setImage(
+      'heroMainPhoto',
+      createImageFile('fresh-login.png', 'fresh-login'),
+      '/images/site/fresh-login.png',
+    );
+    store.saveDraft();
+
+    const beforeLogin = store.getSnapshot();
+    const previewBeforeLogin = store.getImageSrc('heroMainPhoto');
+
+    store.setAuthToken('fresh-admin-token');
+
+    const afterLogin = store.getSnapshot();
+    assert.equal(afterLogin.initialized, true, 'logging in should not rebuild or drop the initialized admin store');
+    assert.equal(store.getText('nav.home'), 'Portada segura', 'logging in should preserve pending text edits');
+    assert.equal(
+      store.getImageSrc('heroMainPhoto'),
+      previewBeforeLogin,
+      'logging in should preserve pending image previews so the editor does not lose unsaved uploads',
+    );
+    assert.equal(
+      afterLogin.pendingCount,
+      beforeLogin.pendingCount,
+      'logging in should not discard existing dirty diffs or pending draft work',
+    );
+    assert.equal(afterLogin.draftTone, beforeLogin.draftTone, 'logging in should preserve the draft save status');
+    assert.equal(afterLogin.draftMessage, beforeLogin.draftMessage, 'logging in should preserve the draft save copy');
+  } finally {
+    restoreWindow();
+  }
+});
+
+test('clearAuthToken only drops auth state and preserves dirty edits plus pending previews', async () => {
+  const { store, previewBeforeAuthChange } = await createDirtyStore();
+  const clearAuthToken = store.clearAuthToken;
+
+  assert.equal(
+    typeof clearAuthToken,
+    'function',
+    'AdminStore should expose clearAuthToken so logout can revoke publish access without destroying pending work',
+  );
+  if (typeof clearAuthToken !== 'function') return;
+
+  const pendingCountBeforeLogout = store.getSnapshot().pendingCount;
+
+  store.clearAuthToken();
+
+  const afterLogout = store.getSnapshot();
+  assert.equal(afterLogout.initialized, true, 'logout should keep the admin store initialized inside the current tab');
+  assert.equal(
+    store.getText('nav.home'),
+    'Portada pendiente',
+    'logout should preserve unsaved dirty edits so the admin can resume after signing back in',
+  );
+  assert.equal(
+    store.getImageSrc('heroMainPhoto'),
+    previewBeforeAuthChange,
+    'logout should preserve pending image previews instead of wiping the current editing tab',
+  );
+  assert.equal(
+    afterLogout.pendingCount,
+    pendingCountBeforeLogout,
+    'logout should only flip auth state and keep the pending dirty diff count intact',
+  );
+  assert.ok(
+    'isAuthenticated' in afterLogout,
+    'logout contracts need an isAuthenticated snapshot flag for React auth gates and toolbar status copy',
+  );
+  if ('isAuthenticated' in afterLogout) {
+    assert.equal(afterLogout.isAuthenticated, false, 'logout should leave the store unauthenticated');
+  }
+});
+
+test('expired identity refresh clears auth, keeps edits and previews, and returns actionable Spanish publish guidance', async () => {
+  const { store, previewBeforeAuthChange } = await createDirtyStore();
+  const fetchCalls = [];
+  const restoreWindow = mockWindow({
+    localStorage: createLocalStorage(),
+    netlifyIdentity: {
+      currentUser: () => ({ id: 'admin-editor' }),
+      refresh: async () => {
+        throw new Error('expired');
+      },
+    },
+  });
+  const restoreFetch = mockFetch(async (input, init = {}) => {
+    fetchCalls.push({ input: String(input), init });
+    return new Response(JSON.stringify({ message: 'publish should stop before repository writes' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  });
+
+  try {
+    await store.publish();
+  } finally {
+    restoreFetch();
+    restoreWindow();
+  }
+
+  const snapshot = store.getSnapshot();
+  assert.match(
+    snapshot.publishError,
+    /No hay una sesión de administrador activa/i,
+    'publish should explain in Spanish that there is no active admin session after Identity refresh fails',
+  );
+  assert.match(
+    snapshot.publishError,
+    /cambios.*pestaña/i,
+    'publish should reassure the editor that unsaved changes still remain in the current tab',
+  );
+  assert.match(
+    snapshot.publishError,
+    /Inicia sesión/i,
+    'publish should tell the editor to sign in again instead of leaving the next action implicit',
+  );
+  assert.ok(
+    'isAuthenticated' in snapshot,
+    'expired sessions need a snapshot auth flag so UI gates and the toolbar can react immediately',
+  );
+  if ('isAuthenticated' in snapshot) {
+    assert.equal(snapshot.isAuthenticated, false, 'an expired refresh should clear the stored authenticated state');
+  }
+  assert.equal(snapshot.isDirty, true, 'an expired refresh should keep the draft dirty so the admin can retry later');
+  assert.equal(
+    store.getText('nav.home'),
+    'Portada pendiente',
+    'an expired refresh should not discard dirty text edits',
+  );
+  assert.equal(
+    store.getImageSrc('heroMainPhoto'),
+    previewBeforeAuthChange,
+    'an expired refresh should preserve pending image previews in the current tab',
+  );
+  assert.equal(fetchCalls.length, 0, 'publish should stop before any repository writes when Identity refresh fails');
+});
+
+test('valid identity refresh still publishes using the fresh token', async () => {
+  const fixtures = await loadAdminFixtures();
+  const store = new AdminStore();
+  const fetchCalls = [];
+  const restoreWindow = mockWindow({
+    localStorage: createLocalStorage(),
+    netlifyIdentity: {
+      currentUser: () => ({ id: 'admin-editor' }),
+      refresh: async () => 'fresh-admin-token',
+    },
+  });
+  const restoreFetch = mockFetch(async (input, init = {}) => {
+    fetchCalls.push({ input: String(input), init });
+    const method = init.method ?? 'GET';
+
+    if (method === 'PUT') {
+      return new Response(JSON.stringify({ content: { sha: 'written-sha' } }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    return new Response(JSON.stringify({ message: 'Not Found' }), {
+      status: 404,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  });
+
+  try {
+    store.init(fixtures.i18n, fixtures.site, 'es', 'stale-admin-token');
+    store.setText('nav.home', 'Portada publicada');
+    await store.publish();
+  } finally {
+    restoreFetch();
+    restoreWindow();
+  }
+
+  const snapshot = store.getSnapshot();
+  assert.equal(snapshot.publishSuccess, true, 'publish should still succeed after refreshing a valid session');
+  assert.equal(snapshot.publishError, '', 'successful publish should clear any auth error copy');
+  assert.ok(fetchCalls.length >= 2, 'publish should perform authenticated reads and writes once the token refresh succeeds');
+  assert.ok(
+    fetchCalls.every(({ init }) => String(init.headers?.Authorization ?? '') === 'Bearer fresh-admin-token'),
+    'every Git Gateway read/write in publish should use the freshly refreshed Netlify Identity token',
+  );
+});
+
+test('AdminAuthGate exists and AdminLayout mounts it exactly once', async () => {
+  const [gateSource, layoutSource] = await Promise.all([
+    readOptionalSource('src/components/admin/AdminAuthGate.tsx'),
+    readSource('src/layouts/AdminLayout.astro'),
+  ]);
+
+  assert.ok(
+    gateSource,
+    'src/components/admin/AdminAuthGate.tsx should be created so production admin routes can block editing until authentication succeeds',
+  );
+  if (!gateSource) return;
+
+  assert.match(
+    layoutSource,
+    /import\s+AdminAuthGate\s+from\s+['"]\.\.\/components\/admin\/AdminAuthGate['"];/,
+    'AdminLayout should import the dedicated auth gate instead of leaving the admin editor directly exposed',
+  );
+
+  const gateMounts = layoutSource.match(/<AdminAuthGate\s+client:load\s*\/>/g) ?? [];
+  assert.equal(gateMounts.length, 1, 'AdminLayout should mount AdminAuthGate exactly once for the whole admin shell');
+});
+
+test('AdminAuthGate only bypasses local hosts and shows the production full-screen login overlay until authenticated', async () => {
+  const source = await readOptionalSource('src/components/admin/AdminAuthGate.tsx');
+
+  assert.ok(
+    source,
+    'src/components/admin/AdminAuthGate.tsx should exist before production admin editing can be blocked correctly',
+  );
+  if (!source) return;
+
+  assert.match(
+    source,
+    /shouldAllowTokenlessAdminInit|window\.location\.hostname/,
+    'AdminAuthGate should stay host-aware so only local loopback hosts bypass the production auth wall',
+  );
+  assert.match(
+    source,
+    /className="fixed inset-0[\s\S]*?"/,
+    'AdminAuthGate should render a fixed full-screen overlay while production admin auth is missing',
+  );
+  assert.match(
+    source,
+    /No hay una sesión de administrador activa/i,
+    'AdminAuthGate should explain the initial unauthenticated production state in Spanish',
+  );
+  assert.match(
+    source,
+    /La sesión de administrador ha expirado/i,
+    'AdminAuthGate should also explain the expired-session production state in Spanish',
+  );
+  assert.match(
+    source,
+    /Iniciar sesión/,
+    'AdminAuthGate should provide a visible "Iniciar sesión" call to action',
+  );
+  assert.match(
+    source,
+    /open\(['"]login['"]\)/,
+    'AdminAuthGate should open the Netlify Identity login dialog when the admin clicks the login CTA',
+  );
+  assert.match(
+    source,
+    /useEffect/,
+    'AdminAuthGate should auto-open the login dialog once when production loads without an active admin session',
+  );
+  assert.match(
+    source,
+    /useRef|autoOpen|hasAutoOpened|loginPromptOpened/i,
+    'AdminAuthGate should guard the production auto-open flow so the login dialog opens only once per page load',
+  );
+  assert.match(
+    source,
+    /if\s*\(\s*store\.isAuthenticated\s*\)\s*return\s+null|store\.isAuthenticated\s*\?\s*null\s*:/,
+    'AdminAuthGate should disappear entirely once the admin becomes authenticated',
+  );
+});
+
+test('AdminToolbar shows session state, login action, draft and publish descriptions, and disables publish while unauthenticated', async () => {
+  const source = await readSource('src/components/admin/AdminToolbar.tsx');
+
+  assert.match(source, /Sesión activa/, 'AdminToolbar should confirm when the admin session is active');
+  assert.match(
+    source,
+    /Inicia sesión para publicar/,
+    'AdminToolbar should warn production editors when there is no active admin session',
+  );
+  assert.match(source, /Iniciar sesión/, 'AdminToolbar should offer an explicit login button or action');
+  assert.match(
+    source,
+    /Guardar borrador/,
+    'AdminToolbar should keep a draft-specific action or description visible while auth may be missing',
+  );
+  assert.match(
+    source,
+    /Publicar cambios/,
+    'AdminToolbar should keep a publish-specific action or description visible alongside auth status',
+  );
+  assert.match(
+    source,
+    /open\(['"]login['"]\)/,
+    'AdminToolbar login actions should route directly to netlifyIdentity.open(\'login\')',
+  );
+  assert.match(
+    source,
+    /disabled=\{[\s\S]*!store\.isAuthenticated[\s\S]*\}/,
+    'AdminToolbar should disable publishing whenever store.isAuthenticated is false',
+  );
+});
