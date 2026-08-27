@@ -125,13 +125,16 @@ export default function AdminAuthGate({ allowTokenless }: Props) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="admin-auth-gate-heading"
-      className="fixed inset-0 z-[150] flex items-center justify-center bg-charcoal/90 p-6 text-center backdrop-blur-sm"
+      className="fixed inset-0 z-[150] flex items-center justify-center bg-ink p-6 text-paper"
     >
-      <div className="max-w-md rounded-2xl bg-white p-8 shadow-2xl">
-        <h1 id="admin-auth-gate-heading" className="text-xl font-bold text-charcoal">
+      <div className="w-full max-w-lg border border-paper/20 bg-ink p-8 text-left md:p-10">
+        <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">
+          MG · ADMIN
+        </p>
+        <h1 id="admin-auth-gate-heading" className="mt-5 font-heading text-4xl leading-none text-paper md:text-5xl">
           {isExpired ? 'Sesión de administrador expirada' : 'Acceso de administrador requerido'}
         </h1>
-        <p className="mt-3 text-sm text-gray-600">
+        <p className="mt-5 font-body text-sm leading-7 text-paper/70">
           {isExpired
             ? 'La sesión de administrador ha expirado. Tus cambios sin publicar siguen abiertos en esta pestaña; inicia sesión de nuevo para continuar sin recargar la página ni perder nada.'
             : 'No hay una sesión de administrador activa. Inicia sesión para abrir y usar el editor.'}
@@ -141,7 +144,7 @@ export default function AdminAuthGate({ allowTokenless }: Props) {
           type="button"
           autoFocus
           onClick={handleManualLoginClick}
-          className="mt-6 inline-flex items-center justify-center rounded-full bg-charcoal px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-charcoal/80"
+          className="mt-7 inline-flex items-center justify-center border border-amaranth bg-amaranth px-6 py-3 font-body text-xs font-semibold uppercase tracking-[0.24em] text-ink transition-colors hover:bg-paper hover:text-amaranth"
         >
           Iniciar sesión
         </button>

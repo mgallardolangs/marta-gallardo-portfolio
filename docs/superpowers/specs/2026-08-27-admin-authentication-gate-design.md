@@ -21,6 +21,9 @@ editing interface is usable.
   button if the modal is closed.
 - Localhost and loopback development retain tokenless preview access.
 
+The gate uses the same flat ink, paper, and amaranth palette plus the site's
+heading/body typography. It has no rounded generic modal chrome or extra effects.
+
 ## Session expiry while editing
 
 Access tokens continue refreshing silently before repository operations.

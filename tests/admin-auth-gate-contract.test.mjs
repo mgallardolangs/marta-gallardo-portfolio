@@ -551,6 +551,15 @@ test('AdminAuthGate only bypasses local hosts and shows the production full-scre
     /La sesión de administrador ha expirado[\s\S]{0,320}(?:cambios[\s\S]{0,160}pestaña|pestaña[\s\S]{0,160}cambios)/i,
     'AdminAuthGate expired-session copy should explicitly say the current tab still keeps unsaved changes',
   );
+  assert.match(source, /bg-ink/, 'AdminAuthGate should use the website ink background');
+  assert.match(source, /text-paper/, 'AdminAuthGate should use the website paper foreground');
+  assert.match(source, /text-amaranth/, 'AdminAuthGate should use the website amaranth accent');
+  assert.match(source, /font-heading/, 'AdminAuthGate should use the website heading typography');
+  assert.doesNotMatch(
+    source,
+    /rounded-(?:full|2xl)|bg-white|bg-charcoal|text-charcoal/,
+    'AdminAuthGate should keep the website flat three-color studio styling instead of a rounded generic modal',
+  );
 });
 
 test('AdminAuthGate receives its local bypass as a prop computed by AdminLayout from Astro.url.hostname, and the production build renders the auth wall before hydration instead of only after an effect', async () => {
