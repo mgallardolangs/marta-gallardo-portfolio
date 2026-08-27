@@ -983,6 +983,151 @@ test('createBlogPost retry-upserts partially existing locale files by reading ev
   }
 });
 
+test('createBlogPost rejects a duplicate slug when all six locale files already exist with different content, doing GET-only reads and never touching the featured image', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const store = createAdminStore(AdminStore);
+
+  const slug = 'mi-post-duplicado';
+  const localePaths = getLocaleMarkdownPaths(slug);
+  const { repositoryPath: imageRepositoryPath } = getSharedImagePaths(slug, 'png');
+  const expectedMessage = `Ya existe una entrada de blog con el slug "${slug}" pero con contenido diferente. Elige otro slug o edita la entrada existente en lugar de crear una nueva.`;
+
+  const originalFetch = globalThis.fetch;
+  const fetchCalls = [];
+
+  globalThis.fetch = async (input, init = {}) => {
+    const call = { method: init.method ?? 'GET', url: String(input), body: init.body ?? null };
+    fetchCalls.push(call);
+
+    for (const [locale, filePath] of Object.entries(localePaths)) {
+      if (call.url.includes(filePath) && call.method === 'GET') {
+        const existingMarkdown = buildFrontmatterFixture({
+          slug,
+          translationKey: slug,
+          date: '2025-01-01',
+          image: undefined,
+          lang: locale,
+          title: `Otro título ya publicado (${locale})`,
+          description: `Otra descripción ya publicada (${locale})`,
+          tags: ['otro-tema'],
+          body: `Contenido totalmente distinto ya publicado en ${locale}.`,
+        });
+
+        return new Response(JSON.stringify({
+          sha: `${locale}-existing-sha`,
+          content: Buffer.from(existingMarkdown, 'utf8').toString('base64'),
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+
+    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+
+  try {
+    await assert.rejects(
+      () => store.createBlogPost({
+        slug,
+        date: '2026-08-26',
+        translations: makeTranslationsFixture(),
+        featuredImage: new File(['image-bytes'], `${slug}.png`, { type: 'image/png' }),
+      }),
+      (error) => {
+        assert.ok(error instanceof Error, 'createBlogPost should reject with an Error instance');
+        assert.equal(
+          error.message,
+          expectedMessage,
+          'a complete six-locale duplicate slug with different content should reject with the exact Spanish message',
+        );
+        return true;
+      },
+    );
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  const getCalls = fetchCalls.filter((call) => call.method === 'GET');
+  const putCalls = fetchCalls.filter((call) => call.method === 'PUT');
+  const deleteCalls = fetchCalls.filter((call) => call.method === 'DELETE');
+
+  assert.equal(getCalls.length, 6, 'a duplicate-slug rejection should only have read the six locale files, once each');
+  assert.equal(putCalls.length, 0, 'a duplicate-slug rejection must never write any locale Markdown file');
+  assert.equal(deleteCalls.length, 0, 'a duplicate-slug rejection must never delete anything');
+  assert.ok(
+    !fetchCalls.some((call) => call.url.includes(imageRepositoryPath)),
+    'a duplicate-slug rejection must never touch the featured image upload path',
+  );
+});
+
+test('createBlogPost treats a complete six-locale existing post whose parsed content already matches the incoming payload as an idempotent success with zero writes', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const store = createAdminStore(AdminStore);
+
+  const slug = 'mi-post-idempotente';
+  const localePaths = getLocaleMarkdownPaths(slug);
+  const translations = makeTranslationsFixture();
+  const { publicPath: imagePublicPath } = getSharedImagePaths(slug, 'png');
+
+  const originalFetch = globalThis.fetch;
+  const fetchCalls = [];
+
+  globalThis.fetch = async (input, init = {}) => {
+    const call = { method: init.method ?? 'GET', url: String(input), body: init.body ?? null };
+    fetchCalls.push(call);
+
+    for (const [locale, filePath] of Object.entries(localePaths)) {
+      if (call.url.includes(filePath) && call.method === 'GET') {
+        const localeTranslation = VISIBLE_LOCALES.includes(locale) ? translations[locale] : translations.es;
+        const existingMarkdown = buildFrontmatterFixture({
+          slug,
+          translationKey: slug,
+          date: '2026-08-26',
+          image: imagePublicPath,
+          lang: locale,
+          title: `  ${localeTranslation.title}  \n`,
+          description: localeTranslation.description,
+          tags: localeTranslation.tags,
+          body: `${localeTranslation.body}\n\n`,
+        });
+
+        return new Response(JSON.stringify({
+          sha: `${locale}-existing-sha`,
+          content: Buffer.from(existingMarkdown, 'utf8').toString('base64'),
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+
+    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+
+  let translationKey;
+  try {
+    translationKey = await store.createBlogPost({
+      slug,
+      date: '2026-08-26',
+      translations,
+      featuredImage: new File(['image-bytes'], `${slug}.png`, { type: 'image/png' }),
+    });
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.equal(translationKey, slug, 'an idempotent retry should still resolve with the shared translationKey');
+
+  const getCalls = fetchCalls.filter((call) => call.method === 'GET');
+  const putCalls = fetchCalls.filter((call) => call.method === 'PUT');
+  const deleteCalls = fetchCalls.filter((call) => call.method === 'DELETE');
+
+  assert.equal(getCalls.length, 6, 'an idempotent retry should only have read the six locale files, once each');
+  assert.equal(putCalls.length, 0, 'an idempotent retry must not rewrite any already-matching locale Markdown file');
+  assert.equal(deleteCalls.length, 0, 'an idempotent retry must not delete anything');
+});
+
 test('createBlogPost writes six locale Markdown files sharing slug/translationKey/date, Spanish-falling-back hidden DE/IT/CA content', async () => {
   const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
   const store = createAdminStore(AdminStore, 'es', 'expired-token');

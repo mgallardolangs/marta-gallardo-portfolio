@@ -451,7 +451,9 @@ function buildBlogLocaleMarkdown(post: {
  * locales can preserve their own localized title/description/tags/body untouched
  * (and every locale can agree on the same translationKey) during an edit.
  */
-function parseBlogLocaleMarkdown(markdown: string): BlogLocaleTranslation & { translationKey: string } {
+function parseBlogLocaleMarkdown(
+  markdown: string,
+): BlogLocaleTranslation & { slug: string; translationKey: string; date: string; image?: string } {
   const frontmatterMatch = markdown.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
   const frontmatterBlock = frontmatterMatch?.[1] ?? '';
   const body = (frontmatterMatch?.[2] ?? markdown).replace(/^\n+/, '').trimEnd();
@@ -478,12 +480,67 @@ function parseBlogLocaleMarkdown(markdown: string): BlogLocaleTranslation & { tr
   }
 
   return {
+    slug: getStringField('slug'),
     translationKey: getStringField('translationKey'),
+    date: getStringField('date'),
+    image: getStringField('image') || undefined,
     title: getStringField('title'),
     description: getStringField('description'),
     tags,
     body,
   };
+}
+
+/**
+ * Resolves the translation a locale should receive for a create/upsert write: the
+ * submitted translation for any currently-visible locale, or the fresh Spanish
+ * translation as a fallback for every hidden locale — shared by the write loop and
+ * the pre-write duplicate/idempotency comparison so both always agree.
+ */
+function resolveBlogLocaleTranslation(
+  locale: SupportedLang,
+  visibleLocales: SupportedLang[],
+  translations: BlogTranslationsInput,
+  esTranslation: BlogLocaleTranslation,
+): BlogLocaleTranslation {
+  return (visibleLocales.includes(locale) ? translations[locale] : esTranslation) as BlogLocaleTranslation;
+}
+
+function normalizeBlogTextForComparison(value: string): string {
+  return value.trim();
+}
+
+function normalizeBlogTagsForComparison(tags: string[]): string {
+  return JSON.stringify(tags.map((tag) => tag.trim()));
+}
+
+/**
+ * True only when a parsed, already-existing locale Markdown file carries exactly the
+ * shared slug/translationKey/date/image and the (trimmed) title/description/tags/body
+ * that createBlogPost would write for that locale. Used to tell a safe, idempotent
+ * create retry (every locale already matches) apart from a genuine duplicate-slug
+ * collision (some locale differs, or its slug/translationKey doesn't match the target)
+ * before any repository write happens.
+ */
+function blogLocaleMatchesExpected(
+  parsed: ReturnType<typeof parseBlogLocaleMarkdown>,
+  expected: BlogLocaleTranslation,
+  shared: { slug: string; translationKey: string; date: string; image?: string },
+): boolean {
+  return (
+    parsed.slug === shared.slug &&
+    parsed.translationKey === shared.translationKey &&
+    parsed.date === shared.date &&
+    (parsed.image ?? undefined) === (shared.image ?? undefined) &&
+    normalizeBlogTextForComparison(parsed.title) === normalizeBlogTextForComparison(expected.title) &&
+    normalizeBlogTextForComparison(parsed.description) === normalizeBlogTextForComparison(expected.description) &&
+    normalizeBlogTagsForComparison(parsed.tags) === normalizeBlogTagsForComparison(expected.tags) &&
+    normalizeBlogTextForComparison(parsed.body) === normalizeBlogTextForComparison(expected.body)
+  );
+}
+
+function getBlogDuplicateSlugMessage(slug: string): string {
+  return `Ya existe una entrada de blog con el slug "${slug}" pero con contenido diferente. Elige otro slug o edita la entrada existente en lugar de crear una nueva.`;
 }
 
 function base64ToUtf8(value: string): string {
@@ -1346,6 +1403,16 @@ export class AdminStore {
    * Creates (or retry-upserts) every locale Markdown file for one logical blog post.
    * Visible locales (per getPublicLanguagePicker) use their submitted translation;
    * every hidden locale always gets the fresh Spanish translation as a fallback.
+   *
+   * Before any image upload or Markdown write, every one of the six locale paths is
+   * read first. If none or only some of them already exist, this is treated as a
+   * partial prior attempt and every locale is retry-safe upserted as usual. If all
+   * six already exist, their parsed content is compared against what this call would
+   * write: an exact match (slug/translationKey/date/image plus trimmed
+   * title/description/tags/body) is a safe idempotent retry that performs zero writes,
+   * while any difference — including a mismatched slug/translationKey on an existing
+   * file — is rejected in Spanish as a duplicate-slug collision instead of silently
+   * overwriting an unrelated post that happens to share the slug.
    */
   async createBlogPost(post: BlogPostCreateInput): Promise<string> {
     await this.refreshIdentityToken();
@@ -1363,6 +1430,49 @@ export class AdminStore {
       validateBlogFeaturedImage(post.featuredImage);
     }
 
+    const translationKey = slug;
+    const localePaths = getBlogLocaleMarkdownPaths(slug);
+    const esTranslation = post.translations.es as BlogLocaleTranslation;
+    // The deterministic path the shared image WOULD get, computed without uploading
+    // anything yet, so a duplicate-slug preflight can compare it against what already
+    // exists before any repository write.
+    const pendingImagePath = post.featuredImage
+      ? getBlogFeaturedImagePaths(slug, post.featuredImage).publicPath
+      : undefined;
+
+    // Preflight: read every locale path's current content before writing or uploading
+    // anything, so an already-fully-published post under this slug can be detected and
+    // either treated as an idempotent retry or rejected as a duplicate-slug collision.
+    const existingFilesByLocale = {} as Record<SupportedLang, { sha: string; content: string } | null>;
+    for (const locale of SUPPORTED_LANGS) {
+      existingFilesByLocale[locale] = await this.fetchRepositoryFile(localePaths[locale]);
+    }
+
+    const existingLocaleCount = SUPPORTED_LANGS.filter((locale) => existingFilesByLocale[locale]).length;
+
+    if (existingLocaleCount === SUPPORTED_LANGS.length) {
+      const isIdenticalLogicalPost = SUPPORTED_LANGS.every((locale) => {
+        const existingFile = existingFilesByLocale[locale];
+        if (!existingFile) return false;
+
+        const parsed = parseBlogLocaleMarkdown(existingFile.content);
+        const expectedTranslation = resolveBlogLocaleTranslation(locale, visibleLocales, post.translations, esTranslation);
+
+        return blogLocaleMatchesExpected(parsed, expectedTranslation, {
+          slug,
+          translationKey,
+          date: post.date,
+          image: pendingImagePath,
+        });
+      });
+
+      if (isIdenticalLogicalPost) {
+        return translationKey;
+      }
+
+      throw new Error(getBlogDuplicateSlugMessage(slug));
+    }
+
     let imagePath: string | undefined;
     if (post.featuredImage) {
       const { repositoryPath, publicPath } = getBlogFeaturedImagePaths(slug, post.featuredImage);
@@ -1372,14 +1482,10 @@ export class AdminStore {
       imagePath = publicPath;
     }
 
-    const translationKey = slug;
-    const localePaths = getBlogLocaleMarkdownPaths(slug);
-    const esTranslation = post.translations.es as BlogLocaleTranslation;
-
     for (const locale of SUPPORTED_LANGS) {
       const path = localePaths[locale];
-      const sha = await this.fetchFileSha(path);
-      const translation = (visibleLocales.includes(locale) ? post.translations[locale] : esTranslation) as BlogLocaleTranslation;
+      const existingFile = existingFilesByLocale[locale];
+      const translation = resolveBlogLocaleTranslation(locale, visibleLocales, post.translations, esTranslation);
 
       const markdown = buildBlogLocaleMarkdown({
         slug,
@@ -1393,7 +1499,7 @@ export class AdminStore {
         body: translation.body,
       });
 
-      await this.putRepositoryFile(path, utf8ToBase64(markdown), `feat(blog): create ${path}`, sha);
+      await this.putRepositoryFile(path, utf8ToBase64(markdown), `feat(blog): create ${path}`, existingFile?.sha || null);
     }
 
     return translationKey;

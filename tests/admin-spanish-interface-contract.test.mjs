@@ -300,14 +300,42 @@ test('AdminStore blog CRUD keeps duplicate/retry-safe, group-aware behavior and 
   const localeCases = ['es', 'en', 'fr'];
   const originalFetch = globalThis.fetch;
   const fetchCalls = [];
+  // A tiny in-memory Git Gateway stand-in: GET returns whatever the last PUT
+  // stored for that path (404 when nothing was ever written), so repeated
+  // creates with unchanged content are genuinely idempotent instead of only
+  // appearing safe because the mock never reflected real file state.
+  const repoFilesByPath = new Map();
+  let shaCounter = 0;
 
   globalThis.fetch = async (input, init = {}) => {
     const method = init.method ?? 'GET';
-    fetchCalls.push({ method, input: String(input), body: init.body ?? null });
-    return new Response(JSON.stringify({ sha: 'existing-post-sha' }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    const url = String(input);
+    fetchCalls.push({ method, input: url, body: init.body ?? null });
+    const path = url.replace(/^.*\/contents\//, '');
+
+    if (method === 'GET') {
+      const existing = repoFilesByPath.get(path);
+      if (!existing) {
+        return new Response(JSON.stringify({ message: 'Not Found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+      }
+      return new Response(JSON.stringify(existing), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    if (method === 'PUT') {
+      shaCounter += 1;
+      const sha = `sha-${shaCounter}`;
+      const payload = JSON.parse(String(init.body ?? '{}'));
+      repoFilesByPath.set(path, { sha, content: payload.content });
+      return new Response(JSON.stringify({ content: { sha } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    return new Response(JSON.stringify({ message: `Unexpected ${method} ${url}` }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  };
+
+  const unchangedTranslations = {
+    es: { title: 'Post ES', description: 'Duplicate slug contract', tags: ['ugc'], body: '# Duplicate slug' },
+    en: { title: 'Post EN', description: 'Duplicate slug contract', tags: ['ugc'], body: '# Duplicate slug' },
+    fr: { title: 'Post FR', description: 'Duplicate slug contract', tags: ['ugc'], body: '# Duplicate slug' },
   };
 
   try {
@@ -318,17 +346,13 @@ test('AdminStore blog CRUD keeps duplicate/retry-safe, group-aware behavior and 
       const translationKey = await store.createBlogPost({
         slug: 'mi-primer-post',
         date: '2026-08-26',
-        translations: {
-          es: { title: `Post ${locale.toUpperCase()} ES`, description: 'Duplicate slug contract', tags: ['ugc'], body: '# Duplicate slug' },
-          en: { title: `Post ${locale.toUpperCase()} EN`, description: 'Duplicate slug contract', tags: ['ugc'], body: '# Duplicate slug' },
-          fr: { title: `Post ${locale.toUpperCase()} FR`, description: 'Duplicate slug contract', tags: ['ugc'], body: '# Duplicate slug' },
-        },
+        translations: unchangedTranslations,
       });
 
       assert.equal(
         translationKey,
         'mi-primer-post',
-        `retry-upserting the same slug should stay safe (group/path aware, not duplicate-rejected) for ${locale.toUpperCase()} admin writes`,
+        `retry-submitting the same, unchanged slug/content should stay safe (idempotent, not duplicate-rejected) for ${locale.toUpperCase()} admin writes`,
       );
 
       await assert.rejects(
@@ -349,7 +373,7 @@ test('AdminStore blog CRUD keeps duplicate/retry-safe, group-aware behavior and 
 
   assert.ok(
     fetchCalls.some((call) => call.method === 'PUT' && call.input.includes('src/content/blog/mi-primer-post/es.md')),
-    'the same slug should be safely upserted across every locale path instead of being duplicate-rejected',
+    'the first create for this slug should still write the es locale file',
   );
 });
 

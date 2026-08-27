@@ -330,7 +330,7 @@ test('createBlogPost rejects invalid featured images before network writes', asy
   assert.deepEqual(fetchCalls, [], 'image validation should fail before any Git Gateway fetch call');
 });
 
-test('createBlogPost uploads the featured asset first, writes public image frontmatter, and keeps every locale markdown write second', async () => {
+test('createBlogPost reads every locale file first for a duplicate-slug preflight, then uploads the featured asset, then writes every locale markdown with its frontmatter', async () => {
   const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
   const store = new AdminStore();
   store.init({ es: {}, en: {}, fr: {} }, {}, 'es', 'publish-token');
@@ -407,24 +407,29 @@ test('createBlogPost uploads the featured asset first, writes public image front
     .map((call, index) => ({ call, index }))
     .filter(({ call }) => call.url.includes(imagePath))
     .map(({ index }) => index);
-  const localeCallIndexes = calls
+  const localeGetIndexes = calls
     .map((call, index) => ({ call, index }))
-    .filter(({ call }) => Object.values(localePaths).some((localePath) => call.url.includes(localePath)))
+    .filter(({ call }) => call.method === 'GET' && Object.values(localePaths).some((localePath) => call.url.includes(localePath)))
+    .map(({ index }) => index);
+  const localePutIndexes = calls
+    .map((call, index) => ({ call, index }))
+    .filter(({ call }) => call.method === 'PUT' && Object.values(localePaths).some((localePath) => call.url.includes(localePath)))
     .map(({ index }) => index);
 
   assert.deepEqual(
-    calls.slice(0, 2).map((call) => `${call.method} ${call.url}`),
-    [
-      `GET /.netlify/git/github/contents/${imagePath}`,
-      `PUT /.netlify/git/github/contents/${imagePath}`,
-    ],
-    'createBlogPost should upload the featured asset before touching any locale markdown file',
+    calls.slice(0, 6).map((call) => `${call.method} ${call.url}`),
+    Object.values(localePaths).map((localePath) => `GET /.netlify/git/github/contents/${localePath}`),
+    'createBlogPost should read every locale Markdown path first, before touching the shared featured image or writing anything, so a duplicate slug can be detected before any write',
   );
   assert.ok(
-    Math.max(...imageCallIndexes) < Math.min(...localeCallIndexes),
-    'every locale markdown fetch/write should happen strictly after the shared featured image upload',
+    Math.max(...localeGetIndexes) < Math.min(...imageCallIndexes),
+    'the featured image upload should only happen after every locale file has been read for the duplicate-slug preflight',
   );
-  assert.equal(localeCallIndexes.length, 12, 'all six locale files should be read then written (GET+PUT each)');
+  assert.ok(
+    Math.max(...imageCallIndexes) < Math.min(...localePutIndexes),
+    'every locale markdown write should happen strictly after the shared featured image upload',
+  );
+  assert.equal(localeGetIndexes.length + localePutIndexes.length, 12, 'all six locale files should be read then written (GET+PUT each)');
 
   const esMarkdownPut = calls.find((call) => call.method === 'PUT' && call.url.includes(localePaths.es));
   assert.ok(esMarkdownPut?.body, 'createBlogPost should write markdown content for the visible ES locale');
