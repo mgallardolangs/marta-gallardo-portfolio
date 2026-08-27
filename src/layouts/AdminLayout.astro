@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import AdminToolbar from '../components/admin/AdminToolbar';
 import AdminInit from '../components/admin/AdminInit';
+import AdminAuthGate from '../components/admin/AdminAuthGate';
 import { getLangFromUrl, t } from '../i18n';
 import es from '../i18n/es.json';
 import en from '../i18n/en.json';
@@ -49,6 +50,7 @@ const allSite = JSON.stringify(siteData);
 </head>
 <body class="min-h-screen bg-cream text-charcoal">
   <AdminInit client:load i18nJson={allI18n} siteJson={allSite} lang={lang} />
+  <AdminAuthGate client:load />
   <div class="fixed bottom-6 right-6 z-[100] print:hidden">
     <AdminToolbar client:load />
   </div>

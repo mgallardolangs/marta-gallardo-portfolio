@@ -99,7 +99,10 @@ test('local loopback admin preview falls back to tokenless init and late identit
   assert.equal(store.getSnapshot().getImageSrc('hero.portrait'), '/images/marta.png');
 
   await store.publish();
-  assert.equal(store.getSnapshot().publishError, 'Debes iniciar sesión antes de publicar.');
+  assert.equal(
+    store.getSnapshot().publishError,
+    'No hay una sesión de administrador activa. Debes iniciar sesión antes de publicar. Tus cambios de esta pestaña siguen a salvo.',
+  );
 
   store.setLang('fr');
   assert.equal(typeof store.setAuthToken, 'function', 'adminStore should expose a late-token upgrade path');

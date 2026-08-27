@@ -49,18 +49,10 @@ export default function AdminInit({ i18nJson, siteJson, lang }: Props) {
     let draftLoaded = adminStore.isInitialized();
     let identityListenersCleanup: (() => void) | null = null;
     let identityInitStarted = false;
-    let loginPromptOpened = false;
     let retryAttempts = 0;
     let retryTimeout: number | undefined;
 
     const hostAllowsTokenlessFallback = shouldAllowTokenlessAdminInit(window.location.hostname);
-
-    const maybeOpenLoginPrompt = (identity?: { open?: (view: 'login') => void }) => {
-      if (loginPromptOpened || hostAllowsTokenlessFallback) return;
-      if (typeof identity?.open !== 'function') return;
-      loginPromptOpened = true;
-      identity.open('login');
-    };
 
     const applyIdentityState = (allowTokenlessFallback: boolean) => {
       const w = window as typeof window & {
@@ -93,10 +85,10 @@ export default function AdminInit({ i18nJson, siteJson, lang }: Props) {
         return true;
       }
 
-      // decision === 'wait': production has no user/token yet — prompt for login
-      // exactly once per mount instead of retrying the modal on every poll.
-      maybeOpenLoginPrompt(w.netlifyIdentity);
-
+      // decision === 'wait': production has no user/token yet. AdminAuthGate
+      // owns the login prompt in this case, so AdminInit only keeps polling
+      // for a future 'init'/'login' identity event instead of opening the
+      // Netlify Identity widget itself.
       return false;
     };
 

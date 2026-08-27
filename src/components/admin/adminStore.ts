@@ -1364,7 +1364,9 @@ export class AdminStore {
       await this.refreshIdentityToken();
       const token = this.token;
       if (!token) {
-        throw new Error('Debes iniciar sesión antes de publicar.');
+        throw new Error(
+          'No hay una sesión de administrador activa. Debes iniciar sesión antes de publicar. Tus cambios de esta pestaña siguen a salvo.',
+        );
       }
 
       for (const [imageKey, pendingImage] of Object.entries(this.pendingImages)) {
@@ -1438,7 +1440,9 @@ export class AdminStore {
     const token = this.token;
 
     if (!token) {
-      throw new Error('Debes iniciar sesión antes de crear entradas de blog.');
+      throw new Error(
+        'No hay una sesión de administrador activa. Debes iniciar sesión antes de crear entradas de blog. Tus cambios de esta pestaña siguen a salvo.',
+      );
     }
 
     const slug = validateBlogSlug(post.slug);
@@ -1550,7 +1554,9 @@ export class AdminStore {
     const token = this.token;
 
     if (!token) {
-      throw new Error('Debes iniciar sesión antes de editar entradas de blog.');
+      throw new Error(
+        'No hay una sesión de administrador activa. Debes iniciar sesión antes de editar entradas de blog. Tus cambios de esta pestaña siguen a salvo.',
+      );
     }
 
     const slug = validateBlogSlug(post.slug);
@@ -1632,7 +1638,9 @@ export class AdminStore {
     const token = this.token;
 
     if (!token) {
-      throw new Error('Debes iniciar sesión antes de eliminar entradas de blog.');
+      throw new Error(
+        'No hay una sesión de administrador activa. Debes iniciar sesión antes de eliminar entradas de blog. Tus cambios de esta pestaña siguen a salvo.',
+      );
     }
 
     const slug = validateBlogSlug(post.slug);
