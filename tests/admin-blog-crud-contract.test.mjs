@@ -1245,6 +1245,7 @@ test('updateBlogPost uploads a replacement shared image before any locale writes
 
   const localePaths = getLocaleMarkdownPaths('mi-post');
   const { repositoryPath: imagePath, publicPath: imagePublicPath } = getSharedImagePaths('mi-post', 'png');
+  const { repositoryPath: previousOwnedImagePath } = getSharedImagePaths('mi-post', 'webp');
   const existingTranslationsByLocale = makeAllLocaleTranslationsFixture({
     de: {
       title: 'Titel DE versteckt',
@@ -1296,6 +1297,11 @@ test('updateBlogPost uploads a replacement shared image before any locale writes
       }
     }
 
+    if (call.url.includes(previousOwnedImagePath)) {
+      if (call.method === 'GET') return new Response(JSON.stringify({ sha: 'previous-owned-image-sha' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      if (call.method === 'DELETE') return new Response(JSON.stringify({ commit: { sha: 'deleted-previous-image' } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+
     for (const filePath of Object.values(localePaths)) {
       const locale = Object.entries(localePaths).find(([, candidatePath]) => candidatePath === filePath)?.[0];
       if (call.url.includes(filePath) && locale) {
@@ -1334,6 +1340,13 @@ test('updateBlogPost uploads a replacement shared image before any locale writes
       const markdownPutIndex = firstSequence.indexOf(`PUT /.netlify/git/github/contents/${filePath}`);
       assert.ok(markdownPutIndex > firstImagePutIndex, `the ${filePath} write should happen after the image upload on the first call`);
     }
+
+    const lastMarkdownPutIndex = Math.max(
+      ...Object.values(localePaths).map((filePath) => firstSequence.indexOf(`PUT /.netlify/git/github/contents/${filePath}`)),
+    );
+    const previousImageDeleteIndex = firstSequence.indexOf(`DELETE /.netlify/git/github/contents/${previousOwnedImagePath}`);
+    assert.ok(previousImageDeleteIndex > -1, 'replacing the featured image should delete the previously owned webp image');
+    assert.ok(previousImageDeleteIndex > lastMarkdownPutIndex, 'the previously owned image should only be deleted after every locale Markdown file is rewritten');
 
     for (const hiddenLocale of HIDDEN_LOCALES) {
       const putCall = firstBatch.find((call) => call.method === 'PUT' && call.url.includes(localePaths[hiddenLocale]));
@@ -1519,6 +1532,356 @@ test('updateBlogPost removing the shared image clears the image frontmatter on e
   const imageDeleteIndex = sequence.indexOf(`DELETE /.netlify/git/github/contents/${imagePath}`);
   assert.ok(imageDeleteIndex > -1, 'removing the shared image should delete the previously owned asset');
   assert.ok(imageDeleteIndex > lastMarkdownPutIndex, 'the owned image should only be deleted after every locale Markdown file is rewritten without it');
+});
+
+// ---------------------------------------------------------------------------
+// SLUG / IMAGE-PATH HARDENING
+// ---------------------------------------------------------------------------
+
+test('createBlogPost, updateBlogPost, and deleteBlogPost reject non-canonical slugs (traversal, slashes, spaces, invalid characters) before any repository fetch', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+
+  const invalidSlugs = [
+    '../etc/passwd',
+    'mi-post/../../secret',
+    '/mi-post',
+    'mi post',
+    'MiPost',
+    'mi_post',
+    'mi--post',
+    '-mi-post',
+    'mi-post-',
+    'mi.post',
+    'café',
+    '',
+    '   ',
+  ];
+
+  for (const slug of invalidSlugs) {
+    const store = createAdminStore(AdminStore);
+    const fetchCalls = [];
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async (input, init = {}) => {
+      fetchCalls.push({ method: init.method ?? 'GET', url: String(input) });
+      return new Response(JSON.stringify({ message: 'Unexpected network call' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    };
+
+    try {
+      await assertRejectsWithMessage(
+        store.createBlogPost({ slug, date: '2026-08-26', translations: makeTranslationsFixture() }),
+        /slug/i,
+        `createBlogPost should reject the non-canonical slug ${JSON.stringify(slug)}`,
+      );
+      await assertRejectsWithMessage(
+        store.updateBlogPost({
+          slug,
+          date: '2026-08-26',
+          currentImage: '/images/blog/mi-post.webp',
+          translations: makeTranslationsFixture(),
+        }),
+        /slug/i,
+        `updateBlogPost should reject the non-canonical slug ${JSON.stringify(slug)}`,
+      );
+      await assertRejectsWithMessage(
+        store.deleteBlogPost({ slug, image: '/images/blog/mi-post.webp' }),
+        /slug/i,
+        `deleteBlogPost should reject the non-canonical slug ${JSON.stringify(slug)}`,
+      );
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+
+    assert.deepEqual(
+      fetchCalls,
+      [],
+      `an invalid slug (${JSON.stringify(slug)}) should be rejected before any Git Gateway fetch across create/update/delete`,
+    );
+  }
+});
+
+test('updateBlogPost never deletes shared site images, another slug\'s blog image, or traversal-like paths when the featured image is removed', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+
+  const localePaths = getLocaleMarkdownPaths('mi-post');
+  const unownedImagePaths = [
+    '/images/site/logo.png',
+    '/images/blog/otro-post.webp',
+    '/images/blog/../../etc/passwd.jpg',
+  ];
+
+  for (const currentImage of unownedImagePaths) {
+    const store = createAdminStore(AdminStore);
+    const existingMarkdownByLocale = Object.fromEntries(
+      SIX_LOCALES.map((locale) => [locale, buildFrontmatterFixture({
+        slug: 'mi-post',
+        translationKey: 'tk-mi-post',
+        date: '2026-08-26',
+        image: currentImage,
+        ...makeLocaleTranslation(locale),
+        lang: locale,
+      })]),
+    );
+
+    const fetchCalls = [];
+    const originalFetch = globalThis.fetch;
+
+    globalThis.fetch = async (input, init = {}) => {
+      const call = { method: init.method ?? 'GET', url: String(input), body: init.body ?? null };
+      fetchCalls.push(call);
+
+      for (const filePath of Object.values(localePaths)) {
+        const locale = Object.entries(localePaths).find(([, candidatePath]) => candidatePath === filePath)?.[0];
+        if (call.url.includes(filePath) && locale) {
+          if (call.method === 'GET') {
+            return new Response(JSON.stringify({
+              sha: `${filePath}-sha`,
+              content: Buffer.from(existingMarkdownByLocale[locale], 'utf8').toString('base64'),
+            }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+          }
+          if (call.method === 'PUT') return new Response(JSON.stringify({ content: { sha: `${filePath}-updated-sha` } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
+      }
+
+      return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    };
+
+    try {
+      await store.updateBlogPost({
+        slug: 'mi-post',
+        date: '2026-08-26',
+        currentImage,
+        removeImage: true,
+        translations: makeTranslationsFixture(),
+      });
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+
+    assert.ok(
+      fetchCalls.every((call) => call.method !== 'DELETE'),
+      `updateBlogPost should never attempt to delete the unowned path ${currentImage}`,
+    );
+  }
+});
+
+test('deleteBlogPost never deletes shared site images, another slug\'s blog image, or traversal-like paths, but still fully deletes the post', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+
+  const localePaths = getLocaleMarkdownPaths('mi-post');
+  const unownedImagePaths = [
+    '/images/site/logo.png',
+    '/images/blog/otro-post.webp',
+    '/images/blog/../../etc/passwd.jpg',
+  ];
+
+  for (const image of unownedImagePaths) {
+    const store = createAdminStore(AdminStore);
+    const fetchCalls = [];
+    const originalFetch = globalThis.fetch;
+
+    globalThis.fetch = async (input, init = {}) => {
+      const call = { method: init.method ?? 'GET', url: String(input) };
+      fetchCalls.push(call);
+
+      for (const filePath of Object.values(localePaths)) {
+        if (call.url.includes(filePath)) {
+          if (call.method === 'GET') return new Response(JSON.stringify({ sha: `${filePath}-sha` }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+          if (call.method === 'DELETE') return new Response(JSON.stringify({ commit: { sha: 'deleted' } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
+      }
+
+      return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    };
+
+    let result;
+    try {
+      result = await store.deleteBlogPost({ slug: 'mi-post', image });
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+
+    assert.equal(
+      normalizeDeleteResult(result).status,
+      'post-deleted',
+      `deleting mi-post with the unowned image path ${image} should still fully succeed`,
+    );
+    assert.equal(
+      fetchCalls.filter((call) => call.method === 'DELETE').length,
+      SIX_LOCALES.length,
+      `deleteBlogPost should only delete the six locale files (never the unowned path ${image})`,
+    );
+  }
+});
+
+test('updateBlogPost deletes the previously owned image only after all six locale Markdown PUTs succeed when the featured image is replaced with a new extension', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const store = createAdminStore(AdminStore);
+
+  const slug = 'post';
+  const localePaths = getLocaleMarkdownPaths(slug);
+  const { repositoryPath: oldImagePath } = getSharedImagePaths(slug, 'jpg');
+  const { repositoryPath: newImagePath, publicPath: newImagePublicPath } = getSharedImagePaths(slug, 'webp');
+
+  const existingMarkdownByLocale = Object.fromEntries(
+    SIX_LOCALES.map((locale) => [locale, buildFrontmatterFixture({
+      slug,
+      translationKey: `tk-${slug}`,
+      date: '2026-08-26',
+      image: '/images/blog/post.jpg',
+      ...makeLocaleTranslation(locale),
+      lang: locale,
+    })]),
+  );
+
+  const fetchCalls = [];
+  const originalFetch = globalThis.fetch;
+  let oldImageDeleted = false;
+
+  globalThis.fetch = async (input, init = {}) => {
+    const call = { method: init.method ?? 'GET', url: String(input), body: init.body ?? null };
+    fetchCalls.push(call);
+
+    if (call.url.includes(newImagePath)) {
+      if (call.method === 'GET') return new Response(JSON.stringify({ message: 'Not Found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+      if (call.method === 'PUT') return new Response(JSON.stringify({ content: { sha: 'new-image-sha' } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    if (call.url.includes(oldImagePath)) {
+      if (call.method === 'GET') return new Response(JSON.stringify({ sha: 'old-image-sha' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      if (call.method === 'DELETE') {
+        oldImageDeleted = true;
+        return new Response(JSON.stringify({ commit: { sha: 'deleted-old-image' } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+
+    for (const filePath of Object.values(localePaths)) {
+      const locale = Object.entries(localePaths).find(([, candidatePath]) => candidatePath === filePath)?.[0];
+      if (call.url.includes(filePath) && locale) {
+        if (call.method === 'GET') {
+          return new Response(JSON.stringify({
+            sha: `${filePath}-sha`,
+            content: Buffer.from(existingMarkdownByLocale[locale], 'utf8').toString('base64'),
+          }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
+        if (call.method === 'PUT') {
+          assert.equal(oldImageDeleted, false, `the previously owned jpg must not be deleted before ${filePath} is rewritten`);
+          return new Response(JSON.stringify({ content: { sha: `${filePath}-updated-sha` } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
+      }
+    }
+
+    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  };
+
+  try {
+    await store.updateBlogPost({
+      slug,
+      date: '2026-08-26',
+      currentImage: '/images/blog/post.jpg',
+      featuredImage: new File(['replacement'], 'post.webp', { type: 'image/webp' }),
+      translations: makeTranslationsFixture(),
+    });
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.ok(oldImageDeleted, 'replacing the featured image should delete the previously owned jpg after the update succeeds');
+
+  const sequence = fetchCalls.map(getCallSummary);
+  const lastMarkdownPutIndex = Math.max(
+    ...Object.values(localePaths).map((filePath) => sequence.indexOf(`PUT /.netlify/git/github/contents/${filePath}`)),
+  );
+  const oldImageDeleteIndex = sequence.indexOf(`DELETE /.netlify/git/github/contents/${oldImagePath}`);
+  assert.ok(oldImageDeleteIndex > lastMarkdownPutIndex, 'the old owned image should only be deleted after every locale Markdown file is rewritten');
+
+  for (const filePath of Object.values(localePaths)) {
+    const putCall = fetchCalls.find((call) => call.method === 'PUT' && call.url.includes(filePath));
+    assertMarkdownFrontmatter(decodeRepositoryPayload(putCall.body).markdown, { image: newImagePublicPath });
+  }
+});
+
+test('updateBlogPost leaves the previously owned image untouched when a locale Markdown write fails during a featured-image replacement', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const store = createAdminStore(AdminStore);
+
+  const slug = 'post';
+  const localePaths = getLocaleMarkdownPaths(slug);
+  const { repositoryPath: oldImagePath } = getSharedImagePaths(slug, 'jpg');
+  const { repositoryPath: newImagePath } = getSharedImagePaths(slug, 'webp');
+
+  const existingMarkdownByLocale = Object.fromEntries(
+    SIX_LOCALES.map((locale) => [locale, buildFrontmatterFixture({
+      slug,
+      translationKey: `tk-${slug}`,
+      date: '2026-08-26',
+      image: '/images/blog/post.jpg',
+      ...makeLocaleTranslation(locale),
+      lang: locale,
+    })]),
+  );
+
+  const fetchCalls = [];
+  const originalFetch = globalThis.fetch;
+
+  globalThis.fetch = async (input, init = {}) => {
+    const call = { method: init.method ?? 'GET', url: String(input), body: init.body ?? null };
+    fetchCalls.push(call);
+
+    if (call.url.includes(newImagePath)) {
+      if (call.method === 'GET') return new Response(JSON.stringify({ message: 'Not Found' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+      if (call.method === 'PUT') return new Response(JSON.stringify({ content: { sha: 'new-image-sha' } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    if (call.url.includes(oldImagePath)) {
+      if (call.method === 'GET') return new Response(JSON.stringify({ sha: 'old-image-sha' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      if (call.method === 'DELETE') {
+        assert.fail('the previously owned jpg must not be deleted when a locale Markdown write fails');
+      }
+    }
+
+    if (call.url.includes(localePaths.fr) && call.method === 'PUT') {
+      return new Response(JSON.stringify({ message: 'fr write failed' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    for (const filePath of Object.values(localePaths)) {
+      const locale = Object.entries(localePaths).find(([, candidatePath]) => candidatePath === filePath)?.[0];
+      if (call.url.includes(filePath) && locale) {
+        if (call.method === 'GET') {
+          return new Response(JSON.stringify({
+            sha: `${filePath}-sha`,
+            content: Buffer.from(existingMarkdownByLocale[locale], 'utf8').toString('base64'),
+          }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
+        if (call.method === 'PUT') return new Response(JSON.stringify({ content: { sha: `${filePath}-updated-sha` } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+
+    return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  };
+
+  try {
+    await assert.rejects(
+      store.updateBlogPost({
+        slug,
+        date: '2026-08-26',
+        currentImage: '/images/blog/post.jpg',
+        featuredImage: new File(['replacement'], 'post.webp', { type: 'image/webp' }),
+        translations: makeTranslationsFixture(),
+      }),
+      'a failed locale Markdown write should reject the update',
+    );
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.equal(
+    fetchCalls.some((call) => call.method === 'DELETE' && call.url.includes(oldImagePath)),
+    false,
+    'a failed locale write must leave the previously owned image untouched',
+  );
 });
 
 test('deleteBlogPost refreshes Identity, deletes all six locale Markdown files, then deletes the owned shared image', async () => {

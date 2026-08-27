@@ -254,6 +254,7 @@ function getSkillInsertIndex(skills: SkillItem[], group: SkillGroup): number {
 }
 
 const BLOG_FEATURED_IMAGE_MAX_BYTES = 2 * 1024 * 1024;
+const BLOG_IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'] as const;
 const BLOG_FEATURED_IMAGE_MIME_TYPES = new Map<string, string>([
   ['image/jpeg', 'jpeg'],
   ['image/png', 'png'],
@@ -283,7 +284,7 @@ function validateBlogFeaturedImage(featuredImage: File): void {
 
 function getBlogFeaturedImageExtension(featuredImage: File): string {
   const filenameExtension = featuredImage.name.split('.').pop()?.toLowerCase() ?? '';
-  if (['jpg', 'jpeg', 'png', 'webp', 'gif'].includes(filenameExtension)) {
+  if ((BLOG_IMAGE_EXTENSIONS as readonly string[]).includes(filenameExtension)) {
     return filenameExtension;
   }
 
@@ -348,9 +349,21 @@ const BLOG_LOCALE_FIELD_MESSAGES: Record<'title' | 'description' | 'tags' | 'bod
   body: (locale) => `Completa el cuerpo de la traducción ${locale}.`,
 };
 
+const BLOG_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/**
+ * Validates the slug against the canonical `[a-z0-9]+(-[a-z0-9]+)*` shape before any
+ * repository path is built from it, rejecting slashes, `..` traversal segments, spaces,
+ * uppercase letters, accents, or any other character outside that pattern.
+ */
 function validateBlogSlug(slug: string): string {
   const trimmedSlug = slug.trim();
   if (!trimmedSlug) throw new Error('El slug es obligatorio.');
+  if (!BLOG_SLUG_PATTERN.test(trimmedSlug)) {
+    throw new Error(
+      'El slug solo puede contener minúsculas, números y guiones simples (sin espacios, mayúsculas, acentos ni barras).',
+    );
+  }
   return trimmedSlug;
 }
 
@@ -383,8 +396,26 @@ function getBlogLocaleMarkdownPaths(slug: string): Record<SupportedLang, string>
   ) as Record<SupportedLang, string>;
 }
 
-function publicImagePathToRepositoryPath(publicPath: string): string {
-  return `public${publicPath.startsWith('/') ? publicPath : `/${publicPath}`}`;
+const BLOG_OWNED_IMAGE_PATTERN = new RegExp(`^/images/blog/([a-z0-9]+(?:-[a-z0-9]+)*)\\.(${BLOG_IMAGE_EXTENSIONS.join('|')})$`);
+
+/**
+ * Returns the repository path for a public blog image only when it is exactly
+ * `/images/blog/<slug>.<allowed-extension>` for the given slug — never a shared
+ * `/images/site/...` asset, another slug's blog image, or a path containing a query,
+ * fragment, or traversal segment. Anything else returns null so callers never delete
+ * an asset they don't own.
+ */
+function getOwnedBlogImageRepositoryPath(slug: string, publicPath: string | null | undefined): string | null {
+  if (!publicPath) return null;
+  if (publicPath.includes('..') || publicPath.includes('?') || publicPath.includes('#')) return null;
+
+  const match = BLOG_OWNED_IMAGE_PATTERN.exec(publicPath);
+  if (!match) return null;
+
+  const [, fileSlug, extension] = match;
+  if (fileSlug !== slug) return null;
+
+  return `public/images/blog/${slug}.${extension}`;
 }
 
 function buildBlogLocaleMarkdown(post: {
@@ -1362,8 +1393,11 @@ export class AdminStore {
    * translationKey stay fixed; visible locales apply the submitted translation while
    * hidden locales preserve their own existing localized content (Spanish-falling-back
    * only when a hidden locale file doesn't exist yet). The shared image is replaced
-   * before any locale write and, when explicitly removed, the previously owned asset
-   * is only deleted after every locale file has been rewritten without it.
+   * before any locale write; whenever the previous image differs from the new one
+   * (replaced with a new upload, or explicitly removed) and was actually owned by this
+   * slug (`/images/blog/<slug>.<ext>`, never a shared `/images/site/...` asset or
+   * another slug's image), its cleanup is deferred until every locale file has been
+   * rewritten successfully.
    */
   async updateBlogPost(post: BlogPostUpdateInput): Promise<string> {
     await this.refreshIdentityToken();
@@ -1390,11 +1424,12 @@ export class AdminStore {
       const base64Content = dataUrl.includes(',') ? dataUrl.split(',')[1] ?? '' : dataUrl;
       await this.writeRepositoryFile(repositoryPath, base64Content, `feat(blog): upload ${slug} image`);
       imagePath = publicPath;
+      if (post.currentImage && post.currentImage !== publicPath) {
+        ownedImageRepositoryPathToRemove = getOwnedBlogImageRepositoryPath(slug, post.currentImage);
+      }
     } else if (post.removeImage) {
       imagePath = undefined;
-      if (post.currentImage) {
-        ownedImageRepositoryPathToRemove = publicImagePathToRepositoryPath(post.currentImage);
-      }
+      ownedImageRepositoryPathToRemove = getOwnedBlogImageRepositoryPath(slug, post.currentImage);
     }
 
     const localePaths = getBlogLocaleMarkdownPaths(slug);
@@ -1439,7 +1474,9 @@ export class AdminStore {
 
   /**
    * Deletes every locale Markdown file belonging to one logical post, then the owned
-   * shared image (only once every locale file is gone). A locale delete failure keeps
+   * shared image (only once every locale file is gone, and only when `post.image` is
+   * actually owned by this slug — never a shared `/images/site/...` asset, another
+   * slug's blog image, or a traversal-like path). A locale delete failure keeps
    * the post row intact by returning the still-remaining paths in Spanish instead of
    * throwing, so the admin UI can retry; deletions already missing (404) count as done.
    */
@@ -1472,16 +1509,18 @@ export class AdminStore {
     }
 
     if (post.image) {
-      const imageRepositoryPath = publicImagePathToRepositoryPath(post.image);
-      try {
-        await this.deleteRepositoryFile(imageRepositoryPath, `chore(blog): remove ${slug} image`);
-      } catch (error) {
-        const details = error instanceof Error ? error.message : 'la imagen destacada no se pudo eliminar';
-        return {
-          status: 'image-cleanup-failed',
-          message: `La entrada se eliminó, pero no se pudo eliminar la imagen destacada: ${details}`,
-          remainingPaths: [imageRepositoryPath],
-        };
+      const imageRepositoryPath = getOwnedBlogImageRepositoryPath(slug, post.image);
+      if (imageRepositoryPath) {
+        try {
+          await this.deleteRepositoryFile(imageRepositoryPath, `chore(blog): remove ${slug} image`);
+        } catch (error) {
+          const details = error instanceof Error ? error.message : 'la imagen destacada no se pudo eliminar';
+          return {
+            status: 'image-cleanup-failed',
+            message: `La entrada se eliminó, pero no se pudo eliminar la imagen destacada: ${details}`,
+            remainingPaths: [imageRepositoryPath],
+          };
+        }
       }
     }
 
