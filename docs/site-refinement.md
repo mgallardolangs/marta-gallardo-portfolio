@@ -202,6 +202,8 @@ The authored grid is fixed at 12 interleaved slots:
 - `BlogIndexPage.astro` keeps the approved eyebrow, typed `Blog` title, one featured row, and the localized `Archive` rail
 - the latest story uses the larger `1.05fr / 0.95fr` editorial split and eager hero-media loading when an image exists
 - archive rows keep numbering from `02` onward when a latest story exists, and the localized empty placeholder row still renders when there is only one post or none
+- one logical post is six locale Markdown files grouped by `translationKey` plus the shared slug, date, and image metadata
+- the public coming-soon row appears only when the current locale has fewer than two posts
 
 ### Article layout and TOC
 - every locale detail route renders through `src/components/BlogArticleLayout.astro`; locale wrappers only provide the scoped post, rendered headings, and alternate links
@@ -211,10 +213,12 @@ The authored grid is fixed at 12 interleaved slots:
 - when there is no adjacent older locale post, the article footer falls back to the localized `/blog` archive instead of a dead next-story link
 
 ### Admin editorial workflow
-- `/admin/blog` mirrors the approved numbered editorial list with no rounded or pastel card chrome
-- `/admin/blog/new` uses `BlogPostForm.tsx` for a strict-palette field grid, ES/EN/FR language restriction, and publish-through-Git-Gateway flow
+- `/admin/blog` mirrors the grouped multilingual list with no rounded or pastel card chrome
+- `/admin/blog/new` and edit use `BlogPostForm.tsx` for a strict-palette field grid, fixed slug, and publish-through-Git-Gateway flow
+- create/edit require every locale currently exposed by `publicLanguagePicker`; hidden locales fall back to Spanish on create and preserve their stored localized text on edit
 - toolbar actions are limited to `H2 Section`, `H3 Subsection`, `Bold`, and `Link`
 - the live outline panel parses the current Markdown body and mirrors the same nested H2/H3 structure that the public TOC will render
+- delete removes all six locale Markdown files before any owned-image cleanup, and partial failures return retryable `locale-delete-failed` / `image-cleanup-failed` status with remaining paths
 
 ### Featured image assets-first and retry behavior
 - featured images accept JPEG, PNG, WebP, and GIF only, with a hard `2 MB` max
@@ -267,7 +271,7 @@ remains in the locale JSON files.
 - Publish refreshes the Netlify Identity JWT before Git Gateway reads and writes, so editing sessions longer than one hour remain publishable
 - If the Identity session cannot refresh, the editor keeps all in-memory changes and asks the user to sign in again
 - Publish writes changed locale JSON, changed `src/data/site.json`, uploaded assets, and blog markdown files
-- Blog creation is restricted to ES/EN/FR
+- Blog post forms follow the current public-picker locales; hidden blog locales keep Spanish fallback on create and preserve their stored text on edit
 
 ## 10. Locale scope and fallback
 
