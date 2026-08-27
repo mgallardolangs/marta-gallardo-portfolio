@@ -75,7 +75,23 @@ test('createBlogPost retry-upserts an already-partially-written slug across ever
     fetchCalls.push({ method, input: String(input), body: init.body ?? null });
 
     if (method === 'GET' && String(input).includes(localePaths.es)) {
-      return new Response(JSON.stringify({ sha: 'existing-post-sha' }), {
+      const existingMarkdown = `---
+slug: "mi-primer-post"
+translationKey: "mi-primer-post"
+title: "Hola mundo"
+description: "Reintento seguro"
+date: "2025-08-01"
+tags: ["ugc"]
+lang: "es"
+---
+
+# Hola mundo
+`;
+
+      return new Response(JSON.stringify({
+        sha: 'existing-post-sha',
+        content: Buffer.from(existingMarkdown, 'utf8').toString('base64'),
+      }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
       });

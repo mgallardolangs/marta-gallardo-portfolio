@@ -514,6 +514,13 @@ function normalizeBlogTagsForComparison(tags: string[]): string {
   return JSON.stringify(tags.map((tag) => tag.trim()));
 }
 
+function blogLocaleMatchesSharedIdentity(
+  parsed: ReturnType<typeof parseBlogLocaleMarkdown>,
+  shared: { slug: string; translationKey: string },
+): boolean {
+  return parsed.slug === shared.slug && parsed.translationKey === shared.translationKey;
+}
+
 /**
  * True only when a parsed, already-existing locale Markdown file carries exactly the
  * shared slug/translationKey/date/image and the (trimmed) title/description/tags/body
@@ -528,8 +535,7 @@ function blogLocaleMatchesExpected(
   shared: { slug: string; translationKey: string; date: string; image?: string },
 ): boolean {
   return (
-    parsed.slug === shared.slug &&
-    parsed.translationKey === shared.translationKey &&
+    blogLocaleMatchesSharedIdentity(parsed, shared) &&
     parsed.date === shared.date &&
     (parsed.image ?? undefined) === (shared.image ?? undefined) &&
     normalizeBlogTextForComparison(parsed.title) === normalizeBlogTextForComparison(expected.title) &&
@@ -1405,14 +1411,15 @@ export class AdminStore {
    * every hidden locale always gets the fresh Spanish translation as a fallback.
    *
    * Before any image upload or Markdown write, every one of the six locale paths is
-   * read first. If none or only some of them already exist, this is treated as a
-   * partial prior attempt and every locale is retry-safe upserted as usual. If all
-   * six already exist, their parsed content is compared against what this call would
-   * write: an exact match (slug/translationKey/date/image plus trimmed
-   * title/description/tags/body) is a safe idempotent retry that performs zero writes,
-   * while any difference — including a mismatched slug/translationKey on an existing
-   * file — is rejected in Spanish as a duplicate-slug collision instead of silently
-   * overwriting an unrelated post that happens to share the slug.
+   * read first. A partial prior attempt may continue retry-safe only when every
+   * existing locale file already agrees on the target slug/translationKey; if any
+   * existing file parses as a different logical post, the create is rejected in
+   * Spanish as a duplicate-slug collision before touching the shared image or any
+   * Markdown writes. If all six already exist and belong to the target logical post,
+   * their parsed content is compared against what this call would write: an exact
+   * match (slug/translationKey/date/image plus trimmed title/description/tags/body)
+   * is a safe idempotent retry that performs zero writes, while any difference is
+   * rejected instead of silently overwriting an existing published post.
    */
   async createBlogPost(post: BlogPostCreateInput): Promise<string> {
     await this.refreshIdentityToken();
@@ -1444,18 +1451,27 @@ export class AdminStore {
     // anything, so an already-fully-published post under this slug can be detected and
     // either treated as an idempotent retry or rejected as a duplicate-slug collision.
     const existingFilesByLocale = {} as Record<SupportedLang, { sha: string; content: string } | null>;
+    const parsedExistingFilesByLocale = {} as Record<SupportedLang, ReturnType<typeof parseBlogLocaleMarkdown> | null>;
     for (const locale of SUPPORTED_LANGS) {
-      existingFilesByLocale[locale] = await this.fetchRepositoryFile(localePaths[locale]);
+      const existingFile = await this.fetchRepositoryFile(localePaths[locale]);
+      existingFilesByLocale[locale] = existingFile;
+      parsedExistingFilesByLocale[locale] = existingFile ? parseBlogLocaleMarkdown(existingFile.content) : null;
     }
 
     const existingLocaleCount = SUPPORTED_LANGS.filter((locale) => existingFilesByLocale[locale]).length;
+    const hasMismatchedExistingLogicalIdentity = SUPPORTED_LANGS.some((locale) => {
+      const parsed = parsedExistingFilesByLocale[locale];
+      return parsed ? !blogLocaleMatchesSharedIdentity(parsed, { slug, translationKey }) : false;
+    });
+
+    if (hasMismatchedExistingLogicalIdentity) {
+      throw new Error(getBlogDuplicateSlugMessage(slug));
+    }
 
     if (existingLocaleCount === SUPPORTED_LANGS.length) {
       const isIdenticalLogicalPost = SUPPORTED_LANGS.every((locale) => {
-        const existingFile = existingFilesByLocale[locale];
-        if (!existingFile) return false;
-
-        const parsed = parseBlogLocaleMarkdown(existingFile.content);
+        const parsed = parsedExistingFilesByLocale[locale];
+        if (!parsed) return false;
         const expectedTranslation = resolveBlogLocaleTranslation(locale, visibleLocales, post.translations, esTranslation);
 
         return blogLocaleMatchesExpected(parsed, expectedTranslation, {

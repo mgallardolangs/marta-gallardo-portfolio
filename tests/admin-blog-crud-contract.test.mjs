@@ -882,7 +882,7 @@ test('createBlogPost retry-upserts partially existing locale files by reading ev
         if (existingSha) {
           const existingMarkdown = buildFrontmatterFixture({
             slug,
-            translationKey: 'tk-mi-post-retry',
+            translationKey: slug,
             date: '2026-08-20',
             image: '/images/blog/mi-post-retry.webp',
             lang: locale,
@@ -980,6 +980,129 @@ test('createBlogPost retry-upserts partially existing locale files by reading ev
       body: translations.es.body,
       lang: hiddenLocale,
     });
+  }
+});
+
+test('createBlogPost rejects partial locale slug collisions when any existing locale file belongs to another logical post, before image upload or markdown writes', async () => {
+  const { AdminStore } = await importModule('src/components/admin/adminStore.ts');
+  const slug = 'mi-post-colision-parcial';
+  const localePaths = getLocaleMarkdownPaths(slug);
+  const { repositoryPath: imageRepositoryPath } = getSharedImagePaths(slug, 'png');
+  const expectedMessage = `Ya existe una entrada de blog con el slug "${slug}" pero con contenido diferente. Elige otro slug o edita la entrada existente en lugar de crear una nueva.`;
+  const existingLocaleSets = [
+    ['es'],
+    ['es', 'en'],
+    ['es', 'en', 'fr'],
+    ['es', 'en', 'fr', 'de'],
+    ['es', 'en', 'fr', 'de', 'it'],
+  ];
+
+  for (const existingLocales of existingLocaleSets) {
+    const store = createAdminStore(AdminStore);
+    const repoFilesByPath = new Map();
+    const fetchCalls = [];
+
+    existingLocales.forEach((locale, index) => {
+      const mismatchedSlug = index % 2 === 0 ? slug : `${slug}-ajeno-${locale}`;
+      const mismatchedTranslationKey = index % 2 === 0 ? `otra-clave-${locale}` : slug;
+      const existingMarkdown = buildFrontmatterFixture({
+        slug: mismatchedSlug,
+        translationKey: mismatchedTranslationKey,
+        date: '2026-08-20',
+        image: '/images/blog/otro-post.png',
+        lang: locale,
+        ...makeLocaleTranslation(locale),
+      });
+
+      repoFilesByPath.set(localePaths[locale], {
+        sha: `${locale}-existing-sha`,
+        content: Buffer.from(existingMarkdown, 'utf8').toString('base64'),
+      });
+    });
+
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async (input, init = {}) => {
+      const call = { method: init.method ?? 'GET', url: String(input), body: init.body ?? null };
+      fetchCalls.push(call);
+      const filePath = call.url.replace(/^.*\/contents\//, '');
+
+      if (call.method === 'GET') {
+        const existing = repoFilesByPath.get(filePath);
+        if (!existing) {
+          return new Response(JSON.stringify({ message: 'Not Found' }), {
+            status: 404,
+            headers: { 'Content-Type': 'application/json' },
+          });
+        }
+
+        return new Response(JSON.stringify(existing), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+
+      return new Response(JSON.stringify({ message: `Unexpected ${call.method} ${call.url}` }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    };
+
+    const initialRepoState = JSON.stringify([...repoFilesByPath.entries()].sort(([a], [b]) => a.localeCompare(b)));
+
+    try {
+      await assert.rejects(
+        () => store.createBlogPost({
+          slug,
+          date: '2026-08-26',
+          translations: makeTranslationsFixture(),
+          featuredImage: new File(['image-bytes'], `${slug}.png`, { type: 'image/png' }),
+        }),
+        (error) => {
+          assert.ok(error instanceof Error, 'createBlogPost should reject with an Error instance');
+          assert.equal(
+            error.message,
+            expectedMessage,
+            `partial slug collision with ${existingLocales.length} pre-existing locale file(s) should reject with the exact Spanish duplicate message`,
+          );
+          return true;
+        },
+      );
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+
+    const getCalls = fetchCalls.filter((call) => call.method === 'GET');
+    const putCalls = fetchCalls.filter((call) => call.method === 'PUT');
+    const deleteCalls = fetchCalls.filter((call) => call.method === 'DELETE');
+
+    assert.equal(
+      getCalls.length,
+      6,
+      `partial slug collision with ${existingLocales.length} pre-existing locale file(s) should still read all six locale files before rejecting`,
+    );
+    assert.equal(
+      putCalls.length,
+      0,
+      `partial slug collision with ${existingLocales.length} pre-existing locale file(s) must not write any locale Markdown file`,
+    );
+    assert.equal(
+      deleteCalls.length,
+      0,
+      `partial slug collision with ${existingLocales.length} pre-existing locale file(s) must not delete anything`,
+    );
+    assert.ok(
+      fetchCalls.every((call) => call.method === 'GET'),
+      `partial slug collision with ${existingLocales.length} pre-existing locale file(s) should stay GET-only`,
+    );
+    assert.ok(
+      !fetchCalls.some((call) => call.url.includes(imageRepositoryPath)),
+      `partial slug collision with ${existingLocales.length} pre-existing locale file(s) must not touch the featured image upload path`,
+    );
+    assert.equal(
+      JSON.stringify([...repoFilesByPath.entries()].sort(([a], [b]) => a.localeCompare(b))),
+      initialRepoState,
+      `partial slug collision with ${existingLocales.length} pre-existing locale file(s) should leave every existing file untouched`,
+    );
   }
 });
 
