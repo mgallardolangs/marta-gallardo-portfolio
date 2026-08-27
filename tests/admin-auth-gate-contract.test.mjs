@@ -633,6 +633,20 @@ test('AdminToolbar shows session state, login action, draft and publish descript
     /store\.orbitValidationErrors\.length\s*>\s*0/,
     'AdminToolbar publish button should keep its validation gate inside the same disabled expression',
   );
+
+  const classNameMatch = publishButtonBlock.match(/className=\{`([\s\S]*?)`\}/);
+  assert.ok(
+    classNameMatch,
+    'AdminToolbar publish button should declare its own className expression',
+  );
+  if (!classNameMatch) return;
+
+  const classNameExpression = classNameMatch[1];
+  assert.match(
+    classNameExpression,
+    /store\.isAuthenticated\s*&&\s*store\.isDirty\s*&&\s*store\.orbitValidationErrors\.length\s*===\s*0/,
+    'AdminToolbar publish button should only render the active green state when authenticated, dirty, and validation-clean',
+  );
 });
 
 for (const entrypoint of [

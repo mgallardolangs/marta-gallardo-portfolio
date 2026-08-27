@@ -161,7 +161,7 @@ export default function AdminToolbar() {
                 type="button"
                 onClick={() => void store.publish()}
                 disabled={!store.isAuthenticated || !store.isDirty || store.isPublishing || store.orbitValidationErrors.length > 0}
-                className={`w-full text-xs px-3 py-2 rounded-lg font-bold transition-colors text-left ${store.isDirty && store.orbitValidationErrors.length === 0 ? 'bg-green-500 hover:bg-green-400' : 'bg-gray-700 text-gray-500'}`}
+                className={`w-full text-xs px-3 py-2 rounded-lg font-bold transition-colors text-left ${store.isAuthenticated && store.isDirty && store.orbitValidationErrors.length === 0 ? 'bg-green-500 hover:bg-green-400' : 'bg-gray-700 text-gray-500'}`}
               >
                 {store.isPublishing ? '⏳ Publicando…' : '🚀 Publicar cambios'}
               </button>
