@@ -355,18 +355,18 @@ test('expired identity refresh clears auth, keeps edits and previews, and return
   const snapshot = store.getSnapshot();
   assert.match(
     snapshot.publishError,
-    /No hay una sesión de administrador activa/i,
-    'publish should explain in Spanish that there is no active admin session after Identity refresh fails',
+    /La sesión de administrador ha expirado/i,
+    'publish should explain in Spanish that the existing admin session expired after Identity refresh fails',
   );
   assert.match(
     snapshot.publishError,
-    /cambios.*pestaña/i,
-    'publish should reassure the editor that unsaved changes still remain in the current tab',
-  );
-  assert.match(
-    snapshot.publishError,
-    /Inicia sesión/i,
+    /vuelve a iniciarla/i,
     'publish should tell the editor to sign in again instead of leaving the next action implicit',
+  );
+  assert.match(
+    snapshot.publishError,
+    /cambios sin publicar siguen abiertos/i,
+    'publish should reassure the editor that unsaved changes still remain available in the current tab',
   );
   assert.ok(
     'isAuthenticated' in snapshot,
