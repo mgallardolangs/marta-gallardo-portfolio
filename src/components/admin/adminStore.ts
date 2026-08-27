@@ -1730,12 +1730,10 @@ export class AdminStore {
     });
 
     if (!response.ok) {
-      let details = response.statusText;
-      try {
-        const data = (await response.json()) as { message?: string };
-        if (data?.message) details = data.message;
-      } catch {
-        details = await response.text();
+      const details = await this.extractGatewayErrorDetails(response);
+      if (response.status === 401 || response.status === 403) {
+        this.clearAuthToken();
+        throw new Error(this.buildGatewayAuthErrorMessage('publicar', path, details));
       }
       throw new Error(`No se pudo publicar ${path}: ${details}`);
     }
@@ -1750,12 +1748,10 @@ export class AdminStore {
 
     if (response.status === 404) return null;
     if (!response.ok) {
-      let details = response.statusText;
-      try {
-        const data = (await response.json()) as { message?: string };
-        if (data?.message) details = data.message;
-      } catch {
-        details = await response.text();
+      const details = await this.extractGatewayErrorDetails(response);
+      if (response.status === 401 || response.status === 403) {
+        this.clearAuthToken();
+        throw new Error(this.buildGatewayAuthErrorMessage('cargar', path, details));
       }
       throw new Error(`No se pudo cargar ${path}: ${details}`);
     }
@@ -1773,12 +1769,10 @@ export class AdminStore {
 
     if (response.status === 404) return null;
     if (!response.ok) {
-      let details = response.statusText;
-      try {
-        const data = (await response.json()) as { message?: string };
-        if (data?.message) details = data.message;
-      } catch {
-        details = await response.text();
+      const details = await this.extractGatewayErrorDetails(response);
+      if (response.status === 401 || response.status === 403) {
+        this.clearAuthToken();
+        throw new Error(this.buildGatewayAuthErrorMessage('cargar', path, details));
       }
       throw new Error(`No se pudo cargar ${path}: ${details}`);
     }
@@ -1804,15 +1798,31 @@ export class AdminStore {
     });
 
     if (!response.ok && response.status !== 404) {
-      let details = response.statusText;
-      try {
-        const data = (await response.json()) as { message?: string };
-        if (data?.message) details = data.message;
-      } catch {
-        details = await response.text();
+      const details = await this.extractGatewayErrorDetails(response);
+      if (response.status === 401 || response.status === 403) {
+        this.clearAuthToken();
+        throw new Error(this.buildGatewayAuthErrorMessage('eliminar', path, details));
       }
       throw new Error(`No se pudo eliminar ${path}: ${details}`);
     }
+  }
+
+  private async extractGatewayErrorDetails(response: Response): Promise<string> {
+    try {
+      const data = (await response.json()) as { message?: string };
+      if (data?.message) return data.message;
+    } catch {
+      try {
+        return await response.text();
+      } catch {
+        /* fall through */
+      }
+    }
+    return response.statusText;
+  }
+
+  private buildGatewayAuthErrorMessage(action: 'publicar' | 'cargar' | 'eliminar', path: string, details: string): string {
+    return `No se pudo ${action} ${path}: Git Gateway rechazó la autorización (${details}). Cierra sesión desde el botón ✏️ Editar y vuelve a iniciar sesión. Si el problema continúa, comprueba en Netlify → Identity → Users que tu usuario tiene el rol configurado en Identity → Services → Git Gateway → Roles.`;
   }
 
   private getMutableOrbitMedia(): OrbitMedia[] {
