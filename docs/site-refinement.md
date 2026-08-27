@@ -268,8 +268,11 @@ remains in the locale JSON files.
 - Drafts live in local storage under the admin store
 - Pending binary uploads are not stored fully in local storage; they must be reselected after reload
 - Spanish draft warnings clarify that files only need reselection if the page reloads before publishing
-- Publish refreshes the Netlify Identity JWT before Git Gateway reads and writes, so editing sessions longer than one hour remain publishable
-- If the Identity session cannot refresh, the editor keeps all in-memory changes and asks the user to sign in again
+- Production admin requires Netlify Identity; localhost stays tokenless
+- Valid sessions refresh the Netlify Identity JWT silently before Git Gateway reads and writes
+- If Identity is missing, SSR shows the auth wall/login before admin loads
+- If a session expires, the editor keeps the current tab's in-memory edits and asks the user to sign in again
+- The toolbar explains which changes are still draft-only versus ready to publish
 - Publish writes changed locale JSON, changed `src/data/site.json`, uploaded assets, and blog markdown files
 - Blog post forms follow the current public-picker locales; hidden blog locales keep Spanish fallback on create and preserve their stored text on edit
 
