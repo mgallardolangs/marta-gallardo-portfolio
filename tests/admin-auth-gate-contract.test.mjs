@@ -468,8 +468,12 @@ test('AdminAuthGate exists and AdminLayout mounts it exactly once', async () => 
     'AdminLayout should import the dedicated auth gate instead of leaving the admin editor directly exposed',
   );
 
-  const gateMounts = layoutSource.match(/<AdminAuthGate\s+client:load\s*\/>/g) ?? [];
-  assert.equal(gateMounts.length, 1, 'AdminLayout should mount AdminAuthGate exactly once for the whole admin shell');
+  const gateMounts = layoutSource.match(/<AdminAuthGate\s+client:load\s+allowTokenless=\{allowTokenless\}\s*\/>/g) ?? [];
+  assert.equal(
+    gateMounts.length,
+    1,
+    'AdminLayout should mount AdminAuthGate exactly once for the whole admin shell, passing the computed allowTokenless prop',
+  );
 });
 
 test('AdminAuthGate only bypasses local hosts and shows the production full-screen login overlay until authenticated', async () => {
@@ -483,8 +487,8 @@ test('AdminAuthGate only bypasses local hosts and shows the production full-scre
 
   assert.match(
     source,
-    /shouldAllowTokenlessAdminInit|window\.location\.hostname/,
-    'AdminAuthGate should stay host-aware so only local loopback hosts bypass the production auth wall',
+    /allowTokenless/,
+    'AdminAuthGate should accept the allowTokenless prop AdminLayout computes from Astro.url.hostname instead of re-deriving the host on the client',
   );
   assert.match(
     source,
@@ -522,13 +526,9 @@ test('AdminAuthGate only bypasses local hosts and shows the production full-scre
     'AdminAuthGate should guard the production auto-open flow so the login dialog opens only once per page load',
   );
   const overlayIndex = source.search(/className="fixed inset-0/);
-  const loopbackEarlyReturnMatch =
-    source.match(
-      /if\s*\(\s*shouldAllowTokenlessAdminInit\([^)]*\)\s*\)\s*(?:\{\s*return\s+null;?\s*\}|return\s+null;?)/,
-    ) ??
-    source.match(
-      /const\s+(?<loopbackGuard>\w+)\s*=\s*shouldAllowTokenlessAdminInit\([^)]*\);?[\s\S]{0,300}?if\s*\(\s*\k<loopbackGuard>\s*\)\s*(?:\{\s*return\s+null;?\s*\}|return\s+null;?)/,
-    );
+  const loopbackEarlyReturnMatch = source.match(
+    /if\s*\(\s*allowTokenless\s*\)\s*(?:\{\s*return\s+null;?\s*\}|return\s+null;?)/,
+  );
   assert.ok(
     loopbackEarlyReturnMatch,
     'AdminAuthGate should use the loopback helper result to return null before rendering any production auth overlay markup',
@@ -548,6 +548,287 @@ test('AdminAuthGate only bypasses local hosts and shows the production full-scre
     source,
     /La sesión de administrador ha expirado[\s\S]{0,320}(?:cambios[\s\S]{0,160}pestaña|pestaña[\s\S]{0,160}cambios)/i,
     'AdminAuthGate expired-session copy should explicitly say the current tab still keeps unsaved changes',
+  );
+});
+
+test('AdminAuthGate receives its local bypass as a prop computed by AdminLayout from Astro.url.hostname, and the production build renders the auth wall before hydration instead of only after an effect', async () => {
+  const [gateSource, layoutSource] = await Promise.all([
+    readOptionalSource('src/components/admin/AdminAuthGate.tsx'),
+    readSource('src/layouts/AdminLayout.astro'),
+  ]);
+
+  assert.ok(gateSource, 'src/components/admin/AdminAuthGate.tsx should exist');
+  if (!gateSource) return;
+
+  assert.match(
+    layoutSource,
+    /import\s*\{\s*shouldAllowTokenlessAdminInit\s*\}\s*from\s*['"]\.\.\/lib\/adminInit\.js['"];/,
+    'AdminLayout should import shouldAllowTokenlessAdminInit so it can compute the bypass itself instead of leaving the decision to a client-side effect',
+  );
+  assert.match(
+    layoutSource,
+    /const\s+allowTokenless\s*=\s*shouldAllowTokenlessAdminInit\(\s*Astro\.url\.hostname\s*\)/,
+    'AdminLayout should derive allowTokenless from Astro.url.hostname while server rendering',
+  );
+  assert.match(
+    layoutSource,
+    /<AdminAuthGate\s+client:load\s+allowTokenless=\{allowTokenless\}\s*\/>/,
+    'AdminLayout should pass the computed allowTokenless prop into AdminAuthGate',
+  );
+
+  assert.match(
+    gateSource,
+    /interface\s+Props\s*\{\s*allowTokenless:\s*boolean;\s*\}/,
+    'AdminAuthGate should type its allowTokenless prop',
+  );
+  assert.match(
+    gateSource,
+    /export default function AdminAuthGate\(\{\s*allowTokenless\s*\}:\s*Props\)/,
+    'AdminAuthGate should destructure the typed allowTokenless prop instead of computing its own host state',
+  );
+  assert.doesNotMatch(
+    gateSource,
+    /window\.location\.hostname/,
+    'AdminAuthGate should no longer read window.location.hostname itself now that AdminLayout computes allowTokenless during SSR',
+  );
+  assert.doesNotMatch(
+    gateSource,
+    /useState/,
+    'AdminAuthGate should not gate its bypass/wall decision behind a useState populated only after mount, or the first client render would flash null before the SSR wall appears',
+  );
+  assert.match(
+    gateSource,
+    /if\s*\(\s*allowTokenless\s*\)\s*return\s+null;/,
+    'AdminAuthGate should return null synchronously from the allowTokenless prop so its first server render and first client render always agree',
+  );
+});
+
+test('CHECK_DIST: production build renders the AdminAuthGate auth wall heading and copy inside its server-rendered island before hydration', async (t) => {
+  if (process.env.CHECK_DIST !== '1') {
+    t.skip('Set CHECK_DIST=1 after npm run build to verify the built admin HTML auth wall.');
+    return;
+  }
+
+  const adminHtml = await readSource('dist/admin/index.html');
+
+  const islandTagMatch = adminHtml.match(/<astro-island[^>]*component-url="\/_astro\/AdminAuthGate\.[^"]*"[^>]*>/);
+  assert.ok(islandTagMatch, 'built admin HTML should include the AdminAuthGate island');
+  if (!islandTagMatch) return;
+
+  assert.match(
+    islandTagMatch[0],
+    /props="[^"]*allowTokenless[^"]*"/,
+    'the AdminAuthGate island should be seeded with the allowTokenless prop computed by AdminLayout',
+  );
+
+  const tagStart = adminHtml.indexOf(islandTagMatch[0]);
+  const bodyStart = tagStart + islandTagMatch[0].length;
+  const bodyEnd = adminHtml.indexOf('</astro-island>', bodyStart);
+  assert.ok(bodyEnd !== -1, 'the AdminAuthGate island should have a matching close tag');
+  const islandBody = adminHtml.slice(bodyStart, bodyEnd);
+
+  assert.match(
+    islandBody,
+    /Acceso de administrador requerido/,
+    'the production build should server-render the auth wall heading before hydration instead of an empty island',
+  );
+  assert.match(
+    islandBody,
+    /No hay una sesión de administrador activa/,
+    'the production build should server-render the initial unauthenticated wall copy before hydration',
+  );
+});
+
+test('AdminLayout wraps all admin editing content in an admin-editing-shell that is inert by default in production, and AdminAuthGate toggles it once real auth state is known', async () => {
+  const [gateSource, layoutSource] = await Promise.all([
+    readOptionalSource('src/components/admin/AdminAuthGate.tsx'),
+    readSource('src/layouts/AdminLayout.astro'),
+  ]);
+
+  assert.ok(gateSource, 'src/components/admin/AdminAuthGate.tsx should exist');
+  if (!gateSource) return;
+
+  assert.match(
+    layoutSource,
+    /<div\s+id="admin-editing-shell"\s+inert=\{allowTokenless\s*\?\s*undefined\s*:\s*true\}>/,
+    'AdminLayout should wrap the admin editing content in a known #admin-editing-shell container that is inert by default whenever the production bypass is not allowed',
+  );
+
+  const shellOpenIndex = layoutSource.indexOf('id="admin-editing-shell"');
+  const adminInitIndex = layoutSource.indexOf('<AdminInit');
+  const toolbarIndex = layoutSource.indexOf('<AdminToolbar');
+  const headerIndex = layoutSource.indexOf('<Header');
+  const mainIndex = layoutSource.indexOf('<main');
+  const footerIndex = layoutSource.indexOf('<Footer');
+  const gateIndex = layoutSource.indexOf('<AdminAuthGate');
+
+  assert.ok(
+    shellOpenIndex !== -1 &&
+      shellOpenIndex < adminInitIndex &&
+      adminInitIndex < toolbarIndex &&
+      toolbarIndex < headerIndex &&
+      headerIndex < mainIndex &&
+      mainIndex < footerIndex &&
+      footerIndex < gateIndex,
+    'the admin-editing-shell should wrap AdminInit, the toolbar, header, main, and footer, with AdminAuthGate rendered as a sibling outside of it afterwards',
+  );
+
+  assert.match(
+    gateSource,
+    /getElementById\(\s*(?:ADMIN_SHELL_ID|['"]admin-editing-shell['"])\s*\)/,
+    'AdminAuthGate should look up the admin-editing-shell element to toggle its inert state',
+  );
+  assert.match(
+    gateSource,
+    /\.inert\s*=\s*!store\.isAuthenticated/,
+    'AdminAuthGate should keep the shell inert while unauthenticated and remove inert once a real session exists',
+  );
+  assert.match(
+    gateSource,
+    /return\s*\(\)\s*=>\s*\{\s*shell\.inert\s*=\s*false;/,
+    'AdminAuthGate should restore the shell out of inert on cleanup so unmounting never leaves the admin shell permanently locked',
+  );
+});
+
+test('CHECK_DIST: the built production admin shell is inert by default around every admin control', async (t) => {
+  if (process.env.CHECK_DIST !== '1') {
+    t.skip('Set CHECK_DIST=1 after npm run build to verify the built admin-editing-shell inert state.');
+    return;
+  }
+
+  const adminHtml = await readSource('dist/admin/index.html');
+
+  assert.match(
+    adminHtml,
+    /<div id="admin-editing-shell" inert>/,
+    'the production build should server-render the admin-editing-shell as inert before any admin session exists',
+  );
+
+  const shellIndex = adminHtml.indexOf('id="admin-editing-shell"');
+  const adminInitIslandIndex = adminHtml.search(/component-url="\/_astro\/AdminInit\./);
+  const gateIslandIndex = adminHtml.search(/component-url="\/_astro\/AdminAuthGate\./);
+  assert.ok(
+    shellIndex !== -1 && shellIndex < adminInitIslandIndex,
+    'the admin-editing-shell should wrap the AdminInit island',
+  );
+  assert.ok(
+    adminInitIslandIndex !== -1 && gateIslandIndex !== -1 && adminInitIslandIndex < gateIslandIndex,
+    'AdminAuthGate should be rendered after the admin-editing-shell content in the built HTML',
+  );
+});
+
+test('AdminAuthGate traps Tab and Shift+Tab focus on its single login CTA while the background shell stays inert', async () => {
+  const gateSource = await readOptionalSource('src/components/admin/AdminAuthGate.tsx');
+  assert.ok(gateSource, 'src/components/admin/AdminAuthGate.tsx should exist');
+  if (!gateSource) return;
+
+  assert.match(
+    gateSource,
+    /ref=\{dialogRef\}/,
+    'the dialog container should hold a ref so the focus trap can attach a keydown listener to it',
+  );
+  assert.match(
+    gateSource,
+    /ref=\{loginButtonRef\}/,
+    'the single login CTA should hold a ref so the focus trap can refocus it',
+  );
+  assert.match(
+    gateSource,
+    /addEventListener\(\s*['"]keydown['"]\s*,\s*handleKeyDown\s*\)/,
+    'AdminAuthGate should attach a keydown listener to the dialog to trap focus',
+  );
+  assert.match(
+    gateSource,
+    /event\.key\s*!==\s*['"]Tab['"]/,
+    'the focus trap should react to Tab presses (Shift+Tab also reports "Tab" as the key) and ignore every other key',
+  );
+  assert.match(
+    gateSource,
+    /event\.preventDefault\(\)/,
+    'the focus trap should prevent the browser default Tab navigation from escaping the one-control dialog',
+  );
+  assert.match(
+    gateSource,
+    /loginButtonRef\.current\?\.focus\(\)/,
+    'the focus trap should keep focus on the single login CTA instead of letting it leave the dialog',
+  );
+  assert.match(
+    gateSource,
+    /removeEventListener\(\s*['"]keydown['"]\s*,\s*handleKeyDown\s*\)/,
+    'the focus trap should clean up its keydown listener when the gate unmounts or stops blocking',
+  );
+  assert.match(
+    gateSource,
+    /admin-editing-shell/,
+    'AdminAuthGate should still reference the admin-editing-shell so the background stays inert while this dialog traps focus',
+  );
+});
+
+test('AdminAuthGate only marks its auto-open flag after a successful Netlify Identity open call, and bounds its widget-readiness retry with cleanup', async () => {
+  const gateSource = await readOptionalSource('src/components/admin/AdminAuthGate.tsx');
+  assert.ok(gateSource, 'src/components/admin/AdminAuthGate.tsx should exist');
+  if (!gateSource) return;
+
+  assert.match(
+    gateSource,
+    /function\s+openNetlifyLogin\(\)\s*:\s*boolean\s*\{/,
+    'openNetlifyLogin should report success/failure instead of silently doing nothing when the widget is not ready',
+  );
+  assert.match(
+    gateSource,
+    /if\s*\(\s*typeof\s+identity\?\.open\s*!==\s*['"]function['"]\s*\)\s*return\s+false;/,
+    'openNetlifyLogin should return false when the Netlify Identity widget has not defined open yet',
+  );
+  assert.match(
+    gateSource,
+    /identity\.open\(['"]login['"]\);\s*\n\s*return true;/,
+    'openNetlifyLogin should return true only once it has actually invoked the widget open call',
+  );
+  assert.match(
+    gateSource,
+    /if\s*\(\s*openNetlifyLogin\(\)\s*\)\s*\{\s*hasAutoOpenedRef\.current\s*=\s*true;/,
+    'the auto-open effect should only flip its one-shot flag after openNetlifyLogin actually succeeds',
+  );
+  assert.doesNotMatch(
+    gateSource,
+    /hasAutoOpenedRef\.current\s*=\s*true;\s*\n\s*openNetlifyLogin\(\);/,
+    'the auto-open flag should never be marked before calling openNetlifyLogin, or a slow widget would be silently skipped forever',
+  );
+  assert.match(
+    gateSource,
+    /ADMIN_AUTH_GATE_OPEN_MAX_RETRIES/,
+    'AdminAuthGate should bound its auto-open retry attempts so a widget that never loads cannot retry forever',
+  );
+  assert.match(
+    gateSource,
+    /window\.setTimeout\(\s*tryOpen\s*,\s*ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS\s*\)/,
+    'AdminAuthGate should retry the auto-open attempt on a bounded timer while the widget script is still loading',
+  );
+  assert.match(
+    gateSource,
+    /if\s*\(\s*timeoutId\s*\)\s*window\.clearTimeout\(\s*timeoutId\s*\)/,
+    'AdminAuthGate should clear its pending retry timeout on cleanup so no stray timer can fire after unmount and cause a modal storm',
+  );
+
+  const adminInitModule = await import('../src/lib/adminInit.js');
+  const { ADMIN_AUTH_GATE_OPEN_MAX_RETRIES, ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS } = adminInitModule;
+  assert.equal(
+    typeof ADMIN_AUTH_GATE_OPEN_MAX_RETRIES,
+    'number',
+    'ADMIN_AUTH_GATE_OPEN_MAX_RETRIES should be exported as a number',
+  );
+  assert.ok(
+    ADMIN_AUTH_GATE_OPEN_MAX_RETRIES > 1,
+    'the retry ceiling should allow more than a single attempt so a slow widget script still gets picked up',
+  );
+  assert.equal(
+    typeof ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS,
+    'number',
+    'ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS should be exported as a number',
+  );
+  assert.ok(
+    ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS > 0,
+    'the retry delay should be a positive bounded interval, not an immediate busy loop',
   );
 });
 

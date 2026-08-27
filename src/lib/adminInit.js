@@ -2,6 +2,13 @@ export const ADMIN_INIT_RETRY_DELAY_MS = 500;
 export const ADMIN_INIT_MAX_RETRIES = 12;
 export const ADMIN_INIT_FALLBACK_DELAY_MS = 2000;
 
+// Bounded retry for AdminAuthGate's login auto-open: the Netlify Identity
+// widget script can still be loading when the gate mounts, so it retries a
+// few times on a short timer instead of silently giving up or opening more
+// than once (a "modal storm").
+export const ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS = 250;
+export const ADMIN_AUTH_GATE_OPEN_MAX_RETRIES = 20;
+
 const LOOPBACK_HOSTNAMES = new Set(['localhost', '127.0.0.1', '::1']);
 
 export function shouldAllowTokenlessAdminInit(hostname) {
