@@ -562,18 +562,36 @@ test('AdminToolbar shows session state, login action, draft and publish descript
     /open\(['"]login['"]\)/,
     'AdminToolbar login actions should route directly to netlifyIdentity.open(\'login\')',
   );
-  const publishButtonBlockMatch =
-    source.match(
-      /<button\b[\s\S]*?onClick=\{\(\)\s*=>\s*void\s+store\.publish\(\)\}[\s\S]*?<\/button>/,
-    ) ??
-    source.match(/<button\b[\s\S]*?Publicar cambios[\s\S]*?<\/button>/);
-  assert.ok(
-    publishButtonBlockMatch,
-    'AdminToolbar should keep a dedicated publish button block anchored to store.publish() or the publish label',
+  const publishOnClickIndex = source.indexOf('onClick={() => void store.publish()}');
+  const publishOnClickIndexFallback = publishOnClickIndex === -1
+    ? source.search(/onClick=\{\(\)\s*=>\s*void\s+store\.publish\(\)\}/)
+    : publishOnClickIndex;
+  assert.notEqual(
+    publishOnClickIndexFallback,
+    -1,
+    'AdminToolbar should expose a publish button onClick that calls store.publish()',
   );
-  if (!publishButtonBlockMatch) return;
+  if (publishOnClickIndexFallback === -1) return;
 
-  const disabledExpressionMatch = publishButtonBlockMatch[0].match(/disabled=\{([\s\S]*?)\}/);
+  const publishButtonStartIndex = source.lastIndexOf('<button', publishOnClickIndexFallback);
+  assert.notEqual(
+    publishButtonStartIndex,
+    -1,
+    'AdminToolbar publish button extraction should find the nearest opening <button before the publish onClick marker',
+  );
+  if (publishButtonStartIndex === -1) return;
+
+  const publishButtonEndIndex = source.indexOf('</button>', publishOnClickIndexFallback);
+  assert.notEqual(
+    publishButtonEndIndex,
+    -1,
+    'AdminToolbar publish button extraction should find the closing </button> after the publish onClick marker',
+  );
+  if (publishButtonEndIndex === -1) return;
+
+  const publishButtonBlock = source.slice(publishButtonStartIndex, publishButtonEndIndex + '</button>'.length);
+
+  const disabledExpressionMatch = publishButtonBlock.match(/disabled=\{([\s\S]*?)\}/);
   assert.ok(
     disabledExpressionMatch,
     'AdminToolbar publish button should declare its own disabled expression',
