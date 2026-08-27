@@ -14,7 +14,6 @@ type ExperienceCard = {
 
 interface Props {
   tabListAriaLabel: string;
-  profileLabel: string;
   statement: string;
   tabs: {
     education: {
@@ -30,7 +29,7 @@ interface Props {
   };
 }
 
-export default function ExperienceTabs({ tabListAriaLabel, profileLabel, statement, tabs }: Props) {
+export default function ExperienceTabs({ tabListAriaLabel, statement, tabs }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [panelHeight, setPanelHeight] = useState<number | null>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -83,7 +82,7 @@ export default function ExperienceTabs({ tabListAriaLabel, profileLabel, stateme
       label: tabs.experience.label,
       intro: tabs.experience.intro,
       content: (
-        <div className="grid gap-px bg-paper/16 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-px bg-paper/16 sm:grid-cols-2 xl:grid-cols-3">
           {tabs.experience.cards.map((card) => (
             <article key={`${card.highlight}-${card.title}`} className="bg-ink px-5 py-6">
               <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-amaranth">{card.highlight}</p>
@@ -134,7 +133,6 @@ export default function ExperienceTabs({ tabListAriaLabel, profileLabel, stateme
               })}
             </div>
           </div>
-          <span className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-paper/42">{profileLabel}</span>
         </div>
       </div>
 

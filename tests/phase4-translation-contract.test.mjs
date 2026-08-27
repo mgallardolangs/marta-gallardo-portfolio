@@ -194,7 +194,7 @@ test('tool logo uploads accept svg inventory while orbit validators stay stricte
   );
   assert.match(
     orbit.validateOrbitMediaUpload(svgLogo, 'image') ?? '',
-    /JPG, PNG, WebP, or GIF/,
+    /JPG, PNG, WebP o GIF/,
   );
 });
 

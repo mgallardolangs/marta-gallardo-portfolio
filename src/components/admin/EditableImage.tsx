@@ -12,7 +12,7 @@ interface Props {
  * EditableImage — direct store access (no useSyncExternalStore)
  * Same pattern as EditableText: bypass React rendering for reliability
  */
-export default function EditableImage({ imageKey, className = '', alt = '', label = '📷 Change image' }: Props) {
+export default function EditableImage({ imageKey, className = '', alt = '', label = '📷 Cambiar imagen' }: Props) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [src, setSrc] = useState('');
 
@@ -36,7 +36,7 @@ export default function EditableImage({ imageKey, className = '', alt = '', labe
     if (!file) return;
     const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml'];
     if (!validTypes.includes(file.type)) {
-      alert('Use JPG, PNG, WebP, GIF, or SVG format');
+      alert('Usa formato JPG, PNG, WebP, GIF o SVG');
       return;
     }
     const ext = file.name.split('.').pop() || 'png';

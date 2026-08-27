@@ -1,10 +1,12 @@
 ---
+slug: "mi-primer-post"
+translationKey: "mi-primer-post"
 title: "Mi primer post"
 description: "Bienvenidos a mi blog donde comparto mi experiencia como creadora de UGC y especialista en traducción."
 date: 2025-07-15
 image: "/images/blog/mi-primer-post.webp"
 tags: ["ugc", "personal"]
-lang: "es"
+lang: "en"
 ---
 
 # Bienvenidos a mi blog

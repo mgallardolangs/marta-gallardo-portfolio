@@ -17,11 +17,11 @@ const PUBLIC_PICKER_LANGS = [
 ];
 
 const NAV_LABELS = [
-  { key: 'nav.home', label: 'Home' },
-  { key: 'nav.ugc', label: 'Creative Content' },
-  { key: 'nav.translationSeo', label: 'Translation / SEO' },
+  { key: 'nav.home', label: 'Inicio' },
+  { key: 'nav.ugc', label: 'Contenido creativo' },
+  { key: 'nav.translationSeo', label: 'Traducción / SEO' },
   { key: 'nav.blog', label: 'Blog' },
-  { key: 'nav.contact', label: 'Contact' },
+  { key: 'nav.contact', label: 'Contacto' },
 ] as const;
 
 export default function AdminToolbar() {
@@ -44,7 +44,7 @@ export default function AdminToolbar() {
         onClick={() => setExpanded(!expanded)}
         className="bg-gray-900 text-white rounded-full px-4 py-2 shadow-2xl flex items-center gap-2 text-sm hover:bg-gray-800 transition-colors"
       >
-        ✏️ Edit
+        ✏️ Editar
         {store.isDirty && (
           <span className="bg-orange-500 text-[10px] px-1.5 py-0.5 rounded-full font-bold">{store.pendingCount}</span>
         )}
@@ -71,7 +71,7 @@ export default function AdminToolbar() {
           </div>
 
           <div className="mb-3">
-            <p className="mb-2 text-[10px] text-gray-400">Navigation labels</p>
+            <p className="mb-2 text-[10px] text-gray-400">Etiquetas de navegación</p>
             <div className="space-y-2">
               {NAV_LABELS.map((item) => (
                 <label key={item.key} className="flex items-center gap-2 text-[11px] text-gray-200">
@@ -91,7 +91,7 @@ export default function AdminToolbar() {
           </div>
 
           <div className="mb-3">
-            <p className="text-[10px] text-gray-400 uppercase mb-1">Public language picker</p>
+            <p className="text-[10px] text-gray-400 uppercase mb-1">Idiomas visibles</p>
             <div className="flex flex-wrap gap-1.5">
               {PUBLIC_PICKER_LANGS.map((pickerLang) => {
                 const isVisible = publicLanguagePicker.includes(pickerLang.code);
@@ -120,7 +120,7 @@ export default function AdminToolbar() {
           <div className="flex flex-col gap-2">
             {store.isDirty && (
               <button type="button" onClick={store.saveDraft} className="w-full text-xs px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-left">
-                💾 Save draft
+                💾 Guardar borrador
               </button>
             )}
             <button
@@ -129,19 +129,19 @@ export default function AdminToolbar() {
               disabled={!store.isDirty || store.isPublishing || store.orbitValidationErrors.length > 0}
               className={`w-full text-xs px-3 py-2 rounded-lg font-bold transition-colors text-left ${store.isDirty && store.orbitValidationErrors.length === 0 ? 'bg-green-500 hover:bg-green-400' : 'bg-gray-700 text-gray-500'}`}
             >
-              {store.isPublishing ? '⏳ Publishing...' : '🚀 Publish changes'}
+              {store.isPublishing ? '⏳ Publicando…' : '🚀 Publicar cambios'}
             </button>
             <a href="/" className="text-xs text-gray-400 hover:text-white px-3 py-2">
-              ← Exit editor
+              ← Salir del editor
             </a>
           </div>
 
           {/* Toasts */}
           {store.orbitValidationErrors.length > 0 && (
-            <p className="mt-2 text-xs text-amber-300">⚠️ Fix the orbit warnings before publishing.</p>
+            <p className="mt-2 text-xs text-amber-300">⚠️ Corrige los avisos del orbit antes de publicar.</p>
           )}
           {store.draftMessage && <p className={`mt-2 text-xs ${draftToneClass}`}>💾 {store.draftMessage}</p>}
-          {store.publishSuccess && <p className="mt-2 text-xs text-green-400">✅ Published! Rebuilds in ~2 min.</p>}
+          {store.publishSuccess && <p className="mt-2 text-xs text-green-400">✅ ¡Publicado! El sitio se reconstruirá en ~2 min.</p>}
           {store.publishError && <p className="mt-2 text-xs text-red-400">❌ {store.publishError}</p>}
         </div>
       )}

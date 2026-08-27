@@ -191,7 +191,7 @@ test('legacy draft load restores code-managed hero marks and current picker whil
     store.loadDraft();
 
     assert.equal(store.getSnapshot().currentLang, 'fr');
-    assert.match(store.getSnapshot().draftMessage ?? '', /reselected before publishing/i);
+    assert.match(store.getSnapshot().draftMessage ?? '', /deberás volver a seleccionarl?o?s? antes de publicar/i);
     assert.equal(store.getSnapshot().getImageSrc('heroMainPhoto'), '/images/site/draft-hero.webp');
     assert.deepEqual(store.getPublicLanguagePicker(), ['es', 'de', 'it']);
 
@@ -450,7 +450,7 @@ test('useAdminStore and AdminToolbar expose compact public language picker contr
   assert.match(storeSource, /setPublicLanguageVisibility\s*\(\s*lang:\s*SupportedLang,\s*visible:\s*boolean\s*\)/, 'adminStore should expose a visibility toggle mutator');
   assert.match(hookSource, /getPublicLanguagePicker:\s*adminStore\.getPublicLanguagePicker\.bind\(adminStore\)/, 'useAdminStore should expose the public picker getter');
   assert.match(hookSource, /setPublicLanguageVisibility:\s*adminStore\.setPublicLanguageVisibility\.bind\(adminStore\)/, 'useAdminStore should expose the public picker toggle mutator');
-  assert.match(toolbarSource, /Public language picker/, 'AdminToolbar should label the compact public picker controls');
+  assert.match(toolbarSource, /Idiomas visibles/, 'AdminToolbar should label the compact public picker controls');
   assert.match(toolbarSource, /ES[\s\S]*EN[\s\S]*FR[\s\S]*DE[\s\S]*IT[\s\S]*CA/s, 'AdminToolbar should expose toggles for all six locales');
   assert.match(toolbarSource, /disabled=\{pickerLang\.code === 'es'\}/, 'AdminToolbar should keep ES checked and disabled');
   assert.match(toolbarSource, /store\.setPublicLanguageVisibility\(pickerLang\.code,\s*!isVisible\)/, 'AdminToolbar toggles should call the public picker visibility mutator');

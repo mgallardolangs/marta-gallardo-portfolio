@@ -114,7 +114,7 @@ export function updateCollectionLocalizedText(
 
 export function validateEditableLocaleSeed(label: string, seed: Partial<EditableLocaleSeed>) {
   const missing = EDITABLE_COLLECTION_LOCALES.filter((locale) => !seed[locale]?.trim());
-  return missing.length > 0 ? `${label} requires ES/EN/FR values.` : null;
+  return missing.length > 0 ? `${label} necesita valores en ES/EN/FR.` : null;
 }
 
 export function buildEditableCollectionId(
@@ -139,11 +139,11 @@ export function buildLanguageCodeFromId(id: string) {
 
 export function validateToolLogoUpload(file: File) {
   if (!isToolLogoType(file.type)) {
-    return 'Tool logos must use JPG, PNG, WebP, GIF, or SVG format.';
+    return 'Los logos de herramientas deben usar formato JPG, PNG, WebP, GIF o SVG.';
   }
 
   if (file.size > TOOL_LOGO_MAX_BYTES) {
-    return 'Tool logos must be 2MB or smaller.';
+    return 'Los logos de herramientas deben pesar 2MB o menos.';
   }
 
   return null;
@@ -174,29 +174,29 @@ export function getEditableCollectionValidationErrors(siteData: SiteData) {
   const arsenal = siteData.arsenal ?? { languages: [], tools: [], skills: [] };
 
   (arsenal.languages ?? []).forEach((item) => {
-    if (validateEditableLocaleSeed(`Language ${item.id} label`, item.label as EditableLocaleSeed)) {
-      errors.push(`Language ${item.id} requires ES/EN/FR labels.`);
+    if (validateEditableLocaleSeed(`El idioma ${item.id} necesita etiquetas`, item.label as EditableLocaleSeed)) {
+      errors.push(`El idioma ${item.id} necesita etiquetas en ES/EN/FR.`);
     }
-    if (validateEditableLocaleSeed(`Language ${item.id} level`, item.level as EditableLocaleSeed)) {
-      errors.push(`Language ${item.id} requires ES/EN/FR levels.`);
+    if (validateEditableLocaleSeed(`El idioma ${item.id} necesita niveles`, item.level as EditableLocaleSeed)) {
+      errors.push(`El idioma ${item.id} necesita niveles en ES/EN/FR.`);
     }
   });
 
   (arsenal.tools ?? []).forEach((item) => {
-    if (validateEditableLocaleSeed(`Tool ${item.id} label`, item.label as EditableLocaleSeed)) {
-      errors.push(`Tool ${item.id} requires ES/EN/FR labels.`);
+    if (validateEditableLocaleSeed(`La herramienta ${item.id} necesita etiquetas`, item.label as EditableLocaleSeed)) {
+      errors.push(`La herramienta ${item.id} necesita etiquetas en ES/EN/FR.`);
     }
     if (!item.logo.trim()) {
-      errors.push(`Tool ${item.id} requires a logo.`);
+      errors.push(`La herramienta ${item.id} necesita un logo.`);
     }
   });
 
   (arsenal.skills ?? []).forEach((item) => {
-    if (validateEditableLocaleSeed(`Skill ${item.id} label`, item.label as EditableLocaleSeed)) {
-      errors.push(`Skill ${item.id} requires ES/EN/FR labels.`);
+    if (validateEditableLocaleSeed(`La habilidad ${item.id} necesita etiquetas`, item.label as EditableLocaleSeed)) {
+      errors.push(`La habilidad ${item.id} necesita etiquetas en ES/EN/FR.`);
     }
     if (!isSkillGroup(item.group)) {
-      errors.push(`Skill ${item.id} requires a translation or seo group.`);
+      errors.push(`La habilidad ${item.id} necesita un grupo de traducción o seo.`);
     }
   });
 
@@ -210,9 +210,9 @@ export function createEditableCollectionItem(
 ): EditableCollectionItemMap[EditableCollectionKind] {
   if (kind === 'languages') {
     const languageInput = input as AddLanguageCollectionItemInput;
-    const labelError = validateEditableLocaleSeed('Language label', languageInput.label);
+    const labelError = validateEditableLocaleSeed('La etiqueta del idioma', languageInput.label);
     if (labelError) throw new Error(labelError);
-    const levelError = validateEditableLocaleSeed('Language level', languageInput.level);
+    const levelError = validateEditableLocaleSeed('El nivel del idioma', languageInput.level);
     if (levelError) throw new Error(levelError);
 
     const id = buildEditableCollectionId(kind, languageInput.label.es, existingIds);
@@ -226,7 +226,7 @@ export function createEditableCollectionItem(
 
   if (kind === 'tools') {
     const toolInput = input as AddToolCollectionItemInput;
-    const labelError = validateEditableLocaleSeed('Tool label', toolInput.label);
+    const labelError = validateEditableLocaleSeed('La etiqueta de la herramienta', toolInput.label);
     if (labelError) throw new Error(labelError);
 
     const id = buildEditableCollectionId(kind, toolInput.label.es, existingIds);
@@ -238,10 +238,10 @@ export function createEditableCollectionItem(
   }
 
   const skillInput = input as AddSkillCollectionItemInput;
-  const labelError = validateEditableLocaleSeed('Skill label', skillInput.label);
+  const labelError = validateEditableLocaleSeed('La etiqueta de la habilidad', skillInput.label);
   if (labelError) throw new Error(labelError);
   if (!isSkillGroup(skillInput.group)) {
-    throw new Error('Skill group is required and must be translation or seo.');
+    throw new Error('El grupo de la habilidad es obligatorio y debe ser translation o seo.');
   }
 
   return {

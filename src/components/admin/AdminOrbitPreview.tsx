@@ -21,7 +21,7 @@ export default function AdminOrbitPreview({ lang }: Props) {
     <div
       className="relative mx-auto aspect-[720/440] min-h-[22rem] w-full max-w-[46rem] overflow-hidden md:min-h-[27.5rem]"
       role="img"
-      aria-label="Orbit preview"
+      aria-label="Vista previa del orbit"
     >
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[55%] w-[56%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/12" />
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[70%] w-[72%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10" />
@@ -59,7 +59,7 @@ export default function AdminOrbitPreview({ lang }: Props) {
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center bg-white/12 px-2 text-center text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-paper/78">
-                {item.type === 'video' ? 'Poster' : 'Media'}
+                {item.type === 'video' ? 'Póster' : 'Contenido'}
               </div>
             )}
           </div>

@@ -49,10 +49,11 @@
 
 ### Admin components
 - `AdminInit.tsx` — Netlify Identity bootstrap + tokenless preview fallback
-- `AdminToolbar.tsx` — draft/publish controls and ES/EN/FR switcher
+- `AdminToolbar.tsx` — Spanish draft/publish controls and ES/EN/FR switcher
 - `EditableText.tsx`, `EditableImage.tsx`, `EditableMedia.tsx` — inline editing primitives
 - `EditableOrbitCollection.tsx` — orbit schema editing
-- `EditableCollection.tsx` — translation arsenal editing
+- `AdminTranslationArsenalEditor.tsx` — integrated translation arsenal editing
+- `AdminTranslationExperienceEditor.tsx` — expandable education/experience browser editor
 - `EditableUgcPortfolio.tsx` — fixed-slot UGC portfolio editor with per-slot media and ES/EN/FR fields
 - `BlogPostForm.tsx` — strict editorial blog composer with featured-image upload, Markdown toolbar, and live outline
 - `AdminOrbitPreview.tsx` — static orbit preview without autoplay runtime or visible controls
@@ -178,7 +179,9 @@ The authored grid is fixed at 12 interleaved slots:
 ### Checkpoint 3 — experience and education
 - `ExperienceTabs` owns the two-panel education/experience browser-window tab UI
 - the public shell keeps the ink browser chrome, amaranth dot, upper-left tabs, stable panel height, and keyboard tab semantics
-- `/admin/translation-seo` mirrors the same browser-tab structure with editable education and experience panels
+- public experience cards wrap through one, two, and three responsive columns as entries grow
+- `/admin/translation-seo` mirrors the browser-tab structure and can add Education bullets or Experience cards with required ES/EN/FR fields
+- new DE/IT/CA entries inherit Spanish; later Spanish edits continue updating only parked fallback values, never distinct localized copy
 
 ### Checkpoint 4 — methodology
 - methodology keeps the ink section, typed display title, four bordered steps, and connector that draws horizontally on desktop and vertically on mobile
@@ -199,6 +202,8 @@ The authored grid is fixed at 12 interleaved slots:
 - `BlogIndexPage.astro` keeps the approved eyebrow, typed `Blog` title, one featured row, and the localized `Archive` rail
 - the latest story uses the larger `1.05fr / 0.95fr` editorial split and eager hero-media loading when an image exists
 - archive rows keep numbering from `02` onward when a latest story exists, and the localized empty placeholder row still renders when there is only one post or none
+- one logical post is six locale Markdown files grouped by `translationKey` plus the shared slug, date, and image metadata
+- the public coming-soon row appears only when the current locale has fewer than two posts
 
 ### Article layout and TOC
 - every locale detail route renders through `src/components/BlogArticleLayout.astro`; locale wrappers only provide the scoped post, rendered headings, and alternate links
@@ -208,10 +213,12 @@ The authored grid is fixed at 12 interleaved slots:
 - when there is no adjacent older locale post, the article footer falls back to the localized `/blog` archive instead of a dead next-story link
 
 ### Admin editorial workflow
-- `/admin/blog` mirrors the approved numbered editorial list with no rounded or pastel card chrome
-- `/admin/blog/new` uses `BlogPostForm.tsx` for a strict-palette field grid, ES/EN/FR language restriction, and publish-through-Git-Gateway flow
+- `/admin/blog` mirrors the grouped multilingual list with no rounded or pastel card chrome
+- `/admin/blog/new` and edit use `BlogPostForm.tsx` for a strict-palette field grid, fixed slug, and publish-through-Git-Gateway flow
+- create/edit require every locale currently exposed by `publicLanguagePicker`; hidden locales fall back to Spanish on create and preserve their stored localized text on edit
 - toolbar actions are limited to `H2 Section`, `H3 Subsection`, `Bold`, and `Link`
 - the live outline panel parses the current Markdown body and mirrors the same nested H2/H3 structure that the public TOC will render
+- delete removes all six locale Markdown files before any owned-image cleanup, and partial failures return retryable `locale-delete-failed` / `image-cleanup-failed` status with remaining paths
 
 ### Featured image assets-first and retry behavior
 - featured images accept JPEG, PNG, WebP, and GIF only, with a hard `2 MB` max
@@ -251,13 +258,20 @@ Code-managed:
 - IT
 - CA
 
-When an admin adds new orbit/tool/skill/language copy, Spanish is the fallback source for code-managed locales until code updates those values explicitly.
+When an admin adds new orbit/tool/skill/language/education/experience copy, Spanish is the fallback source for code-managed locales until code updates those values explicitly.
+
+Fixed admin controls, help text, validation errors, upload guidance, and publish
+messages are written directly in Spanish. Editable multilingual website content
+remains in the locale JSON files.
 
 ### Drafts and publish
 - Drafts live in local storage under the admin store
 - Pending binary uploads are not stored fully in local storage; they must be reselected after reload
+- Spanish draft warnings clarify that files only need reselection if the page reloads before publishing
+- Publish refreshes the Netlify Identity JWT before Git Gateway reads and writes, so editing sessions longer than one hour remain publishable
+- If the Identity session cannot refresh, the editor keeps all in-memory changes and asks the user to sign in again
 - Publish writes changed locale JSON, changed `src/data/site.json`, uploaded assets, and blog markdown files
-- Blog creation is restricted to ES/EN/FR
+- Blog post forms follow the current public-picker locales; hidden blog locales keep Spanish fallback on create and preserve their stored text on edit
 
 ## 10. Locale scope and fallback
 

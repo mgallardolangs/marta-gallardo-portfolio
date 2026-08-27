@@ -16,7 +16,7 @@ const articlePagesByLocale = {
   it: 'src/pages/it/blog/[slug].astro',
   ca: 'src/pages/ca/blog/[slug].astro',
 };
-const spanishOnlySlug = 'mi-primer-post';
+const migratedPostSlug = 'mi-primer-post';
 
 async function readSource(relativePath) {
   return readFile(path.join(rootDir, relativePath), 'utf8');
@@ -216,21 +216,15 @@ test('blog index and localized slug pages stay wired to exact locale scoping', a
   }
 });
 
-test('build only emits the Spanish root route for the Spanish-only blog post', async (t) => {
+test('build emits all six locale routes for the migrated mi-primer-post entry', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built blog paths.');
     return;
   }
 
-  await access(distBlogPostPath('es', spanishOnlySlug));
-
-  for (const locale of nonSpanishLocales) {
-    await assert.rejects(
-      access(distBlogPostPath(locale, spanishOnlySlug)),
-      { code: 'ENOENT' },
-      `${locale} build should not emit ${spanishOnlySlug}`,
-    );
-  }
+  await Promise.all(
+    locales.map((locale) => access(distBlogPostPath(locale, migratedPostSlug))),
+  );
 });
 
 test('all five non-ES localized blog index routes build', async (t) => {
@@ -244,13 +238,13 @@ test('all five non-ES localized blog index routes build', async (t) => {
   );
 });
 
-test('built Spanish-only blog post only advertises built alternates', async (t) => {
+test('built mi-primer-post advertises all six built locale alternates', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built blog SEO alternates.');
     return;
   }
 
-  const html = await readFile(distBlogPostPath('es', spanishOnlySlug), 'utf8');
+  const html = await readFile(distBlogPostPath('es', migratedPostSlug), 'utf8');
   const alternateEntries = [...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)]
     .map((match) => ({ hreflang: match[1], href: match[2] }));
 
@@ -258,8 +252,13 @@ test('built Spanish-only blog post only advertises built alternates', async (t) 
     alternateEntries,
     [
       { hreflang: 'es', href: 'https://marttelier.netlify.app/blog/mi-primer-post' },
+      { hreflang: 'en', href: 'https://marttelier.netlify.app/en/blog/mi-primer-post' },
+      { hreflang: 'fr', href: 'https://marttelier.netlify.app/fr/blog/mi-primer-post' },
+      { hreflang: 'de', href: 'https://marttelier.netlify.app/de/blog/mi-primer-post' },
+      { hreflang: 'it', href: 'https://marttelier.netlify.app/it/blog/mi-primer-post' },
+      { hreflang: 'ca', href: 'https://marttelier.netlify.app/ca/blog/mi-primer-post' },
       { hreflang: 'x-default', href: 'https://marttelier.netlify.app/blog/mi-primer-post' },
     ],
-    'Spanish-only posts should not advertise unbuilt EN/FR/DE/IT/CA article routes',
+    'every locale Markdown sibling now builds its own article route sharing the mi-primer-post slug',
   );
 });

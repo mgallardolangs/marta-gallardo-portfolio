@@ -10,8 +10,12 @@ export function useAdminStore() {
 
   return {
     ...state,
+    getEducationStudies: adminStore.getEducationStudies.bind(adminStore),
+    getExperienceCards: adminStore.getExperienceCards.bind(adminStore),
     setText: adminStore.setText.bind(adminStore),
     setImage: adminStore.setImage.bind(adminStore),
+    addEducationStudy: adminStore.addEducationStudy.bind(adminStore),
+    addExperienceCard: adminStore.addExperienceCard.bind(adminStore),
     setOrbitMediaFile: adminStore.setOrbitMediaFile.bind(adminStore),
     getUgcPortfolio: adminStore.getUgcPortfolio.bind(adminStore),
     updateUgcPortfolioField: adminStore.updateUgcPortfolioField.bind(adminStore),
@@ -40,5 +44,7 @@ export function useAdminStore() {
     saveDraft: adminStore.saveDraft.bind(adminStore),
     loadDraft: adminStore.loadDraft.bind(adminStore),
     createBlogPost: adminStore.createBlogPost.bind(adminStore),
+    updateBlogPost: adminStore.updateBlogPost.bind(adminStore),
+    deleteBlogPost: adminStore.deleteBlogPost.bind(adminStore),
   };
 }

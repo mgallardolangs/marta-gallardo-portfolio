@@ -113,7 +113,7 @@ test('header language helper filters mapped article locales and preserves normal
   );
 });
 
-test('built Spanish-only blog article header only links to the mapped article locale', async (t) => {
+test('built mi-primer-post article header only links to the public-picker locales, keeping DE/IT/CA hidden', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built blog article language switcher links.');
     return;
@@ -121,15 +121,23 @@ test('built Spanish-only blog article header only links to the mapped article lo
 
   const html = await readFile(distBlogPostPath('es', spanishOnlySlug), 'utf8');
 
-  assert.equal(countMatches(html, /class="language-menu__link\b/g), 1, 'desktop article language menu should only render one locale entry');
-  assert.equal(countMatches(html, /class="language-chip\b/g), 1, 'mobile article language chips should only render one locale entry');
-  assert.match(html, /href="\/blog\/mi-primer-post"[^>]*>ES</, 'Spanish-only article header should keep the ES locale link');
+  assert.equal(countMatches(html, /class="language-menu__link\b/g), publicPickerLangs.length, 'desktop article language menu should only render the public-picker locale entries');
+  assert.equal(countMatches(html, /class="language-chip\b/g), publicPickerLangs.length, 'mobile article language chips should only render the public-picker locale entries');
+  assert.match(html, /href="\/blog\/mi-primer-post"[^>]*>ES</, 'the article header should keep the ES locale link');
 
-  for (const locale of ['en', 'fr', 'de', 'it', 'ca']) {
+  for (const locale of ['en', 'fr']) {
+    assert.match(
+      html,
+      new RegExp(`href="/${locale}/blog/${spanishOnlySlug}"`),
+      `${locale} is a public-picker locale and its built article route should appear in the header`,
+    );
+  }
+
+  for (const locale of ['de', 'it', 'ca']) {
     assert.doesNotMatch(
       html,
       new RegExp(`href="/${locale}/blog/${spanishOnlySlug}"`),
-      `${locale} article route should not appear anywhere in the Spanish-only article header`,
+      `${locale} stays hidden from the public picker even though its fallback article route is built`,
     );
   }
 });

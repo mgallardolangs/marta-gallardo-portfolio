@@ -41,7 +41,7 @@ export default function EditableMedia({
   onSelect,
   className = '',
   alt = '',
-  label = '📷 Change media',
+  label = '📷 Cambiar contenido',
   emptyLabel = '📷',
   poster = null,
 }: Props) {
@@ -67,7 +67,7 @@ export default function EditableMedia({
     try {
       await onSelect(file);
     } catch (selectionError) {
-      alert(selectionError instanceof Error ? selectionError.message : 'Could not save this media file.');
+      alert(selectionError instanceof Error ? selectionError.message : 'No se pudo guardar este archivo multimedia.');
     } finally {
       event.target.value = '';
     }

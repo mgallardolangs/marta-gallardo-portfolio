@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { getLangFromUrl, getLocalizedPath, t } from '../i18n';
-import { getLatestAndArchive } from '../lib/blog';
+import { getLatestAndArchive, shouldShowBlogComingSoon } from '../lib/blog';
 import { scopeBlogPostsToLocale } from '../lib/blog';
 import ScrollReveal from '../components/ScrollReveal';
 import TypedTitle from '../components/TypedTitle.astro';
@@ -36,7 +36,7 @@ const archivePlaceholderIndex = String(latest ? 2 : 1).padStart(2, '0');
         <ScrollReveal client:visible>
           <article data-blog-latest-story class="border-y border-black/10 py-6 md:py-8">
             <div class="grid gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
-              <a href={getLocalizedPath(`/blog/${latest.id}`, lang)} class="group block overflow-hidden border border-black/10">
+              <a href={getLocalizedPath(`/blog/${latest.data.slug}`, lang)} class="group block overflow-hidden border border-black/10">
                 {latest.data.image ? (
                   <img src={latest.data.image} alt={latest.data.title} width={1600} height={1200} loading="eager" fetchpriority="high" decoding="async" class="aspect-[16/10] w-full object-cover transition duration-300 group-hover:scale-[1.02]" />
                 ) : (
@@ -62,13 +62,13 @@ const archivePlaceholderIndex = String(latest ? 2 : 1).padStart(2, '0');
                 </div>
 
                 <div class="space-y-4">
-                  <a href={getLocalizedPath(`/blog/${latest.id}`, lang)} class="block transition hover:text-amaranth">
+                  <a href={getLocalizedPath(`/blog/${latest.data.slug}`, lang)} class="block transition hover:text-amaranth">
                     <h2 class="font-heading text-3xl leading-[0.94] text-ink md:text-[3.35rem]">{latest.data.title}</h2>
                   </a>
                   <p class="max-w-xl font-body text-base leading-8 text-ink-muted md:text-lg">{latest.data.description}</p>
                 </div>
 
-                <a href={getLocalizedPath(`/blog/${latest.id}`, lang)} class="text-accent-ink inline-flex items-center gap-3 border-b border-amaranth pb-1 font-body text-xs font-semibold uppercase tracking-[0.28em] transition hover:text-ink">
+                <a href={getLocalizedPath(`/blog/${latest.data.slug}`, lang)} class="text-accent-ink inline-flex items-center gap-3 border-b border-amaranth pb-1 font-body text-xs font-semibold uppercase tracking-[0.28em] transition hover:text-ink">
                   {i.blog.readMore}
                   <span aria-hidden="true">→</span>
                 </a>
@@ -84,14 +84,22 @@ const archivePlaceholderIndex = String(latest ? 2 : 1).padStart(2, '0');
             <p class="text-accent-ink font-body text-[0.72rem] font-semibold uppercase tracking-[0.28em]">{i.blog.archive}</p>
           </div>
 
-          {archive.length > 0 ? (
+          {shouldShowBlogComingSoon(localizedPosts.length) ? (
+            <article class="grid gap-3 border-b border-black/10 py-5 md:grid-cols-[auto_minmax(0,1fr)] md:items-start md:gap-6">
+              <p class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-ink-faint">{archivePlaceholderIndex}</p>
+              <div>
+                <p class="font-heading text-2xl leading-tight text-ink">{i.blog.comingSoonTitle}</p>
+                <p class="mt-2 font-body text-sm uppercase tracking-[0.18em] text-ink-muted">{i.blog.comingSoonMeta}</p>
+              </div>
+            </article>
+          ) : (
             archive.map((post, index) => (
               <article class="group relative grid gap-4 border-b border-black/10 py-5 md:grid-cols-[auto_minmax(0,1fr)] md:items-start md:gap-6">
                 <p class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-ink-faint">{String(index + 2).padStart(2, '0')}</p>
 
                 <div class="grid gap-3 md:grid-cols-[minmax(0,1fr)_140px] md:items-start">
                   <div class="space-y-2">
-                    <a href={getLocalizedPath(`/blog/${post.id}`, lang)} class="block transition hover:text-amaranth">
+                    <a href={getLocalizedPath(`/blog/${post.data.slug}`, lang)} class="block transition hover:text-amaranth">
                       <h3 class="font-heading text-2xl leading-tight text-ink">{post.data.title}</h3>
                     </a>
                     <div class="flex flex-wrap items-center gap-3 text-sm text-ink-muted">
@@ -105,7 +113,7 @@ const archivePlaceholderIndex = String(latest ? 2 : 1).padStart(2, '0');
                   </div>
 
                   {post.data.image ? (
-                    <a href={getLocalizedPath(`/blog/${post.id}`, lang)} class="hidden border border-black/10 md:block md:opacity-0 md:transition md:duration-200 md:group-hover:opacity-100 md:group-focus-within:opacity-100">
+                    <a href={getLocalizedPath(`/blog/${post.data.slug}`, lang)} class="hidden border border-black/10 md:block md:opacity-0 md:transition md:duration-200 md:group-hover:opacity-100 md:group-focus-within:opacity-100">
                       <img src={post.data.image} alt={post.data.title} width={420} height={260} loading="lazy" decoding="async" class="aspect-[16/10] w-full object-cover" />
                     </a>
                   ) : (
@@ -116,14 +124,6 @@ const archivePlaceholderIndex = String(latest ? 2 : 1).padStart(2, '0');
                 </div>
               </article>
             ))
-          ) : (
-            <article class="grid gap-3 border-b border-black/10 py-5 md:grid-cols-[auto_minmax(0,1fr)] md:items-start md:gap-6">
-              <p class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-ink-faint">{archivePlaceholderIndex}</p>
-              <div>
-                <p class="font-heading text-2xl leading-tight text-ink">{i.blog.comingSoonTitle}</p>
-                <p class="mt-2 font-body text-sm uppercase tracking-[0.18em] text-ink-muted">{i.blog.comingSoonMeta}</p>
-              </div>
-            </article>
           )}
         </section>
       </ScrollReveal>

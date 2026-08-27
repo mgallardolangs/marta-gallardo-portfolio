@@ -10,9 +10,9 @@ export default function AdminBrandVideo() {
       src={src}
       mediaType="video"
       acceptKind="video"
-      alt="Brand video"
-      label="🎬 Change video"
-      emptyLabel="Upload MP4/WebM/MOV"
+      alt="Vídeo de marca"
+      label="🎬 Cambiar vídeo"
+      emptyLabel="Sube un MP4/WebM/MOV"
       className="absolute inset-0 h-full w-full"
       onSelect={async (file) => {
         const extension = file.name.split('.').pop()?.toLowerCase() || 'mp4';

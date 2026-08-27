@@ -289,8 +289,8 @@ test('AdminToolbar keeps the shared navigation labels editable from one metadata
 
   assert.match(
     source,
-    /Navigation labels/,
-    'AdminToolbar should label the nav editor section "Navigation labels".',
+    /Etiquetas de navegación/,
+    'AdminToolbar should label the nav editor section "Etiquetas de navegación".',
   );
   assert.match(
     source,
