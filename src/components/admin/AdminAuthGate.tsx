@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAdminStore } from './useAdminStore';
 import {
   ADMIN_AUTH_GATE_OPEN_MAX_RETRIES,
@@ -6,9 +6,13 @@ import {
   createAdminAuthGateOpenController,
 } from '../../lib/adminInit.js';
 
+type NetlifyIdentityEvent = 'open' | 'close' | 'login';
+
 type NetlifyIdentityWindow = typeof window & {
   netlifyIdentity?: {
     open?: (view: 'login') => void;
+    on?: (event: NetlifyIdentityEvent, callback: () => void) => void;
+    off?: (event: NetlifyIdentityEvent, callback: () => void) => void;
   };
 };
 
@@ -46,7 +50,8 @@ export default function AdminAuthGate({ allowTokenless }: Props) {
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const loginButtonRef = useRef<HTMLButtonElement | null>(null);
   const openControllerRef = useRef<ReturnType<typeof createAdminAuthGateOpenController> | null>(null);
-  const isBlocking = !allowTokenless && !store.isAuthenticated;
+  const [isWidgetOpen, setIsWidgetOpen] = useState(false);
+  const isBlocking = !allowTokenless && !store.isAuthenticated && !isWidgetOpen;
 
   const getOpenController = () => {
     if (openControllerRef.current) return openControllerRef.current;
@@ -63,8 +68,38 @@ export default function AdminAuthGate({ allowTokenless }: Props) {
   };
 
   const handleManualLoginClick = () => {
-    getOpenController().attemptManualOpen();
+    const opened = getOpenController().attemptManualOpen();
+    if (opened) {
+      // Hide the gate immediately so the widget's own modal (which uses a
+      // lower z-index than this overlay) is visible without waiting for
+      // the widget's own 'open' event to propagate through React state.
+      setIsWidgetOpen(true);
+    }
   };
+
+  // Track the Netlify Identity widget's own modal state so this gate can
+  // step out of the way while the login dialog is visible. Our overlay uses
+  // z-index 150 with an opaque background; without this the widget's own
+  // modal (z-index 99) would open behind our gate and the admin would see
+  // nothing happen after clicking "Iniciar sesión".
+  useEffect(() => {
+    const identity = (window as NetlifyIdentityWindow).netlifyIdentity;
+    if (!identity?.on) return;
+
+    const onWidgetOpen = () => setIsWidgetOpen(true);
+    const onWidgetClose = () => setIsWidgetOpen(false);
+    const onWidgetLogin = () => setIsWidgetOpen(false);
+
+    identity.on('open', onWidgetOpen);
+    identity.on('close', onWidgetClose);
+    identity.on('login', onWidgetLogin);
+
+    return () => {
+      identity.off?.('open', onWidgetOpen);
+      identity.off?.('close', onWidgetClose);
+      identity.off?.('login', onWidgetLogin);
+    };
+  }, []);
 
   // Keep the background admin shell inert while this wall is showing, and
   // restore it the instant a real session exists (or this gate unmounts).
@@ -116,6 +151,7 @@ export default function AdminAuthGate({ allowTokenless }: Props) {
 
   if (allowTokenless) return null;
   if (store.isAuthenticated) return null;
+  if (isWidgetOpen) return null;
 
   const isExpired = store.initialized;
 
