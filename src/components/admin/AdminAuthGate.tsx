@@ -3,6 +3,7 @@ import { useAdminStore } from './useAdminStore';
 import {
   ADMIN_AUTH_GATE_OPEN_MAX_RETRIES,
   ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS,
+  createAdminAuthGateOpenController,
 } from '../../lib/adminInit.js';
 
 type NetlifyIdentityWindow = typeof window & {
@@ -42,10 +43,28 @@ function openNetlifyLogin(): boolean {
  */
 export default function AdminAuthGate({ allowTokenless }: Props) {
   const store = useAdminStore();
-  const hasAutoOpenedRef = useRef(false);
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const loginButtonRef = useRef<HTMLButtonElement | null>(null);
+  const openControllerRef = useRef<ReturnType<typeof createAdminAuthGateOpenController> | null>(null);
   const isBlocking = !allowTokenless && !store.isAuthenticated;
+
+  const getOpenController = () => {
+    if (openControllerRef.current) return openControllerRef.current;
+
+    openControllerRef.current = createAdminAuthGateOpenController({
+      tryOpen: () => openNetlifyLogin(),
+      scheduleRetry: (callback, delay) => window.setTimeout(callback, delay),
+      clearRetry: (timeoutId) => window.clearTimeout(timeoutId),
+      retryDelayMs: ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS,
+      maxRetries: ADMIN_AUTH_GATE_OPEN_MAX_RETRIES,
+    });
+
+    return openControllerRef.current;
+  };
+
+  const handleManualLoginClick = () => {
+    getOpenController().attemptManualOpen();
+  };
 
   // Keep the background admin shell inert while this wall is showing, and
   // restore it the instant a real session exists (or this gate unmounts).
@@ -62,34 +81,17 @@ export default function AdminAuthGate({ allowTokenless }: Props) {
   }, [allowTokenless, store.isAuthenticated]);
 
   // Auto-open the Netlify Identity login dialog exactly once per production
-  // unauthenticated page load. The widget script can still be loading when
-  // this effect first runs, so retry on a bounded timer until `open` exists,
-  // and only flip the one-shot flag after a real, successful call — never
-  // before — so a slow widget cannot be silently skipped, and a fast one
-  // cannot be reopened into a modal storm.
+  // unauthenticated page load. Manual and automatic opens share the same
+  // success bookkeeping so a user-triggered login click can cancel a queued
+  // auto-retry without blocking deliberate future manual clicks.
   useEffect(() => {
     if (allowTokenless) return;
     if (store.isAuthenticated) return;
-    if (hasAutoOpenedRef.current) return;
-
-    let attempts = 0;
-    let timeoutId: number | undefined;
-
-    const tryOpen = () => {
-      if (openNetlifyLogin()) {
-        hasAutoOpenedRef.current = true;
-        return;
-      }
-
-      attempts += 1;
-      if (attempts >= ADMIN_AUTH_GATE_OPEN_MAX_RETRIES) return;
-      timeoutId = window.setTimeout(tryOpen, ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS);
-    };
-
-    tryOpen();
+    const openController = getOpenController();
+    openController.attemptAutoOpen();
 
     return () => {
-      if (timeoutId) window.clearTimeout(timeoutId);
+      openController.dispose();
     };
   }, [allowTokenless, store.isAuthenticated]);
 
@@ -138,7 +140,7 @@ export default function AdminAuthGate({ allowTokenless }: Props) {
           ref={loginButtonRef}
           type="button"
           autoFocus
-          onClick={openNetlifyLogin}
+          onClick={handleManualLoginClick}
           className="mt-6 inline-flex items-center justify-center rounded-full bg-charcoal px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-charcoal/80"
         >
           Iniciar sesión

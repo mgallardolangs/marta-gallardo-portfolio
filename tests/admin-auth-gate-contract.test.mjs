@@ -6,6 +6,8 @@ import { fileURLToPath } from 'node:url';
 
 import { AdminStore } from '../src/components/admin/adminStore.ts';
 import {
+  ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS,
+  createAdminAuthGateOpenController,
   getAdminInitDecision,
   shouldAllowTokenlessAdminInit,
 } from '../src/lib/adminInit.js';
@@ -771,6 +773,11 @@ test('AdminAuthGate only marks its auto-open flag after a successful Netlify Ide
 
   assert.match(
     gateSource,
+    /createAdminAuthGateOpenController/,
+    'AdminAuthGate should centralize manual and automatic login opens through shared retry bookkeeping instead of treating them as unrelated flows',
+  );
+  assert.match(
+    gateSource,
     /function\s+openNetlifyLogin\(\)\s*:\s*boolean\s*\{/,
     'openNetlifyLogin should report success/failure instead of silently doing nothing when the widget is not ready',
   );
@@ -786,13 +793,18 @@ test('AdminAuthGate only marks its auto-open flag after a successful Netlify Ide
   );
   assert.match(
     gateSource,
-    /if\s*\(\s*openNetlifyLogin\(\)\s*\)\s*\{\s*hasAutoOpenedRef\.current\s*=\s*true;/,
-    'the auto-open effect should only flip its one-shot flag after openNetlifyLogin actually succeeds',
+    /attemptAutoOpen\(\)/,
+    'the auto-open effect should route through the shared controller so automatic retries observe manual-success bookkeeping',
   );
-  assert.doesNotMatch(
+  assert.match(
     gateSource,
-    /hasAutoOpenedRef\.current\s*=\s*true;\s*\n\s*openNetlifyLogin\(\);/,
-    'the auto-open flag should never be marked before calling openNetlifyLogin, or a slow widget would be silently skipped forever',
+    /onClick=\{\s*handleManualLogin(?:Click)?\s*\}/,
+    'the manual login CTA should use a shared handler so a successful click can cancel or neutralize any queued auto-open retry',
+  );
+  assert.match(
+    gateSource,
+    /attemptManualOpen\(\)/,
+    'the shared manual handler should notify the controller when a real manual widget open succeeds',
   );
   assert.match(
     gateSource,
@@ -801,13 +813,18 @@ test('AdminAuthGate only marks its auto-open flag after a successful Netlify Ide
   );
   assert.match(
     gateSource,
-    /window\.setTimeout\(\s*tryOpen\s*,\s*ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS\s*\)/,
-    'AdminAuthGate should retry the auto-open attempt on a bounded timer while the widget script is still loading',
+    /scheduleRetry:\s*\(callback,\s*delay\)\s*=>\s*window\.setTimeout\(callback,\s*delay\)/,
+    'AdminAuthGate should pass a bounded timeout scheduler into the shared controller while the widget script is still loading',
   );
   assert.match(
     gateSource,
-    /if\s*\(\s*timeoutId\s*\)\s*window\.clearTimeout\(\s*timeoutId\s*\)/,
-    'AdminAuthGate should clear its pending retry timeout on cleanup so no stray timer can fire after unmount and cause a modal storm',
+    /clearRetry:\s*\(timeoutId\)\s*=>\s*window\.clearTimeout\(timeoutId\)/,
+    'AdminAuthGate should pass timeout cleanup into the shared controller so manual success or unmount can cancel queued retries',
+  );
+  assert.match(
+    gateSource,
+    /dispose\(\)/,
+    'AdminAuthGate should dispose the shared retry controller on cleanup so no stray timer can fire after unmount and cause a modal storm',
   );
 
   const adminInitModule = await import('../src/lib/adminInit.js');
@@ -829,6 +846,79 @@ test('AdminAuthGate only marks its auto-open flag after a successful Netlify Ide
   assert.ok(
     ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS > 0,
     'the retry delay should be a positive bounded interval, not an immediate busy loop',
+  );
+});
+
+test('createAdminAuthGateOpenController cancels queued auto retries after a manual success and ignores stale retry callbacks', () => {
+  const openSources = [];
+  const scheduledRetries = [];
+  const clearedRetries = [];
+
+  const controller = createAdminAuthGateOpenController({
+    tryOpen: (source) => {
+      openSources.push(source);
+      return source === 'manual';
+    },
+    scheduleRetry: (callback, delay) => {
+      const token = { callback, delay };
+      scheduledRetries.push(token);
+      return token;
+    },
+    clearRetry: (token) => {
+      clearedRetries.push(token);
+    },
+    retryDelayMs: ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS,
+    maxRetries: 3,
+  });
+
+  assert.equal(controller.attemptAutoOpen(), false);
+  assert.deepEqual(openSources, ['auto']);
+  assert.equal(scheduledRetries.length, 1, 'a failed first auto-open should queue exactly one bounded retry');
+  assert.equal(
+    scheduledRetries[0].delay,
+    ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS,
+    'queued retries should keep using the configured bounded delay',
+  );
+
+  assert.equal(controller.attemptManualOpen(), true);
+  assert.deepEqual(openSources, ['auto', 'manual']);
+  assert.deepEqual(
+    clearedRetries,
+    [scheduledRetries[0]],
+    'a successful manual open should clear the queued auto-open retry',
+  );
+
+  scheduledRetries[0].callback();
+  assert.deepEqual(
+    openSources,
+    ['auto', 'manual'],
+    'even if a stale retry callback runs after the manual success, it must observe the success flag and avoid reopening the widget',
+  );
+});
+
+test('createAdminAuthGateOpenController only suppresses duplicate automatic opens, not future explicit manual clicks', () => {
+  const openSources = [];
+
+  const controller = createAdminAuthGateOpenController({
+    tryOpen: (source) => {
+      openSources.push(source);
+      return true;
+    },
+    scheduleRetry: () => {
+      throw new Error('manual/auto success should not queue retries');
+    },
+    clearRetry: () => {},
+    retryDelayMs: ADMIN_AUTH_GATE_OPEN_RETRY_DELAY_MS,
+    maxRetries: 3,
+  });
+
+  assert.equal(controller.attemptAutoOpen(), true);
+  assert.equal(controller.attemptManualOpen(), true);
+  assert.equal(controller.attemptManualOpen(), true);
+  assert.deepEqual(
+    openSources,
+    ['auto', 'manual', 'manual'],
+    'once the one-shot auto-open has succeeded, later deliberate manual clicks should still reopen the widget if the admin closes it and clicks again',
   );
 });
 
