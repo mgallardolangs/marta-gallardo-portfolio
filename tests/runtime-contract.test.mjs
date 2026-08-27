@@ -159,7 +159,7 @@ test('admin layout does not force a full reload and admin init uses bounded iden
   );
   assert.match(
     initSource,
-    /identity\.on\('login', onIdentityChange\);/,
+    /identity\.on\('login', on[A-Za-z]+/,
     'AdminInit should subscribe to Netlify Identity login events for late auth upgrades',
   );
   assert.ok(

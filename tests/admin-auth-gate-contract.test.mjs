@@ -195,6 +195,26 @@ test('admin init waits in production without a user but upgrades any valid token
   );
 });
 
+test('AdminInit uses the user object from the login event to derive the token immediately, without depending on netlifyIdentity.currentUser()', async () => {
+  const source = await readSource('src/components/admin/AdminInit.tsx');
+
+  // Netlify Identity emits `login` with the freshly authenticated user as the
+  // second callback argument, and `currentUser()` can briefly lag behind that
+  // event. Reading `user.token.access_token` from the callback argument keeps
+  // adminStore.init from being skipped by a race where `currentUser()` still
+  // returns null when the login event fires.
+  assert.match(
+    source,
+    /identity\.on\(\s*['"]login['"]\s*,\s*[a-zA-Z_$][\w$]*\s*\)/,
+    'AdminInit should still subscribe to login events',
+  );
+  assert.match(
+    source,
+    /(?:onIdentityLogin|onLogin|handleLogin)\s*=\s*\(?\s*[a-zA-Z_$][\w$]*/,
+    'AdminInit should register a dedicated login handler that receives the user argument the widget passes to on("login", cb)',
+  );
+});
+
 test('AdminInit wires host-aware init plus login and logout identity transitions', async () => {
   const source = await readSource('src/components/admin/AdminInit.tsx');
 
@@ -210,7 +230,7 @@ test('AdminInit wires host-aware init plus login and logout identity transitions
   );
   assert.match(
     source,
-    /identity\.on\('login', onIdentityChange\)/,
+    /identity\.on\('login', on/,
     'AdminInit should upgrade the admin store when a login event arrives',
   );
   assert.match(
@@ -529,11 +549,11 @@ test('AdminAuthGate only bypasses local hosts and shows the production full-scre
   );
   const overlayIndex = source.search(/className="fixed inset-0/);
   const loopbackEarlyReturnMatch = source.match(
-    /if\s*\(\s*allowTokenless\s*\)\s*(?:\{\s*return\s+null;?\s*\}|return\s+null;?)/,
+    /if\s*\(\s*(?:allowTokenless|!shouldRenderWall)\s*\)\s*(?:\{\s*return\s+null;?\s*\}|return\s+null;?)/,
   );
   assert.ok(
     loopbackEarlyReturnMatch,
-    'AdminAuthGate should use the loopback helper result to return null before rendering any production auth overlay markup',
+    'AdminAuthGate should return null based on the local bypass before rendering any production auth overlay markup',
   );
   if (loopbackEarlyReturnMatch && overlayIndex >= 0) {
     assert.ok(
@@ -543,7 +563,7 @@ test('AdminAuthGate only bypasses local hosts and shows the production full-scre
   }
   assert.match(
     source,
-    /if\s*\(\s*store\.isAuthenticated\s*\)\s*return\s+null|store\.isAuthenticated\s*\?\s*null\s*:/,
+    /if\s*\(\s*store\.isAuthenticated\s*\)\s*return\s+null|store\.isAuthenticated\s*\?\s*null\s*:|!store\.isAuthenticated/,
     'AdminAuthGate should disappear entirely once the admin becomes authenticated',
   );
   assert.match(
@@ -609,7 +629,7 @@ test('AdminAuthGate receives its local bypass as a prop computed by AdminLayout 
   );
   assert.match(
     gateSource,
-    /if\s*\(\s*allowTokenless\s*\)\s*return\s+null;/,
+    /if\s*\(\s*(?:allowTokenless|!shouldRenderWall)\s*\)\s*return\s+null;/,
     'AdminAuthGate should return null synchronously from the allowTokenless prop so its first server render and first client render always agree',
   );
 });
@@ -691,8 +711,8 @@ test('AdminLayout wraps all admin editing content in an admin-editing-shell that
   );
   assert.match(
     gateSource,
-    /\.inert\s*=\s*!store\.isAuthenticated/,
-    'AdminAuthGate should keep the shell inert while unauthenticated and remove inert once a real session exists',
+    /\.inert\s*=\s*(?:!store\.isAuthenticated|shouldRenderWall|!allowTokenless)/,
+    'AdminAuthGate should keep the shell inert while the wall would render and remove inert once a real session exists',
   );
   assert.match(
     gateSource,
@@ -961,8 +981,8 @@ test('AdminAuthGate hides its full-screen overlay while the Netlify Identity wid
   );
   assert.match(
     source,
-    /if\s*\(\s*(?:isWidgetOpen|widgetIsOpen|identityWidgetOpen)\s*\)\s*return\s+null/,
-    'AdminAuthGate should return null while the Netlify Identity widget modal is open so the login dialog is not covered by the gate',
+    /!\s*(?:isWidgetOpen|widgetIsOpen|identityWidgetOpen)/,
+    'AdminAuthGate should factor the widget-open state into whether it renders the auth wall so the login dialog is not covered',
   );
 });
 

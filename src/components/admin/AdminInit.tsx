@@ -54,17 +54,18 @@ export default function AdminInit({ i18nJson, siteJson, lang }: Props) {
 
     const hostAllowsTokenlessFallback = shouldAllowTokenlessAdminInit(window.location.hostname);
 
-    const applyIdentityState = (allowTokenlessFallback: boolean) => {
+    const applyIdentityState = (allowTokenlessFallback: boolean, tokenOverride?: string) => {
       const w = window as typeof window & {
         netlifyIdentity?: {
           init?: () => void;
           open?: (view: 'login') => void;
           currentUser?: () => { token?: { access_token?: string } } | null;
-          on?: (event: 'init' | 'login' | 'logout', callback: () => void) => void;
-          off?: (event: 'init' | 'login' | 'logout', callback: () => void) => void;
+          on?: (event: 'init' | 'login' | 'logout', callback: (user?: { token?: { access_token?: string } } | null) => void) => void;
+          off?: (event: 'init' | 'login' | 'logout', callback: (user?: { token?: { access_token?: string } } | null) => void) => void;
         };
       };
-      const token = getNetlifyIdentityToken(w.netlifyIdentity?.currentUser?.());
+      const currentUserToken = getNetlifyIdentityToken(w.netlifyIdentity?.currentUser?.());
+      const token = tokenOverride && tokenOverride.length > 0 ? tokenOverride : currentUserToken;
       const decision = getAdminInitDecision({
         isInitialized: adminStore.isInitialized(),
         identityToken: token,
@@ -109,16 +110,23 @@ export default function AdminInit({ i18nJson, siteJson, lang }: Props) {
       const onIdentityChange = () => {
         applyIdentityState(false);
       };
+      const onIdentityLogin = (user?: { token?: { access_token?: string } } | null) => {
+        // The widget passes the freshly authenticated user directly to this
+        // callback; using its token avoids a race where currentUser() briefly
+        // returns null right when the login event fires.
+        const token = getNetlifyIdentityToken(user);
+        applyIdentityState(false, token);
+      };
       const onIdentityLogout = () => {
         adminStore.clearAuthToken();
       };
 
       identity.on('init', onIdentityChange);
-      identity.on('login', onIdentityChange);
+      identity.on('login', onIdentityLogin);
       identity.on('logout', onIdentityLogout);
       identityListenersCleanup = () => {
         identity.off?.('init', onIdentityChange);
-        identity.off?.('login', onIdentityChange);
+        identity.off?.('login', onIdentityLogin);
         identity.off?.('logout', onIdentityLogout);
         identityListenersCleanup = null;
       };
