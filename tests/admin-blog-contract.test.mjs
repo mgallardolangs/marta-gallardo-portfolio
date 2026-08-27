@@ -35,18 +35,18 @@ test('admin blog creation stays scoped to approved ES/EN/FR locales', async () =
 
   assert.match(
     formSource,
-    /useState<AdminBlogLang>/,
-    'BlogPostForm should keep its local language state scoped to AdminBlogLang',
-  );
-  assert.match(
-    formSource,
-    /ADMIN_BLOG_LANGS\.map\(\(locale\) => \(/,
-    'BlogPostForm should render the language picker from the approved admin locale list',
+    /store\.getPublicLanguagePicker\(\)/,
+    'BlogPostForm should derive its visible locale tabs from the live publicLanguagePicker instead of a fixed AdminBlogLang selector',
   );
   assert.doesNotMatch(
     formSource,
+    /ADMIN_BLOG_LANGS\.map\(\(locale\)\s*=>/,
+    'BlogPostForm should not render the language picker from the fixed ADMIN_BLOG_LANGS list once the picker is dynamic',
+  );
+  assert.match(
+    formSource,
     /Deutsch|Italiano|Català/,
-    'BlogPostForm should not offer DE, IT, or CA blog creation options',
+    'BlogPostForm should be able to offer DE, IT, or CA blog panels once the publicLanguagePicker exposes them',
   );
 });
 
@@ -125,12 +125,12 @@ test('createBlogPost retry-upserts an already-partially-written slug across ever
 
   assert.match(
     formSource,
-    /catch \(submitError\) \{\s*setError\(submitError instanceof Error \? submitError\.message : 'No se pudo crear la entrada\.'\);\s*\}/s,
+    /catch \(submitError\) \{\s*setError\(submitError instanceof Error \? submitError\.message : [\s\S]{0,80}?'No se pudo crear la entrada\.'[\s\S]{0,10}?\);/,
     'BlogPostForm should surface createBlogPost errors to the admin UI',
   );
   assert.match(
     formSource,
-    /setSuccessPath\(path\);\s*setTitle\(''\);\s*setDescription\(''\);\s*setTags\(''\);\s*setBody\('# Nuevo post\\n\\nEscribe aquí\.\.\.'\);/s,
+    /setSuccessPath\(path\);\s*setTranslations\(createInitialTranslationsMap\(visibleLocales\)\);\s*setDate\(getDefaultDate\(\)\);/s,
     'BlogPostForm should keep form input intact on failure and only clear fields after a successful create',
   );
 });

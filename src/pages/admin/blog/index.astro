@@ -1,11 +1,27 @@
 ---
 import AdminLayout from '../../../layouts/AdminLayout.astro';
+import AdminBlogList from '../../../components/admin/AdminBlogList';
 import { getCollection } from 'astro:content';
-import { getLangFromUrl } from '../../../i18n';
+import { groupBlogPostsForAdmin } from '../../../lib/blog';
 
-const lang = getLangFromUrl(Astro.url);
 const posts = (await getCollection('blog'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const groups = groupBlogPostsForAdmin(posts).map((group, index) => ({
+  translationKey: group.translationKey,
+  slug: group.slug,
+  date: group.date ? new Date(group.date).toISOString() : '',
+  image: group.image,
+  position: String(index + 1).padStart(2, '0'),
+  locales: Object.fromEntries(
+    Object.entries(group.locales).map(([locale, post]) => [
+      locale,
+      { title: post.data.title, tags: post.data.tags },
+    ]),
+  ),
+}));
+
+const groupsJson = JSON.stringify(groups);
 ---
 <AdminLayout title="Admin · Blog" description="Archivo de posts">
   <section class="mx-auto max-w-5xl px-6 pb-16 pt-28">
@@ -19,29 +35,6 @@ const posts = (await getCollection('blog'))
       </a>
     </div>
 
-    {posts.length === 0 ? (
-      <p class="border-b border-black/10 py-6 font-body text-sm text-ink-muted">No hay posts todavía.</p>
-    ) : (
-      <div class="border-t border-black/10">
-        {posts.map((post, index) => (
-          <article class="grid gap-4 border-b border-black/10 py-5 md:grid-cols-[auto_110px_minmax(0,1fr)_auto] md:items-start md:gap-6">
-            <p class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-ink-faint">{String(index + 1).padStart(2, '0')}</p>
-            <p class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-accent-ink">{post.data.lang}</p>
-            <div class="space-y-2">
-              <h2 class="font-heading text-2xl leading-tight text-ink">{post.data.title}</h2>
-              <div class="flex flex-wrap items-center gap-3 font-body text-[0.72rem] uppercase tracking-[0.18em] text-ink-muted">
-                <span>Publicado</span>
-                {post.data.tags.map((tag) => (
-                  <span class="text-accent-ink">{tag}</span>
-                ))}
-              </div>
-            </div>
-            <time class="font-body text-[0.72rem] uppercase tracking-[0.18em] text-ink-muted">
-              {post.data.date.toLocaleDateString(lang, { year: 'numeric', month: 'short', day: 'numeric' })}
-            </time>
-          </article>
-        ))}
-      </div>
-    )}
+    <AdminBlogList client:load initialGroupsJson={groupsJson} />
   </section>
 </AdminLayout>

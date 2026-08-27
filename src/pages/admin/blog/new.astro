@@ -1,6 +1,9 @@
 ---
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import BlogPostForm from '../../../components/admin/BlogPostForm';
+import { getPublicLanguagePicker, siteData } from '../../../lib/siteData';
+
+const visibleLocales = getPublicLanguagePicker(siteData);
 ---
 <AdminLayout title="Admin — Nuevo post" description="Crear una nueva entrada de blog">
   <section class="mx-auto max-w-5xl px-6 pb-16 pt-28">
@@ -16,7 +19,7 @@ import BlogPostForm from '../../../components/admin/BlogPostForm';
     </div>
 
     <div class="pt-8">
-      <BlogPostForm client:load />
+      <BlogPostForm client:load mode="create" visibleLocales={visibleLocales} />
     </div>
   </section>
 </AdminLayout>

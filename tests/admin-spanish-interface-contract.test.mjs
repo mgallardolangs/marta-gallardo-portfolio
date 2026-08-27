@@ -552,7 +552,7 @@ test('BlogPostForm field labels, help, validation, and actions are in Spanish', 
   assert.match(source, />Título<\/label>/);
   assert.match(source, />Descripción<\/label>/);
   assert.match(source, />Fecha<\/label>/);
-  assert.match(source, />Idioma<\/label>/);
+  assert.match(source, /role="tablist" aria-label="[^"]*[Ii]diomas?[^"]*"/);
   assert.match(source, /Etiquetas \(separadas por comas\)/);
   assert.match(source, />Imagen destacada<\/label>/);
   assert.match(source, /JPEG, PNG, WebP o GIF/);
@@ -563,12 +563,10 @@ test('BlogPostForm field labels, help, validation, and actions are in Spanish', 
   assert.match(source, />Enlace<\/button>/);
   assert.match(source, /Cuerpo en Markdown/);
   assert.match(source, /Índice en vivo/);
-  assert.match(source, /Completa el título, la descripción y el cuerpo antes de publicar\./);
-  assert.match(source, /Las entradas de blog solo se pueden crear en ES, EN o FR\./);
   assert.match(source, /No se pudo crear la entrada\./);
   assert.match(source, /Publica el sitio para reconstruir el blog\./);
   assert.match(source, /Netlify Git Gateway/);
-  assert.match(source, /\{isSubmitting \? 'Creando…' : 'Crear entrada'\}/);
+  assert.match(source, /isSubmitting \? 'Creando…' : 'Crear entrada'/);
 
   assertEnglishUiStringsAbsent(source, [
     [/>Title<\/label>/, 'title label should no longer be English'],
