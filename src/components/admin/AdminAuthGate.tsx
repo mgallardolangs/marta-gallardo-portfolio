@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useAdminStore } from './useAdminStore';
 import {
   ADMIN_AUTH_GATE_OPEN_MAX_RETRIES,
@@ -51,7 +51,8 @@ export default function AdminAuthGate({ allowTokenless }: Props) {
   const loginButtonRef = useRef<HTMLButtonElement | null>(null);
   const openControllerRef = useRef<ReturnType<typeof createAdminAuthGateOpenController> | null>(null);
   const [isWidgetOpen, setIsWidgetOpen] = useState(false);
-  const isBlocking = !allowTokenless && !store.isAuthenticated && !isWidgetOpen;
+  const shouldRenderWall = !allowTokenless && !store.isAuthenticated && !isWidgetOpen;
+  const isBlocking = shouldRenderWall;
 
   const getOpenController = () => {
     if (openControllerRef.current) return openControllerRef.current;
@@ -101,19 +102,22 @@ export default function AdminAuthGate({ allowTokenless }: Props) {
     };
   }, []);
 
-  // Keep the background admin shell inert while this wall is showing, and
-  // restore it the instant a real session exists (or this gate unmounts).
-  useEffect(() => {
+  // Keep the background admin shell inert only while this wall is actually
+  // rendered. Ties the DOM inert flag directly to the same render decision
+  // used below, then updates it synchronously via useLayoutEffect so the
+  // admin becomes interactive the instant authentication succeeds — even if
+  // React hasn't yet flushed a passive effect from the Identity listener.
+  useLayoutEffect(() => {
     if (allowTokenless) return;
     const shell = document.getElementById(ADMIN_SHELL_ID) as InertElement | null;
     if (!shell) return;
 
-    shell.inert = !store.isAuthenticated;
+    shell.inert = shouldRenderWall;
 
     return () => {
       shell.inert = false;
     };
-  }, [allowTokenless, store.isAuthenticated]);
+  }, [allowTokenless, shouldRenderWall]);
 
   // Auto-open the Netlify Identity login dialog exactly once per production
   // unauthenticated page load. Manual and automatic opens share the same
@@ -149,9 +153,7 @@ export default function AdminAuthGate({ allowTokenless }: Props) {
     };
   }, [isBlocking]);
 
-  if (allowTokenless) return null;
-  if (store.isAuthenticated) return null;
-  if (isWidgetOpen) return null;
+  if (!shouldRenderWall) return null;
 
   const isExpired = store.initialized;
 
