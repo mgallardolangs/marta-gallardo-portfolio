@@ -17,7 +17,7 @@
   },
   "about": {
     "title": "Nice to meet you, I’m Marta.",
-    "text": "I’m a translator and content creator. I work across languages, cultures and formats so every message keeps its intention and connects naturally.\\n\\nI combine translation, localization, multilingual SEO and UGC content to help brands communicate with clarity, consistency and cultural sensitivity."
+    "text": "As a translator and content creator I work across languages, cultures and formats so every message keeps its intention and connects naturally.\\n\\nI combine translation, localization and multilingual SEO with UGC content to help brands communicate with clarity, consistency and cultural sensitivity."
   },
   "ugc": {
     "title": "UGC Portfolio",
@@ -111,7 +111,7 @@
   "home": {
     "hero": {
       "kicker": "Creativity, languages & strategy",
-      "description": "I create content and adapt messages so brands can connect with real people, in any language and market. I combine creativity, translation and digital strategy with an international perspective.",
+      "description": "I adapt messages so brands can connect with real people, in any language and market. I combine creativity, translation and digital strategy with an international perspective.",
       "mainPhoto": "Main Photo",
       "scrollCue": "Discover how I work",
       "coverLabel": "Cover Story"
@@ -132,7 +132,7 @@
     "video": {
       "eyebrow": "PERSONAL BRAND",
       "title": "@marttelier",
-      "description": "At @marttelier I share content about art, travel, languages and creative processes. A personal space where I turn curiosity, observation and real experiences into visual stories.",
+      "description": "At @marttelier I share content about travel, languages and creative processes. A personal space where I turn curiosity, observation and real experiences into visual stories.",
       "placeholder": "Intro Video",
       "note": "9:16 format · placeholder for reel / introduction"
     },
@@ -144,7 +144,7 @@
     },
     "orbit": {
       "kicker": "CREATIVE ARCHIVE",
-      "title": "STORIES IN MOTION.",
+      "title": "My world",
       "index": "MARTA GALLARDO · PORTFOLIO",
       "note": "CONTENT · LANGUAGES · TRAVEL · ART"
     }
