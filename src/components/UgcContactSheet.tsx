@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { useAdminStore } from './admin/useAdminStore';
 import { localize, type Locale, type UgcCategory, type UgcPortfolioItem } from '../lib/siteData.ts';
+import { netlifyImage } from '../lib/netlifyImage';
 import {
   INITIAL_UGC_FILTER,
   canOpenUgcItem,
@@ -344,7 +345,7 @@ export default function UgcContactSheet({
                         previewVideoRefs.current[item.id] = node;
                       }}
                       src={item.src}
-                      poster={item.poster ?? undefined}
+                      src={item.poster ? netlifyImage(item.poster, { width: 600 }) : undefined}
                       muted
                       loop
                       playsInline
@@ -355,7 +356,7 @@ export default function UgcContactSheet({
                     />
                   ) : (
                     <img
-                      src={item.src}
+                      src={netlifyImage(item.src, { width: 600 })}
                       alt={localizedAlt}
                       loading="lazy"
                       className={`h-full w-full object-cover transition duration-300 ${
@@ -440,7 +441,7 @@ export default function UgcContactSheet({
                           <video
                             ref={focusedVideoRef}
                             src={activeItem.src}
-                            poster={activeItem.poster ?? undefined}
+                            poster={activeItem.poster ? netlifyImage(activeItem.poster, { width: 1200 }) : undefined}
                             loop
                             playsInline
                             preload="metadata"
@@ -450,7 +451,7 @@ export default function UgcContactSheet({
                           />
                         ) : (
                           <img
-                            src={activeItem.src}
+                            src={netlifyImage(activeItem.src, { width: 1200 })}
                             alt={localize(activeItem.alt, lang)}
                             className="h-full w-full object-cover"
                           />

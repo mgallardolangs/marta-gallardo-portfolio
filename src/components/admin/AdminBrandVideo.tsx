@@ -42,18 +42,18 @@ export default function AdminBrandVideo() {
           className="block text-[0.6rem] font-semibold uppercase tracking-[0.22em] text-paper"
           htmlFor="brand-video-embed-url"
         >
-          Enlace de YouTube o Vimeo (para vídeos grandes en alta calidad)
+          Enlace o código para incrustar (YouTube, Vimeo, Instagram, TikTok…) para vídeos en alta calidad
         </label>
         <input
           id="brand-video-embed-url"
-          type="url"
+          type="text"
           value={embedRaw}
-          placeholder="https://vimeo.com/… o https://youtu.be/…"
+          placeholder="Pega el enlace del vídeo o el código <iframe>"
           onChange={(event) => store.setBrandVideoEmbedUrl(event.target.value)}
           className="w-full border border-white/20 bg-paper px-2 py-1 text-xs text-ink"
         />
         {embedRaw && !embedUrl ? (
-          <p className="text-[0.65rem] text-amaranth">Pega un enlace válido de YouTube o Vimeo.</p>
+          <p className="text-[0.65rem] text-amaranth">Pega un enlace válido (http o https) o un código para incrustar.</p>
         ) : embedUrl ? (
           <button
             type="button"

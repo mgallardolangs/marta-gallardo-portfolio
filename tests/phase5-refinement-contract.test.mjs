@@ -274,13 +274,13 @@ test('public media surfaces keep eager hero loading, lazy below-fold loading, an
 
   assert.match(homeSource, /<HomeHeroPortrait>/);
   assert.match(homeSource, /siteData\.heroMainPhoto/);
-  assert.match(homeSource, /<img[^>]*src=\{siteData\.instagramScreenshot\}[^>]*width=\{1251\}[^>]*height=\{495\}[^>]*loading="lazy"[^>]*decoding="async"/);
+  assert.match(homeSource, /<img[^>]*src=\{netlifyImage\(siteData\.instagramScreenshot[^>]*?\)\}[^>]*width=\{1251\}[^>]*height=\{495\}[^>]*loading="lazy"[^>]*decoding="async"/);
   assert.doesNotMatch(ugcSource, /fetchpriority="high"|idx === 0 \? 'eager' : 'lazy'/, 'UGC should no longer preload a hero carousel image after the contact-sheet rewrite');
   assert.match(ugcContactSheetSource, /<img[\s\S]*loading="lazy"/, 'UGC contact-sheet still images should stay lazy-loaded');
   assert.match(ugcContactSheetSource, /preload="metadata"/, 'UGC contact-sheet videos should only preload metadata');
-  assert.match(orbitSource, /<img[^>]*src=\{item\.src\}[^>]*alt=\{alt\}[^>]*loading="lazy"[^>]*decoding="async"/);
-  assert.match(blogIndexSource, /<img src=\{(?:latest|post)\.data\.image\} alt=\{(?:latest|post)\.data\.title\}[^>]*width=\{1600\}[^>]*height=\{1200\}/);
-  assert.match(blogArticleSource, /<img src=\{post\.data\.image\} alt=\{post\.data\.title\}[^>]*width=\{1600\}[^>]*height=\{900\}[^>]*fetchpriority="high"/);
+  assert.match(orbitSource, /<img[^>]*src=\{netlifyImage\(item\.src[^>]*?\)\}[^>]*alt=\{alt\}[^>]*loading="lazy"[^>]*decoding="async"/);
+  assert.match(blogIndexSource, /<img src=\{netlifyImage\((?:latest|post)\.data\.image[^>]*?\)\} alt=\{(?:latest|post)\.data\.title\}[^>]*width=\{1600\}[^>]*height=\{1200\}/);
+  assert.match(blogArticleSource, /<img src=\{netlifyImage\(post\.data\.image[^>]*?\)\} alt=\{post\.data\.title\}[^>]*width=\{1600\}[^>]*height=\{900\}[^>]*fetchpriority="high"/);
   assert.match(photoMasonrySource, /alt=""[^>]*loading="lazy"[^>]*decoding="async"/);
   assert.match(videoGallerySource, /preload="metadata"/);
 });

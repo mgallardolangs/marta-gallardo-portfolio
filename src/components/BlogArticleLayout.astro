@@ -5,6 +5,7 @@ import BlogTableOfContents from './BlogTableOfContents';
 import { getLocalizedPath, t } from '../i18n';
 import { getAdjacentLocalePost } from '../lib/blog';
 import { buildBlogOutline, type BlogHeadingLike } from '../lib/blogOutline';
+import { netlifyImage } from '../lib/netlifyImage';
 
 type BlogPost = {
   id: string;
@@ -77,7 +78,7 @@ const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+
         <div class="mt-10">
           {post.data.image ? (
             <div data-blog-feature-image class="mx-auto max-w-[850px] overflow-hidden border border-black/10">
-              <img src={post.data.image} alt={post.data.title} width={1600} height={900} loading="eager" fetchpriority="high" decoding="async" class="aspect-[16/9] w-full object-cover" />
+              <img src={netlifyImage(post.data.image, { width: 1600 })} alt={post.data.title} width={1600} height={900} loading="eager" fetchpriority="high" decoding="async" class="aspect-[16/9] w-full object-cover" />
             </div>
           ) : (
             <div data-blog-feature-image class="mx-auto flex aspect-[16/9] max-w-[850px] items-center justify-center border border-black/10 bg-paper px-6 text-center text-accent-ink">
