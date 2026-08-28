@@ -68,6 +68,7 @@ export type SiteData = {
   nicheIcons: Record<string, string>;
   aboutPhotos: string[];
   brandVideo: string;
+  brandVideoEmbedUrl: string;
   toolLogos: Record<string, string>;
   videoStickers: Record<string, string>;
   orbitMedia: OrbitMedia[];

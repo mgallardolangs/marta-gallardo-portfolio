@@ -12,10 +12,12 @@ import HomeHeroPortrait from '../components/HomeHeroPortrait.astro';
 import TypedTitle from '../components/TypedTitle.astro';
 import { getLangFromUrl, getLocalizedPath, t } from '../i18n';
 import { siteData } from '../lib/siteData';
+import { toEmbedUrl } from '../lib/videoEmbed';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
 const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-proof')?.alt[lang] ?? 'Instagram';
+const brandVideoEmbedUrl = toEmbedUrl(siteData.brandVideoEmbedUrl);
 ---
 
 <BaseLayout title={`${i.hero.name} — ${i.home.hero.kicker}`} description={i.home.hero.description}>
@@ -235,14 +237,37 @@ const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-p
             </ParallaxLayer>
 
             <ScrollReveal client:visible direction="up" className="relative mx-auto flex aspect-[9/16] w-full max-w-[22rem] items-center justify-center overflow-hidden border border-white/12 bg-white/8">
-              <div class="absolute inset-0 bg-[linear-gradient(180deg,rgb(244_245_241_/_0.12),rgb(244_245_241_/_0.02))]"></div>
-              <div class="absolute left-1/2 top-4 h-1.5 w-24 -translate-x-1/2 rounded-full bg-white/20"></div>
-              <div class="absolute inset-x-[22%] top-10 h-24 rounded-full bg-white/10 blur-3xl"></div>
-              <div class="relative z-10 max-w-sm text-center">
-                <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.home.video.note}</p>
-                <p class="mt-5 font-heading text-4xl text-paper md:text-5xl">{i.home.video.placeholder}</p>
-              </div>
-              <ArrowWavy client:visible className="absolute bottom-8 right-8 hidden w-24 text-amaranth md:block" />
+              {brandVideoEmbedUrl ? (
+                <iframe
+                  src={brandVideoEmbedUrl}
+                  title={i.home.video.title}
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                  class="absolute inset-0 h-full w-full border-0"
+                ></iframe>
+              ) : siteData.brandVideo ? (
+                <video
+                  src={siteData.brandVideo}
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                  class="absolute inset-0 h-full w-full object-cover"
+                ></video>
+              ) : (
+                <Fragment>
+                  <div class="absolute inset-0 bg-[linear-gradient(180deg,rgb(244_245_241_/_0.12),rgb(244_245_241_/_0.02))]"></div>
+                  <div class="absolute left-1/2 top-4 h-1.5 w-24 -translate-x-1/2 rounded-full bg-white/20"></div>
+                  <div class="absolute inset-x-[22%] top-10 h-24 rounded-full bg-white/10 blur-3xl"></div>
+                  <div class="relative z-10 max-w-sm text-center">
+                    <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.home.video.note}</p>
+                    <p class="mt-5 font-heading text-4xl text-paper md:text-5xl">{i.home.video.placeholder}</p>
+                  </div>
+                  <ArrowWavy client:visible className="absolute bottom-8 right-8 hidden w-24 text-amaranth md:block" />
+                </Fragment>
+              )}
             </ScrollReveal>
           </div>
 

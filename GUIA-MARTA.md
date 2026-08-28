@@ -85,6 +85,13 @@ El orbit sí tiene controles dinámicos:
 - editar **label** y **alt** en ES/EN/FR
 - subir **poster** obligatorio cuando el elemento es vídeo
 
+### Vídeo principal de marca (portada)
+Tienes **dos formas** de ponerlo:
+- **Enlace de YouTube o Vimeo** (recomendado para vídeos en alta calidad de 30–50 MB o más): sube el vídeo a tu cuenta de YouTube (como “no listado”) o Vimeo y **pega el enlace** en el campo del vídeo de marca. La web lo muestra incrustado, carga rápido y no ocupa espacio en el repositorio.
+- **Archivo subido** (MP4/WebM/MOV, máximo **8 MB**): si no pones enlace, se usa el archivo que subas.
+
+El enlace tiene prioridad sobre el archivo. Para volver al archivo, pulsa **“Quitar enlace y usar archivo subido”**. Si dejas ambos vacíos, se muestra el marcador de posición actual.
+
 ### Reglas del orbit
 - **Imágenes orbit:** JPG, PNG, WebP o GIF, máximo **2 MB**
 - **Vídeos orbit:** MP4, WebM o MOV, máximo **8 MB**

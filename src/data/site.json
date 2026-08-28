@@ -41,6 +41,7 @@
   },
   "aboutPhotos": [],
   "brandVideo": "",
+  "brandVideoEmbedUrl": "",
   "toolLogos": {
     "microsoft-office": "/images/tools/microsoft-office.svg",
     "google-workspace": "/images/tools/google-workspace.svg",
