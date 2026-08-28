@@ -16,7 +16,8 @@
   },
   "publicLanguagePicker": [
     "es",
-    "en"
+    "en",
+    "fr"
   ],
   "nicheBackgrounds": {
     "travel": "/images/site/nicho-viajes.webp",
