@@ -158,7 +158,7 @@ test('public and admin heroes wire the approved portrait media with eager public
   assert.match(homeSource, /import HomeHeroPortrait from '\.\.\/components\/HomeHeroPortrait\.astro';/);
   assert.match(
     homeSource,
-    /<HomeHeroPortrait>\s*<img[^>]*src=\{siteData\.heroMainPhoto\}[^>]*alt=\{i\.hero\.name\}[^>]*width=\{1200\}[^>]*height=\{1600\}[^>]*loading="eager"[^>]*fetchpriority="high"[^>]*decoding="async"[^>]*\/>\s*<\/HomeHeroPortrait>/s,
+    /<HomeHeroPortrait>\s*<img[^>]*src=\{netlifyImage\(siteData\.heroMainPhoto[^>]*?\)\}[^>]*alt=\{i\.hero\.name\}[^>]*width=\{1200\}[^>]*height=\{1600\}[^>]*loading="eager"[^>]*fetchpriority="high"[^>]*decoding="async"[^>]*\/>\s*<\/HomeHeroPortrait>/s,
   );
   assert.doesNotMatch(homeSource, /home-hero__portrait-image/);
 

@@ -54,7 +54,7 @@ test('public hero matches the approved Checkpoint 1 source markers and CTA struc
   assert.match(heroSection, /i\.home\.hero\.description/);
   assert.match(
     heroSection,
-    /<HomeHeroPortrait>\s*<img[^>]*src=\{siteData\.heroMainPhoto\}[^>]*alt=\{i\.hero\.name\}[^>]*width=\{1200\}[^>]*height=\{1600\}[^>]*loading="eager"[^>]*fetchpriority="high"[^>]*decoding="async"[^>]*\/>\s*<\/HomeHeroPortrait>/s,
+    /<HomeHeroPortrait>\s*<img[^>]*src=\{netlifyImage\(siteData\.heroMainPhoto[^>]*?\)\}[^>]*alt=\{i\.hero\.name\}[^>]*width=\{1200\}[^>]*height=\{1600\}[^>]*loading="eager"[^>]*fetchpriority="high"[^>]*decoding="async"[^>]*\/>\s*<\/HomeHeroPortrait>/s,
   );
   assert.doesNotMatch(heroSection, /home-hero__portrait-image/);
   assert.match(heroSection, /href=\{getLocalizedPath\('\/ugc',\s*lang\)\}/);

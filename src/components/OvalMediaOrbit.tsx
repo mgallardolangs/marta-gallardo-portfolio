@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 
 import type { Lang } from '../i18n';
 import type { OrbitMedia } from '../lib/siteData';
+import { netlifyImage } from '../lib/netlifyImage';
 import {
   DESKTOP_ORBIT_GEOMETRY,
   getLocalizedOrbitText,
@@ -361,7 +362,7 @@ export default function OvalMediaOrbit({
                     />
                   ) : (
                     <img
-                      src={item.src}
+                      src={netlifyImage(item.src, { width: 320 })}
                       alt={alt}
                       width={98}
                       height={126}

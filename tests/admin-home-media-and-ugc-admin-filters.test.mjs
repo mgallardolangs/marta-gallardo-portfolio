@@ -48,7 +48,7 @@ test('public homepage binds all four video stickers to siteData with image-first
   ]) {
     assert.match(
       source,
-      new RegExp(`siteData\\.videoStickers\\.${key}\\s*\\?\\s*\\([\\s\\S]*?<img[\\s\\S]*?src=\\{siteData\\.videoStickers\\.${key}\\}[\\s\\S]*?alt=\\{i\\.home\\.gallery\\.${shotKey}\\}[\\s\\S]*?class="h-full w-full object-cover"[\\s\\S]*?\\)\\s*:\\s*\\([\\s\\S]*?i\\.home\\.gallery\\.${shotKey}`, 's'),
+      new RegExp(`siteData\\.videoStickers\\.${key}\\s*\\?\\s*\\([\\s\\S]*?<img[\\s\\S]*?src=\\{netlifyImage\\(siteData\\.videoStickers\\.${key}[\\s\\S]*?\\)\\}[\\s\\S]*?alt=\\{i\\.home\\.gallery\\.${shotKey}\\}[\\s\\S]*?class="h-full w-full object-cover"[\\s\\S]*?\\)\\s*:\\s*\\([\\s\\S]*?i\\.home\\.gallery\\.${shotKey}`, 's'),
       `public homepage should render ${key} from siteData.videoStickers.${key} and fall back to i.home.gallery.${shotKey}`,
     );
   }

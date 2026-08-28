@@ -13,6 +13,7 @@ import TypedTitle from '../components/TypedTitle.astro';
 import { getLangFromUrl, getLocalizedPath, t } from '../i18n';
 import { siteData } from '../lib/siteData';
 import { toEmbedUrl } from '../lib/videoEmbed';
+import { netlifyImage } from '../lib/netlifyImage';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
@@ -74,7 +75,7 @@ const brandVideoEmbedUrl = toEmbedUrl(siteData.brandVideoEmbedUrl);
           <ScrollReveal client:visible direction="none" className="home-hero__portrait-shell">
             <HomeHeroPortrait>
               <img
-                src={siteData.heroMainPhoto}
+                src={netlifyImage(siteData.heroMainPhoto, { width: 1200 })}
                 alt={i.hero.name}
                 width={1200}
                 height={1600}
@@ -161,7 +162,7 @@ const brandVideoEmbedUrl = toEmbedUrl(siteData.brandVideoEmbedUrl);
                 <div class="h-28 w-28 overflow-hidden border border-white/12 bg-paper shadow-[0_18px_40px_rgb(6_4_3_/_0.24)] md:h-36 md:w-36">
                   {siteData.videoStickers.one ? (
                     <img
-                      src={siteData.videoStickers.one}
+                      src={netlifyImage(siteData.videoStickers.one, { width: 400 })}
                       alt={i.home.gallery.shotOne}
                       class="h-full w-full object-cover"
                       loading="lazy"
@@ -181,7 +182,7 @@ const brandVideoEmbedUrl = toEmbedUrl(siteData.brandVideoEmbedUrl);
                 <div class="h-24 w-32 overflow-hidden border border-white/12 bg-white shadow-[0_18px_40px_rgb(6_4_3_/_0.24)] md:h-28 md:w-40">
                   {siteData.videoStickers.two ? (
                     <img
-                      src={siteData.videoStickers.two}
+                      src={netlifyImage(siteData.videoStickers.two, { width: 400 })}
                       alt={i.home.gallery.shotTwo}
                       class="h-full w-full object-cover"
                       loading="lazy"
@@ -201,7 +202,7 @@ const brandVideoEmbedUrl = toEmbedUrl(siteData.brandVideoEmbedUrl);
                 <div class="h-28 w-40 overflow-hidden border border-white/12 bg-white shadow-[0_18px_40px_rgb(6_4_3_/_0.24)] md:h-32 md:w-44">
                   {siteData.videoStickers.three ? (
                     <img
-                      src={siteData.videoStickers.three}
+                      src={netlifyImage(siteData.videoStickers.three, { width: 400 })}
                       alt={i.home.gallery.shotThree}
                       class="h-full w-full object-cover"
                       loading="lazy"
@@ -221,7 +222,7 @@ const brandVideoEmbedUrl = toEmbedUrl(siteData.brandVideoEmbedUrl);
                 <div class="h-20 w-28 overflow-hidden border border-white/12 bg-amaranth shadow-[0_18px_40px_rgb(6_4_3_/_0.24)] md:h-24 md:w-36">
                   {siteData.videoStickers.four ? (
                     <img
-                      src={siteData.videoStickers.four}
+                      src={netlifyImage(siteData.videoStickers.four, { width: 400 })}
                       alt={i.home.gallery.shotFour}
                       class="h-full w-full object-cover"
                       loading="lazy"
@@ -278,7 +279,7 @@ const brandVideoEmbedUrl = toEmbedUrl(siteData.brandVideoEmbedUrl);
             {siteData.instagramScreenshot ? (
               <div class="mt-6 overflow-hidden border border-white/10">
                 <img
-                  src={siteData.instagramScreenshot}
+                  src={netlifyImage(siteData.instagramScreenshot, { width: 1251 })}
                   alt={instagramAlt}
                   width={1251}
                   height={495}
