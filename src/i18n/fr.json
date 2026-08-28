@@ -13,11 +13,11 @@
     "age": "23 ans",
     "city": "Elche, Espagne",
     "ugcLabel": "Créatrice UGC @marttelier",
-    "seoLabel": "Traduction Multilingue & SEO"
+    "seoLabel": "Traduction & SEO multilingue"
   },
   "about": {
-    "title": "Ravie, je suis Marta.",
-    "text": "Je suis traductrice et créatrice de contenu. Je travaille entre langues, cultures et formats pour que chaque message conserve son intention et crée un lien naturel.\\n\\nJ’associe traduction, localisation, SEO multilingue et contenu UGC pour aider les marques à communiquer avec clarté, cohérence et sensibilité culturelle."
+    "title": "Coucou, je suis Marta.",
+    "text": "Comme traductrice et créatrice de contenu, je travaille entre langues, cultures et formats pour que chaque message conserve son intention et crée un lien naturel.\\n\\nJ’associe traduction, localisation et SEO multilingue avec du contenu UGC pour aider les marques à communiquer avec clarté, cohérence et sensibilité culturelle."
   },
   "ugc": {
     "title": "Portfolio UGC",
@@ -111,7 +111,7 @@
   "home": {
     "hero": {
       "kicker": "Créativité, langues et stratégie",
-      "description": "Je crée du contenu et j’adapte les messages pour que les marques créent un lien avec de vraies personnes, dans n’importe quelle langue et sur n’importe quel marché. J’associe créativité, traduction et stratégie digitale avec un regard international.",
+      "description": "J'adapte les messages pour que les marques créent un lien avec de vraies personnes, dans n’importe quelle langue et sur n’importe quel marché. Je mélange créativité, traduction et stratégie digitale avec un regard international.",
       "mainPhoto": "Photo principale",
       "scrollCue": "Découvrez mon travaille",
       "coverLabel": "Couverture éditoriale"
@@ -132,7 +132,7 @@
     "video": {
       "eyebrow": "Marque personnelle",
       "title": "@marttelier",
-      "description": "Sur @marttelier, je partage du contenu autour de l’art, des voyages, des langues et des processus créatifs. Un espace personnel où je transforme la curiosité, l’observation et des expériences réelles en récits visuels.",
+      "description": "Sur @marttelier, je partage du contenu autour des voyages, des langues et des processus créatifs. Un espace personnel où je transforme la curiosité, l’observation et des expériences réelles en récits visuels.",
       "placeholder": "Vidéo intro",
       "note": "Format 9:16 · placeholder pour reel / présentation"
     },
@@ -144,7 +144,7 @@
     },
     "orbit": {
       "kicker": "ARCHIVES CRÉATIVES",
-      "title": "HISTOIRES EN MOUVEMENT.",
+      "title": "Voilà",
       "index": "MARTA GALLARDO · PORTFOLIO",
       "note": "CONTENU · LANGUES · VOYAGES · ART"
     }
