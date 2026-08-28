@@ -52,9 +52,9 @@
     "google-business-profile": "/images/tools/google-my-business.svg"
   },
   "videoStickers": {
-    "one": "",
+    "one": "/images/site/videoStickers-one.jpeg",
     "two": "",
-    "three": "",
+    "three": "/images/site/videoStickers-three.png",
     "four": ""
   },
   "orbitMedia": [
@@ -345,6 +345,28 @@
       }
     },
     {
+      "id": "placeholder-profile-note",
+      "type": "image",
+      "src": "/images/site/placeholder-profile-note.jpeg",
+      "href": null,
+      "label": {
+        "es": "Ruta montaña",
+        "en": "Profile note",
+        "fr": "Note de profil",
+        "de": "Profilnotiz",
+        "it": "Nota profilo",
+        "ca": "Ruta montaña"
+      },
+      "alt": {
+        "es": "Placeholder gráfico con identidad visual de Marta Gallardo",
+        "en": "Branded placeholder carrying Marta Gallardo’s visual identity",
+        "fr": "Placeholder graphique portant l’identité visuelle de Marta Gallardo",
+        "de": "Gebrandeter Platzhalter mit der visuellen Identität von Marta Gallardo",
+        "it": "Placeholder grafico con l’identità visiva di Marta Gallardo",
+        "ca": "Placeholder gràfic amb la identitat visual de Marta Gallardo"
+      }
+    },
+    {
       "id": "placeholder-collaboration",
       "type": "image",
       "src": "/images/orbit/mock-14.webp",
@@ -364,28 +386,6 @@
         "de": "Gebrandeter Platzhalter für eine zukünftige Markenkooperation",
         "it": "Placeholder grafico per una futura collaborazione con un brand",
         "ca": "Placeholder gràfic per a una futura col·laboració amb una marca"
-      }
-    },
-    {
-      "id": "placeholder-profile-note",
-      "type": "image",
-      "src": "/images/orbit/mock-15.webp",
-      "href": null,
-      "label": {
-        "es": "Nota de perfil",
-        "en": "Profile note",
-        "fr": "Note de profil",
-        "de": "Profilnotiz",
-        "it": "Nota profilo",
-        "ca": "Nota de perfil"
-      },
-      "alt": {
-        "es": "Placeholder gráfico con identidad visual de Marta Gallardo",
-        "en": "Branded placeholder carrying Marta Gallardo’s visual identity",
-        "fr": "Placeholder graphique portant l’identité visuelle de Marta Gallardo",
-        "de": "Gebrandeter Platzhalter mit der visuellen Identität von Marta Gallardo",
-        "it": "Placeholder grafico con l’identità visiva di Marta Gallardo",
-        "ca": "Placeholder gràfic amb la identitat visual de Marta Gallardo"
       }
     }
   ],
