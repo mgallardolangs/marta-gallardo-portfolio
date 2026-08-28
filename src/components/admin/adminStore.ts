@@ -1265,6 +1265,14 @@ export class AdminStore {
     this.emit();
   }
 
+  setBrandVideoEmbedUrl(value: string): void {
+    if (!this.initialized) return;
+    deepSet(this.images, 'brandVideoEmbedUrl', value.trim());
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
   setLang(lang: string): void {
     this.currentLang = lang as SupportedLang;
     this.emit();

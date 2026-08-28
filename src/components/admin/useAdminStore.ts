@@ -14,6 +14,7 @@ export function useAdminStore() {
     getExperienceCards: adminStore.getExperienceCards.bind(adminStore),
     setText: adminStore.setText.bind(adminStore),
     setImage: adminStore.setImage.bind(adminStore),
+    setBrandVideoEmbedUrl: adminStore.setBrandVideoEmbedUrl.bind(adminStore),
     addEducationStudy: adminStore.addEducationStudy.bind(adminStore),
     addExperienceCard: adminStore.addExperienceCard.bind(adminStore),
     setOrbitMediaFile: adminStore.setOrbitMediaFile.bind(adminStore),
