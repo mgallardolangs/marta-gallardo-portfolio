@@ -211,6 +211,21 @@ Aceptados:
 
 Consejo: aunque un archivo se deje subir, intenta usar archivos ligeros para que la web cargue rápido.
 
+### Cómo preparar las imágenes (calidad alta + carga rápida)
+
+La web ya **optimiza las imágenes automáticamente** al mostrarlas: las redimensiona y las sirve en el formato más ligero para cada navegador (WebP/AVIF) **sin tocar tu archivo original**. Así que no hace falta que conviertas todo a mano.
+
+Lo único importante al subir:
+
+- **No subas archivos enormes.** Lo que más pesa no es el formato, sino el tamaño en píxeles. Antes de subir, deja la imagen en como mucho **~2000 px de ancho** (menos para fotos pequeñas o stickers).
+- **Si conviertes a WebP, usa calidad ~80** (con “lossy”, no “sin pérdidas / lossless” ni calidad 100). Con calidad máxima el WebP suele salir **más pesado** que el JPG.
+- **Si el WebP te sale más grande que el JPG, quédate con el JPG.** WebP no es obligatorio; la web lo optimiza igual al servirlo.
+- **HEIC (fotos del iPhone): conviértelas antes de subir** a **JPG** (calidad ~80) o WebP. Los navegadores no muestran HEIC y la web no puede optimizarlo directamente. Además, pasar de HEIC a WebP casi siempre pesa más, así que JPG es la opción más segura.
+
+Herramienta gratis recomendada: **[squoosh.app](https://squoosh.app)** — elige WebP o JPG, calidad ~80, y ajusta el ancho; te muestra el peso antes/después.
+
+Diferencia rápida: **“reducir el tamaño”** es que el archivo pese menos; **“optimizar para la web”** es que cargue rápido para quien visita (tamaño adecuado + mejor formato + compresión + carga diferida + CDN). La web ya hace lo segundo por ti; tú solo evita subir originales gigantes.
+
 ---
 
 ## 7. Qué NO se gestiona desde `/admin`
