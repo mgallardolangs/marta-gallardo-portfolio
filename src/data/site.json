@@ -9,7 +9,7 @@
   },
   "videoPlaceholderOrEmbedUrl": "https://example.com/embed/video",
   "ugcHeaderImage": "",
-  "instagramScreenshot": "/images/site/instagram-screenshot.jpeg",
+  "instagramScreenshot": "/images/site/instagramScreenshot.png",
   "socialLinks": {
     "linkedin": "https://www.linkedin.com/in/martagall/",
     "instagram": "https://www.instagram.com/marttelier/"
@@ -53,10 +53,10 @@
     "google-business-profile": "/images/tools/google-my-business.svg"
   },
   "videoStickers": {
-    "one": "/images/site/videoStickers-one.jpeg",
-    "two": "",
-    "three": "/images/site/videoStickers-three.png",
-    "four": ""
+    "one": "/images/site/videoStickers-one.webp",
+    "two": "/images/site/videoStickers-two.webp",
+    "three": "/images/site/videoStickers-three.webp",
+    "four": "/images/site/videoStickers-four.webp"
   },
   "orbitMedia": [
     {
