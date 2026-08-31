@@ -62,20 +62,20 @@
     {
       "id": "hero-editorial",
       "type": "image",
-      "src": "/images/orbit/mock-01.webp",
+      "src": "/images/site/hero-editorial.webp",
       "href": null,
       "label": {
-        "es": "Retrato editorial",
-        "en": "Editorial portrait",
-        "fr": "Portrait éditorial",
+        "es": "Rodeada de libros e idiomas",
+        "en": "Surrounded by books and languages",
+        "fr": "Entourée de livres et de langues",
         "de": "Editorial-Porträt",
         "it": "Ritratto editoriale",
         "ca": "Retrat editorial"
       },
       "alt": {
-        "es": "Retrato editorial de Marta Gallardo para la portada del portfolio",
-        "en": "Editorial portrait of Marta Gallardo for the portfolio cover",
-        "fr": "Portrait éditorial de Marta Gallardo pour la couverture du portfolio",
+        "es": "Traductora en una librería rodeada de libros en varios idiomas",
+        "en": "Full-body photo of a translator in a bookshop surrounded by books in different languages",
+        "fr": "Traductrice en pied dans une librairie entourée de livres en plusieurs langues",
         "de": "Editorial-Porträt von Marta Gallardo für das Portfolio-Cover",
         "it": "Ritratto editoriale di Marta Gallardo per la copertina del portfolio",
         "ca": "Retrat editorial de Marta Gallardo per a la portada del portfoli"
@@ -84,20 +84,20 @@
     {
       "id": "world-cutout",
       "type": "image",
-      "src": "/images/orbit/mock-02.webp",
+      "src": "/images/site/world-cutout.webp",
       "href": null,
       "label": {
-        "es": "Mapa y recorrido",
-        "en": "Map and journey",
-        "fr": "Carte et parcours",
+        "es": "Atardecer entre palmeras en Elche",
+        "en": "Sunset among palm trees in Elche",
+        "fr": "Coucher de soleil parmi les palmiers à Elche",
         "de": "Karte und Weg",
         "it": "Mappa e percorso",
         "ca": "Mapa i recorregut"
       },
       "alt": {
-        "es": "Recorte con mapa para presentar la trayectoria internacional de Marta",
-        "en": "Map cutout introducing Marta’s international journey",
-        "fr": "Découpe avec carte pour présenter le parcours international de Marta",
+        "es": "Atardecer naranja con palmeras en Elche",
+        "en": "Orange sunset with palm trees in Elche",
+        "fr": "Coucher de soleil orange avec des palmiers à Elche",
         "de": "Kartenausschnitt zur Darstellung von Martas internationalem Weg",
         "it": "Ritaglio con mappa per raccontare il percorso internazionale di Marta",
         "ca": "Retall amb mapa per presentar el recorregut internacional de Marta"
@@ -106,20 +106,20 @@
     {
       "id": "passport-sticker",
       "type": "image",
-      "src": "/images/orbit/mock-03.webp",
+      "src": "/images/site/passport-sticker.webp",
       "href": null,
       "label": {
-        "es": "Pasaporte creativo",
-        "en": "Creative passport",
-        "fr": "Passeport créatif",
+        "es": "Creando contenido en San Francisco",
+        "en": "Creating content in San Francisco",
+        "fr": "Créer du contenu à San Francisco",
         "de": "Kreativer Reisepass",
         "it": "Passaporto creativo",
         "ca": "Passaport creatiu"
       },
       "alt": {
-        "es": "Sticker de pasaporte que representa viajes y campañas de estilo de vida",
-        "en": "Passport sticker representing travel and lifestyle campaigns",
-        "fr": "Sticker passeport représentant des campagnes voyage et lifestyle",
+        "es": "Creadora UGC de viajes visitando el puente Golden Gate de San Francisco",
+        "en": "UGC travel creator visiting the Golden Gate Bridge in San Francisco",
+        "fr": "Créatrice UGC de voyages en visite au pont Golden Gate de San Francisco",
         "de": "Reisepass-Sticker für Reise- und Lifestyle-Kampagnen",
         "it": "Sticker passaporto che rappresenta viaggi e campagne lifestyle",
         "ca": "Adhesiu de passaport que representa viatges i campanyes lifestyle"
@@ -128,7 +128,7 @@
     {
       "id": "art-sticker",
       "type": "image",
-      "src": "/images/orbit/mock-04.webp",
+      "src": "/images/site/art-sticker.webp",
       "href": null,
       "label": {
         "es": "Pulso artístico",
@@ -150,20 +150,20 @@
     {
       "id": "crochet-sticker",
       "type": "image",
-      "src": "/images/orbit/mock-05.webp",
+      "src": "/images/site/crochet-sticker.webp",
       "href": null,
       "label": {
-        "es": "Detalle artesanal",
-        "en": "Craft detail",
-        "fr": "Détail artisanal",
+        "es": "Proyectos de creatividad",
+        "en": "Creative projects",
+        "fr": "Projets créatifs",
         "de": "Handwerksdetail",
         "it": "Dettaglio artigianale",
         "ca": "Detall artesanal"
       },
       "alt": {
-        "es": "Sticker de crochet para contenido artesanal y lifestyle",
-        "en": "Crochet sticker for craft and lifestyle content",
-        "fr": "Sticker crochet pour du contenu artisanal et lifestyle",
+        "es": "Proyectos de creatividad: bolso de crochet y pintura moldeable sobre canvas",
+        "en": "Creative projects: handmade crochet bag and moldable paint on canvas",
+        "fr": "Projets créatifs : sac au crochet fait main et peinture modelable sur toile",
         "de": "Häkel-Sticker für Craft- und Lifestyle-Inhalte",
         "it": "Sticker all’uncinetto per contenuti artigianali e lifestyle",
         "ca": "Adhesiu de ganxet per a contingut artesanal i lifestyle"
@@ -172,7 +172,7 @@
     {
       "id": "mountain-sticker",
       "type": "image",
-      "src": "/images/orbit/mock-06.webp",
+      "src": "/images/site/mountain-sticker.webp",
       "href": null,
       "label": {
         "es": "Postal de montaña",
@@ -183,9 +183,9 @@
         "ca": "Postal de muntanya"
       },
       "alt": {
-        "es": "Sticker de montaña para campañas de viajes y escapadas",
-        "en": "Mountain sticker for travel and getaway campaigns",
-        "fr": "Sticker montagne pour des campagnes voyage et escapades",
+        "es": "Vistas de montaña para campañas de viajes y escapadas",
+        "en": "Mountain views for travel and getaway campaigns",
+        "fr": "Vue de montagne pour des campagnes voyage et escapades",
         "de": "Berg-Sticker für Reise- und Ausflugskampagnen",
         "it": "Sticker montagna per campagne travel e weekend",
         "ca": "Adhesiu de muntanya per a campanyes de viatges i escapades"
@@ -194,7 +194,7 @@
     {
       "id": "instagram-proof",
       "type": "image",
-      "src": "/images/orbit/mock-07.webp",
+      "src": "/images/site/instagram-proof.webp",
       "href": null,
       "label": {
         "es": "Presencia social",
@@ -216,7 +216,7 @@
     {
       "id": "travel-niche",
       "type": "image",
-      "src": "/images/orbit/mock-08.webp",
+      "src": "/images/site/travel-niche.webp",
       "href": null,
       "label": {
         "es": "Órbita viajes",
@@ -238,12 +238,12 @@
     {
       "id": "languages-niche",
       "type": "image",
-      "src": "/images/orbit/mock-09.webp",
+      "src": "/images/site/languages-niche.webp",
       "href": null,
       "label": {
-        "es": "Órbita idiomas",
-        "en": "Language orbit",
-        "fr": "Orbite langues",
+        "es": "Traductora SEO",
+        "en": "SEO translator",
+        "fr": "Traductrice SEO",
         "de": "Sprachen-Orbit",
         "it": "Orbita lingue",
         "ca": "Òrbita idiomes"
@@ -260,20 +260,20 @@
     {
       "id": "art-niche",
       "type": "image",
-      "src": "/images/orbit/mock-10.webp",
+      "src": "/images/site/art-niche.webp",
       "href": null,
       "label": {
-        "es": "Órbita arte",
-        "en": "Art orbit",
-        "fr": "Orbite art",
+        "es": "Eligiendo colores",
+        "en": "Choosing colors",
+        "fr": "En train de choisir une couleur",
         "de": "Kunst-Orbit",
         "it": "Orbita arte",
         "ca": "Òrbita art"
       },
       "alt": {
-        "es": "Imagen de apoyo para campañas visuales del nicho artístico",
-        "en": "Supporting image for visual campaigns in the art niche",
-        "fr": "Image de soutien pour les campagnes visuelles du secteur artistique",
+        "es": "Mujer mirando botes de pintura para elegir color",
+        "en": "Woman looking at paint cans choosing a color",
+        "fr": "Femme regardant des pots de peinture pour choisir une couleur",
         "de": "Bild für visuelle Kampagnen im Kunstbereich",
         "it": "Immagine di supporto per campagne visive nel settore artistico",
         "ca": "Imatge de suport per a campanyes visuals del nínxol artístic"
@@ -282,20 +282,20 @@
     {
       "id": "placeholder-travel-story",
       "type": "image",
-      "src": "/images/orbit/mock-11.webp",
+      "src": "/images/site/placeholder-travel-story.webp",
       "href": null,
       "label": {
-        "es": "Historia de viaje",
-        "en": "Travel story",
-        "fr": "Histoire de voyage",
+        "es": "Vistas desde Glacier Point",
+        "en": "Views from Glacier Point",
+        "fr": "Vue depuis Glacier Point",
         "de": "Reisestory",
         "it": "Storia di viaggio",
         "ca": "Història de viatge"
       },
       "alt": {
-        "es": "Placeholder gráfico para un caso de viaje pendiente de publicar",
-        "en": "Branded placeholder for a travel case study that is still to be published",
-        "fr": "Placeholder graphique pour un cas voyage à publier",
+        "es": "Creadora de contenido en Glacier Point, Yosemite",
+        "en": "Content creator at Glacier Point, Yosemite",
+        "fr": "Créatrice de contenu à Glacier Point, Yosemite",
         "de": "Gebrandeter Platzhalter für einen noch unveröffentlichten Reise-Case",
         "it": "Placeholder grafico per un caso travel ancora da pubblicare",
         "ca": "Placeholder gràfic per a un cas de viatge encara per publicar"
@@ -304,20 +304,20 @@
     {
       "id": "placeholder-language-case",
       "type": "image",
-      "src": "/images/orbit/mock-12.webp",
+      "src": "/images/site/placeholder-language-case.webp",
       "href": null,
       "label": {
-        "es": "Caso multilingüe",
-        "en": "Multilingual case",
-        "fr": "Cas multilingue",
+        "es": "Trabajo multilingüe",
+        "en": "Multilingual work",
+        "fr": "Travail multilingue",
         "de": "Mehrsprachiger Case",
         "it": "Caso multilingue",
         "ca": "Cas multilingüe"
       },
       "alt": {
-        "es": "Placeholder gráfico para un proyecto multilingüe pendiente",
-        "en": "Branded placeholder for an upcoming multilingual project",
-        "fr": "Placeholder graphique pour un futur projet multilingue",
+        "es": "Selfie cenital de una traductora trabajando con ordenador y libreta",
+        "en": "Overhead selfie of a translator working with a laptop and notebook",
+        "fr": "Selfie en plongée d'une traductrice travaillant avec un ordinateur et un cahier",
         "de": "Gebrandeter Platzhalter für ein kommendes mehrsprachiges Projekt",
         "it": "Placeholder grafico per un prossimo progetto multilingue",
         "ca": "Placeholder gràfic per a un proper projecte multilingüe"
@@ -326,20 +326,20 @@
     {
       "id": "placeholder-editorial-drop",
       "type": "image",
-      "src": "/images/orbit/mock-13.webp",
+      "src": "/images/site/placeholder-editorial-drop.webp",
       "href": null,
       "label": {
-        "es": "Editorial en curso",
-        "en": "Editorial in progress",
-        "fr": "Éditorial en cours",
+        "es": "Viaje familiar",
+        "en": "Family travel",
+        "fr": "Voyage en famille",
         "de": "Editorial in Arbeit",
         "it": "Editoriale in corso",
         "ca": "Editorial en curs"
       },
       "alt": {
-        "es": "Placeholder gráfico para una nueva pieza editorial del portfolio",
-        "en": "Branded placeholder for a new editorial portfolio piece",
-        "fr": "Placeholder graphique pour une nouvelle pièce éditoriale du portfolio",
+        "es": "Descubriendo Oporto con mi familia",
+        "en": "Travelling in Porto with my family",
+        "fr": "En découvrant Porto avec ma famille",
         "de": "Gebrandeter Platzhalter für ein neues Editorial im Portfolio",
         "it": "Placeholder grafico per una nuova pièce editoriale del portfolio",
         "ca": "Placeholder gràfic per a una nova peça editorial del portfoli"
@@ -348,20 +348,20 @@
     {
       "id": "placeholder-profile-note",
       "type": "image",
-      "src": "/images/site/placeholder-profile-note.jpeg",
+      "src": "/images/site/placeholder-profile-note.webp",
       "href": null,
       "label": {
-        "es": "Ruta montaña",
-        "en": "Profile note",
-        "fr": "Note de profil",
+        "es": "Crochet",
+        "en": "Crochet",
+        "fr": "Crochet",
         "de": "Profilnotiz",
         "it": "Nota profilo",
-        "ca": "Ruta montaña"
+        "ca": "Crochet"
       },
       "alt": {
-        "es": "Placeholder gráfico con identidad visual de Marta Gallardo",
-        "en": "Branded placeholder carrying Marta Gallardo’s visual identity",
-        "fr": "Placeholder graphique portant l’identité visuelle de Marta Gallardo",
+        "es": "Tejiendo a ganchillo mientras viajo en tren",
+        "en": "Crocheting while travelling by train",
+        "fr": "Faire du crochet pendant un voyage en train",
         "de": "Gebrandeter Platzhalter mit der visuellen Identität von Marta Gallardo",
         "it": "Placeholder grafico con l’identità visiva di Marta Gallardo",
         "ca": "Placeholder gràfic amb la identitat visual de Marta Gallardo"
@@ -370,20 +370,20 @@
     {
       "id": "placeholder-collaboration",
       "type": "image",
-      "src": "/images/orbit/mock-14.webp",
+      "src": "/images/site/placeholder-collaboration.webp",
       "href": null,
       "label": {
-        "es": "Próxima colaboración",
-        "en": "Next collaboration",
-        "fr": "Prochaine collaboration",
+        "es": "Esperando el eclipse con gafas especiales",
+        "en": "Waiting for the eclipse in our glasses",
+        "fr": "En attendant l'éclipse avec nos lunettes",
         "de": "Nächste Zusammenarbeit",
         "it": "Prossima collaborazione",
         "ca": "Pròxima col·laboració"
       },
       "alt": {
-        "es": "Placeholder gráfico para una colaboración futura con marca",
-        "en": "Branded placeholder for a future brand collaboration",
-        "fr": "Placeholder graphique pour une future collaboration de marque",
+        "es": "Selfie en pareja con gafas de eclipse en la terraza del hotel",
+        "en": "Couple selfie wearing eclipse glasses at the hotel",
+        "fr": "Selfie en couple avec lunettes d'éclipse à l'hôtel",
         "de": "Gebrandeter Platzhalter für eine zukünftige Markenkooperation",
         "it": "Placeholder grafico per una futura collaborazione con un brand",
         "ca": "Placeholder gràfic per a una futura col·laboració amb una marca"
