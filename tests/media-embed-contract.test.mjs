@@ -170,6 +170,7 @@ test('ugc focused dialog prioritizes valid embeds and preserves local poster pat
     readSource('src/components/OvalMediaOrbit.tsx'),
     readSource('src/components/admin/AdminOrbitPreview.tsx'),
   ]);
+  const focusedEmbedBlock = ugcSource.match(/\{activeItem\.type === 'video' && activeEmbedUrl \? \(\s*(<iframe[\s\S]*?\/>)\s*\)/)?.[1];
 
   assert.match(ugcSource, /import \{ toEmbedUrl, toHttpsEmbedUrl \} from '\.\.\/lib\/videoEmbed';/);
   assert.match(
@@ -180,9 +181,24 @@ test('ugc focused dialog prioritizes valid embeds and preserves local poster pat
     ugcSource,
     /className="aspect-\[9\/16\] w-full max-w-sm overflow-hidden bg-paper"/,
   );
+  assert.ok(focusedEmbedBlock, 'UGC dialog should render an iframe block when a valid embed URL exists');
+  assert.match(
+    focusedEmbedBlock,
+    /src=\{activeEmbedUrl\}[\s\S]*title=\{localize\(activeItem\.title, lang\)\}[\s\S]*loading="lazy"[\s\S]*allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"[\s\S]*allowFullScreen[\s\S]*className="h-full w-full border-0"/,
+  );
+  assert.doesNotMatch(
+    focusedEmbedBlock,
+    /tabIndex=\{-1\}/,
+    'UGC dialog embeds should stay keyboard reachable for third-party player controls',
+  );
+  assert.ok(
+    /tabIndex=\{0\}/.test(focusedEmbedBlock) || !/tabIndex=\{/.test(focusedEmbedBlock),
+    'UGC dialog embeds should either opt into tabIndex={0} or omit tabIndex so iframe players remain focusable',
+  );
   assert.match(
     ugcSource,
-    /\{activeItem\.type === 'video' && activeEmbedUrl \? \(\s*<iframe[\s\S]*src=\{activeEmbedUrl\}[\s\S]*title=\{localize\(activeItem\.title, lang\)\}[\s\S]*tabIndex=\{-1\}[\s\S]*loading="lazy"[\s\S]*allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"[\s\S]*allowFullScreen[\s\S]*className="h-full w-full border-0"/,
+    /ref=\{closeButtonRef\}[\s\S]*\{copy\.close\}[\s\S]*<iframe[\s\S]*aria-label=\{copy\.previous\}[\s\S]*aria-label=\{copy\.next\}/,
+    'UGC dialog should keep the close, previous, and next controls in the modal focus order around the focused iframe',
   );
   assert.match(
     ugcSource,

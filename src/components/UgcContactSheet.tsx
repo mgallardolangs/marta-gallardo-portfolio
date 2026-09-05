@@ -446,7 +446,7 @@ export default function UgcContactSheet({
                           <iframe
                             src={activeEmbedUrl}
                             title={localize(activeItem.title, lang)}
-                            tabIndex={-1}
+                            tabIndex={0}
                             loading="lazy"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowFullScreen
