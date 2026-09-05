@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Let Home, UGC, and orbit video slots accept the same URL/iframe embed input without changing existing local uploads, posters, layouts, or assets; render embeds in Home and UGC focused playback while leaving orbit tiles unchanged.
+**Goal:** Let Home, UGC, and orbit video slots accept the same URL/iframe embed input without changing existing local uploads, posters, layouts, or assets; render only HTTPS embeds in Home and UGC focused playback while leaving orbit tiles unchanged and orbit publishing dependent on a local video source.
 
-**Architecture:** Store an optional normalized-compatible embed string alongside each UGC/orbit item; keep `src` as the existing local fallback. Reuse `toEmbedUrl` for admin preview and UGC focused playback, while poster-based thumbnails and orbit tiles remain unchanged. Add the smallest shared admin field needed to match the existing Home control.
+**Architecture:** Store an optional normalized-compatible embed string alongside each UGC/orbit item; keep `src` as the existing local fallback. Reuse `toEmbedUrl` for admin preview, but require `toHttpsEmbedUrl` anywhere public rendering or embed-only UGC publishing depends on the value. Poster-based thumbnails and orbit tiles remain unchanged, and orbit validation continues to require a local `src`. Add the smallest shared admin field needed to match the existing Home control.
 
 **Tech Stack:** Astro 7, React 19, TypeScript, Node’s built-in test runner, existing `toEmbedUrl` parser and admin store.
 
@@ -192,18 +192,20 @@ git commit -m "feat: render media embeds in focused views" -m "Co-authored-by: C
 
 - [ ] **Step 1: Add validation regression assertions**
 
-Assert that UGC and orbit validators still require `src` or an embed, still
-require local posters for video slots, still reject image posters, and still
-enforce the existing 2 MB image and 8 MB video upload limits. Assert that
-valid HTTP(S) embeds are accepted and unsafe schemes remain rejected through
-`toEmbedUrl`.
+Assert that UGC accepts HTTPS embed-only videos but rejects HTTP-only embed-only
+publishes, that orbit still requires a local `src` even when `embedUrl` exists,
+that both validators still require local posters for video slots and reject
+image posters, and that they still enforce the existing 2 MB image and 8 MB
+video upload limits. Assert that admin parsing still accepts HTTP(S) through
+`toEmbedUrl` while public rendering/publish gates use `toHttpsEmbedUrl`.
 
 - [ ] **Step 2: Implement the smallest validation change**
 
-Change the source-required rule to accept `item.embedUrl` when
-`toEmbedUrl(item.embedUrl)` returns a URL. Keep local extension checks only for
-non-embedded sources, and leave all file MIME/size/poster checks unchanged.
-Do not add a new dependency or upload path.
+Change UGC validation to accept embed-only videos only when
+`toHttpsEmbedUrl(item.embedUrl)` returns a URL. Keep orbit validation based on
+its local `src` regardless of `embedUrl`, so extension/source checks stay tied
+to the file that orbit public tiles actually render. Leave all file
+MIME/size/poster checks unchanged. Do not add a new dependency or upload path.
 
 - [ ] **Step 3: Update Marta’s guide**
 

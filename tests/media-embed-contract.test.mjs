@@ -291,7 +291,15 @@ test('ugc focused dialog prioritizes valid embeds and preserves local poster pat
   );
 });
 
-test('ugc validation accepts valid embeds without requiring a local video source', () => {
+test('homepage public brand video only trusts https embeds before falling back to local media', async () => {
+  const homeSource = await readSource('src/views/HomePage.astro');
+
+  assert.match(homeSource, /import \{ toHttpsEmbedUrl \} from '\.\.\/lib\/videoEmbed';/);
+  assert.match(homeSource, /const brandVideoEmbedUrl = toHttpsEmbedUrl\(siteData\.brandVideoEmbedUrl\);/);
+  assert.doesNotMatch(homeSource, /const brandVideoEmbedUrl = toEmbedUrl\(siteData\.brandVideoEmbedUrl\);/);
+});
+
+test('ugc validation only accepts https embed-only videos without requiring a local source', () => {
   const blankSourceItem = createUgcVideoItem({
     src: '',
     embedUrl: 'https://player.example.com/embed/video',
@@ -305,10 +313,12 @@ test('ugc validation accepts valid embeds without requiring a local video source
     embedUrl: '<iframe src="https://player.example.com/embed/video"></iframe>',
   });
 
-  assert.equal(toEmbedUrl(blankSourceItem.embedUrl), 'https://player.example.com/embed/video');
-  assert.equal(toEmbedUrl(httpSourceItem.embedUrl), 'http://player.example.com/embed/video');
+  assert.equal(toHttpsEmbedUrl(blankSourceItem.embedUrl), 'https://player.example.com/embed/video');
+  assert.equal(toHttpsEmbedUrl(httpSourceItem.embedUrl), null);
   assert.deepEqual(validateUgcPortfolioItem(blankSourceItem), []);
-  assert.deepEqual(validateUgcPortfolioItem(httpSourceItem), []);
+  assert.deepEqual(validateUgcPortfolioItem(httpSourceItem), [
+    'Los elementos UGC necesitan un archivo de origen.',
+  ]);
   assert.deepEqual(validateUgcPortfolioItem(invalidExtensionItem), []);
 });
 
@@ -348,7 +358,7 @@ test('orbit validation still accepts optional embed metadata when local media re
   assert.deepEqual(validateOrbitMediaItem(orbitVideoItem), []);
 });
 
-test('orbit validation accepts a valid embed without requiring a local video source', () => {
+test('orbit validation keeps the local video source requirement even when embed metadata exists', () => {
   const blankSourceItem = createOrbitVideoItem({
     src: '',
     embedUrl: 'https://player.example.com/embed/orbit',
@@ -359,8 +369,12 @@ test('orbit validation accepts a valid embed without requiring a local video sou
   });
 
   assert.equal(toEmbedUrl(blankSourceItem.embedUrl), 'https://player.example.com/embed/orbit');
-  assert.deepEqual(validateOrbitMediaItem(blankSourceItem), []);
-  assert.deepEqual(validateOrbitMediaItem(invalidExtensionItem), []);
+  assert.deepEqual(validateOrbitMediaItem(blankSourceItem), [
+    'El elemento del orbit necesita un archivo de origen.',
+  ]);
+  assert.deepEqual(validateOrbitMediaItem(invalidExtensionItem), [
+    'Los vídeos del orbit deben usar un archivo de origen MP4, WebM o MOV.',
+  ]);
 });
 
 test('embed parsing keeps https public embeds and rejects http or unsafe schemes', () => {

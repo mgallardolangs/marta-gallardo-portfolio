@@ -5,7 +5,7 @@ import {
   ORBIT_VIDEO_TYPES,
 } from './orbitMedia.ts';
 import type { LocalizedText, UgcCategory, UgcPortfolioItem } from './siteData.ts';
-import { toEmbedUrl } from './videoEmbed.ts';
+import { toHttpsEmbedUrl } from './videoEmbed.ts';
 
 export type UgcFilter = 'all' | UgcCategory;
 export type UgcTileVisibility = 'visible' | 'blank';
@@ -88,7 +88,7 @@ export function validateUgcMediaUpload(file: File, expectedKind: 'image' | 'vide
 export function validateUgcPortfolioItem(item: UgcPortfolioItem) {
   const errors: string[] = [];
   const src = item.src.trim();
-  const hasValidVideoEmbed = item.type === 'video' && toEmbedUrl(item.embedUrl) !== null;
+  const hasValidVideoEmbed = item.type === 'video' && toHttpsEmbedUrl(item.embedUrl) !== null;
 
   if (!src && !hasValidVideoEmbed) {
     errors.push('Los elementos UGC necesitan un archivo de origen.');

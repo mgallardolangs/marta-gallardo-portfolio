@@ -25,19 +25,22 @@ animated layout.
 ## Public behavior
 
 The existing media frame and surrounding layout remain unchanged. Home and the
-UGC focused viewer use the normalized embed URL when present; otherwise they
-render the current local video source. UGC and orbit thumbnails continue to use
-their poster rather than loading remote embeds in the moving/contact-sheet
-previews. Orbit remains a moving tile collection with its current local-video
-or poster rendering; it does not gain a new modal in this change.
+UGC focused viewer use only HTTPS-normalized embed URLs in public; HTTP-only or
+unsafe values fall back to the current local video source. UGC and orbit
+thumbnails continue to use their poster rather than loading remote embeds in
+the moving/contact-sheet previews. Orbit remains a moving tile collection with
+its current local-video or poster rendering; it does not gain a new modal in
+this change and still requires a local video source to publish.
 
 ## Persistence and validation
 
 Embed values flow through the existing admin draft and site-data publishing
 path. Empty values clear the embed and restore local-video behavior. Invalid,
 malformed, or non-HTTP(S) values are rejected without replacing the current
-media. Existing file type, size, poster, and pending-upload validation remains
-in force for local files.
+media. UGC can publish a video without `src` only when its embed resolves to an
+HTTPS URL; orbit keeps the optional embed field for admin parity, but publish
+validation still depends on a local `src`. Existing file type, size, poster,
+and pending-upload validation remains in force for local files.
 
 ## Verification
 
