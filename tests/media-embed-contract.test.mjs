@@ -178,11 +178,15 @@ test('ugc focused dialog prioritizes valid embeds and preserves local poster pat
   );
   assert.match(
     ugcSource,
+    /className="aspect-\[9\/16\] w-full max-w-sm overflow-hidden bg-paper"/,
+  );
+  assert.match(
+    ugcSource,
     /\{activeItem\.type === 'video' && activeEmbedUrl \? \(\s*<iframe[\s\S]*src=\{activeEmbedUrl\}[\s\S]*title=\{localize\(activeItem\.title, lang\)\}[\s\S]*tabIndex=\{0\}[\s\S]*loading="lazy"[\s\S]*allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"[\s\S]*allowFullScreen[\s\S]*className="h-full w-full border-0"/,
   );
   assert.match(
     ugcSource,
-    /:\s*activeItem\.type === 'video' \? \(\s*<video[\s\S]*ref=\{focusedVideoRef\}[\s\S]*src=\{activeItem\.src\}[\s\S]*poster=\{activeItem\.poster \? netlifyImage\(activeItem\.poster, \{ width: 1200 \}\) : undefined\}[\s\S]*onClick=\{handleDialogVideoClick\}/,
+    /:\s*activeItem\.type === 'video' \? \(\s*<video[\s\S]*ref=\{focusedVideoRef\}[\s\S]*src=\{activeItem\.src\}[\s\S]*poster=\{activeItem\.poster \? netlifyImage\(activeItem\.poster, \{ width: 1200 \}\) : undefined\}[\s\S]*loop[\s\S]*playsInline[\s\S]*preload="metadata"[\s\S]*tabIndex=\{0\}[\s\S]*onClick=\{handleDialogVideoClick\}[\s\S]*className="h-full w-full cursor-pointer object-cover"/,
   );
   assert.match(
     ugcSource,
