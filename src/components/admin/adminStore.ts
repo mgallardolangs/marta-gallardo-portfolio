@@ -121,6 +121,29 @@ function cloneValue<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
 }
 
+function hasEmbedUrl<T extends { embedUrl?: string | null }>(item: T | undefined): boolean {
+  return item ? Object.prototype.hasOwnProperty.call(item, 'embedUrl') : false;
+}
+
+function setTrimmedEmbedUrl<T extends { embedUrl?: string | null }>(
+  item: T,
+  originalItem: T | undefined,
+  value: string | null,
+): void {
+  const trimmedValue = value?.trim() ?? '';
+  if (trimmedValue) {
+    item.embedUrl = trimmedValue;
+    return;
+  }
+
+  if (hasEmbedUrl(originalItem)) {
+    item.embedUrl = null;
+    return;
+  }
+
+  delete item.embedUrl;
+}
+
 function isObjectRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
@@ -1126,6 +1149,23 @@ export class AdminStore {
     this.emit();
   }
 
+  setOrbitMediaEmbedUrl(index: number, value: string | null): void {
+    const item = this.getMutableOrbitMedia()[index];
+    if (!item || item.type !== 'video') return;
+    const originalOrbitMedia = deepGet(this.originalImages, 'orbitMedia');
+    const originalItem = Array.isArray(originalOrbitMedia)
+      ? originalOrbitMedia.find((candidate) => (
+        candidate !== null
+        && typeof candidate === 'object'
+        && (candidate as OrbitMedia).id === item.id
+      )) as OrbitMedia | undefined
+      : undefined;
+    setTrimmedEmbedUrl(item, originalItem, value);
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
   updateOrbitMediaText(index: number, field: 'label' | 'alt', lang: OrbitAdminLang, value: string): void {
     const item = this.getMutableOrbitMedia()[index];
     if (!item) return;
@@ -1232,6 +1272,23 @@ export class AdminStore {
     }
 
     await this.setPendingUgcAsset(item, 'poster', file, buildUgcUploadPath(item.id, 'poster', file));
+  }
+
+  setUgcPortfolioEmbedUrl(itemId: string, value: string | null): void {
+    const item = this.getMutableUgcPortfolio().find((candidate) => candidate.id === itemId);
+    if (!item || item.type !== 'video') return;
+    const originalUgcPortfolio = deepGet(this.originalImages, 'ugcPortfolio');
+    const originalItem = Array.isArray(originalUgcPortfolio)
+      ? originalUgcPortfolio.find((candidate) => (
+        candidate !== null
+        && typeof candidate === 'object'
+        && (candidate as UgcPortfolioItem).id === itemId
+      )) as UgcPortfolioItem | undefined
+      : undefined;
+    setTrimmedEmbedUrl(item, originalItem, value);
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
   }
 
   clearUgcPortfolioPoster(itemId: string): void {

@@ -244,16 +244,17 @@ export function validateOrbitMediaUpload(file: File, expectedKind: 'image' | 'vi
 
 export function validateOrbitMediaItem(item: OrbitMedia) {
   const errors: string[] = [];
+  const src = item.src.trim();
 
-  if (!item.src.trim()) {
+  if (!src) {
     errors.push('El elemento del orbit necesita un archivo de origen.');
   }
 
-  if (item.type === 'image' && item.src.trim() && !IMAGE_SOURCE_PATTERN.test(item.src)) {
+  if (item.type === 'image' && src && !IMAGE_SOURCE_PATTERN.test(src)) {
     errors.push('Las imágenes del orbit deben usar un archivo de origen JPG, PNG, WebP, GIF o SVG.');
   }
 
-  if (item.type === 'video' && item.src.trim() && !VIDEO_SOURCE_PATTERN.test(item.src)) {
+  if (item.type === 'video' && src && !VIDEO_SOURCE_PATTERN.test(src)) {
     errors.push('Los vídeos del orbit deben usar un archivo de origen MP4, WebM o MOV.');
   }
 

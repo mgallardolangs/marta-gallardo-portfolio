@@ -68,3 +68,14 @@ export function toEmbedUrl(input: string | null | undefined): string | null {
   // Any other http(s) URL (or a known host we couldn't normalize) is embedded as-is.
   return url.toString();
 }
+
+export function toHttpsEmbedUrl(input: string | null | undefined): string | null {
+  const embedUrl = toEmbedUrl(input);
+  if (!embedUrl) return null;
+
+  try {
+    return new URL(embedUrl).protocol === 'https:' ? embedUrl : null;
+  } catch {
+    return null;
+  }
+}

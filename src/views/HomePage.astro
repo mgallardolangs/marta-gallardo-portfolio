@@ -12,13 +12,13 @@ import HomeHeroPortrait from '../components/HomeHeroPortrait.astro';
 import TypedTitle from '../components/TypedTitle.astro';
 import { getLangFromUrl, getLocalizedPath, t } from '../i18n';
 import { siteData } from '../lib/siteData';
-import { toEmbedUrl } from '../lib/videoEmbed';
+import { toHttpsEmbedUrl } from '../lib/videoEmbed';
 import { netlifyImage } from '../lib/netlifyImage';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
 const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-proof')?.alt[lang] ?? 'Instagram';
-const brandVideoEmbedUrl = toEmbedUrl(siteData.brandVideoEmbedUrl);
+const brandVideoEmbedUrl = toHttpsEmbedUrl(siteData.brandVideoEmbedUrl);
 ---
 
 <BaseLayout title={`${i.hero.name} — ${i.home.hero.kicker}`} description={i.home.hero.description}>

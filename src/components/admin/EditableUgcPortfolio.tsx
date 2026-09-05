@@ -1,4 +1,5 @@
 import EditableMedia from './EditableMedia';
+import EditableVideoEmbed, { VIDEO_EMBED_LABEL } from './EditableVideoEmbed';
 import { useAdminStore } from './useAdminStore';
 
 const EDITABLE_LANGS = ['es', 'en', 'fr'] as const;
@@ -91,6 +92,11 @@ export default function EditableUgcPortfolio() {
 
                       {item.type === 'video' ? (
                         <div className="space-y-3">
+                          <EditableVideoEmbed
+                            value={item.embedUrl}
+                            label={VIDEO_EMBED_LABEL}
+                            onChange={(value) => store.setUgcPortfolioEmbedUrl(item.id, value)}
+                          />
                           <EditableMedia
                             src={item.poster ?? ''}
                             mediaType="image"

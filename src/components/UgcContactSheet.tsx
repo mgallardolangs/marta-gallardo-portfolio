@@ -4,6 +4,7 @@ import { flushSync } from 'react-dom';
 import { useAdminStore } from './admin/useAdminStore';
 import { localize, type Locale, type UgcCategory, type UgcPortfolioItem } from '../lib/siteData.ts';
 import { netlifyImage } from '../lib/netlifyImage';
+import { toEmbedUrl, toHttpsEmbedUrl } from '../lib/videoEmbed';
 import {
   INITIAL_UGC_FILTER,
   canOpenUgcItem,
@@ -69,6 +70,9 @@ export default function UgcContactSheet({
 
   const activeVisibleIndex = visibleItems.findIndex((item) => item.id === activeId);
   const activeItem = activeVisibleIndex >= 0 ? visibleItems[activeVisibleIndex] : null;
+  const activeEmbedUrl = activeItem && activeItem.type === 'video'
+    ? (adminPreview ? toEmbedUrl(activeItem.embedUrl) : toHttpsEmbedUrl(activeItem.embedUrl))
+    : null;
 
   useEffect(() => {
     if (activeId && !items.some((item) => item.id === activeId)) {
@@ -149,7 +153,8 @@ export default function UgcContactSheet({
   }, [activeItem, activeVisibleIndex, visibleItems]);
 
   useEffect(() => {
-    if (!activeItem || activeItem.type !== 'video') {
+    if (!activeItem || activeItem.type !== 'video' || activeEmbedUrl) {
+      gesturePlaybackItemRef.current = null;
       setFocusedVideoPlaying(false);
       return;
     }
@@ -168,7 +173,7 @@ export default function UgcContactSheet({
       resetFocusedVideoPlayback(video);
       setFocusedVideoPlaying(false);
     };
-  }, [activeItem]);
+  }, [activeItem, activeEmbedUrl]);
 
   const closeDialog = () => {
     stopAllPreviewVideoPlayback(previewVideoRefs.current);
@@ -345,7 +350,7 @@ export default function UgcContactSheet({
                         previewVideoRefs.current[item.id] = node;
                       }}
                       src={item.src}
-                      src={item.poster ? netlifyImage(item.poster, { width: 600 }) : undefined}
+                      poster={item.poster ? netlifyImage(item.poster, { width: 600 }) : undefined}
                       muted
                       loop
                       playsInline
@@ -437,7 +442,17 @@ export default function UgcContactSheet({
                         transition={{ duration: 0.24, ease: 'easeOut' }}
                         className="aspect-[9/16] w-full max-w-sm overflow-hidden bg-paper"
                       >
-                        {activeItem.type === 'video' ? (
+                        {activeItem.type === 'video' && activeEmbedUrl ? (
+                          <iframe
+                            src={activeEmbedUrl}
+                            title={localize(activeItem.title, lang)}
+                            tabIndex={0}
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
+                            className="h-full w-full border-0"
+                          />
+                        ) : activeItem.type === 'video' ? (
                           <video
                             ref={focusedVideoRef}
                             src={activeItem.src}

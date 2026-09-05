@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { toEmbedUrl } from '../src/lib/videoEmbed.ts';
+import { toEmbedUrl, toHttpsEmbedUrl } from '../src/lib/videoEmbed.ts';
 
 test('toEmbedUrl normalizes YouTube links to the embed player', () => {
   assert.equal(toEmbedUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ'), 'https://www.youtube.com/embed/dQw4w9WgXcQ');
@@ -32,6 +32,7 @@ test('toEmbedUrl allows embeds from any provider, rejecting only unsafe or malfo
   // Any http(s) URL is allowed through (TikTok, a generic player, etc.).
   assert.equal(toEmbedUrl('https://www.tiktok.com/@user/video/123'), 'https://www.tiktok.com/@user/video/123');
   assert.equal(toEmbedUrl('https://example.com/embed/xyz'), 'https://example.com/embed/xyz');
+  assert.equal(toEmbedUrl('http://example.com/embed/xyz'), 'http://example.com/embed/xyz');
 
   // Empty, malformed, and unsafe-scheme input is still rejected.
   assert.equal(toEmbedUrl(''), null);
@@ -39,4 +40,13 @@ test('toEmbedUrl allows embeds from any provider, rejecting only unsafe or malfo
   assert.equal(toEmbedUrl(null), null);
   assert.equal(toEmbedUrl('not a url'), null);
   assert.equal(toEmbedUrl('javascript:alert(1)'), null);
+});
+
+test('toHttpsEmbedUrl only returns normalized embeds that resolve to https', () => {
+  assert.equal(toHttpsEmbedUrl('https://example.com/embed/xyz'), 'https://example.com/embed/xyz');
+  assert.equal(
+    toHttpsEmbedUrl('http://www.youtube.com/watch?v=dQw4w9WgXcQ'),
+    'https://www.youtube.com/embed/dQw4w9WgXcQ',
+  );
+  assert.equal(toHttpsEmbedUrl('http://example.com/embed/xyz'), null);
 });

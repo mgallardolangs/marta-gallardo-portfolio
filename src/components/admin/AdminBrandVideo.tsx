@@ -1,4 +1,5 @@
 import EditableMedia from './EditableMedia';
+import { VIDEO_EMBED_LABEL } from './EditableVideoEmbed';
 import { useAdminStore } from './useAdminStore';
 import { toEmbedUrl } from '../../lib/videoEmbed';
 
@@ -42,7 +43,7 @@ export default function AdminBrandVideo() {
           className="block text-[0.6rem] font-semibold uppercase tracking-[0.22em] text-paper"
           htmlFor="brand-video-embed-url"
         >
-          Enlace o código para incrustar (YouTube, Vimeo, Instagram, TikTok…) para vídeos en alta calidad
+          {VIDEO_EMBED_LABEL}
         </label>
         <input
           id="brand-video-embed-url"

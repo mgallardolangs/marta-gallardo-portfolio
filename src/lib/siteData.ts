@@ -9,6 +9,7 @@ export type OrbitMedia = {
   id: string;
   type: 'image' | 'video';
   src: string;
+  embedUrl?: string | null;
   poster?: string | null;
   href?: string | null;
   alt: LocalizedText;
@@ -22,6 +23,7 @@ export type UgcPortfolioItem = {
   category: UgcCategory;
   type: 'image' | 'video';
   src: string;
+  embedUrl?: string | null;
   poster: string | null;
   label: LocalizedText;
   title: LocalizedText;
