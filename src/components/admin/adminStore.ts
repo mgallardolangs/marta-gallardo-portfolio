@@ -1126,6 +1126,15 @@ export class AdminStore {
     this.emit();
   }
 
+  setOrbitMediaEmbedUrl(index: number, value: string | null): void {
+    const item = this.getMutableOrbitMedia()[index];
+    if (!item || item.type !== 'video') return;
+    item.embedUrl = value?.trim() ? value.trim() : null;
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
   updateOrbitMediaText(index: number, field: 'label' | 'alt', lang: OrbitAdminLang, value: string): void {
     const item = this.getMutableOrbitMedia()[index];
     if (!item) return;
@@ -1232,6 +1241,15 @@ export class AdminStore {
     }
 
     await this.setPendingUgcAsset(item, 'poster', file, buildUgcUploadPath(item.id, 'poster', file));
+  }
+
+  setUgcPortfolioEmbedUrl(itemId: string, value: string | null): void {
+    const item = this.getMutableUgcPortfolio().find((candidate) => candidate.id === itemId);
+    if (!item || item.type !== 'video') return;
+    item.embedUrl = value?.trim() ? value.trim() : null;
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
   }
 
   clearUgcPortfolioPoster(itemId: string): void {
