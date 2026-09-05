@@ -116,6 +116,7 @@ test('video embed editors use the shared compact admin control for video items o
   assert.match(sharedSource, /value:\s*string \| null \| undefined;/);
   assert.match(sharedSource, /onChange:\s*\(value:\s*string\)\s*=>\s*void;/);
   assert.match(sharedSource, /placeholder="Pega el enlace del vídeo o el código <iframe>"/);
+  assert.match(sharedSource, /onChange=\{\(event\) => onChange\(event\.target\.value\.trim\(\)\)\}/);
   assert.match(sharedSource, /title="Vista previa del vídeo incrustado"/);
   assert.match(sharedSource, /loading="lazy"/);
   assert.match(sharedSource, /accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share/);
@@ -132,11 +133,13 @@ test('video embed editors use the shared compact admin control for video items o
 
   assert.match(ugcSource, /import EditableVideoEmbed, \{ VIDEO_EMBED_LABEL \} from '\.\/EditableVideoEmbed';/);
   assert.match(ugcSource, /item\.type === 'video' \?[\s\S]*<EditableVideoEmbed/);
+  assert.match(ugcSource, /value=\{item\.embedUrl\}/);
   assert.match(ugcSource, /label=\{VIDEO_EMBED_LABEL\}/);
   assert.match(ugcSource, /onChange=\{\(value\) => store\.setUgcPortfolioEmbedUrl\(item\.id, value\)\}/);
 
   assert.match(orbitSource, /import EditableVideoEmbed, \{ VIDEO_EMBED_LABEL \} from '\.\/EditableVideoEmbed';/);
   assert.match(orbitSource, /item\.type === 'video' &&[\s\S]*<EditableVideoEmbed/);
+  assert.match(orbitSource, /value=\{item\.embedUrl\}/);
   assert.match(orbitSource, /label=\{VIDEO_EMBED_LABEL\}/);
   assert.match(orbitSource, /onChange=\{\(value\) => store\.setOrbitMediaEmbedUrl\(index, value\)\}/);
 

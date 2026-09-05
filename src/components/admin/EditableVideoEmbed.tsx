@@ -28,7 +28,7 @@ export default function EditableVideoEmbed({
           type="text"
           value={value ?? ''}
           placeholder="Pega el enlace del vídeo o el código <iframe>"
-          onChange={(event) => onChange(event.target.value)}
+          onChange={(event) => onChange(event.target.value.trim())}
           className="w-full border border-ink/10 bg-paper px-3 py-2 text-sm text-ink"
         />
       </label>
