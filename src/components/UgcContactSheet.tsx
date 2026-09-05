@@ -4,7 +4,7 @@ import { flushSync } from 'react-dom';
 import { useAdminStore } from './admin/useAdminStore';
 import { localize, type Locale, type UgcCategory, type UgcPortfolioItem } from '../lib/siteData.ts';
 import { netlifyImage } from '../lib/netlifyImage';
-import { toEmbedUrl } from '../lib/videoEmbed';
+import { toEmbedUrl, toHttpsEmbedUrl } from '../lib/videoEmbed';
 import {
   INITIAL_UGC_FILTER,
   canOpenUgcItem,
@@ -71,7 +71,7 @@ export default function UgcContactSheet({
   const activeVisibleIndex = visibleItems.findIndex((item) => item.id === activeId);
   const activeItem = activeVisibleIndex >= 0 ? visibleItems[activeVisibleIndex] : null;
   const activeEmbedUrl = activeItem && activeItem.type === 'video'
-    ? toEmbedUrl(activeItem.embedUrl)
+    ? (adminPreview ? toEmbedUrl(activeItem.embedUrl) : toHttpsEmbedUrl(activeItem.embedUrl))
     : null;
 
   useEffect(() => {
@@ -446,7 +446,7 @@ export default function UgcContactSheet({
                           <iframe
                             src={activeEmbedUrl}
                             title={localize(activeItem.title, lang)}
-                            tabIndex={0}
+                            tabIndex={-1}
                             loading="lazy"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowFullScreen

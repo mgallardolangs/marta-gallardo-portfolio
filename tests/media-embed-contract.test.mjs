@@ -171,10 +171,10 @@ test('ugc focused dialog prioritizes valid embeds and preserves local poster pat
     readSource('src/components/admin/AdminOrbitPreview.tsx'),
   ]);
 
-  assert.match(ugcSource, /import \{ toEmbedUrl \} from '\.\.\/lib\/videoEmbed';/);
+  assert.match(ugcSource, /import \{ toEmbedUrl, toHttpsEmbedUrl \} from '\.\.\/lib\/videoEmbed';/);
   assert.match(
     ugcSource,
-    /const activeEmbedUrl = activeItem && activeItem\.type === 'video'\s*\?\s*toEmbedUrl\(activeItem\.embedUrl\)\s*:\s*null;/,
+    /const activeEmbedUrl = activeItem && activeItem\.type === 'video'\s*\?\s*\(adminPreview\s*\?\s*toEmbedUrl\(activeItem\.embedUrl\)\s*:\s*toHttpsEmbedUrl\(activeItem\.embedUrl\)\)\s*:\s*null;/,
   );
   assert.match(
     ugcSource,
@@ -182,7 +182,7 @@ test('ugc focused dialog prioritizes valid embeds and preserves local poster pat
   );
   assert.match(
     ugcSource,
-    /\{activeItem\.type === 'video' && activeEmbedUrl \? \(\s*<iframe[\s\S]*src=\{activeEmbedUrl\}[\s\S]*title=\{localize\(activeItem\.title, lang\)\}[\s\S]*tabIndex=\{0\}[\s\S]*loading="lazy"[\s\S]*allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"[\s\S]*allowFullScreen[\s\S]*className="h-full w-full border-0"/,
+    /\{activeItem\.type === 'video' && activeEmbedUrl \? \(\s*<iframe[\s\S]*src=\{activeEmbedUrl\}[\s\S]*title=\{localize\(activeItem\.title, lang\)\}[\s\S]*tabIndex=\{-1\}[\s\S]*loading="lazy"[\s\S]*allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"[\s\S]*allowFullScreen[\s\S]*className="h-full w-full border-0"/,
   );
   assert.match(
     ugcSource,
