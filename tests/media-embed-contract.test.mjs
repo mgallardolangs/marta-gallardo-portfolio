@@ -207,12 +207,14 @@ test('video embed editors use the shared compact admin control for video items o
   assert.match(ugcSource, /value=\{item\.embedUrl\}/);
   assert.match(ugcSource, /label=\{VIDEO_EMBED_LABEL\}/);
   assert.match(ugcSource, /onChange=\{\(value\) => store\.setUgcPortfolioEmbedUrl\(item\.id, value\)\}/);
+  assert.match(ugcSource, /onPasteEmbed=\{item\.type === 'video'[\s\S]*store\.setUgcPortfolioEmbedUrl\(item\.id, value\)/);
 
   assert.match(orbitSource, /import EditableVideoEmbed, \{ VIDEO_EMBED_LABEL \} from '\.\/EditableVideoEmbed';/);
   assert.match(orbitSource, /item\.type === 'video' &&[\s\S]*<EditableVideoEmbed/);
   assert.match(orbitSource, /value=\{item\.embedUrl\}/);
   assert.match(orbitSource, /label=\{VIDEO_EMBED_LABEL\}/);
   assert.match(orbitSource, /onChange=\{\(value\) => store\.setOrbitMediaEmbedUrl\(index, value\)\}/);
+  assert.match(orbitSource, /onPasteEmbed=\{item\.type === 'video'[\s\S]*store\.setOrbitMediaEmbedUrl\(index, value\)/);
 
   assert.match(ugcSource, /VIDEO_EMBED_LABEL/);
   assert.match(orbitSource, /VIDEO_EMBED_LABEL/);
@@ -232,6 +234,20 @@ test('video embed editors use the shared compact admin control for video items o
     sharedSource,
     /<span className="text-\[0\.68rem\] font-semibold uppercase tracking-\[0\.28em\] text-ink\/52">\{label\}<\/span>/,
   );
+});
+
+test('UGC video media areas accept pasted iframe code without file validation', async () => {
+  const [mediaSource, ugcSource] = await Promise.all([
+    readSource('src/components/admin/EditableMedia.tsx'),
+    readSource('src/components/admin/EditableUgcPortfolio.tsx'),
+  ]);
+
+  assert.match(mediaSource, /onPasteEmbed\?: \(value: string\) => void;/);
+  assert.match(mediaSource, /clipboardData\.getData\('text\/plain'\)/);
+  assert.match(mediaSource, /toEmbedUrl\(pastedValue\)/);
+  assert.match(mediaSource, /event\.preventDefault\(\)/);
+  assert.match(mediaSource, /onPasteEmbed\(pastedValue\)/);
+  assert.match(ugcSource, /onPasteEmbed=\{item\.type === 'video'[\s\S]*store\.setUgcPortfolioEmbedUrl\(item\.id, value\)/);
 });
 
 test('ugc focused dialog prioritizes valid embeds and preserves local poster paths', async () => {

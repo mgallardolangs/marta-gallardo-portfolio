@@ -83,6 +83,9 @@ export default function EditableOrbitCollection() {
                       emptyLabel={item.type === 'video' ? 'Sube un MP4/WebM/MOV' : 'Sube un JPG/PNG/WebP/GIF'}
                       className="aspect-[96/122]"
                       poster={item.poster}
+                      onPasteEmbed={item.type === 'video'
+                        ? (value) => store.setOrbitMediaEmbedUrl(index, value)
+                        : undefined}
                       onSelect={async (file) => {
                         await store.setOrbitMediaFile(index, 'src', file, buildOrbitUploadPath(item.id, 'src', file));
                       }}
