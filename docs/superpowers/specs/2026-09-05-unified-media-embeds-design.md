@@ -5,7 +5,9 @@
 Make video media controls consistent across the Home brand video, UGC, and
 orbit editors. Marta can paste a provider URL or iframe snippet for any video
 slot, while existing local uploads, posters, layouts, and published assets
-continue to work unchanged.
+continue to work unchanged. Home and UGC have focused playback surfaces; orbit
+tiles keep their current poster/local-video behavior to avoid changing the
+animated layout.
 
 ## Design
 
@@ -22,10 +24,12 @@ continue to work unchanged.
 
 ## Public behavior
 
-The existing media frame and surrounding layout remain unchanged. For a video,
-the renderer uses the normalized embed URL when present; otherwise it renders
-the current local video source. UGC and orbit thumbnails continue to use their
-poster rather than loading remote embeds in the moving/contact-sheet previews.
+The existing media frame and surrounding layout remain unchanged. Home and the
+UGC focused viewer use the normalized embed URL when present; otherwise they
+render the current local video source. UGC and orbit thumbnails continue to use
+their poster rather than loading remote embeds in the moving/contact-sheet
+previews. Orbit remains a moving tile collection with its current local-video
+or poster rendering; it does not gain a new modal in this change.
 
 ## Persistence and validation
 
