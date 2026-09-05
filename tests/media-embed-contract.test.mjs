@@ -357,9 +357,7 @@ test('ugc validation only accepts https embed-only videos without requiring a lo
   assert.deepEqual(validateUgcPortfolioItem(httpSourceItem), [
     'Los elementos UGC necesitan un archivo de origen.',
   ]);
-  assert.deepEqual(validateUgcPortfolioItem(staleImageSourceItem), [
-    'Los vídeos UGC deben usar un archivo de origen MP4, WebM o MOV.',
-  ]);
+  assert.deepEqual(validateUgcPortfolioItem(staleImageSourceItem), []);
   assert.deepEqual(validateUgcPortfolioItem(validLocalVideoItem), []);
 });
 

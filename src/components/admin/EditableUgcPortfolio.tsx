@@ -27,8 +27,6 @@ export default function EditableUgcPortfolio() {
 
       <div className="space-y-5">
         {items.map((item, index) => {
-          const errors = store.getUgcPortfolioItemValidationErrors(item.id);
-
           return (
             <article key={item.id} className="space-y-5 border border-ink/10 bg-paper p-5">
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink/10 pb-4">
@@ -141,13 +139,6 @@ export default function EditableUgcPortfolio() {
                     </div>
                   </div>
 
-                  {errors.length > 0 ? (
-                    <div className="space-y-1 border border-amaranth/24 bg-paper px-4 py-3 text-sm text-amaranth">
-                      {errors.map((error) => (
-                        <p key={error}>{error}</p>
-                      ))}
-                    </div>
-                  ) : null}
                 </div>
 
                 <div className="space-y-5">
