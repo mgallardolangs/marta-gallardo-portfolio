@@ -1,5 +1,5 @@
 import EditableMedia from './EditableMedia';
-import EditableVideoEmbed from './EditableVideoEmbed';
+import EditableVideoEmbed, { VIDEO_EMBED_LABEL } from './EditableVideoEmbed';
 import { useAdminStore } from './useAdminStore';
 import { buildOrbitUploadPath, getLocalizedOrbitText } from '../../lib/orbitMedia';
 
@@ -134,7 +134,7 @@ export default function EditableOrbitCollection() {
                         </div>
                         <EditableVideoEmbed
                           value={item.embedUrl}
-                          label="Enlace o código para incrustar"
+                          label={VIDEO_EMBED_LABEL}
                           onChange={(value) => store.setOrbitMediaEmbedUrl(index, value)}
                         />
                       </div>

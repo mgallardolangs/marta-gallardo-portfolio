@@ -103,15 +103,20 @@ test('media embed contracts expose optional embed URLs and admin bindings', asyn
 });
 
 test('video embed editors use the shared compact admin control for video items only', async () => {
-  const [sharedSource, ugcSource, orbitSource] = await Promise.all([
+  const [sharedSource, brandSource, ugcSource, orbitSource] = await Promise.all([
     readSource('src/components/admin/EditableVideoEmbed.tsx'),
+    readSource('src/components/admin/AdminBrandVideo.tsx'),
     readSource('src/components/admin/EditableUgcPortfolio.tsx'),
     readSource('src/components/admin/EditableOrbitCollection.tsx'),
   ]);
 
   assert.match(sharedSource, /import \{ toEmbedUrl \} from '\.\.\/\.\.\/lib\/videoEmbed';/);
+  assert.match(sharedSource, /export const VIDEO_EMBED_LABEL =\n  'Enlace o código para incrustar \(YouTube, Vimeo, Instagram, TikTok…\) para vídeos en alta calidad';/);
+  assert.match(sharedSource, /label = VIDEO_EMBED_LABEL,/);
   assert.match(sharedSource, /value:\s*string \| null \| undefined;/);
   assert.match(sharedSource, /onChange:\s*\(value:\s*string\)\s*=>\s*void;/);
+  assert.match(sharedSource, /placeholder="Pega el enlace del vídeo o el código <iframe>"/);
+  assert.match(sharedSource, /title="Vista previa del vídeo incrustado"/);
   assert.match(sharedSource, /loading="lazy"/);
   assert.match(sharedSource, /accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share/);
   assert.match(sharedSource, /allowFullScreen/);
@@ -119,13 +124,40 @@ test('video embed editors use the shared compact admin control for video items o
   assert.match(sharedSource, /Quitar enlace y usar archivo subido/);
   assert.doesNotMatch(sharedSource, /absolute inset-0/);
 
-  assert.match(ugcSource, /import EditableVideoEmbed from '\.\/EditableVideoEmbed';/);
+  assert.match(brandSource, /import \{ VIDEO_EMBED_LABEL \} from '\.\/EditableVideoEmbed';/);
+  assert.match(brandSource, /htmlFor="brand-video-embed-url"/);
+  assert.match(brandSource, /id="brand-video-embed-url"/);
+  assert.match(brandSource, /<label[\s\S]*htmlFor="brand-video-embed-url"[\s\S]*\{VIDEO_EMBED_LABEL\}[\s\S]*<\/label>/);
+  assert.match(brandSource, /placeholder="Pega el enlace del vídeo o el código <iframe>"/);
+
+  assert.match(ugcSource, /import EditableVideoEmbed, \{ VIDEO_EMBED_LABEL \} from '\.\/EditableVideoEmbed';/);
   assert.match(ugcSource, /item\.type === 'video' \?[\s\S]*<EditableVideoEmbed/);
+  assert.match(ugcSource, /label=\{VIDEO_EMBED_LABEL\}/);
   assert.match(ugcSource, /onChange=\{\(value\) => store\.setUgcPortfolioEmbedUrl\(item\.id, value\)\}/);
 
-  assert.match(orbitSource, /import EditableVideoEmbed from '\.\/EditableVideoEmbed';/);
+  assert.match(orbitSource, /import EditableVideoEmbed, \{ VIDEO_EMBED_LABEL \} from '\.\/EditableVideoEmbed';/);
   assert.match(orbitSource, /item\.type === 'video' &&[\s\S]*<EditableVideoEmbed/);
+  assert.match(orbitSource, /label=\{VIDEO_EMBED_LABEL\}/);
   assert.match(orbitSource, /onChange=\{\(value\) => store\.setOrbitMediaEmbedUrl\(index, value\)\}/);
+
+  assert.match(ugcSource, /VIDEO_EMBED_LABEL/);
+  assert.match(orbitSource, /VIDEO_EMBED_LABEL/);
+  assert.match(
+    sharedSource,
+    /<label className="flex flex-col gap-2 text-sm text-ink">[\s\S]*<input[\s\S]*placeholder="Pega el enlace del vídeo o el código <iframe>"[\s\S]*<\/label>/,
+  );
+  assert.match(
+    sharedSource,
+    /<iframe[\s\S]*title="Vista previa del vídeo incrustado"[\s\S]*allowFullScreen/,
+  );
+  assert.match(
+    sharedSource,
+    /<button[\s\S]*Quitar enlace y usar archivo subido/,
+  );
+  assert.match(
+    sharedSource,
+    /<span className="text-\[0\.68rem\] font-semibold uppercase tracking-\[0\.28em\] text-ink\/52">\{label\}<\/span>/,
+  );
 });
 
 test('media embed setters trim values, clear empty input, and ignore image items', () => {

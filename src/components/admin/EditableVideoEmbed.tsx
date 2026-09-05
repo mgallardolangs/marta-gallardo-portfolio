@@ -1,5 +1,8 @@
 import { toEmbedUrl } from '../../lib/videoEmbed';
 
+export const VIDEO_EMBED_LABEL =
+  'Enlace o código para incrustar (YouTube, Vimeo, Instagram, TikTok…) para vídeos en alta calidad';
+
 type EditableVideoEmbedProps = {
   value: string | null | undefined;
   onChange: (value: string) => void;
@@ -12,7 +15,7 @@ const IFRAME_ALLOW =
 export default function EditableVideoEmbed({
   value,
   onChange,
-  label = 'Enlace o código para incrustar',
+  label = VIDEO_EMBED_LABEL,
 }: EditableVideoEmbedProps) {
   const embedUrl = toEmbedUrl(value);
   const hasValue = Boolean(value?.trim());

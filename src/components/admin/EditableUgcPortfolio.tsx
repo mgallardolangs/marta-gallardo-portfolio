@@ -1,5 +1,5 @@
 import EditableMedia from './EditableMedia';
-import EditableVideoEmbed from './EditableVideoEmbed';
+import EditableVideoEmbed, { VIDEO_EMBED_LABEL } from './EditableVideoEmbed';
 import { useAdminStore } from './useAdminStore';
 
 const EDITABLE_LANGS = ['es', 'en', 'fr'] as const;
@@ -94,7 +94,7 @@ export default function EditableUgcPortfolio() {
                         <div className="space-y-3">
                           <EditableVideoEmbed
                             value={item.embedUrl}
-                            label="Enlace o código para incrustar"
+                            label={VIDEO_EMBED_LABEL}
                             onChange={(value) => store.setUgcPortfolioEmbedUrl(item.id, value)}
                           />
                           <EditableMedia
