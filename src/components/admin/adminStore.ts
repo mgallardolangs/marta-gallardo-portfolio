@@ -1396,23 +1396,17 @@ export class AdminStore {
   async publish(): Promise<void> {
     if (!this.initialized || this.isPublishingState) return;
     const orbitValidationErrors = this.getOrbitValidationErrors();
-    if (orbitValidationErrors.length > 0) {
-      this.publishErrorState = orbitValidationErrors.join(' ');
-      this.publishSuccessState = false;
-      this.emit();
-      return;
-    }
-
     const ugcValidationErrors = this.getUgcPortfolioValidationErrors();
-    if (ugcValidationErrors.length > 0) {
-      this.publishErrorState = ugcValidationErrors.join(' ');
-      this.publishSuccessState = false;
-      this.emit();
-      return;
-    }
-
-    this.syncToolLogoPaths();
-    const editableCollectionErrors = getEditableCollectionValidationErrors(this.images as SiteData);
+    const mediaValidationErrors = [...orbitValidationErrors, ...ugcValidationErrors];
+    const invalidOrbitIds = this.getPersistedOrbitMedia()
+      .filter((item) => validateOrbitMediaItem(item).length > 0)
+      .map((item) => item.id);
+    const invalidUgcIds = this.getPersistedUgcPortfolio()
+      .filter((item) => validateUgcPortfolioItem(item).length > 0)
+      .map((item) => item.id);
+    const imagesToPublish = this.buildPublishImages(invalidOrbitIds, invalidUgcIds);
+    this.syncToolLogoPaths(imagesToPublish);
+    const editableCollectionErrors = getEditableCollectionValidationErrors(imagesToPublish as SiteData);
     if (editableCollectionErrors.length > 0) {
       this.publishErrorState = editableCollectionErrors.join(' ');
       this.publishSuccessState = false;
@@ -1434,7 +1428,10 @@ export class AdminStore {
         );
       }
 
-      for (const [imageKey, pendingImage] of Object.entries(this.pendingImages)) {
+      const pendingImagesToPublish = Object.entries(this.pendingImages)
+        .filter(([imageKey]) => !this.isInvalidMediaPendingKey(imageKey, invalidOrbitIds, invalidUgcIds));
+
+      for (const [imageKey, pendingImage] of pendingImagesToPublish) {
         await this.writeRepositoryFile(
           pendingImage.path,
           pendingImage.base64Content,
@@ -1456,20 +1453,24 @@ export class AdminStore {
         );
       }
 
-      if (JSON.stringify(this.images) !== JSON.stringify(this.originalImages)) {
+      if (JSON.stringify(imagesToPublish) !== JSON.stringify(this.originalImages)) {
         await this.writeRepositoryFile(
           'src/data/site.json',
-          utf8ToBase64(`${JSON.stringify(this.images, null, 2)}\n`),
+          utf8ToBase64(`${JSON.stringify(imagesToPublish, null, 2)}\n`),
           'chore(admin): update site data',
           token,
         );
       }
 
       this.originalI18n = cloneValue(this.i18n);
-      this.originalImages = cloneValue(this.images);
-      this.pendingImages = {};
+      this.originalImages = cloneValue(imagesToPublish);
+      this.pendingImages = Object.fromEntries(
+        Object.entries(this.pendingImages).filter(([imageKey]) => (
+          this.isInvalidMediaPendingKey(imageKey, invalidOrbitIds, invalidUgcIds)
+        )),
+      );
       this.publishSuccessState = true;
-      this.publishErrorState = '';
+      this.publishErrorState = mediaValidationErrors.join(' ');
       this.draftToneState = '';
       this.draftMessageState = '';
       if (typeof window !== 'undefined') {
@@ -1961,9 +1962,9 @@ export class AdminStore {
     return nextCollection;
   }
 
-  private syncToolLogoPaths(): void {
-    const toolLogos = deepGet(this.images, 'toolLogos');
-    const tools = deepGet(this.images, 'arsenal.tools');
+  private syncToolLogoPaths(images: ImagesTree): void {
+    const toolLogos = deepGet(images, 'toolLogos');
+    const tools = deepGet(images, 'arsenal.tools');
     if (!toolLogos || typeof toolLogos !== 'object' || !Array.isArray(tools)) return;
 
     (tools as ToolItem[]).forEach((tool) => {
@@ -1972,6 +1973,49 @@ export class AdminStore {
         tool.logo = mappedLogo;
       }
     });
+  }
+
+  private buildPublishImages(invalidOrbitIds: string[], invalidUgcIds: string[]): ImagesTree {
+    const images = cloneValue(this.images);
+    const restoreItems = <T extends { id: string }>(
+      currentPath: string,
+      originalPath: string,
+      invalidIds: string[],
+    ) => {
+      const current = deepGet(images, currentPath);
+      const original = deepGet(this.originalImages, originalPath);
+      if (!Array.isArray(current) || !Array.isArray(original)) return;
+
+      const originalById = new Map(
+        original
+          .filter((item): item is T => item !== null && typeof item === 'object' && typeof (item as T).id === 'string')
+          .map((item) => [item.id, item]),
+      );
+      const restored = current
+        .map((item) => {
+          const id = (item as T).id;
+          return invalidIds.includes(id) ? originalById.get(id) : item;
+        })
+        .filter((item): item is T => Boolean(item));
+      deepSet(images, currentPath, restored);
+    };
+
+    restoreItems<OrbitMedia>('orbitMedia', 'orbitMedia', invalidOrbitIds);
+    restoreItems<UgcPortfolioItem>('ugcPortfolio', 'ugcPortfolio', invalidUgcIds);
+    return images;
+  }
+
+  private isInvalidMediaPendingKey(
+    key: string,
+    invalidOrbitIds: string[],
+    invalidUgcIds: string[],
+  ): boolean {
+    const orbitMatch = key.match(/^orbit\.([^.]*)\./);
+    const ugcMatch = key.match(/^ugc\.([^.]*)\./);
+    return Boolean(
+      (orbitMatch && invalidOrbitIds.includes(orbitMatch[1] ?? ''))
+      || (ugcMatch && invalidUgcIds.includes(ugcMatch[1] ?? '')),
+    );
   }
 
   private buildDraftPayload(): DraftPayload {

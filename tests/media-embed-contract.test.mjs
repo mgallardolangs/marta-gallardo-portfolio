@@ -102,6 +102,21 @@ function createStore(imageOverrides = {}) {
   return store;
 }
 
+test('translation arsenal editor exposes selected logo filenames', async () => {
+  const source = await readSource('src/components/admin/AdminTranslationArsenalEditor.tsx');
+
+  assert.match(source, /addToolFile\?\.name/);
+  assert.match(source, /data-selected-file-name/);
+});
+
+test('publish keeps invalid media drafts while publishing valid changes', async () => {
+  const source = await readSource('src/components/admin/adminStore.ts');
+
+  assert.match(source, /const imagesToPublish = this\.buildPublishImages/);
+  assert.match(source, /const pendingImagesToPublish = Object\.entries\(this\.pendingImages\)/);
+  assert.match(source, /publishErrorState = mediaValidationErrors\.join\(' '\)/);
+});
+
 function localized(seed) {
   return {
     es: `${seed} ES`,
