@@ -203,6 +203,7 @@ Aceptados:
 - MP4
 - WebM
 - MOV / QuickTime
+- En cualquier hueco de vídeo del panel puedes usar archivo local o pegar un enlace/código `<iframe>`; los pósters de UGC y orbit siguen siendo miniaturas locales.
 
 ### Límites que sí están controlados en el panel
 - Orbit imágenes: **2 MB**

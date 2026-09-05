@@ -5,6 +5,17 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { AdminStore } from '../src/components/admin/adminStore.ts';
+import {
+  ORBIT_IMAGE_MAX_BYTES,
+  ORBIT_VIDEO_MAX_BYTES,
+  validateOrbitMediaItem,
+  validateOrbitMediaUpload,
+} from '../src/lib/orbitMedia.ts';
+import {
+  validateUgcMediaUpload,
+  validateUgcPortfolioItem,
+} from '../src/lib/ugcPortfolio.ts';
+import { toEmbedUrl, toHttpsEmbedUrl } from '../src/lib/videoEmbed.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -89,6 +100,65 @@ function createStore(imageOverrides = {}) {
   );
 
   return store;
+}
+
+function localized(seed) {
+  return {
+    es: `${seed} ES`,
+    en: `${seed} EN`,
+    fr: `${seed} FR`,
+    de: `${seed} ES`,
+    it: `${seed} ES`,
+    ca: `${seed} ES`,
+  };
+}
+
+function createUgcVideoItem(overrides = {}) {
+  return {
+    id: 'ugc-video',
+    category: 'travel',
+    type: 'video',
+    src: '/images/ugc/ugc-video.mp4',
+    poster: '/images/ugc/ugc-video-poster.jpg',
+    embedUrl: null,
+    label: localized('Label'),
+    title: localized('Title'),
+    description: localized('Description'),
+    format: localized('Format'),
+    alt: localized('Alt'),
+    ...overrides,
+  };
+}
+
+function createUgcImageItem(overrides = {}) {
+  return {
+    id: 'ugc-image',
+    category: 'art',
+    type: 'image',
+    src: '/images/ugc/ugc-image.jpg',
+    poster: null,
+    embedUrl: null,
+    label: localized('Image label'),
+    title: localized('Image title'),
+    description: localized('Image description'),
+    format: localized('Image format'),
+    alt: localized('Image alt'),
+    ...overrides,
+  };
+}
+
+function createOrbitVideoItem(overrides = {}) {
+  return {
+    id: 'orbit-video',
+    type: 'video',
+    src: '/images/site/orbit-video.mp4',
+    poster: '/images/site/orbit-video-poster.jpg',
+    href: null,
+    embedUrl: null,
+    label: localized('Orbit label'),
+    alt: localized('Orbit alt'),
+    ...overrides,
+  };
 }
 
 test('media embed contracts expose optional embed URLs and admin bindings', async () => {
@@ -219,6 +289,92 @@ test('ugc focused dialog prioritizes valid embeds and preserves local poster pat
     adminPreviewSource,
     /function getPreviewSrc\(item: OrbitMedia\) \{\s*return item\.type === 'video' \? \(item\.poster \?\? ''\) : item\.src;\s*\}/,
   );
+});
+
+test('ugc validation accepts valid embeds without requiring a local video source', () => {
+  const blankSourceItem = createUgcVideoItem({
+    src: '',
+    embedUrl: 'https://player.example.com/embed/video',
+  });
+  const httpSourceItem = createUgcVideoItem({
+    src: '',
+    embedUrl: 'http://player.example.com/embed/video',
+  });
+  const invalidExtensionItem = createUgcVideoItem({
+    src: '/images/ugc/not-a-video.txt',
+    embedUrl: '<iframe src="https://player.example.com/embed/video"></iframe>',
+  });
+
+  assert.equal(toEmbedUrl(blankSourceItem.embedUrl), 'https://player.example.com/embed/video');
+  assert.equal(toEmbedUrl(httpSourceItem.embedUrl), 'http://player.example.com/embed/video');
+  assert.deepEqual(validateUgcPortfolioItem(blankSourceItem), []);
+  assert.deepEqual(validateUgcPortfolioItem(httpSourceItem), []);
+  assert.deepEqual(validateUgcPortfolioItem(invalidExtensionItem), []);
+});
+
+test('ugc validation keeps poster and local source rules when embed input is missing or unsafe', () => {
+  const unsafeEmbedItem = createUgcVideoItem({
+    src: '/images/ugc/not-a-video.txt',
+    embedUrl: 'javascript:alert(1)',
+    poster: '',
+  });
+  const emptyEmbedItem = createUgcVideoItem({
+    src: '',
+    embedUrl: '   ',
+  });
+  const imagePosterItem = createUgcImageItem({
+    poster: '/images/ugc/ugc-image-poster.jpg',
+  });
+
+  assert.equal(toEmbedUrl(unsafeEmbedItem.embedUrl), null);
+  assert.equal(toHttpsEmbedUrl(unsafeEmbedItem.embedUrl), null);
+  assert.deepEqual(validateUgcPortfolioItem(unsafeEmbedItem), [
+    'Los vídeos UGC deben usar un archivo de origen MP4, WebM o MOV.',
+    'Los vídeos UGC necesitan una imagen de póster.',
+  ]);
+  assert.deepEqual(validateUgcPortfolioItem(emptyEmbedItem), [
+    'Los elementos UGC necesitan un archivo de origen.',
+  ]);
+  assert.deepEqual(validateUgcPortfolioItem(imagePosterItem), [
+    'Las imágenes UGC no deben conservar un valor de póster.',
+  ]);
+});
+
+test('orbit validation still accepts optional embed metadata when local media remains intact', () => {
+  const orbitVideoItem = createOrbitVideoItem({
+    embedUrl: 'https://player.example.com/embed/orbit',
+  });
+
+  assert.deepEqual(validateOrbitMediaItem(orbitVideoItem), []);
+});
+
+test('embed parsing keeps https public embeds and rejects http or unsafe schemes', () => {
+  assert.equal(
+    toEmbedUrl('<iframe src="https://player.example.com/embed/video"></iframe>'),
+    'https://player.example.com/embed/video',
+  );
+  assert.equal(
+    toHttpsEmbedUrl('<iframe src="https://player.example.com/embed/video"></iframe>'),
+    'https://player.example.com/embed/video',
+  );
+  assert.equal(toEmbedUrl('http://player.example.com/embed/video'), 'http://player.example.com/embed/video');
+  assert.equal(toHttpsEmbedUrl('http://player.example.com/embed/video'), null);
+  assert.equal(toEmbedUrl('data:text/html,<iframe></iframe>'), null);
+  assert.equal(toHttpsEmbedUrl('javascript:alert(1)'), null);
+});
+
+test('ugc and orbit uploads keep the existing 2MB image and 8MB video limits', () => {
+  const oversizeImage = new File([new Uint8Array(ORBIT_IMAGE_MAX_BYTES + 1)], 'image.jpg', {
+    type: 'image/jpeg',
+  });
+  const oversizeVideo = new File([new Uint8Array(ORBIT_VIDEO_MAX_BYTES + 1)], 'video.mp4', {
+    type: 'video/mp4',
+  });
+
+  assert.equal(validateUgcMediaUpload(oversizeImage, 'image'), 'Las imágenes deben pesar 2MB o menos.');
+  assert.equal(validateUgcMediaUpload(oversizeVideo, 'video'), 'Los vídeos deben pesar 8MB o menos.');
+  assert.equal(validateOrbitMediaUpload(oversizeImage, 'image'), 'Las imágenes deben pesar 2MB o menos.');
+  assert.equal(validateOrbitMediaUpload(oversizeVideo, 'video'), 'Los vídeos deben pesar 8MB o menos.');
 });
 
 test('media embed setters preserve missing embedUrl fields when a draft is cleared', () => {
