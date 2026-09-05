@@ -47,10 +47,12 @@
     "microsoft-office": "/images/tools/microsoft-office.svg",
     "google-workspace": "/images/tools/google-workspace.svg",
     "notion": "/images/tools/notion.svg",
-    "ai-tools": "/images/tools/ai-tools--chatgpt--claude-.svg",
+    "ai-tools": "/images/tools/ai-tools.svg",
     "wordpress": "/images/tools/wordpress.svg",
     "google-search-console": "/images/tools/google-search-console.svg",
-    "google-business-profile": "/images/tools/google-my-business.svg"
+    "google-business-profile": "/images/tools/google-business-profile.svg",
+    "tool-claude": "/images/tools/tool-claude.svg",
+    "tool-capcut": "/images/tools/tool-capcut.svg"
   },
   "videoStickers": {
     "one": "/images/site/videoStickers-one.webp",
@@ -552,14 +554,38 @@
       },
       {
         "id": "ai-tools",
-        "logo": "/images/tools/ai-tools--chatgpt--claude-.svg",
+        "logo": "/images/tools/ai-tools.svg",
         "label": {
-          "es": "AI tools (ChatGPT, Claude)",
-          "en": "AI tools (ChatGPT, Claude)",
-          "fr": "Outils IA (ChatGPT, Claude)",
+          "es": "ChatGPT",
+          "en": "ChatGPT",
+          "fr": "ChatGPT",
           "de": "KI-Tools (ChatGPT, Claude)",
           "it": "Strumenti IA (ChatGPT, Claude)",
           "ca": "Eines d’IA (ChatGPT, Claude)"
+        }
+      },
+      {
+        "id": "tool-claude",
+        "logo": "/images/tools/tool-claude.svg",
+        "label": {
+          "es": "Claude",
+          "en": "Claude",
+          "fr": "Claude",
+          "de": "Claude",
+          "it": "Claude",
+          "ca": "Claude"
+        }
+      },
+      {
+        "id": "tool-capcut",
+        "logo": "/images/tools/tool-capcut.svg",
+        "label": {
+          "es": "Capcut",
+          "en": "Capcut",
+          "fr": "Capcut",
+          "de": "Capcut",
+          "it": "Capcut",
+          "ca": "Capcut"
         }
       },
       {
@@ -588,7 +614,7 @@
       },
       {
         "id": "google-business-profile",
-        "logo": "/images/tools/google-my-business.svg",
+        "logo": "/images/tools/google-business-profile.svg",
         "label": {
           "es": "Google My Business",
           "en": "Google Business Profile",
@@ -714,41 +740,41 @@
       "src": "/images/ugc/mock-01.webp",
       "poster": null,
       "label": {
-        "es": "Nota de amanecer",
-        "en": "Sunrise note",
-        "fr": "Note d’aube",
+        "es": "Road trip por California",
+        "en": "California road trip",
+        "fr": "Californie road trip",
         "de": "Morgennotiz",
         "it": "Nota d’alba",
         "ca": "Nota d’alba"
       },
       "title": {
-        "es": "Apuntes de llegada en la azotea",
-        "en": "Rooftop arrival notes",
-        "fr": "Notes d’arrivée en terrasse",
+        "es": "Ruta de 10 días por California",
+        "en": "10-Day California Itinerary",
+        "fr": "Tour de 10 jours en Californie",
         "de": "Ankunftsnotizen auf der Dachterrasse",
         "it": "Appunti d’arrivo in terrazza",
         "ca": "Apunts d’arribada al terrat"
       },
       "description": {
-        "es": "Maqueta conceptual de una mañana de hotel con luz suave, café y esenciales de viaje listos para empezar el día.",
-        "en": "Concept still of a hotel morning with soft light, coffee, and travel essentials ready to start the day.",
-        "fr": "Maquette conceptuelle d’un matin d’hôtel avec une lumière douce, du café et des essentiels de voyage prêts pour commencer la journée.",
+        "es": "De San Francisco a Sacramento, pasando por Yosemite y Tahoe. Coche, naturaleza y amigas.",
+        "en": "From San Francisco to Sacramento, passing through Yosemite and Tahoe. A road trip, nature, and friends.",
+        "fr": "De San Francisco à Sacramento, en passant par Yosemite et Tahoe. La voiture, la nature et les copines.",
         "de": "Konzeptionelles Still eines Hotelmorgens mit weichem Licht, Kaffee und Reiseessentials für den Tagesbeginn.",
         "it": "Still concettuale di una mattina in hotel con luce soffusa, caffè ed essenziali da viaggio pronti per iniziare la giornata.",
         "ca": "Maqueta conceptual d’un matí d’hotel amb llum suau, cafè i essencials de viatge a punt per començar el dia."
       },
       "format": {
-        "es": "Imagen fija",
-        "en": "Still image",
-        "fr": "Image fixe",
+        "es": "Video vertical",
+        "en": "Vertical video",
+        "fr": "Vidéo vertical",
         "de": "Standbild",
         "it": "Immagine statica",
         "ca": "Imatge fixa"
       },
       "alt": {
-        "es": "Cuaderno de viaje, gafas de sol y café sobre una mesa de azotea al amanecer.",
-        "en": "Travel notebook, sunglasses, and coffee on a rooftop table at sunrise.",
-        "fr": "Carnet de voyage, lunettes de soleil et café sur une table en terrasse au lever du jour.",
+        "es": "San Francisco, Yosemite, Tahoe, Sacramento, Napa Valley.",
+        "en": "San Francisco, Yosemite, Tahoe, Sacramento, Napa Valley.",
+        "fr": "San Francisco, Yosemite, Tahoe, Sacramento, Napa Valley.",
         "de": "Reisenotizbuch, Sonnenbrille und Kaffee auf einem Dachterrassentisch bei Sonnenaufgang.",
         "it": "Taccuino di viaggio, occhiali da sole e caffè su un tavolo in terrazza all’alba.",
         "ca": "Quadern de viatge, ulleres de sol i cafè sobre una taula de terrat a l’alba."
