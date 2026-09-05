@@ -348,6 +348,21 @@ test('orbit validation still accepts optional embed metadata when local media re
   assert.deepEqual(validateOrbitMediaItem(orbitVideoItem), []);
 });
 
+test('orbit validation accepts a valid embed without requiring a local video source', () => {
+  const blankSourceItem = createOrbitVideoItem({
+    src: '',
+    embedUrl: 'https://player.example.com/embed/orbit',
+  });
+  const invalidExtensionItem = createOrbitVideoItem({
+    src: '/images/site/not-a-video.txt',
+    embedUrl: '<iframe src="https://player.example.com/embed/orbit"></iframe>',
+  });
+
+  assert.equal(toEmbedUrl(blankSourceItem.embedUrl), 'https://player.example.com/embed/orbit');
+  assert.deepEqual(validateOrbitMediaItem(blankSourceItem), []);
+  assert.deepEqual(validateOrbitMediaItem(invalidExtensionItem), []);
+});
+
 test('embed parsing keeps https public embeds and rejects http or unsafe schemes', () => {
   assert.equal(
     toEmbedUrl('<iframe src="https://player.example.com/embed/video"></iframe>'),
