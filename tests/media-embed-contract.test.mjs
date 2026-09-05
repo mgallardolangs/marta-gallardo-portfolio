@@ -102,6 +102,32 @@ test('media embed contracts expose optional embed URLs and admin bindings', asyn
   assert.match(hookSource, /setUgcPortfolioEmbedUrl:\s*adminStore\.setUgcPortfolioEmbedUrl\.bind\(adminStore\)/);
 });
 
+test('video embed editors use the shared compact admin control for video items only', async () => {
+  const [sharedSource, ugcSource, orbitSource] = await Promise.all([
+    readSource('src/components/admin/EditableVideoEmbed.tsx'),
+    readSource('src/components/admin/EditableUgcPortfolio.tsx'),
+    readSource('src/components/admin/EditableOrbitCollection.tsx'),
+  ]);
+
+  assert.match(sharedSource, /import \{ toEmbedUrl \} from '\.\.\/\.\.\/lib\/videoEmbed';/);
+  assert.match(sharedSource, /value:\s*string \| null \| undefined;/);
+  assert.match(sharedSource, /onChange:\s*\(value:\s*string\)\s*=>\s*void;/);
+  assert.match(sharedSource, /loading="lazy"/);
+  assert.match(sharedSource, /accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share/);
+  assert.match(sharedSource, /allowFullScreen/);
+  assert.match(sharedSource, /Pega un enlace válido \(http o https\) o un código para incrustar\./);
+  assert.match(sharedSource, /Quitar enlace y usar archivo subido/);
+  assert.doesNotMatch(sharedSource, /absolute inset-0/);
+
+  assert.match(ugcSource, /import EditableVideoEmbed from '\.\/EditableVideoEmbed';/);
+  assert.match(ugcSource, /item\.type === 'video' \?[\s\S]*<EditableVideoEmbed/);
+  assert.match(ugcSource, /onChange=\{\(value\) => store\.setUgcPortfolioEmbedUrl\(item\.id, value\)\}/);
+
+  assert.match(orbitSource, /import EditableVideoEmbed from '\.\/EditableVideoEmbed';/);
+  assert.match(orbitSource, /item\.type === 'video' &&[\s\S]*<EditableVideoEmbed/);
+  assert.match(orbitSource, /onChange=\{\(value\) => store\.setOrbitMediaEmbedUrl\(index, value\)\}/);
+});
+
 test('media embed setters trim values, clear empty input, and ignore image items', () => {
   const store = createStore();
 

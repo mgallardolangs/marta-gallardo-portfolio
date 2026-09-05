@@ -1,4 +1,5 @@
 import EditableMedia from './EditableMedia';
+import EditableVideoEmbed from './EditableVideoEmbed';
 import { useAdminStore } from './useAdminStore';
 import { buildOrbitUploadPath, getLocalizedOrbitText } from '../../lib/orbitMedia';
 
@@ -126,9 +127,16 @@ export default function EditableOrbitCollection() {
                           await store.setOrbitMediaFile(index, 'poster', file, buildOrbitUploadPath(item.id, 'poster', file));
                         }}
                       />
-                      <div className="space-y-2 rounded-sm border border-black/10 bg-paper p-3 text-sm leading-6 text-ink-muted">
-                        <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink-faint">Póster del vídeo</p>
-                        <p>Todos los vídeos del orbit necesitan una imagen de póster para la carga, el modo de movimiento reducido y la reproducción automática silenciada.</p>
+                      <div className="space-y-3">
+                        <div className="rounded-sm border border-black/10 bg-paper p-3 text-sm leading-6 text-ink-muted">
+                          <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink-faint">Póster del vídeo</p>
+                          <p>Todos los vídeos del orbit necesitan una imagen de póster para la carga, el modo de movimiento reducido y la reproducción automática silenciada.</p>
+                        </div>
+                        <EditableVideoEmbed
+                          value={item.embedUrl}
+                          label="Enlace o código para incrustar"
+                          onChange={(value) => store.setOrbitMediaEmbedUrl(index, value)}
+                        />
                       </div>
                     </div>
                   )}
