@@ -325,6 +325,11 @@ test('admin UGC preview and fixed-slot editor expose only the approved controls'
   assert.match(editorSource, /updateUgcPortfolioField\([^)]*['"]alt['"]/, 'EditableUgcPortfolio should edit localized alt text');
   assert.match(editorSource, /setUgcPortfolioMedia\(/, 'EditableUgcPortfolio should edit slot media');
   assert.match(editorSource, /setUgcPortfolioPoster\(/, 'EditableUgcPortfolio should edit slot posters');
+  assert.doesNotMatch(
+    editorSource,
+    /getUgcPortfolioItemValidationErrors/,
+    'UGC should not render whole-item publish validation while a slot is still being edited',
+  );
   assert.doesNotMatch(editorSource, /\baddUgcPortfolio\b|\bremoveUgcPortfolio\b|\bmoveUgcPortfolio\b|\breorderUgcPortfolio\b/, 'EditableUgcPortfolio should not add, remove, move, or reorder slots');
   assert.doesNotMatch(editorSource, />\s*(?:Add|Remove|Move|Reorder)\b/i, 'EditableUgcPortfolio should not expose add/remove/reorder buttons');
 

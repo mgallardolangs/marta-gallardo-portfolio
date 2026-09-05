@@ -98,7 +98,7 @@ export function validateUgcPortfolioItem(item: UgcPortfolioItem) {
     errors.push('Las imágenes UGC deben usar un archivo de origen JPG, PNG, WebP o GIF.');
   }
 
-  if (item.type === 'video' && src && !UGC_VIDEO_SOURCE_PATTERN.test(src)) {
+  if (item.type === 'video' && src && !hasValidVideoEmbed && !UGC_VIDEO_SOURCE_PATTERN.test(src)) {
     errors.push('Los vídeos UGC deben usar un archivo de origen MP4, WebM o MOV.');
   }
 
