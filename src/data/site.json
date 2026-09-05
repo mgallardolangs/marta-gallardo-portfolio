@@ -736,9 +736,9 @@
     {
       "id": "ugc-travel-01",
       "category": "travel",
-      "type": "image",
+      "type": "video",
       "src": "/images/ugc/mock-01.webp",
-      "poster": null,
+      "poster": "/images/ugc/ugc-travel-01-poster.webp",
       "label": {
         "es": "Road trip por California",
         "en": "California road trip",
@@ -778,7 +778,8 @@
         "de": "Reisenotizbuch, Sonnenbrille und Kaffee auf einem Dachterrassentisch bei Sonnenaufgang.",
         "it": "Taccuino di viaggio, occhiali da sole e caffè su un tavolo in terrazza all’alba.",
         "ca": "Quadern de viatge, ulleres de sol i cafè sobre una taula de terrat a l’alba."
-      }
+      },
+      "embedUrl": "<iframe width=\"384\" height=\"682\" src=\"https://www.youtube.com/embed/Ds1-fNV6q7g\" title=\"Viaje California\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>"
     },
     {
       "id": "ugc-languages-01",
