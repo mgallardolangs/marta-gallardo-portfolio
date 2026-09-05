@@ -134,3 +134,47 @@ test('media embed setters trim values, clear empty input, and ignore image items
   assert.equal(snapshot.publishSuccess, false);
   assert.equal(snapshot.publishError, '');
 });
+
+test('publish preserves embed URLs in the serialized site payload', async () => {
+  const store = createStore();
+  store.setOrbitMediaEmbedUrl(0, '  https://player.example.com/orbit  ');
+  store.setUgcPortfolioEmbedUrl('ugc-video', '  https://player.example.com/ugc  ');
+
+  const fetchCalls = [];
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input, init = {}) => {
+    fetchCalls.push({ input: String(input), init });
+
+    if (!init.method || init.method === 'GET') {
+      return new Response(JSON.stringify({ sha: 'site-sha' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    return new Response(JSON.stringify({ content: { sha: 'updated-site-sha' } }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+
+  try {
+    await store.publish();
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.equal(store.getSnapshot().publishSuccess, true);
+  assert.equal(store.getSnapshot().publishError, '');
+
+  const siteWrite = fetchCalls.find(
+    (call) => call.init?.method === 'PUT' && String(call.input).includes('src/data/site.json'),
+  );
+  assert.ok(siteWrite, 'publishing should write the site JSON payload');
+
+  const writePayload = JSON.parse(String(siteWrite?.init?.body ?? '{}'));
+  const publishedSite = JSON.parse(Buffer.from(writePayload.content, 'base64').toString('utf8'));
+
+  assert.equal(publishedSite.orbitMedia[0].embedUrl, 'https://player.example.com/orbit');
+  assert.equal(publishedSite.ugcPortfolio[0].embedUrl, 'https://player.example.com/ugc');
+});
