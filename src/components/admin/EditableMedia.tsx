@@ -78,8 +78,10 @@ export default function EditableMedia({
 
   const handlePaste = (event: React.ClipboardEvent<HTMLDivElement>) => {
     if (mediaType !== 'video' || !onPasteEmbed) return;
-    const pastedValue = event.clipboardData.getData('text/plain').trim();
-    if (!toEmbedUrl(pastedValue)) return;
+    const pastedValue = ['text/plain', 'text/html']
+      .map((type) => event.clipboardData.getData(type).trim())
+      .find((value) => toEmbedUrl(value));
+    if (!pastedValue) return;
     event.preventDefault();
     onPasteEmbed(pastedValue);
   };

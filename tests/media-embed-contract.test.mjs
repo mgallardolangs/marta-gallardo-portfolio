@@ -258,8 +258,11 @@ test('UGC video media areas accept pasted iframe code without file validation', 
   ]);
 
   assert.match(mediaSource, /onPasteEmbed\?: \(value: string\) => void;/);
-  assert.match(mediaSource, /clipboardData\.getData\('text\/plain'\)/);
-  assert.match(mediaSource, /toEmbedUrl\(pastedValue\)/);
+  assert.match(
+    mediaSource,
+    /\['text\/plain', 'text\/html'\][\s\S]*\.map\(\(type\) => event\.clipboardData\.getData\(type\)\.trim\(\)\)[\s\S]*\.find\(\(value\) => toEmbedUrl\(value\)\)/,
+    'video paste should try rich HTML when plain clipboard text is not an embed',
+  );
   assert.match(mediaSource, /event\.preventDefault\(\)/);
   assert.match(mediaSource, /onPasteEmbed\(pastedValue\)/);
   assert.match(ugcSource, /onPasteEmbed=\{item\.type === 'video'[\s\S]*store\.setUgcPortfolioEmbedUrl\(item\.id, value\)/);
