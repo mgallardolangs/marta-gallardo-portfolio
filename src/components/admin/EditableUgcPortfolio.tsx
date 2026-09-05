@@ -79,6 +79,9 @@ export default function EditableUgcPortfolio() {
                       emptyLabel={item.type === 'video' ? 'Sube un MP4 / WebM / MOV' : 'Sube un JPG / PNG / WebP / GIF'}
                       className="aspect-square border border-ink/10 bg-paper"
                       poster={item.poster}
+                      onPasteEmbed={item.type === 'video'
+                        ? (value) => store.setUgcPortfolioEmbedUrl(item.id, value)
+                        : undefined}
                       onSelect={async (file) => {
                         await store.setUgcPortfolioMedia(item.id, file);
                       }}

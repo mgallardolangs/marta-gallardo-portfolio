@@ -1,12 +1,14 @@
 import { useRef } from 'react';
 import { validateOrbitMediaUpload } from '../../lib/orbitMedia';
 import { validateToolLogoUpload } from '../../lib/adminCollections.ts';
+import { toEmbedUrl } from '../../lib/videoEmbed';
 
 interface Props {
   src: string;
   mediaType: 'image' | 'video';
   acceptKind: 'image' | 'video' | 'tool-logo';
   onSelect: (file: File) => Promise<void> | void;
+  onPasteEmbed?: (value: string) => void;
   className?: string;
   alt?: string;
   label?: string;
@@ -39,6 +41,7 @@ export default function EditableMedia({
   mediaType,
   acceptKind,
   onSelect,
+  onPasteEmbed,
   className = '',
   alt = '',
   label = '📷 Cambiar contenido',
@@ -73,8 +76,20 @@ export default function EditableMedia({
     }
   };
 
+  const handlePaste = (event: React.ClipboardEvent<HTMLDivElement>) => {
+    if (mediaType !== 'video' || !onPasteEmbed) return;
+    const pastedValue = event.clipboardData.getData('text/plain').trim();
+    if (!toEmbedUrl(pastedValue)) return;
+    event.preventDefault();
+    onPasteEmbed(pastedValue);
+  };
+
   return (
-    <div className={`group/media relative overflow-hidden bg-paper ${className}`} style={{ cursor: 'pointer', minHeight: '3rem' }}>
+    <div
+      className={`group/media relative overflow-hidden bg-paper ${className}`}
+      style={{ cursor: 'pointer', minHeight: '3rem' }}
+      onPaste={handlePaste}
+    >
       {src ? (
         mediaType === 'video' ? (
           <video

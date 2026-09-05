@@ -74,6 +74,7 @@ export default function AdminTranslationArsenalEditor() {
   const [addLabelFields, setAddLabelFields] = useState<LocaleFieldState>(createEmptyFields);
   const [addLevelFields, setAddLevelFields] = useState<LocaleFieldState>(createEmptyFields);
   const [addToolFile, setAddToolFile] = useState<File | null>(null);
+  const [selectedToolFileName, setSelectedToolFileName] = useState('');
   const [addError, setAddError] = useState('');
   const [itemError, setItemError] = useState('');
   const dragSourceRef = useRef<DragSource | null>(null);
@@ -99,6 +100,7 @@ export default function AdminTranslationArsenalEditor() {
     setAddLabelFields(createEmptyFields());
     setAddLevelFields(createEmptyFields());
     setAddToolFile(null);
+    setSelectedToolFileName('');
     setAddError('');
     setActiveAdd(null);
   };
@@ -107,11 +109,13 @@ export default function AdminTranslationArsenalEditor() {
     setEditingItem(null);
     setActiveAdd(target);
     setAddError('');
+    setSelectedToolFileName('');
   };
 
   const openItemEditor = (kind: EditableCollectionKind, id: string) => {
     setActiveAdd(null);
     setItemError('');
+    setSelectedToolFileName('');
     setEditingItem({ kind, id });
   };
 
@@ -217,9 +221,16 @@ export default function AdminTranslationArsenalEditor() {
             <input
               type="file"
               accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
-              onChange={(event) => setAddToolFile(event.target.files?.[0] ?? null)}
+              onChange={(event) => {
+                const file = event.target.files?.[0] ?? null;
+                setAddToolFile(file);
+                setSelectedToolFileName(file?.name ?? '');
+              }}
               className="border border-ink/15 bg-white px-2 py-1.5 text-sm text-ink"
             />
+            <span data-selected-file-name className="text-xs text-ink-faint">
+              {addToolFile?.name ?? 'Seleccionar archivo'}
+            </span>
           </label>
         )}
 
@@ -304,6 +315,7 @@ export default function AdminTranslationArsenalEditor() {
               const file = event.target.files?.[0];
               event.target.value = '';
               if (!file) return;
+              setSelectedToolFileName(file.name);
               setItemError('');
               try {
                 await store.setEditableToolLogo(index, file);
@@ -313,6 +325,9 @@ export default function AdminTranslationArsenalEditor() {
             }}
             className="border border-ink/15 bg-white px-2 py-1.5 text-sm text-ink"
           />
+          <span data-selected-file-name className="text-xs text-ink-faint">
+            {selectedToolFileName || 'Seleccionar archivo'}
+          </span>
         </label>
         {itemError && (
           <p role="alert" data-item-editor-error className="text-xs text-amaranth">
