@@ -308,8 +308,12 @@ test('ugc validation only accepts https embed-only videos without requiring a lo
     src: '',
     embedUrl: 'http://player.example.com/embed/video',
   });
-  const invalidExtensionItem = createUgcVideoItem({
-    src: '/images/ugc/not-a-video.txt',
+  const staleImageSourceItem = createUgcVideoItem({
+    src: '/images/ugc/ugc-image.jpg',
+    embedUrl: '<iframe src="https://player.example.com/embed/video"></iframe>',
+  });
+  const validLocalVideoItem = createUgcVideoItem({
+    src: '/images/ugc/ugc-video.webm',
     embedUrl: '<iframe src="https://player.example.com/embed/video"></iframe>',
   });
 
@@ -319,7 +323,10 @@ test('ugc validation only accepts https embed-only videos without requiring a lo
   assert.deepEqual(validateUgcPortfolioItem(httpSourceItem), [
     'Los elementos UGC necesitan un archivo de origen.',
   ]);
-  assert.deepEqual(validateUgcPortfolioItem(invalidExtensionItem), []);
+  assert.deepEqual(validateUgcPortfolioItem(staleImageSourceItem), [
+    'Los vídeos UGC deben usar un archivo de origen MP4, WebM o MOV.',
+  ]);
+  assert.deepEqual(validateUgcPortfolioItem(validLocalVideoItem), []);
 });
 
 test('ugc validation keeps poster and local source rules when embed input is missing or unsafe', () => {
