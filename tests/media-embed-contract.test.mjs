@@ -164,6 +164,43 @@ test('video embed editors use the shared compact admin control for video items o
   );
 });
 
+test('ugc focused dialog prioritizes valid embeds and preserves local poster paths', async () => {
+  const [ugcSource, orbitSource, adminPreviewSource] = await Promise.all([
+    readSource('src/components/UgcContactSheet.tsx'),
+    readSource('src/components/OvalMediaOrbit.tsx'),
+    readSource('src/components/admin/AdminOrbitPreview.tsx'),
+  ]);
+
+  assert.match(ugcSource, /import \{ toEmbedUrl \} from '\.\.\/lib\/videoEmbed';/);
+  assert.match(
+    ugcSource,
+    /const activeEmbedUrl = activeItem && activeItem\.type === 'video'\s*\?\s*toEmbedUrl\(activeItem\.embedUrl\)\s*:\s*null;/,
+  );
+  assert.match(
+    ugcSource,
+    /\{activeItem\.type === 'video' && activeEmbedUrl \? \(\s*<iframe[\s\S]*src=\{activeEmbedUrl\}[\s\S]*title=\{localize\(activeItem\.title, lang\)\}[\s\S]*tabIndex=\{0\}[\s\S]*loading="lazy"[\s\S]*allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"[\s\S]*allowFullScreen[\s\S]*className="h-full w-full border-0"/,
+  );
+  assert.match(
+    ugcSource,
+    /:\s*activeItem\.type === 'video' \? \(\s*<video[\s\S]*ref=\{focusedVideoRef\}[\s\S]*src=\{activeItem\.src\}[\s\S]*poster=\{activeItem\.poster \? netlifyImage\(activeItem\.poster, \{ width: 1200 \}\) : undefined\}[\s\S]*onClick=\{handleDialogVideoClick\}/,
+  );
+  assert.match(
+    ugcSource,
+    /\{item\.type === 'video' \? \(\s*<video[\s\S]*src=\{item\.src\}[\s\S]*poster=\{item\.poster \? netlifyImage\(item\.poster, \{ width: 600 \}\) : undefined\}[\s\S]*preload="metadata"/,
+  );
+
+  assert.doesNotMatch(orbitSource, /toEmbedUrl|<iframe/);
+  assert.match(
+    orbitSource,
+    /<video[\s\S]*src=\{item\.src\}[\s\S]*poster=\{item\.poster \?\? undefined\}/,
+  );
+
+  assert.match(
+    adminPreviewSource,
+    /function getPreviewSrc\(item: OrbitMedia\) \{\s*return item\.type === 'video' \? \(item\.poster \?\? ''\) : item\.src;\s*\}/,
+  );
+});
+
 test('media embed setters preserve missing embedUrl fields when a draft is cleared', () => {
   const store = createStore({
     orbitMedia: [
