@@ -77,24 +77,42 @@ test('SEO helpers normalize whitespace and always return strings for page metada
       seo: {
         home: {
           title: { fr: '  Page   title  ' },
-          description: { es: '  Descripción \n limpia  ' },
+          description: { it: '   ' },
         },
       },
     },
     'home',
     'fr',
     {
-      title: '  Home fallback  ',
-      description: '  Home description fallback  ',
+      title: { fr: '  Home fallback  ' },
+      description: { es: '  Descripción \n fallback  ' },
     },
   );
 
   assert.deepEqual(resolved, {
     title: 'Page title',
-    description: 'Descripción limpia',
+    description: 'Descripción fallback',
   });
   assert.equal(typeof resolved.title, 'string');
   assert.equal(typeof resolved.description, 'string');
+});
+
+test('SEO page fallback maps prefer requested locale, then Spanish, then empty strings', () => {
+  assert.deepEqual(getPageSeo(undefined, 'contact', 'en', {
+    title: { en: '  English fallback title  ', es: '  Título español  ' },
+    description: { es: '  Descripción fallback  ' },
+  }), {
+    title: 'English fallback title',
+    description: 'Descripción fallback',
+  });
+
+  assert.deepEqual(getPageSeo(undefined, 'contact', 'fr', {
+    title: { en: '  English only title  ' },
+    description: { en: '  English only description  ' },
+  }), {
+    title: '',
+    description: '',
+  });
 });
 
 test('SEO site data exposes only the four editable page groups and keeps the runtime contract optional', async () => {

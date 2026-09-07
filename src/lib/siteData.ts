@@ -129,13 +129,15 @@ export function getPageSeo(
   site: Partial<SiteData> | null | undefined,
   page: SeoPageKey,
   lang: Locale,
-  fallback: ResolvedSeoPageValue,
+  fallback: SeoPageValue,
 ): ResolvedSeoPageValue {
   const pageSeo = site?.seo?.[page];
+  const fallbackTitle = resolveSeoText(fallback.title, lang, '');
+  const fallbackDescription = resolveSeoText(fallback.description, lang, '');
 
   return {
-    title: resolveSeoText(pageSeo?.title, lang, fallback.title),
-    description: resolveSeoText(pageSeo?.description, lang, fallback.description),
+    title: resolveSeoText(pageSeo?.title, lang, fallbackTitle),
+    description: resolveSeoText(pageSeo?.description, lang, fallbackDescription),
   };
 }
 
