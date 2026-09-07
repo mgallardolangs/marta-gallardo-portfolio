@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
-const siteUrl = 'https://marttelier.netlify.app';
+const siteUrl = 'https://marttelier.com';
 const blogSocialImage = `${siteUrl}/images/blog/mi-primer-post.webp`;
 
 async function readSource(relativePath) {
