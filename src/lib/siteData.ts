@@ -2,8 +2,18 @@ import rawSiteData from '../data/site.json' with { type: 'json' };
 
 export const siteLocales = ['es', 'en', 'fr', 'de', 'it', 'ca'] as const;
 export type Locale = (typeof siteLocales)[number];
+export const seoPageKeys = ['home', 'translationSeo', 'ugc', 'contact'] as const;
+export type SeoPageKey = (typeof seoPageKeys)[number];
 
 export type LocalizedText = Record<Locale, string>;
+export type SeoPageValue = {
+  title?: Partial<LocalizedText>;
+  description?: Partial<LocalizedText>;
+};
+export type ResolvedSeoPageValue = {
+  title: string;
+  description: string;
+};
 
 export type OrbitMedia = {
   id: string;
@@ -88,12 +98,45 @@ export type SiteData = {
       instagram: string;
     };
   };
+  seo?: Partial<Record<SeoPageKey, SeoPageValue>>;
 };
 
 export function localize(value: LocalizedText | string | null | undefined, lang: Locale): string {
   if (typeof value === 'string') return value;
   if (!value) return '';
   return value[lang] ?? value.es ?? '';
+}
+
+function normalizeSeoText(value: string | null | undefined): string {
+  return typeof value === 'string' ? value.replace(/\s+/g, ' ').trim() : '';
+}
+
+export function resolveSeoText(
+  value: Partial<LocalizedText> | null | undefined,
+  lang: Locale,
+  fallback: string,
+): string {
+  const requested = normalizeSeoText(value?.[lang]);
+  if (requested) return requested;
+
+  const spanish = normalizeSeoText(value?.es);
+  if (spanish) return spanish;
+
+  return normalizeSeoText(fallback);
+}
+
+export function getPageSeo(
+  site: Partial<SiteData> | null | undefined,
+  page: SeoPageKey,
+  lang: Locale,
+  fallback: ResolvedSeoPageValue,
+): ResolvedSeoPageValue {
+  const pageSeo = site?.seo?.[page];
+
+  return {
+    title: resolveSeoText(pageSeo?.title, lang, fallback.title),
+    description: resolveSeoText(pageSeo?.description, lang, fallback.description),
+  };
 }
 
 export const publicLanguagePickerFallback: Locale[] = ['es', 'en', 'fr'];
