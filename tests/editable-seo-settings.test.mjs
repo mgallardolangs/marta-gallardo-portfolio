@@ -42,15 +42,20 @@ function getMetaContents(html, attributeName) {
     .map((match) => match[1]);
 }
 
-async function findGeneratedSitemapPath() {
+function getXmlLocs(xml) {
+  return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+}
+
+async function findGeneratedSitemapPaths() {
   const sitemapIndexPath = 'dist/sitemap-index.xml';
   const sitemapIndex = await readBuiltSource(sitemapIndexPath);
-  const sitemapMatches = [...sitemapIndex.matchAll(/<loc>https:\/\/marttelier\.com\/([^<]+\.xml)<\/loc>/g)]
-    .map((match) => match[1])
-    .filter((fileName) => fileName !== 'sitemap-index.xml');
+  const sitemapMatches = getXmlLocs(sitemapIndex)
+    .map((url) => new URL(url))
+    .filter((url) => url.pathname !== '/sitemap-index.xml')
+    .map((url) => `dist/${path.basename(url.pathname)}`);
 
   if (sitemapMatches.length > 0) {
-    return `dist/${sitemapMatches[0]}`;
+    return [...new Set(sitemapMatches)];
   }
 
   const distEntries = await readdir(path.join(rootDir, 'dist')).catch((error) => {
@@ -69,7 +74,7 @@ async function findGeneratedSitemapPath() {
     'Expected Astro to emit a sitemap XML file such as sitemap.xml or sitemap-0.xml.',
   );
 
-  return `dist/${fallbackSitemap}`;
+  return [`dist/${fallbackSitemap}`];
 }
 
 function createAdminI18n() {
@@ -168,15 +173,15 @@ test('built public SEO output uses marttelier.com canonicals, alternates, sitema
     return;
   }
 
-  const sitemapPath = await findGeneratedSitemapPath();
-  const [homeHtml, contactHtml, translationHtml, ugcHtml, robots, sitemapIndex, sitemap] = await Promise.all([
+  const sitemapPaths = await findGeneratedSitemapPaths();
+  const [homeHtml, contactHtml, translationHtml, ugcHtml, robots, sitemapIndex, ...sitemaps] = await Promise.all([
     readBuiltSource('dist/index.html'),
     readBuiltSource('dist/contact/index.html'),
     readBuiltSource('dist/translation-seo/index.html'),
     readBuiltSource('dist/ugc/index.html'),
     readBuiltSource('dist/robots.txt'),
     readBuiltSource('dist/sitemap-index.xml'),
-    readBuiltSource(sitemapPath),
+    ...sitemapPaths.map((sitemapPath) => readBuiltSource(sitemapPath)),
   ]);
 
   assert.deepEqual(getLinkHrefs(homeHtml, 'canonical'), [`${productionSite}/`]);
@@ -208,12 +213,16 @@ test('built public SEO output uses marttelier.com canonicals, alternates, sitema
       canonicalLinks,
       `${relativePath} og:url should match the canonical marttelier.com URL`,
     );
-    assert.ok(
-      ogImages.every((href) => href.startsWith(`${productionSite}/`)),
+    assert.equal(ogImages.length, 1, `${relativePath} should emit exactly one og:image`);
+    assert.equal(twitterImages.length, 1, `${relativePath} should emit exactly one twitter:image`);
+    assert.equal(
+      new URL(ogImages[0]).origin,
+      productionSite,
       `${relativePath} og:image should use the marttelier.com origin`,
     );
-    assert.ok(
-      twitterImages.every((href) => href.startsWith(`${productionSite}/`)),
+    assert.equal(
+      new URL(twitterImages[0]).origin,
+      productionSite,
       `${relativePath} twitter:image should use the marttelier.com origin`,
     );
   }
@@ -223,21 +232,25 @@ test('built public SEO output uses marttelier.com canonicals, alternates, sitema
     `User-agent: *\nAllow: /\nDisallow: /admin\n\nSitemap: ${productionSite}/sitemap-index.xml\n`,
     'built robots.txt should advertise the canonical production sitemap index',
   );
-  assert.match(
-    sitemapIndex,
-    /<loc>https:\/\/marttelier\.com\/sitemap(?:-\d+)?\.xml<\/loc>/,
-    'sitemap index should point at a marttelier.com sitemap payload',
-  );
-  assert.match(
-    sitemap,
-    /<loc>https:\/\/marttelier\.com\/(?:<\/loc>|[^<]+<\/loc>)/,
-    'generated sitemap should contain marttelier.com URLs',
-  );
-  assert.doesNotMatch(
-    sitemap,
-    /https:\/\/marttelier\.com\/admin(?:\/|<)/,
-    'generated sitemap should never expose admin routes',
-  );
+  const sitemapIndexLocs = getXmlLocs(sitemapIndex);
+  const childSitemapLocs = sitemaps.flatMap((sitemap) => getXmlLocs(sitemap));
+
+  assert.ok(sitemapIndexLocs.length > 0, 'sitemap index should point at at least one child sitemap payload');
+  assert.ok(childSitemapLocs.length > 0, 'generated child sitemap payloads should contain crawlable URLs');
+
+  for (const loc of [...sitemapIndexLocs, ...childSitemapLocs]) {
+    const parsed = new URL(loc);
+
+    assert.equal(
+      parsed.origin,
+      productionSite,
+      `sitemap loc ${loc} should use the canonical marttelier.com origin`,
+    );
+    assert.ok(
+      !parsed.pathname.split('/').filter(Boolean).includes('admin'),
+      `sitemap loc ${loc} should not include an /admin segment`,
+    );
+  }
 });
 
 test('SEO resolver prefers requested locale text, then Spanish, then explicit fallback', () => {
