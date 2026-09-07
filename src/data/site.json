@@ -786,7 +786,7 @@
       "category": "languages",
       "type": "video",
       "src": "/images/ugc/mock-02.mp4",
-      "poster": "/images/ugc/mock-02.webp",
+      "poster": "/images/ugc/ugc-languages-01-poster.png",
       "label": {
         "es": "Ritmo de lección",
         "en": "Lesson flow",
@@ -832,7 +832,7 @@
       "id": "ugc-art-01",
       "category": "art",
       "type": "image",
-      "src": "/images/ugc/mock-03.webp",
+      "src": "/images/ugc/ugc-art-01.png",
       "poster": null,
       "label": {
         "es": "Estudio quieto",
@@ -880,7 +880,7 @@
       "category": "travel",
       "type": "video",
       "src": "/images/ugc/mock-04.mp4",
-      "poster": "/images/ugc/mock-04.webp",
+      "poster": "/images/ugc/ugc-travel-02-poster.png",
       "label": {
         "es": "Paso de check-in",
         "en": "Check-in motion",
@@ -926,7 +926,7 @@
       "id": "ugc-languages-02",
       "category": "languages",
       "type": "image",
-      "src": "/images/ugc/mock-05.webp",
+      "src": "/images/ugc/ugc-languages-02.png",
       "poster": null,
       "label": {
         "es": "Mesa de estudio",
@@ -974,7 +974,7 @@
       "category": "art",
       "type": "video",
       "src": "/images/ugc/mock-06.mp4",
-      "poster": "/images/ugc/mock-06.webp",
+      "poster": "/images/ugc/ugc-art-02-poster.png",
       "label": {
         "es": "Preparación de color",
         "en": "Color setup",
@@ -1020,7 +1020,7 @@
       "id": "ugc-travel-03",
       "category": "travel",
       "type": "image",
-      "src": "/images/ugc/mock-07.webp",
+      "src": "/images/ugc/ugc-travel-03.png",
       "poster": null,
       "label": {
         "es": "Equipaje corto",
@@ -1068,7 +1068,7 @@
       "category": "languages",
       "type": "video",
       "src": "/images/ugc/mock-08.mp4",
-      "poster": "/images/ugc/mock-08.webp",
+      "poster": "/images/ugc/ugc-languages-03-poster.png",
       "label": {
         "es": "Ritmo de subtítulos",
         "en": "Subtitle rhythm",
@@ -1114,7 +1114,7 @@
       "id": "ugc-art-03",
       "category": "art",
       "type": "image",
-      "src": "/images/ugc/mock-09.webp",
+      "src": "/images/ugc/ugc-art-03.png",
       "poster": null,
       "label": {
         "es": "Luz de galería",
@@ -1162,7 +1162,7 @@
       "category": "travel",
       "type": "video",
       "src": "/images/ugc/mock-10.mp4",
-      "poster": "/images/ugc/mock-10.webp",
+      "poster": "/images/ugc/ugc-travel-04-poster.png",
       "label": {
         "es": "Ruta en ventana",
         "en": "Window route",
@@ -1208,7 +1208,7 @@
       "id": "ugc-languages-04",
       "category": "languages",
       "type": "image",
-      "src": "/images/ugc/mock-11.webp",
+      "src": "/images/ugc/ugc-languages-04.png",
       "poster": null,
       "label": {
         "es": "Tarjetas de frase",
@@ -1256,7 +1256,7 @@
       "category": "art",
       "type": "video",
       "src": "/images/ugc/mock-12.mp4",
-      "poster": "/images/ugc/mock-12.webp",
+      "poster": "/images/ugc/ugc-art-04-poster.png",
       "label": {
         "es": "Detalle de marco",
         "en": "Frame detail",
