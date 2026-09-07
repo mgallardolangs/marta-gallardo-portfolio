@@ -1569,6 +1569,7 @@ export class AdminStore {
       }
 
       this.originalI18n = cloneValue(this.i18n);
+      this.images = cloneValue(imagesToPublish);
       this.originalImages = cloneValue(imagesToPublish);
       this.pendingImages = Object.fromEntries(
         Object.entries(this.pendingImages).filter(([imageKey]) => (

@@ -607,5 +607,8 @@ test('AdminStore saves and publishes normalized SEO while preserving raw in-memo
   assert.equal(published.seo.ugc.description.fr, '');
   assert.equal(store.getSnapshot().publishSuccess, true);
   assert.equal(store.getSnapshot().publishError, '');
-  assert.equal(store.getSeoText('home', 'title', 'es'), '  SEO title  ');
+  assert.equal(store.getSeoText('home', 'title', 'es'), 'SEO title');
+  assert.equal(store.getSeoText('contact', 'description', 'ca'), 'Text de contacte');
+  assert.equal(store.getSeoText('ugc', 'description', 'fr'), '');
+  assert.equal(store.getSnapshot().isDirty, false);
 });
