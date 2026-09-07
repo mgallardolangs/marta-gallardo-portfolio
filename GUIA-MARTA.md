@@ -75,6 +75,20 @@ Aquí puedes editar:
 - vídeo principal de marca
 - colección del **orbit**
 
+### SEO de las páginas públicas
+En la página principal del panel (`/admin`) encontrarás el bloque **SEO de páginas públicas**. Ahí puedes cambiar el título y la descripción que Google y las redes sociales muestran para:
+
+- Inicio
+- Traducción + SEO
+- UGC
+- Contacto
+
+Puedes completar estos datos en **ES, EN, FR, DE, IT y CA**. Si un idioma queda vacío, la web usa primero el texto en español y, si tampoco existe, el texto actual de la página. Así no se muestra información vacía.
+
+Para comprobar el resultado, publica los cambios y abre la página pública correspondiente. El título aparece en la pestaña del navegador; la descripción es la que pueden usar Google y las vistas previas al compartir el enlace.
+
+La web usa siempre `https://marttelier.com` como dirección principal. También genera un mapa del sitio para buscadores y mantiene las páginas `/admin` fuera de Google.
+
 ### Orbit de portada
 El orbit sí tiene controles dinámicos:
 - añadir elemento
