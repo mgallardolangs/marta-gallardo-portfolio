@@ -40,6 +40,8 @@ export function useAdminStore() {
     updateEditableCollectionText: adminStore.updateEditableCollectionText.bind(adminStore),
     updateEditableCollectionSkillGroup: adminStore.updateEditableCollectionSkillGroup.bind(adminStore),
     setEditableToolLogo: adminStore.setEditableToolLogo.bind(adminStore),
+    getSeoText: adminStore.getSeoText.bind(adminStore),
+    setSeoText: adminStore.setSeoText.bind(adminStore),
     getPublicLanguagePicker: adminStore.getPublicLanguagePicker.bind(adminStore),
     setPublicLanguageVisibility: adminStore.setPublicLanguageVisibility.bind(adminStore),
     setLang: adminStore.setLang.bind(adminStore),

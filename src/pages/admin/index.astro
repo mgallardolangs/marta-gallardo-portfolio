@@ -11,6 +11,7 @@ import EditableImage from '../../components/admin/EditableImage';
 import AdminBrandVideo from '../../components/admin/AdminBrandVideo';
 import AdminOrbitPreview from '../../components/admin/AdminOrbitPreview';
 import EditableOrbitCollection from '../../components/admin/EditableOrbitCollection';
+import EditableSeoSettings from '../../components/admin/EditableSeoSettings';
 import HomeHeroPortrait from '../../components/HomeHeroPortrait.astro';
 
 const lang = getLangFromUrl(Astro.url);
@@ -80,6 +81,14 @@ const i = t(lang);
         </div>
       </section>
       <!-- admin-home-hero:end -->
+
+      <section class="bg-paper px-6 pb-10 md:pb-12">
+        <div class="site-container">
+          <div class="border border-black/10 bg-white/85 p-4 md:p-6">
+            <EditableSeoSettings client:load />
+          </div>
+        </div>
+      </section>
 
       <section data-admin-home-orbit class="home-orbit bg-ink px-6 py-16 text-paper md:py-24">
         <div class="site-container grid gap-8 lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)_minmax(0,12rem)] lg:grid-rows-[auto_1fr_auto] lg:items-center xl:grid-cols-[minmax(0,21rem)_minmax(0,1fr)_minmax(0,14rem)]">

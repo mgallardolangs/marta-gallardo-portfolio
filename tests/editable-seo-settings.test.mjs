@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { AdminStore, SUPPORTED_LANGS } from '../src/components/admin/adminStore.ts';
 import { getPageSeo, resolveSeoText, seoPageKeys } from '../src/lib/siteData.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -15,6 +16,60 @@ async function readSource(relativePath) {
 
 async function readJson(relativePath) {
   return JSON.parse(await readSource(relativePath));
+}
+
+function createAdminI18n() {
+  return {
+    es: {},
+    en: {},
+    fr: {},
+  };
+}
+
+function createSeoLocales(seed) {
+  return {
+    es: `${seed} ES`,
+    en: `${seed} EN`,
+    fr: `${seed} FR`,
+    de: `${seed} DE`,
+    it: `${seed} IT`,
+    ca: `${seed} CA`,
+  };
+}
+
+function createAdminSiteData(overrides = {}) {
+  return {
+    publicLanguagePicker: ['es', 'en', 'fr'],
+    arsenal: {
+      languages: [],
+      tools: [],
+      skills: [],
+    },
+    seo: {
+      home: {
+        title: createSeoLocales('Home title'),
+        description: createSeoLocales('Home description'),
+      },
+      translationSeo: {
+        title: createSeoLocales('Translation title'),
+        description: createSeoLocales('Translation description'),
+      },
+      ugc: {
+        title: createSeoLocales('UGC title'),
+        description: createSeoLocales('UGC description'),
+      },
+      contact: {
+        title: createSeoLocales('Contact title'),
+        description: createSeoLocales('Contact description'),
+      },
+    },
+    ...overrides,
+  };
+}
+
+function decodePublishedJsonBody(body) {
+  const payload = JSON.parse(String(body));
+  return JSON.parse(Buffer.from(payload.content, 'base64').toString('utf8'));
 }
 
 test('Astro SEO settings use the canonical production origin and keep admin routes out of the sitemap', async () => {
@@ -232,4 +287,125 @@ test('blog article frontend keeps frontmatter metadata and does not opt into edi
     /<BlogArticleLayout post=\{post\} posts=\{posts\} headings=\{headings\} alternateLinks=\{blogAlternateLinks\}>/,
     'Blog article routes should continue passing the post through to BlogArticleLayout unchanged',
   );
+});
+
+test('admin SEO editor exposes the shared store API, exact page keys, and six-locale title and description controls', async () => {
+  const [editorSource, hookSource, adminIndexSource] = await Promise.all([
+    readSource('src/components/admin/EditableSeoSettings.tsx'),
+    readSource('src/components/admin/useAdminStore.ts'),
+    readSource('src/pages/admin/index.astro'),
+  ]);
+
+  assert.deepEqual(SUPPORTED_LANGS, ['es', 'en', 'fr', 'de', 'it', 'ca']);
+  assert.match(editorSource, /const SEO_PAGE_KEYS = \['home', 'translationSeo', 'ugc', 'contact'\] as const;/);
+  assert.match(editorSource, /SEO_PAGE_KEYS\.map\(\(page\) => \(/);
+  assert.match(editorSource, /<fieldset key=\{page\}/);
+  assert.match(editorSource, /SUPPORTED_LANGS\.map\(\(locale\) => \(/);
+  assert.match(editorSource, /store\.setSeoText\(page,\s*field,\s*locale,\s*event\.target\.value\)/);
+  assert.match(editorSource, /field === 'title' \? \(/);
+  assert.match(editorSource, /useAdminStore\(\)/);
+  assert.match(hookSource, /getSeoText:\s*adminStore\.getSeoText\.bind\(adminStore\)/);
+  assert.match(hookSource, /setSeoText:\s*adminStore\.setSeoText\.bind\(adminStore\)/);
+  assert.match(adminIndexSource, /import EditableSeoSettings from '\.\.\/\.\.\/components\/admin\/EditableSeoSettings';/);
+  assert.match(adminIndexSource, /<EditableSeoSettings client:load \/>/);
+});
+
+test('AdminStore trims SEO text, allows deliberate empty fallbacks, and rejects invalid page field and locale writes', () => {
+  const store = new AdminStore();
+  store.init(createAdminI18n(), createAdminSiteData(), 'es', '');
+
+  store.setSeoText('home', 'title', 'es', '  SEO en español  ');
+  store.setSeoText('home', 'description', 'de', '   ');
+
+  assert.equal(store.getSeoText('home', 'title', 'es'), 'SEO en español');
+  assert.equal(store.getSeoText('home', 'description', 'de'), '');
+  assert.equal(store.getSnapshot().isDirty, true);
+
+  const pendingCountAfterValidWrites = store.getSnapshot().pendingCount;
+
+  assert.throws(() => store.getSeoText('landing', 'title', 'es'), /Página SEO no válida/);
+  assert.throws(() => store.setSeoText('landing', 'title', 'es', 'Hola'), /Página SEO no válida/);
+  assert.throws(() => store.setSeoText('home', 'summary', 'es', 'Hola'), /Campo SEO no válido/);
+  assert.throws(() => store.setSeoText('home', 'title', 'pt', 'Olá'), /Idioma SEO no válido/);
+  assert.throws(() => store.setSeoText('home', 'title', 'es', 42), /El valor SEO debe ser un texto/);
+
+  assert.equal(store.getSnapshot().pendingCount, pendingCountAfterValidWrites);
+  assert.equal(store.images?.seo?.landing, undefined);
+  assert.equal(store.images?.seo?.home?.summary, undefined);
+  assert.equal(store.images?.seo?.home?.title?.pt, undefined);
+  assert.equal(store.getSeoText('home', 'title', 'es'), 'SEO en español');
+});
+
+test('AdminStore repairs malformed persisted SEO branches when writing a valid localized value', () => {
+  const store = new AdminStore();
+  store.init(createAdminI18n(), createAdminSiteData({
+    seo: {
+      home: {
+        title: 'broken branch',
+        description: createSeoLocales('Home description'),
+      },
+      translationSeo: {
+        title: createSeoLocales('Translation title'),
+        description: createSeoLocales('Translation description'),
+      },
+      ugc: {
+        title: createSeoLocales('UGC title'),
+        description: createSeoLocales('UGC description'),
+      },
+      contact: {
+        title: createSeoLocales('Contact title'),
+        description: createSeoLocales('Contact description'),
+      },
+    },
+  }), 'es', '');
+
+  store.setSeoText('home', 'title', 'es', '  Reparado  ');
+
+  assert.equal(store.getSeoText('home', 'title', 'es'), 'Reparado');
+  assert.equal(store.images?.seo?.home?.title?.es, 'Reparado');
+  assert.equal(store.getSnapshot().isDirty, true);
+});
+
+test('AdminStore publishes updated SEO inside the existing Git Gateway site data payload', async () => {
+  const store = new AdminStore();
+  store.init(createAdminI18n(), createAdminSiteData(), 'es', 'publish-token');
+  store.setSeoText('home', 'title', 'es', '  SEO en español  ');
+  store.setSeoText('contact', 'description', 'ca', '  Text de contacte  ');
+
+  const fetchCalls = [];
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input, init = {}) => {
+    fetchCalls.push({ input: String(input), init });
+
+    if (!init.method || init.method === 'GET') {
+      return new Response(JSON.stringify({ sha: 'file-sha-1' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    return new Response(JSON.stringify({ content: { sha: 'next-sha' } }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  };
+
+  try {
+    await store.publish();
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  const putCalls = fetchCalls.filter((call) => call.init?.method === 'PUT');
+  assert.deepEqual(
+    putCalls.map((call) => call.input),
+    ['/.netlify/git/github/contents/src/data/site.json'],
+    'SEO-only admin edits should publish through the existing site data document',
+  );
+
+  const published = decodePublishedJsonBody(putCalls[0].init?.body);
+  assert.equal(published.seo.home.title.es, 'SEO en español');
+  assert.equal(published.seo.contact.description.ca, 'Text de contacte');
+  assert.equal(store.getSnapshot().publishSuccess, true);
+  assert.equal(store.getSnapshot().publishError, '');
 });

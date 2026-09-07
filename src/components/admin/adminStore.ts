@@ -24,6 +24,7 @@ import type {
   LanguageItem,
   LocalizedText,
   OrbitMedia,
+  SeoPageKey,
   SkillGroup,
   SiteData,
   SkillItem,
@@ -31,16 +32,48 @@ import type {
   UgcCategory,
   UgcPortfolioItem,
 } from '../../lib/siteData.ts';
-import { getPublicLanguagePicker } from '../../lib/siteData.ts';
+import { getPublicLanguagePicker, seoPageKeys } from '../../lib/siteData.ts';
 
 type Listener = () => void;
 export const SUPPORTED_LANGS = ['es', 'en', 'fr', 'de', 'it', 'ca'] as const;
 export type SupportedLang = (typeof SUPPORTED_LANGS)[number];
 export const ADMIN_BLOG_LANGS = ['es', 'en', 'fr'] as const;
 export type AdminBlogLang = (typeof ADMIN_BLOG_LANGS)[number];
+const SEO_FIELDS = ['title', 'description'] as const;
+type SeoField = (typeof SEO_FIELDS)[number];
 
 export function isAdminBlogLang(lang: string): lang is AdminBlogLang {
   return ADMIN_BLOG_LANGS.includes(lang as AdminBlogLang);
+}
+
+function isSupportedLang(lang: string): lang is SupportedLang {
+  return SUPPORTED_LANGS.includes(lang as SupportedLang);
+}
+
+function isSeoPageKey(page: string): page is SeoPageKey {
+  return seoPageKeys.includes(page as SeoPageKey);
+}
+
+function isSeoField(field: string): field is SeoField {
+  return SEO_FIELDS.includes(field as SeoField);
+}
+
+function assertSupportedSeoLang(lang: string): asserts lang is SupportedLang {
+  if (!isSupportedLang(lang)) {
+    throw new Error(`Idioma SEO no válido: ${lang}`);
+  }
+}
+
+function assertSeoPageKey(page: string): asserts page is SeoPageKey {
+  if (!isSeoPageKey(page)) {
+    throw new Error(`Página SEO no válida: ${page}`);
+  }
+}
+
+function assertSeoField(field: string): asserts field is SeoField {
+  if (!isSeoField(field)) {
+    throw new Error(`Campo SEO no válido: ${field}`);
+  }
 }
 
 type I18nTree = Record<string, unknown>;
@@ -220,6 +253,13 @@ function deepSet(source: unknown, path: string, value: unknown): void {
   }
 
   (current as Record<string, unknown>)[String(last)] = value;
+}
+
+function ensureObjectAtPath(source: unknown, path: string): void {
+  const current = deepGet(source, path);
+  if (!isObjectRecord(current)) {
+    deepSet(source, path, {});
+  }
 }
 
 function countLeafDiffs(current: unknown, original: unknown): number {
@@ -1055,6 +1095,35 @@ export class AdminStore {
     if (pending) return pending.previewSrc;
     const value = deepGet(this.images, key);
     return typeof value === 'string' ? value : '';
+  }
+
+  getSeoText(page: SeoPageKey, field: SeoField, lang: SupportedLang): string {
+    assertSeoPageKey(page);
+    assertSeoField(field);
+    assertSupportedSeoLang(lang);
+
+    const value = deepGet(this.images, `seo.${page}.${field}.${lang}`);
+    return typeof value === 'string' ? value : '';
+  }
+
+  setSeoText(page: SeoPageKey, field: SeoField, lang: SupportedLang, value: string): void {
+    assertSeoPageKey(page);
+    assertSeoField(field);
+    assertSupportedSeoLang(lang);
+
+    if (typeof value !== 'string') {
+      throw new Error('El valor SEO debe ser un texto.');
+    }
+
+    if (!this.initialized) return;
+
+    ensureObjectAtPath(this.images, 'seo');
+    ensureObjectAtPath(this.images, `seo.${page}`);
+    ensureObjectAtPath(this.images, `seo.${page}.${field}`);
+    deepSet(this.images, `seo.${page}.${field}.${lang}`, value.trim());
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
   }
 
   setPublicLanguageVisibility(lang: SupportedLang, visible: boolean): void {
