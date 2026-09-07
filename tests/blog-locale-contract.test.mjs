@@ -251,13 +251,13 @@ test('built mi-primer-post advertises all six built locale alternates', async (t
   assert.deepEqual(
     alternateEntries,
     [
-      { hreflang: 'es', href: 'https://marttelier.netlify.app/blog/mi-primer-post' },
-      { hreflang: 'en', href: 'https://marttelier.netlify.app/en/blog/mi-primer-post' },
-      { hreflang: 'fr', href: 'https://marttelier.netlify.app/fr/blog/mi-primer-post' },
-      { hreflang: 'de', href: 'https://marttelier.netlify.app/de/blog/mi-primer-post' },
-      { hreflang: 'it', href: 'https://marttelier.netlify.app/it/blog/mi-primer-post' },
-      { hreflang: 'ca', href: 'https://marttelier.netlify.app/ca/blog/mi-primer-post' },
-      { hreflang: 'x-default', href: 'https://marttelier.netlify.app/blog/mi-primer-post' },
+      { hreflang: 'es', href: 'https://marttelier.com/blog/mi-primer-post' },
+      { hreflang: 'en', href: 'https://marttelier.com/en/blog/mi-primer-post' },
+      { hreflang: 'fr', href: 'https://marttelier.com/fr/blog/mi-primer-post' },
+      { hreflang: 'de', href: 'https://marttelier.com/de/blog/mi-primer-post' },
+      { hreflang: 'it', href: 'https://marttelier.com/it/blog/mi-primer-post' },
+      { hreflang: 'ca', href: 'https://marttelier.com/ca/blog/mi-primer-post' },
+      { hreflang: 'x-default', href: 'https://marttelier.com/blog/mi-primer-post' },
     ],
     'every locale Markdown sibling now builds its own article route sharing the mi-primer-post slug',
   );

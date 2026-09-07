@@ -103,7 +103,7 @@ function routeNeedsMotionBundles(routePath) {
 }
 
 function getAbsoluteRouteUrl(routePath) {
-  return new URL(routePath === '/' ? '/' : `${routePath}/`, 'https://marttelier.netlify.app').toString();
+  return new URL(routePath === '/' ? '/' : `${routePath}/`, 'https://marttelier.com').toString();
 }
 
 function getCanonicalUrlFromHtml(html) {
@@ -377,21 +377,21 @@ test('built public and admin HTML keep SEO/noindex classes, local media referenc
       const alternateLinks = getAlternateLinksFromHtml(html);
       assert.match(html, /<title>[^<]+<\/title>/);
       assert.match(html, /<meta name="description" content="[^"]+"/);
-      assert.match(html, /<link rel="canonical" href="https:\/\/marttelier\.netlify\.app/);
+      assert.match(html, /<link rel="canonical" href="https:\/\/marttelier\.com/);
       assert.match(html, /<link rel="alternate" hreflang="x-default"/);
       if (!isBlogDetailRoute(routePath)) {
         assert.equal(alternateLinks.length, 7, `${routePath} should keep all locale alternates plus x-default`);
       }
       assert.doesNotMatch(html, /noindex/);
       assert.equal(
-        normalizeRoutePath(new URL(getCanonicalUrlFromHtml(html) ?? 'https://marttelier.netlify.app/').pathname),
+        normalizeRoutePath(new URL(getCanonicalUrlFromHtml(html) ?? 'https://marttelier.com/').pathname),
         routePath,
         `${routePath} should self-canonicalize`,
       );
 
       for (const { href } of alternateLinks) {
         const alternateUrl = new URL(href);
-        if (alternateUrl.origin !== 'https://marttelier.netlify.app') continue;
+        if (alternateUrl.origin !== 'https://marttelier.com') continue;
         if (isAssetLikePath(alternateUrl.pathname)) continue;
 
         const alternateRoutePath = normalizeRoutePath(alternateUrl.pathname);
@@ -411,7 +411,7 @@ test('built public and admin HTML keep SEO/noindex classes, local media referenc
   assert.ok(publicRoutePaths.includes('/blog/mi-primer-post'), 'dist should include the built Spanish blog article route');
 
   const robots = await readFile(path.join(rootDir, 'dist/robots.txt'), 'utf8');
-  assert.match(robots, /^User-agent: \*\nAllow: \/\nDisallow: \/admin\n\nSitemap: https:\/\/marttelier\.netlify\.app\/sitemap-index\.xml\n?$/);
+  assert.match(robots, /^User-agent: \*\nAllow: \/\nDisallow: \/admin\n\nSitemap: https:\/\/marttelier\.com\/sitemap-index\.xml\n?$/);
 
   const sitemapIndex = await readFile(path.join(rootDir, 'dist/sitemap-index.xml'), 'utf8');
   assert.match(sitemapIndex, /<sitemapindex/);

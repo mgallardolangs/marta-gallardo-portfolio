@@ -6,8 +6,9 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
-const siteUrl = 'https://marttelier.netlify.app';
-const blogSocialImage = `${siteUrl}/images/blog/mi-primer-post.webp`;
+const siteUrl = 'https://marttelier.com';
+const spanishBlogSourcePath =
+  'src/content/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones/es.md';
 
 async function readSource(relativePath) {
   return readFile(path.join(rootDir, relativePath), 'utf8');
@@ -32,6 +33,12 @@ function getPersonJsonLd(html) {
   }
 
   return null;
+}
+
+function getFrontmatterValue(markdown, key) {
+  const match = markdown.match(new RegExp(`^${key}:\\s*"([^"]+)"`, 'm'));
+  assert.ok(match, `Expected ${key} frontmatter in the Spanish blog source fixture`);
+  return match[1];
 }
 
 test('SEO components expose a dedicated optional social image pipeline for blog articles', async () => {
@@ -84,9 +91,15 @@ test('built Spanish blog article uses its own social image exactly once while Pe
     return;
   }
 
-  const site = await readJson('src/data/site.json');
+  const [site, articleSource] = await Promise.all([
+    readJson('src/data/site.json'),
+    readSource(spanishBlogSourcePath),
+  ]);
+  const articleSlug = getFrontmatterValue(articleSource, 'slug');
+  const articleImage = getFrontmatterValue(articleSource, 'image');
+  const blogSocialImage = `${siteUrl}${articleImage}`;
   const heroImage = `${siteUrl}${site.heroMainPhoto}`;
-  const html = await readSource('dist/blog/mi-primer-post/index.html');
+  const html = await readSource(`dist/blog/${articleSlug}/index.html`);
   const ogImages = getMetaContents(html, 'og:image');
   const twitterImages = getMetaContents(html, 'twitter:image');
   const personJsonLd = getPersonJsonLd(html);

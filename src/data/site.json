@@ -1298,5 +1298,79 @@
         "ca": "Pòster de vídeo vertical amb un marc clar i mans ajustant una obra."
       }
     }
-  ]
+  ],
+  "seo": {
+    "home": {
+      "title": {
+        "es": "Marta Gallardo — Creatividad, idiomas y estrategia",
+        "en": "Marta Gallardo — Creativity, languages & strategy",
+        "fr": "Marta Gallardo — Créativité, langues et stratégie",
+        "de": "Marta Gallardo — Kreativität, Sprachen und Strategie",
+        "it": "Marta Gallardo — Creatività, lingue e strategia",
+        "ca": "Marta Gallardo — Creativitat, idiomes i estratègia"
+      },
+      "description": {
+        "es": "Adapto mensajes para que las marcas conecten con personas reales, en cualquier idioma y mercado. Combino creatividad, traducción y estrategia digital con una mirada internacional.",
+        "en": "I adapt messages so brands can connect with real people, in any language and market. I combine creativity, translation and digital strategy with an international perspective.",
+        "fr": "J'adapte les messages pour que les marques créent un lien avec de vraies personnes, dans n’importe quelle langue et sur n’importe quel marché. Je mélange créativité, traduction et stratégie digitale avec un regard international.",
+        "de": "Ich erstelle Inhalte und passe Botschaften so an, dass Marken echte Menschen erreichen – in jeder Sprache und auf jedem Markt. Ich verbinde Kreativität, Übersetzung und digitale Strategie mit einem internationalen Blick.",
+        "it": "Creo contenuti e adatto i messaggi perché i brand possano entrare in contatto con persone reali, in qualsiasi lingua e mercato. Unisco creatività, traduzione e strategia digitale con uno sguardo internazionale.",
+        "ca": "Creo contingut i adapto missatges perquè les marques connectin amb persones reals, en qualsevol idioma i mercat. Combino creativitat, traducció i estratègia digital amb una mirada internacional."
+      }
+    },
+    "translationSeo": {
+      "title": {
+        "es": "Marta Gallardo — Comunicación multilingüe y SEO",
+        "en": "Marta Gallardo — Multilingual communication & SEO",
+        "fr": "Marta Gallardo — Communication multilingue & SEO",
+        "de": "Marta Gallardo — Übersetzung + SEO",
+        "it": "Marta Gallardo — Traduzione + SEO",
+        "ca": "Marta Gallardo — Traducció + SEO"
+      },
+      "description": {
+        "es": "Adapto contenidos para que suenen naturales, conecten con cada mercado y tengan más oportunidades de encontrarse. Traducción, localización y SEO multilingüe con una misma intención: que tu mensaje funcione, esté donde esté tu audiencia.",
+        "en": "I adapt content so it sounds natural, connects with each market and has more chances to be found. Translation, localization and multilingual SEO with one shared intention: to make your message work, wherever your audience is.",
+        "fr": "J’adapte les contenus pour qu’ils sonnent naturellement, créent un lien avec chaque marché et aient plus de chances d’être trouvés. Traduction, localisation et SEO multilingue avec une même intention : faire fonctionner votre message, où que se trouve votre audience.",
+        "de": "Ich passe Inhalte so an, dass sie natürlich klingen, mit jedem Markt in Verbindung treten und bessere Chancen haben, gefunden zu werden. Übersetzung, Lokalisierung und mehrsprachiges SEO mit einer gemeinsamen Absicht: dass deine Botschaft funktioniert, egal wo dein Publikum ist.",
+        "it": "Adatto i contenuti perché suonino naturali, entrino in contatto con ogni mercato e abbiano più possibilità di essere trovati. Traduzione, localizzazione e SEO multilingue con un’unica intenzione: far funzionare il tuo messaggio, ovunque si trovi il tuo pubblico.",
+        "ca": "Adapto continguts perquè sonin naturals, connectin amb cada mercat i tinguin més oportunitats de ser trobats. Traducció, localització i SEO multilingüe amb una mateixa intenció: que el teu missatge funcioni, sigui on sigui la teva audiència."
+      }
+    },
+    "ugc": {
+      "title": {
+        "es": "Marta Gallardo | Portfolio UGC",
+        "en": "Marta Gallardo | UGC Portfolio",
+        "fr": "Marta Gallardo | Portfolio UGC",
+        "de": "Marta Gallardo | UGC Portfolio",
+        "it": "Marta Gallardo | Portfolio UGC",
+        "ca": "Marta Gallardo | Portfolio UGC"
+      },
+      "description": {
+        "es": "Portfolio profesional de UGC de Marta Gallardo con campañas editoriales conceptuales de viajes, idiomas y arte.",
+        "en": "Professional UGC portfolio for Marta Gallardo featuring editorial placeholder campaigns across travel, languages, and art.",
+        "fr": "Portfolio UGC professionnel de Marta Gallardo avec des campagnes éditoriales conceptuelles autour du voyage, des langues et de l’art.",
+        "de": "Professionelles UGC-Portfolio von Marta Gallardo mit editorialen Konzeptkampagnen zu Reisen, Sprachen und Kunst.",
+        "it": "Portfolio UGC professionale di Marta Gallardo con campagne editoriali concettuali dedicate a viaggi, lingue e arte.",
+        "ca": "Portfoli professional de UGC de Marta Gallardo amb campanyes editorials conceptuals de viatges, idiomes i art."
+      }
+    },
+    "contact": {
+      "title": {
+        "es": "Colaboremos — Marta Gallardo",
+        "en": "Let's collaborate — Marta Gallardo",
+        "fr": "Collaborons — Marta Gallardo",
+        "de": "Lassen Sie uns zusammenarbeiten — Marta Gallardo",
+        "it": "Collaboriamo — Marta Gallardo",
+        "ca": "Col·laborem — Marta Gallardo"
+      },
+      "description": {
+        "es": "Cuéntame qué quieres crear, adaptar o posicionar. Te responderé con una propuesta clara para dar forma al proyecto.",
+        "en": "Tell me what you want to create, adapt or position. I’ll reply with a clear proposal to shape the project.",
+        "fr": "Expliquez-moi ce que vous voulez créer, adapter ou positionner. Je vous répondrai avec une proposition claire pour donner forme au projet.",
+        "de": "Erzähl mir, was du schaffen, anpassen oder positionieren möchtest. Ich antworte dir mit einem klaren Vorschlag, um das Projekt zu formen.",
+        "it": "Raccontami cosa vuoi creare, adattare o posizionare. Ti risponderò con una proposta chiara per dare forma al progetto.",
+        "ca": "Explica’m què vols crear, adaptar o posicionar. Et respondré amb una proposta clara per donar forma al projecte."
+      }
+    }
+  }
 }

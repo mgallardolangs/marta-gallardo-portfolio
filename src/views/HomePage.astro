@@ -11,17 +11,23 @@ import StaggerContainer, { StaggerItem } from '../components/StaggerContainer';
 import HomeHeroPortrait from '../components/HomeHeroPortrait.astro';
 import TypedTitle from '../components/TypedTitle.astro';
 import { getLangFromUrl, getLocalizedPath, t } from '../i18n';
-import { siteData } from '../lib/siteData';
+import { getPageSeo, siteData } from '../lib/siteData';
 import { toHttpsEmbedUrl } from '../lib/videoEmbed';
 import { netlifyImage } from '../lib/netlifyImage';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
+const pageTitle = `${i.hero.name} — ${i.home.hero.kicker}`;
+const pageDescription = i.home.hero.description;
+const pageSeo = getPageSeo(siteData, 'home', lang, {
+  title: { [lang]: pageTitle },
+  description: { [lang]: pageDescription },
+});
 const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-proof')?.alt[lang] ?? 'Instagram';
 const brandVideoEmbedUrl = toHttpsEmbedUrl(siteData.brandVideoEmbedUrl);
 ---
 
-<BaseLayout title={`${i.hero.name} — ${i.home.hero.kicker}`} description={i.home.hero.description}>
+<BaseLayout title={pageSeo.title} description={pageSeo.description}>
   <GsapPageRuntime />
   <div class="overflow-x-hidden bg-paper">
       <!-- home-hero:start -->

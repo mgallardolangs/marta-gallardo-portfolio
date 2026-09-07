@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://marttelier.netlify.app/sitemap-index.xml
+Sitemap: https://marttelier.com/sitemap-index.xml
