@@ -3,9 +3,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import RichText from '../components/RichText.astro';
 import TypedTitle from '../components/TypedTitle.astro';
 import { getLangFromUrl, t } from '../i18n';
+import { getPageSeo, siteData } from '../lib/siteData';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
+const pageTitle = `${i.contact.title} — ${i.hero.name}`;
+const pageDescription = i.contact.subtitle;
+const pageSeo = getPageSeo(siteData, 'contact', lang, {
+  title: { [lang]: pageTitle },
+  description: { [lang]: pageDescription },
+});
 
 const fieldClass =
   'w-full border-b border-paper/22 bg-transparent px-2 py-2.5 font-body text-base text-paper outline-none transition placeholder:text-paper/42 focus:border-amaranth';
@@ -16,7 +23,7 @@ const panelClass = 'pt-6';
 const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-paper';
 ---
 
-<BaseLayout title={`${i.contact.title} — ${i.hero.name}`} description={i.contact.subtitle}>
+<BaseLayout title={pageSeo.title} description={pageSeo.description}>
   <section data-contact-hero class="bg-paper px-6 pb-8 pt-20 text-ink md:pb-10 md:pt-24">
     <div class="site-container max-w-5xl space-y-4">
       <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-amaranth">{i.contact.eyebrow}</p>

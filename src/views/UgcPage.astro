@@ -4,15 +4,19 @@ import ScrollReveal from '../components/ScrollReveal';
 import TypedTitle from '../components/TypedTitle.astro';
 import UgcContactSheet from '../components/UgcContactSheet';
 import { getLangFromUrl, t } from '../i18n';
-import { siteData } from '../lib/siteData';
+import { getPageSeo, siteData } from '../lib/siteData';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
 const pageTitle = `${i.hero.name} | ${i.ugc.title}`;
 const pageDescription = i.ugcPage.pageDescription;
+const pageSeo = getPageSeo(siteData, 'ugc', lang, {
+  title: { [lang]: pageTitle },
+  description: { [lang]: pageDescription },
+});
 ---
 
-<BaseLayout title={pageTitle} description={pageDescription}>
+<BaseLayout title={pageSeo.title} description={pageSeo.description}>
   <div class="bg-paper">
     <section data-ugc-hero class="px-6 pt-20 pb-5 md:pt-24 md:pb-6">
       <div class="site-container">

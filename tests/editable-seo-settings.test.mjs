@@ -132,3 +132,104 @@ test('SEO site data exposes only the four editable page groups and keeps the run
   assert.match(source, /seo\?: Partial<Record<SeoPageKey, SeoPageValue>>;/);
   assert.match(source, /export type ResolvedSeoPageValue = \{\s*title: string;\s*description: string;\s*\};/s);
 });
+
+test('public page views resolve editable SEO with exact page keys and localized BaseLayout fallbacks', async () => {
+  const [homeSource, translationSource, ugcSource, contactSource] = await Promise.all([
+    readSource('src/views/HomePage.astro'),
+    readSource('src/views/TranslationSeoPage.astro'),
+    readSource('src/views/UgcPage.astro'),
+    readSource('src/views/ContactPage.astro'),
+  ]);
+
+  assert.match(
+    homeSource,
+    /import\s+\{\s*getPageSeo,\s*siteData\s*\}\s+from\s+['"]\.\.\/lib\/siteData['"];?/,
+    'HomePage should import getPageSeo alongside siteData',
+  );
+  assert.match(
+    homeSource,
+    /const pageTitle = `\$\{i\.hero\.name\} — \$\{i\.home\.hero\.kicker\}`;\s*const pageDescription = i\.home\.hero\.description;\s*const pageSeo = getPageSeo\(siteData,\s*'home',\s*lang,\s*\{\s*title:\s*\{\s*\[lang\]:\s*pageTitle\s*\},\s*description:\s*\{\s*\[lang\]:\s*pageDescription\s*\},\s*\}\);/s,
+    'HomePage should resolve editable SEO with the exact home key and preserve its existing localized fallbacks',
+  );
+  assert.match(
+    homeSource,
+    /<BaseLayout\s+title=\{pageSeo\.title\}\s+description=\{pageSeo\.description\}>/,
+    'HomePage should pass resolved pageSeo strings into BaseLayout',
+  );
+
+  assert.match(
+    translationSource,
+    /import\s+\{\s*getPageSeo,\s*siteData\s*\}\s+from\s+['"]\.\.\/lib\/siteData['"];?/,
+    'TranslationSeoPage should import getPageSeo alongside siteData',
+  );
+  assert.match(
+    translationSource,
+    /const pageTitle = `\$\{i\.hero\.name\} — \$\{i\.nav\.translationSeo\}`;\s*const pageDescription = page\.hero\.text\.replaceAll\('\\n', ' '\)\.replace\(\/\\s\+\/g, ' '\)\.trim\(\);\s*const pageSeo = getPageSeo\(siteData,\s*'translationSeo',\s*lang,\s*\{\s*title:\s*\{\s*\[lang\]:\s*pageTitle\s*\},\s*description:\s*\{\s*\[lang\]:\s*pageDescription\s*\},\s*\}\);/s,
+    'TranslationSeoPage should resolve editable SEO with the exact translationSeo key and keep the normalized localized fallback copy',
+  );
+  assert.match(
+    translationSource,
+    /<BaseLayout\s+title=\{pageSeo\.title\}\s+description=\{pageSeo\.description\}>/,
+    'TranslationSeoPage should pass resolved pageSeo strings into BaseLayout',
+  );
+
+  assert.match(
+    ugcSource,
+    /import\s+\{\s*getPageSeo,\s*siteData\s*\}\s+from\s+['"]\.\.\/lib\/siteData['"];?/,
+    'UgcPage should import getPageSeo alongside siteData',
+  );
+  assert.match(
+    ugcSource,
+    /const pageTitle = `\$\{i\.hero\.name\} \| \$\{i\.ugc\.title\}`;\s*const pageDescription = i\.ugcPage\.pageDescription;\s*const pageSeo = getPageSeo\(siteData,\s*'ugc',\s*lang,\s*\{\s*title:\s*\{\s*\[lang\]:\s*pageTitle\s*\},\s*description:\s*\{\s*\[lang\]:\s*pageDescription\s*\},\s*\}\);/s,
+    'UgcPage should resolve editable SEO with the exact ugc key and preserve its existing localized fallbacks',
+  );
+  assert.match(
+    ugcSource,
+    /<BaseLayout\s+title=\{pageSeo\.title\}\s+description=\{pageSeo\.description\}>/,
+    'UgcPage should pass resolved pageSeo strings into BaseLayout',
+  );
+
+  assert.match(
+    contactSource,
+    /import\s+\{\s*getPageSeo,\s*siteData\s*\}\s+from\s+['"]\.\.\/lib\/siteData['"];?/,
+    'ContactPage should import getPageSeo alongside siteData',
+  );
+  assert.match(
+    contactSource,
+    /const pageTitle = `\$\{i\.contact\.title\} — \$\{i\.hero\.name\}`;\s*const pageDescription = i\.contact\.subtitle;\s*const pageSeo = getPageSeo\(siteData,\s*'contact',\s*lang,\s*\{\s*title:\s*\{\s*\[lang\]:\s*pageTitle\s*\},\s*description:\s*\{\s*\[lang\]:\s*pageDescription\s*\},\s*\}\);/s,
+    'ContactPage should resolve editable SEO with the exact contact key and preserve its existing localized fallbacks',
+  );
+  assert.match(
+    contactSource,
+    /<BaseLayout\s+title=\{pageSeo\.title\}\s+description=\{pageSeo\.description\}>/,
+    'ContactPage should pass resolved pageSeo strings into BaseLayout',
+  );
+});
+
+test('blog article frontend keeps frontmatter metadata and does not opt into editable page SEO', async () => {
+  const [blogRouteSource, blogArticleLayoutSource] = await Promise.all([
+    readSource('src/pages/blog/[slug].astro'),
+    readSource('src/components/BlogArticleLayout.astro'),
+  ]);
+
+  assert.doesNotMatch(
+    blogRouteSource,
+    /getPageSeo/,
+    'Blog article routes should not import or call getPageSeo',
+  );
+  assert.doesNotMatch(
+    blogArticleLayoutSource,
+    /getPageSeo/,
+    'BlogArticleLayout should not import or call getPageSeo',
+  );
+  assert.match(
+    blogArticleLayoutSource,
+    /<BaseLayout[\s\S]*title=\{`\$\{post\.data\.title\} — \$\{i\.hero\.name\}`\}[\s\S]*description=\{post\.data\.description\}[\s\S]*image=\{post\.data\.image\}/,
+    'BlogArticleLayout should keep title, description, and image sourced from post frontmatter fields',
+  );
+  assert.match(
+    blogRouteSource,
+    /<BlogArticleLayout post=\{post\} posts=\{posts\} headings=\{headings\} alternateLinks=\{blogAlternateLinks\}>/,
+    'Blog article routes should continue passing the post through to BlogArticleLayout unchanged',
+  );
+});

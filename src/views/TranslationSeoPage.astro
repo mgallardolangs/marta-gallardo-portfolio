@@ -6,7 +6,7 @@ import GsapPageRuntime from '../components/GsapPageRuntime.astro';
 import ExperienceTabs from '../components/translation/ExperienceTabs';
 import ServiceSwitcher from '../components/translation/ServiceSwitcher';
 import { getLangFromUrl, getLocalizedPath, t } from '../i18n';
-import { siteData } from '../lib/siteData';
+import { getPageSeo, siteData } from '../lib/siteData';
 import { getTranslationArsenalColumns } from '../lib/translationPage.js';
 
 const lang = getLangFromUrl(Astro.url);
@@ -16,9 +16,13 @@ const arsenalColumns = getTranslationArsenalColumns(lang, siteData);
 
 const pageTitle = `${i.hero.name} — ${i.nav.translationSeo}`;
 const pageDescription = page.hero.text.replaceAll('\n', ' ').replace(/\s+/g, ' ').trim();
+const pageSeo = getPageSeo(siteData, 'translationSeo', lang, {
+  title: { [lang]: pageTitle },
+  description: { [lang]: pageDescription },
+});
 ---
 
-<BaseLayout title={pageTitle} description={pageDescription}>
+<BaseLayout title={pageSeo.title} description={pageSeo.description}>
   <GsapPageRuntime />
   <div class="bg-paper" data-translation-page>
     <section class="relative overflow-hidden border-b border-ink px-6 pb-18 pt-28 md:pb-20 md:pt-32">
