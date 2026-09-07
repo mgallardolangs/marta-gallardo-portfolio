@@ -76,6 +76,26 @@ function assertSeoField(field: string): asserts field is SeoField {
   }
 }
 
+function normalizeSeoValue(value: string): string {
+  return value.trim();
+}
+
+function normalizeSeoImages(images: ImagesTree): ImagesTree {
+  seoPageKeys.forEach((page) => {
+    SEO_FIELDS.forEach((field) => {
+      SUPPORTED_LANGS.forEach((lang) => {
+        const path = `seo.${page}.${field}.${lang}`;
+        const value = deepGet(images, path);
+        if (typeof value === 'string') {
+          deepSet(images, path, normalizeSeoValue(value));
+        }
+      });
+    });
+  });
+
+  return images;
+}
+
 type I18nTree = Record<string, unknown>;
 type ImagesTree = Record<string, unknown>;
 
@@ -1120,7 +1140,24 @@ export class AdminStore {
     ensureObjectAtPath(this.images, 'seo');
     ensureObjectAtPath(this.images, `seo.${page}`);
     ensureObjectAtPath(this.images, `seo.${page}.${field}`);
-    deepSet(this.images, `seo.${page}.${field}.${lang}`, value.trim());
+    deepSet(this.images, `seo.${page}.${field}.${lang}`, value);
+    this.publishSuccessState = false;
+    this.publishErrorState = '';
+    this.emit();
+  }
+
+  normalizeSeoText(page: SeoPageKey, field: SeoField, lang: SupportedLang): void {
+    assertSeoPageKey(page);
+    assertSeoField(field);
+    assertSupportedSeoLang(lang);
+
+    if (!this.initialized) return;
+
+    const path = `seo.${page}.${field}.${lang}`;
+    const value = deepGet(this.images, path);
+    if (typeof value !== 'string') return;
+
+    deepSet(this.images, path, normalizeSeoValue(value));
     this.publishSuccessState = false;
     this.publishErrorState = '';
     this.emit();
@@ -2045,7 +2082,7 @@ export class AdminStore {
   }
 
   private buildPublishImages(invalidOrbitIds: string[], invalidUgcIds: string[]): ImagesTree {
-    const images = cloneValue(this.images);
+    const images = normalizeSeoImages(cloneValue(this.images));
     const restoreItems = <T extends { id: string }>(
       currentPath: string,
       originalPath: string,
@@ -2088,7 +2125,7 @@ export class AdminStore {
   }
 
   private buildDraftPayload(): DraftPayload {
-    const images = cloneValue(this.images);
+    const images = normalizeSeoImages(cloneValue(this.images));
     const pendingUploads = Object.keys(this.pendingImages).map((key) => ({ key }));
 
     for (const [key, pendingImage] of Object.entries(this.pendingImages)) {

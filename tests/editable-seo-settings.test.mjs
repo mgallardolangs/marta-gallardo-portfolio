@@ -26,6 +26,18 @@ function createAdminI18n() {
   };
 }
 
+function installWindow(mockWindow) {
+  const previousWindow = globalThis.window;
+  globalThis.window = mockWindow;
+  return () => {
+    if (previousWindow === undefined) {
+      delete globalThis.window;
+      return;
+    }
+    globalThis.window = previousWindow;
+  };
+}
+
 function createSeoLocales(seed) {
   return {
     es: `${seed} ES`,
@@ -302,22 +314,32 @@ test('admin SEO editor exposes the shared store API, exact page keys, and six-lo
   assert.match(editorSource, /<fieldset key=\{page\}/);
   assert.match(editorSource, /SUPPORTED_LANGS\.map\(\(locale\) => \(/);
   assert.match(editorSource, /store\.setSeoText\(page,\s*field,\s*locale,\s*event\.target\.value\)/);
+  assert.match(editorSource, /onBlur=\{\(\)\s*=>\s*store\.normalizeSeoText\(page,\s*field,\s*locale\)\}/);
   assert.match(editorSource, /field === 'title' \? \(/);
   assert.match(editorSource, /useAdminStore\(\)/);
   assert.match(hookSource, /getSeoText:\s*adminStore\.getSeoText\.bind\(adminStore\)/);
   assert.match(hookSource, /setSeoText:\s*adminStore\.setSeoText\.bind\(adminStore\)/);
+  assert.match(hookSource, /normalizeSeoText:\s*adminStore\.normalizeSeoText\.bind\(adminStore\)/);
   assert.match(adminIndexSource, /import EditableSeoSettings from '\.\.\/\.\.\/components\/admin\/EditableSeoSettings';/);
   assert.match(adminIndexSource, /<EditableSeoSettings client:load \/>/);
 });
 
-test('AdminStore trims SEO text, allows deliberate empty fallbacks, and rejects invalid page field and locale writes', () => {
+test('AdminStore preserves raw SEO text while typing, normalizes on blur, and rejects invalid page field locale and value writes', () => {
   const store = new AdminStore();
   store.init(createAdminI18n(), createAdminSiteData(), 'es', '');
 
-  store.setSeoText('home', 'title', 'es', '  SEO en español  ');
+  store.setSeoText('home', 'title', 'es', 'SEO');
+  store.setSeoText('home', 'title', 'es', 'SEO ');
+  store.setSeoText('home', 'title', 'es', '  SEO title  ');
   store.setSeoText('home', 'description', 'de', '   ');
 
-  assert.equal(store.getSeoText('home', 'title', 'es'), 'SEO en español');
+  assert.equal(store.getSeoText('home', 'title', 'es'), '  SEO title  ');
+  assert.equal(store.getSeoText('home', 'description', 'de'), '   ');
+
+  store.normalizeSeoText('home', 'title', 'es');
+  store.normalizeSeoText('home', 'description', 'de');
+
+  assert.equal(store.getSeoText('home', 'title', 'es'), 'SEO title');
   assert.equal(store.getSeoText('home', 'description', 'de'), '');
   assert.equal(store.getSnapshot().isDirty, true);
 
@@ -328,12 +350,15 @@ test('AdminStore trims SEO text, allows deliberate empty fallbacks, and rejects 
   assert.throws(() => store.setSeoText('home', 'summary', 'es', 'Hola'), /Campo SEO no válido/);
   assert.throws(() => store.setSeoText('home', 'title', 'pt', 'Olá'), /Idioma SEO no válido/);
   assert.throws(() => store.setSeoText('home', 'title', 'es', 42), /El valor SEO debe ser un texto/);
+  assert.throws(() => store.normalizeSeoText('landing', 'title', 'es'), /Página SEO no válida/);
+  assert.throws(() => store.normalizeSeoText('home', 'summary', 'es'), /Campo SEO no válido/);
+  assert.throws(() => store.normalizeSeoText('home', 'title', 'pt'), /Idioma SEO no válido/);
 
   assert.equal(store.getSnapshot().pendingCount, pendingCountAfterValidWrites);
   assert.equal(store.images?.seo?.landing, undefined);
   assert.equal(store.images?.seo?.home?.summary, undefined);
   assert.equal(store.images?.seo?.home?.title?.pt, undefined);
-  assert.equal(store.getSeoText('home', 'title', 'es'), 'SEO en español');
+  assert.equal(store.getSeoText('home', 'title', 'es'), 'SEO title');
 });
 
 test('AdminStore repairs malformed persisted SEO branches when writing a valid localized value', () => {
@@ -361,16 +386,44 @@ test('AdminStore repairs malformed persisted SEO branches when writing a valid l
 
   store.setSeoText('home', 'title', 'es', '  Reparado  ');
 
+  assert.equal(store.getSeoText('home', 'title', 'es'), '  Reparado  ');
+  store.normalizeSeoText('home', 'title', 'es');
   assert.equal(store.getSeoText('home', 'title', 'es'), 'Reparado');
   assert.equal(store.images?.seo?.home?.title?.es, 'Reparado');
   assert.equal(store.getSnapshot().isDirty, true);
 });
 
-test('AdminStore publishes updated SEO inside the existing Git Gateway site data payload', async () => {
+test('AdminStore saves and publishes normalized SEO while preserving raw in-memory edits until blur', async () => {
   const store = new AdminStore();
   store.init(createAdminI18n(), createAdminSiteData(), 'es', 'publish-token');
-  store.setSeoText('home', 'title', 'es', '  SEO en español  ');
+  store.setSeoText('home', 'title', 'es', '  SEO title  ');
   store.setSeoText('contact', 'description', 'ca', '  Text de contacte  ');
+  store.setSeoText('ugc', 'description', 'fr', '   ');
+
+  let savedDraft = '';
+  const restoreWindow = installWindow({
+    localStorage: {
+      getItem: () => null,
+      setItem: (_key, value) => {
+        savedDraft = value;
+      },
+      removeItem: () => {},
+    },
+  });
+
+  try {
+    store.saveDraft();
+  } finally {
+    restoreWindow();
+  }
+
+  assert.equal(store.getSeoText('home', 'title', 'es'), '  SEO title  ');
+  assert.equal(store.getSeoText('ugc', 'description', 'fr'), '   ');
+  assert.ok(savedDraft, 'draft should be written to localStorage');
+  const parsedDraft = JSON.parse(savedDraft);
+  assert.equal(parsedDraft.images.seo.home.title.es, 'SEO title');
+  assert.equal(parsedDraft.images.seo.contact.description.ca, 'Text de contacte');
+  assert.equal(parsedDraft.images.seo.ugc.description.fr, '');
 
   const fetchCalls = [];
   const originalFetch = globalThis.fetch;
@@ -404,8 +457,10 @@ test('AdminStore publishes updated SEO inside the existing Git Gateway site data
   );
 
   const published = decodePublishedJsonBody(putCalls[0].init?.body);
-  assert.equal(published.seo.home.title.es, 'SEO en español');
+  assert.equal(published.seo.home.title.es, 'SEO title');
   assert.equal(published.seo.contact.description.ca, 'Text de contacte');
+  assert.equal(published.seo.ugc.description.fr, '');
   assert.equal(store.getSnapshot().publishSuccess, true);
   assert.equal(store.getSnapshot().publishError, '');
+  assert.equal(store.getSeoText('home', 'title', 'es'), '  SEO title  ');
 });

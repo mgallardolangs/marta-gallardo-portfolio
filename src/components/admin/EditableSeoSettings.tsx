@@ -51,6 +51,7 @@ export default function EditableSeoSettings() {
                             type="text"
                             value={store.getSeoText(page, field, locale)}
                             onChange={(event) => store.setSeoText(page, field, locale, event.target.value)}
+                            onBlur={() => store.normalizeSeoText(page, field, locale)}
                             className="rounded-none border border-ink/15 bg-white px-3 py-2 font-body text-sm text-ink outline-none transition focus:border-amaranth"
                           />
                         ) : (
@@ -58,6 +59,7 @@ export default function EditableSeoSettings() {
                             id={getSeoInputId(page, field, locale)}
                             value={store.getSeoText(page, field, locale)}
                             onChange={(event) => store.setSeoText(page, field, locale, event.target.value)}
+                            onBlur={() => store.normalizeSeoText(page, field, locale)}
                             rows={4}
                             className="min-h-28 rounded-none border border-ink/15 bg-white px-3 py-2 font-body text-sm text-ink outline-none transition focus:border-amaranth"
                           />
