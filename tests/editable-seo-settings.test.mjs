@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { AdminStore, SUPPORTED_LANGS } from '../src/components/admin/adminStore.ts';
@@ -14,8 +14,62 @@ async function readSource(relativePath) {
   return readFile(path.join(rootDir, relativePath), 'utf8');
 }
 
+async function readBuiltSource(relativePath) {
+  try {
+    return await readSource(relativePath);
+  } catch (error) {
+    if (error?.code === 'ENOENT') {
+      assert.fail(`Missing built artifact "${relativePath}". Run npm run build before CHECK_DIST=1 verification.`);
+    }
+
+    throw error;
+  }
+}
+
 async function readJson(relativePath) {
   return JSON.parse(await readSource(relativePath));
+}
+
+function getLinkHrefs(html, relName) {
+  const escapedRel = relName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return [...html.matchAll(new RegExp(`<link[^>]+rel="${escapedRel}"[^>]+href="([^"]+)"[^>]*>`, 'g'))]
+    .map((match) => match[1]);
+}
+
+function getMetaContents(html, attributeName) {
+  const escapedAttribute = attributeName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return [...html.matchAll(new RegExp(`<meta[^>]+(?:property|name)="${escapedAttribute}"[^>]+content="([^"]+)"[^>]*>`, 'g'))]
+    .map((match) => match[1]);
+}
+
+async function findGeneratedSitemapPath() {
+  const sitemapIndexPath = 'dist/sitemap-index.xml';
+  const sitemapIndex = await readBuiltSource(sitemapIndexPath);
+  const sitemapMatches = [...sitemapIndex.matchAll(/<loc>https:\/\/marttelier\.com\/([^<]+\.xml)<\/loc>/g)]
+    .map((match) => match[1])
+    .filter((fileName) => fileName !== 'sitemap-index.xml');
+
+  if (sitemapMatches.length > 0) {
+    return `dist/${sitemapMatches[0]}`;
+  }
+
+  const distEntries = await readdir(path.join(rootDir, 'dist')).catch((error) => {
+    if (error?.code === 'ENOENT') {
+      assert.fail('Missing built dist directory. Run npm run build before CHECK_DIST=1 verification.');
+    }
+
+    throw error;
+  });
+  const fallbackSitemap = distEntries
+    .filter((entry) => /^sitemap(?:-\d+)?\.xml$/.test(entry))
+    .sort()[0];
+
+  assert.ok(
+    fallbackSitemap,
+    'Expected Astro to emit a sitemap XML file such as sitemap.xml or sitemap-0.xml.',
+  );
+
+  return `dist/${fallbackSitemap}`;
 }
 
 function createAdminI18n() {
@@ -105,6 +159,84 @@ test('robots.txt allows public crawling, blocks /admin, and advertises the produ
   assert.equal(
     robots,
     `User-agent: *\nAllow: /\nDisallow: /admin\n\nSitemap: ${productionSite}/sitemap-index.xml\n`,
+  );
+});
+
+test('built public SEO output uses marttelier.com canonicals, alternates, sitemap, and robots metadata', async (t) => {
+  if (process.env.CHECK_DIST !== '1') {
+    t.skip('Set CHECK_DIST=1 after npm run build to verify built SEO output.');
+    return;
+  }
+
+  const sitemapPath = await findGeneratedSitemapPath();
+  const [homeHtml, contactHtml, translationHtml, ugcHtml, robots, sitemapIndex, sitemap] = await Promise.all([
+    readBuiltSource('dist/index.html'),
+    readBuiltSource('dist/contact/index.html'),
+    readBuiltSource('dist/translation-seo/index.html'),
+    readBuiltSource('dist/ugc/index.html'),
+    readBuiltSource('dist/robots.txt'),
+    readBuiltSource('dist/sitemap-index.xml'),
+    readBuiltSource(sitemapPath),
+  ]);
+
+  assert.deepEqual(getLinkHrefs(homeHtml, 'canonical'), [`${productionSite}/`]);
+
+  for (const [relativePath, html] of [
+    ['dist/index.html', homeHtml],
+    ['dist/contact/index.html', contactHtml],
+    ['dist/translation-seo/index.html', translationHtml],
+    ['dist/ugc/index.html', ugcHtml],
+  ]) {
+    const canonicalLinks = getLinkHrefs(html, 'canonical');
+    const alternateLinks = getLinkHrefs(html, 'alternate');
+    const ogUrls = getMetaContents(html, 'og:url');
+    const ogImages = getMetaContents(html, 'og:image');
+    const twitterImages = getMetaContents(html, 'twitter:image');
+
+    assert.equal(canonicalLinks.length, 1, `${relativePath} should emit exactly one canonical link`);
+    assert.ok(
+      canonicalLinks[0].startsWith(`${productionSite}/`),
+      `${relativePath} canonical should use the marttelier.com origin`,
+    );
+    assert.ok(alternateLinks.length > 0, `${relativePath} should emit alternate links`);
+    assert.ok(
+      alternateLinks.every((href) => href.startsWith(`${productionSite}/`)),
+      `${relativePath} alternates should use the marttelier.com origin`,
+    );
+    assert.deepEqual(
+      ogUrls,
+      canonicalLinks,
+      `${relativePath} og:url should match the canonical marttelier.com URL`,
+    );
+    assert.ok(
+      ogImages.every((href) => href.startsWith(`${productionSite}/`)),
+      `${relativePath} og:image should use the marttelier.com origin`,
+    );
+    assert.ok(
+      twitterImages.every((href) => href.startsWith(`${productionSite}/`)),
+      `${relativePath} twitter:image should use the marttelier.com origin`,
+    );
+  }
+
+  assert.equal(
+    robots,
+    `User-agent: *\nAllow: /\nDisallow: /admin\n\nSitemap: ${productionSite}/sitemap-index.xml\n`,
+    'built robots.txt should advertise the canonical production sitemap index',
+  );
+  assert.match(
+    sitemapIndex,
+    /<loc>https:\/\/marttelier\.com\/sitemap(?:-\d+)?\.xml<\/loc>/,
+    'sitemap index should point at a marttelier.com sitemap payload',
+  );
+  assert.match(
+    sitemap,
+    /<loc>https:\/\/marttelier\.com\/(?:<\/loc>|[^<]+<\/loc>)/,
+    'generated sitemap should contain marttelier.com URLs',
+  );
+  assert.doesNotMatch(
+    sitemap,
+    /https:\/\/marttelier\.com\/admin(?:\/|<)/,
+    'generated sitemap should never expose admin routes',
   );
 });
 
