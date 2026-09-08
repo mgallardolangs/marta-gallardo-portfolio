@@ -721,6 +721,30 @@
           "ca": "Copywriting"
         },
         "group": "seo"
+      },
+      {
+        "id": "skill-interlinking",
+        "group": "seo",
+        "label": {
+          "es": "INTERLINKING",
+          "en": "INTERLINKING",
+          "fr": "INTERLINKING",
+          "de": "INTERLINKING",
+          "it": "INTERLINKING",
+          "ca": "INTERLINKING"
+        }
+      },
+      {
+        "id": "skill-arquitectura-web",
+        "group": "seo",
+        "label": {
+          "es": "ARQUITECTURA WEB",
+          "en": "SEO STRUCTURE",
+          "fr": "ARCHITECTURE SEO",
+          "de": "ARQUITECTURA WEB",
+          "it": "ARQUITECTURA WEB",
+          "ca": "ARQUITECTURA WEB"
+        }
       }
     ]
   },
