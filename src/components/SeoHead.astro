@@ -54,14 +54,47 @@ const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: siteData.person.name,
+  jobTitle: 'Especialista SEO, Traductora & Creadora de Contenidos',
   url: absolute(getLocalizedPath('/', lang)).toString(),
   image: personImage.toString(),
   homeLocation: {
     '@type': 'Place',
     name: siteData.person.location,
   },
+  alumniOf: {
+    '@type': 'EducationalOrganization',
+    name: 'Universidad de Alicante',
+    sameAs: 'https://www.ua.es/',
+  },
+  hasCredential: [
+    {
+      '@type': 'EducationalOccupationalCredential',
+      name: 'Grado en Traducción e Interpretación',
+      recognizedBy: {
+        '@type': 'EducationalOrganization',
+        name: 'Universidad de Alicante',
+      },
+    },
+    {
+      '@type': 'EducationalOccupationalCredential',
+      name: 'Especialización en SEO',
+      credentialCategory: 'Certification',
+      recognizedBy: {
+        '@type': 'Organization',
+        name: 'Nómada Digital',
+      },
+    },
+  ],
   knowsLanguage: languageNames,
   sameAs: socialProfiles,
+  knowsAbout: [
+    'Search Engine Optimization (SEO)',
+    'SEO Local',
+    'SEO Internacional',
+    'Traducción y Localización',
+    'Estrategia de Contenidos',
+    'User Generated Content (UGC)',
+  ],
 };
 ---
 <link rel="canonical" href={canonical.toString()} />
