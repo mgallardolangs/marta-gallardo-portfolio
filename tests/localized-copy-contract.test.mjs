@@ -35,6 +35,7 @@ function getCopyContract(dictionary) {
     seoPage: dictionary.seoPage,
     translationServicePage: dictionary.translationServicePage,
     ugcPage: {
+      pageTitle: dictionary.ugcPage.pageTitle,
       benefits: dictionary.ugcPage.benefits,
       process: dictionary.ugcPage.process,
     },
@@ -115,6 +116,8 @@ test('Spanish localized copy matches the approved source text', async () => {
   assert.equal(es.aboutPage.hero.title, 'Sobre mí: Marta Gallardo y la Filosofía Marttelier');
   assert.equal(es.seoPage.hero.paragraphs.length, 2);
   assert.equal(es.translationServicePage.arsenal.skillsTitle, 'Habilidades');
+  assert.equal(es.translationServicePage.arsenal.eyebrow, '02 · PERFIL Y HERRAMIENTAS');
   assert.equal(es.seoPage.arsenal.skillsTitle, 'Habilidades SEO');
   assert.equal(es.ugcPage.benefits.title, 'Por qué Apostar por el Contenido Generado por Usuarios');
+  assert.equal(es.ugcPage.pageTitle, 'Creadora de Contenido UGC para Marcas');
 });

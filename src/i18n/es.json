@@ -149,6 +149,7 @@
   },
   "ugcPage": {
     "pageDescription": "Portfolio profesional de UGC de Marta Gallardo con campañas editoriales conceptuales de viajes, idiomas y arte.",
+    "pageTitle": "Creadora de Contenido UGC para Marcas",
     "niches": {
       "travel": {
         "label": "Viajes",
@@ -566,6 +567,7 @@
     },
     "arsenal": {
       "title": "Idiomas, herramientas y habilidades de traducción",
+      "eyebrow": "02 · PERFIL Y HERRAMIENTAS",
       "languagesTitle": "Idiomas",
       "toolsTitle": "Herramientas",
       "skillsTitle": "Habilidades"
