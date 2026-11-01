@@ -2,12 +2,14 @@
   command = "npm run build"
   publish = "dist"
 
+[build.processing.html]
+  pretty_urls = false
+
 [[redirects]]
-  from = "/*"
+  from = "https://www.marttelier.com/*"
   to = "https://marttelier.com/:splat"
   status = 301
   force = true
-  conditions = {Host = ["www.marttelier.com"]}
 
 [[headers]]
   for = "/*"

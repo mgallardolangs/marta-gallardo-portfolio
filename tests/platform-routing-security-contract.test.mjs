@@ -25,12 +25,20 @@ test('Netlify serves unknown paths as 404s and retains only the approved www red
   const redirectRules = config.match(/\[\[redirects\]\][\s\S]*?(?=\n\[\[|\n\[headers\]|\s*$)/g) ?? [];
 
   assert.equal(redirectRules.length, 1, 'only the www host redirect should be configured');
-  assert.match(redirectRules[0], /from\s*=\s*"\/\*"/);
+  assert.match(redirectRules[0], /from\s*=\s*"https:\/\/www\.marttelier\.com\/\*"/);
   assert.match(redirectRules[0], /to\s*=\s*"https:\/\/marttelier\.com\/:splat"/);
   assert.match(redirectRules[0], /status\s*=\s*301/);
-  assert.match(redirectRules[0], /Host\s*=\s*\["www\.marttelier\.com"\]/);
+  assert.match(config, /\[build\.processing\.html\]\s*pretty_urls\s*=\s*false/);
+  assert.doesNotMatch(redirectRules[0], /conditions\s*=/);
   assert.doesNotMatch(config, /status\s*=\s*200/);
   assert.doesNotMatch(config, /to\s*=\s*"\/index\.html"/);
+});
+
+test('Netlify Identity login returns to the canonical admin route', async () => {
+  const layout = await readProjectFile('src/layouts/BaseLayout.astro');
+
+  assert.match(layout, /document\.location\.href\s*=\s*"\/admin";/);
+  assert.doesNotMatch(layout, /document\.location\.href\s*=\s*"\/admin\/"/);
 });
 
 test('Netlify security headers retain HSTS and framing protection while CSP stays report-only', async () => {
