@@ -371,7 +371,7 @@ test('public page views resolve editable SEO with exact page keys and localized 
   );
   assert.match(
     homeSource,
-    /<BaseLayout\s+title=\{pageSeo\.title\}\s+description=\{pageSeo\.description\}>/,
+    /<BaseLayout\s+lang=\{lang\}\s+title=\{pageSeo\.title\}\s+description=\{pageSeo\.description\}>/,
     'HomePage should pass resolved pageSeo strings into BaseLayout',
   );
 
