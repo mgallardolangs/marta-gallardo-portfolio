@@ -99,7 +99,7 @@ test('translation arsenal source keeps equal thirds plus exact square tool tiles
     'public tool logos should stay visually constrained inside equal tiles',
   );
 
-  assert.match(adminEditorSource, /<div className="grid gap-0 lg:grid-cols-3">/);
+  assert.match(adminEditorSource, /scope === 'translation' \? 'lg:grid-cols-3' : 'md:grid-cols-2'/);
   assert.doesNotMatch(adminEditorSource, /lg:grid-cols-\[0\.82fr_0\.88fr_1\.3fr\]/);
   assert.match(adminEditorSource, /<div className="mt-5 grid grid-cols-3 gap-2" data-arsenal-items>/);
   assert.match(

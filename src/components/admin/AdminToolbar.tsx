@@ -68,7 +68,7 @@ export default function AdminToolbar() {
 
       {/* Expanded panel */}
       {expanded && (
-        <div className="absolute bottom-full right-0 mb-2 bg-gray-900 text-white rounded-2xl shadow-2xl p-4 min-w-[288px]">
+        <div className="absolute bottom-full right-0 mb-2 max-h-[calc(100dvh-7rem)] min-w-[288px] overflow-y-auto overscroll-contain bg-gray-900 p-4 text-white shadow-2xl rounded-2xl">
           {/* Admin session status */}
           <div className="mb-3 rounded-lg bg-gray-800 px-3 py-2">
             {store.isAuthenticated ? (

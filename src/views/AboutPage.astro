@@ -22,7 +22,7 @@ const pageSeo = getPageSeo(siteData, 'about', lang, {
     <section class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
       <div class="site-container grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
         <ScrollReveal client:visible direction="right" className="flex flex-col gap-8">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-amaranth">{i.nav.about}</p>
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-amaranth">{page.hero.eyebrow}</p>
           <TypedTitle
             as="h1"
             text={page.hero.title}
@@ -80,7 +80,7 @@ const pageSeo = getPageSeo(siteData, 'about', lang, {
     <section class="px-6 py-16 md:py-20">
       <div class="site-container grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
         <ScrollReveal client:visible direction="right" className="flex flex-col gap-5">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{i.nav.about}</p>
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.principles.eyebrow}</p>
           <TypedTitle
             as="h2"
             text={page.principles.title}

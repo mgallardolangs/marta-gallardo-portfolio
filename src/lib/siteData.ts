@@ -49,13 +49,16 @@ export type LanguageItem = {
   level: LocalizedText;
 };
 
+export type ArsenalGroup = 'translation' | 'seo';
+
 export type ToolItem = {
   id: string;
   logo: string;
   label: LocalizedText;
+  group?: ArsenalGroup;
 };
 
-export type SkillGroup = 'translation' | 'seo';
+export type SkillGroup = ArsenalGroup;
 
 export type SkillItem = {
   id: string;

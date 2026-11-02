@@ -9,14 +9,15 @@ import { siteData } from '../../lib/siteData';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
+const page = i.ugcPage;
 ---
 
-<AdminLayout title={`Admin — ${i.ugc.title}`} description={i.ugcPage.pageDescription}>
+<AdminLayout title={`Admin — ${page.pageTitle}`} description={page.pageDescription}>
   <div class="bg-paper">
     <section class="px-6 pt-20 pb-5 md:pt-24 md:pb-6">
       <div class="site-container">
         <ScrollReveal client:visible className="max-w-6xl flex flex-col gap-6">
-          <EditableText client:load i18nKey="ugcPage.contactSheet.eyebrow" as="p" className="text-xs font-semibold uppercase tracking-[0.34em] text-amaranth" />
+          <EditableText client:load i18nKey="ugcPage.hero.eyebrow" as="p" className="text-xs font-semibold uppercase tracking-[0.34em] text-amaranth" />
           <div class="grid gap-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:items-end">
             <EditableText client:load i18nKey="ugcPage.pageTitle" as="h1" className="block text-4xl leading-none text-ink md:text-6xl" />
             <EditableText client:load i18nKey="ugcPage.contactSheet.headline" as="p" className="text-balance text-lg font-semibold uppercase leading-[1.18] tracking-[0.13em] text-ink md:text-2xl lg:justify-self-end lg:text-right lg:text-3xl" />
@@ -44,7 +45,7 @@ const i = t(lang);
     <section class="bg-ink px-6 py-16 text-paper md:py-20" data-admin-ugc-benefits>
       <div class="site-container grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
         <ScrollReveal client:visible direction="right" className="flex flex-col gap-6">
-          <EditableText client:load i18nKey="ugcPage.contactSheet.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="ugcPage.benefits.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
           <EditableText client:load i18nKey="ugcPage.benefits.title" as="h2" className="font-heading text-4xl leading-none text-paper md:text-5xl" />
         </ScrollReveal>
         <ScrollReveal client:visible direction="left">
@@ -56,7 +57,7 @@ const i = t(lang);
     <section class="px-6 py-16 md:py-20" data-admin-ugc-process>
       <div class="site-container space-y-10">
         <div class="max-w-3xl space-y-5">
-          <EditableText client:load i18nKey="ugcPage.contactSheet.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="ugcPage.process.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
           <EditableText client:load i18nKey="ugcPage.process.title" as="h2" className="font-heading text-4xl leading-none text-ink md:text-5xl" />
         </div>
 

@@ -113,7 +113,7 @@ test('Spanish localized copy matches the approved source text', async () => {
   assert.equal(es.home.hero.ctaDiagnosis, 'Solicitar diagnóstico SEO');
   assert.equal(es.home.hero.ctaServices, 'Ver servicios');
   assert.equal(es.home.visibility.text, 'Como traductora y creadora de contenido, trabajo entre idiomas, culturas y formatos para que cada mensaje conserve su intención y conecte de forma natural. Combino traducción, localización y SEO multilingüe junto con contenido UGC para ayudar a marcas a comunicar con claridad, coherencia y sensibilidad cultural.');
-  assert.equal(es.aboutPage.hero.title, 'Sobre mí: Marta Gallardo y la Filosofía Marttelier');
+  assert.equal(es.aboutPage.hero.title, 'Marta Gallardo  Filosofía Marttelier');
   assert.equal(es.seoPage.hero.paragraphs.length, 2);
   assert.equal(es.translationServicePage.arsenal.skillsTitle, 'Habilidades');
   assert.equal(es.translationServicePage.arsenal.eyebrow, '02 · PERFIL Y HERRAMIENTAS');

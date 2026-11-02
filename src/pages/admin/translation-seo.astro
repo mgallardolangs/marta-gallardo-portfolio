@@ -10,7 +10,7 @@ const i = t(lang);
 const page = i.translationServicePage;
 ---
 
-<AdminLayout title={`Admin — ${i.nav.translation}`} description={page.hero.description}>
+<AdminLayout title={`Admin — ${page.hero.title}`} description={page.hero.description}>
   <div class="bg-paper" data-admin-translation-page>
     <section class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
       <div class="site-container max-w-7xl">
@@ -31,7 +31,7 @@ const page = i.translationServicePage;
     <section class="bg-ink px-6 py-16 text-paper md:py-20">
       <div class="site-container space-y-10">
         <div class="space-y-5">
-          <EditableText client:load i18nKey="nav.translation" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="translationServicePage.localization.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
           <EditableText client:load i18nKey="translationServicePage.localization.title" as="h2" className="font-heading text-4xl text-paper md:text-5xl" />
         </div>
         <div class="grid gap-8 border-t border-paper/18 pt-8 md:grid-cols-2">
@@ -48,14 +48,14 @@ const page = i.translationServicePage;
     <section class="px-6 py-16 md:py-20">
       <div class="site-container grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
         <ScrollReveal client:visible direction="right" className="flex flex-col gap-6">
-          <EditableText client:load i18nKey="nav.translation" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="translationServicePage.multilingualSeo.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
           <EditableText client:load i18nKey="translationServicePage.multilingualSeo.title" as="h2" className="font-heading text-4xl leading-none text-ink md:text-5xl" />
         </ScrollReveal>
         <ScrollReveal client:visible direction="left" className="flex flex-col gap-6">
           <EditableText client:load i18nKey="translationServicePage.multilingualSeo.description" as="div" className="max-w-3xl font-body text-base leading-8 text-ink-muted md:text-lg" />
           <div class="site-text-cta-row">
             <a href="/admin/seo" class="site-text-cta">
-              {i.nav.seo}
+              {page.multilingualSeo.seoLinkLabel}
               <span class="site-text-cta__arrow" aria-hidden="true">↗</span>
             </a>
           </div>
@@ -66,7 +66,7 @@ const page = i.translationServicePage;
     <section class="bg-ink px-6 py-16 text-paper md:py-20">
       <div class="site-container space-y-10">
         <div class="space-y-5">
-          <EditableText client:load i18nKey="nav.translation" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="translationServicePage.digitalContent.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
           <EditableText client:load i18nKey="translationServicePage.digitalContent.title" as="h2" className="font-heading text-4xl text-paper md:text-5xl" />
         </div>
         <div class="grid gap-8 border-t border-paper/18 pt-8 md:grid-cols-2">
@@ -86,7 +86,7 @@ const page = i.translationServicePage;
           <EditableText client:load i18nKey="translationServicePage.arsenal.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
           <EditableText client:load i18nKey="translationServicePage.arsenal.title" as="h2" className="font-heading text-4xl text-ink md:text-5xl" />
         </div>
-        <AdminTranslationArsenalEditor client:load />
+        <AdminTranslationArsenalEditor client:load scope="translation" />
       </div>
     </section>
   </div>

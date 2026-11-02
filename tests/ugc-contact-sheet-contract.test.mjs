@@ -142,7 +142,7 @@ test('public UgcPage keeps TypedTitle but swaps in the approved contact-sheet sh
     'UgcPage should expose a stable data-ugc-hero marker for the approved editorial hero',
   );
   assert.match(pageSource, /<TypedTitle\b/, 'UgcPage should preserve TypedTitle in the hero');
-  assert.match(pageSource, /i\.ugcPage\.contactSheet\.eyebrow/, 'UgcPage should use the approved contactSheet eyebrow key');
+  assert.match(pageSource, /i\.ugcPage\.hero\.eyebrow/, 'UgcPage should use the independent hero eyebrow key');
   assert.match(pageSource, /i\.ugcPage\.contactSheet\.headline/, 'UgcPage should use the approved contactSheet headline key');
   assert.match(pageSource, /<UgcContactSheet\b/, 'UgcPage should render the shared UgcContactSheet component');
   assert.match(pageSource, /\.ugcPortfolio\b/, 'UgcPage should render from the fixed ugcPortfolio dataset');

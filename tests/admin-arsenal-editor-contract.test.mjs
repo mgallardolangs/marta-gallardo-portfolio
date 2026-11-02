@@ -52,8 +52,8 @@ function createSiteData(overrides = {}) {
         { id: 'language-french', code: 'fr', label: createLocalizedText('Francés', 'French', 'Français'), level: createLocalizedText('C1', 'C1', 'C1') },
       ],
       tools: [
-        { id: 'notion', logo: '/images/tools/notion.svg', label: createLocalizedText('Notion', 'Notion', 'Notion') },
-        { id: 'trados', logo: '/images/tools/trados.svg', label: createLocalizedText('Trados', 'Trados', 'Trados') },
+        { id: 'notion', group: 'translation', logo: '/images/tools/notion.svg', label: createLocalizedText('Notion', 'Notion', 'Notion') },
+        { id: 'trados', group: 'seo', logo: '/images/tools/trados.svg', label: createLocalizedText('Trados', 'Trados', 'Trados') },
       ],
       skills: [
         { id: 'website-localization', group: 'translation', label: createLocalizedText('Localización web', 'Website localization', 'Localisation web') },
@@ -67,20 +67,24 @@ function createSiteData(overrides = {}) {
   };
 }
 
-test('admin translation-seo page mounts only the integrated arsenal editor and no detached EditableCollection cards or preview island', async () => {
-  const source = await readSource('src/pages/admin/translation-seo.astro');
+test('translation and SEO admin pages mount service-scoped arsenal editors', async () => {
+  const [translationSource, seoSource] = await Promise.all([
+    readSource('src/pages/admin/translation-seo.astro'),
+    readSource('src/pages/admin/seo.astro'),
+  ]);
 
   assert.match(
-    source,
+    translationSource,
     /import\s+AdminTranslationArsenalEditor\s+from\s+['"]\.\.\/\.\.\/components\/admin\/AdminTranslationArsenalEditor['"]/,
     'admin translation page should import the integrated arsenal editor',
   );
 
-  const editorMatches = source.match(/<AdminTranslationArsenalEditor\s+client:load\s*\/>/g) ?? [];
-  assert.equal(editorMatches.length, 1, 'admin translation page should mount the integrated arsenal editor exactly once');
+  assert.match(translationSource, /<AdminTranslationArsenalEditor\s+client:load\s+scope="translation"\s*\/>/);
+  assert.match(seoSource, /<AdminTranslationArsenalEditor\s+client:load\s+scope="seo"\s*\/>/);
 
-  assert.doesNotMatch(source, /EditableCollection/, 'admin translation page should stop rendering the generic EditableCollection cards');
-  assert.doesNotMatch(source, /AdminTranslationArsenalPreview/, 'admin translation page should stop mounting the separate display-only preview island');
+  assert.doesNotMatch(translationSource, /EditableCollection/, 'admin translation page should not render detached collection cards');
+  assert.doesNotMatch(translationSource, /AdminTranslationArsenalPreview/, 'admin translation page should not mount a detached preview island');
+  assert.doesNotMatch(seoSource, /EditableCollection/, 'admin SEO page should not render detached collection cards');
 
   assert.equal(
     existsSync(path.join(rootDir, 'src/components/admin/EditableCollection.tsx')),
@@ -94,17 +98,17 @@ test('admin translation-seo page mounts only the integrated arsenal editor and n
   );
 });
 
-test('AdminTranslationArsenalEditor renders the approved compact three-panel arsenal layout with baseline public classes', async () => {
+test('AdminTranslationArsenalEditor renders the public arsenal panels scoped to the current service', async () => {
   const source = await readSource('src/components/admin/AdminTranslationArsenalEditor.tsx');
 
-  assert.match(source, /className="border border-ink"\s+data-admin-arsenal-editor/, 'outer wrapper should keep the exact compact border chrome');
-  assert.match(source, /<div className="grid gap-0 lg:grid-cols-3">/, 'panel grid should keep the approved equal-third desktop layout');
-
+  assert.match(source, /className="border border-ink"\s+data-admin-arsenal-editor\s+data-arsenal-scope=\{scope\}/);
+  assert.match(source, /scope === 'translation' \? 'lg:grid-cols-3' : 'md:grid-cols-2'/);
+  assert.match(source, /scope === 'translation' && \([\s\S]*data-admin-arsenal-panel="languages"/s);
   assert.match(source, /data-admin-arsenal-panel="languages"/);
   assert.match(source, /data-admin-arsenal-panel="tools"/);
   assert.match(source, /data-admin-arsenal-panel="skills"/);
 
-  assert.match(source, /border-b border-ink p-5 lg:border-b-0 lg:border-r/, 'languages\/tools panels should keep the approved divider chrome');
+  assert.match(source, /border-b border-ink p-5 lg:border-b-0 lg:border-r/, 'translation languages panel should keep the approved divider chrome');
 
   assert.match(
     source,
@@ -117,7 +121,7 @@ test('AdminTranslationArsenalEditor renders the approved compact three-panel ars
     'tool tiles should keep the exact dark square tile baseline classes',
   );
   assert.match(source, /grid grid-cols-3 gap-2/, 'tools panel should keep the approved three-column equal-cell grid');
-  assert.match(source, /grid gap-6 md:grid-cols-2/, 'skills panel should keep the approved two-column group grid');
+  assert.match(source, /groupedSkills\[scope\]/, 'skills panel should contain only the current service group');
   assert.match(
     source,
     /border border-ink\/12 px-3 py-2 text-\[0\.68rem\] uppercase tracking-\[0\.08em\] text-ink/,
@@ -130,18 +134,12 @@ test('AdminTranslationArsenalEditor keeps add controls scoped inside their own p
 
   assert.match(source, /data-collection-add="languages"/);
   assert.match(source, /data-collection-add="tools"/);
-  assert.match(source, /data-collection-add="skills-translation"/);
-  assert.match(source, /data-collection-add="skills-seo"/);
-
-  const translationGroupBlock = source.slice(source.indexOf('data-skill-group="translation"'), source.indexOf('data-skill-group="seo"'));
-  assert.match(translationGroupBlock, /data-collection-add="skills-translation"/, 'the translation add marker should live inside the translation group column');
-
-  const seoGroupBlock = source.slice(source.indexOf('data-skill-group="seo"'));
-  assert.match(seoGroupBlock, /data-collection-add="skills-seo"/, 'the seo add marker should live inside the seo group column');
+  assert.match(source, /data-collection-add=\{`skills-\$\{scope\}`\}/);
+  assert.match(source, /group:\s*scope/, 'new tools should stay in the current page group');
 
   assert.match(
     source,
-    /aspect-square w-full min-w-0[\s\S]{0,80}border border-dashed/,
+    /className="flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-2 border border-dashed/,
     'the dashed add-tool tile should keep the same square footprint as the live tool tiles',
   );
 });
@@ -277,5 +275,30 @@ test('AdminStore.moveEditableCollectionItem stays compatible by delegating delta
     store.getSnapshot().getEditableCollection('skills').map((item) => item.id),
     ['website-localization', 'local-seo', 'transcreation', 'keyword-research'],
     'a zero delta should remain a no-op',
+  );
+});
+
+test('AdminStore inserts new tools inside the selected service group', () => {
+  const site = createSiteData();
+  site.arsenal.tools = [
+    { id: 'translation-tool', group: 'translation', logo: '/translation.svg', label: createLocalizedText('Traducción', 'Translation', 'Traduction') },
+    { id: 'unassigned-tool', logo: '/other.svg', label: createLocalizedText('Otra', 'Other', 'Autre') },
+    { id: 'seo-tool', group: 'seo', logo: '/seo.svg', label: createLocalizedText('SEO', 'SEO', 'SEO') },
+  ];
+
+  const store = new AdminStore();
+  store.init(createI18n(), site, 'es', '');
+  const insertedIndex = store.addEditableCollectionItem('tools', {
+    group: 'translation',
+    label: { es: 'Nueva traducción', en: 'New translation', fr: 'Nouvelle traduction' },
+    logo: '/new-translation.svg',
+  });
+
+  const tools = store.getSnapshot().getEditableCollection('tools');
+  assert.equal(insertedIndex, 1);
+  assert.equal(tools[insertedIndex]?.group, 'translation');
+  assert.deepEqual(
+    tools.map((tool) => tool.id),
+    ['translation-tool', 'tool-nueva-traduccion', 'unassigned-tool', 'seo-tool'],
   );
 });

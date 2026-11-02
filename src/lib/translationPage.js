@@ -8,6 +8,26 @@ export const TOOL_LOGO_KEYS = {
   'google-business-profile': 'googleMyBusiness',
 };
 
+export const SEO_RESERVED_TOOL_LABELS = ['Ahrefs', 'SEMrush', 'Screaming Frog'];
+
+const LEGACY_TOOL_GROUPS = {
+  'microsoft-office': 'translation',
+  'google-workspace': 'translation',
+  notion: 'translation',
+  'ai-tools': 'translation',
+  'tool-claude': 'translation',
+  wordpress: 'seo',
+  'google-search-console': 'seo',
+  'google-business-profile': 'seo',
+};
+
+const ARSENAL_GROUP_ORDER = ['translation', 'seo'];
+
+export function getArsenalToolGroup(tool) {
+  if (tool?.group === 'translation' || tool?.group === 'seo') return tool.group;
+  return LEGACY_TOOL_GROUPS[tool?.id] ?? null;
+}
+
 function localize(value, lang) {
   if (typeof value === 'string') return value;
   if (!value || typeof value !== 'object') return '';
@@ -58,9 +78,14 @@ export function getTranslationArsenalColumns(lang, siteData, filter) {
   };
 
   if (filter === 'translation' || filter === 'seo') {
+    const filteredToolIds = new Set(
+      (siteData?.arsenal?.tools ?? [])
+        .filter((tool) => getArsenalToolGroup(tool) === filter)
+        .map((tool) => tool.id),
+    );
     return {
       languages,
-      tools,
+      tools: tools.filter((tool) => filteredToolIds.has(tool.id)),
       skills: groupedSkills[filter],
       skillGroups: { [filter]: groupedSkills[filter] },
     };

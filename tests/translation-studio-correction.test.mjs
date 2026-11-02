@@ -343,12 +343,14 @@ test('ServiceSwitcher keeps the 6-second behavior but swaps to open layout and r
   );
 });
 
-test('public Translation arsenal shows only translation skills while admin retains the integrated arsenal editor', async () => {
-  const [source, seoSource, adminSource, adminEditorSource] = await Promise.all([
+test('public and admin service arsenals keep translation and SEO tools and skills separate', async () => {
+  const [source, seoSource, adminSource, adminSeoSource, adminEditorSource, arsenalHelperSource] = await Promise.all([
     readSource('src/views/TranslationServicePage.astro'),
     readSource('src/views/SeoServicePage.astro'),
     readSource('src/pages/admin/translation-seo.astro'),
+    readSource('src/pages/admin/seo.astro'),
     readSource('src/components/admin/AdminTranslationArsenalEditor.tsx'),
+    readSource('src/lib/translationPage.js'),
   ]);
   const arsenalSection = extractSectionByDataAttribute(source, 'data-translation-arsenal', 'public Translation arsenal section');
 
@@ -359,13 +361,17 @@ test('public Translation arsenal shows only translation skills while admin retai
   assert.doesNotMatch(arsenalSection, /skillGroups\.seo|SEO Local|Keyword planner/, 'public Translation arsenal should not include SEO skills');
   assert.match(seoSource, /getTranslationArsenalColumns\(lang,\s*siteData,\s*'seo'\)/, 'the separate SEO page should filter its skills to SEO');
   assert.match(seoSource, /arsenal\.skills\.map/, 'the separate SEO page should display its SEO skills');
-  assert.match(seoSource, /Ahrefs[\s\S]*SEMrush[\s\S]*Screaming Frog/, 'the separate SEO page should reserve the missing SEO tool logos');
-  assert.match(adminSource, /import\s+AdminTranslationArsenalEditor\s+from\s+['"]..\/..\/components\/admin\/AdminTranslationArsenalEditor['"]/, 'admin translation page should import the integrated arsenal editor');
-  assert.match(adminSource, /<AdminTranslationArsenalEditor\s+client:load\s*\/>/, 'admin translation page should mount the integrated arsenal editor');
+  assert.match(seoSource, /SEO_RESERVED_TOOL_LABELS\.map/);
+  assert.match(arsenalHelperSource, /SEO_RESERVED_TOOL_LABELS\s*=\s*\['Ahrefs',\s*'SEMrush',\s*'Screaming Frog'\]/);
+  assert.match(adminSource, /import\s+AdminTranslationArsenalEditor\s+from\s+['"]..\/..\/components\/admin\/AdminTranslationArsenalEditor['"]/, 'admin translation page should import the shared arsenal editor');
+  assert.match(adminSource, /<AdminTranslationArsenalEditor\s+client:load\s+scope="translation"\s*\/>/);
+  assert.match(adminSeoSource, /<AdminTranslationArsenalEditor\s+client:load\s+scope="seo"\s*\/>/);
   assert.doesNotMatch(adminSource, /arsenalColumns\.languages\.map/, 'admin translation page should stop using static Astro loops for arsenal languages');
   assert.doesNotMatch(adminSource, /arsenalColumns\.tools\.map/, 'admin translation page should stop using static Astro loops for arsenal tools');
   assert.doesNotMatch(adminSource, /arsenalColumns\.skillGroups\.translation/, 'admin translation page should stop using static Astro loops for translation skills');
-  assert.match(adminEditorSource, /lg:grid-cols-3/, 'admin editor should mirror the equal-third desktop grid');
+  assert.match(adminEditorSource, /getArsenalToolGroup\(item\)\s*===\s*scope/, 'admin editor should filter tools to the current page group');
+  assert.match(adminEditorSource, /groupedSkills\[scope\]/, 'admin editor should filter skills to the current page group');
+  assert.match(adminEditorSource, /scope === 'translation' \? 'lg:grid-cols-3' : 'md:grid-cols-2'/, 'admin panel layout should match the public page distribution');
   assert.match(adminEditorSource, /group relative flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink/, 'admin editor should mirror the public square tool tiles');
 });
 
@@ -463,31 +469,27 @@ test('language editor keeps its add marker inside the languages panel after the 
   );
 });
 
-test('tool editor reserves a dashed add tile inside the same tool grid as existing logos', async () => {
+test('tool editor reserves a dashed add tile in the scoped tool grid', async () => {
   const editorSource = await readSource('src/components/admin/AdminTranslationArsenalEditor.tsx');
   const toolsPanel = extractArsenalPanel(editorSource, 'tools', 'tools');
 
   assert.match(
     toolsPanel,
-    /tools\.map\(\(tool, index\) => \([\s\S]*data-collection-add="tools"[\s\S]*aspect-square w-full min-w-0[\s\S]*border-dashed/s,
+    /tools\.map\(\(\{ item: tool, index \}\) => \([\s\S]*data-collection-add="tools"[\s\S]*className="flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-2 border border-dashed/s,
     'tool editor should render a dashed same-size add tile inside the tool collection grid',
   );
 });
 
-test('skill editor splits translation and seo into separate contained groups with their own add markers', async () => {
+test('skill editor exposes only the active page group and scopes additions to it', async () => {
   const editorSource = await readSource('src/components/admin/AdminTranslationArsenalEditor.tsx');
   const skillsPanel = extractArsenalPanel(editorSource, 'skills', 'skills');
 
   assert.match(
     skillsPanel,
-    /data-skill-group="translation"[\s\S]*data-collection-add="skills-translation"/s,
-    'translation skill group should contain its own skills-translation add marker',
+    /data-skill-group=\{scope\}[\s\S]*data-collection-add=\{`skills-\$\{scope\}`\}/s,
+    'the skill list and add marker should both follow the current service scope',
   );
-  assert.match(
-    skillsPanel,
-    /data-skill-group="seo"[\s\S]*data-collection-add="skills-seo"/s,
-    'seo skill group should contain its own skills-seo add marker',
-  );
+  assert.doesNotMatch(skillsPanel, /data-skill-group="translation"|data-skill-group="seo"/);
 });
 
 test('About page and admin editor expose the current education and experience sections', async () => {

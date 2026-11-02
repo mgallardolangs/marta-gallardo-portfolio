@@ -7,7 +7,7 @@ import ServiceSwitcher from '../components/translation/ServiceSwitcher';
 import TypedTitle from '../components/TypedTitle.astro';
 import { getLangFromUrl, getLocalizedRoute, t } from '../i18n';
 import { getPageSeo, siteData } from '../lib/siteData';
-import { getTranslationArsenalColumns } from '../lib/translationPage.js';
+import { getTranslationArsenalColumns, SEO_RESERVED_TOOL_LABELS } from '../lib/translationPage.js';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
@@ -18,9 +18,6 @@ const pageSeo = getPageSeo(siteData, 'seo', lang, {
   description: { [lang]: pageDescription },
 });
 const arsenal = getTranslationArsenalColumns(lang, siteData, 'seo');
-const seoToolIds = new Set(['google-search-console', 'google-business-profile', 'wordpress']);
-const seoTools = arsenal.tools.filter((tool) => seoToolIds.has(tool.id));
-const reservedTools = ['Ahrefs', 'SEMrush', 'Screaming Frog'];
 ---
 
 <BaseLayout title={pageSeo.title} description={pageSeo.description}>
@@ -52,7 +49,7 @@ const reservedTools = ['Ahrefs', 'SEMrush', 'Screaming Frog'];
     <section class="bg-ink px-6 py-16 text-paper md:py-20">
       <div class="site-container space-y-10">
         <div class="space-y-5">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{i.nav.seo}</p>
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.services.eyebrow}</p>
           <TypedTitle
             as="h2"
             text={page.services.title}
@@ -76,7 +73,7 @@ const reservedTools = ['Ahrefs', 'SEMrush', 'Screaming Frog'];
     <section class="px-6 py-16 md:py-20">
       <div class="site-container grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
         <ScrollReveal client:visible direction="right" className="flex flex-col gap-6">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{i.nav.seo}</p>
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.international.eyebrow}</p>
           <TypedTitle
             as="h2"
             text={page.international.title}
@@ -88,7 +85,7 @@ const reservedTools = ['Ahrefs', 'SEMrush', 'Screaming Frog'];
           <RichText text={page.international.description} class="max-w-3xl font-body text-base leading-8 text-ink-muted md:text-lg" />
           <div class="site-text-cta-row">
             <a href={getLocalizedRoute('translation', lang)} class="site-text-cta">
-              {i.nav.translation}
+              {page.international.translationLinkLabel}
               <span class="site-text-cta__arrow" aria-hidden="true">↗</span>
             </a>
           </div>
@@ -99,7 +96,7 @@ const reservedTools = ['Ahrefs', 'SEMrush', 'Screaming Frog'];
     <section class="bg-ink px-6 py-16 text-paper md:py-20">
       <div class="site-container space-y-10">
         <div class="max-w-3xl space-y-5">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{i.nav.seo}</p>
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.why.eyebrow}</p>
           <TypedTitle
             as="h2"
             text={page.why.title}
@@ -114,13 +111,13 @@ const reservedTools = ['Ahrefs', 'SEMrush', 'Screaming Frog'];
             <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.toolsTitle}</p>
             <span class="mt-4 block h-px bg-paper/18"></span>
             <div class="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
-              {seoTools.map((tool) => (
+              {arsenal.tools.map((tool) => (
                 <div class="group flex aspect-square min-w-0 flex-col items-center justify-center gap-3 bg-paper px-3 py-4 text-center text-ink transition hover:bg-amaranth">
                   <img src={tool.logoSrc} alt="" width="40" height="40" loading="lazy" decoding="async" class="h-10 w-10 object-contain" />
                   <p class="font-body text-[0.68rem] font-medium uppercase tracking-[0.1em]">{tool.label}</p>
                 </div>
               ))}
-              {reservedTools.map((tool) => (
+              {SEO_RESERVED_TOOL_LABELS.map((tool) => (
                 <div class="flex aspect-square min-w-0 flex-col items-center justify-center gap-3 border border-dashed border-paper/30 px-3 py-4 text-center text-paper/64">
                   <span class="flex h-10 w-10 items-center justify-center border border-dashed border-paper/35 font-body text-[0.55rem] font-semibold uppercase tracking-[0.1em]">Logo</span>
                   <p class="font-body text-[0.68rem] font-medium uppercase tracking-[0.1em]">{tool}</p>
@@ -145,7 +142,7 @@ const reservedTools = ['Ahrefs', 'SEMrush', 'Screaming Frog'];
     <section class="px-6 py-16 md:py-20">
       <div class="site-container space-y-8">
         <div class="max-w-3xl space-y-6">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{i.nav.seo}</p>
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.budget.eyebrow}</p>
           <TypedTitle
             as="h2"
             text={page.budget.title}

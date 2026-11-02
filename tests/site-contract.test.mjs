@@ -469,7 +469,7 @@ test('admin translation SEO page uses stable site-data collections for arsenal c
   const source = await readFile(path.join(rootDir, 'src/pages/admin/translation-seo.astro'), 'utf8');
 
   assert.match(source, /import\s+AdminTranslationArsenalEditor\s+from\s+['"]..\/..\/components\/admin\/AdminTranslationArsenalEditor['"]/);
-  assert.match(source, /<AdminTranslationArsenalEditor\s+client:load\s*\/>/);
+  assert.match(source, /<AdminTranslationArsenalEditor\s+client:load\s+scope="translation"\s*\/>/);
   assert.doesNotMatch(source, /getTranslationArsenalColumns\(lang,\s*imagesData\)/);
   assert.doesNotMatch(source, /arsenalColumns\.languages\.map/);
   assert.doesNotMatch(source, /translationPage\.skills\.tools\.items/);
