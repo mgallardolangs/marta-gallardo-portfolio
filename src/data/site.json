@@ -518,6 +518,7 @@
     "tools": [
       {
         "id": "microsoft-office",
+        "group": "translation",
         "logo": "/images/tools/microsoft-office.svg",
         "label": {
           "es": "Microsoft Office",
@@ -530,6 +531,7 @@
       },
       {
         "id": "google-workspace",
+        "group": "translation",
         "logo": "/images/tools/google-workspace.svg",
         "label": {
           "es": "Google Workspace",
@@ -542,6 +544,7 @@
       },
       {
         "id": "notion",
+        "group": "translation",
         "logo": "/images/tools/notion.svg",
         "label": {
           "es": "Notion",
@@ -554,6 +557,7 @@
       },
       {
         "id": "ai-tools",
+        "group": "translation",
         "logo": "/images/tools/ai-tools.svg",
         "label": {
           "es": "ChatGPT",
@@ -566,6 +570,7 @@
       },
       {
         "id": "tool-claude",
+        "group": "translation",
         "logo": "/images/tools/tool-claude.svg",
         "label": {
           "es": "Claude",
@@ -590,6 +595,7 @@
       },
       {
         "id": "wordpress",
+        "group": "seo",
         "logo": "/images/tools/wordpress.svg",
         "label": {
           "es": "WordPress",
@@ -602,6 +608,7 @@
       },
       {
         "id": "google-search-console",
+        "group": "seo",
         "logo": "/images/tools/google-search-console.svg",
         "label": {
           "es": "Google Search Console",
@@ -614,6 +621,7 @@
       },
       {
         "id": "google-business-profile",
+        "group": "seo",
         "logo": "/images/tools/google-business-profile.svg",
         "label": {
           "es": "Google My Business",

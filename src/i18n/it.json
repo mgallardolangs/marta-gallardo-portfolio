@@ -125,7 +125,7 @@
       "ctaServices": "Vedi i servizi"
     },
     "about": {
-      "eyebrow": "Profilo editoriale",
+      "eyebrow": "Chi sono",
       "highlight": "Uno sguardo creativo con precisione strategica.",
       "languagesLabel": "Lingue con cui lavoro",
       "languages": [
@@ -166,6 +166,11 @@
         "seo": "Consulenza e audit SEO",
         "translation": "Traduzione e localizzazione di siti web",
         "ugc": "Creazione di contenuti UGC"
+      },
+      "descriptions": {
+        "seo": "Strategie on-page, ottimizzazione tecnica e architettura web pensate per far salire il tuo sito nei risultati di ricerca di Google.",
+        "translation": "Adattamento linguistico professionale con un approccio SEO per internazionalizzare il tuo e-commerce o progetto digitale senza perdere naturalezza.",
+        "ugc": "Produzione audiovisiva organica (Reels, TikTok e annunci) per entrare in contatto in modo autentico con il tuo pubblico e migliorare il tasso di conversione."
       }
     },
     "visibility": {
@@ -179,7 +184,7 @@
   "ugcPage": {
     "hero": {
       "backgroundLabel": "PORTFOLIO BRAND",
-      "eyebrow": "UGC",
+      "eyebrow": "UGC · DIREZIONE CREATIVA",
       "headline": "@marttelier",
       "description": "Creo video e immagini che si integrano in modo naturale nei social e nelle campagne. Contenuti vicini, curati e credibili, pensati per catturare l’attenzione senza perdere l’identità del brand.",
       "nicheIntroTitle": "Ogni brand ha una storia diversa.",
@@ -309,10 +314,12 @@
       "pieceLabel": "PEZZO"
     },
     "benefits": {
+      "eyebrow": "UGC · DIREZIONE CREATIVA",
       "title": "Perché puntare sui contenuti generati dagli utenti",
       "description": "I contenuti UGC permettono di presentare un brand attraverso un’esperienza visiva vicina al pubblico. Possono mostrare come un prodotto o servizio si inserisce nelle situazioni quotidiane e offrire più contesto per valutarlo."
     },
     "process": {
+      "eyebrow": "UGC · DIREZIONE CREATIVA",
       "title": "Processo di lavoro: dall’idea al montaggio finale",
       "steps": [
         {
@@ -462,11 +469,13 @@
   "aboutPage": {
     "trajectoryEyebrow": "PERCORSO",
     "hero": {
+      "eyebrow": "Chi sono",
       "title": "Chi sono: Marta Gallardo e la filosofia Marttelier",
       "subtitle": "Il punto d’incontro tra linguistica, strategia e contenuti",
       "story": "Mi sono laureata in Traduzione e Interpretariato all’Università di Alicante e mi sono specializzata in SEO e strategia digitale. Unendo lingue, ricerca online e contenuti UGC, ho trovato un modo diretto per affiancare i progetti, senza intermediari. Mi interessa che ogni messaggio conservi la propria intenzione e raggiunga le persone giuste."
     },
     "principles": {
+      "eyebrow": "Chi sono",
       "title": "Principi e valori di lavoro di marttelier",
       "items": [
         "Trasparenza e onestà",
@@ -490,6 +499,7 @@
       ]
     },
     "services": {
+      "eyebrow": "SEO",
       "title": "Servizi SEO su misura",
       "items": [
         {
@@ -510,10 +520,13 @@
       ]
     },
     "international": {
+      "eyebrow": "SEO",
+      "translationLinkLabel": "Traduzione",
       "title": "Specialista in SEO internazionale e multilingue",
       "description": "Ogni mercato formula le proprie ricerche in modo diverso. Oltre ad adattare la lingua, è utile analizzare l’intento di ricerca e il contesto culturale affinché i contenuti risultino naturali in ogni mercato."
     },
     "why": {
+      "eyebrow": "SEO",
       "title": "Perché affidarti a me come consulente SEO?",
       "description": "La mia formazione, gli strumenti che uso e il lavoro applicato al mio sito mi permettono di spiegare con chiarezza il processo e le decisioni di ogni progetto."
     },
@@ -522,6 +535,7 @@
       "skillsTitle": "Competenze SEO"
     },
     "budget": {
+      "eyebrow": "SEO",
       "title": "Tariffe e budget SEO",
       "description": "Il budget dipende dallo stato del sito, dall’ambito e dal tipo di supporto. Raccontami gli obiettivi del progetto e preparerò una proposta su misura."
     }
@@ -533,6 +547,7 @@
       "description": "Adatto i contenuti della tua azienda a nuovi mercati con precisione semantica e un approccio SEO."
     },
     "localization": {
+      "eyebrow": "Traduzione",
       "title": "Localizzazione di siti web ed e-commerce",
       "items": [
         {
@@ -548,10 +563,13 @@
       ]
     },
     "multilingualSeo": {
+      "eyebrow": "Traduzione",
+      "seoLinkLabel": "SEO",
       "title": "Traduzione SEO multilingue (fai crescere il traffico organico)",
       "description": "La traduzione SEO parte dalle ricerche effettuate in ogni lingua e mercato. Adatto le parole chiave strategiche per conservarne l’intento senza perdere naturalezza né coerenza di marca."
     },
     "digitalContent": {
+      "eyebrow": "Traduzione",
       "title": "Traduzione professionale di contenuti digitali e blog",
       "items": [
         {

@@ -103,7 +103,7 @@ test('orbit hover playback exposes a helper for immediate pause and resume while
     import('../src/lib/orbitMedia.ts'),
   ]);
 
-  assert.match(homeSource, /<div class="order-4 lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:order-none lg:translate-x-6">/);
+  assert.match(homeSource, /<div class="order-4 min-w-0 w-full lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:order-none lg:translate-x-6">/);
   assert.doesNotMatch(adminHomeSource, /lg:translate-x-6/);
   assert.match(orbitSource, /syncOrbitDriftPlayback\(driftTweenRef\.current,\s*itemId\);/);
   assert.match(

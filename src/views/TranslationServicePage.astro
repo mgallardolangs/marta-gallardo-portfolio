@@ -17,8 +17,6 @@ const pageSeo = getPageSeo(siteData, 'translation', lang, {
   description: { [lang]: page.hero.description },
 });
 const arsenal = getTranslationArsenalColumns(lang, siteData, 'translation');
-const translationToolIds = new Set(['microsoft-office', 'google-workspace', 'notion', 'ai-tools', 'tool-claude']);
-const translationTools = arsenal.tools.filter((tool) => translationToolIds.has(tool.id));
 ---
 
 <BaseLayout title={pageSeo.title} description={pageSeo.description}>
@@ -52,7 +50,7 @@ const translationTools = arsenal.tools.filter((tool) => translationToolIds.has(t
     <section class="bg-ink px-6 py-16 text-paper md:py-20">
       <div class="site-container space-y-10">
         <div class="space-y-5">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{i.nav.translation}</p>
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.localization.eyebrow}</p>
           <TypedTitle
             as="h2"
             text={page.localization.title}
@@ -76,7 +74,7 @@ const translationTools = arsenal.tools.filter((tool) => translationToolIds.has(t
     <section class="px-6 py-16 md:py-20">
       <div class="site-container grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
         <ScrollReveal client:visible direction="right" className="flex flex-col gap-6">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{i.nav.translation}</p>
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.multilingualSeo.eyebrow}</p>
           <TypedTitle
             as="h2"
             text={page.multilingualSeo.title}
@@ -88,7 +86,7 @@ const translationTools = arsenal.tools.filter((tool) => translationToolIds.has(t
           <RichText text={page.multilingualSeo.description} class="max-w-3xl font-body text-base leading-8 text-ink-muted md:text-lg" />
           <div class="site-text-cta-row">
             <a href={getLocalizedRoute('seo', lang)} class="site-text-cta">
-              {i.nav.seo}
+              {page.multilingualSeo.seoLinkLabel}
               <span class="site-text-cta__arrow" aria-hidden="true">↗</span>
             </a>
           </div>
@@ -99,7 +97,7 @@ const translationTools = arsenal.tools.filter((tool) => translationToolIds.has(t
     <section class="bg-ink px-6 py-16 text-paper md:py-20">
       <div class="site-container space-y-10">
         <div class="space-y-5">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{i.nav.translation}</p>
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.digitalContent.eyebrow}</p>
           <TypedTitle
             as="h2"
             text={page.digitalContent.title}
@@ -150,7 +148,7 @@ const translationTools = arsenal.tools.filter((tool) => translationToolIds.has(t
             <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.toolsTitle}</p>
             <span class="mt-4 block h-px bg-ink/12"></span>
             <div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
-              {translationTools.map((tool) => (
+              {arsenal.tools.map((tool) => (
                 <div class="group flex aspect-square min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink">
                   <img src={tool.logoSrc} alt="" width="40" height="40" loading="lazy" decoding="async" class="h-10 w-10 object-contain" />
                   <p class="font-body text-[0.68rem] font-medium uppercase tracking-[0.1em]">{tool.label}</p>

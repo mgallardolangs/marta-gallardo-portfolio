@@ -33,6 +33,7 @@ import type {
   UgcPortfolioItem,
 } from '../../lib/siteData.ts';
 import { getPublicLanguagePicker, seoPageKeys } from '../../lib/siteData.ts';
+import { getArsenalToolGroup } from '../../lib/translationPage.js';
 
 type Listener = () => void;
 export const SUPPORTED_LANGS = ['es', 'en', 'fr', 'de', 'it', 'ca'] as const;
@@ -322,6 +323,8 @@ function utf8ToBase64(value: string): string {
   return btoa(binary);
 }
 
+const ARSENAL_GROUP_ORDER: SkillGroup[] = ['translation', 'seo'];
+
 function getSkillInsertIndex(skills: SkillItem[], group: SkillGroup): number {
   if (group === 'translation') {
     const firstSeoIndex = skills.findIndex((skill) => skill.group === 'seo');
@@ -335,6 +338,22 @@ function getSkillInsertIndex(skills: SkillItem[], group: SkillGroup): number {
   }
 
   return skills.length;
+}
+
+function getToolInsertIndex(tools: ToolItem[], group: SkillGroup): number {
+  const groupedIndexes = tools.flatMap((tool, index) => (
+    getArsenalToolGroup(tool) === group ? [index] : []
+  ));
+  if (groupedIndexes.length > 0) {
+    return groupedIndexes[groupedIndexes.length - 1] + 1;
+  }
+
+  const targetGroupIndex = ARSENAL_GROUP_ORDER.indexOf(group);
+  const nextGroupIndex = tools.findIndex((tool) => {
+    const toolGroup = getArsenalToolGroup(tool);
+    return toolGroup !== null && ARSENAL_GROUP_ORDER.indexOf(toolGroup) > targetGroupIndex;
+  });
+  return nextGroupIndex === -1 ? tools.length : nextGroupIndex;
 }
 
 const BLOG_FEATURED_IMAGE_MAX_BYTES = 2 * 1024 * 1024;
@@ -1000,6 +1019,10 @@ export class AdminStore {
       const skills = collection as SkillItem[];
       const insertIndex = getSkillInsertIndex(skills, (nextItem as SkillItem).group);
       skills.splice(insertIndex, 0, nextItem as SkillItem);
+    } else if (kind === 'tools' && (nextItem as ToolItem).group) {
+      const tools = collection as ToolItem[];
+      const insertIndex = getToolInsertIndex(tools, (nextItem as ToolItem).group!);
+      tools.splice(insertIndex, 0, nextItem as ToolItem);
     } else {
       collection.push(nextItem);
     }
@@ -1015,7 +1038,7 @@ export class AdminStore {
     if (kind === 'skills') {
       return (collection as SkillItem[]).findIndex((item) => item.id === (nextItem as SkillItem).id);
     }
-    return collection.length - 1;
+    return collection.findIndex((item) => (item as { id: string }).id === (nextItem as { id: string }).id);
   }
 
   removeEditableCollectionItem(kind: EditableCollectionKind, index: number): void {

@@ -10,7 +10,7 @@ const i = t(lang);
 const page = i.seoPage;
 ---
 
-<AdminLayout title={`Admin — ${i.nav.seo}`} description={page.hero.paragraphs.join(' ')}>
+<AdminLayout title={`Admin — ${page.hero.title}`} description={page.hero.paragraphs.join(' ')}>
   <div class="bg-paper" data-admin-seo-page>
     <section class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
       <div class="site-container max-w-7xl">
@@ -33,7 +33,7 @@ const page = i.seoPage;
     <section class="bg-ink px-6 py-16 text-paper md:py-20">
       <div class="site-container space-y-10">
         <div class="space-y-5">
-          <EditableText client:load i18nKey="nav.seo" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="seoPage.services.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
           <EditableText client:load i18nKey="seoPage.services.title" as="h2" className="font-heading text-4xl text-paper md:text-5xl" />
         </div>
         <div class="grid gap-8 border-t border-paper/18 pt-8 md:grid-cols-3">
@@ -50,14 +50,14 @@ const page = i.seoPage;
     <section class="px-6 py-16 md:py-20">
       <div class="site-container grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
         <ScrollReveal client:visible direction="right" className="flex flex-col gap-6">
-          <EditableText client:load i18nKey="nav.seo" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="seoPage.international.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
           <EditableText client:load i18nKey="seoPage.international.title" as="h2" className="font-heading text-4xl leading-none text-ink md:text-5xl" />
         </ScrollReveal>
         <ScrollReveal client:visible direction="left" className="flex flex-col gap-6">
           <EditableText client:load i18nKey="seoPage.international.description" as="div" className="max-w-3xl font-body text-base leading-8 text-ink-muted md:text-lg" />
           <div class="site-text-cta-row">
             <a href="/admin/translation-seo" class="site-text-cta">
-              {i.nav.translation}
+              {page.international.translationLinkLabel}
               <span class="site-text-cta__arrow" aria-hidden="true">↗</span>
             </a>
           </div>
@@ -68,15 +68,12 @@ const page = i.seoPage;
     <section class="bg-ink px-6 py-16 text-paper md:py-20">
       <div class="site-container space-y-10">
         <div class="max-w-4xl space-y-5">
+          <EditableText client:load i18nKey="seoPage.why.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
           <EditableText client:load i18nKey="seoPage.why.title" as="h2" className="font-heading text-4xl leading-none text-paper md:text-5xl" />
           <EditableText client:load i18nKey="seoPage.why.description" as="div" className="font-body text-base leading-8 text-paper/72 md:text-lg" />
         </div>
         <div id="admin-seo-arsenal" class="space-y-6 border-t border-paper/18 pt-8">
-          <div class="grid gap-3 md:grid-cols-2">
-            <EditableText client:load i18nKey="seoPage.arsenal.toolsTitle" as="h3" className="font-heading text-2xl text-paper" />
-            <EditableText client:load i18nKey="seoPage.arsenal.skillsTitle" as="h3" className="font-heading text-2xl text-paper" />
-          </div>
-          <AdminTranslationArsenalEditor client:load />
+          <AdminTranslationArsenalEditor client:load scope="seo" />
         </div>
       </div>
     </section>
@@ -84,6 +81,7 @@ const page = i.seoPage;
     <section class="px-6 py-16 md:py-20">
       <div class="site-container space-y-8">
         <div class="max-w-3xl space-y-6">
+          <EditableText client:load i18nKey="seoPage.budget.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
           <EditableText client:load i18nKey="seoPage.budget.title" as="h2" className="font-heading text-4xl leading-none text-ink md:text-5xl" />
           <EditableText client:load i18nKey="seoPage.budget.description" as="div" className="font-body text-base leading-8 text-ink-muted md:text-lg" />
         </div>

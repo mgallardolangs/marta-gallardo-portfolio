@@ -1,5 +1,12 @@
+import { useEffect, useState } from 'react';
 import type { Lang } from '../../i18n';
-import { DESKTOP_ORBIT_GEOMETRY, getLocalizedOrbitText, getOrbitItemLayout } from '../../lib/orbitMedia';
+import {
+  DESKTOP_ORBIT_GEOMETRY,
+  MOBILE_ORBIT_GEOMETRY,
+  getLocalizedOrbitText,
+  getOrbitItemLayout,
+  type OrbitGeometry,
+} from '../../lib/orbitMedia';
 import type { OrbitMedia } from '../../lib/siteData';
 import { useAdminStore } from './useAdminStore';
 
@@ -16,10 +23,23 @@ function getPreviewSrc(item: OrbitMedia) {
 export default function AdminOrbitPreview({ lang }: Props) {
   const store = useAdminStore();
   const items = store.getOrbitMedia();
+  const [orbitGeometry, setOrbitGeometry] = useState<OrbitGeometry>(DESKTOP_ORBIT_GEOMETRY);
+
+  useEffect(() => {
+    const breakpoint = window.matchMedia('(max-width: 767px)');
+    const updateGeometry = () => {
+      setOrbitGeometry(breakpoint.matches ? MOBILE_ORBIT_GEOMETRY : DESKTOP_ORBIT_GEOMETRY);
+    };
+
+    updateGeometry();
+    breakpoint.addEventListener('change', updateGeometry);
+    return () => breakpoint.removeEventListener('change', updateGeometry);
+  }, []);
 
   return (
     <div
-      className="relative mx-auto aspect-[720/440] min-h-[22rem] w-full max-w-[46rem] overflow-hidden md:min-h-[27.5rem]"
+      data-orbit-frame
+      className="relative mx-auto min-w-0 aspect-[2/3] min-h-[22rem] w-full max-w-[46rem] overflow-hidden md:aspect-[720/440] md:min-h-[27.5rem]"
       role="img"
       aria-label="Vista previa del orbit"
     >
@@ -32,7 +52,7 @@ export default function AdminOrbitPreview({ lang }: Props) {
       </div>
 
       {items.map((item, index) => {
-        const layout = getOrbitItemLayout(STATIC_PROGRESS, index, items.length, DESKTOP_ORBIT_GEOMETRY);
+        const layout = getOrbitItemLayout(STATIC_PROGRESS, index, items.length, orbitGeometry);
         const previewSrc = getPreviewSrc(item);
         const alt = getLocalizedOrbitText(item.alt, lang);
 

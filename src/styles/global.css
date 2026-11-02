@@ -547,6 +547,15 @@ svg {
     align-items: end;
   }
 
+  .home-hero__copy {
+    max-width: 48rem;
+  }
+
+  .home-hero__title {
+    max-width: 24ch;
+    font-size: clamp(2.75rem, 4.35vw, 4rem);
+  }
+
   .home-hero__portrait {
     margin-right: 0;
     margin-left: auto;

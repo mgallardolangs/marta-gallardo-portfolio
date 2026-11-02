@@ -6,6 +6,7 @@ import type { OrbitMedia } from '../lib/siteData';
 import { netlifyImage } from '../lib/netlifyImage';
 import {
   DESKTOP_ORBIT_GEOMETRY,
+  MOBILE_ORBIT_GEOMETRY,
   getLocalizedOrbitText,
   getOrbitActivatedVideoPlaybackMode,
   getOrbitDriftTweenOptions,
@@ -16,6 +17,7 @@ import {
   shouldPauseOrbitDriftOnIntroComplete,
   shouldStartOrbitDrift,
   syncOrbitDriftPlayback,
+  type OrbitGeometry,
 } from '../lib/orbitMedia';
 
 interface Props {
@@ -65,10 +67,22 @@ export default function OvalMediaOrbit({
   const entranceTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const activeIdRef = useRef<string | null>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean | null>(null);
+  const [orbitGeometry, setOrbitGeometry] = useState<OrbitGeometry>(DESKTOP_ORBIT_GEOMETRY);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isRegionVisible, setIsRegionVisible] = useState(true);
   const [isDocumentVisible, setIsDocumentVisible] = useState(true);
   const shouldAnimate = !previewMode && prefersReducedMotion === false;
+
+  useEffect(() => {
+    const breakpoint = window.matchMedia('(max-width: 767px)');
+    const updateGeometry = () => {
+      setOrbitGeometry(breakpoint.matches ? MOBILE_ORBIT_GEOMETRY : DESKTOP_ORBIT_GEOMETRY);
+    };
+
+    updateGeometry();
+    breakpoint.addEventListener('change', updateGeometry);
+    return () => breakpoint.removeEventListener('change', updateGeometry);
+  }, []);
 
   const killMotion = () => {
     entranceTimelineRef.current?.kill();
@@ -85,7 +99,7 @@ export default function OvalMediaOrbit({
       const tile = tileRefs.current[item.id];
       if (!tile) return;
 
-      const layout = getOrbitItemLayout(progress, index, items.length, DESKTOP_ORBIT_GEOMETRY);
+      const layout = getOrbitItemLayout(progress, index, items.length, orbitGeometry);
       const interactionState = getOrbitInteractionState({
         baseScale: layout.baseScale,
         isActive: activeIdRef.current === item.id,
@@ -179,7 +193,7 @@ export default function OvalMediaOrbit({
     activeIdRef.current = activeId;
     applyOrbitLayout();
     syncOrbitDriftPlayback(driftTweenRef.current, activeId);
-  }, [activeId, items]);
+  }, [activeId, items, orbitGeometry]);
 
   useEffect(() => {
     if (prefersReducedMotion === null) return;
@@ -244,12 +258,12 @@ export default function OvalMediaOrbit({
       left: (_index, element: HTMLDivElement) => {
         const itemId = element.dataset.itemId ?? '';
         const itemIndex = items.findIndex((item) => item.id === itemId);
-        return `${getOrbitItemLayout(progressRef.current.value, itemIndex, items.length, DESKTOP_ORBIT_GEOMETRY).leftPercent}%`;
+        return `${getOrbitItemLayout(progressRef.current.value, itemIndex, items.length, orbitGeometry).leftPercent}%`;
       },
       top: (_index, element: HTMLDivElement) => {
         const itemId = element.dataset.itemId ?? '';
         const itemIndex = items.findIndex((item) => item.id === itemId);
-        return `${getOrbitItemLayout(progressRef.current.value, itemIndex, items.length, DESKTOP_ORBIT_GEOMETRY).topPercent}%`;
+        return `${getOrbitItemLayout(progressRef.current.value, itemIndex, items.length, orbitGeometry).topPercent}%`;
       },
     }, 0);
     timeline.to(centerRef.current, { duration: 0.78, clipPath: 'inset(0 0 0 0)', ease: 'power2.out' }, 0.2);
@@ -267,7 +281,7 @@ export default function OvalMediaOrbit({
     return () => {
       timeline.kill();
     };
-  }, [items, prefersReducedMotion, shouldAnimate]);
+  }, [items, orbitGeometry, prefersReducedMotion, shouldAnimate]);
 
   useEffect(() => {
     const onBeforePreparation = () => {
@@ -298,7 +312,7 @@ export default function OvalMediaOrbit({
     <div className={className}>
       <div
         ref={regionRef}
-        className="relative mx-auto w-full max-w-[46rem]"
+        className="relative mx-auto min-w-0 w-full max-w-[46rem]"
         role="region"
         aria-label={ariaLabel}
         onPointerLeave={(event) => {
@@ -307,7 +321,7 @@ export default function OvalMediaOrbit({
           clearActiveTile();
         }}
       >
-        <div className="relative aspect-[720/440] min-h-[22rem] overflow-hidden md:min-h-[27.5rem]">
+        <div data-orbit-frame className="relative aspect-[2/3] min-h-[22rem] overflow-hidden md:aspect-[720/440] md:min-h-[27.5rem]">
           <div
             ref={(element) => { echoRefs.current[0] = element; }}
             className="pointer-events-none absolute left-1/2 top-1/2 h-[55%] w-[56%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/12"

@@ -2,6 +2,7 @@ import { applySpanishFallbackToCodeManagedLocales } from './orbitMedia.ts';
 import type {
   LanguageItem,
   LocalizedText,
+  ArsenalGroup,
   SkillGroup,
   SiteData,
   SkillItem,
@@ -24,6 +25,7 @@ export type AddLanguageCollectionItemInput = {
 };
 
 export type AddToolCollectionItemInput = {
+  group?: ArsenalGroup;
   label: EditableLocaleSeed;
   logo?: string;
 };
@@ -189,6 +191,9 @@ export function getEditableCollectionValidationErrors(siteData: SiteData) {
     if (!item.logo.trim()) {
       errors.push(`La herramienta ${item.id} necesita un logo.`);
     }
+    if (item.group && !isSkillGroup(item.group)) {
+      errors.push(`La herramienta ${item.id} necesita un grupo de traducción o seo.`);
+    }
   });
 
   (arsenal.skills ?? []).forEach((item) => {
@@ -232,6 +237,7 @@ export function createEditableCollectionItem(
     const id = buildEditableCollectionId(kind, toolInput.label.es, existingIds);
     return {
       id,
+      ...(toolInput.group ? { group: toolInput.group } : {}),
       logo: toolInput.logo?.trim() ?? '',
       label: createCollectionLocalizedText(toolInput.label),
     };

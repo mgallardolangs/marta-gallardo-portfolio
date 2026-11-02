@@ -12,15 +12,29 @@ export const ORBIT_IMAGE_MAX_BYTES = 2 * 1024 * 1024;
 export const ORBIT_VIDEO_MAX_BYTES = 8 * 1024 * 1024;
 export const ORBIT_REVOLUTION_SECONDS = 76;
 
-export const DESKTOP_ORBIT_GEOMETRY = {
+export type OrbitGeometry = {
+  width: number;
+  height: number;
+  radiusX: number;
+  radiusY: number;
+  tiltDeg: number;
+};
+
+export const DESKTOP_ORBIT_GEOMETRY: OrbitGeometry = {
   width: 720,
   height: 440,
   radiusX: 324,
   radiusY: 145,
   tiltDeg: -18,
-} as const;
+};
 
-export type OrbitGeometry = typeof DESKTOP_ORBIT_GEOMETRY;
+export const MOBILE_ORBIT_GEOMETRY: OrbitGeometry = {
+  width: 320,
+  height: 480,
+  radiusX: 108,
+  radiusY: 170,
+  tiltDeg: 0,
+};
 export type OrbitActivationMode = 'pointer-hover' | 'focus';
 
 const TAU = Math.PI * 2;

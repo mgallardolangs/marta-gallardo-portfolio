@@ -9,12 +9,15 @@ import {
 } from '../../lib/adminCollections.ts';
 import { localize } from '../../lib/siteData.ts';
 import type { LanguageItem, SkillGroup, SkillItem, ToolItem } from '../../lib/siteData.ts';
+import { getArsenalToolGroup, SEO_RESERVED_TOOL_LABELS } from '../../lib/translationPage.js';
+import EditableText from './EditableText';
 import { useAdminStore } from './useAdminStore';
 
 type LocaleFieldState = Record<EditableCollectionLocale, string>;
 type AddTarget = 'languages' | 'tools' | SkillGroup;
 type ItemEditorTarget = { kind: EditableCollectionKind; id: string };
 type DragSource = { kind: EditableCollectionKind; index: number };
+type EditorProps = { scope: SkillGroup };
 
 function createEmptyFields(): LocaleFieldState {
   return { es: '', en: '', fr: '' };
@@ -63,10 +66,15 @@ function LocaleLabelFields({
   );
 }
 
-export default function AdminTranslationArsenalEditor() {
+export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
   const store = useAdminStore();
-  const languages = store.getEditableCollection('languages') as LanguageItem[];
-  const tools = store.getEditableCollection('tools') as ToolItem[];
+  const allLanguages = store.getEditableCollection('languages') as LanguageItem[];
+  const languages = scope === 'translation' ? allLanguages : [];
+  const allTools = store.getEditableCollection('tools') as ToolItem[];
+  const tools = allTools
+    .map((item, index) => ({ item, index }))
+    .filter(({ item }) => getArsenalToolGroup(item) === scope);
+  const reservedTools = scope === 'seo' ? SEO_RESERVED_TOOL_LABELS : [];
   const skills = store.getEditableCollection('skills') as SkillItem[];
 
   const [editingItem, setEditingItem] = useState<ItemEditorTarget | null>(null);
@@ -87,13 +95,13 @@ export default function AdminTranslationArsenalEditor() {
       .map((item, index) => ({ item, index }))
       .filter(({ item }) => item.group === 'seo'),
   }), [skills]);
+  const scopedSkills = groupedSkills[scope];
 
-  const titles = {
-    languages: store.getText('translationPage.arsenal.languagesTitle'),
-    tools: store.getText('translationPage.arsenal.toolsTitle'),
-    skills: store.getText('translationPage.arsenal.skillsTitle'),
-    translation: store.getText('translationPage.skillGroups.translation'),
-    seo: store.getText('translationPage.skillGroups.seo'),
+  const sectionKey = scope === 'translation' ? 'translationServicePage.arsenal' : 'seoPage.arsenal';
+  const titleKeys = {
+    languages: 'translationServicePage.arsenal.languagesTitle',
+    tools: `${sectionKey}.toolsTitle`,
+    skills: `${sectionKey}.skillsTitle`,
   };
 
   const resetAddForm = () => {
@@ -157,7 +165,7 @@ export default function AdminTranslationArsenalEditor() {
         kind === 'languages'
           ? { label: addLabelFields, level: addLevelFields }
           : kind === 'tools'
-            ? { label: addLabelFields, logo: '' }
+              ? { label: addLabelFields, logo: '', group: scope }
             : { group: activeAdd as SkillGroup, label: addLabelFields },
       );
 
@@ -294,9 +302,10 @@ export default function AdminTranslationArsenalEditor() {
 
   const renderToolItemEditor = () => {
     if (editingItem?.kind !== 'tools') return null;
-    const index = tools.findIndex((item) => item.id === editingItem.id);
-    const item = tools[index];
-    if (!item) return null;
+    const position = tools.findIndex(({ item }) => item.id === editingItem.id);
+    const entry = tools[position];
+    if (!entry) return null;
+    const { item, index } = entry;
 
     return (
       <div className="mt-3 space-y-3 border border-dashed border-ink/30 bg-paper/70 p-4" data-item-editor="tools">
@@ -335,8 +344,8 @@ export default function AdminTranslationArsenalEditor() {
           </p>
         )}
         <div className="flex flex-wrap items-center gap-2">
-          <button type="button" data-move-item="up" disabled={index === 0} onClick={() => store.moveEditableCollectionItem('tools', index, -1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↑ Subir</button>
-          <button type="button" data-move-item="down" disabled={index === tools.length - 1} onClick={() => store.moveEditableCollectionItem('tools', index, 1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↓ Bajar</button>
+          <button type="button" data-move-item="up" disabled={position === 0} onClick={() => store.moveEditableCollectionItem('tools', index, -1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↑ Subir</button>
+          <button type="button" data-move-item="down" disabled={position === tools.length - 1} onClick={() => store.moveEditableCollectionItem('tools', index, 1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↓ Bajar</button>
           <button type="button" onClick={closeItemEditor} className="border border-ink/10 bg-white px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink">Hecho</button>
           <button
             type="button"
@@ -351,12 +360,12 @@ export default function AdminTranslationArsenalEditor() {
     );
   };
 
-  const renderSkillItemEditor = (group: SkillGroup) => {
+  const renderSkillItemEditor = () => {
     if (editingItem?.kind !== 'skills') return null;
     const index = skills.findIndex((skillItem) => skillItem.id === editingItem.id);
     const item = skills[index];
-    if (!item || item.group !== group) return null;
-    const position = groupedSkills[group].findIndex((entry) => entry.item.id === item.id);
+    if (!item) return null;
+    const position = groupedSkills[item.group].findIndex((entry) => entry.item.id === item.id);
 
     return (
       <div className="mt-3 space-y-3 border border-dashed border-ink/30 bg-paper/70 p-4" data-item-editor="skills">
@@ -372,7 +381,7 @@ export default function AdminTranslationArsenalEditor() {
         />
         <div className="flex flex-wrap items-center gap-2">
           <button type="button" data-move-item="up" disabled={position === 0} onClick={() => store.moveEditableCollectionItem('skills', index, -1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↑ Subir</button>
-          <button type="button" data-move-item="down" disabled={position === groupedSkills[group].length - 1} onClick={() => store.moveEditableCollectionItem('skills', index, 1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↓ Bajar</button>
+          <button type="button" data-move-item="down" disabled={position === groupedSkills[item.group].length - 1} onClick={() => store.moveEditableCollectionItem('skills', index, 1)} className="border border-ink/10 px-2 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink disabled:cursor-not-allowed disabled:opacity-40">↓ Bajar</button>
           <button type="button" onClick={closeItemEditor} className="border border-ink/10 bg-white px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-ink">Hecho</button>
           <button
             type="button"
@@ -388,10 +397,11 @@ export default function AdminTranslationArsenalEditor() {
   };
 
   return (
-    <div className="border border-ink" data-admin-arsenal-editor>
-      <div className="grid gap-0 lg:grid-cols-3">
+    <div className="border border-ink" data-admin-arsenal-editor data-arsenal-scope={scope}>
+      <div className={`grid gap-0 ${scope === 'translation' ? 'lg:grid-cols-3' : 'md:grid-cols-2'}`}>
+        {scope === 'translation' && (
         <article className="border-b border-ink p-5 lg:border-b-0 lg:border-r" data-admin-arsenal-panel="languages">
-          <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{titles.languages}</p>
+          <EditableText i18nKey={titleKeys.languages} as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth" />
           <span className="mt-4 block h-px bg-ink/12"></span>
           <div className="mt-5" data-arsenal-items>
             {languages.map((language, index) => (
@@ -437,12 +447,16 @@ export default function AdminTranslationArsenalEditor() {
           </button>
           {activeAdd === 'languages' && renderAddComposer()}
         </article>
+        )}
 
-        <article className="border-b border-ink p-5 lg:border-b-0 lg:border-r" data-admin-arsenal-panel="tools">
-          <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{titles.tools}</p>
+        <article
+          className={`border-b border-ink p-5 ${scope === 'translation' ? 'lg:border-b-0 lg:border-r' : 'md:border-b-0 md:border-r'}`}
+          data-admin-arsenal-panel="tools"
+        >
+          <EditableText i18nKey={titleKeys.tools} as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth" />
           <span className="mt-4 block h-px bg-ink/12"></span>
           <div className="mt-5 grid grid-cols-3 gap-2" data-arsenal-items>
-            {tools.map((tool, index) => (
+            {tools.map(({ item: tool, index }) => (
               <div
                 key={tool.id}
                 className="group relative flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink"
@@ -481,6 +495,12 @@ export default function AdminTranslationArsenalEditor() {
                 </button>
               </div>
             ))}
+            {reservedTools.map((tool) => (
+              <div key={tool} className="flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 border border-dashed border-ink/30 px-3 py-4 text-center text-ink-faint">
+                <span className="flex h-10 w-10 items-center justify-center border border-dashed border-ink/35 font-body text-[0.55rem] font-semibold uppercase tracking-[0.1em]">Logo</span>
+                <span className="text-[0.65rem] font-medium uppercase tracking-[0.12em]">{tool}</span>
+              </div>
+            ))}
 
             <button
               type="button"
@@ -498,97 +518,48 @@ export default function AdminTranslationArsenalEditor() {
         </article>
 
         <article className="p-5" data-admin-arsenal-panel="skills">
-          <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{titles.skills}</p>
+          <EditableText i18nKey={titleKeys.skills} as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth" />
           <span className="mt-4 block h-px bg-ink/12"></span>
-          <div className="mt-5 grid gap-6 md:grid-cols-2" data-arsenal-items>
-            <div className="space-y-3" data-skill-group="translation">
-              <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-muted">{titles.translation}</p>
-              <div className="flex flex-col gap-2">
-                {groupedSkills.translation.map(({ item, index }) => (
-                  <span
-                    key={item.id}
-                    className="group relative border border-ink/12 px-3 py-2 text-[0.68rem] uppercase tracking-[0.08em] text-ink"
-                    data-arsenal-item
-                    data-skill-chip
-                    data-skill-group="translation"
-                    data-item-id={item.id}
-                    data-item-index={index}
-                    draggable
-                    onDragStart={(event) => handleDragStart(event, 'skills', index)}
-                    onDragOver={handleDragOver}
-                    onDrop={(event) => handleDrop(event, 'skills', index)}
-                    onDragEnd={handleDragEnd}
-                  >
-                    {localize(item.label, store.currentLang)}
-                    <span data-drag-handle aria-hidden="true" className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 pl-1 text-[0.6rem] text-ink-faint opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100">⠿</span>
-                    <button
-                      type="button"
-                      data-edit-item
-                      onClick={() => openItemEditor('skills', item.id)}
-                      aria-label={`Editar ${localize(item.label, store.currentLang)}`}
-                      className="absolute inset-y-0 right-0 flex items-center bg-paper px-2 text-ink opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100"
-                    >
-                      ✎
-                    </button>
-                  </span>
-                ))}
-                {renderSkillItemEditor('translation')}
+          <div className="mt-5 flex flex-col gap-2" data-arsenal-items data-skill-group={scope}>
+            {scopedSkills.map(({ item, index }) => (
+              <span
+                key={item.id}
+                className="group relative border border-ink/12 px-3 py-2 text-[0.68rem] uppercase tracking-[0.08em] text-ink"
+                data-arsenal-item
+                data-skill-chip
+                data-skill-group={scope}
+                data-item-id={item.id}
+                data-item-index={index}
+                draggable
+                onDragStart={(event) => handleDragStart(event, 'skills', index)}
+                onDragOver={handleDragOver}
+                onDrop={(event) => handleDrop(event, 'skills', index)}
+                onDragEnd={handleDragEnd}
+              >
+                {localize(item.label, store.currentLang)}
+                <span data-drag-handle aria-hidden="true" className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 pl-1 text-[0.6rem] text-ink-faint opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100">⠿</span>
                 <button
                   type="button"
-                  data-collection-add="skills-translation"
-                  onClick={() => openAdd('translation')}
-                  className="border border-dashed border-ink/25 px-3 py-2 text-left text-[0.68rem] uppercase tracking-[0.08em] text-ink-faint transition hover:border-amaranth hover:text-amaranth"
+                  data-edit-item
+                  onClick={() => openItemEditor('skills', item.id)}
+                  aria-label={`Editar ${localize(item.label, store.currentLang)}`}
+                  className="absolute inset-y-0 right-0 flex items-center bg-paper px-2 text-ink opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100"
                 >
-                  + Añadir habilidad
+                  ✎
                 </button>
-                {activeAdd === 'translation' && renderAddComposer()}
-              </div>
+              </span>
+            ))}
+            {renderSkillItemEditor()}
+            <button
+              type="button"
+              data-collection-add={`skills-${scope}`}
+              onClick={() => openAdd(scope)}
+              className="border border-dashed border-ink/25 px-3 py-2 text-left text-[0.68rem] uppercase tracking-[0.08em] text-ink-faint transition hover:border-amaranth hover:text-amaranth"
+            >
+              + Añadir habilidad
+            </button>
+            {activeAdd === scope && renderAddComposer()}
             </div>
-
-            <div className="space-y-3" data-skill-group="seo">
-              <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-muted">{titles.seo}</p>
-              <div className="flex flex-col gap-2">
-                {groupedSkills.seo.map(({ item, index }) => (
-                  <span
-                    key={item.id}
-                    className="group relative border border-ink/12 px-3 py-2 text-[0.68rem] uppercase tracking-[0.08em] text-ink"
-                    data-arsenal-item
-                    data-skill-chip
-                    data-skill-group="seo"
-                    data-item-id={item.id}
-                    data-item-index={index}
-                    draggable
-                    onDragStart={(event) => handleDragStart(event, 'skills', index)}
-                    onDragOver={handleDragOver}
-                    onDrop={(event) => handleDrop(event, 'skills', index)}
-                    onDragEnd={handleDragEnd}
-                  >
-                    {localize(item.label, store.currentLang)}
-                    <span data-drag-handle aria-hidden="true" className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 pl-1 text-[0.6rem] text-ink-faint opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100">⠿</span>
-                    <button
-                      type="button"
-                      data-edit-item
-                      onClick={() => openItemEditor('skills', item.id)}
-                      aria-label={`Editar ${localize(item.label, store.currentLang)}`}
-                      className="absolute inset-y-0 right-0 flex items-center bg-paper px-2 text-ink opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100"
-                    >
-                      ✎
-                    </button>
-                  </span>
-                ))}
-                {renderSkillItemEditor('seo')}
-                <button
-                  type="button"
-                  data-collection-add="skills-seo"
-                  onClick={() => openAdd('seo')}
-                  className="border border-dashed border-ink/25 px-3 py-2 text-left text-[0.68rem] uppercase tracking-[0.08em] text-ink-faint transition hover:border-amaranth hover:text-amaranth"
-                >
-                  + Añadir habilidad
-                </button>
-                {activeAdd === 'seo' && renderAddComposer()}
-              </div>
-            </div>
-          </div>
         </article>
       </div>
     </div>
