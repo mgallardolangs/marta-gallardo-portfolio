@@ -3,6 +3,9 @@ import { adminStore } from './adminStore';
 import originalEs from '../../i18n/es.json';
 import originalEn from '../../i18n/en.json';
 import originalFr from '../../i18n/fr.json';
+import originalDe from '../../i18n/de.json';
+import originalIt from '../../i18n/it.json';
+import originalCa from '../../i18n/ca.json';
 import {
   ADMIN_INIT_FALLBACK_DELAY_MS,
   ADMIN_INIT_MAX_RETRIES,
@@ -22,29 +25,24 @@ export default function AdminInit({ i18nJson, siteJson, lang }: Props) {
   useEffect(() => {
     const parsedI18n = JSON.parse(i18nJson) as Record<string, unknown>;
     const parsedSite = JSON.parse(siteJson) as Record<string, unknown>;
+    const restoreHeroMark = (locale: string, original: typeof originalEs) => {
+      const dictionary = (parsedI18n[locale] as Record<string, unknown>) ?? {};
+      return {
+        ...dictionary,
+        translationPage: {
+          ...((dictionary.translationPage as Record<string, unknown>) ?? {}),
+          heroMark: original.translationPage.heroMark,
+        },
+      };
+    };
     const restoredI18n = {
       ...parsedI18n,
-      es: {
-        ...(parsedI18n.es as Record<string, unknown>),
-        translationPage: {
-          ...(((parsedI18n.es as Record<string, unknown>)?.translationPage as Record<string, unknown>) ?? {}),
-          heroMark: originalEs.translationPage.heroMark,
-        },
-      },
-      en: {
-        ...(parsedI18n.en as Record<string, unknown>),
-        translationPage: {
-          ...(((parsedI18n.en as Record<string, unknown>)?.translationPage as Record<string, unknown>) ?? {}),
-          heroMark: originalEn.translationPage.heroMark,
-        },
-      },
-      fr: {
-        ...(parsedI18n.fr as Record<string, unknown>),
-        translationPage: {
-          ...(((parsedI18n.fr as Record<string, unknown>)?.translationPage as Record<string, unknown>) ?? {}),
-          heroMark: originalFr.translationPage.heroMark,
-        },
-      },
+      es: restoreHeroMark('es', originalEs),
+      en: restoreHeroMark('en', originalEn),
+      fr: restoreHeroMark('fr', originalFr),
+      de: restoreHeroMark('de', originalDe),
+      it: restoreHeroMark('it', originalIt),
+      ca: restoreHeroMark('ca', originalCa),
     };
     let draftLoaded = adminStore.isInitialized();
     let identityListenersCleanup: (() => void) | null = null;

@@ -8,6 +8,9 @@ import { getLangFromUrl, t } from '../i18n';
 import es from '../i18n/es.json';
 import en from '../i18n/en.json';
 import fr from '../i18n/fr.json';
+import de from '../i18n/de.json';
+import it from '../i18n/it.json';
+import ca from '../i18n/ca.json';
 import { siteData } from '../lib/siteData';
 
 interface Props {
@@ -31,6 +34,9 @@ const allI18n = JSON.stringify({
   es: sanitizeAdminTranslations(es),
   en: sanitizeAdminTranslations(en),
   fr: sanitizeAdminTranslations(fr),
+  de: sanitizeAdminTranslations(de),
+  it: sanitizeAdminTranslations(it),
+  ca: sanitizeAdminTranslations(ca),
 });
 const allSite = JSON.stringify(siteData);
 ---

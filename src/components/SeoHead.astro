@@ -1,5 +1,5 @@
 ---
-import { defaultLang, getLocalizedPath, stripLocaleFromPath, visibleLangs, type Lang } from '../i18n';
+import { defaultLang, getLocalizedPath, visibleLangs, type Lang } from '../i18n';
 import { localize, siteData } from '../lib/siteData';
 
 interface Props {
@@ -14,8 +14,12 @@ interface Props {
 }
 
 const { lang, title, description, pathname, image, alternateLocales, alternateLinks, xDefaultPath } = Astro.props;
-const pagePath = pathname === '/' ? '/' : pathname.replace(/\/$/, '') || '/';
-const normalizedPublicPath = stripLocaleFromPath(pagePath);
+const extensionlessPath = pathname.replace(/\.html$/, '');
+const pagePath = extensionlessPath === '/index'
+  ? '/'
+  : extensionlessPath === '/'
+    ? '/'
+    : extensionlessPath.replace(/\/$/, '') || '/';
 const absolute = (target: string) => new URL(target, Astro.site);
 const canonical = absolute(pagePath);
 const personImage = absolute(siteData.heroMainPhoto);
@@ -41,13 +45,13 @@ const localizedAlternateLinks = alternateLinks
 const resolvedAlternateLinks = localizedAlternateLinks
   ? localizedAlternateLinks
   : (alternateLocales ?? visibleLangs).reduce<Partial<Record<Lang, string>>>((alternates, locale) => {
-      alternates[locale] = getLocalizedPath(normalizedPublicPath, locale);
+      alternates[locale] = getLocalizedPath(pagePath, locale);
       return alternates;
     }, {});
 const xDefaultHref = absolute(
   xDefaultPath
     ? normalizeSeoPath(xDefaultPath)
-    : resolvedAlternateLinks[defaultLang] ?? pagePath,
+    : resolvedAlternateLinks[defaultLang] ?? getLocalizedPath(pagePath, defaultLang),
 ).toString();
 
 const personJsonLd = {

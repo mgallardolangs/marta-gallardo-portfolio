@@ -1,5 +1,5 @@
 ---
-import { getLocalizedPath, t, type Lang } from '../i18n';
+import { getLocalizedPath, getLocalizedRoute, t, type Lang } from '../i18n';
 import { siteData } from '../lib/siteData';
 import EditableText from './admin/EditableText';
 
@@ -12,10 +12,21 @@ const { lang, adminMode = false } = Astro.props;
 const i = t(lang);
 const year = new Date().getFullYear();
 const navPath = (path: string) => (adminMode ? `/admin${path === '/' ? '' : path}` : getLocalizedPath(path, lang));
-const navItems = [
+const publicNavItems = [
+  { route: 'home', label: i.nav.home },
+  { route: 'about', label: i.nav.about },
+  { route: 'seo', label: i.nav.seo },
+  { route: 'translation', label: i.nav.translation },
+  { route: 'ugc', label: i.nav.ugcService },
+  { route: 'blog', label: i.nav.blog },
+  { route: 'contact', label: i.nav.contact },
+];
+const adminNavItems = [
   { key: 'home', href: '/', label: i.nav.home, i18nKey: 'nav.home' },
-  { key: 'ugc', href: '/ugc', label: i.nav.ugc, i18nKey: 'nav.ugc' },
-  { key: 'translationSeo', href: '/translation-seo', label: i.nav.translationSeo, i18nKey: 'nav.translationSeo' },
+  { key: 'about', href: '/about', label: i.nav.about, i18nKey: 'nav.about' },
+  { key: 'seo', href: '/seo', label: i.nav.seo, i18nKey: 'nav.seo' },
+  { key: 'translation', href: '/translation-seo', label: i.nav.translation, i18nKey: 'nav.translation' },
+  { key: 'ugc', href: '/ugc', label: i.nav.ugcService, i18nKey: 'nav.ugcService' },
   { key: 'blog', href: '/blog', label: i.nav.blog, i18nKey: 'nav.blog' },
   { key: 'contact', href: '/contact', label: i.nav.contact, i18nKey: 'nav.contact' },
 ];
@@ -51,7 +62,7 @@ const navItems = [
           </div>
         ) : (
           <div class="lg:justify-self-end">
-            <a href={navPath('/contact')} class="footer-cta">
+            <a href={adminMode ? navPath('/contact') : getLocalizedRoute('contact', lang)} class="footer-cta">
               {i.footer.cta}
             </a>
           </div>
@@ -61,8 +72,8 @@ const navItems = [
       <div class="mt-12 flex flex-col gap-10 border-t border-white/10 pt-10">
         <div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
           <nav aria-label="Footer" class="flex flex-wrap gap-x-6 gap-y-4">
-            {navItems.map((item) => (
-              adminMode ? (
+            {adminMode ? (
+              adminNavItems.map((item) => (
                 <div class="group/edit relative overflow-visible">
                   <a href={navPath(item.href)} class="footer-nav-link group">
                     <span class="footer-nav-link__bracket" aria-hidden="true">[</span>
@@ -78,8 +89,10 @@ const navItems = [
                   </a>
                   <span id={`admin-footer-nav-${item.key}-edit`} />
                 </div>
-              ) : (
-                <a href={navPath(item.href)} class="footer-nav-link group">
+              ))
+            ) : (
+              publicNavItems.map((item) => (
+                <a href={getLocalizedRoute(item.route, lang)} class="footer-nav-link group">
                   <span class="footer-nav-link__bracket" aria-hidden="true">[</span>
                   <span class="footer-nav-link__line">
                     <span>{item.label}</span>
@@ -87,8 +100,8 @@ const navItems = [
                   </span>
                   <span class="footer-nav-link__bracket" aria-hidden="true">]</span>
                 </a>
-              )
-            ))}
+              ))
+            )}
           </nav>
 
           <div class="flex items-center gap-3">

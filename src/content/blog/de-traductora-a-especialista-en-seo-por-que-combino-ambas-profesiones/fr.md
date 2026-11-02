@@ -31,4 +31,4 @@ Cette combinaison prend tout son sens pour les entreprises qui vendent, ou souha
 
 Cet espace sera le reflet de cette combinaison : je parlerai de langues, de SEO, et de tout ce qui se trouve à leur croisement. Si vous dirigez une entreprise qui souhaite se développer au-delà de sa langue d'origine, ou si ce sujet vous intéresse simplement, vous êtes au bon endroit.
 
-Si vous souhaitez en savoir plus sur ma façon de travailler, n'hésitez pas à consulter mon [portfolio](https://marttelier.com/fr/translation-seo/) ou à me [contacter](https://marttelier.com/fr/contact/) directement.
+Si vous souhaitez en savoir plus sur ma façon de travailler, n'hésitez pas à consulter mon [portfolio](https://marttelier.com/fr/a-propos) ou à me [contacter](https://marttelier.com/fr/contact) directement.

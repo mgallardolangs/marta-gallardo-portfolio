@@ -15,19 +15,7 @@ const wrapperSpecs = [
   ['src/pages/de/index.astro', '../../views/HomePage.astro', 'HomePage'],
   ['src/pages/it/index.astro', '../../views/HomePage.astro', 'HomePage'],
   ['src/pages/ca/index.astro', '../../views/HomePage.astro', 'HomePage'],
-  ['src/pages/ugc.astro', '../views/UgcPage.astro', 'UgcPage'],
-  ['src/pages/en/ugc.astro', '../../views/UgcPage.astro', 'UgcPage'],
-  ['src/pages/fr/ugc.astro', '../../views/UgcPage.astro', 'UgcPage'],
-  ['src/pages/de/ugc.astro', '../../views/UgcPage.astro', 'UgcPage'],
-  ['src/pages/it/ugc.astro', '../../views/UgcPage.astro', 'UgcPage'],
-  ['src/pages/ca/ugc.astro', '../../views/UgcPage.astro', 'UgcPage'],
-  ['src/pages/translation-seo.astro', '../views/TranslationSeoPage.astro', 'TranslationSeoPage'],
-  ['src/pages/en/translation-seo.astro', '../../views/TranslationSeoPage.astro', 'TranslationSeoPage'],
-  ['src/pages/fr/translation-seo.astro', '../../views/TranslationSeoPage.astro', 'TranslationSeoPage'],
-  ['src/pages/de/translation-seo.astro', '../../views/TranslationSeoPage.astro', 'TranslationSeoPage'],
-  ['src/pages/it/translation-seo.astro', '../../views/TranslationSeoPage.astro', 'TranslationSeoPage'],
-  ['src/pages/ca/translation-seo.astro', '../../views/TranslationSeoPage.astro', 'TranslationSeoPage'],
-  ['src/pages/contact.astro', '../views/ContactPage.astro', 'ContactPage'],
+  ['src/pages/contacto.astro', '../views/ContactPage.astro', 'ContactPage'],
   ['src/pages/en/contact.astro', '../../views/ContactPage.astro', 'ContactPage'],
   ['src/pages/fr/contact.astro', '../../views/ContactPage.astro', 'ContactPage'],
   ['src/pages/de/contact.astro', '../../views/ContactPage.astro', 'ContactPage'],
@@ -43,16 +31,20 @@ const wrapperSpecs = [
 
 const sharedViews = [
   'src/views/HomePage.astro',
+  'src/views/AboutPage.astro',
+  'src/views/SeoServicePage.astro',
+  'src/views/TranslationServicePage.astro',
   'src/views/UgcPage.astro',
-  'src/views/TranslationSeoPage.astro',
   'src/views/BlogIndexPage.astro',
   'src/views/ContactPage.astro',
 ];
 
 const typedViewSpecs = [
-  ['src/views/HomePage.astro', /text=\{i\.hero\.name\}/, 1],
-  ['src/views/UgcPage.astro', /text=\{i\.ugcPage\.hero\.headline\}/, 1],
-  ['src/views/TranslationSeoPage.astro', /text=\{page\.hero\.title\}/, 6],
+  ['src/views/HomePage.astro', /text=\{i\.home\.hero\.title\}/, 2],
+  ['src/views/AboutPage.astro', /text=\{page\.hero\.title\}/, 3],
+  ['src/views/SeoServicePage.astro', /text=\{page\.hero\.title\}/, 5],
+  ['src/views/TranslationServicePage.astro', /text=\{page\.hero\.title\}/, 5],
+  ['src/views/UgcPage.astro', /text=\{i\.ugcPage\.pageTitle\}/, 3],
   ['src/views/BlogIndexPage.astro', /text=\{i\.blog\.title\}/, 1],
   ['src/views/ContactPage.astro', /text=\{i\.contact\.title\}/, 1],
 ];
@@ -75,13 +67,48 @@ const noSpacerShells = [
 ];
 
 const requiredLocalePaths = [
+  'home.hero.title',
   'home.hero.kicker',
   'home.hero.description',
+  'home.hero.ctaDiagnosis',
+  'home.hero.ctaServices',
+  'home.services.title',
+  'home.services.items.seo',
+  'home.services.items.translation',
+  'home.services.items.ugc',
+  'home.visibility.title',
+  'home.visibility.text',
+  'home.about.title',
+  'home.about.description',
+  'home.about.cta',
+  'home.latestArticles.title',
   'about.title',
   'about.text',
+  'aboutPage.hero.title',
+  'aboutPage.hero.subtitle',
+  'aboutPage.hero.story',
+  'aboutPage.principles.title',
+  'aboutPage.principles.items.0',
+  'aboutPage.principles.items.1',
+  'aboutPage.principles.items.2',
+  'aboutPage.principles.items.3',
+  'aboutPage.work.title',
+  'aboutPage.work.description',
   'home.video.description',
   'ugcPage.hero.description',
+  'ugcPage.pageTitle',
   'ugcPage.hero.nicheIntroText',
+  'ugcPage.benefits.title',
+  'ugcPage.benefits.description',
+  'ugcPage.process.title',
+  'ugcPage.process.steps.0.title',
+  'ugcPage.process.steps.0.description',
+  'ugcPage.process.steps.1.title',
+  'ugcPage.process.steps.1.description',
+  'ugcPage.process.steps.2.title',
+  'ugcPage.process.steps.2.description',
+  'ugcPage.process.steps.3.title',
+  'ugcPage.process.steps.3.description',
   'ugcPage.contactSheet.eyebrow',
   'ugcPage.contactSheet.headline',
   'ugcPage.niches.travel.intro',
@@ -97,6 +124,45 @@ const requiredLocalePaths = [
   'translationPage.education.studies.1',
   'translationPage.education.studies.2',
   'translationPage.education.studies.3',
+  'seoPage.hero.eyebrow',
+  'seoPage.hero.title',
+  'seoPage.hero.paragraphs.0',
+  'seoPage.hero.paragraphs.1',
+  'seoPage.services.title',
+  'seoPage.services.items.0.title',
+  'seoPage.services.items.0.description',
+  'seoPage.services.items.1.title',
+  'seoPage.services.items.1.description',
+  'seoPage.services.items.2.title',
+  'seoPage.services.items.2.description',
+  'seoPage.international.title',
+  'seoPage.international.description',
+  'seoPage.why.title',
+  'seoPage.why.description',
+  'seoPage.arsenal.toolsTitle',
+  'seoPage.arsenal.skillsTitle',
+  'seoPage.budget.title',
+  'seoPage.budget.description',
+  'translationServicePage.hero.eyebrow',
+  'translationServicePage.hero.title',
+  'translationServicePage.hero.description',
+  'translationServicePage.localization.title',
+  'translationServicePage.localization.items.0.title',
+  'translationServicePage.localization.items.0.description',
+  'translationServicePage.localization.items.1.title',
+  'translationServicePage.localization.items.1.description',
+  'translationServicePage.multilingualSeo.title',
+  'translationServicePage.multilingualSeo.description',
+  'translationServicePage.digitalContent.title',
+  'translationServicePage.digitalContent.items.0.title',
+  'translationServicePage.digitalContent.items.0.description',
+  'translationServicePage.digitalContent.items.1.title',
+  'translationServicePage.digitalContent.items.1.description',
+  'translationServicePage.arsenal.eyebrow',
+  'translationServicePage.arsenal.title',
+  'translationServicePage.arsenal.languagesTitle',
+  'translationServicePage.arsenal.toolsTitle',
+  'translationServicePage.arsenal.skillsTitle',
   'blog.emptyState',
   'ugcPage.backToTop',
   'footer.eyebrow',
@@ -104,6 +170,11 @@ const requiredLocalePaths = [
   'footer.support',
   'footer.cta',
   'nav.home',
+  'nav.about',
+  'nav.services',
+  'nav.seo',
+  'nav.translation',
+  'nav.ugcService',
   'nav.ugc',
   'nav.translationSeo',
   'nav.blog',
@@ -245,14 +316,24 @@ test('Phase 2 locale files keep required public copy filled in for every locale'
   });
 });
 
-test('Phase 2 Spanish and translation hero copy match the approved content set', async () => {
+test('Phase 2 Spanish and localized copy match the approved content set', async () => {
   const [es, en, fr, de, it, ca] = await Promise.all(locales.map((locale) => readJson(`src/i18n/${locale}.json`)));
 
-  assert.equal(es.home.hero.kicker, 'Creatividad, idiomas y estrategia');
-  assert.equal(es.home.hero.description, 'Creo contenido y adapto mensajes para que las marcas conecten con personas reales, en cualquier idioma y mercado. Combino creatividad, traducción y estrategia digital con una mirada internacional.');
+  assert.equal(es.home.hero.kicker, 'marttelier');
+  assert.equal(es.home.hero.title, 'Consultora SEO Freelance y Estrategia de Contenidos Digitales');
+  assert.equal(es.home.hero.description, 'Optimizo la visibilidad y conversión de tu negocio para que conectes con personas reales, en cualquier idioma y mercado.');
+  assert.equal(es.home.hero.ctaDiagnosis, 'Solicitar diagnóstico SEO');
+  assert.equal(es.home.hero.ctaServices, 'Ver servicios');
+  assert.equal(es.home.services.items.seo, 'Consultoría y Auditoría SEO');
+  assert.equal(es.home.services.items.translation, 'Traducción y Localización Web');
+  assert.equal(es.home.services.items.ugc, 'Creación de Contenido UGC');
   assert.equal(es.about.title, 'Encantada, soy Marta.');
-  assert.equal(es.about.text, 'Soy traductora y creadora de contenido. Trabajo entre idiomas, culturas y formatos para que cada mensaje conserve su intención y conecte de forma natural.\\n\\nCombino traducción, localización, SEO multilingüe y contenido UGC para ayudar a las marcas a comunicar con claridad, coherencia y sensibilidad cultural.');
-  assert.equal(es.home.video.description, 'En @marttelier comparto contenido sobre arte, viajes, idiomas y procesos creativos. Un espacio personal donde convierto curiosidad, observación y experiencias reales en historias visuales.');
+  assert.equal(es.about.text, [
+    'Como traductora y creadora de contenido, trabajo entre idiomas, culturas y formatos para que cada mensaje conserve su intención y conecte de forma natural.',
+    '',
+    'Combino traducción, localización y SEO multilingüe junto con contenido UGC para ayudar a marcas a comunicar con claridad, coherencia y sensibilidad cultural.',
+  ].join('\\n'));
+  assert.equal(es.home.video.description, 'En @marttelier comparto contenido sobre viajes, idiomas y procesos creativos. Un espacio personal donde convierto curiosidad, observación y experiencias reales en historias visuales.');
   assert.equal(es.ugcPage.hero.description, 'Creo vídeos e imágenes que se integran de forma natural en redes y campañas. Contenido cercano, cuidado y creíble, pensado para captar atención sin perder la identidad de la marca.');
   assert.equal(es.ugcPage.hero.nicheIntroText, 'Entiendo qué hace única a cada marca y lo traduzco en contenido natural, relevante y listo para conectar con su audiencia.');
   assert.equal(es.ugcPage.niches.travel.intro, 'Creo contenido para turismo, alojamientos y productos de viaje que transmite la experiencia con naturalidad: recorridos, recomendaciones, integraciones y piezas que ayudan a imaginar el destino antes de reservar.');
@@ -264,10 +345,10 @@ test('Phase 2 Spanish and translation hero copy match the approved content set',
   assert.equal(es.translationPage.experience.cards[0].text, 'Traducción diaria de fichas de producto (ES→FR/DE/IT), gestión de catálogos y atención a clientes francófonos, manteniendo precisión y tono de marca.');
   assert.equal(es.translationPage.experience.cards[1].text, 'Traducción FR⇄ES de textos legales y posedición, con foco en precisión terminológica y coherencia.');
   assert.equal(es.translationPage.experience.cards[2].text, 'Trabajo y convivencia en Suiza en un entorno multicultural, reforzando adaptabilidad, empatía y fluidez comunicativa.');
-  assert.equal(es.translationPage.education.studies[0], 'Grado en Traducción e Interpretación, especializado en francés, redacción y adaptación de contenidos.');
-  assert.equal(es.translationPage.education.studies[1], 'Erasmus+ de seis meses en París y práctica diaria en entornos francófonos.');
+  assert.equal(es.translationPage.education.studies[0], 'Grado en Traducción e Interpretación, especializado en francés, redacción y adaptación de contenidos. Segundos idiomas: alemán e italiano.Formación básica especializada en traducción literaria, jurídico-económica, técnico-científica y audiovisual.');
+  assert.equal(es.translationPage.education.studies[1], 'Erasmus+ en París: práctica diaria en entornos francófonos.');
   assert.equal(es.translationPage.education.studies[2], 'Formación continua en escritura clara, terminología y optimización de contenidos digitales.');
-  assert.equal(es.translationPage.education.studies[3], 'Prácticas de traducción jurídica FR→ES y posedición junto a una traductora especializada.');
+  assert.equal(es.translationPage.education.studies[3], 'Curso privado de Marketing Digital y SEO.');
   assert.equal(es.ugcPage.hero.headline, '@marttelier');
   assert.equal(en.ugcPage.hero.headline, '@marttelier');
   assert.equal(fr.ugcPage.hero.headline, '@marttelier');

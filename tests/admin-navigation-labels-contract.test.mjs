@@ -8,26 +8,35 @@ import { AdminStore } from '../src/components/admin/adminStore.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
-const navKeys = ['nav.home', 'nav.ugc', 'nav.translationSeo', 'nav.blog', 'nav.contact'];
+const navKeys = ['nav.home', 'nav.about', 'nav.services', 'nav.seo', 'nav.translation', 'nav.ugcService', 'nav.blog', 'nav.contact'];
 const navLabelsByLang = {
   es: {
     home: 'Inicio',
-    ugc: 'Contenido creativo',
-    translationSeo: 'Comunicación multilingüe y SEO',
+    about: 'Sobre mí',
+    services: 'Servicios',
+    seo: 'SEO',
+    translation: 'Traducción',
+    ugcService: 'Creación de contenido UGC',
     blog: 'Blog',
     contact: 'Contacto',
   },
   en: {
     home: 'Home',
-    ugc: 'UGC',
-    translationSeo: 'SEO Translation',
+    about: 'About',
+    services: 'Services',
+    seo: 'SEO',
+    translation: 'Translation',
+    ugcService: 'UGC',
     blog: 'Blog',
     contact: 'Contact',
   },
   fr: {
     home: 'Accueil',
-    ugc: 'UGC',
-    translationSeo: 'Traduction SEO',
+    about: 'À propos',
+    services: 'Services',
+    seo: 'SEO',
+    translation: 'Traduction',
+    ugcService: 'UGC',
     blog: 'Blog',
     contact: 'Contact',
   },
@@ -276,7 +285,7 @@ test('AdminToolbar keeps the shared navigation labels editable from one metadata
 
   assert.ok(
     navMetadata,
-    'AdminToolbar should keep the five shared navigation keys together in one metadata list.',
+    'AdminToolbar should keep the current navigation keys together in one metadata list.',
   );
 
   for (const key of navKeys) {
@@ -333,120 +342,31 @@ test('AdminToolbar keeps the shared navigation labels editable from one metadata
   );
 });
 
-test('Header mirrors nav labels only under adminMode', async () => {
+test('Header exposes current admin sections and mirrors their editable labels', async () => {
   const source = await readSource('src/components/Header.astro');
-  const navMetadata = findArrayDeclarationContaining(
-    source,
-    navKeys.map((key) => new RegExp(`i18nKey\\s*:\\s*['"]${escapeRegex(key)}['"]`)),
-  );
-
-  assert.ok(navMetadata, 'Header should keep the shared nav item metadata with i18n keys in one array.');
   assert.match(
     source,
     /import\s+AdminTextMirror\s+from\s+['"]\.\/admin\/AdminTextMirror['"];/,
     'Header should import the shared display-only admin mirror.',
   );
 
-  for (const key of navKeys) {
-    assert.match(
-      navMetadata.body,
-      new RegExp(`i18nKey\\s*:\\s*['"]${escapeRegex(key)}['"]`),
-      `Header should assign ${key} to a nav item.`,
-    );
-  }
-
-  assert.equal(
-    countMatches(navMetadata.body, /i18nKey\s*:\s*['"]nav\.[^'"]+['"]/g),
-    5,
-    'Header should assign exactly one i18nKey per nav item.',
-  );
-
-  const desktopNavSection = extractBoundedBlock(
-    source,
-    /<nav\s+aria-label="Primary"[\s\S]*?>/,
-    '</nav>',
-    'desktop primary navigation section',
-  );
-  const mobileNavSection = extractBoundedBlock(
-    source,
-    /<nav\s+aria-label="Mobile"[\s\S]*?>/,
-    '</nav>',
-    'mobile navigation section',
-  );
-  const desktopRenderBlock = extractMapRenderBlock(
-    desktopNavSection,
-    navMetadata.name,
-    'desktop primary navigation section',
-  );
-  const mobileRenderBlock = extractMapRenderBlock(
-    mobileNavSection,
-    navMetadata.name,
-    'mobile navigation section',
-  );
-  const desktopLabelRegion = extractTagBlock(
-    desktopRenderBlock,
-    /<span class="nav-link__text">/,
-    'span',
-    'desktop primary navigation label region',
-  );
-  const mobileLabelRegion = extractTagBlock(
-    mobileRenderBlock,
-    /<span class="mobile-nav-link__line">/,
-    'span',
-    'mobile navigation label region',
-  );
-
-  for (const [description, renderBlock, labelRegion, expectedClass] of [
-    ['desktop primary navigation section', desktopRenderBlock, desktopLabelRegion, 'nav-link group'],
-    ['mobile navigation section', mobileRenderBlock, mobileLabelRegion, 'mobile-nav-link'],
+  for (const [key, route] of [
+    ['nav.home', "href: '/'"],
+    ['nav.about', "href: '/about'"],
+    ['nav.seo', "href: '/seo'"],
+    ['nav.translation', "href: '/translation-seo'"],
+    ['nav.ugcService', "href: '/ugc'"],
+    ['nav.blog', "href: '/blog'"],
+    ['nav.contact', "href: '/contact'"],
   ]) {
-    assert.match(
-      renderBlock,
-      new RegExp(`class=["']${escapeRegex(expectedClass)}["']`),
-      `Header should keep the ${description} anchored to the ${expectedClass} link markup.`,
-    );
-    assert.equal(
-      countMatches(labelRegion, /adminMode\s*\?\s*(?:\(\s*)?<AdminTextMirror\b/g),
-      2,
-      `Header should keep two admin mirror branches in the ${description} label region.`,
-    );
-    assert.doesNotMatch(
-      labelRegion,
-      /item\.i18nKey\s*===|item\.i18nKey\s*!==/,
-      `Header should not branch on a navigation i18n key in the ${description} label region.`,
-    );
-    assert.match(
-      labelRegion,
-      /adminMode\s*\?\s*(?:\(\s*)?<AdminTextMirror[\s\S]*?:\s*\(?\s*item\.label\s*\)?/s,
-      `Header should use adminMode ? hydrated AdminTextMirror : item.label for each mapped navigation label in the ${description} label region.`,
-    );
-    const adminMirrors = extractComponentTags(labelRegion, 'AdminTextMirror');
-
-    assert.equal(adminMirrors.length, 2, `Header should render exactly two AdminTextMirror copies in the ${description} label region.`);
-
-    for (const mirrorTag of adminMirrors) {
-      assert.match(
-        mirrorTag,
-        /\bclient:load\b/,
-        `Header should hydrate each AdminTextMirror copy with client:load in the ${description} label region.`,
-      );
-      assert.match(
-        mirrorTag,
-        /i18nKey=\{\s*item\.i18nKey\s*\}/,
-        `Header should pass item.i18nKey into each AdminTextMirror copy in the ${description} label region.`,
-      );
-      assert.match(
-        mirrorTag,
-        /fallback=\{\s*item\.label\s*\}/,
-        `Header should pass item.label as the fallback for each AdminTextMirror copy in the ${description} label region.`,
-      );
-    }
-    assert.equal(
-      countMatches(labelRegion, /:\s*\(?\s*item\.label\s*\)?/g),
-      2,
-      `Header should keep two static item.label public fallbacks in the ${description} label region.`,
-    );
+    assert.ok(source.includes(key), `Header should expose ${key} in admin navigation.`);
+    assert.ok(source.includes(route), `Header should route ${key} to the current admin page.`);
   }
+
+  assert.match(source, /adminServiceItems\.map/);
+  assert.match(source, /<AdminTextMirror client:load i18nKey=\{item\.i18nKey\} fallback=\{item\.label\} \/>/);
+  assert.match(source, /<details class="services-nav" data-service-menu>/);
+  assert.match(source, /<details class="mobile-services" data-service-menu>/);
 });
 
 test('built header keeps public nav static and limits AdminTextMirror islands to the admin header', async (t) => {
@@ -457,7 +377,7 @@ test('built header keeps public nav static and limits AdminTextMirror islands to
 
   const [publicHtml, adminHtml] = await Promise.all([
     readSource('dist/index.html'),
-    readSource('dist/admin/index.html'),
+    readSource('dist/admin.html'),
   ]);
 
   const publicHeader = extractHeader(publicHtml, 'public home HTML');
@@ -466,19 +386,28 @@ test('built header keeps public nav static and limits AdminTextMirror islands to
   assert.doesNotMatch(publicHeader, /AdminTextMirror/, 'public header should not ship AdminTextMirror markers');
   assert.doesNotMatch(publicHeader, /<astro-island\b/, 'public header should stay static without hydrated admin text islands');
 
-  for (const label of Object.values(navLabelsByLang.es)) {
+  for (const label of [
+    'Inicio',
+    'Sobre mí',
+    'Blog',
+    'Contacto',
+    'Servicios',
+    'SEO',
+    'Traducción',
+    'Creación de contenido UGC',
+  ]) {
     assert.match(
       publicHeader,
       new RegExp(escapeRegex(label)),
-      `public header should keep the static Spanish nav label "${label}"`,
+      `public header should keep the static Spanish public nav label "${label}"`,
     );
   }
 
   const adminMirrorIslands = extractAstroIslandBlocks(adminHeader).filter((block) => block.includes('AdminTextMirror'));
 
   assert.ok(
-    adminMirrorIslands.length >= navKeys.length * 4,
-    'admin header should hydrate AdminTextMirror islands for both desktop and mobile nav label copies',
+    adminMirrorIslands.length >= 20,
+    'admin header should hydrate editable main-navigation and service labels on desktop and mobile',
   );
 
   for (const island of adminMirrorIslands) {
@@ -494,8 +423,8 @@ test('built header keeps public nav static and limits AdminTextMirror islands to
     ));
 
     assert.ok(
-      matchingIslands.length >= 4,
-      `admin header should include desktop and mobile hydrated AdminTextMirror copies for ${i18nKey} with the ${fallback} fallback`,
+      matchingIslands.length >= 3,
+      `admin header should include desktop animated copies and a single mobile label for ${i18nKey} with the ${fallback} fallback`,
     );
   }
 });

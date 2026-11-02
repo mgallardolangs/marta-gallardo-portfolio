@@ -15,6 +15,9 @@ const LANGS = [
   { code: 'es' as const, label: 'ES' },
   { code: 'en' as const, label: 'EN' },
   { code: 'fr' as const, label: 'FR' },
+  { code: 'de' as const, label: 'DE' },
+  { code: 'it' as const, label: 'IT' },
+  { code: 'ca' as const, label: 'CA' },
 ];
 
 const PUBLIC_PICKER_LANGS = [
@@ -28,8 +31,11 @@ const PUBLIC_PICKER_LANGS = [
 
 const NAV_LABELS = [
   { key: 'nav.home', label: 'Inicio' },
-  { key: 'nav.ugc', label: 'Contenido creativo' },
-  { key: 'nav.translationSeo', label: 'Traducción / SEO' },
+  { key: 'nav.about', label: 'Sobre mí' },
+  { key: 'nav.services', label: 'Servicios' },
+  { key: 'nav.seo', label: 'SEO' },
+  { key: 'nav.translation', label: 'Traducción' },
+  { key: 'nav.ugcService', label: 'UGC' },
   { key: 'nav.blog', label: 'Blog' },
   { key: 'nav.contact', label: 'Contacto' },
 ] as const;
@@ -161,7 +167,7 @@ export default function AdminToolbar() {
                 type="button"
                 onClick={() => void store.publish()}
                 disabled={!store.isAuthenticated || !store.isDirty || store.isPublishing || store.orbitValidationErrors.length > 0}
-                className={`w-full text-xs px-3 py-2 rounded-lg font-bold transition-colors text-left ${store.isAuthenticated && store.isDirty && store.orbitValidationErrors.length === 0 ? 'bg-green-500 hover:bg-green-400' : 'bg-gray-700 text-gray-500'}`}
+                className={`w-full text-xs px-3 py-2 rounded-lg font-bold transition-colors text-left ${store.isAuthenticated && store.isDirty && store.orbitValidationErrors.length === 0 ? 'bg-green-500 hover:bg-green-400' : 'bg-gray-700 text-gray-200'}`}
               >
                 {store.isPublishing ? '⏳ Publicando…' : '🚀 Publicar cambios'}
               </button>

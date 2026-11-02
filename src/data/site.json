@@ -1327,56 +1327,92 @@
   "seo": {
     "home": {
       "title": {
-        "es": "Marta Gallardo — Creatividad, idiomas y estrategia",
-        "en": "Marta Gallardo — Creativity, languages & strategy",
-        "fr": "Marta Gallardo — Créativité, langues et stratégie",
-        "de": "Marta Gallardo — Kreativität, Sprachen und Strategie",
-        "it": "Marta Gallardo — Creatività, lingue e strategia",
-        "ca": "Marta Gallardo — Creativitat, idiomes i estratègia"
+        "es": "Marta Gallardo | Consultora SEO & Estrategia Digital Multilingüe",
+        "en": "Marta Gallardo | Multilingual SEO Consultant & Digital Strategy",
+        "fr": "Marta Gallardo | Consultante SEO et stratégie numérique multilingue",
+        "de": "Marta Gallardo | Mehrsprachige SEO-Beraterin & Digitalstrategie",
+        "it": "Marta Gallardo | Consulente SEO e strategia digitale multilingue",
+        "ca": "Marta Gallardo | Consultora SEO i estratègia digital multilingüe"
       },
       "description": {
-        "es": "Adapto mensajes para que las marcas conecten con personas reales, en cualquier idioma y mercado. Combino creatividad, traducción y estrategia digital con una mirada internacional.",
-        "en": "I adapt messages so brands can connect with real people, in any language and market. I combine creativity, translation and digital strategy with an international perspective.",
-        "fr": "J'adapte les messages pour que les marques créent un lien avec de vraies personnes, dans n’importe quelle langue et sur n’importe quel marché. Je mélange créativité, traduction et stratégie digitale avec un regard international.",
-        "de": "Ich erstelle Inhalte und passe Botschaften so an, dass Marken echte Menschen erreichen – in jeder Sprache und auf jedem Markt. Ich verbinde Kreativität, Übersetzung und digitale Strategie mit einem internationalen Blick.",
-        "it": "Creo contenuti e adatto i messaggi perché i brand possano entrare in contatto con persone reali, in qualsiasi lingua e mercato. Unisco creatività, traduzione e strategia digitale con uno sguardo internazionale.",
-        "ca": "Creo contingut i adapto missatges perquè les marques connectin amb persones reals, en qualsevol idioma i mercat. Combino creativitat, traducció i estratègia digital amb una mirada internacional."
+        "es": "Especialista SEO freelance, graduada en Traducción e Interpretación y creadora de contenido UGC. Optimizo tu presencia digital para captar tráfico y convertir.",
+        "en": "Freelance SEO specialist, graduate in Translation and Interpreting, and UGC content creator. I optimize your digital presence to attract traffic and convert.",
+        "fr": "Spécialiste SEO freelance, diplômée en traduction et interprétation et créatrice de contenu UGC. J’optimise votre présence numérique pour attirer du trafic et convertir.",
+        "de": "Freiberufliche SEO-Spezialistin, Absolventin der Übersetzungs- und Dolmetschwissenschaft und UGC-Content-Creatorin. Ich optimiere Ihre digitale Präsenz, um Traffic zu gewinnen und Conversions zu erzielen.",
+        "it": "Specialista SEO freelance, laureata in Traduzione e Interpretariato e creatrice di contenuti UGC. Ottimizzo la tua presenza digitale per attirare traffico e convertire.",
+        "ca": "Especialista SEO freelance, graduada en Traducció i Interpretació i creadora de contingut UGC. Optimitzo la teva presència digital per atraure trànsit i convertir."
       }
     },
-    "translationSeo": {
+    "about": {
       "title": {
-        "es": "Marta Gallardo — Comunicación multilingüe y SEO",
-        "en": "Marta Gallardo — Multilingual communication & SEO",
-        "fr": "Marta Gallardo — Communication multilingue & SEO",
-        "de": "Marta Gallardo — Übersetzung + SEO",
-        "it": "Marta Gallardo — Traduzione + SEO",
-        "ca": "Marta Gallardo — Traducció + SEO"
+        "es": "Sobre mí | Marta Gallardo: Consultora SEO y Lingüista Web",
+        "en": "About | Marta Gallardo: SEO Consultant & Web Linguist",
+        "fr": "À propos | Marta Gallardo : Consultante SEO et linguiste web",
+        "de": "Über mich | Marta Gallardo: SEO-Beraterin und Weblinguistin",
+        "it": "Chi sono | Marta Gallardo: consulente SEO e linguista web",
+        "ca": "Sobre mi | Marta Gallardo: consultora SEO i lingüista web"
       },
       "description": {
-        "es": "Adapto contenidos para que suenen naturales, conecten con cada mercado y tengan más oportunidades de encontrarse. Traducción, localización y SEO multilingüe con una misma intención: que tu mensaje funcione, esté donde esté tu audiencia.",
-        "en": "I adapt content so it sounds natural, connects with each market and has more chances to be found. Translation, localization and multilingual SEO with one shared intention: to make your message work, wherever your audience is.",
-        "fr": "J’adapte les contenus pour qu’ils sonnent naturellement, créent un lien avec chaque marché et aient plus de chances d’être trouvés. Traduction, localisation et SEO multilingue avec une même intention : faire fonctionner votre message, où que se trouve votre audience.",
-        "de": "Ich passe Inhalte so an, dass sie natürlich klingen, mit jedem Markt in Verbindung treten und bessere Chancen haben, gefunden zu werden. Übersetzung, Lokalisierung und mehrsprachiges SEO mit einer gemeinsamen Absicht: dass deine Botschaft funktioniert, egal wo dein Publikum ist.",
-        "it": "Adatto i contenuti perché suonino naturali, entrino in contatto con ogni mercato e abbiano più possibilità di essere trovati. Traduzione, localizzazione e SEO multilingue con un’unica intenzione: far funzionare il tuo messaggio, ovunque si trovi il tuo pubblico.",
-        "ca": "Adapto continguts perquè sonin naturals, connectin amb cada mercat i tinguin més oportunitats de ser trobats. Traducció, localització i SEO multilingüe amb una mateixa intenció: que el teu missatge funcioni, sigui on sigui la teva audiència."
+        "es": "Conoce a Marta Gallardo, fundadora de Marttelier. Graduada en Traducción e Interpretación por la Universidad de Alicante, consultora SEO y creadora UGC.",
+        "en": "Meet Marta Gallardo, founder of Marttelier. A graduate in Translation and Interpreting from the University of Alicante, SEO consultant and UGC creator.",
+        "fr": "Découvrez Marta Gallardo, fondatrice de Marttelier. Diplômée en traduction et interprétation de l’Université d’Alicante, consultante SEO et créatrice UGC.",
+        "de": "Lernen Sie Marta Gallardo kennen, Gründerin von Marttelier. Absolventin der Übersetzungs- und Dolmetschwissenschaft an der Universität Alicante, SEO-Beraterin und UGC-Creatorin.",
+        "it": "Scopri Marta Gallardo, fondatrice di Marttelier. Laureata in Traduzione e Interpretariato all’Università di Alicante, consulente SEO e creator UGC.",
+        "ca": "Coneix Marta Gallardo, fundadora de Marttelier. Graduada en Traducció i Interpretació per la Universitat d’Alacant, consultora SEO i creadora UGC."
+      }
+    },
+    "seo": {
+      "title": {
+        "es": "Consultoría SEO Freelance e Internacional | Marta Gallardo",
+        "en": "Freelance & International SEO Consulting | Marta Gallardo",
+        "fr": "Consultante SEO freelance et international | Marta Gallardo",
+        "de": "Freiberufliche und internationale SEO-Beratung | Marta Gallardo",
+        "it": "Consulenza SEO freelance e internazionale | Marta Gallardo",
+        "ca": "Consultoria SEO freelance i internacional | Marta Gallardo"
+      },
+      "description": {
+        "es": "Auditoría, consultoría y SEO local e internacional para mejorar la visibilidad de tu web y atraer tráfico cualificado.",
+        "en": "SEO audits, consulting, and local and international SEO to improve your website’s visibility and attract qualified traffic.",
+        "fr": "Audits, conseil et SEO local et international pour améliorer la visibilité de votre site et attirer un trafic qualifié.",
+        "de": "SEO-Audits, Beratung sowie lokales und internationales SEO, um die Sichtbarkeit Ihrer Website zu verbessern und qualifizierten Traffic zu gewinnen.",
+        "it": "Audit, consulenza e SEO locale e internazionale per migliorare la visibilità del tuo sito e attirare traffico qualificato.",
+        "ca": "Auditories, consultoria i SEO local i internacional per millorar la visibilitat del teu web i atraure trànsit qualificat."
+      }
+    },
+    "translation": {
+      "title": {
+        "es": "Traducción y Localización Web Profesional | Especialista SEO",
+        "en": "Professional Website Translation & Localization | SEO Specialist",
+        "fr": "Traduction et localisation web professionnelles | Spécialiste SEO",
+        "de": "Professionelle Website-Übersetzung und Lokalisierung | SEO-Spezialistin",
+        "it": "Traduzione e localizzazione web professionale | Specialista SEO",
+        "ca": "Traducció i localització web professional | Especialista SEO"
+      },
+      "description": {
+        "es": "Servicios de traducción profesional y localización web. Adapta el contenido de tu empresa a nuevos mercados con precisión semántica y enfoque SEO.",
+        "en": "Professional translation and website localization services. Adapt your company’s content for new markets with semantic precision and an SEO focus.",
+        "fr": "Services professionnels de traduction et de localisation web. Adaptez le contenu de votre entreprise à de nouveaux marchés avec précision sémantique et approche SEO.",
+        "de": "Professionelle Übersetzungs- und Website-Lokalisierungsdienste. Passen Sie Ihre Inhalte mit semantischer Präzision und SEO-Fokus an neue Märkte an.",
+        "it": "Servizi professionali di traduzione e localizzazione web. Adatta i contenuti della tua azienda a nuovi mercati con precisione semantica e un approccio SEO.",
+        "ca": "Serveis professionals de traducció i localització web. Adapta el contingut de la teva empresa a nous mercats amb precisió semàntica i enfocament SEO."
       }
     },
     "ugc": {
       "title": {
-        "es": "Marta Gallardo | Portfolio UGC",
-        "en": "Marta Gallardo | UGC Portfolio",
-        "fr": "Marta Gallardo | Portfolio UGC",
-        "de": "Marta Gallardo | UGC Portfolio",
-        "it": "Marta Gallardo | Portfolio UGC",
-        "ca": "Marta Gallardo | Portfolio UGC"
+        "es": "Creadora UGC en España | Vídeos Auténticos para Marcas",
+        "en": "UGC Creator in Spain | Authentic Videos for Brands",
+        "fr": "Créatrice UGC en Espagne | Vidéos authentiques pour les marques",
+        "de": "UGC-Creatorin in Spanien | Authentische Videos für Marken",
+        "it": "Creator UGC in Spagna | Video autentici per i brand",
+        "ca": "Creadora UGC a Espanya | Vídeos autèntics per a marques"
       },
       "description": {
-        "es": "Portfolio profesional de UGC de Marta Gallardo con campañas editoriales conceptuales de viajes, idiomas y arte.",
-        "en": "Professional UGC portfolio for Marta Gallardo featuring editorial placeholder campaigns across travel, languages, and art.",
-        "fr": "Portfolio UGC professionnel de Marta Gallardo avec des campagnes éditoriales conceptuelles autour du voyage, des langues et de l’art.",
-        "de": "Professionelles UGC-Portfolio von Marta Gallardo mit editorialen Konzeptkampagnen zu Reisen, Sprachen und Kunst.",
-        "it": "Portfolio UGC professionale di Marta Gallardo con campagne editoriali concettuali dedicate a viaggi, lingue e arte.",
-        "ca": "Portfoli professional de UGC de Marta Gallardo amb campanyes editorials conceptuals de viatges, idiomes i art."
+        "es": "Servicios de creación de contenido UGC (User Generated Content). Vídeos orgánicos y anuncios orientados a aumentar las conversiones de tu marca o e-commerce.",
+        "en": "UGC (User Generated Content) creation services. Organic videos and ads designed to increase conversions for your brand or e-commerce business.",
+        "fr": "Services de création de contenu UGC (User Generated Content). Vidéos organiques et publicités conçues pour augmenter les conversions de votre marque ou e-commerce.",
+        "de": "UGC-Content-Erstellung (User Generated Content). Organische Videos und Anzeigen, die darauf ausgerichtet sind, die Conversions Ihrer Marke oder Ihres E-Commerce zu steigern.",
+        "it": "Servizi di creazione di contenuti UGC (User Generated Content). Video organici e annunci pensati per aumentare le conversioni del tuo brand o e-commerce.",
+        "ca": "Serveis de creació de contingut UGC (User Generated Content). Vídeos orgànics i anuncis orientats a augmentar les conversions de la teva marca o e-commerce."
       }
     },
     "contact": {

@@ -18,7 +18,7 @@ test('public UGC hero keeps the denser approved two-column source contract', asy
   assert.match(source, /<p class="text-xs font-semibold uppercase tracking-\[0\.34em\] text-amaranth">\s*\{i\.ugcPage\.contactSheet\.eyebrow\}\s*<\/p>/);
   assert.match(
     source,
-    /<div class="mt-5 grid gap-8 lg:grid-cols-\[minmax\(0,0\.75fr\)_minmax\(0,1\.25fr\)\] lg:items-end">[\s\S]*?<TypedTitle[\s\S]*?text=\{i\.ugcPage\.hero\.headline\}[\s\S]*?class="block text-4xl leading-none text-ink md:text-6xl"[\s\S]*?<p class="text-balance text-lg font-semibold uppercase leading-\[1\.18\] tracking-\[0\.1[234]em\] text-ink md:text-2xl lg:justify-self-end lg:text-right lg:text-3xl">\s*\{i\.ugcPage\.contactSheet\.headline\}\s*<\/p>[\s\S]*?<\/div>/s,
+    /<div class="mt-5 grid gap-8 lg:grid-cols-\[minmax\(0,0\.75fr\)_minmax\(0,1\.25fr\)\] lg:items-end">[\s\S]*?<TypedTitle[\s\S]*?text=\{i\.ugcPage\.pageTitle\}[\s\S]*?class="block text-4xl leading-none text-ink md:text-6xl"[\s\S]*?<p class="text-balance text-lg font-semibold uppercase leading-\[1\.18\] tracking-\[0\.1[234]em\] text-ink md:text-2xl lg:justify-self-end lg:text-right lg:text-3xl">\s*\{i\.ugcPage\.contactSheet\.headline\}\s*<\/p>[\s\S]*?<\/div>/s,
   );
   assert.match(source, /<div class="mt-5 overflow-hidden" aria-hidden="true">/);
   assert.doesNotMatch(source, /pt-28|md:pt-32|pb-8|md:pb-10/);
@@ -26,19 +26,20 @@ test('public UGC hero keeps the denser approved two-column source contract', asy
   assert.doesNotMatch(source, /text-2xl font-semibold uppercase leading-\[1\.18\] tracking-\[0\.18em\] text-ink md:text-4xl/);
 });
 
-test('admin UGC preview mirrors the hero density with editable static copy', async () => {
+test('admin UGC preview mirrors the current hero and exposes editable benefit and process copy', async () => {
   const source = await readSource('src/pages/admin/ugc.astro');
 
   assert.match(source, /import EditableText from '\.\.\/\.\.\/components\/admin\/EditableText';/);
   assert.match(source, /<section class="px-6 pt-20 pb-5 md:pt-24 md:pb-6">/);
-  assert.match(source, /<p class="text-xs font-semibold uppercase tracking-\[0\.34em\] text-amaranth">\s*\{i\.ugcPage\.contactSheet\.eyebrow\}\s*<\/p>/);
+  assert.match(source, /i18nKey="ugcPage\.contactSheet\.eyebrow"/);
   assert.match(
     source,
-    /<div class="mt-5 grid gap-8 lg:grid-cols-\[minmax\(0,0\.75fr\)_minmax\(0,1\.25fr\)\] lg:items-end">[\s\S]*?<EditableText client:load i18nKey="ugcPage\.hero\.headline" as="h1" className="block text-4xl leading-none text-ink md:text-6xl" \/>[\s\S]*?<EditableText client:load i18nKey="ugcPage\.contactSheet\.headline" as="p" className="text-balance text-lg font-semibold uppercase leading-\[1\.18\] tracking-\[0\.1[234]em\] text-ink md:text-2xl lg:justify-self-end lg:text-right lg:text-3xl" \/>[\s\S]*?<\/div>/s,
+    /<div class="grid gap-8 lg:grid-cols-\[minmax\(0,0\.75fr\)_minmax\(0,1\.25fr\)\] lg:items-end">[\s\S]*?<EditableText client:load i18nKey="ugcPage\.pageTitle" as="h1" className="block text-4xl leading-none text-ink md:text-6xl" \/>[\s\S]*?<EditableText client:load i18nKey="ugcPage\.contactSheet\.headline" as="p" className="text-balance text-lg font-semibold uppercase leading-\[1\.18\] tracking-\[0\.13em\] text-ink md:text-2xl lg:justify-self-end lg:text-right lg:text-3xl" \/>[\s\S]*?<\/div>/s,
   );
   assert.match(source, /<div class="mt-5 overflow-hidden" aria-hidden="true">/);
+  assert.match(source, /ugcPage\.benefits\.description/);
+  assert.match(source, /ugcPage\.process\.steps\.\$\{index\}\.description/);
   assert.doesNotMatch(source, /<TypedTitle\b/);
-  assert.doesNotMatch(source, /EditableText client:load i18nKey="ugcPage\.contactSheet\.eyebrow"/);
   assert.doesNotMatch(source, /pt-28|md:pt-32|pb-8|md:pb-10/);
 });
 

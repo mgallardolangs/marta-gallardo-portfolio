@@ -174,11 +174,13 @@ test('built public SEO output uses marttelier.com canonicals, alternates, sitema
   }
 
   const sitemapPaths = await findGeneratedSitemapPaths();
-  const [homeHtml, contactHtml, translationHtml, ugcHtml, robots, sitemapIndex, ...sitemaps] = await Promise.all([
+  const [homeHtml, aboutHtml, seoHtml, contactHtml, translationHtml, ugcHtml, robots, sitemapIndex, ...sitemaps] = await Promise.all([
     readBuiltSource('dist/index.html'),
-    readBuiltSource('dist/contact/index.html'),
-    readBuiltSource('dist/translation-seo/index.html'),
-    readBuiltSource('dist/ugc/index.html'),
+    readBuiltSource('dist/sobre-mi.html'),
+    readBuiltSource('dist/servicios/seo.html'),
+    readBuiltSource('dist/contacto.html'),
+    readBuiltSource('dist/servicios/traduccion.html'),
+    readBuiltSource('dist/servicios/ugc.html'),
     readBuiltSource('dist/robots.txt'),
     readBuiltSource('dist/sitemap-index.xml'),
     ...sitemapPaths.map((sitemapPath) => readBuiltSource(sitemapPath)),
@@ -188,9 +190,11 @@ test('built public SEO output uses marttelier.com canonicals, alternates, sitema
 
   for (const [relativePath, html] of [
     ['dist/index.html', homeHtml],
-    ['dist/contact/index.html', contactHtml],
-    ['dist/translation-seo/index.html', translationHtml],
-    ['dist/ugc/index.html', ugcHtml],
+    ['dist/sobre-mi.html', aboutHtml],
+    ['dist/servicios/seo.html', seoHtml],
+    ['dist/contacto.html', contactHtml],
+    ['dist/servicios/traduccion.html', translationHtml],
+    ['dist/servicios/ugc.html', ugcHtml],
   ]) {
     const canonicalLinks = getLinkHrefs(html, 'canonical');
     const alternateLinks = getLinkHrefs(html, 'alternate');
@@ -327,11 +331,11 @@ test('SEO page fallback maps prefer requested locale, then Spanish, then empty s
   });
 });
 
-test('SEO site data exposes only the four editable page groups and keeps the runtime contract optional', async () => {
+test('SEO site data exposes the six current editable page groups and keeps the runtime contract optional', async () => {
   const site = await readJson('src/data/site.json');
   const source = await readSource('src/lib/siteData.ts');
 
-  assert.deepEqual(seoPageKeys, ['home', 'translationSeo', 'ugc', 'contact']);
+  assert.deepEqual(seoPageKeys, ['home', 'about', 'seo', 'translation', 'ugc', 'contact']);
   assert.deepEqual(Object.keys(site.seo).sort(), [...seoPageKeys].sort());
 
   for (const page of seoPageKeys) {
@@ -346,9 +350,11 @@ test('SEO site data exposes only the four editable page groups and keeps the run
 });
 
 test('public page views resolve editable SEO with exact page keys and localized BaseLayout fallbacks', async () => {
-  const [homeSource, translationSource, ugcSource, contactSource] = await Promise.all([
+  const [homeSource, aboutSource, seoSource, translationSource, ugcSource, contactSource] = await Promise.all([
     readSource('src/views/HomePage.astro'),
-    readSource('src/views/TranslationSeoPage.astro'),
+    readSource('src/views/AboutPage.astro'),
+    readSource('src/views/SeoServicePage.astro'),
+    readSource('src/views/TranslationServicePage.astro'),
     readSource('src/views/UgcPage.astro'),
     readSource('src/views/ContactPage.astro'),
   ]);
@@ -360,7 +366,7 @@ test('public page views resolve editable SEO with exact page keys and localized 
   );
   assert.match(
     homeSource,
-    /const pageTitle = `\$\{i\.hero\.name\} — \$\{i\.home\.hero\.kicker\}`;\s*const pageDescription = i\.home\.hero\.description;\s*const pageSeo = getPageSeo\(siteData,\s*'home',\s*lang,\s*\{\s*title:\s*\{\s*\[lang\]:\s*pageTitle\s*\},\s*description:\s*\{\s*\[lang\]:\s*pageDescription\s*\},\s*\}\);/s,
+    /const pageTitle = i\.home\.hero\.title;\s*const pageDescription = i\.home\.hero\.description;\s*const pageSeo = getPageSeo\(siteData,\s*'home',\s*lang,\s*\{\s*title:\s*\{\s*\[lang\]:\s*pageTitle\s*\},\s*description:\s*\{\s*\[lang\]:\s*pageDescription\s*\},\s*\}\);/s,
     'HomePage should resolve editable SEO with the exact home key and preserve its existing localized fallbacks',
   );
   assert.match(
@@ -369,21 +375,12 @@ test('public page views resolve editable SEO with exact page keys and localized 
     'HomePage should pass resolved pageSeo strings into BaseLayout',
   );
 
-  assert.match(
-    translationSource,
-    /import\s+\{\s*getPageSeo,\s*siteData\s*\}\s+from\s+['"]\.\.\/lib\/siteData['"];?/,
-    'TranslationSeoPage should import getPageSeo alongside siteData',
-  );
-  assert.match(
-    translationSource,
-    /const pageTitle = `\$\{i\.hero\.name\} — \$\{i\.nav\.translationSeo\}`;\s*const pageDescription = page\.hero\.text\.replaceAll\('\\n', ' '\)\.replace\(\/\\s\+\/g, ' '\)\.trim\(\);\s*const pageSeo = getPageSeo\(siteData,\s*'translationSeo',\s*lang,\s*\{\s*title:\s*\{\s*\[lang\]:\s*pageTitle\s*\},\s*description:\s*\{\s*\[lang\]:\s*pageDescription\s*\},\s*\}\);/s,
-    'TranslationSeoPage should resolve editable SEO with the exact translationSeo key and keep the normalized localized fallback copy',
-  );
-  assert.match(
-    translationSource,
-    /<BaseLayout\s+title=\{pageSeo\.title\}\s+description=\{pageSeo\.description\}>/,
-    'TranslationSeoPage should pass resolved pageSeo strings into BaseLayout',
-  );
+  assert.match(aboutSource, /getPageSeo\(siteData,\s*'about',\s*lang/);
+  assert.match(aboutSource, /<BaseLayout\s+title=\{pageSeo\.title\}\s+description=\{pageSeo\.description\}>/);
+  assert.match(seoSource, /getPageSeo\(siteData,\s*'seo',\s*lang/);
+  assert.match(seoSource, /<BaseLayout\s+title=\{pageSeo\.title\}\s+description=\{pageSeo\.description\}>/);
+  assert.match(translationSource, /getPageSeo\(siteData,\s*'translation',\s*lang/);
+  assert.match(translationSource, /<BaseLayout\s+title=\{pageSeo\.title\}\s+description=\{pageSeo\.description\}>/);
 
   assert.match(
     ugcSource,
@@ -392,7 +389,7 @@ test('public page views resolve editable SEO with exact page keys and localized 
   );
   assert.match(
     ugcSource,
-    /const pageTitle = `\$\{i\.hero\.name\} \| \$\{i\.ugc\.title\}`;\s*const pageDescription = i\.ugcPage\.pageDescription;\s*const pageSeo = getPageSeo\(siteData,\s*'ugc',\s*lang,\s*\{\s*title:\s*\{\s*\[lang\]:\s*pageTitle\s*\},\s*description:\s*\{\s*\[lang\]:\s*pageDescription\s*\},\s*\}\);/s,
+    /const pageTitle = i\.ugcPage\.pageTitle;\s*const pageDescription = i\.ugcPage\.pageDescription;\s*const pageSeo = getPageSeo\(siteData,\s*'ugc',\s*lang,\s*\{\s*title:\s*\{\s*\[lang\]:\s*pageTitle\s*\},\s*description:\s*\{\s*\[lang\]:\s*pageDescription\s*\},\s*\}\);/s,
     'UgcPage should resolve editable SEO with the exact ugc key and preserve its existing localized fallbacks',
   );
   assert.match(
@@ -454,7 +451,7 @@ test('admin SEO editor exposes the shared store API, exact page keys, and six-lo
   ]);
 
   assert.deepEqual(SUPPORTED_LANGS, ['es', 'en', 'fr', 'de', 'it', 'ca']);
-  assert.match(editorSource, /const SEO_PAGE_KEYS = \['home', 'translationSeo', 'ugc', 'contact'\] as const;/);
+  assert.match(editorSource, /const SEO_PAGE_KEYS = \['home', 'about', 'seo', 'translation', 'ugc', 'contact'\] as const;/);
   assert.match(editorSource, /SEO_PAGE_KEYS\.map\(\(page\) => \(/);
   assert.match(editorSource, /<fieldset key=\{page\}/);
   assert.match(editorSource, /SUPPORTED_LANGS\.map\(\(locale\) => \(/);

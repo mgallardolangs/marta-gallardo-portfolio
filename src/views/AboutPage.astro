@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ClickToLoadYouTube from '../components/ClickToLoadYouTube.astro';
+import ExperienceTabs from '../components/translation/ExperienceTabs';
+import RichText from '../components/RichText.astro';
+import ScrollReveal from '../components/ScrollReveal';
+import TypedTitle from '../components/TypedTitle.astro';
+import { getLangFromUrl, t } from '../i18n';
+import { getPageSeo, siteData } from '../lib/siteData';
+
+const lang = getLangFromUrl(Astro.url);
+const i = t(lang);
+const page = i.aboutPage;
+const pageSeo = getPageSeo(siteData, 'about', lang, {
+  title: { [lang]: page.hero.title },
+  description: { [lang]: page.hero.story },
+});
+---
+
+<BaseLayout title={pageSeo.title} description={pageSeo.description}>
+  <div class="bg-paper">
+    <section class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
+      <div class="site-container grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
+        <ScrollReveal client:visible direction="right" className="flex flex-col gap-8">
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-amaranth">{i.nav.about}</p>
+          <TypedTitle
+            as="h1"
+            text={page.hero.title}
+            trigger="load"
+            class="max-w-[13ch] font-heading text-5xl leading-[0.92] tracking-[-0.04em] text-ink md:text-7xl"
+          />
+          <h2 class="font-heading text-2xl leading-tight text-ink md:text-3xl">{page.hero.subtitle}</h2>
+          <RichText text={page.hero.story} class="max-w-2xl font-body text-base leading-8 text-ink-muted md:text-lg" />
+        </ScrollReveal>
+
+        <ScrollReveal client:visible direction="left" className="flex flex-col gap-5">
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-amaranth">{i.home.video.eyebrow}</p>
+          <ClickToLoadYouTube
+            src={siteData.brandVideoEmbedUrl}
+            title={i.home.video.title}
+            playLabel={i.home.video.playLabel}
+          />
+          <p class="max-w-xl font-body text-sm leading-7 text-ink-muted md:text-base">{i.home.video.description}</p>
+        </ScrollReveal>
+      </div>
+    </section>
+
+    <section class="bg-ink px-6 py-16 text-paper md:py-20" data-about-trajectory>
+      <div class="site-container space-y-8">
+        <div class="space-y-3">
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.trajectoryEyebrow}</p>
+          <TypedTitle
+            as="h2"
+            text={i.translationPage.experienceSectionTitle}
+            trigger="visible"
+            class="font-heading text-4xl text-paper md:text-5xl"
+          />
+        </div>
+
+        <ExperienceTabs
+          client:load
+          tabListAriaLabel={i.translationPage.browserTabsAriaLabel}
+          statement={i.translationPage.experienceStatement}
+          tabs={{
+            education: {
+              label: i.translationPage.browserTabs.education,
+              intro: i.translationPage.education.intro,
+              studies: i.translationPage.education.studies,
+            },
+            experience: {
+              label: i.translationPage.browserTabs.experience,
+              intro: i.translationPage.experience.intro,
+              cards: i.translationPage.experience.cards,
+            },
+          }}
+        />
+      </div>
+    </section>
+
+    <section class="px-6 py-16 md:py-20">
+      <div class="site-container grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+        <ScrollReveal client:visible direction="right" className="flex flex-col gap-5">
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{i.nav.about}</p>
+          <TypedTitle
+            as="h2"
+            text={page.principles.title}
+            trigger="visible"
+            class="font-heading text-4xl leading-none text-ink md:text-5xl"
+          />
+          <div class="flex flex-wrap gap-2">
+            {page.principles.items.map((principle) => (
+              <span class="border border-ink/16 px-3 py-2 font-body text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-ink">
+                {principle}
+              </span>
+            ))}
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal client:visible direction="left" className="flex flex-col gap-5 border-t border-ink/16 pt-6 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+          <h3 class="font-heading text-3xl leading-tight text-ink md:text-4xl">{page.work.title}</h3>
+          <RichText text={page.work.description} class="max-w-2xl font-body text-base leading-8 text-ink-muted md:text-lg" />
+        </ScrollReveal>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

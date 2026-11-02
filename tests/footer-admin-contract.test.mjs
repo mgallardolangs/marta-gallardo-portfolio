@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const locales = ['es', 'en', 'fr', 'de', 'it', 'ca'];
-const navKeys = ['nav.home', 'nav.ugc', 'nav.translationSeo', 'nav.blog', 'nav.contact'];
+const navKeys = ['nav.home', 'nav.about', 'nav.seo', 'nav.translation', 'nav.ugcService', 'nav.blog', 'nav.contact'];
 const editableFooterKeys = [
   'footer.eyebrow',
   'footer.headline',
@@ -109,7 +109,7 @@ test('built footer stays static in public HTML and mounts editable islands only 
 
   const [publicHtml, adminHtml] = await Promise.all([
     readSource('dist/index.html'),
-    readSource('dist/admin/index.html'),
+    readSource('dist/admin.html'),
   ]);
 
   const publicFooter = extractFooter(publicHtml, 'public home HTML');

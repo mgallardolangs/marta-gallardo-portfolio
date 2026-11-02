@@ -31,4 +31,4 @@ Esta combinación tiene sentido sobre todo para **negocios** que venden o quiere
 
 Este espacio va a ser el reflejo de esa combinación: hablaré de idiomas, de SEO, y de todo lo que hay en el cruce entre ambos. Si tienes un negocio que quiere crecer más allá de tu idioma nativo, o simplemente te interesa este mundo, este es tu sitio.
 
-Si quieres saber más sobre cómo trabajo, puedes echar un vistazo a mi [portfolio](https://marttelier.com/translation-seo/) o [contactarme](https://marttelier.com/contact/) directamente.
+Si quieres saber más sobre cómo trabajo, puedes echar un vistazo a mi [portfolio](https://marttelier.com/sobre-mi) o [contactarme](https://marttelier.com/contacto) directamente.

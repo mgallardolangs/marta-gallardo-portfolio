@@ -20,38 +20,28 @@ test('FloatingIcon keeps pointer-events-none by default and exposes an interacti
   assert.match(source, /className=\{`\$\{pointerEventsClass\} \$\{className\}`\}/);
 });
 
-test('admin homepage sticker frames opt into interactive FloatingIcon wrappers for all four EditableImage slots', async () => {
-  const source = await readSource('src/pages/admin/index.astro');
+test('admin home now edits the live home sections while About owns its editable brand video', async () => {
+  const [homeSource, aboutSource] = await Promise.all([
+    readSource('src/pages/admin/index.astro'),
+    readSource('src/pages/admin/about.astro'),
+  ]);
 
-  for (const [key, intensity] of [
-    ['one', 10],
-    ['two', 12],
-    ['three', 14],
-    ['four', 11],
-  ]) {
-    assert.match(
-      source,
-      new RegExp(`<FloatingIcon client:visible intensity=\\{${intensity}\\} interactive>[\\s\\S]*?imageKey="videoStickers\\.${key}"`, 's'),
-      `admin homepage should keep the ${key} sticker inside an interactive FloatingIcon wrapper`,
-    );
-  }
+  assert.match(homeSource, /data-admin-home-services/);
+  assert.match(homeSource, /data-admin-home-visibility/);
+  assert.match(homeSource, /EditableOrbitCollection/);
+  assert.doesNotMatch(homeSource, /videoStickers\.|instagramScreenshot|AdminBrandVideo/);
+  assert.match(aboutSource, /<AdminBrandVideo client:load\s*\/>/);
 });
 
-test('public homepage binds all four video stickers to siteData with image-first rendering and localized text fallbacks', async () => {
-  const source = await readSource('src/views/HomePage.astro');
+test('public Home no longer contains the personal video stickers; About owns the click-to-load video', async () => {
+  const [homeSource, aboutSource] = await Promise.all([
+    readSource('src/views/HomePage.astro'),
+    readSource('src/views/AboutPage.astro'),
+  ]);
 
-  for (const [key, shotKey] of [
-    ['one', 'shotOne'],
-    ['two', 'shotTwo'],
-    ['three', 'shotThree'],
-    ['four', 'shotFour'],
-  ]) {
-    assert.match(
-      source,
-      new RegExp(`siteData\\.videoStickers\\.${key}\\s*\\?\\s*\\([\\s\\S]*?<img[\\s\\S]*?src=\\{netlifyImage\\(siteData\\.videoStickers\\.${key}[\\s\\S]*?\\)\\}[\\s\\S]*?alt=\\{i\\.home\\.gallery\\.${shotKey}\\}[\\s\\S]*?class="h-full w-full object-cover"[\\s\\S]*?\\)\\s*:\\s*\\([\\s\\S]*?i\\.home\\.gallery\\.${shotKey}`, 's'),
-      `public homepage should render ${key} from siteData.videoStickers.${key} and fall back to i.home.gallery.${shotKey}`,
-    );
-  }
+  assert.doesNotMatch(homeSource, /siteData\.videoStickers|brandVideoEmbedUrl|instagramScreenshot/);
+  assert.match(aboutSource, /<ClickToLoadYouTube[\s\S]*src=\{siteData\.brandVideoEmbedUrl\}/);
+  assert.doesNotMatch(aboutSource, /instagramScreenshot/);
 });
 
 test('UGC contact sheet keeps public filter markup untouched and adds an admin-only rolling filter treatment', async () => {

@@ -1,0 +1,80 @@
+---
+import { toHttpsEmbedUrl } from '../lib/videoEmbed';
+
+interface Props {
+  src: string;
+  title: string;
+  playLabel: string;
+}
+
+const { src, title, playLabel } = Astro.props;
+const embedUrl = toHttpsEmbedUrl(src);
+
+if (!embedUrl) {
+  throw new Error('The configured video embed URL must be a valid HTTPS URL.');
+}
+
+const videoId = embedUrl.match(/^https:\/\/www\.youtube\.com\/embed\/([A-Za-z0-9_-]{11})(?:[?#]|$)/)?.[1];
+const posterUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null;
+---
+
+<div class="relative mx-auto aspect-[9/16] w-full max-w-[22rem] overflow-hidden border border-white/12 bg-ink" data-youtube-facade>
+  <button
+    type="button"
+    class="group absolute inset-0 flex h-full w-full items-center justify-center overflow-hidden bg-ink text-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amaranth"
+    data-click-to-load-youtube
+    data-embed-url={embedUrl}
+    data-video-title={title}
+    aria-label={playLabel}
+  >
+    {posterUrl ? (
+      <img src={posterUrl} alt="" width="480" height="854" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover opacity-85 transition duration-300 group-hover:opacity-100" />
+    ) : (
+      <span class="absolute inset-0 flex items-center justify-center px-8 font-heading text-3xl text-paper">{title}</span>
+    )}
+    <span class="relative z-10 inline-flex h-16 w-16 items-center justify-center rounded-full bg-amaranth text-ink transition-transform group-hover:scale-105" aria-hidden="true">▶</span>
+  </button>
+</div>
+
+<script>
+  declare global {
+    interface Window {
+      __mgClickToLoadYouTubeBound?: boolean;
+    }
+  }
+
+  if (!window.__mgClickToLoadYouTubeBound) {
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+
+      const button = target.closest<HTMLButtonElement>('[data-click-to-load-youtube]');
+      if (!button) return;
+
+      const source = button.dataset.embedUrl;
+      if (!source) {
+        throw new Error('The YouTube facade is missing its embed URL.');
+      }
+
+      const embedUrl = new URL(source);
+      if (embedUrl.protocol !== 'https:') {
+        throw new Error('The YouTube facade only accepts HTTPS embed URLs.');
+      }
+
+      embedUrl.searchParams.set('autoplay', '1');
+      const iframe = document.createElement('iframe');
+      iframe.src = embedUrl.toString();
+      iframe.title = button.dataset.videoTitle ?? 'Video';
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      iframe.allowFullscreen = true;
+      iframe.loading = 'lazy';
+      iframe.tabIndex = 0;
+      iframe.className = 'absolute inset-0 h-full w-full border-0';
+      button.replaceWith(iframe);
+      iframe.focus();
+    });
+
+    window.__mgClickToLoadYouTubeBound = true;
+  }
+</script>

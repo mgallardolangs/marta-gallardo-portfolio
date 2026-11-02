@@ -11,7 +11,7 @@ async function readSource(relativePath) {
   return readFile(path.join(rootDir, relativePath), 'utf8');
 }
 
-test('public and admin home heroes tighten top spacing and keep matching primary CTA markup', async () => {
+test('public Home and its admin mirror use the same paired diagnosis and services CTA treatments', async () => {
   const [homeSource, adminHomeSource, globalCssSource] = await Promise.all([
     readSource('src/views/HomePage.astro'),
     readSource('src/pages/admin/index.astro'),
@@ -20,18 +20,18 @@ test('public and admin home heroes tighten top spacing and keep matching primary
 
   assert.match(homeSource, /data-home-hero class="home-hero bg-paper px-6 pt-20 pb-16 md:pt-24 md:pb-20"/);
   assert.match(adminHomeSource, /data-admin-home-hero class="home-hero bg-paper px-6 pt-20 pb-16 md:pt-24 md:pb-20"/);
-  assert.doesNotMatch(homeSource, /home-hero__cta--secondary/);
-  assert.doesNotMatch(adminHomeSource, /home-hero__cta--secondary/);
   assert.equal(
     homeSource.match(/class="home-hero__cta home-hero__cta--primary"/g)?.length,
-    2,
-    'public hero should render both CTAs with the same primary treatment',
+    1,
+    'public hero should use the primary treatment for the diagnosis CTA',
   );
   assert.equal(
-    adminHomeSource.match(/class="home-hero__cta home-hero__cta--primary"/g)?.length,
-    2,
-    'admin hero should render both CTAs with the same primary treatment',
+    homeSource.match(/class="home-hero__cta home-hero__cta--secondary"/g)?.length,
+    1,
+    'public hero should use the secondary treatment for the services CTA',
   );
+  assert.equal(adminHomeSource.match(/class="home-hero__cta home-hero__cta--primary"/g)?.length, 1);
+  assert.equal(adminHomeSource.match(/class="home-hero__cta home-hero__cta--secondary"/g)?.length, 1);
   assert.match(
     globalCssSource,
     /\.home-hero__actions\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\);[^}]*gap:\s*0\.75rem;[^}]*\}/s,
@@ -44,7 +44,7 @@ test('public and admin home heroes tighten top spacing and keep matching primary
     globalCssSource,
     /\.home-hero__cta-label\s*\{[^}]*display:\s*block;[^}]*white-space:\s*normal;[^}]*\}/s,
   );
-  assert.doesNotMatch(globalCssSource, /\.home-hero__cta--secondary\b/);
+  assert.match(globalCssSource, /\.home-hero__cta--secondary\s*\{/);
 });
 
 test('header and footer tighten nav sizing and swap every LinkedIn icon for the text-only in mark', async () => {

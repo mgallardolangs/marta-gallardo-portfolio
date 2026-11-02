@@ -2,7 +2,7 @@ import rawSiteData from '../data/site.json' with { type: 'json' };
 
 export const siteLocales = ['es', 'en', 'fr', 'de', 'it', 'ca'] as const;
 export type Locale = (typeof siteLocales)[number];
-export const seoPageKeys = ['home', 'translationSeo', 'ugc', 'contact'] as const;
+export const seoPageKeys = ['home', 'about', 'seo', 'translation', 'ugc', 'contact'] as const;
 export type SeoPageKey = (typeof seoPageKeys)[number];
 
 export type LocalizedText = Record<Locale, string>;

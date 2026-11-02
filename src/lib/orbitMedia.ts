@@ -1,4 +1,5 @@
 import type { LocalizedText, OrbitMedia } from './siteData.ts';
+import { getLocalizedPath } from './localizedRoutes.js';
 
 type OrbitLang = 'es' | 'en' | 'fr' | 'de' | 'it' | 'ca';
 
@@ -210,7 +211,7 @@ export function getOrbitActivatedVideoPlaybackMode({
 export function resolveOrbitHref(href: string | null | undefined, lang: OrbitLang) {
   if (!href) return null;
   const normalizedHref = href.startsWith('/') ? href : `/${href}`;
-  return lang === 'es' ? normalizedHref : `/${lang}${normalizedHref}`;
+  return getLocalizedPath(normalizedHref, lang);
 }
 
 function isImageType(type: string) {

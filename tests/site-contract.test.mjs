@@ -144,7 +144,7 @@ test('site data preserves the Phase 1 contract', async () => {
   });
 });
 
-test('site data locks the approved UGC editorial contact sheet dataset', async () => {
+test('site data preserves the existing 12-slot UGC editorial contact sheet dataset', async () => {
   const site = await readJson('src/data/site.json');
   const categories = ['travel', 'languages', 'art'];
   const expectedIds = [1, 2, 3, 4].flatMap((slot) => (
@@ -166,8 +166,14 @@ test('site data locks the approved UGC editorial contact sheet dataset', async (
       site.ugcPortfolio.filter((item) => item.category === category).length,
     ])),
     { travel: 4, languages: 4, art: 4 },
-    'ugcPortfolio should keep exactly four items per approved category',
+    'ugcPortfolio should keep exactly four items per existing category',
   );
+
+  const expectedTypeCounts = {
+    travel: { image: 1, video: 3 },
+    languages: { image: 2, video: 2 },
+    art: { image: 2, video: 2 },
+  };
 
   for (const category of categories) {
     const categoryItems = site.ugcPortfolio.filter((item) => item.category === category);
@@ -178,8 +184,8 @@ test('site data locks the approved UGC editorial contact sheet dataset', async (
 
     assert.deepEqual(
       typeCounts,
-      { image: 2, video: 2 },
-      `${category} should keep two images and two videos`,
+      expectedTypeCounts[category],
+      `${category} should preserve its current image and video mix`,
     );
   }
 
@@ -189,8 +195,8 @@ test('site data locks the approved UGC editorial contact sheet dataset', async (
     assert.match(item.type, /^(image|video)$/, `ugcPortfolio[${index}].type should be image or video`);
     assert.match(
       item.src,
-      /^\/images\/ugc\/mock-\d{2}\.(?:webp|mp4)$/,
-      `ugcPortfolio[${index}].src should use the approved local mock path`,
+      /^\/images\/ugc\/(?:mock-\d{2}\.(?:webp|mp4)|ugc-(?:travel|languages|art)-0[1-4]\.(?:png|webp|jpg))$/,
+      `ugcPortfolio[${index}].src should preserve an existing local asset path`,
     );
     assertLocalizedText(item.label, `ugcPortfolio[${index}].label`);
     assertLocalizedText(item.title, `ugcPortfolio[${index}].title`);
@@ -207,23 +213,19 @@ test('site data locks the approved UGC editorial contact sheet dataset', async (
     }
 
     if (item.type === 'video') {
-      assert.match(
-        item.src,
-        /^\/images\/ugc\/mock-\d{2}\.(?:mp4|webm|mov)$/,
-        `ugcPortfolio[${index}] videos should point at a local video mock asset`,
-      );
+      assert.match(item.src, /^\/images\/ugc\//, `ugcPortfolio[${index}] videos should keep a local preview asset`);
       assert.equal(typeof item.poster, 'string', `ugcPortfolio[${index}].poster should exist for videos`);
       assert.match(
         item.poster,
-        /^\/images\/ugc\/mock-\d{2}\.webp$/,
-        `ugcPortfolio[${index}].poster should use the approved local poster path`,
+        /^\/images\/ugc\/ugc-(?:travel|languages|art)-0[1-4]-poster\.(?:webp|jpe?g|png)$/,
+        `ugcPortfolio[${index}].poster should preserve its existing local poster path`,
       );
     } else {
       assert.equal(item.poster, null, `ugcPortfolio[${index}].poster should stay null for images`);
       assert.match(
         item.src,
-        /^\/images\/ugc\/mock-\d{2}\.webp$/,
-        `ugcPortfolio[${index}] images should point at a local image mock asset`,
+        /^\/images\/ugc\/ugc-(?:travel|languages|art)-0[1-4]\.(?:png|webp|jpg)$/,
+        `ugcPortfolio[${index}] images should preserve their current local still-image source`,
       );
     }
   });

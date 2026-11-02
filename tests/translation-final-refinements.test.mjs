@@ -62,32 +62,20 @@ test('translation methodology motion leaves methodology steps unclipped while pr
   );
 });
 
-test('public and admin methodology cards keep equal-height unclipped desktop cards with matching hover affordances', async () => {
+test('public and admin Translation pages render the current service sections and remove legacy methodology blocks', async () => {
   const [publicSource, adminSource] = await Promise.all([
-    readSource('src/views/TranslationSeoPage.astro'),
+    readSource('src/views/TranslationServicePage.astro'),
     readSource('src/pages/admin/translation-seo.astro'),
   ]);
 
-  const publicMethodology = extractSectionByDataAttribute(publicSource, 'data-methodology-section', 'public methodology section');
-  const adminMethodology = extractSectionByDataAttribute(adminSource, 'data-admin-methodology', 'admin methodology section');
-
-  assert.match(publicMethodology, /<div class="grid items-stretch gap-6 md:grid-cols-4">/);
-  assert.match(publicMethodology, /<article class="group relative flex h-full flex-col overflow-visible pl-16 md:pl-0" data-methodology-step tabindex="0">/);
-  assert.match(
-    publicMethodology,
-    /class="absolute left-0 top-0 flex h-12 w-12 items-center justify-center rounded-full border border-paper\/24 font-body text-sm font-semibold uppercase tracking-\[0\.16em\] text-amaranth transition group-hover:-translate-y-1 group-hover:border-amaranth group-hover:bg-amaranth group-hover:text-ink group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth group-focus-visible:bg-amaranth group-focus-visible:text-ink md:relative md:mx-auto"/,
-  );
-  assert.match(
-    publicMethodology,
-    /class="border border-paper\/18 px-5 py-6 transition group-hover:-translate-y-1 group-hover:border-amaranth\/60 group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth\/60 md:mt-6 md:flex-1 md:h-full md:min-h-\[170px\]"/,
-  );
-
-  assert.match(adminMethodology, /<div class="grid items-stretch gap-6 md:grid-cols-4">/);
-  assert.match(adminMethodology, /<article class="group relative flex h-full flex-col overflow-visible pl-16 md:pl-0">/);
-  assert.match(
-    adminMethodology,
-    /class="border border-paper\/18 px-5 py-6 transition group-hover:-translate-y-1 group-hover:border-amaranth\/60 group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth\/60 md:mt-6 md:flex-1 md:h-full md:min-h-\[170px\]"/,
-  );
+  assert.match(publicSource, /page\.localization\.items\.map/);
+  assert.match(publicSource, /page\.digitalContent\.items\.map/);
+  assert.match(publicSource, /data-translation-arsenal/);
+  assert.match(adminSource, /translationServicePage\.localization\.items/);
+  assert.match(adminSource, /translationServicePage\.digitalContent\.items/);
+  assert.match(adminSource, /<AdminTranslationArsenalEditor/);
+  assert.doesNotMatch(publicSource, /data-methodology-section|data-why-section/);
+  assert.doesNotMatch(adminSource, /data-admin-methodology|data-admin-why|translationPage\.methodology/);
 });
 
 test('translation arsenal source keeps equal thirds plus exact square tool tiles in public and the integrated admin editor', async () => {

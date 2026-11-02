@@ -642,7 +642,7 @@ test('admin page headings and descriptions (ugc, blog/new) are in Spanish', asyn
   ]);
 
   assert.match(ugcSource, /Portfolio UGC de 12 espacios fijos/);
-  assert.match(ugcSource, /Actualiza el contenido multimedia y el texto en ES \/ EN \/ FR/);
+  assert.match(ugcSource, /Actualiza el contenido multimedia, las fichas y los textos localizados/);
   assertEnglishUiStringsAbsent(ugcSource, [
     [/Fixed 12-slot UGC portfolio/, 'UGC page heading should no longer be English'],
   ]);

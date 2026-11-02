@@ -16,7 +16,7 @@ const articlePagesByLocale = {
   it: 'src/pages/it/blog/[slug].astro',
   ca: 'src/pages/ca/blog/[slug].astro',
 };
-const migratedPostSlug = 'mi-primer-post';
+const migratedPostSlug = 'de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones';
 
 async function readSource(relativePath) {
   return readFile(path.join(rootDir, relativePath), 'utf8');
@@ -36,8 +36,8 @@ async function importModule(relativePath) {
 
 function distBlogPostPath(locale, slug) {
   return locale === 'es'
-    ? path.join(rootDir, 'dist', 'blog', slug, 'index.html')
-    : path.join(rootDir, 'dist', locale, 'blog', slug, 'index.html');
+    ? path.join(rootDir, 'dist', 'blog', `${slug}.html`)
+    : path.join(rootDir, 'dist', locale, 'blog', `${slug}.html`);
 }
 
 function normalizeLatestArchive(result) {
@@ -216,7 +216,7 @@ test('blog index and localized slug pages stay wired to exact locale scoping', a
   }
 });
 
-test('build emits all six locale routes for the migrated mi-primer-post entry', async (t) => {
+test('build emits all six locale routes for the existing localized article', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built blog paths.');
     return;
@@ -234,11 +234,11 @@ test('all five non-ES localized blog index routes build', async (t) => {
   }
 
   await Promise.all(
-    nonSpanishLocales.map((locale) => access(path.join(rootDir, 'dist', locale, 'blog', 'index.html'))),
+    nonSpanishLocales.map((locale) => access(path.join(rootDir, 'dist', locale, 'blog.html'))),
   );
 });
 
-test('built mi-primer-post advertises all six built locale alternates', async (t) => {
+test('built localized article advertises all six built locale alternates', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built blog SEO alternates.');
     return;
@@ -251,14 +251,14 @@ test('built mi-primer-post advertises all six built locale alternates', async (t
   assert.deepEqual(
     alternateEntries,
     [
-      { hreflang: 'es', href: 'https://marttelier.com/blog/mi-primer-post' },
-      { hreflang: 'en', href: 'https://marttelier.com/en/blog/mi-primer-post' },
-      { hreflang: 'fr', href: 'https://marttelier.com/fr/blog/mi-primer-post' },
-      { hreflang: 'de', href: 'https://marttelier.com/de/blog/mi-primer-post' },
-      { hreflang: 'it', href: 'https://marttelier.com/it/blog/mi-primer-post' },
-      { hreflang: 'ca', href: 'https://marttelier.com/ca/blog/mi-primer-post' },
-      { hreflang: 'x-default', href: 'https://marttelier.com/blog/mi-primer-post' },
+      { hreflang: 'es', href: `https://marttelier.com/blog/${migratedPostSlug}` },
+      { hreflang: 'en', href: `https://marttelier.com/en/blog/${migratedPostSlug}` },
+      { hreflang: 'fr', href: `https://marttelier.com/fr/blog/${migratedPostSlug}` },
+      { hreflang: 'de', href: `https://marttelier.com/de/blog/${migratedPostSlug}` },
+      { hreflang: 'it', href: `https://marttelier.com/it/blog/${migratedPostSlug}` },
+      { hreflang: 'ca', href: `https://marttelier.com/ca/blog/${migratedPostSlug}` },
+      { hreflang: 'x-default', href: `https://marttelier.com/blog/${migratedPostSlug}` },
     ],
-    'every locale Markdown sibling now builds its own article route sharing the mi-primer-post slug',
+    'every locale Markdown sibling should keep its existing shared public slug',
   );
 });

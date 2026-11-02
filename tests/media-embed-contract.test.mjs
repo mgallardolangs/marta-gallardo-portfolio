@@ -325,12 +325,16 @@ test('ugc focused dialog prioritizes valid embeds and preserves local poster pat
   );
 });
 
-test('homepage public brand video only trusts https embeds before falling back to local media', async () => {
-  const homeSource = await readSource('src/views/HomePage.astro');
+test('about page uses the click-to-load HTTPS-only public brand video', async () => {
+  const [aboutSource, videoSource] = await Promise.all([
+    readSource('src/views/AboutPage.astro'),
+    readSource('src/components/ClickToLoadYouTube.astro'),
+  ]);
 
-  assert.match(homeSource, /import \{ toHttpsEmbedUrl \} from '\.\.\/lib\/videoEmbed';/);
-  assert.match(homeSource, /const brandVideoEmbedUrl = toHttpsEmbedUrl\(siteData\.brandVideoEmbedUrl\);/);
-  assert.doesNotMatch(homeSource, /const brandVideoEmbedUrl = toEmbedUrl\(siteData\.brandVideoEmbedUrl\);/);
+  assert.match(aboutSource, /<ClickToLoadYouTube[\s\S]*src=\{siteData\.brandVideoEmbedUrl\}/);
+  assert.match(videoSource, /import \{ toHttpsEmbedUrl \} from '\.\.\/lib\/videoEmbed';/);
+  assert.match(videoSource, /const embedUrl = toHttpsEmbedUrl\(src\);/);
+  assert.match(videoSource, /embedUrl\.protocol !== 'https:'/);
 });
 
 test('ugc validation only accepts https embed-only videos without requiring a local source', () => {

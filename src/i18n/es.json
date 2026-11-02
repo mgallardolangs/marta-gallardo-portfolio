@@ -90,7 +90,7 @@
       "intro": "Base académica orientada a idiomas, comunicación intercultural y redacción, reforzada con inmersión práctica en entornos internacionales. Suplementada con formación reciente en optimización de contenidos web y redes sociales.",
       "studies": [
         "Grado en Traducción e Interpretación, especializado en francés, redacción y adaptación de contenidos. Segundos idiomas: alemán e italiano.Formación básica especializada en traducción literaria, jurídico-económica, técnico-científica y audiovisual.",
-        "Erasmus+en París: práctica diaria en entornos francófonos.",
+        "Erasmus+ en París: práctica diaria en entornos francófonos.",
         "Formación continua en escritura clara, terminología y optimización de contenidos digitales.",
         "Curso privado de Marketing Digital y SEO."
       ]
@@ -460,6 +460,7 @@
     }
   },
   "aboutPage": {
+    "trajectoryEyebrow": "TRAYECTORIA",
     "hero": {
       "title": "Sobre mí: Marta Gallardo y la Filosofía Marttelier",
       "subtitle": "El punto de encuentro entre la lingüística, la estrategia y el contenido",

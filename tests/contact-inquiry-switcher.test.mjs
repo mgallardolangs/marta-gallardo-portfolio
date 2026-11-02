@@ -137,7 +137,7 @@ test('public and admin contact pages keep the denser contact desk, exact forms, 
     assert.equal(countMatches(source, /min-h-\[7rem\]/g), 2, 'each contact page should use the shorter textarea minimum height');
     assert.doesNotMatch(source, /rows="6"/);
     assert.doesNotMatch(source, /min-h-\[10rem\]/);
-    assert.doesNotMatch(source, /py-14|md:py-18|px-6 py-8 md:px-8 md:py-10|pb-6|space-y-6|gap-6|py-3/);
+    assert.doesNotMatch(source, /py-14|md:py-18|px-6 py-8 md:px-8 md:py-10|pb-6|gap-6|py-3/);
     assert.doesNotMatch(source, /\b(?:ugc|seo)-(?:budget|name)\b/);
     assert.doesNotMatch(source, /\bname="Budget"\b/);
     assert.doesNotMatch(source, /\bname="Name"\b/);

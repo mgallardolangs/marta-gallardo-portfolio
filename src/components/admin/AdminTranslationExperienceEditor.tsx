@@ -193,7 +193,7 @@ export default function AdminTranslationExperienceEditor({ initialContent }: { i
               <div className="space-y-4">
                 {studies.map((study, index) => (
                   <div key={index} className="flex gap-3">
-                    <span className="mt-3 h-2 w-2 rounded-full bg-amaranth" />
+                    <span aria-hidden="true" className="mt-3 h-2 w-2 shrink-0 rounded-full bg-amaranth" />
                     {store.initialized ? (
                       <EditableText i18nKey={`translationPage.education.studies.${index}`} as="span" className="text-base leading-8 text-paper" />
                     ) : (

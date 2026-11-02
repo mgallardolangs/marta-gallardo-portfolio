@@ -192,18 +192,14 @@ test('favicon keeps only a root svg with one ink MG text child', async () => {
   );
 });
 
-test('site orbit dataset is the approved local mock placeholder set', async () => {
+test('site orbit dataset preserves all fifteen existing local image assets', async () => {
   const site = await readJson('src/data/site.json');
 
   assert.equal(site.orbitMedia.length, 15, 'orbitMedia should stay at exactly 15 items');
 
   site.orbitMedia.forEach((item, index) => {
-    assert.equal(item.type, 'image', `orbitMedia[${index}] should ship as an image placeholder`);
-    assert.match(
-      item.src,
-      /^\/images\/orbit\/mock-\d{2}\.webp$/,
-      `orbitMedia[${index}].src should point at the approved local mock placeholder path`,
-    );
+    assert.equal(item.type, 'image', `orbitMedia[${index}] should preserve its existing image type`);
+    assert.match(item.src, /^\/images\/site\/[a-z0-9-]+\.webp$/, `orbitMedia[${index}].src should remain a local site asset`);
     assert.equal(item.href, null, `orbitMedia[${index}].href should stay null until real destinations are approved`);
   });
 });

@@ -1,30 +1,34 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 import ScrollReveal from '../components/ScrollReveal';
 import RichText from '../components/RichText.astro';
 import OvalMediaOrbit from '../components/OvalMediaOrbit';
-import ParallaxLayer from '../components/ParallaxLayer';
-import FloatingIcon from '../components/FloatingIcon';
 import GsapPageRuntime from '../components/GsapPageRuntime.astro';
-import { ArrowWavy } from '../components/DoodleArrows';
 import StaggerContainer, { StaggerItem } from '../components/StaggerContainer';
 import HomeHeroPortrait from '../components/HomeHeroPortrait.astro';
 import TypedTitle from '../components/TypedTitle.astro';
-import { getLangFromUrl, getLocalizedPath, t } from '../i18n';
+import { getLangFromUrl, getLocalizedPath, getLocalizedRoute, t } from '../i18n';
 import { getPageSeo, siteData } from '../lib/siteData';
-import { toHttpsEmbedUrl } from '../lib/videoEmbed';
+import { getLatestAndArchive, scopeBlogPostsToLocale } from '../lib/blog';
 import { netlifyImage } from '../lib/netlifyImage';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
-const pageTitle = `${i.hero.name} — ${i.home.hero.kicker}`;
+const pageTitle = i.home.hero.title;
 const pageDescription = i.home.hero.description;
 const pageSeo = getPageSeo(siteData, 'home', lang, {
   title: { [lang]: pageTitle },
   description: { [lang]: pageDescription },
 });
-const instagramAlt = siteData.orbitMedia.find((item) => item.id === 'instagram-proof')?.alt[lang] ?? 'Instagram';
-const brandVideoEmbedUrl = toHttpsEmbedUrl(siteData.brandVideoEmbedUrl);
+const localizedPosts = scopeBlogPostsToLocale(await getCollection('blog'), lang);
+const { latest, archive } = getLatestAndArchive(localizedPosts);
+const latestPosts = latest ? [latest, ...archive].slice(0, 3) : archive.slice(0, 3);
+const homeServices = [
+  { route: 'seo', title: i.home.services.items.seo },
+  { route: 'translation', title: i.home.services.items.translation },
+  { route: 'ugc', title: i.home.services.items.ugc },
+];
 ---
 
 <BaseLayout title={pageSeo.title} description={pageSeo.description}>
@@ -34,7 +38,7 @@ const brandVideoEmbedUrl = toHttpsEmbedUrl(siteData.brandVideoEmbedUrl);
       <section data-home-hero class="home-hero bg-paper px-6 pt-20 pb-16 md:pt-24 md:pb-20">
         <div class="site-container home-hero__stage">
           <div class="home-hero__copy">
-            <StaggerContainer client:visible className="space-y-6 md:space-y-8" staggerDelay={0.1}>
+            <StaggerContainer client:visible className="flex flex-col gap-8 md:gap-10" staggerDelay={0.1}>
               <div class="home-hero__clip">
                 <StaggerItem>
                   <p class="home-hero__kicker">{i.home.hero.kicker}</p>
@@ -43,17 +47,7 @@ const brandVideoEmbedUrl = toHttpsEmbedUrl(siteData.brandVideoEmbedUrl);
 
               <div class="home-hero__clip">
                 <StaggerItem>
-                  <TypedTitle as="h1" text={i.hero.name} trigger="load" class="home-hero__title" />
-                </StaggerItem>
-              </div>
-
-              <div class="home-hero__clip">
-                <StaggerItem>
-                  <div class="home-hero__meta">
-                    <span>{i.hero.age}</span>
-                    <span class="home-hero__separator">✦</span>
-                    <span>{i.hero.city}</span>
-                  </div>
+                  <TypedTitle as="h1" text={i.home.hero.title} trigger="load" class="home-hero__title" />
                 </StaggerItem>
               </div>
 
@@ -66,11 +60,11 @@ const brandVideoEmbedUrl = toHttpsEmbedUrl(siteData.brandVideoEmbedUrl);
               <div class="home-hero__clip">
                 <StaggerItem>
                   <div class="home-hero__actions">
-                    <a href={getLocalizedPath('/ugc', lang)} class="home-hero__cta home-hero__cta--primary">
-                      <span class="home-hero__cta-label">{i.hero.ugcLabel}</span>
+                    <a href={getLocalizedRoute('contact', lang)} class="home-hero__cta home-hero__cta--primary">
+                      <span class="home-hero__cta-label">{i.home.hero.ctaDiagnosis}</span>
                     </a>
-                    <a href={getLocalizedPath('/translation-seo', lang)} class="home-hero__cta home-hero__cta--primary">
-                      <span class="home-hero__cta-label">{i.hero.seoLabel}</span>
+                    <a href="#home-services" data-home-services-cta class="home-hero__cta home-hero__cta--secondary">
+                      <span class="home-hero__cta-label">{i.home.hero.ctaServices}</span>
                     </a>
                   </div>
                 </StaggerItem>
@@ -95,9 +89,33 @@ const brandVideoEmbedUrl = toHttpsEmbedUrl(siteData.brandVideoEmbedUrl);
       </section>
       <!-- home-hero:end -->
 
+      <section id="home-services" class="scroll-mt-24 bg-ink px-6 py-16 text-paper md:scroll-mt-28 md:py-20">
+        <div class="site-container space-y-10">
+          <ScrollReveal client:visible direction="right" className="flex flex-col gap-5 md:gap-6">
+            <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.nav.services}</p>
+            <h2 class="font-heading text-4xl leading-none text-paper md:text-6xl">{i.home.services.title}</h2>
+          </ScrollReveal>
+
+          <div class="border-t border-paper/18">
+            {homeServices.map((service, index) => (
+              <a
+                href={getLocalizedRoute(service.route, lang)}
+                class="group flex items-center justify-between gap-5 border-b border-paper/18 py-5 transition-colors hover:text-amaranth focus-visible:text-amaranth md:py-7"
+              >
+                <span class="flex min-w-0 items-center gap-4 md:gap-6">
+                  <span class="font-body text-[0.68rem] font-semibold tracking-[0.24em] text-amaranth">{`0${index + 1}`}</span>
+                  <h3 class="font-heading text-2xl font-normal leading-tight md:text-4xl">{service.title}</h3>
+                </span>
+                <span class="font-body text-xl text-amaranth transition-transform group-hover:translate-x-1 group-focus-visible:translate-x-1" aria-hidden="true">↗</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section data-home-orbit class="home-orbit bg-ink px-6 py-16 text-paper md:py-24">
         <div class="site-container grid gap-8 lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)_minmax(0,12rem)] lg:grid-rows-[auto_1fr_auto] lg:items-center xl:grid-cols-[minmax(0,21rem)_minmax(0,1fr)_minmax(0,14rem)]">
-          <ScrollReveal client:visible direction="right" className="space-y-4 lg:col-start-1 lg:row-start-1 lg:self-start">
+          <ScrollReveal client:visible direction="right" className="flex flex-col gap-5 lg:col-start-1 lg:row-start-1 lg:self-start">
             <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.home.orbit.kicker}</p>
             <h2 class="max-w-[8ch] font-heading text-[2.8rem] leading-[0.9] tracking-[-0.08em] text-paper md:text-[4.25rem] xl:text-[5.5rem]">
               {i.home.orbit.title}
@@ -123,14 +141,11 @@ const brandVideoEmbedUrl = toHttpsEmbedUrl(siteData.brandVideoEmbedUrl);
       </section>
 
       <section class="bg-paper px-6 py-20 md:py-24">
-        <div class="site-container space-y-12">
-          <ScrollReveal client:visible direction="right" className="space-y-6">
+        <div class="site-container space-y-14">
+          <ScrollReveal client:visible direction="right" className="flex flex-col gap-8">
             <div class="w-16 border-t border-amaranth"></div>
-            <h2 class="font-heading text-4xl leading-none text-ink md:text-6xl">{i.about.title}</h2>
-            {i.home.about.highlight && (
-              <p class="max-w-md font-body text-xl leading-8 text-ink">{i.home.about.highlight}</p>
-            )}
-            <RichText text={i.about.text} class="max-w-3xl font-body text-lg leading-8 text-ink-muted md:text-xl" />
+            <h2 class="font-heading text-4xl leading-none text-ink md:text-6xl">{i.home.visibility.title}</h2>
+            <RichText text={i.home.visibility.text} class="max-w-3xl font-body text-lg leading-8 text-ink-muted md:text-xl" />
           </ScrollReveal>
 
           <ScrollReveal client:visible>
@@ -148,158 +163,74 @@ const brandVideoEmbedUrl = toHttpsEmbedUrl(siteData.brandVideoEmbedUrl);
         </div>
       </section>
 
-      <section class="border-b border-white/10 bg-ink px-6 py-10" aria-hidden="true">
-        <div class="site-container">
-          <div class="relative mx-auto h-px max-w-5xl bg-white/12">
-            <span class="absolute left-1/2 top-1/2 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-3 bg-ink px-4 font-body text-[0.68rem] font-semibold uppercase tracking-[0.34em] text-amaranth">
-              <span class="h-px w-8 bg-amaranth"></span>
-              MG
-              <span class="h-px w-8 bg-amaranth"></span>
-            </span>
-          </div>
+      <section class="bg-ink px-6 py-20 text-paper md:py-24">
+        <div class="site-container grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+          <ScrollReveal client:visible direction="right" className="flex flex-col gap-7">
+            <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.nav.about}</p>
+            <h2 class="font-heading text-4xl leading-none text-paper md:text-6xl">{i.home.about.title}</h2>
+          </ScrollReveal>
+          <ScrollReveal client:visible direction="left" className="flex flex-col gap-8 lg:justify-self-end">
+            <RichText text={i.home.about.description} class="max-w-3xl font-body text-lg leading-8 text-white/76 md:text-xl" />
+            <div class="site-text-cta-row">
+              <a href={getLocalizedRoute('about', lang)} class="site-text-cta">
+                {i.home.about.cta}
+                <span class="site-text-cta__arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
-      <section class="bg-ink px-6 py-20 text-paper md:py-24">
-        <div class="site-container grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-          <div class="relative min-h-[32rem] border border-white/10 bg-white/5 p-5 md:min-h-[38rem] md:p-8">
-            <ParallaxLayer client:visible speed={-0.18} className="absolute -left-2 top-8 z-20 md:-left-8 md:top-12">
-              <FloatingIcon client:visible intensity={10}>
-                <div class="h-28 w-28 overflow-hidden border border-white/12 bg-paper shadow-[0_18px_40px_rgb(6_4_3_/_0.24)] md:h-36 md:w-36">
-                  {siteData.videoStickers.one ? (
-                    <img
-                      src={netlifyImage(siteData.videoStickers.one, { width: 400 })}
-                      alt={i.home.gallery.shotOne}
-                      class="h-full w-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : (
-                    <div class="flex h-full w-full items-center justify-center text-center font-body text-xs font-semibold uppercase tracking-[0.18em] text-ink">
-                      {i.home.gallery.shotOne}
-                    </div>
-                  )}
-                </div>
-              </FloatingIcon>
-            </ParallaxLayer>
-
-            <ParallaxLayer client:visible speed={0.22} className="absolute right-0 top-0 z-20 md:right-4">
-              <FloatingIcon client:visible intensity={12}>
-                <div class="h-24 w-32 overflow-hidden border border-white/12 bg-white shadow-[0_18px_40px_rgb(6_4_3_/_0.24)] md:h-28 md:w-40">
-                  {siteData.videoStickers.two ? (
-                    <img
-                      src={netlifyImage(siteData.videoStickers.two, { width: 400 })}
-                      alt={i.home.gallery.shotTwo}
-                      class="h-full w-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : (
-                    <div class="flex h-full w-full items-center justify-center text-center font-body text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-ink">
-                      {i.home.gallery.shotTwo}
-                    </div>
-                  )}
-                </div>
-              </FloatingIcon>
-            </ParallaxLayer>
-
-            <ParallaxLayer client:visible speed={-0.12} className="absolute -bottom-4 left-6 z-20 md:bottom-8 md:left-10">
-              <FloatingIcon client:visible intensity={14}>
-                <div class="h-28 w-40 overflow-hidden border border-white/12 bg-white shadow-[0_18px_40px_rgb(6_4_3_/_0.24)] md:h-32 md:w-44">
-                  {siteData.videoStickers.three ? (
-                    <img
-                      src={netlifyImage(siteData.videoStickers.three, { width: 400 })}
-                      alt={i.home.gallery.shotThree}
-                      class="h-full w-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : (
-                    <div class="flex h-full w-full items-center justify-center text-center font-body text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-ink">
-                      {i.home.gallery.shotThree}
-                    </div>
-                  )}
-                </div>
-              </FloatingIcon>
-            </ParallaxLayer>
-
-            <ParallaxLayer client:visible speed={0.18} className="absolute bottom-14 right-2 z-20 md:right-0">
-              <FloatingIcon client:visible intensity={11}>
-                <div class="h-20 w-28 overflow-hidden border border-white/12 bg-amaranth shadow-[0_18px_40px_rgb(6_4_3_/_0.24)] md:h-24 md:w-36">
-                  {siteData.videoStickers.four ? (
-                    <img
-                      src={netlifyImage(siteData.videoStickers.four, { width: 400 })}
-                      alt={i.home.gallery.shotFour}
-                      class="h-full w-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : (
-                    <div class="flex h-full w-full items-center justify-center text-center font-body text-[0.6rem] font-semibold uppercase tracking-[0.24em] text-ink md:text-xs">
-                      {i.home.gallery.shotFour}
-                    </div>
-                  )}
-                </div>
-              </FloatingIcon>
-            </ParallaxLayer>
-
-            <ScrollReveal client:visible direction="up" className="relative mx-auto flex aspect-[9/16] w-full max-w-[22rem] items-center justify-center overflow-hidden border border-white/12 bg-white/8">
-              {brandVideoEmbedUrl ? (
-                <iframe
-                  src={brandVideoEmbedUrl}
-                  title={i.home.video.title}
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowfullscreen
-                  class="absolute inset-0 h-full w-full border-0"
-                ></iframe>
-              ) : siteData.brandVideo ? (
-                <video
-                  src={siteData.brandVideo}
-                  autoplay
-                  muted
-                  loop
-                  playsinline
-                  preload="metadata"
-                  class="absolute inset-0 h-full w-full object-cover"
-                ></video>
-              ) : (
-                <Fragment>
-                  <div class="absolute inset-0 bg-[linear-gradient(180deg,rgb(244_245_241_/_0.12),rgb(244_245_241_/_0.02))]"></div>
-                  <div class="absolute left-1/2 top-4 h-1.5 w-24 -translate-x-1/2 rounded-full bg-white/20"></div>
-                  <div class="absolute inset-x-[22%] top-10 h-24 rounded-full bg-white/10 blur-3xl"></div>
-                  <div class="relative z-10 max-w-sm text-center">
-                    <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.home.video.note}</p>
-                    <p class="mt-5 font-heading text-4xl text-paper md:text-5xl">{i.home.video.placeholder}</p>
-                  </div>
-                  <ArrowWavy client:visible className="absolute bottom-8 right-8 hidden w-24 text-amaranth md:block" />
-                </Fragment>
-              )}
-            </ScrollReveal>
-          </div>
-
-          <ScrollReveal client:visible direction="right" className="space-y-6">
-            <p class="font-body text-xs font-semibold uppercase tracking-[0.36em] text-amaranth">{i.home.video.eyebrow}</p>
-            <h2 class="font-heading text-4xl leading-none text-paper md:text-6xl">{i.home.video.title}</h2>
-            <RichText text={i.home.video.description} class="max-w-xl font-body text-lg leading-8 text-white/74 md:text-xl" />
-            {siteData.instagramScreenshot ? (
-              <div class="mt-6 overflow-hidden border border-white/10">
-                <img
-                  src={netlifyImage(siteData.instagramScreenshot, { width: 1251 })}
-                  alt={instagramAlt}
-                  width={1251}
-                  height={495}
-                  loading="lazy"
-                  decoding="async"
-                  class="w-full"
-                />
-              </div>
-            ) : (
-              <div class="mt-6 flex aspect-[4/3] items-center justify-center border border-dashed border-white/20 bg-white/5">
-                <p class="font-body text-sm text-white/60">📱 Instagram screenshot</p>
-              </div>
-            )}
+      <section class="bg-paper px-6 py-20 md:py-24">
+        <div class="site-container space-y-12">
+          <ScrollReveal client:visible direction="right" className="flex flex-col gap-6">
+            <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.blog.eyebrow}</p>
+            <TypedTitle
+              as="h2"
+              text={i.home.latestArticles.title}
+              trigger="visible"
+              class="font-heading text-4xl leading-none text-ink md:text-6xl"
+            />
           </ScrollReveal>
+
+          {latestPosts.length > 0 && (
+            <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {latestPosts.map((post, index) => (
+                <article class="group flex h-full flex-col border-t border-ink/20 pt-5">
+                  <a href={getLocalizedPath(`/blog/${post.data.slug}`, lang)} class="mb-5 block overflow-hidden border border-ink/10 bg-ink/5">
+                    {post.data.image ? (
+                      <img
+                        src={netlifyImage(post.data.image, { width: 720 })}
+                        alt={post.data.title}
+                        width={720}
+                        height={450}
+                        loading="lazy"
+                        decoding="async"
+                        class="aspect-[16/10] w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+                      />
+                    ) : (
+                      <div class="flex aspect-[16/10] items-center justify-center">
+                        <span class="font-body text-xs font-semibold uppercase tracking-[0.28em] text-amaranth">{i.blog.latestStory}</span>
+                      </div>
+                    )}
+                  </a>
+                  <div class="flex flex-1 flex-col gap-4">
+                    <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-muted">
+                      {String(index + 1).padStart(2, '0')} · {post.data.date.toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </p>
+                    <a href={getLocalizedPath(`/blog/${post.data.slug}`, lang)} class="transition hover:text-amaranth">
+                      <h3 class="font-heading text-2xl leading-tight text-ink md:text-3xl">{post.data.title}</h3>
+                    </a>
+                    <p class="flex-1 font-body text-sm leading-7 text-ink-muted">{post.data.description}</p>
+                    <a href={getLocalizedPath(`/blog/${post.data.slug}`, lang)} class="blog-read-more">
+                      {i.blog.readMore}
+                      <span class="blog-read-more__arrow" aria-hidden="true">→</span>
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </div>

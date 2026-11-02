@@ -1,0 +1,29 @@
+---
+import AboutPage from '../views/AboutPage.astro';
+import SeoServicePage from '../views/SeoServicePage.astro';
+import TranslationServicePage from '../views/TranslationServicePage.astro';
+import UgcPage from '../views/UgcPage.astro';
+import { localizedRoutes } from '../lib/localizedRoutes.js';
+
+const pageViews = {
+  about: AboutPage,
+  seo: SeoServicePage,
+  translation: TranslationServicePage,
+  ugc: UgcPage,
+};
+
+export function getStaticPaths() {
+  const routeKeys = ['about', 'seo', 'translation', 'ugc'] as const;
+  return routeKeys.flatMap((routeKey) => (
+    Object.values(localizedRoutes[routeKey]).map((routePath) => ({
+      params: { path: routePath.replace(/^\/+/, '') },
+      props: { routeKey },
+    }))
+  ));
+}
+
+const { routeKey } = Astro.props as { routeKey: keyof typeof pageViews };
+const Page = pageViews[routeKey];
+---
+
+<Page />

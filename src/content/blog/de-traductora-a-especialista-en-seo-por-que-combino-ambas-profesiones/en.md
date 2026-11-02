@@ -31,4 +31,4 @@ This combination makes the most sense for **businesses** that sell, or want to s
 
 This space will reflect exactly that combination: I'll be writing about languages, SEO, and everything where the two overlap. If you run a business that wants to grow beyond your native language, or you're simply curious about this world, you're in the right place.
 
-If you'd like to know more about how I work, feel free to take a look at my [portfolio](https://marttelier.com/en/translation-seo/) or [get in touch](https://marttelier.com/en/contact/) directly.
+If you'd like to know more about how I work, feel free to take a look at my [portfolio](https://marttelier.com/en/about) or [get in touch](https://marttelier.com/en/contact) directly.
