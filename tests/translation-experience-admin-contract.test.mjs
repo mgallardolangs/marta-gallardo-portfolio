@@ -262,32 +262,34 @@ function captureExperienceState(store) {
   );
 }
 
-test('public translation page hero keeps only the contact CTA while parking the portfolio CTA data', async () => {
-  const source = await readSource('src/views/TranslationSeoPage.astro');
+test('public Translation hero uses current localized content and a contact CTA', async () => {
+  const source = await readSource('src/views/TranslationServicePage.astro');
 
-  assert.doesNotMatch(source, /data-translation-cta="portfolio"/, 'public translation hero should stop rendering the portfolio CTA element');
-  assert.doesNotMatch(source, /getLocalizedPath\('\/ugc',\s*lang\)/, 'public translation hero should stop linking to the UGC page from the hero CTA');
-  assert.doesNotMatch(source, /page\.hero\.ctaPrimary/, 'public translation hero should stop reading the parked primary CTA copy');
-  assert.match(source, /data-translation-cta="contact"/, 'public translation hero should keep the contact CTA');
-  assert.match(source, /page\.hero\.ctaSecondary/, 'public translation hero should keep the contact CTA copy');
+  assert.match(source, /page\.hero\.description/);
+  assert.match(source, /data-translation-cta="contact"/);
+  assert.match(source, /getLocalizedRoute\('contact', lang\)/);
+  assert.doesNotMatch(source, /translationPage\.hero\.ctaPrimary/);
 });
 
-test('admin translation hero keeps only the secondary CTA editor', async () => {
+test('admin Translation hero edits the current page copy and links to contact', async () => {
   const source = await readSource('src/pages/admin/translation-seo.astro');
 
-  assert.doesNotMatch(source, /translationPage\.hero\.ctaPrimary/, 'admin translation page should stop rendering the primary CTA editor');
-  assert.match(source, /translationPage\.hero\.ctaSecondary/, 'admin translation page should keep the secondary CTA editor');
+  assert.match(source, /translationServicePage\.hero\.title/);
+  assert.match(source, /translationServicePage\.hero\.description/);
+  assert.match(source, /href="\/admin\/contact"/);
 });
 
-test('experience tabs and both pages drop profileLabel while keeping the education and experience tabs contract', async () => {
+test('About and its admin editor drop profileLabel while keeping education and experience tabs', async () => {
   const [publicSource, adminSource, tabsSource] = await Promise.all([
-    readSource('src/views/TranslationSeoPage.astro'),
-    readSource('src/pages/admin/translation-seo.astro'),
+    readSource('src/views/AboutPage.astro'),
+    readSource('src/pages/admin/about.astro'),
     readSource('src/components/translation/ExperienceTabs.tsx'),
   ]);
 
-  assert.doesNotMatch(publicSource, /profileLabel=\{page\.browserTabs\.profileLabel\}/, 'public translation page should stop passing profileLabel to ExperienceTabs');
-  assert.doesNotMatch(adminSource, /translationPage\.browserTabs\.profileLabel/, 'admin translation page should stop rendering the parked profile label');
+  assert.match(publicSource, /<ExperienceTabs/);
+  assert.match(adminSource, /AdminTranslationExperienceEditor/);
+  assert.doesNotMatch(publicSource, /profileLabel/);
+  assert.doesNotMatch(adminSource, /profileLabel/);
   assert.doesNotMatch(tabsSource, /\bprofileLabel\b/, 'ExperienceTabs should drop the profileLabel prop and rendering path entirely');
   assert.match(tabsSource, /tabs\.education\.label/, 'ExperienceTabs should keep the education tab contract');
   assert.match(tabsSource, /tabs\.experience\.label/, 'ExperienceTabs should keep the experience tab contract');
@@ -306,8 +308,8 @@ test('all six locale dictionaries retain the parked primary CTA and profile labe
   }
 });
 
-test('admin translation page delegates the experience browser to one integrated editor island', async () => {
-  const source = await readSource('src/pages/admin/translation-seo.astro');
+test('admin About page delegates education and experience to one integrated editor island', async () => {
+  const source = await readSource('src/pages/admin/about.astro');
 
   assert.match(
     source,
@@ -573,9 +575,9 @@ test('AdminTranslationExperienceEditor source uses the shared admin store, local
   assert.match(source, /(?:sm|md):grid-cols-2[^"]*(?:xl|2xl):grid-cols-3/, 'experience editor should preview experience cards in the responsive approved grid');
 });
 
-test('admin translation page passes a typed initialContent prop built from page.* into the integrated experience editor', async () => {
+test('admin About page passes typed trajectory content into the integrated experience editor', async () => {
   const [adminSource, editorSource] = await Promise.all([
-    readSource('src/pages/admin/translation-seo.astro'),
+    readSource('src/pages/admin/about.astro'),
     readRequiredSource('src/components/admin/AdminTranslationExperienceEditor.tsx'),
   ]);
 
@@ -589,14 +591,14 @@ test('admin translation page passes a typed initialContent prop built from page.
   assert.ok(mountMatch, 'admin translation page should mount the experience editor with props');
   const mountSource = mountMatch[0];
 
-  assert.match(mountSource, /page\.browserTabsAriaLabel/, 'initialContent should seed the tablist aria label from page.browserTabsAriaLabel');
-  assert.match(mountSource, /page\.browserTabs\.education/, 'initialContent should seed the education tab label from page.browserTabs.education');
-  assert.match(mountSource, /page\.browserTabs\.experience/, 'initialContent should seed the experience tab label from page.browserTabs.experience');
-  assert.match(mountSource, /page\.experienceStatement/, 'initialContent should seed the experience statement from page.experienceStatement');
-  assert.match(mountSource, /page\.education\.intro/, 'initialContent should seed the education intro from page.education.intro');
-  assert.match(mountSource, /page\.education\.studies/, 'initialContent should seed the education studies from page.education.studies');
-  assert.match(mountSource, /page\.experience\.intro/, 'initialContent should seed the experience intro from page.experience.intro');
-  assert.match(mountSource, /page\.experience\.cards/, 'initialContent should seed the experience cards from page.experience.cards');
+  assert.match(mountSource, /experience\.browserTabsAriaLabel/, 'initialContent should seed the tablist aria label from the localized trajectory data');
+  assert.match(mountSource, /experience\.browserTabs\.education/, 'initialContent should seed the education tab label');
+  assert.match(mountSource, /experience\.browserTabs\.experience/, 'initialContent should seed the experience tab label');
+  assert.match(mountSource, /experience\.experienceStatement/, 'initialContent should seed the experience statement');
+  assert.match(mountSource, /experience\.education\.intro/, 'initialContent should seed the education intro');
+  assert.match(mountSource, /experience\.education\.studies/, 'initialContent should seed the education studies');
+  assert.match(mountSource, /experience\.experience\.intro/, 'initialContent should seed the experience intro');
+  assert.match(mountSource, /experience\.experience\.cards/, 'initialContent should seed the experience cards');
 
   assert.match(
     editorSource,
@@ -705,14 +707,14 @@ test('experience editor submit handlers guard an uninitialized store without res
   );
 });
 
-test('built admin translation HTML seeds the experience browser tablist and lists before hydration', async (t) => {
+test('built admin About HTML seeds the experience browser tablist and lists before hydration', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built admin experience browser HTML.');
     return;
   }
 
   const [adminHtml, esDictionary] = await Promise.all([
-    readSource('dist/admin/translation-seo/index.html'),
+    readSource('dist/admin/about.html'),
     readJson('src/i18n/es.json'),
   ]);
 
@@ -741,7 +743,7 @@ test('built admin translation HTML seeds the experience browser tablist and list
   const educationPanel = browserSection.slice(educationPanelStart, experiencePanelStart);
   const experiencePanel = browserSection.slice(experiencePanelStart);
 
-  const studyBulletMatches = educationPanel.match(/mt-3 h-2 w-2 rounded-full bg-amaranth/g) ?? [];
+  const studyBulletMatches = educationPanel.match(/mt-3 h-2 w-2 shrink-0 rounded-full bg-amaranth/g) ?? [];
   assert.equal(
     studyBulletMatches.length,
     esDictionary.translationPage.education.studies.length,

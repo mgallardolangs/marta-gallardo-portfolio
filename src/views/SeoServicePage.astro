@@ -1,0 +1,166 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GsapPageRuntime from '../components/GsapPageRuntime.astro';
+import RichText from '../components/RichText.astro';
+import ScrollReveal from '../components/ScrollReveal';
+import ServiceSwitcher from '../components/translation/ServiceSwitcher';
+import TypedTitle from '../components/TypedTitle.astro';
+import { getLangFromUrl, getLocalizedRoute, t } from '../i18n';
+import { getPageSeo, siteData } from '../lib/siteData';
+import { getTranslationArsenalColumns } from '../lib/translationPage.js';
+
+const lang = getLangFromUrl(Astro.url);
+const i = t(lang);
+const page = i.seoPage;
+const pageDescription = page.hero.paragraphs.join(' ');
+const pageSeo = getPageSeo(siteData, 'seo', lang, {
+  title: { [lang]: page.hero.title },
+  description: { [lang]: pageDescription },
+});
+const arsenal = getTranslationArsenalColumns(lang, siteData, 'seo');
+const seoToolIds = new Set(['google-search-console', 'google-business-profile', 'wordpress']);
+const seoTools = arsenal.tools.filter((tool) => seoToolIds.has(tool.id));
+const reservedTools = ['Ahrefs', 'SEMrush', 'Screaming Frog'];
+---
+
+<BaseLayout title={pageSeo.title} description={pageSeo.description}>
+  <GsapPageRuntime />
+  <div class="bg-paper" data-seo-service-page>
+    <section class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
+      <div class="site-container max-w-7xl">
+        <ScrollReveal client:visible direction="right" className="flex flex-col gap-8">
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-amaranth">{page.hero.eyebrow}</p>
+          <TypedTitle
+            as="h1"
+            text={page.hero.title}
+            trigger="load"
+            class="max-w-[16ch] font-heading text-5xl leading-[0.92] tracking-[-0.04em] text-ink md:text-7xl"
+          />
+          {page.hero.paragraphs.map((paragraph) => (
+            <RichText text={paragraph} class="max-w-4xl font-body text-base leading-8 text-ink-muted md:text-lg" />
+          ))}
+          <div class="site-text-cta-row">
+            <a href={getLocalizedRoute('contact', lang)} class="site-text-cta">
+              {i.footer.cta}
+              <span class="site-text-cta__arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </ScrollReveal>
+      </div>
+    </section>
+
+    <section class="bg-ink px-6 py-16 text-paper md:py-20">
+      <div class="site-container space-y-10">
+        <div class="space-y-5">
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{i.nav.seo}</p>
+          <TypedTitle
+            as="h2"
+            text={page.services.title}
+            trigger="visible"
+            class="font-heading text-4xl text-paper md:text-5xl"
+          />
+        </div>
+        <ServiceSwitcher
+          client:load
+          title={page.services.title}
+          items={page.services.items.map((service) => ({
+            id: service.id,
+            name: service.title,
+            headline: service.title,
+            description: service.description,
+          }))}
+        />
+      </div>
+    </section>
+
+    <section class="px-6 py-16 md:py-20">
+      <div class="site-container grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+        <ScrollReveal client:visible direction="right" className="flex flex-col gap-6">
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{i.nav.seo}</p>
+          <TypedTitle
+            as="h2"
+            text={page.international.title}
+            trigger="visible"
+            class="font-heading text-4xl leading-none text-ink md:text-5xl"
+          />
+        </ScrollReveal>
+        <ScrollReveal client:visible direction="left" className="flex flex-col gap-6">
+          <RichText text={page.international.description} class="max-w-3xl font-body text-base leading-8 text-ink-muted md:text-lg" />
+          <div class="site-text-cta-row">
+            <a href={getLocalizedRoute('translation', lang)} class="site-text-cta">
+              {i.nav.translation}
+              <span class="site-text-cta__arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </ScrollReveal>
+      </div>
+    </section>
+
+    <section class="bg-ink px-6 py-16 text-paper md:py-20">
+      <div class="site-container space-y-10">
+        <div class="max-w-3xl space-y-5">
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{i.nav.seo}</p>
+          <TypedTitle
+            as="h2"
+            text={page.why.title}
+            trigger="visible"
+            class="font-heading text-4xl leading-none text-paper md:text-5xl"
+          />
+          <RichText text={page.why.description} class="font-body text-base leading-8 text-paper/72 md:text-lg" />
+        </div>
+
+        <div class="grid gap-0 border border-paper/18 md:grid-cols-2">
+          <article class="border-b border-paper/18 p-5 md:border-b-0 md:border-r">
+            <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.toolsTitle}</p>
+            <span class="mt-4 block h-px bg-paper/18"></span>
+            <div class="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {seoTools.map((tool) => (
+                <div class="group flex aspect-square min-w-0 flex-col items-center justify-center gap-3 bg-paper px-3 py-4 text-center text-ink transition hover:bg-amaranth">
+                  <img src={tool.logoSrc} alt="" width="40" height="40" loading="lazy" decoding="async" class="h-10 w-10 object-contain" />
+                  <p class="font-body text-[0.68rem] font-medium uppercase tracking-[0.1em]">{tool.label}</p>
+                </div>
+              ))}
+              {reservedTools.map((tool) => (
+                <div class="flex aspect-square min-w-0 flex-col items-center justify-center gap-3 border border-dashed border-paper/30 px-3 py-4 text-center text-paper/64">
+                  <span class="flex h-10 w-10 items-center justify-center border border-dashed border-paper/35 font-body text-[0.55rem] font-semibold uppercase tracking-[0.1em]">Logo</span>
+                  <p class="font-body text-[0.68rem] font-medium uppercase tracking-[0.1em]">{tool}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+
+          <article class="p-5">
+            <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.skillsTitle}</p>
+            <span class="mt-4 block h-px bg-paper/18"></span>
+            <div class="mt-5 flex flex-col gap-2">
+              {arsenal.skills.map((skill) => (
+                <span class="border border-paper/18 px-3 py-3 font-body text-[0.68rem] uppercase tracking-[0.08em] text-paper">{skill.label}</span>
+              ))}
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-6 py-16 md:py-20">
+      <div class="site-container space-y-8">
+        <div class="max-w-3xl space-y-6">
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{i.nav.seo}</p>
+          <TypedTitle
+            as="h2"
+            text={page.budget.title}
+            trigger="visible"
+            class="font-heading text-4xl leading-none text-ink md:text-5xl"
+          />
+          <RichText text={page.budget.description} class="font-body text-base leading-8 text-ink-muted md:text-lg" />
+        </div>
+        <div class="site-text-cta-row">
+          <a href={getLocalizedRoute('contact', lang)} class="site-text-cta">
+            {i.footer.cta}
+            <span class="site-text-cta__arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

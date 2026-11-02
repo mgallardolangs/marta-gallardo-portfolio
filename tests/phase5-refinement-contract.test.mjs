@@ -94,16 +94,27 @@ function isHomeRoute(routePath) {
   return routePath === '/' || /^\/(?:en|fr|de|it|ca)$/.test(routePath);
 }
 
-function isTranslationRoute(routePath) {
-  return routePath === '/translation-seo' || /^\/(?:en|fr|de|it|ca)\/translation-seo$/.test(routePath);
-}
+const motionServiceRoutes = new Set([
+  '/servicios/seo',
+  '/servicios/traduccion',
+  '/en/services/seo',
+  '/en/services/translation',
+  '/fr/services/seo',
+  '/fr/services/traduction',
+  '/de/dienstleistungen/seo',
+  '/de/dienstleistungen/uebersetzung',
+  '/it/servizi/seo',
+  '/it/servizi/traduzione',
+  '/ca/serveis/seo',
+  '/ca/serveis/traduccio',
+]);
 
 function routeNeedsMotionBundles(routePath) {
-  return isHomeRoute(routePath) || isTranslationRoute(routePath);
+  return isHomeRoute(routePath) || motionServiceRoutes.has(routePath);
 }
 
 function getAbsoluteRouteUrl(routePath) {
-  return new URL(routePath === '/' ? '/' : `${routePath}/`, 'https://marttelier.com').toString();
+  return new URL(routePath, 'https://marttelier.com').toString();
 }
 
 function getCanonicalUrlFromHtml(html) {
@@ -260,9 +271,10 @@ test('motion runtime and reduced-motion-sensitive components keep the Phase 5 ha
   );
 });
 
-test('public media surfaces keep eager hero loading, lazy below-fold loading, and explicit sizing contracts', async () => {
-  const [homeSource, ugcSource, ugcContactSheetSource, orbitSource, blogIndexSource, blogArticleSource, photoMasonrySource, videoGallerySource] = await Promise.all([
+test('public media surfaces keep eager hero loading, click-gated About video, lazy media, and explicit sizing contracts', async () => {
+  const [homeSource, aboutSource, ugcSource, ugcContactSheetSource, orbitSource, blogIndexSource, blogArticleSource, photoMasonrySource, videoGallerySource] = await Promise.all([
     readSource('src/views/HomePage.astro'),
+    readSource('src/views/AboutPage.astro'),
     readSource('src/views/UgcPage.astro'),
     readSource('src/components/UgcContactSheet.tsx'),
     readSource('src/components/OvalMediaOrbit.tsx'),
@@ -274,7 +286,9 @@ test('public media surfaces keep eager hero loading, lazy below-fold loading, an
 
   assert.match(homeSource, /<HomeHeroPortrait>/);
   assert.match(homeSource, /siteData\.heroMainPhoto/);
-  assert.match(homeSource, /<img[^>]*src=\{netlifyImage\(siteData\.instagramScreenshot[^>]*?\)\}[^>]*width=\{1251\}[^>]*height=\{495\}[^>]*loading="lazy"[^>]*decoding="async"/);
+  assert.doesNotMatch(homeSource, /brandVideoEmbedUrl|instagramScreenshot/);
+  assert.match(aboutSource, /<ClickToLoadYouTube/);
+  assert.doesNotMatch(aboutSource, /instagramScreenshot/);
   assert.doesNotMatch(ugcSource, /fetchpriority="high"|idx === 0 \? 'eager' : 'lazy'/, 'UGC should no longer preload a hero carousel image after the contact-sheet rewrite');
   assert.match(ugcContactSheetSource, /<img[\s\S]*loading="lazy"/, 'UGC contact-sheet still images should stay lazy-loaded');
   assert.match(ugcContactSheetSource, /preload="metadata"/, 'UGC contact-sheet videos should only preload metadata');
@@ -367,6 +381,12 @@ test('built public and admin HTML keep SEO/noindex classes, local media referenc
     const routePath = getRoutePathFromDistHtml(relativePath);
     const html = await readFile(path.join(rootDir, relativePath), 'utf8');
 
+    if (routePath === '/404') {
+      assert.match(html, /<meta name="robots" content="noindex, nofollow"/);
+      assert.equal(getCanonicalUrlFromHtml(html), null, 'the 404 page should not ship a public canonical URL');
+      continue;
+    }
+
     if (isAdminRoute(routePath)) {
       adminRoutePaths.push(routePath);
       assert.match(html, /<title>Admin/);
@@ -408,7 +428,8 @@ test('built public and admin HTML keep SEO/noindex classes, local media referenc
   }
 
   assert.ok(adminRoutePaths.includes('/admin/blog/new'), 'dist should include the inline admin blog/new editor route');
-  assert.ok(publicRoutePaths.includes('/blog/mi-primer-post'), 'dist should include the built Spanish blog article route');
+  const articleSlug = '/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones';
+  assert.ok(publicRoutePaths.includes(articleSlug), 'dist should include the built Spanish blog article route');
 
   const robots = await readFile(path.join(rootDir, 'dist/robots.txt'), 'utf8');
   assert.match(robots, /^User-agent: \*\nAllow: \/\nDisallow: \/admin\n\nSitemap: https:\/\/marttelier\.com\/sitemap-index\.xml\n?$/);
@@ -435,11 +456,11 @@ test('built public and admin HTML keep SEO/noindex classes, local media referenc
     assert.ok(!sitemapRoutePaths.has(routePath), `${routePath} should stay out of the sitemap set`);
   }
 
-  assert.ok(sitemapRoutePaths.has('/blog/mi-primer-post'), 'sitemap should include the built Spanish article route');
+  assert.ok(sitemapRoutePaths.has(articleSlug), 'sitemap should include the built Spanish article route');
   assert.ok(!sitemapRoutePaths.has('/admin/blog/new'), 'sitemap should exclude the inline admin new-post route');
   for (const locale of ['en', 'fr', 'de', 'it', 'ca']) {
     assert.ok(
-      sitemapRoutePaths.has(`/${locale}/blog/mi-primer-post`),
+      sitemapRoutePaths.has(`/${locale}${articleSlug}`),
       `sitemap should include the built ${locale} fallback article route now that every locale is migrated`,
     );
   }

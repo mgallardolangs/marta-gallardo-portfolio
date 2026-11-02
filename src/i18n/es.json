@@ -90,7 +90,7 @@
       "intro": "Base académica orientada a idiomas, comunicación intercultural y redacción, reforzada con inmersión práctica en entornos internacionales. Suplementada con formación reciente en optimización de contenidos web y redes sociales.",
       "studies": [
         "Grado en Traducción e Interpretación, especializado en francés, redacción y adaptación de contenidos. Segundos idiomas: alemán e italiano.Formación básica especializada en traducción literaria, jurídico-económica, técnico-científica y audiovisual.",
-        "Erasmus+en París: práctica diaria en entornos francófonos.",
+        "Erasmus+ en París: práctica diaria en entornos francófonos.",
         "Formación continua en escritura clara, terminología y optimización de contenidos digitales.",
         "Curso privado de Marketing Digital y SEO."
       ]
@@ -149,6 +149,7 @@
   },
   "ugcPage": {
     "pageDescription": "Portfolio profesional de UGC de Marta Gallardo con campañas editoriales conceptuales de viajes, idiomas y arte.",
+    "pageTitle": "Creadora de Contenido UGC para Marcas",
     "niches": {
       "travel": {
         "label": "Viajes",
@@ -277,6 +278,31 @@
       "next": "Siguiente",
       "formatLabel": "FORMATO",
       "pieceLabel": "PIEZA"
+    },
+    "benefits": {
+      "title": "Por qué Apostar por el Contenido Generado por Usuarios",
+      "description": "El contenido UGC permite presentar una marca desde una experiencia visual cercana. Puede ayudar a mostrar cómo se integra un producto o servicio en situaciones cotidianas y ofrecer a la audiencia más contexto para valorarlo."
+    },
+    "process": {
+      "title": "Proceso de Trabajo: De la Idea a la Edición Final",
+      "steps": [
+        {
+          "title": "Briefing",
+          "description": "Acordamos objetivo, audiencia, formato, mensajes clave y requisitos."
+        },
+        {
+          "title": "Desarrollo de la idea",
+          "description": "Doy forma al concepto y a la estructura de la pieza a partir del briefing."
+        },
+        {
+          "title": "Grabación",
+          "description": "Produzco el material siguiendo el enfoque acordado y cuidando encuadre, ritmo y claridad."
+        },
+        {
+          "title": "Edición final",
+          "description": "Reviso el material y preparo la pieza final en los formatos acordados."
+        }
+      ]
     }
   },
   "blog": {
@@ -297,7 +323,12 @@
   },
   "nav": {
     "home": "Inicio",
+    "about": "Sobre mí",
+    "services": "Servicios",
+    "seo": "SEO",
+    "translation": "Traducción",
     "ugc": "Contenido creativo",
+    "ugcService": "Creación de contenido UGC",
     "translationSeo": "Comunicación multilingüe y SEO",
     "blog": "Blog",
     "contact": "Contacto",
@@ -367,11 +398,14 @@
   },
   "home": {
     "hero": {
-      "kicker": "Creatividad, idiomas y estrategia",
-      "description": "Adapto mensajes para que las marcas conecten con personas reales, en cualquier idioma y mercado. Combino creatividad, traducción y estrategia digital con una mirada internacional.",
+      "kicker": "marttelier",
+      "description": "Optimizo la visibilidad y conversión de tu negocio para que conectes con personas reales, en cualquier idioma y mercado.",
       "mainPhoto": "Foto principal",
       "scrollCue": "Descubre cómo trabajo",
-      "coverLabel": "Portada editorial"
+      "coverLabel": "Portada editorial",
+      "title": "Consultora SEO Freelance y Estrategia de Contenidos Digitales",
+      "ctaDiagnosis": "Solicitar diagnóstico SEO",
+      "ctaServices": "Ver servicios"
     },
     "about": {
       "eyebrow": "",
@@ -384,13 +418,17 @@
         "Alemán",
         "Italiano"
       ],
-      "highlight": ""
+      "highlight": "",
+      "title": "Sobre mí: Rigor técnico, titulación oficial y creatividad",
+      "description": "Soy Marta Gallardo, graduada en Traducción e Interpretación por la Universidad de Alicante y con formación en SEO. Uno lingüística, estrategia y contenido para ayudar a marcas a comunicar con claridad y conectar con sus audiencias.",
+      "cta": "Conoce más sobre mí"
     },
     "video": {
       "eyebrow": "MARCA PERSONAL",
       "title": "@marttelier",
       "description": "En @marttelier comparto contenido sobre viajes, idiomas y procesos creativos. Un espacio personal donde convierto curiosidad, observación y experiencias reales en historias visuales.",
       "placeholder": "Vídeo intro",
+      "playLabel": "Reproducir vídeo",
       "note": "Formato 9:16 · placeholder para reel / presentación"
     },
     "gallery": {
@@ -404,6 +442,136 @@
       "title": "Mi historia",
       "index": "MARTA GALLARDO · PORTFOLIO",
       "note": "CONTENIDO · IDIOMAS · VIAJES · ARTE"
+    },
+    "services": {
+      "title": "Soluciones integrales para escalar tu marca",
+      "items": {
+        "seo": "Consultoría y Auditoría SEO",
+        "translation": "Traducción y Localización Web",
+        "ugc": "Creación de Contenido UGC"
+      }
+    },
+    "visibility": {
+      "title": "Visibilidad, Idiomas y Conversión",
+      "text": "Como traductora y creadora de contenido, trabajo entre idiomas, culturas y formatos para que cada mensaje conserve su intención y conecte de forma natural. Combino traducción, localización y SEO multilingüe junto con contenido UGC para ayudar a marcas a comunicar con claridad, coherencia y sensibilidad cultural."
+    },
+    "latestArticles": {
+      "title": "Últimos artículos sobre SEO y Marketing Digital"
+    }
+  },
+  "aboutPage": {
+    "trajectoryEyebrow": "TRAYECTORIA",
+    "hero": {
+      "title": "Sobre mí: Marta Gallardo y la Filosofía Marttelier",
+      "subtitle": "El punto de encuentro entre la lingüística, la estrategia y el contenido",
+      "story": "Me gradué en Traducción e Interpretación por la Universidad de Alicante y me especialicé en SEO y estrategia digital. Al unir los idiomas, la búsqueda y el contenido UGC, encontré una forma de acompañar proyectos de manera directa, sin agencias de por medio. Me interesa que cada mensaje conserve su intención y encuentre a las personas adecuadas."
+    },
+    "principles": {
+      "title": "Principios y valores de trabajo en marttelier",
+      "items": [
+        "Transparencia sin humo",
+        "Revisión 100% humana",
+        "Enfoque en conversión",
+        "Crecimiento conjunto"
+      ]
+    },
+    "work": {
+      "title": "¿Cómo trabajo con marcas y proyectos digitales?",
+      "description": "Trabajo con un acompañamiento cercano y directo: acordamos objetivos, prioridades y siguientes pasos, y mantengo una comunicación clara durante el proyecto."
+    }
+  },
+  "seoPage": {
+    "hero": {
+      "eyebrow": "Posicionamiento SEO",
+      "title": "Servicio de Posicionamiento SEO y SEO Internacional",
+      "paragraphs": [
+        "En un entorno digital tan competitivo, aparecer en los primeros resultados de Google no es cuestión de suerte, sino de estrategia. Como especialista en posicionamiento en buscadores, te ayudo a transformar tu página web en un canal activo de captación de clientes. No se trata solo de conseguir más visitas, sino de atraer tráfico cualificado: usuarios que buscan exactamente lo que tú ofreces y que están listos para comprar o contratar.",
+        "A través de un enfoque integral, analizo el estado de tu proyecto para diseñar un plan a tu medida. Optimizo la estructura técnica de tu web, mejoro la relevancia de tus contenidos y potencio tu autoridad digital para que escales posiciones frente a tus competidores. Ya sea que busques consolidar tu marca en tu mercado más cercano o abrir las puertas a una expansión global mediante una estrategia de SEO internacional, mi objetivo es hacer que tu negocio sea la opción indiscutible para tu audiencia."
+      ]
+    },
+    "services": {
+      "title": "Servicios de SEO a tu medida",
+      "items": [
+        {
+          "id": "audit",
+          "title": "Auditoría SEO Profesional",
+          "description": "Antes de actuar, reviso el punto de partida: SEO técnico, indexabilidad, estructura y contenido on-page. La auditoría organiza los hallazgos por prioridad para orientar los siguientes pasos."
+        },
+        {
+          "id": "consulting",
+          "title": "Consultoría SEO y Estrategia Digital",
+          "description": "Acompañamiento mensual o por proyecto para definir prioridades, revisar avances y ajustar la estrategia de empresas y profesionales autónomos."
+        },
+        {
+          "id": "local",
+          "title": "Posicionamiento SEO Local",
+          "description": "Optimización de la ficha de Google Business Profile y de la presencia en Google Maps para facilitar que clientes de la zona encuentren el negocio."
+        }
+      ]
+    },
+    "international": {
+      "title": "Especialista en SEO Internacional y Multilingüe",
+      "description": "Cada mercado expresa sus búsquedas de forma distinta. Además de adaptar el idioma, conviene investigar la intención de búsqueda y el contexto cultural para que el contenido resulte natural en cada mercado."
+    },
+    "why": {
+      "title": "¿Por qué confiar en mí como tu Consultora SEO?",
+      "description": "Mi formación, las herramientas que uso y el trabajo aplicado en mi propia web me permiten explicar con claridad el proceso y las decisiones de cada proyecto."
+    },
+    "arsenal": {
+      "toolsTitle": "Herramientas SEO",
+      "skillsTitle": "Habilidades SEO"
+    },
+    "budget": {
+      "title": "Tarifas y Presupuesto de SEO",
+      "description": "El presupuesto depende del estado de la web, el alcance y el tipo de acompañamiento. Cuéntame los objetivos del proyecto y preparo una propuesta ajustada."
+    }
+  },
+  "translationServicePage": {
+    "hero": {
+      "eyebrow": "Traducción y localización",
+      "title": "Traducción y Localización Web Profesional con Enfoque SEO",
+      "description": "Adapto el contenido de tu empresa a nuevos mercados con precisión semántica y enfoque SEO."
+    },
+    "localization": {
+      "title": "Localización de Páginas Web y E-commerce",
+      "items": [
+        {
+          "id": "cultural-adaptation",
+          "title": "Adaptación cultural de textos para mercados internacionales",
+          "description": "Ajusto referencias, tono y expresiones para que el mensaje resulte natural en el mercado de destino sin perder su intención."
+        },
+        {
+          "id": "product-catalogues",
+          "title": "Traducción de catálogos y fichas de producto orientadas a conversión",
+          "description": "Adapto catálogos y fichas con atención a la terminología, la claridad y la información que ayuda a comprender cada producto."
+        }
+      ]
+    },
+    "multilingualSeo": {
+      "title": "Traducción SEO Multilingüe (Multiplica tu tráfico orgánico)",
+      "description": "La traducción SEO parte de las búsquedas de cada idioma y mercado. Adapto las palabras clave estratégicas para conservar su intención sin perder naturalidad ni coherencia de marca."
+    },
+    "digitalContent": {
+      "title": "Traducción Profesional de Contenidos Digitales y Blogs",
+      "items": [
+        {
+          "id": "editorial-content",
+          "title": "Artículos de blog, copys corporativos y boletines",
+          "description": "Adapto tono, terminología y llamadas a la acción para que cada pieza conserve la voz de la marca."
+        },
+        {
+          "id": "technical-localization",
+          "title": "Localización técnica y especializada (B2B)",
+          "description": "Trabajo la terminología y el contexto del sector para presentar información especializada de forma clara y consistente."
+        }
+      ]
+    },
+    "arsenal": {
+      "title": "Idiomas, herramientas y habilidades de traducción",
+      "eyebrow": "02 · PERFIL Y HERRAMIENTAS",
+      "languagesTitle": "Idiomas",
+      "toolsTitle": "Herramientas",
+      "skillsTitle": "Habilidades"
     }
   }
 }

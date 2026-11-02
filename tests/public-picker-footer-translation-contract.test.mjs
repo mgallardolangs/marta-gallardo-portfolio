@@ -435,7 +435,10 @@ test('admin bootstrap sanitizes built heroMark text but restores original locale
   ]);
 
   assert.match(layoutSource, /heroMark:\s*''/, 'AdminLayout should keep heroMark out of built admin HTML payloads');
-  assert.match(initSource, /heroMark:\s*original(?:Es|En|Fr)\.translationPage\.heroMark/, 'AdminInit should restore the original heroMark values before the admin store bootstraps');
+  for (const locale of ['es', 'en', 'fr', 'de', 'it', 'ca']) {
+    assert.match(layoutSource, new RegExp(`${locale}:\\s*sanitizeAdminTranslations\\(${locale}\\)`), `${locale} admin copy should sanitize the retired heroMark before static rendering`);
+    assert.match(initSource, new RegExp(`${locale}:\\s*restoreHeroMark\\('${locale}',\\s*original${locale[0].toUpperCase()}${locale.slice(1)}\\)`), `${locale} should restore its original heroMark before the admin store initializes`);
+  }
   assert.match(initSource, /adminStore\.init\(restoredI18n,\s*parsedSite,\s*lang,\s*token\)/, 'AdminInit should still initialize the shared admin store after restoring hidden translation fields');
 });
 
@@ -477,7 +480,7 @@ test('footer source stops rendering footer.location while all locale keys stay i
 
   const [homeHtml, adminHtml] = await Promise.all([
     readBuiltHtml('dist/index.html'),
-    readBuiltHtml('dist/admin/translation-seo/index.html'),
+    readBuiltHtml('dist/admin/translation-seo.html'),
   ]);
 
   for (const [label, html] of [['home', homeHtml], ['admin translation', adminHtml]]) {
@@ -496,7 +499,7 @@ test('footer source stops rendering footer.location while all locale keys stay i
 
 test('translation public and admin views stop rendering heroMark while locale data keeps the key', async (t) => {
   const [publicSource, adminSource, dictionaries] = await Promise.all([
-    readSource('src/views/TranslationSeoPage.astro'),
+    readSource('src/views/TranslationServicePage.astro'),
     readSource('src/pages/admin/translation-seo.astro'),
     Promise.all(locales.map(async (locale) => [locale, await readJson(`src/i18n/${locale}.json`)])),
   ]);
@@ -515,8 +518,8 @@ test('translation public and admin views stop rendering heroMark while locale da
   }
 
   const [publicHtml, adminHtml] = await Promise.all([
-    readBuiltHtml('dist/translation-seo/index.html'),
-    readBuiltHtml('dist/admin/translation-seo/index.html'),
+    readBuiltHtml('dist/servicios/traduccion.html'),
+    readBuiltHtml('dist/admin/translation-seo.html'),
   ]);
 
   for (const [locale, heroMark] of Object.entries(heroMarks)) {

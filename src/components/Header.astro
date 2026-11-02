@@ -1,5 +1,5 @@
 ---
-import { getLocalizedPath, langNames, stripLocaleFromPath, t, type Lang } from '../i18n';
+import { getLocalizedPath, getLocalizedRoute, langNames, resolvePublicRouteKey, t, type Lang } from '../i18n';
 import { resolveHeaderLanguageLinks } from '../lib/headerLanguageLinks';
 import { getPublicLanguagePicker, siteData } from '../lib/siteData';
 import AdminTextMirror from './admin/AdminTextMirror';
@@ -13,35 +13,58 @@ interface Props {
 const { lang, adminMode = false, alternateLinks } = Astro.props;
 const i = t(lang);
 const pathname = Astro.url.pathname;
-const publicPath = stripLocaleFromPath(pathname).replace(/^\/admin(?=\/|$)/, '') || '/';
-const strippedPath = publicPath === '/' ? '/' : publicPath.replace(/\/$/, '');
+const currentRoute = resolvePublicRouteKey(pathname);
+const adminPath = pathname.replace(/^\/admin(?=\/|$)/, '') || '/';
 const navPath = (path: string) => (adminMode ? `/admin${path === '/' ? '' : path}` : getLocalizedPath(path, lang));
 const publicLanguagePicker = getPublicLanguagePicker(siteData);
+const languagePickerPath = currentRoute ? pathname : getLocalizedRoute('home', lang);
 const availableLanguages = resolveHeaderLanguageLinks({
-  path: strippedPath === '' ? '/' : strippedPath,
+  path: languagePickerPath,
   visibleLangs: publicLanguagePicker,
   getLocalizedPath,
   alternateLinks,
 });
 
-const navItems = [
+const publicNavItems = [
+  { route: 'home', label: i.nav.home },
+  { route: 'about', label: i.nav.about },
+  { route: 'blog', label: i.nav.blog },
+  { route: 'contact', label: i.nav.contact },
+];
+
+const publicServiceItems = [
+  { route: 'seo', label: i.nav.seo },
+  { route: 'translation', label: i.nav.translation },
+  { route: 'ugc', label: i.nav.ugcService },
+];
+
+const adminNavItems = [
   { href: '/', label: i.nav.home, i18nKey: 'nav.home' },
-  { href: '/ugc', label: i.nav.ugc, i18nKey: 'nav.ugc' },
-  { href: '/translation-seo', label: i.nav.translationSeo, i18nKey: 'nav.translationSeo' },
+  { href: '/about', label: i.nav.about, i18nKey: 'nav.about' },
   { href: '/blog', label: i.nav.blog, i18nKey: 'nav.blog' },
   { href: '/contact', label: i.nav.contact, i18nKey: 'nav.contact' },
 ];
+const adminServiceItems = [
+  { href: '/seo', label: i.nav.seo, i18nKey: 'nav.seo' },
+  { href: '/translation-seo', label: i.nav.translation, i18nKey: 'nav.translation' },
+  { href: '/ugc', label: i.nav.ugcService, i18nKey: 'nav.ugcService' },
+];
 
 const isActive = (path: string) => {
-  if (path === '/') return strippedPath === '/' || strippedPath === '';
-  return strippedPath === path || strippedPath.startsWith(`${path}/`);
+  const normalizedPath = adminPath === '' ? '/' : adminPath.replace(/\/$/, '') || '/';
+  if (path === '/') return normalizedPath === '/';
+  return normalizedPath === path || normalizedPath.startsWith(`${path}/`);
 };
+const isServiceActive = publicServiceItems.some(({ route }) => route === currentRoute);
+const isAdminServiceActive = adminServiceItems.some(({ href }) => isActive(href));
+const publicHref = (route: string) => getLocalizedRoute(route, lang);
 ---
 <header
   class="site-header fixed inset-x-0 top-0 z-50 px-4 py-4 md:px-6"
   data-header-root
   data-compact="false"
   data-hidden="false"
+  data-surface="light"
   data-admin={adminMode ? 'true' : 'false'}
 >
   <div class="site-header__shell mx-auto flex w-full max-w-7xl items-center justify-between text-ink">
@@ -50,22 +73,87 @@ const isActive = (path: string) => {
     </a>
 
     <div class="hidden items-center gap-6 md:ml-auto md:flex">
-      <nav aria-label="Primary" class="flex items-center gap-4">
-        {navItems.map((item) => (
-          <a
-            href={navPath(item.href)}
-            class="nav-link group"
-            aria-current={isActive(item.href) ? 'page' : undefined}
-          >
-            <span class="nav-link__bracket nav-link__bracket--left" aria-hidden="true">[</span>
-            <span class="nav-link__text">
-              <span>{adminMode ? <AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} /> : item.label}</span>
-              <span aria-hidden="true">{adminMode ? <AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} /> : item.label}</span>
-            </span>
-            <span class="nav-link__bracket nav-link__bracket--right" aria-hidden="true">]</span>
-          </a>
-        ))}
-      </nav>
+      {adminMode ? (
+        <nav aria-label="Primary" class="flex items-center gap-4">
+          {adminNavItems.slice(0, 2).map((item) => (
+            <a href={navPath(item.href)} class="nav-link group" aria-current={isActive(item.href) ? 'page' : undefined}>
+              <span class="nav-link__bracket nav-link__bracket--left" aria-hidden="true">[</span>
+              <span class="nav-link__text">
+                <span><AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} /></span>
+                <span aria-hidden="true"><AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} /></span>
+              </span>
+              <span class="nav-link__bracket nav-link__bracket--right" aria-hidden="true">]</span>
+            </a>
+          ))}
+          <details class="services-nav" data-service-menu>
+            <summary class="nav-link group" aria-controls="admin-service-menu-desktop" aria-current={isAdminServiceActive ? 'page' : undefined}>
+              <span class="nav-link__bracket nav-link__bracket--left" aria-hidden="true">[</span>
+              <span class="nav-link__text">
+                <span><AdminTextMirror client:load i18nKey="nav.services" fallback={i.nav.services} />⌄</span>
+                <span aria-hidden="true"><AdminTextMirror client:load i18nKey="nav.services" fallback={i.nav.services} />⌄</span>
+              </span>
+              <span class="nav-link__bracket nav-link__bracket--right" aria-hidden="true">]</span>
+            </summary>
+            <div class="service-submenu" id="admin-service-menu-desktop" role="group" aria-label={i.nav.services}>
+              {adminServiceItems.map((item) => (
+                <a href={navPath(item.href)} aria-current={isActive(item.href) ? 'page' : undefined}>
+                  <AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} />
+                </a>
+              ))}
+            </div>
+          </details>
+          {adminNavItems.slice(2).map((item) => (
+            <a href={navPath(item.href)} class="nav-link group" aria-current={isActive(item.href) ? 'page' : undefined}>
+              <span class="nav-link__bracket nav-link__bracket--left" aria-hidden="true">[</span>
+              <span class="nav-link__text">
+                <span><AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} /></span>
+                <span aria-hidden="true"><AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} /></span>
+              </span>
+              <span class="nav-link__bracket nav-link__bracket--right" aria-hidden="true">]</span>
+            </a>
+          ))}
+        </nav>
+      ) : (
+        <nav aria-label="Primary" class="flex items-center gap-4">
+          {publicNavItems.slice(0, 2).map((item) => (
+            <a href={publicHref(item.route)} class="nav-link group" aria-current={currentRoute === item.route ? 'page' : undefined}>
+              <span class="nav-link__bracket nav-link__bracket--left" aria-hidden="true">[</span>
+              <span class="nav-link__text">
+                <span>{item.label}</span>
+                <span aria-hidden="true">{item.label}</span>
+              </span>
+              <span class="nav-link__bracket nav-link__bracket--right" aria-hidden="true">]</span>
+            </a>
+          ))}
+          <details class="services-nav" data-service-menu>
+            <summary class="nav-link group" aria-controls="site-service-menu-desktop" aria-current={isServiceActive ? 'page' : undefined}>
+              <span class="nav-link__bracket nav-link__bracket--left" aria-hidden="true">[</span>
+              <span class="nav-link__text">
+                <span>{i.nav.services}⌄</span>
+                <span aria-hidden="true">{i.nav.services}⌄</span>
+              </span>
+              <span class="nav-link__bracket nav-link__bracket--right" aria-hidden="true">]</span>
+            </summary>
+            <div class="service-submenu" id="site-service-menu-desktop" role="group" aria-label={i.nav.services}>
+              {publicServiceItems.map((item) => (
+                <a href={publicHref(item.route)} aria-current={currentRoute === item.route ? 'page' : undefined}>
+                  {item.label}
+                </a>
+              ))}
+            </div>
+          </details>
+          {publicNavItems.slice(2).map((item) => (
+            <a href={publicHref(item.route)} class="nav-link group" aria-current={currentRoute === item.route ? 'page' : undefined}>
+              <span class="nav-link__bracket nav-link__bracket--left" aria-hidden="true">[</span>
+              <span class="nav-link__text">
+                <span>{item.label}</span>
+                <span aria-hidden="true">{item.label}</span>
+              </span>
+              <span class="nav-link__bracket nav-link__bracket--right" aria-hidden="true">]</span>
+            </a>
+          ))}
+        </nav>
+      )}
 
       <div class="flex items-center gap-3">
         <a href={siteData.socialLinks.linkedin} target="_blank" rel="noreferrer noopener" aria-label="LinkedIn" class="social-control">
@@ -148,14 +236,59 @@ const isActive = (path: string) => {
       </div>
 
       <nav aria-label="Mobile" class="mt-8 flex flex-col gap-5">
-        {navItems.map((item) => (
-          <a href={navPath(item.href)} class="mobile-nav-link" aria-current={isActive(item.href) ? 'page' : undefined}>
-            <span class="mobile-nav-link__line">
-              <span>{adminMode ? <AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} /> : item.label}</span>
-              <span aria-hidden="true">{adminMode ? <AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} /> : item.label}</span>
-            </span>
-          </a>
-        ))}
+        {adminMode ? (
+          <>
+            {adminNavItems.slice(0, 2).map((item) => (
+              <a href={navPath(item.href)} class="mobile-nav-link" aria-current={isActive(item.href) ? 'page' : undefined}>
+                <AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} />
+              </a>
+            ))}
+            <details class="mobile-services" data-service-menu>
+              <summary class="mobile-nav-link" aria-controls="admin-service-menu-mobile" aria-current={isAdminServiceActive ? 'page' : undefined}>
+                <AdminTextMirror client:load i18nKey="nav.services" fallback={i.nav.services} />
+                <span class="mobile-services__indicator" aria-hidden="true">+</span>
+              </summary>
+              <div class="mobile-service-menu" id="admin-service-menu-mobile">
+                {adminServiceItems.map((item) => (
+                  <a href={navPath(item.href)} class="mobile-nav-link mobile-service-link" aria-current={isActive(item.href) ? 'page' : undefined}>
+                    <AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} />
+                  </a>
+                ))}
+              </div>
+            </details>
+            {adminNavItems.slice(2).map((item) => (
+              <a href={navPath(item.href)} class="mobile-nav-link" aria-current={isActive(item.href) ? 'page' : undefined}>
+                <AdminTextMirror client:load i18nKey={item.i18nKey} fallback={item.label} />
+              </a>
+            ))}
+          </>
+        ) : (
+          <>
+            {publicNavItems.slice(0, 2).map((item) => (
+              <a href={publicHref(item.route)} class="mobile-nav-link" aria-current={currentRoute === item.route ? 'page' : undefined}>
+                {item.label}
+              </a>
+            ))}
+            <details class="mobile-services" data-service-menu>
+              <summary class="mobile-nav-link" aria-controls="site-service-menu-mobile" aria-current={isServiceActive ? 'page' : undefined}>
+                {i.nav.services}
+                <span class="mobile-services__indicator" aria-hidden="true">+</span>
+              </summary>
+              <div class="mobile-service-menu" id="site-service-menu-mobile">
+                {publicServiceItems.map((item) => (
+                  <a href={publicHref(item.route)} class="mobile-nav-link mobile-service-link" aria-current={currentRoute === item.route ? 'page' : undefined}>
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+            </details>
+            {publicNavItems.slice(2).map((item) => (
+              <a href={publicHref(item.route)} class="mobile-nav-link" aria-current={currentRoute === item.route ? 'page' : undefined}>
+                {item.label}
+              </a>
+            ))}
+          </>
+        )}
       </nav>
 
       <div class="mt-10 flex flex-wrap gap-3">
@@ -220,6 +353,20 @@ const isActive = (path: string) => {
     transition: color 0.2s ease;
   }
 
+  .site-header[data-surface='dark'] .site-header__shell,
+  .site-header[data-surface='dark'] .site-header__brand,
+  .site-header[data-surface='dark'] .social-control {
+    color: var(--color-paper);
+  }
+
+  .site-header[data-surface='dark'] .social-control {
+    border-color: rgb(244 245 241 / 0.4);
+  }
+
+  .site-header[data-surface='dark'] .nav-link__text {
+    color: var(--color-paper);
+  }
+
   .nav-link__text > span {
     display: flex;
     align-items: center;
@@ -235,6 +382,53 @@ const isActive = (path: string) => {
     opacity: 0;
     transform: translateY(0.3rem);
     transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .services-nav {
+    position: relative;
+  }
+
+  .services-nav > summary,
+  .mobile-services > summary {
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .services-nav > summary::-webkit-details-marker,
+  .mobile-services > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .service-submenu {
+    position: absolute;
+    top: calc(100% + 0.8rem);
+    left: -0.75rem;
+    z-index: 60;
+    display: grid;
+    min-width: 16rem;
+    gap: 0.2rem;
+    border: 1px solid rgb(6 4 3 / 0.12);
+    background: rgb(244 245 241 / 0.98);
+    padding: 0.45rem;
+    box-shadow: 0 20px 50px rgb(6 4 3 / 0.1);
+  }
+
+  .service-submenu a {
+    display: block;
+    padding: 0.7rem 0.8rem;
+    color: rgb(6 4 3 / 0.8);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .service-submenu a:hover,
+  .service-submenu a:focus-visible,
+  .service-submenu a[aria-current='page'] {
+    background: rgb(6 4 3 / 0.04);
+    color: var(--color-amaranth);
   }
 
   .nav-link:hover .nav-link__text,
@@ -337,41 +531,72 @@ const isActive = (path: string) => {
     position: fixed;
     inset: 0;
     z-index: 48;
-    background: rgb(244 245 241 / 0.98);
+    overflow-y: auto;
+    background: var(--color-paper);
+    overscroll-behavior: contain;
   }
 
   .mobile-panel__content {
     display: flex;
-    min-height: 100%;
+    min-height: 100dvh;
     flex-direction: column;
     padding: 1.25rem 1.1rem 2rem;
   }
 
   .mobile-nav-link {
-    overflow: hidden;
+    display: flex;
+    width: 100%;
+    min-height: 3.25rem;
+    align-items: center;
+    justify-content: space-between;
     border-bottom: 1px solid rgba(6, 4, 3, 0.08);
     padding-bottom: 0.9rem;
     font-size: clamp(1.8rem, 8vw, 2.6rem);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: -0.02em;
-  }
-
-  .mobile-nav-link__line {
-    display: grid;
-    overflow: hidden;
     color: rgba(6, 4, 3, 0.88);
+    transition: color 0.2s ease;
   }
 
-  .mobile-nav-link__line > span {
-    min-height: 1.15em;
-    transition: transform 0.24s ease;
+  .mobile-nav-link:hover,
+  .mobile-nav-link:focus-visible,
+  .mobile-nav-link:active,
+  .mobile-nav-link[aria-current='page'],
+  .mobile-services[open] > .mobile-nav-link {
+    color: var(--color-amaranth);
   }
 
-  .mobile-nav-link:hover .mobile-nav-link__line > span,
-  .mobile-nav-link:focus-visible .mobile-nav-link__line > span,
-  .mobile-nav-link[aria-current='page'] .mobile-nav-link__line > span {
-    transform: translateY(-100%);
+  .mobile-services__indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    transition: transform 0.2s ease;
+  }
+
+  .mobile-services[open] .mobile-services__indicator {
+    transform: rotate(45deg);
+  }
+
+  .mobile-service-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: -0.75rem 0 0 1rem;
+  }
+
+  .mobile-nav-link.mobile-service-link {
+    border-bottom: 0;
+    color: rgb(6 4 3 / 0.64);
+    font-size: clamp(1.15rem, 5vw, 1.5rem);
+    padding-bottom: 0.45rem;
+  }
+
+  .mobile-nav-link.mobile-service-link:hover,
+  .mobile-nav-link.mobile-service-link:focus-visible,
+  .mobile-nav-link.mobile-service-link:active,
+  .mobile-nav-link.mobile-service-link[aria-current='page'] {
     color: var(--color-amaranth);
   }
 
@@ -381,7 +606,9 @@ const isActive = (path: string) => {
     .nav-link__text > span,
     .nav-link__bracket,
     .social-control,
-    .mobile-nav-link__line > span {
+    .mobile-nav-link,
+    .mobile-services__indicator,
+    .service-submenu a {
       transition: none;
     }
   }
@@ -409,20 +636,22 @@ const isActive = (path: string) => {
     const menuClose = header.querySelector<HTMLButtonElement>('[data-menu-close]');
     const langToggles = Array.from(header.querySelectorAll<HTMLButtonElement>('[data-lang-toggle]'));
     const languageMenu = header.querySelector<HTMLElement>('[data-lang-menu]');
-    const mobileLinks = Array.from(header.querySelectorAll<HTMLAnchorElement>('.mobile-nav-link, .language-chip'));
+    const mobileLinks = Array.from(header.querySelectorAll<HTMLAnchorElement>('a.mobile-nav-link, a.language-chip'));
     const languageLinks = Array.from(header.querySelectorAll<HTMLAnchorElement>('[data-lang-menu] [role="menuitem"]'));
+    const serviceMenus = Array.from(header.querySelectorAll<HTMLDetailsElement>('[data-service-menu]'));
     let lastScrollY = window.scrollY;
     let headerHidden = false;
     let bodyOverflow = '';
     let overlayState = createHeaderOverlayState();
+    let surfaceFrame: number | null = null;
 
     const getFocusableElements = (container: HTMLElement | null) => {
       if (!container) return [];
       return Array.from(
         container.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+          'a[href], button:not([disabled]), summary, [tabindex]:not([tabindex="-1"])',
         ),
-      ).filter((element) => !element.hasAttribute('hidden'));
+      ).filter((element) => !element.hasAttribute('hidden') && element.getClientRects().length > 0);
     };
 
     const trapFocus = (event: KeyboardEvent, container: HTMLElement | null) => {
@@ -510,11 +739,32 @@ const isActive = (path: string) => {
       headerHidden = nextHeaderState.hidden;
       lastScrollY = nextHeaderState.lastScrollY;
     };
+    const updateHeaderSurface = () => {
+      if (surfaceFrame !== null) return;
+
+      surfaceFrame = window.requestAnimationFrame(() => {
+        surfaceFrame = null;
+        const headerRect = header.getBoundingClientRect();
+        const isDarkSurface = Array.from(document.querySelectorAll<HTMLElement>('.bg-ink')).some((surface) => {
+          if (header.contains(surface)) return false;
+
+          const surfaceRect = surface.getBoundingClientRect();
+          const overlapHeight = Math.min(headerRect.bottom, surfaceRect.bottom) - Math.max(headerRect.top, surfaceRect.top);
+          const overlapWidth = Math.min(headerRect.right, surfaceRect.right) - Math.max(headerRect.left, surfaceRect.left);
+          return overlapHeight >= headerRect.height * 0.5 && overlapWidth >= headerRect.width * 0.5;
+        });
+
+        header.dataset.surface = isDarkSurface ? 'dark' : 'light';
+      });
+    };
     const closeMenus = () => {
       applyOverlayResult(closeActiveHeaderOverlay(overlayState));
     };
 
-    const onScroll = () => syncHeader();
+    const onScroll = () => {
+      syncHeader();
+      updateHeaderSurface();
+    };
     const onFocusIn = () => {
       headerHidden = false;
       header.dataset.hidden = 'false';
@@ -523,10 +773,21 @@ const isActive = (path: string) => {
       const target = event.target instanceof Node ? event.target : null;
       if (target && !header.contains(target)) {
         closeMenus();
+        serviceMenus.forEach((serviceMenu) => {
+          serviceMenu.open = false;
+        });
       }
     };
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        const openServiceMenu = serviceMenus.find((serviceMenu) => serviceMenu.open);
+        if (openServiceMenu) {
+          event.preventDefault();
+          openServiceMenu.open = false;
+          openServiceMenu.querySelector<HTMLElement>('summary')?.focus();
+          return;
+        }
+
         if (!overlayState.activeOverlay) return;
         event.preventDefault();
         applyOverlayResult(closeActiveHeaderOverlay(overlayState));
@@ -558,13 +819,17 @@ const isActive = (path: string) => {
     });
 
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', updateHeaderSurface);
     header.addEventListener('focusin', onFocusIn);
     document.addEventListener('pointerdown', onPointerDown);
     document.addEventListener('keydown', onKeyDown);
     syncHeader();
+    updateHeaderSurface();
 
     window.__mgHeaderCleanup = () => {
       window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', updateHeaderSurface);
+      if (surfaceFrame !== null) window.cancelAnimationFrame(surfaceFrame);
       header.removeEventListener('focusin', onFocusIn);
       document.removeEventListener('pointerdown', onPointerDown);
       document.removeEventListener('keydown', onKeyDown);

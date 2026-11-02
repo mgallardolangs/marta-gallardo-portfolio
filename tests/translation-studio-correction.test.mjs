@@ -29,6 +29,7 @@ const expectedExactChrome = {
     heroMark: 'ELCHE · WORKING WORLDWIDE',
     servicesEyebrow: '01 · CÓMO PUEDO AYUDARTE',
     arsenalEyebrow: '02 · PERFIL Y HERRAMIENTAS',
+    aboutTrajectoryEyebrow: 'TRAYECTORIA',
     experienceEyebrow: '03 · TRAYECTORIA',
     experienceSectionTitle: 'Experiencia y Formación',
     methodologyEyebrow: '04 · METODOLOGÍA E INFOGRAFÍA',
@@ -39,6 +40,7 @@ const expectedExactChrome = {
     heroMark: 'ELCHE · WORKING WORLDWIDE',
     servicesEyebrow: '01 · HOW I CAN HELP',
     arsenalEyebrow: '02 · PROFILE & TOOLS',
+    aboutTrajectoryEyebrow: 'EXPERIENCE',
     experienceEyebrow: '03 · EXPERIENCE',
     experienceSectionTitle: 'Experience & Education',
     methodologyEyebrow: '04 · METHODOLOGY & INFOGRAPHICS',
@@ -49,6 +51,7 @@ const expectedExactChrome = {
     heroMark: 'ELCHE · DISPONIBLE DANS LE MONDE ENTIER',
     servicesEyebrow: '01 · COMMENT JE PEUX VOUS AIDER',
     arsenalEyebrow: '02 · PROFIL & OUTILS',
+    aboutTrajectoryEyebrow: 'PARCOURS',
     experienceEyebrow: '03 · PARCOURS',
     experienceSectionTitle: 'Expérience et formation',
     methodologyEyebrow: '04 · MÉTHODOLOGIE & INFOGRAPHIE',
@@ -59,6 +62,7 @@ const expectedExactChrome = {
     heroMark: 'ELCHE · WELTWEIT TÄTIG',
     servicesEyebrow: '01 · WIE ICH SIE UNTERSTÜTZEN KANN',
     arsenalEyebrow: '02 · PROFIL & TOOLS',
+    aboutTrajectoryEyebrow: 'WERDEGANG',
     experienceEyebrow: '03 · WERDEGANG',
     experienceSectionTitle: 'Erfahrung und Ausbildung',
     methodologyEyebrow: '04 · METHODIK & INFOGRAFIK',
@@ -69,6 +73,7 @@ const expectedExactChrome = {
     heroMark: 'ELCHE · OPERATIVA IN TUTTO IL MONDO',
     servicesEyebrow: '01 · COME POSSO AIUTARTI',
     arsenalEyebrow: '02 · PROFILO & STRUMENTI',
+    aboutTrajectoryEyebrow: 'PERCORSO',
     experienceEyebrow: '03 · PERCORSO',
     experienceSectionTitle: 'Esperienza e formazione',
     methodologyEyebrow: '04 · METODOLOGIA & INFOGRAFICA',
@@ -79,6 +84,7 @@ const expectedExactChrome = {
     heroMark: 'ELCHE · TREBALLANT ARREU DEL MÓN',
     servicesEyebrow: '01 · COM ET PUC AJUDAR',
     arsenalEyebrow: '02 · PERFIL I EINES',
+    aboutTrajectoryEyebrow: 'TRAJECTÒRIA',
     experienceEyebrow: '03 · TRAJECTÒRIA',
     experienceSectionTitle: 'Experiència i formació',
     methodologyEyebrow: '04 · METODOLOGIA I INFOGRAFIA',
@@ -163,6 +169,7 @@ test('all six locale files add the correction-only translation display keys and 
     assert.equal(page.heroMark, exactChrome.heroMark, `${locale} translationPage.heroMark should keep the approved chrome copy`);
     assert.equal(page.servicesEyebrow, exactChrome.servicesEyebrow, `${locale} translationPage.servicesEyebrow should keep the approved chrome copy`);
     assert.equal(page.arsenalEyebrow, exactChrome.arsenalEyebrow, `${locale} translationPage.arsenalEyebrow should keep the approved chrome copy`);
+    assert.equal(dictionary.aboutPage.trajectoryEyebrow, exactChrome.aboutTrajectoryEyebrow, `${locale} aboutPage.trajectoryEyebrow should omit section numbering`);
     assert.equal(page.experienceSectionTitle, exactChrome.experienceSectionTitle, `${locale} translationPage.experienceSectionTitle should keep the approved chrome copy`);
     assert.equal(page.experienceEyebrow, exactChrome.experienceEyebrow, `${locale} translationPage.experienceEyebrow should keep the approved chrome copy`);
     assert.equal(page.methodologyEyebrow, exactChrome.methodologyEyebrow, `${locale} translationPage.methodologyEyebrow should keep the approved chrome copy`);
@@ -206,10 +213,10 @@ test('all six locale files add the correction-only translation display keys and 
   }
 });
 
-test('site arsenal skills keep the exact 4/4 translation-vs-seo split and grouped helper output', async () => {
+test('site arsenal skills keep the authored 4/6 translation-vs-seo split and grouped helper output', async () => {
   const site = await readJson('src/data/site.json');
 
-  assert.equal(site.arsenal.skills.length, 8, 'arsenal.skills should stay at exactly eight authored records');
+  assert.equal(site.arsenal.skills.length, 10, 'arsenal.skills should keep the ten authored translation and SEO records');
 
   const translationIds = site.arsenal.skills
     .filter((skill) => skill.group === 'translation')
@@ -237,39 +244,43 @@ test('site arsenal skills keep the exact 4/4 translation-vs-seo split and groupe
       'copywriting',
       'keyword-planning',
       'local-seo',
+      'skill-arquitectura-web',
+      'skill-interlinking',
     ].sort(),
-    'seo skill group should keep the approved four SEO/web-content skills',
+    'seo skill group should keep the six authored SEO/web-content skills',
   );
 
   const columns = getTranslationArsenalColumns('es', site);
   assert.equal(columns.languages.length, 6, 'arsenal helper should keep six language rows');
-  assert.equal(columns.tools.length, 7, 'arsenal helper should keep seven tool tiles');
+  assert.equal(columns.tools.length, site.arsenal.tools.length, 'arsenal helper should keep all existing tool tiles');
   assert.deepEqual(
     Object.keys(columns.skillGroups ?? {}).sort(),
     ['seo', 'translation'],
     'arsenal helper should expose grouped skill columns instead of one flat list',
   );
   assert.equal(columns.skillGroups.translation.length, 4, 'translation helper column should keep four skills');
-  assert.equal(columns.skillGroups.seo.length, 4, 'seo helper column should keep four skills');
+  assert.equal(columns.skillGroups.seo.length, 6, 'seo helper column should keep six skills');
 });
 
-test('public translation hero source/build contract parks the portfolio CTA and keeps the localized contact CTA anchor with stable markers and rectangular shape', async (t) => {
-  const source = await readSource('src/views/TranslationSeoPage.astro');
+test('public Translation hero keeps the contact link compact while its underline spans the content row', async (t) => {
+  const [source, styles] = await Promise.all([
+    readSource('src/views/TranslationServicePage.astro'),
+    readSource('src/styles/global.css'),
+  ]);
   const heroWindow = extractWindowAround(source, 'page.hero.title', 'public translation hero');
   const contactCta = extractElementByDataAttribute(source, 'a', 'data-translation-cta', 'contact', 'public translation contact CTA');
 
   assert.doesNotMatch(source, /page\.heroMark/, 'public translation hero should stop rendering the vertical hero mark');
   assert.doesNotMatch(source, /data-translation-cta="portfolio"/, 'public translation hero should stop rendering the parked portfolio CTA anchor');
-  assert.match(contactCta, /href=\{getLocalizedPath\('\/contact', lang\)\}/, 'public translation hero should keep the localized contact CTA anchor');
+  assert.match(contactCta, /href=\{getLocalizedRoute\('contact', lang\)\}/, 'public translation hero should keep the localized contact CTA anchor');
+  assert.match(contactCta, /class="site-text-cta"/);
+  assert.match(source, /<div class="site-text-cta-row">[\s\S]*data-translation-cta="contact"/);
+  assert.match(styles, /\.site-text-cta\s*\{[^}]*width:\s*fit-content;[^}]*flex:\s*0 0 auto;/s);
+  assert.match(styles, /\.site-text-cta-row\s*\{[^}]*border-bottom:\s*1px solid var\(--color-amaranth\);/s);
   assert.doesNotMatch(heroWindow, /bg-\[radial-gradient/i, 'public translation hero should not restore the radial gradient');
   assert.doesNotMatch(source, /page\.hero\.backgroundLabel/, 'public translation hero should remove the old right-side background label card');
   assert.doesNotMatch(heroWindow, /backdrop-blur/, 'public translation hero should stay flat without blur chrome');
-  assert.doesNotMatch(contactCta, /rounded-full/, 'public translation contact CTA should be rectangular instead of pill-shaped');
-  assert.match(contactCta, /hover:-translate-y-0\.5/, 'public translation contact CTA should lift on hover');
-  assert.match(contactCta, /focus-visible:-translate-y-0\.5/, 'public translation contact CTA should lift on focus');
-  assert.match(contactCta, /hover:shadow-\[0_4px_0_var\(--color-ink\)\]/, 'public translation contact CTA should add the exact bottom shadow on hover');
-  assert.match(contactCta, /focus-visible:shadow-\[0_4px_0_var\(--color-ink\)\]/, 'public translation contact CTA should add the exact bottom shadow on focus');
-  assert.doesNotMatch(contactCta, /hover:border-amaranth|hover:text-amaranth|focus-visible:border-amaranth|focus-visible:text-amaranth/, 'public translation contact CTA should keep strict colors');
+  assert.doesNotMatch(contactCta, /w-full|justify-center|hover:-translate-y|shadow-/);
 
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built translation hero CTA anchors.');
@@ -277,8 +288,15 @@ test('public translation hero source/build contract parks the portfolio CTA and 
   }
 
   for (const locale of locales) {
-    const relativePath = locale === 'es' ? 'dist/translation-seo/index.html' : `dist/${locale}/translation-seo/index.html`;
-    const contactHref = locale === 'es' ? '/contact' : `/${locale}/contact`;
+    const relativePath = {
+      es: 'dist/servicios/traduccion.html',
+      en: 'dist/en/services/translation.html',
+      fr: 'dist/fr/services/traduction.html',
+      de: 'dist/de/dienstleistungen/uebersetzung.html',
+      it: 'dist/it/servizi/traduzione.html',
+      ca: 'dist/ca/serveis/traduccio.html',
+    }[locale];
+    const contactHref = locale === 'es' ? '/contacto' : `/${locale}/contact`;
     const html = await readBuiltHtml(relativePath);
     const builtContactCta = extractElementByDataAttribute(
       html,
@@ -298,11 +316,7 @@ test('public translation hero source/build contract parks the portfolio CTA and 
       new RegExp(`href="${escapeForRegex(contactHref)}"`),
       `${relativePath} should keep the localized contact CTA href`,
     );
-    assert.doesNotMatch(
-      builtContactCta,
-      /rounded-full/,
-      `${relativePath} should keep the contact CTA rectangular in built HTML`,
-    );
+    assert.match(builtContactCta, /class="site-text-cta"/, `${relativePath} should keep the compact CTA hit area in built HTML`);
     assert.doesNotMatch(
       html,
       new RegExp(escapeForRegex(expectedExactChrome[locale].heroMark)),
@@ -329,28 +343,23 @@ test('ServiceSwitcher keeps the 6-second behavior but swaps to open layout and r
   );
 });
 
-test('public arsenal uses exact equal thirds, square tool cells, and two skill groups while admin mounts the integrated arsenal editor', async () => {
-  const [source, adminSource, adminEditorSource] = await Promise.all([
-    readSource('src/views/TranslationSeoPage.astro'),
+test('public Translation arsenal shows only translation skills while admin retains the integrated arsenal editor', async () => {
+  const [source, seoSource, adminSource, adminEditorSource] = await Promise.all([
+    readSource('src/views/TranslationServicePage.astro'),
+    readSource('src/views/SeoServicePage.astro'),
     readSource('src/pages/admin/translation-seo.astro'),
     readSource('src/components/admin/AdminTranslationArsenalEditor.tsx'),
   ]);
-  const arsenalSection = extractSectionByDataAttribute(source, 'data-arsenal-section', 'public arsenal section');
+  const arsenalSection = extractSectionByDataAttribute(source, 'data-translation-arsenal', 'public Translation arsenal section');
 
-  assert.match(arsenalSection, /page\.arsenalEyebrow/, 'public arsenal should render the new localized eyebrow');
-  assert.match(arsenalSection, /lg:grid-cols-3/, 'public arsenal should keep the approved equal-third desktop grid');
-  assert.doesNotMatch(arsenalSection, /lg:grid-cols-\[/, 'public arsenal should not revert to weighted fraction columns');
-  assert.doesNotMatch(arsenalSection, /sm:grid-cols-2/, 'public arsenal languages/tools should stop using the old two-column card grids');
-  assert.match(arsenalSection, /grid-cols-3 gap-2/, 'public arsenal tools should use the approved three-column equal-cell grid with 8px gaps');
-  assert.match(arsenalSection, /page\.skillGroups\.translation/, 'public arsenal should render the translation skill-group title');
-  assert.match(arsenalSection, /page\.skillGroups\.seo/, 'public arsenal should render the seo skill-group title');
-  assert.match(arsenalSection, /arsenalColumns\.skillGroups\.translation/, 'public arsenal should render grouped translation skills from the helper');
-  assert.match(arsenalSection, /arsenalColumns\.skillGroups\.seo/, 'public arsenal should render grouped seo skills from the helper');
-  assert.doesNotMatch(arsenalSection, /shadow-\[/, 'public arsenal should not revert to separate shadow cards');
-  assert.match(arsenalSection, /flex items-center justify-between gap-4 border-b border-ink\/10 py-3/, 'public arsenal languages should render compact flex rows');
-  assert.match(arsenalSection, /text-sm font-medium text-amaranth/, 'public arsenal language level should sit right in amaranth');
-  assert.match(arsenalSection, /group flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink/, 'public arsenal tools should use dark square tiles with amaranth hover');
-  assert.doesNotMatch(arsenalSection, /bg-paper px-3 py-4/, 'public arsenal tools should not reintroduce light paper tiles');
+  assert.match(source, /getTranslationArsenalColumns\(lang,\s*siteData,\s*'translation'\)/, 'public Translation arsenal should filter site skills to translation');
+  assert.match(arsenalSection, /arsenal\.languages\.map/, 'public Translation arsenal should render language rows');
+  assert.match(arsenalSection, /language\.level/, 'public Translation arsenal should display existing language levels');
+  assert.match(arsenalSection, /arsenal\.skills\.map/, 'public Translation arsenal should render individual skill tags');
+  assert.doesNotMatch(arsenalSection, /skillGroups\.seo|SEO Local|Keyword planner/, 'public Translation arsenal should not include SEO skills');
+  assert.match(seoSource, /getTranslationArsenalColumns\(lang,\s*siteData,\s*'seo'\)/, 'the separate SEO page should filter its skills to SEO');
+  assert.match(seoSource, /arsenal\.skills\.map/, 'the separate SEO page should display its SEO skills');
+  assert.match(seoSource, /Ahrefs[\s\S]*SEMrush[\s\S]*Screaming Frog/, 'the separate SEO page should reserve the missing SEO tool logos');
   assert.match(adminSource, /import\s+AdminTranslationArsenalEditor\s+from\s+['"]..\/..\/components\/admin\/AdminTranslationArsenalEditor['"]/, 'admin translation page should import the integrated arsenal editor');
   assert.match(adminSource, /<AdminTranslationArsenalEditor\s+client:load\s*\/>/, 'admin translation page should mount the integrated arsenal editor');
   assert.doesNotMatch(adminSource, /arsenalColumns\.languages\.map/, 'admin translation page should stop using static Astro loops for arsenal languages');
@@ -360,15 +369,16 @@ test('public arsenal uses exact equal thirds, square tool cells, and two skill g
   assert.match(adminEditorSource, /group relative flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink/, 'admin editor should mirror the public square tool tiles');
 });
 
-test('experience browser profile chrome parks the profile label so it stops rendering in source and built translation pages', async (t) => {
+test('About reuses the trajectory tabs without rendering the parked profile label', async (t) => {
   const [experienceTabsSource, publicSource, adminSource] = await Promise.all([
     readSource('src/components/translation/ExperienceTabs.tsx'),
-    readSource('src/views/TranslationSeoPage.astro'),
-    readSource('src/pages/admin/translation-seo.astro'),
+    readSource('src/views/AboutPage.astro'),
+    readSource('src/pages/admin/about.astro'),
   ]);
 
   assert.doesNotMatch(experienceTabsSource, /profileLabel/, 'ExperienceTabs should drop the profile label prop and rendering path entirely');
-  assert.doesNotMatch(publicSource, /profileLabel=\{page\.browserTabs\.profileLabel\}/, 'public translation page should stop passing the parked profile label');
+  assert.match(publicSource, /<ExperienceTabs/, 'About should reuse the existing trajectory tabs');
+  assert.doesNotMatch(publicSource, /profileLabel/, 'About should not pass the parked profile label');
   assert.doesNotMatch(adminSource, /translationPage\.browserTabs\.profileLabel/, 'admin translation page should stop exposing the parked profile label editor');
 
   if (process.env.CHECK_DIST !== '1') {
@@ -377,7 +387,14 @@ test('experience browser profile chrome parks the profile label so it stops rend
   }
 
   for (const locale of locales) {
-    const relativePath = locale === 'es' ? 'dist/translation-seo/index.html' : `dist/${locale}/translation-seo/index.html`;
+    const relativePath = {
+      es: 'dist/sobre-mi.html',
+      en: 'dist/en/about.html',
+      fr: 'dist/fr/a-propos.html',
+      de: 'dist/de/ueber-mich.html',
+      it: 'dist/it/chi-sono.html',
+      ca: 'dist/ca/sobre-mi.html',
+    }[locale];
     const html = await readBuiltHtml(relativePath);
 
     assert.doesNotMatch(
@@ -388,11 +405,11 @@ test('experience browser profile chrome parks the profile label so it stops rend
   }
 });
 
-test('tool logos rendered on ink arsenal tiles keep sufficient default contrast', async () => {
+test('Notion logo keeps its white tile and dark mark for contrast on ink arsenal tiles', async () => {
   const notionLogo = await readSource('public/images/tools/notion.svg');
 
-  assert.match(notionLogo, /#F4F5F1/i, 'Notion logo should switch to the paper tone for dark arsenal tiles');
-  assert.doesNotMatch(notionLogo, /#2D2D2D/i, 'Notion logo should not keep the old near-black stroke on ink tiles');
+  assert.match(notionLogo, /fill="white"/i, 'Notion mark should retain its white background tile on dark surfaces');
+  assert.match(notionLogo, /fill="#000000"/i, 'Notion mark should retain the dark glyph on its white tile');
 });
 
 test('admin skill creation contracts require group-aware data and grouped editor controls', async () => {
@@ -416,10 +433,10 @@ test('admin skill creation contracts require group-aware data and grouped editor
     readSource('src/components/admin/AdminTranslationArsenalEditor.tsx'),
   ]);
 
-  assert.match(adminSource, /i18nKey={`translationPage\.services\.items\.\$\{index\}\.headline`}/, 'admin services should expose editable service headlines');
-  assert.doesNotMatch(adminSource, /i18nKey="translationPage\.heroMark"/, 'admin hero should stop exposing the hidden vertical hero mark');
-  assert.doesNotMatch(adminSource, /i18nKey="translationPage\.hero\.ctaPrimary"/, 'admin hero should stop exposing the parked primary CTA key');
-  assert.match(adminSource, /i18nKey="translationPage\.hero\.ctaSecondary"/, 'admin hero should expose the editable secondary CTA key');
+  assert.match(adminSource, /i18nKey={`translationServicePage\.localization\.items\.\$\{index\}\.title`}/, 'admin services should expose editable localization service titles');
+  assert.match(adminSource, /i18nKey={`translationServicePage\.localization\.items\.\$\{index\}\.description`}/, 'admin services should expose editable localization descriptions');
+  assert.match(adminSource, /i18nKey={`translationServicePage\.digitalContent\.items\.\$\{index\}\.title`}/, 'admin services should expose editable digital-content titles');
+  assert.doesNotMatch(adminSource, /translationPage\.heroMark|translationPage\.hero\.ctaPrimary|translationPage\.services\.items/);
   assert.match(
     editorSource,
     /<select[\s\S]*translation[\s\S]*seo/s,
@@ -473,21 +490,20 @@ test('skill editor splits translation and seo into separate contained groups wit
   );
 });
 
-test('experience browser chrome plus methodology and why sections expose the new correction markers', async () => {
+test('About page and admin editor expose the current education and experience sections', async () => {
   const [publicSource, adminSource, experienceTabsSource, experienceEditorSource] = await Promise.all([
-    readSource('src/views/TranslationSeoPage.astro'),
-    readSource('src/pages/admin/translation-seo.astro'),
+    readSource('src/views/AboutPage.astro'),
+    readSource('src/pages/admin/about.astro'),
     readSource('src/components/translation/ExperienceTabs.tsx'),
     readSource('src/components/admin/AdminTranslationExperienceEditor.tsx'),
   ]);
 
-  const methodologySection = extractSectionByDataAttribute(publicSource, 'data-methodology-section', 'public methodology section');
-  const whySection = extractSectionByDataAttribute(publicSource, 'data-why-section', 'public why section');
-
-  assert.match(publicSource, /page\.experienceEyebrow/, 'public translation page should render the experience eyebrow');
-  assert.match(publicSource, /page\.experienceSectionTitle/, 'public translation page should render the typed experience section title');
-  assert.match(adminSource, /i18nKey="translationPage\.experienceEyebrow"/, 'admin translation page should expose the editable experience eyebrow');
-  assert.match(adminSource, /i18nKey="translationPage\.experienceSectionTitle"/, 'admin translation page should expose the editable experience title');
+  assert.match(publicSource, /data-about-trajectory/, 'About should show the education and experience section');
+  assert.match(publicSource, /page\.trajectoryEyebrow/, 'About should render its unnumbered trajectory eyebrow');
+  assert.match(publicSource, /i\.translationPage\.experienceSectionTitle/, 'About should render the trajectory title');
+  assert.match(adminSource, /aboutPage\.trajectoryEyebrow/, 'About admin should expose the editable trajectory eyebrow');
+  assert.match(adminSource, /translationPage\.experienceSectionTitle/, 'About admin should expose the editable trajectory title');
+  assert.match(adminSource, /<AdminTranslationExperienceEditor/);
   assert.match(experienceTabsSource, /rounded-t-\[7px\]/, 'public browser tabs should use modest browser-tab corners');
   assert.match(experienceTabsSource, /bg-paper\/14/, 'public browser tabs should keep the paper/14 inactive fill');
   assert.match(experienceTabsSource, /border-paper bg-paper text-ink/, 'public browser tabs should keep the paper active fill');
@@ -502,7 +518,7 @@ test('experience browser chrome plus methodology and why sections expose the new
     /role="tablist"[\s\S]{0,260}h-2 w-2 rounded-full bg-amaranth/s,
     'browser tab chrome should add the small amaranth browser dot ahead of the tabs',
   );
-  assert.doesNotMatch(adminSource, /data-admin-experience-trigger/, 'admin translation page should delegate browser tab triggers to the integrated experience editor');
+  assert.doesNotMatch(adminSource, /data-admin-experience-trigger/, 'About admin should delegate browser tab triggers to the integrated experience editor');
   assert.match(experienceEditorSource, /data-admin-experience-trigger="education"/, 'the integrated experience editor should keep the education trigger');
   assert.match(experienceEditorSource, /data-admin-experience-trigger="experience"/, 'the integrated experience editor should keep the experience trigger');
   assert.match(experienceEditorSource, /rounded-t-\[7px\]/, 'the integrated experience editor should mirror the modest top-corner radius');
@@ -510,49 +526,17 @@ test('experience browser chrome plus methodology and why sections expose the new
   assert.match(experienceEditorSource, /border-paper bg-paper text-ink/, 'the integrated experience editor should mirror the paper active fill');
   assert.doesNotMatch(experienceEditorSource, /data-admin-experience-trigger="education"[\s\S]{0,220}rounded-t-2xl/s, 'the integrated experience editor should not use the old pill radius');
 
-  assert.match(methodologySection, /page\.methodologyEyebrow/, 'methodology should render the new eyebrow');
-  assert.match(methodologySection, /page\.methodologyDisplayTitle/, 'methodology should render the new display title');
-  assert.match(methodologySection, /data-methodology-connector/, 'methodology should keep a stable connector marker');
-  assert.doesNotMatch(methodologySection, /bg-white\/5/, 'methodology steps should remove the old filled inner cards');
-
-  assert.match(whySection, /page\.whyEyebrow/, 'why section should render the new eyebrow');
-  assert.match(whySection, /\[\s*0\$\{index \+ 1\}\s*\]/, 'why cards should switch to inline bracketed numbers');
-  assert.doesNotMatch(whySection, /gap-6/, 'why cards should become a flush grid without the old gaps');
-  assert.doesNotMatch(whySection, /shadow-\[/, 'why cards should remove the old white card shadows');
 });
 
-test('admin methodology and why sections keep editable parity markers, headings, and indexed loops', async () => {
+test('admin Translation page contains the current editable localization and digital-content sections', async () => {
   const adminSource = await readSource('src/pages/admin/translation-seo.astro');
-  const adminMethodologySection = extractSectionByDataAttribute(adminSource, 'data-admin-methodology', 'admin methodology section');
-  const adminWhySection = extractSectionByDataAttribute(adminSource, 'data-admin-why', 'admin why section');
-
-  assert.match(adminMethodologySection, /i18nKey="translationPage\.methodologyEyebrow"/, 'admin methodology should expose the editable eyebrow key');
-  assert.match(adminMethodologySection, /i18nKey="translationPage\.methodologyDisplayTitle"/, 'admin methodology should expose the editable display title key');
-  assert.match(adminMethodologySection, /page\.methodology\.steps\.map/, 'admin methodology should keep looping the methodology steps collection');
-  assert.match(
-    adminMethodologySection,
-    /i18nKey={`translationPage\.methodology\.steps\.\$\{index\}\.title`}/,
-    'admin methodology should expose editable methodology step titles for every indexed step',
-  );
-  assert.match(
-    adminMethodologySection,
-    /i18nKey={`translationPage\.methodology\.steps\.\$\{index\}\.description`}/,
-    'admin methodology should expose editable methodology step descriptions for every indexed step',
-  );
-
-  assert.match(adminWhySection, /i18nKey="translationPage\.whyEyebrow"/, 'admin why section should expose the editable eyebrow key');
-  assert.match(adminWhySection, /i18nKey="translationPage\.whyChooseMe\.title"/, 'admin why section should expose the editable title key');
-  assert.match(adminWhySection, /page\.whyChooseMe\.cards\.map/, 'admin why section should keep looping the why cards collection');
-  assert.match(
-    adminWhySection,
-    /i18nKey={`translationPage\.whyChooseMe\.cards\.\$\{index\}\.title`}/,
-    'admin why section should expose editable why card titles for every indexed card',
-  );
-  assert.match(
-    adminWhySection,
-    /i18nKey={`translationPage\.whyChooseMe\.cards\.\$\{index\}\.text`}/,
-    'admin why section should expose editable why card text for every indexed card',
-  );
+  assert.match(adminSource, /translationServicePage\.localization\.title/);
+  assert.match(adminSource, /translationServicePage\.localization\.items\.\$\{index\}\.title/);
+  assert.match(adminSource, /translationServicePage\.localization\.items\.\$\{index\}\.description/);
+  assert.match(adminSource, /translationServicePage\.multilingualSeo\.description/);
+  assert.match(adminSource, /translationServicePage\.digitalContent\.items\.\$\{index\}\.title/);
+  assert.match(adminSource, /<AdminTranslationArsenalEditor/);
+  assert.doesNotMatch(adminSource, /data-admin-methodology|data-admin-why|translationPage\.methodology/);
 });
 
 test('existing Home and UGC stable markers stay untouched by the translation correction work', async () => {

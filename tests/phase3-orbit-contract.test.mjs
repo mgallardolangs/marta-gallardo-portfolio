@@ -83,6 +83,8 @@ test('orbit helpers keep hrefs locale-aware and interaction states consistent', 
   const layout = orbit.getOrbitItemLayout(0.12, 3, 15, orbit.DESKTOP_ORBIT_GEOMETRY);
 
   assert.equal(orbit.resolveOrbitHref('/contact', 'fr'), '/fr/contact');
+  assert.equal(orbit.resolveOrbitHref('/contact', 'es'), '/contacto');
+  assert.equal(orbit.resolveOrbitHref('/ugc', 'ca'), '/ca/serveis/ugc');
   assert.equal(orbit.resolveOrbitHref('/blog', 'es'), '/blog');
   assert.equal(orbit.resolveOrbitHref(null, 'en'), null);
   assert.equal(layout.baseScale, 1, 'orbit tiles should keep a flat base scale so adjacent overlap stays consistent across the loop');
@@ -393,22 +395,17 @@ test('admin orbit type switches keep existing media paths and posters until an e
   assert.deepEqual(snapshot.getOrbitItemValidationErrors('orbit-video'), []);
 });
 
-test('site orbit data stays fixed to the approved fifteen local mock placeholders', async () => {
+test('site orbit data keeps all fifteen existing local image assets', async () => {
   const site = await readJson('src/data/site.json');
   const orbitMedia = site.orbitMedia;
 
   assert.equal(orbitMedia.length, 15);
 
-  for (const [index, item] of orbitMedia.entries()) {
-    assert.equal(item.type, 'image', `orbit item ${item.id} should stay on the approved image placeholders`);
-    assert.match(item.src, /^\/images\/orbit\/mock-\d{2}\.webp$/, `orbit item ${item.id} should use the approved mock placeholder path`);
-    assert.doesNotMatch(item.src, /^https?:\/\//, `orbit item ${item.id} should not use remote assets`);
+  for (const item of orbitMedia) {
+    assert.equal(item.type, 'image', `orbit item ${item.id} should preserve its existing image type`);
+    assert.match(item.src, /^\/images\/site\/[a-z0-9-]+\.webp$/, `orbit item ${item.id} should remain a local site asset`);
     assert.equal(item.href, null, `orbit item ${item.id} should keep href null until real destinations are approved`);
-    assert.equal(
-      item.src,
-      `/images/orbit/mock-${String(index + 1).padStart(2, '0')}.webp`,
-      `orbit item ${item.id} should follow the approved mock placeholder order`,
-    );
+    await access(path.join(rootDir, 'public', item.src.slice(1)));
   }
 });
 
@@ -624,8 +621,8 @@ test('built home route ships orbit motion chunks while contact and blog stay fre
   const distRoot = path.join(rootDir, 'dist');
   const [homeHtml, contactHtml, blogHtml] = await Promise.all([
     readFile(path.join(distRoot, 'index.html'), 'utf8'),
-    readFile(path.join(distRoot, 'contact', 'index.html'), 'utf8'),
-    readFile(path.join(distRoot, 'blog', 'index.html'), 'utf8'),
+    readFile(path.join(distRoot, 'contacto.html'), 'utf8'),
+    readFile(path.join(distRoot, 'blog.html'), 'utf8'),
   ]);
 
   const collectAssetPaths = (html) => [...html.matchAll(/\/_astro\/[^"'?#]+\.js/g)].map((match) => match[0]);

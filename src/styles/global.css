@@ -84,7 +84,7 @@ svg {
 }
 
 .site-container {
-  width: min(100% - 2rem, 80rem);
+  width: min(100% - 2rem, 86rem);
   margin-inline: auto;
 }
 
@@ -105,6 +105,93 @@ svg {
 
 .text-accent-ink {
   color: var(--color-amaranth);
+}
+
+.site-text-cta-row {
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid var(--color-amaranth);
+  padding-bottom: 0.5rem;
+}
+
+.site-text-cta {
+  display: inline-flex;
+  width: fit-content;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-ink);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.bg-ink .site-text-cta {
+  color: var(--color-paper);
+}
+
+.site-text-cta:hover,
+.site-text-cta:focus-visible {
+  color: var(--color-amaranth);
+}
+
+.site-text-cta__arrow {
+  transition: transform 0.2s ease;
+}
+
+.site-text-cta:hover .site-text-cta__arrow,
+.site-text-cta:focus-visible .site-text-cta__arrow {
+  transform: translateX(2px);
+}
+
+.blog-read-more {
+  position: relative;
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.35rem;
+  color: var(--color-amaranth);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.blog-read-more::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: var(--color-amaranth);
+  content: '';
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.28s ease;
+}
+
+.blog-read-more:hover,
+.blog-read-more:focus-visible {
+  color: var(--color-ink);
+}
+
+.blog-read-more:hover::after,
+.blog-read-more:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.blog-read-more__arrow {
+  transition: transform 0.2s ease;
+}
+
+.blog-read-more:hover .blog-read-more__arrow,
+.blog-read-more:focus-visible .blog-read-more__arrow {
+  transform: translateX(3px);
 }
 
 .contact-tab {
@@ -170,7 +257,7 @@ svg {
 }
 
 .home-hero__copy {
-  max-width: 32rem;
+  max-width: 42rem;
 }
 
 .home-hero__clip {
@@ -188,10 +275,11 @@ svg {
 
 .home-hero__title {
   display: block;
-  max-width: 7.2ch;
-  font-size: clamp(4rem, 11vw, 7rem);
-  line-height: 0.84;
-  letter-spacing: -0.08em;
+  max-width: 18ch;
+  padding-bottom: 0.16em;
+  font-size: clamp(3rem, 5.4vw, 4rem);
+  line-height: 1.08;
+  letter-spacing: -0.07em;
 }
 
 .home-hero__meta {
@@ -259,6 +347,35 @@ svg {
   min-height: 4rem;
   color: var(--color-paper);
   padding: 1rem 1.2rem;
+}
+
+.home-hero__cta--secondary {
+  overflow: hidden;
+  border: 1px solid var(--color-ink);
+  background: transparent;
+  min-height: 4rem;
+  color: var(--color-ink);
+  padding: 1rem 1.2rem;
+}
+
+.home-hero__cta--secondary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.32s ease;
+}
+
+.home-hero__cta--secondary:hover::before,
+.home-hero__cta--secondary:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.home-hero__cta--secondary:hover .home-hero__cta-label,
+.home-hero__cta--secondary:focus-visible .home-hero__cta-label {
+  color: var(--color-paper);
 }
 
 .home-hero__cta--primary::before {
@@ -426,13 +543,21 @@ svg {
 
 @media (min-width: 1024px) {
   .home-hero__stage {
-    grid-template-columns: minmax(0, 32rem) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.15fr) minmax(22rem, 0.85fr);
     align-items: end;
   }
 
   .home-hero__portrait {
     margin-right: 0;
     margin-left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-hero__cta {
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    padding-inline: 0.5rem;
   }
 }
 

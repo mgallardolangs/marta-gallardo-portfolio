@@ -10,19 +10,19 @@ const locales = ['es', 'en', 'fr', 'de', 'it', 'ca'];
 const expectedOrbitCopy = {
   es: {
     kicker: 'ARCHIVO CREATIVO',
-    title: 'HISTORIAS EN MOVIMIENTO.',
+    title: 'Mi historia',
     index: 'MARTA GALLARDO · PORTFOLIO',
     note: 'CONTENIDO · IDIOMAS · VIAJES · ARTE',
   },
   en: {
     kicker: 'CREATIVE ARCHIVE',
-    title: 'STORIES IN MOTION.',
+    title: 'My world',
     index: 'MARTA GALLARDO · PORTFOLIO',
     note: 'CONTENT · LANGUAGES · TRAVEL · ART',
   },
   fr: {
     kicker: 'ARCHIVES CRÉATIVES',
-    title: 'HISTOIRES EN MOUVEMENT.',
+    title: 'Souvenirs',
     index: 'MARTA GALLARDO · PORTFOLIO',
     note: 'CONTENU · LANGUES · VOYAGES · ART',
   },
@@ -91,7 +91,7 @@ test('public and admin orbit sections render kicker title index note only, with 
 
   assert.match(
     homeSource,
-    /className="space-y-4 lg:col-start-1 lg:row-start-1 lg:self-start"[\s\S]*i\.home\.orbit\.kicker[\s\S]*i\.home\.orbit\.title/s,
+    /className="flex flex-col gap-5 lg:col-start-1 lg:row-start-1 lg:self-start"[\s\S]*i\.home\.orbit\.kicker[\s\S]*i\.home\.orbit\.title/s,
   );
   assert.match(
     homeSource,

@@ -277,7 +277,7 @@ test('motion runtime keeps Lenis global while lazy-loading GSAP only for marked 
   );
 });
 
-test('built HTML pages keep the GSAP page marker scoped to home and translation routes while the global motion bundle stays Lenis-only', async (t) => {
+test('built HTML pages keep the GSAP page marker scoped to Home and service routes while the global motion bundle stays Lenis-only', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built assets.');
     return;
@@ -286,11 +286,31 @@ test('built HTML pages keep the GSAP page marker scoped to home and translation 
   const distFiles = await collectFiles(path.join(rootDir, 'dist'));
   const htmlFiles = distFiles.filter((filePath) => filePath.endsWith('.html'));
   assert.ok(htmlFiles.length > 0, 'build contract needs generated HTML files to inspect');
+  const gsapPagePaths = new Set([
+    'dist/index.html',
+    'dist/en.html',
+    'dist/fr.html',
+    'dist/de.html',
+    'dist/it.html',
+    'dist/ca.html',
+    'dist/servicios/seo.html',
+    'dist/en/services/seo.html',
+    'dist/fr/services/seo.html',
+    'dist/de/dienstleistungen/seo.html',
+    'dist/it/servizi/seo.html',
+    'dist/ca/serveis/seo.html',
+    'dist/servicios/traduccion.html',
+    'dist/en/services/translation.html',
+    'dist/fr/services/traduction.html',
+    'dist/de/dienstleistungen/uebersetzung.html',
+    'dist/it/servizi/traduzione.html',
+    'dist/ca/serveis/traduccio.html',
+  ]);
 
   for (const htmlFile of htmlFiles) {
     const html = await readFile(htmlFile, 'utf8');
     const relativePath = path.relative(rootDir, htmlFile);
-    const allowsGsapMarker = /dist\/(?:[a-z]{2}\/)?(?:index|translation-seo\/index)\.html$/.test(relativePath.replace(/\\/g, '/'));
+    const allowsGsapMarker = gsapPagePaths.has(relativePath.replace(/\\/g, '/'));
 
     if (allowsGsapMarker) {
       assert.match(html, /data-gsap-page/, `${relativePath} should opt into the route-scoped GSAP marker`);
@@ -311,20 +331,7 @@ test('built HTML pages keep the GSAP page marker scoped to home and translation 
   const runtimeStats = await stat(motionAssets[0]);
   assert.ok(runtimeStats.size < 40000, 'Lenis-only MotionRuntime bundle should stay well below the old 130KB payload');
 
-  for (const relativePath of [
-    'dist/index.html',
-    'dist/en/index.html',
-    'dist/fr/index.html',
-    'dist/de/index.html',
-    'dist/it/index.html',
-    'dist/ca/index.html',
-    'dist/translation-seo/index.html',
-    'dist/en/translation-seo/index.html',
-    'dist/fr/translation-seo/index.html',
-    'dist/de/translation-seo/index.html',
-    'dist/it/translation-seo/index.html',
-    'dist/ca/translation-seo/index.html',
-  ]) {
+  for (const relativePath of gsapPagePaths) {
     const html = await readFile(path.join(rootDir, relativePath.replace(/^dist[\\/]/, 'dist/')), 'utf8');
     const motionScriptIndex = html.indexOf('/_astro/MotionRuntime.astro_astro_type_script_index_0_lang');
     const gsapScriptIndex = html.indexOf('/_astro/GsapPageRuntime.astro_astro_type_script_index_0_lang');

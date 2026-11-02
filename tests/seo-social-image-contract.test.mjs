@@ -99,7 +99,7 @@ test('built Spanish blog article uses its own social image exactly once while Pe
   const articleImage = getFrontmatterValue(articleSource, 'image');
   const blogSocialImage = `${siteUrl}${articleImage}`;
   const heroImage = `${siteUrl}${site.heroMainPhoto}`;
-  const html = await readSource(`dist/blog/${articleSlug}/index.html`);
+  const html = await readSource(`dist/blog/${articleSlug}.html`);
   const ogImages = getMetaContents(html, 'og:image');
   const twitterImages = getMetaContents(html, 'twitter:image');
   const personJsonLd = getPersonJsonLd(html);
@@ -131,7 +131,7 @@ test('built home and contact pages keep the portrait fallback social image witho
   const site = await readJson('src/data/site.json');
   const heroImage = `${siteUrl}${site.heroMainPhoto}`;
 
-  await Promise.all(['dist/index.html', 'dist/contact/index.html'].map(async (relativePath) => {
+  await Promise.all(['dist/index.html', 'dist/contacto.html'].map(async (relativePath) => {
     const html = await readSource(relativePath);
     const ogImages = getMetaContents(html, 'og:image');
     const twitterImages = getMetaContents(html, 'twitter:image');

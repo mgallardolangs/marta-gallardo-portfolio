@@ -12,7 +12,7 @@ export function netlifyImage(
   options: { width?: number; quality?: number } = {},
 ): string {
   const value = (src ?? '').trim();
-  if (!value || !LOCAL_RASTER.test(value)) return value;
+  if (!value || !LOCAL_RASTER.test(value) || import.meta.env?.PROD !== true) return value;
 
   const params = [`url=${encodeURIComponent(value)}`];
   if (options.width) params.push(`w=${options.width}`);

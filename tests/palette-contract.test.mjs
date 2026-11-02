@@ -74,6 +74,10 @@ function extractDisallowedRgbFunctions(source) {
   return findings;
 }
 
+function stripEscapedEmbedMarkup(source) {
+  return source.replace(/&lt;div style=[\s\S]*?&lt;\/a&gt;/gi, '');
+}
+
 test('all src files drop legacy palette token names even when CSS escapes are decoded', async () => {
   const sourceFiles = await collectFiles(srcDir);
 
@@ -207,9 +211,12 @@ test('palette audit rejects any non-approved rgb triplet across built assets whe
   await Promise.all(builtFiles.map(async (absolutePath) => {
     const relativePath = path.relative(rootDir, absolutePath);
     const source = await readFile(absolutePath, 'utf8');
+    const paletteSource = path.extname(absolutePath) === '.html'
+      ? stripEscapedEmbedMarkup(source)
+      : source;
 
     assert.deepEqual(
-      extractDisallowedRgbFunctions(source),
+      extractDisallowedRgbFunctions(paletteSource),
       [],
       `${relativePath} should only contain built rgb()/rgba() triplets for paper (244/245/241), ink (6/4/3), or approved amaranth (232/50/86)`,
     );

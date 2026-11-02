@@ -338,32 +338,31 @@ test('every logical blog post is represented by six locale Markdown files sharin
   }
 });
 
-test('the initial mi-primer-post migration preserves the Spanish entry and Spanish-fallbacks the other five locales', async () => {
+test('the current Blog article keeps its existing shared slug and six localized Markdown entries', async () => {
+  const currentSlug = 'de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones';
   const files = await listBlogMarkdownFiles();
-  const migrated = [];
+  const articleLocales = [];
 
   for (const file of files) {
     const markdown = await readFile(file.absolutePath, 'utf8');
     const frontmatter = parseFrontmatter(markdown);
-    if (frontmatter.slug === 'mi-primer-post') {
-      migrated.push({ ...frontmatter, path: file.relativePath, markdown });
+    if (frontmatter.slug === currentSlug) {
+      articleLocales.push({ ...frontmatter, path: file.relativePath, markdown });
     }
   }
 
-  assert.equal(migrated.length, 6, 'the mi-primer-post migration should produce six locale Markdown files');
+  assert.equal(articleLocales.length, 6, 'the current Blog article should keep one Markdown file per locale');
 
-  const spanish = migrated.find((entry) => entry.lang === 'es');
-  assert.ok(spanish, 'the migrated group should keep a Spanish (es) locale file');
-  assert.equal(spanish.title, 'Mi primer post', 'the Spanish entry should preserve its original title');
-  assert.match(spanish.markdown, /Bienvenidos a mi blog/, 'the Spanish entry should preserve its original body content');
+  const spanish = articleLocales.find((entry) => entry.lang === 'es');
+  assert.ok(spanish, 'the current article should keep its Spanish locale file');
+  assert.equal(spanish.title, 'DE TRADUCTORA A ESPECIALISTA EN SEO: por qué combino ambas profesiones');
+  assert.match(spanish.markdown, /Mi relación con los idiomas empezó mucho antes de la universidad/);
 
-  for (const lang of HIDDEN_LOCALES.concat('en', 'fr')) {
-    const entry = migrated.find((candidate) => candidate.lang === lang);
-    assert.ok(entry, `the migration should create a ${lang} locale file for mi-primer-post`);
-    assert.equal(entry.lang, lang, `the ${lang} locale file should declare its own lang even though the content is a fallback`);
-    assert.equal(entry.title, spanish.title, `${lang} should Spanish-fallback the title until translated`);
-    assert.equal(entry.description, spanish.description, `${lang} should Spanish-fallback the description until translated`);
-    assert.match(entry.markdown, /Bienvenidos a mi blog/, `${lang} should Spanish-fallback the body until translated`);
+  for (const lang of SIX_LOCALES) {
+    const entry = articleLocales.find((candidate) => candidate.lang === lang);
+    assert.ok(entry, `the current article should keep a ${lang} locale file`);
+    assert.equal(entry.slug, currentSlug, `${lang} should keep the existing public slug`);
+    assert.equal(entry.translationKey, currentSlug, `${lang} should keep the existing article translation key`);
   }
 });
 
@@ -2515,7 +2514,7 @@ test('CHECK_DIST: the built admin blog edit route renders a bare YYYY-MM-DD valu
     return;
   }
 
-  const html = await readFile(path.join(rootDir, 'dist/admin/blog/edit/mi-primer-post/index.html'), 'utf8');
+  const html = await readFile(path.join(rootDir, 'dist/admin/blog/edit/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones.html'), 'utf8');
   const match = html.match(/id="blog-date"[^>]*\svalue="([^"]*)"/);
   assert.ok(match, 'the built edit page should render the #blog-date input with a value attribute');
   assert.match(

@@ -238,16 +238,12 @@ test('experience tablist aria label is localized in all six translation dictiona
   }
 });
 
-test('translation page router listeners use stable handler references for rerun-safe cleanup', async () => {
-  const source = await readSource('src/views/TranslationSeoPage.astro');
+test('public Translation page mounts its two client-side service switchers without page-global listeners', async () => {
+  const source = await readSource('src/views/TranslationServicePage.astro');
 
-  assert.match(source, /const pageLoadHandlerKey = '__mgInitTranslationPage'/);
-  assert.match(source, /const beforePreparationHandlerKey = '__mgCleanupTranslationPage'/);
-  assert.match(source, /document\.removeEventListener\('astro:page-load', docWithHandler\[pageLoadHandlerKey\]\)/);
-  assert.match(source, /document\.removeEventListener\('astro:before-preparation', docWithHandler\[beforePreparationHandlerKey\]\)/);
-  assert.match(source, /docWithHandler\[pageLoadHandlerKey\] = mountTranslationPage/);
-  assert.match(source, /docWithHandler\[beforePreparationHandlerKey\] = cleanupTranslationPage/);
-  assert.doesNotMatch(source, /document\.addEventListener\('astro:before-preparation', \(\) =>/);
+  assert.equal((source.match(/<ServiceSwitcher\b/g) ?? []).length, 2);
+  assert.match(source, /<ServiceSwitcher\s+client:load/);
+  assert.doesNotMatch(source, /astro:page-load|astro:before-preparation/);
 });
 
 test('translation page motion cancels stale async mounts so revisits cannot stack GSAP scopes', async () => {
@@ -412,15 +408,14 @@ test('translation page motion cancels in-flight mounts when route cleanup runs b
   }
 });
 
-test('translation view removes duplicated legacy sections and keeps the approved section components', async () => {
-  const source = await readSource('src/views/TranslationSeoPage.astro');
+test('public Translation view keeps only translation-specific service and arsenal sections', async () => {
+  const source = await readSource('src/views/TranslationServicePage.astro');
 
   assert.match(source, /<ServiceSwitcher/);
-  assert.match(source, /<ExperienceTabs/);
-  assert.doesNotMatch(source, /servicesOffered/);
-  assert.doesNotMatch(source, /page\.skills\.linguistic/);
-  assert.doesNotMatch(source, /page\.skills\.webOptimization/);
-  assert.doesNotMatch(source, /page\.education\.languages/);
+  assert.doesNotMatch(source, /<ExperienceTabs|methodology|whyChooseMe/);
+  assert.match(source, /getTranslationArsenalColumns\(lang,\s*siteData,\s*'translation'\)/);
+  assert.match(source, /arsenal\.skills\.map/);
+  assert.doesNotMatch(source, /skillGroups\.seo|SEO Local|Keyword planner/);
 });
 
 test('translation admin store mutations enforce ES\/EN\/FR inputs, add Spanish fallbacks, and publish site data', async () => {
@@ -544,10 +539,10 @@ test('built translation route ships translation-specific GSAP and React chunks w
 
   const distRoot = path.join(rootDir, 'dist');
   const [translationHtml, contactHtml, blogHtml, ugcHtml] = await Promise.all([
-    readFile(path.join(distRoot, 'translation-seo', 'index.html'), 'utf8'),
-    readFile(path.join(distRoot, 'contact', 'index.html'), 'utf8'),
-    readFile(path.join(distRoot, 'blog', 'index.html'), 'utf8'),
-    readFile(path.join(distRoot, 'ugc', 'index.html'), 'utf8'),
+    readFile(path.join(distRoot, 'servicios', 'traduccion.html'), 'utf8'),
+    readFile(path.join(distRoot, 'contacto.html'), 'utf8'),
+    readFile(path.join(distRoot, 'blog.html'), 'utf8'),
+    readFile(path.join(distRoot, 'servicios', 'ugc.html'), 'utf8'),
   ]);
 
   const collectAssetPaths = (html) => [...html.matchAll(/\/_astro\/[^"'?#]+\.js/g)].map((match) => match[0]);
@@ -568,17 +563,20 @@ test('built translation route ships translation-specific GSAP and React chunks w
   assert.ok(builtFiles.some((filePath) => /ServiceSwitcher|ExperienceTabs/.test(path.basename(filePath))));
 });
 
-test('built translation route includes stable service switcher panel ids for all three controls', async (t) => {
+test('built translation route includes stable service switcher panel ids for all translation controls', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built assets.');
     return;
   }
 
   const translationDictionary = await readJson('src/i18n/es.json');
-  const serviceIds = translationDictionary.translationPage.services.items.map((item) => item.id);
-  const translationHtml = await readFile(path.join(rootDir, 'dist', 'translation-seo', 'index.html'), 'utf8');
+  const serviceIds = [
+    ...translationDictionary.translationServicePage.localization.items.map((item) => item.id),
+    ...translationDictionary.translationServicePage.digitalContent.items.map((item) => item.id),
+  ];
+  const translationHtml = await readFile(path.join(rootDir, 'dist', 'servicios', 'traduccion.html'), 'utf8');
 
-  assert.equal(serviceIds.length, 3, 'phase 4 translation data should keep exactly three service switcher entries');
+  assert.equal(serviceIds.length, 4, 'translation data should keep two localization and two digital-content switcher entries');
 
   for (const serviceId of serviceIds) {
     assert.match(

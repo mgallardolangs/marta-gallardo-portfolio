@@ -1,7 +1,15 @@
 import { SUPPORTED_LANGS } from './adminStore';
 import { useAdminStore } from './useAdminStore';
 
-const SEO_PAGE_KEYS = ['home', 'translationSeo', 'ugc', 'contact'] as const;
+const SEO_PAGE_KEYS = ['home', 'about', 'seo', 'translation', 'ugc', 'contact'] as const;
+const SEO_PAGE_LABELS: Record<(typeof SEO_PAGE_KEYS)[number], string> = {
+  home: 'Inicio',
+  about: 'Sobre mí',
+  seo: 'Servicio SEO',
+  translation: 'Servicio de traducción',
+  ugc: 'Servicio UGC',
+  contact: 'Contacto',
+};
 const SEO_FIELDS = ['title', 'description'] as const;
 
 function getSeoInputId(page: string, field: string, locale: string) {
@@ -24,7 +32,7 @@ export default function EditableSeoSettings() {
         {SEO_PAGE_KEYS.map((page) => (
           <fieldset key={page} className="border border-ink/10 bg-white p-4 md:p-5" data-admin-seo-page={page}>
             <legend className="px-2 font-body text-xs font-semibold uppercase tracking-[0.28em] text-amaranth">
-              {page}
+              {SEO_PAGE_LABELS[page]}
             </legend>
 
             <div className="space-y-5">

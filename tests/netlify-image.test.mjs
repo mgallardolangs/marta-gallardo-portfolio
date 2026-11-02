@@ -3,19 +3,10 @@ import assert from 'node:assert/strict';
 
 import { netlifyImage } from '../src/lib/netlifyImage.ts';
 
-test('netlifyImage routes local rasters through the Netlify Image CDN', () => {
-  assert.equal(
-    netlifyImage('/images/site/photo.jpg', { width: 800 }),
-    '/.netlify/images?url=%2Fimages%2Fsite%2Fphoto.jpg&w=800&q=75',
-  );
-  assert.equal(
-    netlifyImage('/images/site/photo.png'),
-    '/.netlify/images?url=%2Fimages%2Fsite%2Fphoto.png&q=75',
-  );
-  assert.equal(
-    netlifyImage('/images/site/photo.webp', { width: 400, quality: 60 }),
-    '/.netlify/images?url=%2Fimages%2Fsite%2Fphoto.webp&w=400&q=60',
-  );
+test('netlifyImage leaves local rasters directly accessible in development', () => {
+  assert.equal(netlifyImage('/images/site/photo.jpg', { width: 800 }), '/images/site/photo.jpg');
+  assert.equal(netlifyImage('/images/site/photo.png'), '/images/site/photo.png');
+  assert.equal(netlifyImage('/images/site/photo.webp', { width: 400, quality: 60 }), '/images/site/photo.webp');
 });
 
 test('netlifyImage passes through non-optimizable sources unchanged', () => {

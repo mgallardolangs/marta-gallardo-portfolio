@@ -69,9 +69,9 @@ const archivePlaceholderIndex = String(latest ? 2 : 1).padStart(2, '0');
                   <p class="max-w-xl font-body text-base leading-8 text-ink-muted md:text-lg">{latest.data.description}</p>
                 </div>
 
-                <a href={getLocalizedPath(`/blog/${latest.data.slug}`, lang)} class="text-accent-ink inline-flex items-center gap-3 border-b border-amaranth pb-1 font-body text-xs font-semibold uppercase tracking-[0.28em] transition hover:text-ink">
+                <a href={getLocalizedPath(`/blog/${latest.data.slug}`, lang)} class="blog-read-more">
                   {i.blog.readMore}
-                  <span aria-hidden="true">→</span>
+                  <span class="blog-read-more__arrow" aria-hidden="true">→</span>
                 </a>
               </div>
             </div>

@@ -70,7 +70,7 @@ export default function ExperienceTabs({ tabListAriaLabel, statement, tabs }: Pr
         <ul className="space-y-4">
           {tabs.education.studies.map((study) => (
             <li key={study} className="flex gap-3 text-base leading-8 text-paper">
-              <span className="mt-3 h-2 w-2 rounded-full bg-amaranth" />
+              <span aria-hidden="true" className="mt-3 h-2 w-2 shrink-0 rounded-full bg-amaranth" />
               <span>{study}</span>
             </li>
           ))}

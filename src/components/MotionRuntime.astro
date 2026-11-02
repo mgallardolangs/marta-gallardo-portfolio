@@ -75,10 +75,33 @@
       controller.start();
       queueResizeSync();
     };
+    const onHomeServicesClick = (event: MouseEvent) => {
+      const eventTarget = event.target;
+      if (!(eventTarget instanceof Element)) return;
+
+      const link = eventTarget.closest<HTMLAnchorElement>('[data-home-services-cta]');
+      if (!link || link.hash !== '#home-services') return;
+
+      const target = document.getElementById('home-services');
+      if (!target) return;
+
+      event.preventDefault();
+      const lenis = controller.getLenis();
+      if (lenis && !reducedMotionMedia.matches) {
+        lenis.scrollTo(target, { offset: -112 });
+      } else {
+        window.scrollTo({
+          top: window.scrollY + target.getBoundingClientRect().top - 112,
+          behavior: reducedMotionMedia.matches ? 'auto' : 'smooth',
+        });
+      }
+      window.history.replaceState(window.history.state, '', link.hash);
+    };
 
     document.addEventListener('visibilitychange', onVisibilityChange);
     document.addEventListener('astro:before-preparation', onBeforePreparation);
     document.addEventListener('astro:page-load', onPageLoad);
+    document.addEventListener('click', onHomeServicesClick, true);
 
     const onReducedMotionChange = () => {
       if (reducedMotionMedia.matches) {
@@ -103,6 +126,7 @@
       document.removeEventListener('visibilitychange', onVisibilityChange);
       document.removeEventListener('astro:before-preparation', onBeforePreparation);
       document.removeEventListener('astro:page-load', onPageLoad);
+      document.removeEventListener('click', onHomeServicesClick, true);
       reducedMotionMedia.removeEventListener('change', onReducedMotionChange);
     };
 

@@ -47,26 +47,29 @@ test('public hero matches the approved Checkpoint 1 source markers and CTA struc
     /<section\b(?=[^>]*\bdata-home-hero\b)(?=[^>]*\bclass=["'][^"']*\bhome-hero\b[^"']*\bbg-paper\b[^"']*["'])[^>]*>/,
   );
   assert.match(homeSource, /import HomeHeroPortrait from '\.\.\/components\/HomeHeroPortrait\.astro';/);
-  assert.match(heroSection, /<TypedTitle\b[^>]*\btext=\{i\.hero\.name\}[^>]*\bclass="[^"]*\bhome-hero__title\b[^"]*"/);
+  assert.match(heroSection, /<TypedTitle\b[^>]*\btext=\{i\.home\.hero\.title\}[^>]*\bclass="[^"]*\bhome-hero__title\b[^"]*"/);
   assert.match(heroSection, /i\.home\.hero\.kicker/);
-  assert.match(heroSection, /i\.hero\.age/);
-  assert.match(heroSection, /i\.hero\.city/);
   assert.match(heroSection, /i\.home\.hero\.description/);
+  assert.match(heroSection, /href=\{getLocalizedRoute\('contact',\s*lang\)\}/);
+  assert.match(heroSection, /href="#home-services"/);
   assert.match(
     heroSection,
     /<HomeHeroPortrait>\s*<img[^>]*src=\{netlifyImage\(siteData\.heroMainPhoto[^>]*?\)\}[^>]*alt=\{i\.hero\.name\}[^>]*width=\{1200\}[^>]*height=\{1600\}[^>]*loading="eager"[^>]*fetchpriority="high"[^>]*decoding="async"[^>]*\/>\s*<\/HomeHeroPortrait>/s,
   );
   assert.doesNotMatch(heroSection, /home-hero__portrait-image/);
-  assert.match(heroSection, /href=\{getLocalizedPath\('\/ugc',\s*lang\)\}/);
-  assert.match(heroSection, /href=\{getLocalizedPath\('\/translation-seo',\s*lang\)\}/);
   assert.equal(
     heroSection.match(/class="home-hero__cta home-hero__cta--primary"/g)?.length,
-    2,
-    'public hero should keep both CTAs on the shared primary treatment',
+    1,
+    'public hero should keep the diagnosis CTA as the primary action',
   );
-  assert.doesNotMatch(heroSection, /home-hero__cta--secondary/);
+  assert.equal(
+    heroSection.match(/class="home-hero__cta home-hero__cta--secondary"/g)?.length,
+    1,
+    'public hero should include the secondary services-scroll action',
+  );
   assert.doesNotMatch(heroSection, /rounded-full|rounded-\[/);
 });
+
 
 test('portrait component replaces the old abstract visual with a slotted media frame', async () => {
   const [portraitSource, globalCssSource] = await Promise.all([
@@ -101,7 +104,7 @@ test('portrait component replaces the old abstract visual with a slotted media f
   assert.doesNotMatch(globalCssSource, /home-hero__oval|home-hero__frame|home-hero__mark/);
 });
 
-test('admin hero mirrors the layout with editable copy and keeps later admin tooling intact', async () => {
+test('admin hero mirrors current homepage copy and keeps the image and service editors intact', async () => {
   const adminHomeSource = await readSource('src/pages/admin/index.astro');
   const heroSection = extractBetweenMarkers(adminHomeSource, ADMIN_HOME_HERO_START, ADMIN_HOME_HERO_END, 'admin hero source');
 
@@ -110,27 +113,17 @@ test('admin hero mirrors the layout with editable copy and keeps later admin too
     /<section\b(?=[^>]*\bdata-admin-home-hero\b)(?=[^>]*\bclass=["'][^"']*\bhome-hero\b[^"']*\bbg-paper\b[^"']*["'])[^>]*>/,
   );
   assert.match(heroSection, /i18nKey="home\.hero\.kicker"/);
-  assert.match(heroSection, /i18nKey="hero\.name"/);
-  assert.match(heroSection, /i18nKey="hero\.age"/);
-  assert.match(heroSection, /i18nKey="hero\.city"/);
+  assert.match(heroSection, /i18nKey="home\.hero\.title"/);
   assert.match(heroSection, /i18nKey="home\.hero\.description"/);
+  assert.match(heroSection, /i18nKey="home\.hero\.ctaDiagnosis"/);
+  assert.match(heroSection, /i18nKey="home\.hero\.ctaServices"/);
   assert.match(
     heroSection,
     /<HomeHeroPortrait>\s*<EditableImage client:load imageKey="heroMainPhoto" className="h-full w-full" alt=\{i\.hero\.name\} \/>[\s\S]*<\/HomeHeroPortrait>/s,
   );
   assert.doesNotMatch(heroSection, /home-hero__portrait-image/);
-  assert.match(
-    heroSection,
-    /<div class="group\/edit relative flex w-full">[\s\S]*?<a href="\/admin\/ugc" class="home-hero__cta home-hero__cta--primary">[\s\S]*?<\/a>[\s\S]*?<\/div>/,
-  );
-  assert.match(
-    heroSection,
-    /<div class="group\/edit relative flex w-full">[\s\S]*?<a href="\/admin\/translation-seo" class="home-hero__cta home-hero__cta--primary">[\s\S]*?<\/a>[\s\S]*?<\/div>/,
-  );
-  assert.match(heroSection, /<EditableText client:load i18nKey="hero\.ugcLabel" as="span" className="home-hero__cta-label" clickToEdit=\{false\} editButtonTargetId="admin-home-ugc-cta-edit" \/>/);
-  assert.match(heroSection, /<EditableText client:load i18nKey="hero\.seoLabel" as="span" className="home-hero__cta-label" clickToEdit=\{false\} editButtonTargetId="admin-home-seo-cta-edit" \/>/  );
-  assert.match(heroSection, /<span id="admin-home-ugc-cta-edit" \/>/);
-  assert.match(heroSection, /<span id="admin-home-seo-cta-edit" \/>/);
+  assert.match(heroSection, /href="\/admin\/contact" class="home-hero__cta home-hero__cta--primary"/);
+  assert.match(heroSection, /href="#home-services" class="home-hero__cta home-hero__cta--secondary"/);
   assert.match(adminHomeSource, /HomeHeroPortrait/);
   assert.match(adminHomeSource, /EditableOrbitCollection/);
   assert.match(adminHomeSource, /AdminOrbitPreview/);

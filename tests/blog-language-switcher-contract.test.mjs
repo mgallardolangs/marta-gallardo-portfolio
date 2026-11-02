@@ -3,12 +3,13 @@ import assert from 'node:assert/strict';
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { getLocalizedPath } from '../src/lib/localizedRoutes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const seoLangs = ['es', 'en', 'fr', 'de', 'it', 'ca'];
 const publicPickerLangs = ['es', 'en', 'fr'];
-const spanishOnlySlug = 'mi-primer-post';
+const spanishOnlySlug = 'de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones';
 
 async function importModule(relativePath) {
   try {
@@ -20,8 +21,8 @@ async function importModule(relativePath) {
 
 function distBlogPostPath(locale, slug) {
   return locale === 'es'
-    ? path.join(rootDir, 'dist', 'blog', slug, 'index.html')
-    : path.join(rootDir, 'dist', locale, 'blog', slug, 'index.html');
+    ? path.join(rootDir, 'dist', 'blog', `${slug}.html`)
+    : path.join(rootDir, 'dist', locale, 'blog', `${slug}.html`);
 }
 
 function countMatches(html, pattern) {
@@ -60,8 +61,6 @@ test('header language helper filters mapped article locales and preserves normal
   const { resolveHeaderLanguageLinks } = await importModule('src/lib/headerLanguageLinks.ts');
 
   assert.equal(typeof resolveHeaderLanguageLinks, 'function', 'src/lib/headerLanguageLinks.ts should export resolveHeaderLanguageLinks');
-
-  const getLocalizedPath = (targetPath, lang) => (lang === 'es' ? targetPath : `/${lang}${targetPath}`);
 
   assert.deepEqual(
     resolveHeaderLanguageLinks({
@@ -105,7 +104,7 @@ test('header language helper filters mapped article locales and preserves normal
       getLocalizedPath,
     }),
     [
-      { lang: 'es', href: '/contact' },
+      { lang: 'es', href: '/contacto' },
       { lang: 'en', href: '/en/contact' },
       { lang: 'fr', href: '/fr/contact' },
     ],
@@ -113,7 +112,7 @@ test('header language helper filters mapped article locales and preserves normal
   );
 });
 
-test('built mi-primer-post article header only links to the public-picker locales, keeping DE/IT/CA hidden', async (t) => {
+test('built article header only links to the public-picker locales, keeping DE/IT/CA hidden', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built blog article language switcher links.');
     return;
@@ -123,7 +122,7 @@ test('built mi-primer-post article header only links to the public-picker locale
 
   assert.equal(countMatches(html, /class="language-menu__link\b/g), publicPickerLangs.length, 'desktop article language menu should only render the public-picker locale entries');
   assert.equal(countMatches(html, /class="language-chip\b/g), publicPickerLangs.length, 'mobile article language chips should only render the public-picker locale entries');
-  assert.match(html, /href="\/blog\/mi-primer-post"[^>]*>ES</, 'the article header should keep the ES locale link');
+  assert.match(html, new RegExp(`href="/blog/${spanishOnlySlug}"[^>]*>ES`), 'the article header should keep the ES locale link');
 
   for (const locale of ['en', 'fr']) {
     assert.match(
@@ -154,18 +153,18 @@ test('built home header exposes only the public picker while DE IT CA routes and
 
   assert.equal(countMatches(html, /class="language-menu__link\b/g), publicPickerLangs.length, 'desktop home language menu should only show the public picker locales');
   assert.equal(countMatches(html, /class="language-chip\b/g), publicPickerLangs.length, 'mobile home language chips should only show the public picker locales');
-  assert.deepEqual(desktopPickerHrefs, ['/', '/en/', '/fr/']);
-  assert.deepEqual(mobilePickerHrefs, ['/', '/en/', '/fr/']);
+  assert.deepEqual(desktopPickerHrefs, ['/', '/en', '/fr']);
+  assert.deepEqual(mobilePickerHrefs, ['/', '/en', '/fr']);
 
   for (const hiddenLocale of ['de', 'it', 'ca']) {
-    assert.ok(!desktopPickerHrefs.includes(`/${hiddenLocale}/`), `${hiddenLocale} should stay hidden from the desktop public picker until re-enabled`);
-    assert.ok(!mobilePickerHrefs.includes(`/${hiddenLocale}/`), `${hiddenLocale} should stay hidden from the mobile public picker until re-enabled`);
+    assert.ok(!desktopPickerHrefs.includes(`/${hiddenLocale}`), `${hiddenLocale} should stay hidden from the desktop public picker until re-enabled`);
+    assert.ok(!mobilePickerHrefs.includes(`/${hiddenLocale}`), `${hiddenLocale} should stay hidden from the mobile public picker until re-enabled`);
     assert.match(
       html,
-      new RegExp(`<link rel="alternate" hreflang="${hiddenLocale}" href="https://marttelier\\.netlify\\.app/${hiddenLocale}/"`),
+      new RegExp(`<link rel="alternate" hreflang="${hiddenLocale}" href="https://marttelier\\.com/${hiddenLocale}"`),
       `${hiddenLocale} hreflang should remain available for SEO`,
     );
-    await access(path.join(rootDir, 'dist', hiddenLocale, 'index.html'));
+    await access(path.join(rootDir, 'dist', `${hiddenLocale}.html`));
   }
 
   assert.equal(
