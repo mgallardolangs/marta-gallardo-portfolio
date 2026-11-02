@@ -9,12 +9,12 @@ const rootDir = path.resolve(__dirname, '..');
 const locales = ['es', 'en', 'fr', 'de', 'it', 'ca'];
 
 const wrapperSpecs = [
-  ['src/pages/index.astro', '../views/HomePage.astro', 'HomePage'],
-  ['src/pages/en/index.astro', '../../views/HomePage.astro', 'HomePage'],
-  ['src/pages/fr/index.astro', '../../views/HomePage.astro', 'HomePage'],
-  ['src/pages/de/index.astro', '../../views/HomePage.astro', 'HomePage'],
-  ['src/pages/it/index.astro', '../../views/HomePage.astro', 'HomePage'],
-  ['src/pages/ca/index.astro', '../../views/HomePage.astro', 'HomePage'],
+  ['src/pages/index.astro', '../views/HomePage.astro', 'HomePage', 'lang="es"'],
+  ['src/pages/en/index.astro', '../../views/HomePage.astro', 'HomePage', 'lang="en"'],
+  ['src/pages/fr/index.astro', '../../views/HomePage.astro', 'HomePage', 'lang="fr"'],
+  ['src/pages/de/index.astro', '../../views/HomePage.astro', 'HomePage', 'lang="de"'],
+  ['src/pages/it/index.astro', '../../views/HomePage.astro', 'HomePage', 'lang="it"'],
+  ['src/pages/ca/index.astro', '../../views/HomePage.astro', 'HomePage', 'lang="ca"'],
   ['src/pages/contacto.astro', '../views/ContactPage.astro', 'ContactPage'],
   ['src/pages/en/contact.astro', '../../views/ContactPage.astro', 'ContactPage'],
   ['src/pages/fr/contact.astro', '../../views/ContactPage.astro', 'ContactPage'],
@@ -207,12 +207,15 @@ test('Phase 2 public route files are thin wrappers around shared views', async (
   );
 
   for (const [relativePath, source] of sources) {
-    const [, importPath, componentName] = wrapperSpecs.find(([candidate]) => candidate === relativePath);
+    const [, importPath, componentName, expectedProps] = wrapperSpecs.find(([candidate]) => candidate === relativePath);
     const normalized = source.trim();
+    const openingTag = expectedProps
+      ? `<${componentName}\\s+${expectedProps}\\s*\\/?>`
+      : `<${componentName}\\s*\\/?>`;
 
     assert.match(
       normalized,
-      new RegExp(`^---\\s*import ${componentName} from ['"]${importPath.replaceAll('/', '\\/')}['"];\\s*---\\s*<${componentName}\\s*\\/?>$`),
+      new RegExp(`^---\\s*import ${componentName} from ['"]${importPath.replaceAll('/', '\\/')}['"];\\s*---\\s*${openingTag}$`),
       `${relativePath} should stay a thin wrapper around ${componentName}`,
     );
     assert.doesNotMatch(normalized, /BaseLayout|PageTransition|ScrollReveal|getCollection|TypedTitle/);

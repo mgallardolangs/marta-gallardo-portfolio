@@ -8,12 +8,16 @@ import GsapPageRuntime from '../components/GsapPageRuntime.astro';
 import StaggerContainer, { StaggerItem } from '../components/StaggerContainer';
 import HomeHeroPortrait from '../components/HomeHeroPortrait.astro';
 import TypedTitle from '../components/TypedTitle.astro';
-import { getLangFromUrl, getLocalizedPath, getLocalizedRoute, t } from '../i18n';
+import { getLangFromUrl, getLocalizedPath, getLocalizedRoute, t, type Lang } from '../i18n';
 import { getPageSeo, siteData } from '../lib/siteData';
 import { getLatestAndArchive, scopeBlogPostsToLocale } from '../lib/blog';
 import { netlifyImage } from '../lib/netlifyImage';
 
-const lang = getLangFromUrl(Astro.url);
+interface Props {
+  lang?: Lang;
+}
+
+const lang = Astro.props.lang ?? getLangFromUrl(Astro.url);
 const i = t(lang);
 const pageTitle = i.home.hero.title;
 const pageDescription = i.home.hero.description;
@@ -31,7 +35,7 @@ const homeServices = [
 ];
 ---
 
-<BaseLayout title={pageSeo.title} description={pageSeo.description}>
+<BaseLayout lang={lang} title={pageSeo.title} description={pageSeo.description}>
   <GsapPageRuntime />
   <div class="overflow-x-hidden bg-paper">
       <!-- home-hero:start -->

@@ -1,8 +1,8 @@
 ---
 slug: "de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
 translationKey: "de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
-title: "DE TRADUCTRICE À SPÉCIALISTE SEO : pourquoi j'allie les deux"
-description: "Traductrice de formation, j'allie aujourd'hui les langues et le référencement naturel (SEO) pour aider les marques à se développer sur différents marchés. Je vais vous raconter mon parcours et vous expliquer pourquoi je fais ce métier."
+title: "De traductrice à spécialiste SEO"
+description: "Je combine traduction et SEO pour aider les marques à conquérir de nouveaux marchés. Découvrez comment mon parcours m’a menée au référencement multilingue."
 date: "2026-09-07"
 image: "/images/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones.webp"
 tags: ["traduction", "traductrice SEO", "langues"]

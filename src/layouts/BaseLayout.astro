@@ -8,6 +8,7 @@ import Footer from '../components/Footer.astro';
 import { getLangFromUrl, t, type Lang } from '../i18n';
 
 interface Props {
+  lang?: Lang;
   title?: string;
   description?: string;
   image?: string;
@@ -16,7 +17,8 @@ interface Props {
   xDefaultPath?: string;
 }
 
-const lang = getLangFromUrl(Astro.url);
+const { lang: requestedLang } = Astro.props;
+const lang = requestedLang ?? getLangFromUrl(Astro.url);
 const i = t(lang);
 const {
   title = `${i.hero.name} — UGC & SEO`,

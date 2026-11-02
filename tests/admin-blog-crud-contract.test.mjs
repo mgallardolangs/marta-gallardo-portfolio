@@ -355,7 +355,7 @@ test('the current Blog article keeps its existing shared slug and six localized 
 
   const spanish = articleLocales.find((entry) => entry.lang === 'es');
   assert.ok(spanish, 'the current article should keep its Spanish locale file');
-  assert.equal(spanish.title, 'DE TRADUCTORA A ESPECIALISTA EN SEO: por qué combino ambas profesiones');
+  assert.equal(spanish.title, 'De traductora a especialista SEO');
   assert.match(spanish.markdown, /Mi relación con los idiomas empezó mucho antes de la universidad/);
 
   for (const lang of SIX_LOCALES) {
