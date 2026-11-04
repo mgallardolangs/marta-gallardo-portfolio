@@ -72,7 +72,7 @@
         {
           "title": "Traducción y gestión de contenido ecommerce + ATC en francés",
           "highlight": "Las Tijeras Mágicas",
-          "text": "Traducción diaria de fichas de producto (ES→FR/DE/IT), gestión de catálogos y atención a clientes francófonos, manteniendo precisión y tono de marca."
+          "text": "Traducción diaria de fichas de producto (ES→FR/DE/IT/ES), gestión de catálogos y atención a clientes francófonos, manteniendo precisión y tono de marca."
         },
         {
           "title": "Prácticas en traducción jurídica freelance",
@@ -506,17 +506,17 @@
         {
           "id": "audit",
           "title": "Auditoría SEO Profesional",
-          "description": "Antes de actuar, reviso el punto de partida: SEO técnico, indexabilidad, estructura y contenido on-page. La auditoría organiza los hallazgos por prioridad para orientar los siguientes pasos."
+          "description": "\\nAntes de actuar, analizo el punto de partida: SEO técnico (rastreo e indexación), estructura y enlazado interno, y contenido on-page. Recibes un informe ordenado por prioridad: qué falla, por qué afecta a tu visibilidad y qué corregir primero."
         },
         {
           "id": "consulting",
           "title": "Consultoría SEO y Estrategia Digital",
-          "description": "Acompañamiento mensual o por proyecto para definir prioridades, revisar avances y ajustar la estrategia de empresas y profesionales autónomos."
+          "description": "\\nUna auditoría te dice qué falla; la consultoría te dice qué hacer y en qué orden. Definimos juntos qué búsquedas te interesan, qué páginas conviene crear o mejorar y cómo repartir el trabajo según tus recursos. Te explico cada decisión con claridad para que entiendas el plan y puedas seguirlo."
         },
         {
           "id": "local",
           "title": "Posicionamiento SEO Local",
-          "description": "Optimización de la ficha de Google Business Profile y de la presencia en Google Maps para facilitar que clientes de la zona encuentren el negocio."
+          "description": "\\nSi tu negocio atiende a clientes de una zona concreta, aparecer en las búsquedas locales es tan importante como tener una buena web. Reviso y optimizo tu ficha de Google Business Profile, trabajo palabras clave con intención local y compruebo que los datos de tu negocio (nombre, dirección, teléfono, horarios y servicios) sean coherentes en tu web y en tus perfiles."
         }
       ]
     },
@@ -538,7 +538,7 @@
     "budget": {
       "eyebrow": "SEO",
       "title": "Tarifas y Presupuesto de SEO",
-      "description": "El presupuesto depende del estado de la web, el alcance y el tipo de acompañamiento. Cuéntame los objetivos del proyecto y preparo una propuesta ajustada."
+      "description": "\\nNo hay una tarifa única porque cada web parte de un punto distinto. El presupuesto depende del tamaño de la web, de su estado técnico, de los idiomas y mercados que quieras trabajar y de si necesitas una auditoría puntual o un acompañamiento continuo. \\nEl primer paso es contarme tu proyecto en el formulario: te respondo con una propuesta clara, con alcance y plazos, antes de empezar.\\nOfrezco un diagnóstico inicial gratuito: una revisión básica de tu web con tres hallazgos priorizados, más una llamada gratuita de 30 minutos para conocer tu proyecto y comentar esos resultados. No incluye un informe completo ni la aplicación de las mejoras; si decides continuar, lo concretamos en la propuesta.  \\n\\n"
     }
   },
   "translationServicePage": {
@@ -559,7 +559,7 @@
         {
           "id": "product-catalogues",
           "title": "Traducción de catálogos y fichas de producto orientadas a conversión",
-          "description": "Adapto catálogos y fichas con atención a la terminología, la claridad y la información que ayuda a comprender cada producto."
+          "description": "Una ficha de producto no solo informa: ayuda a decidir la compra. Traduzco catálogos y fichas de producto de tiendas online cuidando las características técnicas, el tono de la marca y las palabras clave con las que busca el cliente en cada idioma. Tengo experiencia previa traduciendo y gestionando catálogo de un ecommerce, con un flujo diario de fichas."
         }
       ]
     },
@@ -581,7 +581,7 @@
         {
           "id": "technical-localization",
           "title": "Localización técnica y especializada (B2B)",
-          "description": "Trabajo la terminología y el contexto del sector para presentar información especializada de forma clara y consistente."
+          "description": "Los textos B2B exigen precisión: terminología coherente, un registro profesional y frases que un cliente del sector entienda a la primera. Localizo páginas de servicios, fichas técnicas, presentaciones corporativas y newsletters, y mantengo un glosario por proyecto para que cada término se traduzca siempre igual. Si un texto requiere un nivel de especialización que no cubro, te lo digo desde el principio."
         }
       ]
     },
