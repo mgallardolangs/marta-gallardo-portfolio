@@ -637,14 +637,26 @@
       {
         "id": "translation-content-adaptation",
         "label": {
-          "es": "Traducción y adaptación de contenidos FR⇄ES y EN/DE/IT/CA→ES",
-          "en": "Translation and content adaptation FR⇄ES and EN/DE/IT/CA→ES",
-          "fr": "Traduction et adaptation de contenus FR⇄ES et EN/DE/IT/CA→ES",
+          "es": "Traducción directa e inversa FR⇄ES",
+          "en": "Translation FR⇄ES ",
+          "fr": "Traduction FR⇄ES ",
           "de": "Übersetzung und Inhaltsanpassung FR⇄ES und EN/DE/IT/CA→ES",
           "it": "Traduzione e adattamento dei contenuti FR⇄ES e EN/DE/IT/CA→ES",
           "ca": "Traducció i adaptació de continguts FR⇄ES i EN/DE/IT/CA→ES"
         },
         "group": "translation"
+      },
+      {
+        "id": "skill-traduccion-directa-en-de-it-ca-es",
+        "group": "translation",
+        "label": {
+          "es": "TRADUCCIÓN DIRECTA  EN/DE/IT/CA→ES",
+          "en": "DIRECT TRANSLATION EN/DE/IT/CA→ES",
+          "fr": "TRADUCTION EN/DE/IT/CA→ES",
+          "de": "TRADUCCIÓN DIRECTA  EN/DE/IT/CA→ES",
+          "it": "TRADUCCIÓN DIRECTA  EN/DE/IT/CA→ES",
+          "ca": "TRADUCCIÓN DIRECTA  EN/DE/IT/CA→ES"
+        }
       },
       {
         "id": "website-localization",
