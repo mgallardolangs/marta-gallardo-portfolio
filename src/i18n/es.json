@@ -20,7 +20,10 @@
       "message": "Gracias por contactarme. Te responderé lo antes posible."
     },
     "eyebrow": "Hablemos",
-    "errorRequired": "Por favor, completa este campo."
+    "errorRequired": "Por favor, completa este campo.",
+    "privacyConsent": "He leído y acepto la {link}.",
+    "privacyConsentLink": "política de privacidad",
+    "privacyConsentError": "Debes aceptar la política de privacidad."
   },
   "translationPage": {
     "hero": {
@@ -593,6 +596,20 @@
       "languagesTitle": "Idiomas",
       "toolsTitle": "Herramientas",
       "skillsTitle": "Habilidades"
+    }
+  },
+  "legal": {
+    "privacy": {
+      "title": "Política de privacidad",
+      "body": "Contenido pendiente de publicación."
+    },
+    "cookies": {
+      "title": "Política de cookies",
+      "body": "Contenido pendiente de publicación."
+    },
+    "legalNotice": {
+      "title": "Aviso legal",
+      "body": "Contenido pendiente de publicación."
     }
   }
 }

@@ -3,6 +3,7 @@ import AboutPage from '../views/AboutPage.astro';
 import SeoServicePage from '../views/SeoServicePage.astro';
 import TranslationServicePage from '../views/TranslationServicePage.astro';
 import UgcPage from '../views/UgcPage.astro';
+import LegalPage from '../views/LegalPage.astro';
 import { localizedRoutes } from '../lib/localizedRoutes.js';
 
 const pageViews = {
@@ -10,10 +11,13 @@ const pageViews = {
   seo: SeoServicePage,
   translation: TranslationServicePage,
   ugc: UgcPage,
+  privacy: LegalPage,
+  cookies: LegalPage,
+  legalNotice: LegalPage,
 };
 
 export function getStaticPaths() {
-  const routeKeys = ['about', 'seo', 'translation', 'ugc'] as const;
+  const routeKeys = ['about', 'seo', 'translation', 'ugc', 'privacy', 'cookies', 'legalNotice'] as const;
   return routeKeys.flatMap((routeKey) => (
     Object.values(localizedRoutes[routeKey]).map((routePath) => ({
       params: { path: routePath.replace(/^\/+/, '') },
@@ -26,4 +30,4 @@ const { routeKey } = Astro.props as { routeKey: keyof typeof pageViews };
 const Page = pageViews[routeKey];
 ---
 
-<Page />
+<Page routeKey={routeKey} />

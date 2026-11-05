@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RichText from '../components/RichText.astro';
+import { getLangFromUrl, t } from '../i18n';
+
+interface Props {
+  routeKey: 'privacy' | 'cookies' | 'legalNotice';
+}
+
+const lang = getLangFromUrl(Astro.url);
+const i = t(lang);
+const page = i.legal[Astro.props.routeKey];
+---
+
+<BaseLayout title={`${page.title} | ${i.hero.name}`} description={page.title}>
+  <div class="bg-paper">
+    <section class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
+      <div class="site-container max-w-3xl space-y-8">
+        <h1 class="font-heading text-4xl leading-none text-ink md:text-6xl">{page.title}</h1>
+        <RichText text={page.body} class="font-body text-base leading-8 text-ink-muted md:text-lg" />
+      </div>
+    </section>
+  </div>
+</BaseLayout>

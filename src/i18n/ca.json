@@ -94,7 +94,10 @@
       "message": "Gràcies per contactar-me. Et respondré el més aviat possible."
     },
     "eyebrow": "Parlem",
-    "errorRequired": "Si us plau, ompliu aquest camp."
+    "errorRequired": "Si us plau, ompliu aquest camp.",
+    "privacyConsent": "He llegit i accepte la {link}.",
+    "privacyConsentLink": "política de privacitat",
+    "privacyConsentError": "Has d’acceptar la política de privacitat."
   },
   "footer": {
     "rights": "Tots els drets reservats",
@@ -593,6 +596,20 @@
       "languagesTitle": "Idiomes",
       "toolsTitle": "Eines",
       "skillsTitle": "Habilitats"
+    }
+  },
+  "legal": {
+    "privacy": {
+      "title": "Política de privacitat",
+      "body": "Contingut pendent de publicació."
+    },
+    "cookies": {
+      "title": "Política de galetes",
+      "body": "Contingut pendent de publicació."
+    },
+    "legalNotice": {
+      "title": "Avís legal",
+      "body": "Contingut pendent de publicació."
     }
   }
 }

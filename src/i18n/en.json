@@ -94,7 +94,10 @@
       "message": "Thanks for reaching out. I'll get back to you as soon as possible."
     },
     "eyebrow": "Let's talk",
-    "errorRequired": "Please fill in this field."
+    "errorRequired": "Please fill in this field.",
+    "privacyConsent": "I have read and accept the {link}.",
+    "privacyConsentLink": "privacy policy",
+    "privacyConsentError": "You must accept the privacy policy."
   },
   "footer": {
     "rights": "All rights reserved",
@@ -593,6 +596,20 @@
       "languagesTitle": "Languages",
       "toolsTitle": "Tools",
       "skillsTitle": "Skills"
+    }
+  },
+  "legal": {
+    "privacy": {
+      "title": "Privacy policy",
+      "body": "Content pending publication."
+    },
+    "cookies": {
+      "title": "Cookie policy",
+      "body": "Content pending publication."
+    },
+    "legalNotice": {
+      "title": "Legal notice",
+      "body": "Content pending publication."
     }
   }
 }

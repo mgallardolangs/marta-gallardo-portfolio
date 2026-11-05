@@ -9,6 +9,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://marttelier.com',
   trailingSlash: 'never',
+  image: {
+    domains: ['img.youtube.com'],
+  },
   build: {
     format: 'file',
   },

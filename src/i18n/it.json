@@ -94,7 +94,10 @@
       "message": "Grazie per avermi contattata. Ti risponderò il prima possibile."
     },
     "eyebrow": "Parliamo",
-    "errorRequired": "Si prega di compilare questo campo."
+    "errorRequired": "Si prega di compilare questo campo.",
+    "privacyConsent": "Ho letto e accetto l’{link}.",
+    "privacyConsentLink": "informativa sulla privacy",
+    "privacyConsentError": "Devi accettare l’informativa sulla privacy."
   },
   "footer": {
     "rights": "Tutti i diritti riservati",
@@ -593,6 +596,20 @@
       "languagesTitle": "Lingue",
       "toolsTitle": "Strumenti",
       "skillsTitle": "Competenze"
+    }
+  },
+  "legal": {
+    "privacy": {
+      "title": "Informativa sulla privacy",
+      "body": "Contenuto in attesa di pubblicazione."
+    },
+    "cookies": {
+      "title": "Cookie policy",
+      "body": "Contenuto in attesa di pubblicazione."
+    },
+    "legalNotice": {
+      "title": "Note legali",
+      "body": "Contenuto in attesa di pubblicazione."
     }
   }
 }
