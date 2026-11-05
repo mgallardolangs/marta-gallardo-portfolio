@@ -66,7 +66,7 @@ export function initContactForms(root = getDefaultRoot()) {
         setCustomValidity(field, '');
 
         const onInvalid = () => {
-          setCustomValidity(field, errorMsg);
+          setCustomValidity(field, field.getAttribute('data-required-msg') || errorMsg);
         };
         const onInput = () => {
           setCustomValidity(field, '');
@@ -74,9 +74,11 @@ export function initContactForms(root = getDefaultRoot()) {
 
         field.addEventListener('invalid', onInvalid);
         field.addEventListener('input', onInput);
+        field.addEventListener('change', onInput);
         cleanupCallbacks.push(() => {
           field.removeEventListener('invalid', onInvalid);
           field.removeEventListener('input', onInput);
+          field.removeEventListener('change', onInput);
         });
       });
     }

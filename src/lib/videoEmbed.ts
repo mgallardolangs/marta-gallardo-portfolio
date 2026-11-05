@@ -35,14 +35,14 @@ export function toEmbedUrl(input: string | null | undefined): string | null {
 
   if (host === 'youtu.be') {
     const id = url.pathname.split('/').filter(Boolean)[0] ?? '';
-    if (YOUTUBE_ID.test(id)) return `https://www.youtube.com/embed/${id}`;
+    if (YOUTUBE_ID.test(id)) return `https://www.youtube-nocookie.com/embed/${id}`;
   } else if (host === 'youtube.com' || host === 'youtube-nocookie.com' || host === 'm.youtube.com') {
     if (url.pathname === '/watch') {
       const id = url.searchParams.get('v') ?? '';
-      if (YOUTUBE_ID.test(id)) return `https://www.youtube.com/embed/${id}`;
+      if (YOUTUBE_ID.test(id)) return `https://www.youtube-nocookie.com/embed/${id}`;
     }
     const match = url.pathname.match(/^\/(?:embed|shorts)\/([A-Za-z0-9_-]{11})/);
-    if (match) return `https://www.youtube.com/embed/${match[1]}`;
+    if (match) return `https://www.youtube-nocookie.com/embed/${match[1]}`;
   } else if (host === 'vimeo.com') {
     const parts = url.pathname.split('/').filter(Boolean);
     const id = parts[0] ?? '';

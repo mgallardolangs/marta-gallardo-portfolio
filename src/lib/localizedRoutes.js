@@ -55,6 +55,30 @@ export const localizedRoutes = {
     it: '/it/contact',
     ca: '/ca/contact',
   },
+  privacy: {
+    es: '/politica-de-privacidad',
+    en: '/en/privacy-policy',
+    fr: '/fr/politique-de-confidentialite',
+    de: '/de/datenschutz',
+    it: '/it/privacy-policy',
+    ca: '/ca/politica-de-privacitat',
+  },
+  cookies: {
+    es: '/politica-de-cookies',
+    en: '/en/cookie-policy',
+    fr: '/fr/politique-de-cookies',
+    de: '/de/cookie-richtlinie',
+    it: '/it/cookie-policy',
+    ca: '/ca/politica-de-galetes',
+  },
+  legalNotice: {
+    es: '/aviso-legal',
+    en: '/en/legal-notice',
+    fr: '/fr/mentions-legales',
+    de: '/de/impressum',
+    it: '/it/note-legali',
+    ca: '/ca/avis-legal',
+  },
 };
 
 const locales = ['es', 'en', 'fr', 'de', 'it', 'ca'];

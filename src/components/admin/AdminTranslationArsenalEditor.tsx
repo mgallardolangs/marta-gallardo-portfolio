@@ -75,6 +75,35 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
     .map((item, index) => ({ item, index }))
     .filter(({ item }) => getArsenalToolGroup(item) === scope);
   const reservedTools = scope === 'seo' ? SEO_RESERVED_TOOL_LABELS : [];
+  // The SEO section sits on a dark background, so its tones mirror the public page.
+  const onDark = scope === 'seo';
+  const tone = onDark
+    ? {
+        frame: 'border-paper/18',
+        rule: 'bg-paper/18',
+        tile: 'bg-paper text-ink hover:bg-amaranth',
+        tileLabel: 'text-ink',
+        handle: 'text-ink/60',
+        editButton: 'bg-ink text-paper',
+        reserved: 'border-paper/30 text-paper/64',
+        reservedLogo: 'border-paper/35',
+        add: 'border-paper/30 text-paper/64',
+        chip: 'border-paper/18 text-paper',
+        chipHandle: 'text-paper/60',
+      }
+    : {
+        frame: 'border-ink',
+        rule: 'bg-ink/12',
+        tile: 'bg-ink text-paper hover:bg-amaranth hover:text-ink',
+        tileLabel: 'text-paper group-hover:text-ink',
+        handle: 'text-paper/70',
+        editButton: 'bg-paper text-ink',
+        reserved: 'border-ink/30 text-ink-faint',
+        reservedLogo: 'border-ink/35',
+        add: 'border-ink/30 text-ink-faint',
+        chip: 'border-ink/12 text-ink',
+        chipHandle: 'text-ink-faint',
+      };
   const skills = store.getEditableCollection('skills') as SkillItem[];
 
   const [editingItem, setEditingItem] = useState<ItemEditorTarget | null>(null);
@@ -397,7 +426,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
   };
 
   return (
-    <div className="border border-ink" data-admin-arsenal-editor data-arsenal-scope={scope}>
+    <div className={`border ${tone.frame}`} data-admin-arsenal-editor data-arsenal-scope={scope}>
       <div className={`grid gap-0 ${scope === 'translation' ? 'lg:grid-cols-3' : 'md:grid-cols-2'}`}>
         {scope === 'translation' && (
         <article className="border-b border-ink p-5 lg:border-b-0 lg:border-r" data-admin-arsenal-panel="languages">
@@ -450,16 +479,16 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
         )}
 
         <article
-          className={`border-b border-ink p-5 ${scope === 'translation' ? 'lg:border-b-0 lg:border-r' : 'md:border-b-0 md:border-r'}`}
+          className={`border-b ${tone.frame} p-5 ${scope === 'translation' ? 'lg:border-b-0 lg:border-r' : 'md:border-b-0 md:border-r'}`}
           data-admin-arsenal-panel="tools"
         >
           <EditableText i18nKey={titleKeys.tools} as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth" />
-          <span className="mt-4 block h-px bg-ink/12"></span>
+          <span className={`mt-4 block h-px ${tone.rule}`}></span>
           <div className="mt-5 grid grid-cols-3 gap-2" data-arsenal-items>
             {tools.map(({ item: tool, index }) => (
               <div
                 key={tool.id}
-                className="group relative flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink"
+                className={`group relative flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 px-3 py-4 text-center transition ${tone.tile}`}
                 data-arsenal-item
                 data-tool-tile
                 data-item-id={tool.id}
@@ -481,23 +510,23 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
                     className="h-6 max-h-[24px] w-6 max-w-[24px] object-contain"
                   />
                 </div>
-                <p className="text-[0.68rem] font-medium uppercase tracking-[0.12em] text-paper transition group-hover:text-ink">{localize(tool.label, store.currentLang)}</p>
+                <p className={`text-[0.68rem] font-medium uppercase tracking-[0.12em] transition ${tone.tileLabel}`}>{localize(tool.label, store.currentLang)}</p>
 
-                <span data-drag-handle aria-hidden="true" className="pointer-events-none absolute left-1 top-1 text-paper/70 opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100">⠿</span>
+                <span data-drag-handle aria-hidden="true" className={`pointer-events-none absolute left-1 top-1 ${tone.handle} opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100`}>⠿</span>
                 <button
                   type="button"
                   data-edit-item
                   onClick={() => openItemEditor('tools', tool.id)}
                   aria-label={`Editar ${localize(tool.label, store.currentLang)}`}
-                  className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center bg-paper text-[0.65rem] text-ink opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100"
+                  className={`absolute right-1 top-1 flex h-6 w-6 items-center justify-center ${tone.editButton} text-[0.65rem] opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100 focus:opacity-100`}
                 >
                   ✎
                 </button>
               </div>
             ))}
             {reservedTools.map((tool) => (
-              <div key={tool} className="flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 border border-dashed border-ink/30 px-3 py-4 text-center text-ink-faint">
-                <span className="flex h-10 w-10 items-center justify-center border border-dashed border-ink/35 font-body text-[0.55rem] font-semibold uppercase tracking-[0.1em]">Logo</span>
+              <div key={tool} className={`flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 border border-dashed ${tone.reserved} px-3 py-4 text-center`}>
+                <span className={`flex h-10 w-10 items-center justify-center border border-dashed ${tone.reservedLogo} font-body text-[0.55rem] font-semibold uppercase tracking-[0.1em]`}>Logo</span>
                 <span className="text-[0.65rem] font-medium uppercase tracking-[0.12em]">{tool}</span>
               </div>
             ))}
@@ -506,7 +535,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
               type="button"
               data-collection-add="tools"
               onClick={() => openAdd('tools')}
-              className="flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-2 border border-dashed border-ink/30 px-3 py-4 text-center text-ink-faint transition hover:border-amaranth hover:text-amaranth"
+              className={`flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-2 border border-dashed ${tone.add} px-3 py-4 text-center transition hover:border-amaranth hover:text-amaranth`}
             >
               <span className="text-2xl leading-none">+</span>
               <span className="text-[0.65rem] font-medium uppercase tracking-[0.12em]">Añadir herramienta</span>
@@ -519,12 +548,12 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
 
         <article className="p-5" data-admin-arsenal-panel="skills">
           <EditableText i18nKey={titleKeys.skills} as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth" />
-          <span className="mt-4 block h-px bg-ink/12"></span>
+          <span className={`mt-4 block h-px ${tone.rule}`}></span>
           <div className="mt-5 flex flex-col gap-2" data-arsenal-items data-skill-group={scope}>
             {scopedSkills.map(({ item, index }) => (
               <span
                 key={item.id}
-                className="group relative border border-ink/12 px-3 py-2 text-[0.68rem] uppercase tracking-[0.08em] text-ink"
+                className={`group relative border ${tone.chip} px-3 py-2 text-[0.68rem] uppercase tracking-[0.08em]`}
                 data-arsenal-item
                 data-skill-chip
                 data-skill-group={scope}
@@ -537,7 +566,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
                 onDragEnd={handleDragEnd}
               >
                 {localize(item.label, store.currentLang)}
-                <span data-drag-handle aria-hidden="true" className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 pl-1 text-[0.6rem] text-ink-faint opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100">⠿</span>
+                <span data-drag-handle aria-hidden="true" className={`pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 pl-1 text-[0.6rem] ${tone.chipHandle} opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100`}>⠿</span>
                 <button
                   type="button"
                   data-edit-item
@@ -554,7 +583,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
               type="button"
               data-collection-add={`skills-${scope}`}
               onClick={() => openAdd(scope)}
-              className="border border-dashed border-ink/25 px-3 py-2 text-left text-[0.68rem] uppercase tracking-[0.08em] text-ink-faint transition hover:border-amaranth hover:text-amaranth"
+              className={`border border-dashed ${tone.add} px-3 py-2 text-left text-[0.68rem] uppercase tracking-[0.08em] transition hover:border-amaranth hover:text-amaranth`}
             >
               + Añadir habilidad
             </button>

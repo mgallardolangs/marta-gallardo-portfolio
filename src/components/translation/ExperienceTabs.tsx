@@ -23,6 +23,7 @@ interface Props {
     };
     experience: {
       label: string;
+      statement?: string;
       intro: string;
       cards: ExperienceCard[];
     };
@@ -65,6 +66,7 @@ export default function ExperienceTabs({ tabListAriaLabel, statement, tabs }: Pr
     {
       id: 'education' as const,
       label: tabs.education.label,
+      statement,
       intro: tabs.education.intro,
       content: (
         <ul className="space-y-4">
@@ -80,6 +82,7 @@ export default function ExperienceTabs({ tabListAriaLabel, statement, tabs }: Pr
     {
       id: 'experience' as const,
       label: tabs.experience.label,
+      statement: tabs.experience.statement || statement,
       intro: tabs.experience.intro,
       content: (
         <div className="grid grid-cols-1 gap-px bg-paper/16 sm:grid-cols-2 xl:grid-cols-3">
@@ -154,7 +157,7 @@ export default function ExperienceTabs({ tabListAriaLabel, statement, tabs }: Pr
             >
               <div className="grid gap-8 lg:grid-cols-[0.62fr_1.38fr]">
                 <div className="space-y-5 border-b border-paper/16 pb-6 lg:border-b-0 lg:border-r lg:pb-0 lg:pr-8">
-                  <p className="font-heading text-3xl leading-[0.96] text-paper md:text-4xl">{statement}</p>
+                  <p className="font-heading text-3xl leading-[0.96] text-paper md:text-4xl">{panel.statement}</p>
                   <p className="text-sm leading-7 text-paper/68 md:text-base">{panel.intro}</p>
                 </div>
                 <div>{panel.content}</div>

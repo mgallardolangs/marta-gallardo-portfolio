@@ -299,7 +299,7 @@ svg {
 }
 
 .home-hero__description {
-  max-width: 30rem;
+  max-width: 40rem;
   font-size: clamp(1.02rem, 2vw, 1.18rem);
   line-height: 1.9;
   color: var(--color-ink-muted);
@@ -548,11 +548,11 @@ svg {
   }
 
   .home-hero__copy {
-    max-width: 48rem;
+    max-width: none;
   }
 
   .home-hero__title {
-    max-width: 24ch;
+    max-width: 26ch;
     font-size: clamp(2.75rem, 4.35vw, 4rem);
   }
 
@@ -595,4 +595,23 @@ svg {
     transform: none;
     animation: none;
   }
+}
+
+.seo-budget-highlight {
+  position: relative;
+  border: 1px solid rgb(6 4 3 / 0.12);
+  border-left: 3px solid var(--color-amaranth);
+  background: #fff;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  box-shadow: var(--shadow-amaranth), var(--shadow-ink);
+  animation: seo-budget-float 6s ease-in-out infinite;
+}
+
+@keyframes seo-budget-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seo-budget-highlight { animation: none; }
 }

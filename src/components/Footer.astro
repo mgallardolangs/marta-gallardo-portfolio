@@ -21,6 +21,7 @@ const publicNavItems = [
   { route: 'blog', label: i.nav.blog },
   { route: 'contact', label: i.nav.contact },
 ];
+const legalRoutes = ['legalNotice', 'privacy', 'cookies'] as const;
 const adminNavItems = [
   { key: 'home', href: '/', label: i.nav.home, i18nKey: 'nav.home' },
   { key: 'about', href: '/about', label: i.nav.about, i18nKey: 'nav.about' },
@@ -131,6 +132,13 @@ const adminNavItems = [
           ) : (
             <p>© {year} {i.hero.name}. {i.footer.rights}.</p>
           )}
+          <nav aria-label={i.legal.privacy.title} class="flex w-full flex-wrap gap-x-5 gap-y-2 text-xs md:w-auto">
+            {legalRoutes.map((route) => (
+              <a href={getLocalizedRoute(route, lang)} class="text-white/60 underline-offset-4 transition hover:text-paper hover:underline">
+                {i.legal[route].title}
+              </a>
+            ))}
+          </nav>
         </div>
       </div>
     </div>

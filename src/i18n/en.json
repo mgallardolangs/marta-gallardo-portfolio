@@ -94,13 +94,16 @@
       "message": "Thanks for reaching out. I'll get back to you as soon as possible."
     },
     "eyebrow": "Let's talk",
-    "errorRequired": "Please fill in this field."
+    "errorRequired": "Please fill in this field.",
+    "privacyConsent": "I have read and accept the {link}.",
+    "privacyConsentLink": "privacy policy",
+    "privacyConsentError": "You must accept the privacy policy."
   },
   "footer": {
     "rights": "All rights reserved",
-    "eyebrow": "Do you have a project in mind?",
+    "eyebrow": "Ready to grow your web project?",
     "headline": "Let’s talk.",
-    "support": "Content, localisation, and strategy shaped with a clear, editorial eye.",
+    "support": "Let's talk about your goals and design a step-by-step strategy to position your brand.",
     "cta": "Get in touch",
     "brand": "MG",
     "location": "Elche, Spain"
@@ -117,7 +120,7 @@
   "home": {
     "hero": {
       "kicker": "marttelier",
-      "description": "I improve your business’s visibility and conversion so you can connect with real people in any language and market.",
+      "description": "I make sure your project is found, understood and chosen in several languages: technical SEO audits, professional translation and localization, and UGC content built to convert.",
       "mainPhoto": "Main Photo",
       "scrollCue": "Discover how I work",
       "coverLabel": "Cover Story",
@@ -137,8 +140,8 @@
         "Italian",
         "English"
       ],
-      "title": "About me: technical rigour, formal qualifications and creativity",
-      "description": "I’m Marta Gallardo, a Translation and Interpreting graduate from the University of Alicante with SEO training. I bring linguistics, strategy and content together to help brands communicate clearly and connect with their audiences.",
+      "title": "Technical rigour, formal qualifications and creativity",
+      "description": "Behind Marttelier is Marta Gallardo. With a degree in Translation and Interpreting from the University of Alicante and training in SEO and digital strategy, I work side by side with companies and brands to build a solid, multilingual and profitable online presence, without the extra layers of an agency.",
       "cta": "Get to know me"
     },
     "video": {
@@ -176,7 +179,7 @@
     },
     "visibility": {
       "title": "Visibility, Languages & Conversion",
-      "text": "As a translator and content creator, I work across languages, cultures and formats so every message keeps its intention and connects naturally. I combine translation, localization and multilingual SEO with UGC content to help brands communicate with clarity, consistency and cultural sensitivity."
+      "text": "More traffic is worthless if it doesn't reach the right people. That's why, as a translator and content creator, I work across languages, cultures and formats: I design SEO strategies suited to each project and combine them with translation, localization and UGC video, so every message keeps its intent, connects naturally and builds trust at first glance."
     },
     "latestArticles": {
       "title": "Latest articles on SEO and digital marketing"
@@ -316,30 +319,38 @@
     },
     "benefits": {
       "eyebrow": "UGC · CREATIVE DIRECTION",
-      "title": "Why choose user-generated content?",
-      "description": "UGC content offers a relatable visual way to present a brand. It can help show how a product or service fits into everyday situations and give audiences more context to consider it."
+      "title": "Why bet on UGC content",
+      "description": "Many people trust someone who uses a product or service in everyday life more than a highly produced ad. UGC (user-generated content) shows your brand in real situations, with a close-up camera and a natural tone. It works for your social media, your website and as a paid ad, and gives you varied material to test which message works best with your audience."
     },
     "process": {
-      "eyebrow": "UGC · CREATIVE DIRECTION",
+      "eyebrow": "From idea to delivery",
       "title": "How I work: from the idea to the final edit",
       "steps": [
         {
           "title": "Briefing",
-          "description": "We agree on the goal, audience, format, key messages and requirements."
+          "description": "We agree on the goal, audience, format, key messages and requirements.",
+          "items": [
+            "Usage rights agreed in writing: duration and publishing channels."
+          ]
         },
         {
           "title": "Idea development",
-          "description": "I shape the concept and structure of the piece based on the briefing."
+          "description": "I turn the briefing into a concept and a script or structure for the piece."
         },
         {
           "title": "Filming",
-          "description": "I produce the material according to the agreed direction, paying attention to framing, pacing and clarity."
+          "description": "I produce the material following the agreed approach and taking care of framing, pace and clarity."
         },
         {
-          "title": "Final edit",
-          "description": "I review the material and prepare the final piece in the agreed formats."
+          "title": "Editing",
+          "description": "I edit the footage with subtitles and music and prepare the piece in the agreed formats."
+        },
+        {
+          "title": "Delivery and revisions",
+          "description": "You receive high-quality files within 10 working days of approving the script, and you can request up to 2 rounds of revisions."
         }
-      ]
+      ],
+      "closing": "Do you have a product or an experience you want to show? Tell me what you're after and I'll suggest an idea."
     }
   },
   "translationPage": {
@@ -390,7 +401,7 @@
       "intro": "Hands-on experience in real communication, direct contact with people and language adaptation across different contexts.",
       "cards": [
         {
-          "title": "Ecommerce translation and content management + customer service in French",
+          "title": "E-commerce content translation and management + customer service in French",
           "highlight": "Las Tijeras Mágicas",
           "text": "Daily translation of product sheets (ES→FR/DE/IT), catalogue management and support for French-speaking clients, maintaining accuracy and brand tone."
         },
@@ -407,9 +418,9 @@
       ]
     },
     "education": {
-      "intro": "Academic background focused on languages, intercultural communication and writing, strengthened by practical experience in international environments. Complemented by recent training in web content and social media optimization.",
+      "intro": "An academic foundation focused on languages, intercultural communication and writing, reinforced by hands-on immersion in international settings. Complemented by recent training in web content and social media optimization.",
       "studies": [
-        "Bachelor’s Degree in Translation and Interpreting, specializing in French, writing and content adaptation. Additional languages: German and Italian. Foundational training in literary, legal and business, technical and scientific, and audiovisual translation.",
+        "Degree in Translation and Interpreting, specializing in French, writing and content adaptation. Second languages: German and Italian. Training in literary, legal-economic, technical-scientific and audiovisual translation.",
         "Erasmus+ program in Paris and daily practice in French-speaking environments.",
         "Ongoing training in clear writing, terminology and digital content optimization.",
         "Private course in Digital Marketing and SEO."
@@ -465,22 +476,23 @@
     "skillGroups": {
       "translation": "Translation & localization",
       "seo": "SEO & web content"
-    }
+    },
+    "experienceTabStatement": "Real practice in international settings"
   },
   "aboutPage": {
     "trajectoryEyebrow": "EXPERIENCE",
     "hero": {
       "eyebrow": "About",
-      "title": "About me: Marta Gallardo and the Marttelier philosophy",
+      "title": "Marta Gallardo and the Marttelier philosophy",
       "subtitle": "Where linguistics, strategy and content come together",
-      "story": "I graduated in Translation and Interpreting from the University of Alicante and went on to specialise in SEO and digital strategy. Bringing languages, search and UGC content together showed me how to support projects directly, without agencies in between. I want every message to retain its intention and reach the right people."
+      "story": "I graduated in Translation and Interpreting from the University of Alicante and trained in SEO and digital strategy. By bringing together languages, search and content creation, I found a way to support projects directly, with no agency in between. I care that every message keeps its intent and finds the right people."
     },
     "principles": {
-      "eyebrow": "About",
-      "title": "Marttelier working principles and values",
+      "eyebrow": "marttelier",
+      "title": "Working principles and values",
       "items": [
         "Honest, transparent communication",
-        "100% human review",
+        "Human review",
         "A focus on conversion",
         "Growing together"
       ]
@@ -495,8 +507,8 @@
       "eyebrow": "SEO positioning",
       "title": "SEO & International SEO Services",
       "paragraphs": [
-        "In such a competitive digital environment, appearing among Google’s top results is a matter of strategy, not luck. As a search engine optimization specialist, I help turn your website into an active customer acquisition channel. It is not just about getting more visits, but attracting qualified traffic: people looking for exactly what you offer and ready to buy or hire.",
-        "I take a comprehensive approach, assessing your project to design a plan around your needs. I optimize your site’s technical structure, improve the relevance of your content and strengthen your digital authority so you can move up against competitors. Whether you want to establish your brand in your local market or open the door to global expansion with an international SEO strategy, my goal is to make your business the clear choice for your audience."
+        "Showing up on Google isn't a matter of luck, it's a matter of strategy. My SEO service turns your website into a channel that attracts people already searching for what you offer: not just more visits, but visits with real interest.",
+        "I analyze your project's starting point and design a search ranking plan tailored to you: I improve the technical structure, the relevance of your content and your site's authority. Whether you want to consolidate in your home market or take the leap into other countries with international SEO, I explain every step and we work with clear priorities."
       ]
     },
     "services": {
@@ -521,15 +533,41 @@
       ]
     },
     "international": {
-      "eyebrow": "SEO",
+      "eyebrow": "Your website, in every market",
       "translationLinkLabel": "Translation",
       "title": "International & Multilingual SEO Specialist",
-      "description": "People search differently in every market. Along with adapting the language, it is useful to research search intent and cultural context so content feels natural in each market."
+      "description": "Taking a website international isn't about installing a machine-translation plugin. Every market searches differently, so I start by researching which terms users in each country actually use and with what intent. From there I adapt the content and set up what's needed on the technical side, such as hreflang tags, so Google shows each version to the right audience. If you also need a website translation service, we handle it within the same strategy so language and ranking don't go separate ways."
     },
     "why": {
       "eyebrow": "SEO",
       "title": "Why trust me as your SEO consultant?",
-      "description": "My training, the tools I use and the work I apply to my own website help me explain each project’s process and decisions clearly."
+      "description": "In SEO, what worked a few years ago is no longer enough: Google changes its systems and artificial intelligence has changed the way people search. Working with me means choosing a transparent, direct service with no intermediaries. My approach stands on four pillars:",
+      "items": [
+        "Up-to-date training. Private course in digital marketing and SEO, plus ongoing training in international SEO and search-focused content.",
+        "Command of professional tools. I work with Google Search Console, Google Business Profile, WordPress and Screaming Frog.",
+        "My own project as a lab. This website is where I apply and test every improvement before suggesting it to you.",
+        "Native, global approach. My translation training lets me look after the language and the searches of every market I work in."
+      ],
+      "closing": "I'm not a big agency and I don't want to be: you work with me directly, and I tell you from the start what I can and can't do.",
+      "stats": [
+        {
+          "value": "6",
+          "label": "languages"
+        },
+        {
+          "value": "4",
+          "label": "tools"
+        },
+        {
+          "value": "1:1",
+          "label": "no agency"
+        },
+        {
+          "value": "30 min",
+          "label": "free call"
+        }
+      ],
+      "ctaText": "Free initial diagnosis with three prioritized findings."
     },
     "arsenal": {
       "toolsTitle": "SEO tools",
@@ -538,7 +576,9 @@
     "budget": {
       "eyebrow": "SEO",
       "title": "SEO Rates & Budget",
-      "description": "The budget depends on the website’s current state, scope and type of support. Tell me about the project goals and I’ll prepare a tailored proposal."
+      "description": "The budget depends on the website’s current state, scope and type of support. Tell me about the project goals and I’ll prepare a tailored proposal.",
+      "highlight": "A basic review of your website with three prioritised findings, plus a free 30-minute call to get to know your project and discuss the results. It doesn’t include a full report or implementing the improvements; if you decide to continue, we’ll define that in the proposal.",
+      "highlightTitle": "I offer a free initial diagnosis"
     }
   },
   "translationServicePage": {
@@ -548,30 +588,30 @@
       "description": "I adapt your company’s content for new markets with semantic precision and an SEO focus."
     },
     "localization": {
-      "eyebrow": "Translation",
+      "eyebrow": "WEBSITE LOCALIZATION",
       "title": "Website & E-commerce Localization",
       "items": [
         {
           "id": "cultural-adaptation",
-          "title": "Cultural adaptation of copy for international markets",
-          "description": "I adapt references, tone and expressions so the message feels natural in the target market without losing its intention."
+          "title": "Cultural adaptation of texts for international markets",
+          "description": "I adjust references, tone and expressions so the message feels natural in the target market without losing its intent."
         },
         {
           "id": "product-catalogues",
           "title": "Conversion-focused translation of catalogues and product pages",
-          "description": "I adapt catalogues and product pages with care for terminology, clarity and the information that helps people understand each product."
+          "description": "A product listing doesn't just inform: it helps people decide to buy. I translate catalogs and product listings for online stores, taking care of technical specifications, brand tone and the keywords customers use in each language. I have previous experience translating and managing an e-commerce catalog, with a daily flow of listings."
         }
       ]
     },
     "multilingualSeo": {
-      "eyebrow": "Translation",
+      "eyebrow": "SEO TRANSLATION",
       "seoLinkLabel": "SEO",
-      "title": "Multilingual SEO Translation (Grow your organic traffic)",
-      "description": "SEO translation starts with the searches people make in each language and market. I adapt strategic keywords to preserve their intent without losing naturalness or brand consistency."
+      "title": "Multilingual SEO translation: content built around how each market searches",
+      "description": "SEO translation starts from the searches in each language, not from the source text. I research how users in each market search and adapt keywords and structure to preserve your brand's intent and voice. If your project also needs a strategy, I integrate it with the international SEO service."
     },
     "digitalContent": {
-      "eyebrow": "Translation",
-      "title": "Professional Translation of Digital Content & Blogs",
+      "eyebrow": "DIGITAL CONTENT",
+      "title": "Digital content translation: blogs, newsletters and copy",
       "items": [
         {
           "id": "editorial-content",
@@ -587,10 +627,206 @@
     },
     "arsenal": {
       "title": "Languages, tools & translation skills",
-      "eyebrow": "02 · PROFILE & TOOLS",
+      "eyebrow": "PROFILE & TOOLS",
       "languagesTitle": "Languages",
       "toolsTitle": "Tools",
       "skillsTitle": "Skills"
+    }
+  },
+  "legal": {
+    "privacy": {
+      "title": "Privacy policy",
+      "updated": "Last updated: 05.11.2026",
+      "sections": [
+        {
+          "title": "1. Data controller",
+          "paragraphs": [
+            "Marta Gallardo Albertu, tax ID (NIF) 77039673T, with address at Calle Asunción Parreño García, 03205 Elche (Alicante), Spain, and email <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>. She operates under the trade name Marttelier."
+          ]
+        },
+        {
+          "title": "2. What data I collect",
+          "paragraphs": [
+            "The data you send me through the contact forms on marttelier.com: your email address, your company name (optional) and your project description, plus any other information you choose to include in your message. I do not collect browsing data for analytics purposes."
+          ]
+        },
+        {
+          "title": "3. What I use it for",
+          "paragraphs": [
+            "To reply to your enquiry and, where appropriate, to prepare a proposal or a quote. I do not use it to send you commercial communications you have not asked for."
+          ]
+        },
+        {
+          "title": "4. Legal basis",
+          "paragraphs": [
+            "Your consent, which you give by ticking the box and submitting the form (Article 6(1)(a) GDPR), and taking the pre-contractual steps you request (Article 6(1)(b))."
+          ]
+        },
+        {
+          "title": "5. How long I keep it",
+          "paragraphs": [
+            "If we do not end up working together, for 12 months from our last contact. If there is a professional relationship, for as long as it lasts and afterwards for the periods required by tax and commercial law."
+          ]
+        },
+        {
+          "title": "6. Who I share it with",
+          "paragraphs": [
+            "I do not sell or transfer your data. To be able to assist you, I use the following providers, who act as data processors:"
+          ],
+          "table": {
+            "head": [
+              "Provider",
+              "Purpose",
+              "Location"
+            ],
+            "rows": [
+              [
+                "Netlify",
+                "Website hosting and receiving form submissions",
+                "USA"
+              ],
+              [
+                "Google (Gmail)",
+                "Email",
+                "USA"
+              ],
+              [
+                "Infomaniak",
+                "Email for the marttelier.com domain",
+                "Switzerland"
+              ]
+            ]
+          },
+          "after": [
+            "Transfers to the USA are covered by the EU-US Data Privacy Framework or by standard contractual clauses. Switzerland has an adequacy decision from the European Commission."
+          ]
+        },
+        {
+          "title": "7. Your rights",
+          "paragraphs": [
+            "You can request access to your data, its rectification or erasure, object to or restrict its processing, or request data portability by writing to <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>. You can withdraw your consent at any time. If you believe your data has not been handled correctly, you can lodge a complaint with the Spanish Data Protection Agency (aepd.es)."
+          ]
+        },
+        {
+          "title": "8. Changes",
+          "paragraphs": [
+            "I will update this policy if the way I process your data changes."
+          ]
+        }
+      ]
+    },
+    "cookies": {
+      "title": "Cookie policy",
+      "updated": "Last updated: 05.11.2026",
+      "sections": [
+        {
+          "title": "1. What cookies are",
+          "paragraphs": [
+            "Small files that a website stores on your device to remember information or to make certain content work."
+          ]
+        },
+        {
+          "title": "2. What this website uses",
+          "paragraphs": [
+            "marttelier.com does not use analytics, advertising or tracking cookies. Nor does it set its own cookies to remember your preferences."
+          ]
+        },
+        {
+          "title": "3. Third-party content",
+          "paragraphs": [
+            "Some videos on this website are hosted on YouTube (Google). They load in privacy-enhanced mode (youtube-nocookie.com) and only after you click to play them. When you play them, Google may set cookies on your device; their use is governed by Google’s privacy policy."
+          ],
+          "table": {
+            "head": [
+              "Source",
+              "Purpose",
+              "When it is activated",
+              "Owner"
+            ],
+            "rows": [
+              [
+                "YouTube (youtube-nocookie.com)",
+                "Playing embedded videos",
+                "When you click play",
+                "Google"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "4. How to disable them",
+          "paragraphs": [
+            "You can delete or block cookies in your browser settings. If you do, some videos may not play."
+          ]
+        },
+        {
+          "title": "5. Changes",
+          "paragraphs": [
+            "If the website starts using analytics or other cookies, I will update this policy and ask for your consent before enabling them."
+          ]
+        }
+      ]
+    },
+    "legalNotice": {
+      "title": "Legal notice",
+      "updated": "Last updated: 05.11.2026",
+      "sections": [
+        {
+          "title": "1. Identification details",
+          "paragraphs": [
+            "In accordance with Article 10 of Spanish Law 34/2002 on Information Society Services and Electronic Commerce, this website, marttelier.com, belongs to:"
+          ],
+          "items": [
+            "Owner: Marta Gallardo Albertu",
+            "Tax ID (NIF): 77039673T",
+            "Trade name: Marttelier",
+            "Address: Calle Asunción Parreño García, 03205 Elche (Alicante), Spain",
+            "Contact email: <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>"
+          ]
+        },
+        {
+          "title": "2. Purpose",
+          "paragraphs": [
+            "This website presents Marta Gallardo’s SEO consulting, translation and localisation, and UGC content creation services, and allows you to contact her."
+          ]
+        },
+        {
+          "title": "3. Terms of use",
+          "paragraphs": [
+            "Accessing the website implies acceptance of this notice. Users undertake to use the website lawfully and not for activities contrary to the law, good faith or public order."
+          ]
+        },
+        {
+          "title": "4. Intellectual and industrial property",
+          "paragraphs": [
+            "The texts, images, videos, design and the Marttelier name belong to Marta Gallardo Albertu or are used with the permission of the people who appear in them or of their owners. Their reproduction, distribution or transformation is not permitted without prior written authorisation."
+          ]
+        },
+        {
+          "title": "5. Third-party links",
+          "paragraphs": [
+            "This website may link to external pages such as LinkedIn, Instagram or YouTube. Marta Gallardo is not responsible for their content or policies."
+          ]
+        },
+        {
+          "title": "6. Liability",
+          "paragraphs": [
+            "The content is for information purposes. Every effort is made to keep it accurate and up to date, but the absence of errors and the continuous availability of the website are not guaranteed. The information on the website does not constitute a promise of specific results."
+          ]
+        },
+        {
+          "title": "7. Data protection and cookies",
+          "paragraphs": [
+            "The processing of personal data is explained in the [privacy:privacy policy] and the use of cookies in the [cookies:cookie policy]."
+          ]
+        },
+        {
+          "title": "8. Applicable law",
+          "paragraphs": [
+            "This notice is governed by Spanish law. Any dispute will be heard by the courts and tribunals with jurisdiction under the applicable regulations."
+          ]
+        }
+      ]
     }
   }
 }
