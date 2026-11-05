@@ -1,23 +1,61 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import RichText from '../components/RichText.astro';
-import { getLangFromUrl, t } from '../i18n';
+import { getLangFromUrl, getLocalizedRoute, t } from '../i18n';
 
 interface Props {
   routeKey: 'privacy' | 'cookies' | 'legalNotice';
 }
 
+interface LegalSection {
+  title: string;
+  paragraphs?: string[];
+  items?: string[];
+  table?: { head: string[]; rows: string[][] };
+  after?: string[];
+}
+
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
-const page = i.legal[Astro.props.routeKey];
+const page = i.legal[Astro.props.routeKey] as { title: string; updated: string; sections: LegalSection[] };
+
+// Paragraphs may reference the other legal pages as [privacy:label] or [cookies:label].
+const withLinks = (text: string) =>
+  text.replace(/\[(privacy|cookies|legalNotice):([^\]]+)\]/g, (_match, route, label) =>
+    `<a href="${getLocalizedRoute(route, lang)}" class="text-ink underline underline-offset-4 hover:text-amaranth">${label}</a>`);
 ---
 
 <BaseLayout title={`${page.title} | ${i.hero.name}`} description={page.title}>
   <div class="bg-paper">
     <section class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
-      <div class="site-container max-w-3xl space-y-8">
+      <div class="site-container max-w-3xl space-y-10">
         <h1 class="font-heading text-4xl leading-none text-ink md:text-6xl">{page.title}</h1>
-        <RichText text={page.body} class="font-body text-base leading-8 text-ink-muted md:text-lg" />
+        {page.sections.map((section) => (
+          <div class="space-y-4 font-body text-base leading-8 text-ink-muted">
+            <h2 class="font-heading text-2xl leading-tight text-ink md:text-3xl">{section.title}</h2>
+            {section.paragraphs?.map((text) => <p set:html={withLinks(text)} />)}
+            {section.items && (
+              <ul class="list-disc space-y-1 pl-6">
+                {section.items.map((text) => <li set:html={withLinks(text)} />)}
+              </ul>
+            )}
+            {section.table && (
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-left text-sm leading-6">
+                  <thead>
+                    <tr>{section.table.head.map((cell) => <th class="border-b border-ink/20 py-2 pr-4 font-semibold text-ink">{cell}</th>)}</tr>
+                  </thead>
+                  <tbody>
+                    {section.table.rows.map((row) => (
+                      <tr>{row.map((cell) => <td class="border-b border-ink/10 py-2 pr-4 align-top">{cell}</td>)}</tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {section.after?.map((text) => <p set:html={withLinks(text)} />)}
+          </div>
+        ))}
+        <p class="font-body text-sm text-ink-muted">{page.updated}</p>
       </div>
     </section>
   </div>

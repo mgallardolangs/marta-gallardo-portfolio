@@ -601,15 +601,197 @@
   "legal": {
     "privacy": {
       "title": "Privacy policy",
-      "body": "Content pending publication."
+      "updated": "Last updated: 05.11.2026",
+      "sections": [
+        {
+          "title": "1. Data controller",
+          "paragraphs": [
+            "Marta Gallardo Albertu, tax ID (NIF) 77039673T, with address at Calle Asunción Parreño García, 03205 Elche (Alicante), Spain, and email <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>. She operates under the trade name Marttelier."
+          ]
+        },
+        {
+          "title": "2. What data I collect",
+          "paragraphs": [
+            "The data you send me through the contact forms on marttelier.com: your email address, your company name (optional) and your project description, plus any other information you choose to include in your message. I do not collect browsing data for analytics purposes."
+          ]
+        },
+        {
+          "title": "3. What I use it for",
+          "paragraphs": [
+            "To reply to your enquiry and, where appropriate, to prepare a proposal or a quote. I do not use it to send you commercial communications you have not asked for."
+          ]
+        },
+        {
+          "title": "4. Legal basis",
+          "paragraphs": [
+            "Your consent, which you give by ticking the box and submitting the form (Article 6(1)(a) GDPR), and taking the pre-contractual steps you request (Article 6(1)(b))."
+          ]
+        },
+        {
+          "title": "5. How long I keep it",
+          "paragraphs": [
+            "If we do not end up working together, for 12 months from our last contact. If there is a professional relationship, for as long as it lasts and afterwards for the periods required by tax and commercial law."
+          ]
+        },
+        {
+          "title": "6. Who I share it with",
+          "paragraphs": [
+            "I do not sell or transfer your data. To be able to assist you, I use the following providers, who act as data processors:"
+          ],
+          "table": {
+            "head": [
+              "Provider",
+              "Purpose",
+              "Location"
+            ],
+            "rows": [
+              [
+                "Netlify",
+                "Website hosting and receiving form submissions",
+                "USA"
+              ],
+              [
+                "Google (Gmail)",
+                "Email",
+                "USA"
+              ],
+              [
+                "Infomaniak",
+                "Email for the marttelier.com domain",
+                "Switzerland"
+              ]
+            ]
+          },
+          "after": [
+            "Transfers to the USA are covered by the EU-US Data Privacy Framework or by standard contractual clauses. Switzerland has an adequacy decision from the European Commission."
+          ]
+        },
+        {
+          "title": "7. Your rights",
+          "paragraphs": [
+            "You can request access to your data, its rectification or erasure, object to or restrict its processing, or request data portability by writing to <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>. You can withdraw your consent at any time. If you believe your data has not been handled correctly, you can lodge a complaint with the Spanish Data Protection Agency (aepd.es)."
+          ]
+        },
+        {
+          "title": "8. Changes",
+          "paragraphs": [
+            "I will update this policy if the way I process your data changes."
+          ]
+        }
+      ]
     },
     "cookies": {
       "title": "Cookie policy",
-      "body": "Content pending publication."
+      "updated": "Last updated: 05.11.2026",
+      "sections": [
+        {
+          "title": "1. What cookies are",
+          "paragraphs": [
+            "Small files that a website stores on your device to remember information or to make certain content work."
+          ]
+        },
+        {
+          "title": "2. What this website uses",
+          "paragraphs": [
+            "marttelier.com does not use analytics, advertising or tracking cookies. Nor does it set its own cookies to remember your preferences."
+          ]
+        },
+        {
+          "title": "3. Third-party content",
+          "paragraphs": [
+            "Some videos on this website are hosted on YouTube (Google). They load in privacy-enhanced mode (youtube-nocookie.com) and only after you click to play them. When you play them, Google may set cookies on your device; their use is governed by Google’s privacy policy."
+          ],
+          "table": {
+            "head": [
+              "Source",
+              "Purpose",
+              "When it is activated",
+              "Owner"
+            ],
+            "rows": [
+              [
+                "YouTube (youtube-nocookie.com)",
+                "Playing embedded videos",
+                "When you click play",
+                "Google"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "4. How to disable them",
+          "paragraphs": [
+            "You can delete or block cookies in your browser settings. If you do, some videos may not play."
+          ]
+        },
+        {
+          "title": "5. Changes",
+          "paragraphs": [
+            "If the website starts using analytics or other cookies, I will update this policy and ask for your consent before enabling them."
+          ]
+        }
+      ]
     },
     "legalNotice": {
       "title": "Legal notice",
-      "body": "Content pending publication."
+      "updated": "Last updated: 05.11.2026",
+      "sections": [
+        {
+          "title": "1. Identification details",
+          "paragraphs": [
+            "In accordance with Article 10 of Spanish Law 34/2002 on Information Society Services and Electronic Commerce, this website, marttelier.com, belongs to:"
+          ],
+          "items": [
+            "Owner: Marta Gallardo Albertu",
+            "Tax ID (NIF): 77039673T",
+            "Trade name: Marttelier",
+            "Address: Calle Asunción Parreño García, 03205 Elche (Alicante), Spain",
+            "Contact email: <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>"
+          ]
+        },
+        {
+          "title": "2. Purpose",
+          "paragraphs": [
+            "This website presents Marta Gallardo’s SEO consulting, translation and localisation, and UGC content creation services, and allows you to contact her."
+          ]
+        },
+        {
+          "title": "3. Terms of use",
+          "paragraphs": [
+            "Accessing the website implies acceptance of this notice. Users undertake to use the website lawfully and not for activities contrary to the law, good faith or public order."
+          ]
+        },
+        {
+          "title": "4. Intellectual and industrial property",
+          "paragraphs": [
+            "The texts, images, videos, design and the Marttelier name belong to Marta Gallardo Albertu or are used with the permission of the people who appear in them or of their owners. Their reproduction, distribution or transformation is not permitted without prior written authorisation."
+          ]
+        },
+        {
+          "title": "5. Third-party links",
+          "paragraphs": [
+            "This website may link to external pages such as LinkedIn, Instagram or YouTube. Marta Gallardo is not responsible for their content or policies."
+          ]
+        },
+        {
+          "title": "6. Liability",
+          "paragraphs": [
+            "The content is for information purposes. Every effort is made to keep it accurate and up to date, but the absence of errors and the continuous availability of the website are not guaranteed. The information on the website does not constitute a promise of specific results."
+          ]
+        },
+        {
+          "title": "7. Data protection and cookies",
+          "paragraphs": [
+            "The processing of personal data is explained in the [privacy:privacy policy] and the use of cookies in the [cookies:cookie policy]."
+          ]
+        },
+        {
+          "title": "8. Applicable law",
+          "paragraphs": [
+            "This notice is governed by Spanish law. Any dispute will be heard by the courts and tribunals with jurisdiction under the applicable regulations."
+          ]
+        }
+      ]
     }
   }
 }

@@ -601,15 +601,197 @@
   "legal": {
     "privacy": {
       "title": "Política de privacitat",
-      "body": "Contingut pendent de publicació."
+      "updated": "Última actualització: 05.11.2026",
+      "sections": [
+        {
+          "title": "1. Responsable del tractament",
+          "paragraphs": [
+            "Marta Gallardo Albertu, amb NIF 77039673T, domicili al carrer Asunción Parreño García, 03205 Elx (Alacant) i correu electrònic <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>. Exerceix la seua activitat amb el nom comercial Marttelier."
+          ]
+        },
+        {
+          "title": "2. Quines dades recopile",
+          "paragraphs": [
+            "Les que m’envies a través dels formularis de contacte de marttelier.com: el teu correu electrònic, el nom de la teua empresa (opcional) i la descripció del teu projecte, a més de qualsevol dada que decidisques incloure en el missatge. No recopile dades de navegació amb finalitats d’analítica."
+          ]
+        },
+        {
+          "title": "3. Per a què les utilitze",
+          "paragraphs": [
+            "Per a respondre a la teua consulta i, si escau, preparar-te una proposta o un pressupost. No les utilitze per a enviar-te comunicacions comercials que no hages demanat."
+          ]
+        },
+        {
+          "title": "4. Base jurídica",
+          "paragraphs": [
+            "El teu consentiment, que atorgues en marcar la casella i enviar el formulari (article 6.1.a del RGPD), i l’aplicació de mesures precontractuals que em sol·licites (article 6.1.b)."
+          ]
+        },
+        {
+          "title": "5. Quant de temps les conserve",
+          "paragraphs": [
+            "Si no arribem a treballar junts, durant 12 mesos des de l’últim contacte. Si hi ha una relació professional, mentre dure i després durant els terminis que exigeixen les normes fiscals i mercantils."
+          ]
+        },
+        {
+          "title": "6. Amb qui les compartisc",
+          "paragraphs": [
+            "No venc ni cedisc les teues dades. Per a poder atendre’t utilitze aquests proveïdors, que actuen com a encarregats del tractament:"
+          ],
+          "table": {
+            "head": [
+              "Proveïdor",
+              "Per a què",
+              "Ubicació"
+            ],
+            "rows": [
+              [
+                "Netlify",
+                "Allotjament del web i recepció dels formularis",
+                "EUA"
+              ],
+              [
+                "Google (Gmail)",
+                "Correu electrònic",
+                "EUA"
+              ],
+              [
+                "Infomaniak",
+                "Correu del domini marttelier.com",
+                "Suïssa"
+              ]
+            ]
+          },
+          "after": [
+            "Les transferències als EUA s’emparen en el Marc de Privacitat de Dades UE-EUA o en clàusules contractuals tipus. Suïssa compta amb una decisió d’adequació de la Comissió Europea."
+          ]
+        },
+        {
+          "title": "7. Els teus drets",
+          "paragraphs": [
+            "Pots demanar l’accés a les teues dades, la rectificació o supressió, oposar-te al tractament, limitar-lo o sol·licitar-ne la portabilitat escrivint a <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>. Pots retirar el teu consentiment en qualsevol moment. Si creus que no he tractat les teues dades correctament, pots presentar una reclamació davant l’Agència Espanyola de Protecció de Dades (aepd.es)."
+          ]
+        },
+        {
+          "title": "8. Canvis",
+          "paragraphs": [
+            "Actualitzaré aquesta política si canvia la manera com tracte les teues dades."
+          ]
+        }
+      ]
     },
     "cookies": {
       "title": "Política de galetes",
-      "body": "Contingut pendent de publicació."
+      "updated": "Última actualització: 05.11.2026",
+      "sections": [
+        {
+          "title": "1. Què són les galetes",
+          "paragraphs": [
+            "Són xicotets arxius que un lloc web guarda en el teu dispositiu per a recordar informació o perquè funcione cert contingut."
+          ]
+        },
+        {
+          "title": "2. Què utilitza aquest web",
+          "paragraphs": [
+            "marttelier.com no utilitza galetes d’analítica, de publicitat ni de seguiment. Tampoc instal·la galetes pròpies per a recordar les teues preferències."
+          ]
+        },
+        {
+          "title": "3. Contingut de tercers",
+          "paragraphs": [
+            "Alguns vídeos del web s’allotgen a YouTube (Google). Es carreguen en mode de privacitat ampliada (youtube-nocookie.com) i només després que premes per reproduir-los. En reproduir-los, Google pot instal·lar galetes en el teu dispositiu; el seu tractament es regeix per la política de privacitat de Google."
+          ],
+          "table": {
+            "head": [
+              "Origen",
+              "Finalitat",
+              "Quan s’activa",
+              "Titular"
+            ],
+            "rows": [
+              [
+                "YouTube (youtube-nocookie.com)",
+                "Reproduir vídeos incrustats",
+                "En prémer reproduir",
+                "Google"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "4. Com desactivar-les",
+          "paragraphs": [
+            "Pots esborrar o bloquejar les galetes des de la configuració del teu navegador. Si ho fas, és possible que alguns vídeos no es reproduïsquen."
+          ]
+        },
+        {
+          "title": "5. Canvis",
+          "paragraphs": [
+            "Si el web comença a utilitzar analítica o altres galetes, actualitzaré aquesta política i demanaré el teu consentiment abans d’activar-les."
+          ]
+        }
+      ]
     },
     "legalNotice": {
       "title": "Avís legal",
-      "body": "Contingut pendent de publicació."
+      "updated": "Última actualització: 05.11.2026",
+      "sections": [
+        {
+          "title": "1. Dades identificatives",
+          "paragraphs": [
+            "En compliment de l’article 10 de la Llei 34/2002 de serveis de la societat de la informació i de comerç electrònic, s’informa que aquest lloc web, marttelier.com, pertany a:"
+          ],
+          "items": [
+            "Titular: Marta Gallardo Albertu",
+            "NIF: 77039673T",
+            "Nom comercial: Marttelier",
+            "Domicili: carrer Asunción Parreño García, 03205 Elx (Alacant)",
+            "Correu electrònic de contacte: <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>"
+          ]
+        },
+        {
+          "title": "2. Objecte",
+          "paragraphs": [
+            "Aquest lloc web presenta els serveis de consultoria SEO, traducció i localització, i creació de contingut UGC de Marta Gallardo, i permet contactar-hi."
+          ]
+        },
+        {
+          "title": "3. Condicions d’ús",
+          "paragraphs": [
+            "Accedir al lloc implica acceptar aquest avís. La persona usuària es compromet a fer un ús lícit del web i a no utilitzar-lo per a activitats contràries a la llei, a la bona fe o a l’ordre públic."
+          ]
+        },
+        {
+          "title": "4. Propietat intel·lectual i industrial",
+          "paragraphs": [
+            "Els textos, imatges, vídeos, disseny i el nom Marttelier pertanyen a Marta Gallardo Albertu o s’utilitzen amb l’autorització de les persones que hi apareixen o dels seus titulars. No se’n permet la reproducció, distribució o transformació sense autorització prèvia i per escrit."
+          ]
+        },
+        {
+          "title": "5. Enllaços a tercers",
+          "paragraphs": [
+            "Aquest lloc pot enllaçar a pàgines alienes, com ara LinkedIn, Instagram o YouTube. Marta Gallardo no es responsabilitza dels seus continguts ni de les seues polítiques."
+          ]
+        },
+        {
+          "title": "6. Responsabilitat",
+          "paragraphs": [
+            "Els continguts tenen caràcter informatiu. Es procura que siguen correctes i estiguen actualitzats, però no es garanteix l’absència d’errors ni la disponibilitat contínua del lloc. La informació del web no constitueix una promesa de resultats concrets."
+          ]
+        },
+        {
+          "title": "7. Protecció de dades i galetes",
+          "paragraphs": [
+            "El tractament de dades personals s’explica en la [privacy:política de privacitat] i l’ús de galetes en la [cookies:política de galetes]."
+          ]
+        },
+        {
+          "title": "8. Legislació aplicable",
+          "paragraphs": [
+            "Aquest avís es regeix per la legislació espanyola. Per a qualsevol controvèrsia, seran competents els jutjats i tribunals que corresponguen d’acord amb la normativa aplicable."
+          ]
+        }
+      ]
     }
   }
 }

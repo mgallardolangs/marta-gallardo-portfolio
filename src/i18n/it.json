@@ -601,15 +601,197 @@
   "legal": {
     "privacy": {
       "title": "Informativa sulla privacy",
-      "body": "Contenuto in attesa di pubblicazione."
+      "updated": "Ultimo aggiornamento: 05.11.2026",
+      "sections": [
+        {
+          "title": "1. Titolare del trattamento",
+          "paragraphs": [
+            "Marta Gallardo Albertu, NIF 77039673T, con domicilio in Calle Asunción Parreño García, 03205 Elche (Alicante), Spagna, e indirizzo e-mail <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>. Svolge la propria attività con il nome commerciale Marttelier."
+          ]
+        },
+        {
+          "title": "2. Quali dati raccolgo",
+          "paragraphs": [
+            "Quelli che mi invii tramite i moduli di contatto di marttelier.com: il tuo indirizzo e-mail, il nome della tua azienda (facoltativo) e la descrizione del tuo progetto, oltre a qualsiasi altro dato che decidi di includere nel messaggio. Non raccolgo dati di navigazione a fini di analisi."
+          ]
+        },
+        {
+          "title": "3. Per cosa li uso",
+          "paragraphs": [
+            "Per rispondere alla tua richiesta e, se del caso, prepararti una proposta o un preventivo. Non li uso per inviarti comunicazioni commerciali che non hai richiesto."
+          ]
+        },
+        {
+          "title": "4. Base giuridica",
+          "paragraphs": [
+            "Il tuo consenso, che presti selezionando la casella e inviando il modulo (articolo 6.1.a del GDPR), e l’esecuzione di misure precontrattuali da te richieste (articolo 6.1.b)."
+          ]
+        },
+        {
+          "title": "5. Per quanto tempo li conservo",
+          "paragraphs": [
+            "Se non arriviamo a lavorare insieme, per 12 mesi dall’ultimo contatto. Se c’è un rapporto professionale, per tutta la sua durata e successivamente per i periodi previsti dalle norme fiscali e commerciali."
+          ]
+        },
+        {
+          "title": "6. Con chi li condivido",
+          "paragraphs": [
+            "Non vendo né cedo i tuoi dati. Per poterti assistere utilizzo i seguenti fornitori, che agiscono come responsabili del trattamento:"
+          ],
+          "table": {
+            "head": [
+              "Fornitore",
+              "Finalità",
+              "Sede"
+            ],
+            "rows": [
+              [
+                "Netlify",
+                "Hosting del sito e ricezione dei moduli",
+                "USA"
+              ],
+              [
+                "Google (Gmail)",
+                "Posta elettronica",
+                "USA"
+              ],
+              [
+                "Infomaniak",
+                "Posta del dominio marttelier.com",
+                "Svizzera"
+              ]
+            ]
+          },
+          "after": [
+            "I trasferimenti verso gli USA si basano sul Quadro UE-USA per la protezione dei dati o su clausole contrattuali tipo. La Svizzera dispone di una decisione di adeguatezza della Commissione europea."
+          ]
+        },
+        {
+          "title": "7. I tuoi diritti",
+          "paragraphs": [
+            "Puoi chiedere l’accesso ai tuoi dati, la loro rettifica o cancellazione, opporti al trattamento, limitarlo o richiederne la portabilità scrivendo a <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>. Puoi revocare il consenso in qualsiasi momento. Se ritieni che i tuoi dati non siano stati trattati correttamente, puoi presentare un reclamo all’Agenzia spagnola per la protezione dei dati (aepd.es)."
+          ]
+        },
+        {
+          "title": "8. Modifiche",
+          "paragraphs": [
+            "Aggiornerò questa informativa se cambia il modo in cui tratto i tuoi dati."
+          ]
+        }
+      ]
     },
     "cookies": {
       "title": "Cookie policy",
-      "body": "Contenuto in attesa di pubblicazione."
+      "updated": "Ultimo aggiornamento: 05.11.2026",
+      "sections": [
+        {
+          "title": "1. Cosa sono i cookie",
+          "paragraphs": [
+            "Piccoli file che un sito web salva sul tuo dispositivo per ricordare informazioni o per far funzionare determinati contenuti."
+          ]
+        },
+        {
+          "title": "2. Cosa usa questo sito",
+          "paragraphs": [
+            "marttelier.com non utilizza cookie di analisi, pubblicità o tracciamento. Non installa nemmeno cookie propri per ricordare le tue preferenze."
+          ]
+        },
+        {
+          "title": "3. Contenuti di terze parti",
+          "paragraphs": [
+            "Alcuni video del sito sono ospitati su YouTube (Google). Vengono caricati in modalità di privacy avanzata (youtube-nocookie.com) e solo dopo che fai clic per riprodurli. Durante la riproduzione, Google può installare cookie sul tuo dispositivo; il loro trattamento è disciplinato dall’informativa sulla privacy di Google."
+          ],
+          "table": {
+            "head": [
+              "Origine",
+              "Finalità",
+              "Quando si attiva",
+              "Titolare"
+            ],
+            "rows": [
+              [
+                "YouTube (youtube-nocookie.com)",
+                "Riprodurre i video incorporati",
+                "Al clic su riproduci",
+                "Google"
+              ]
+            ]
+          }
+        },
+        {
+          "title": "4. Come disattivarli",
+          "paragraphs": [
+            "Puoi eliminare o bloccare i cookie dalle impostazioni del tuo browser. In tal caso, alcuni video potrebbero non essere riprodotti."
+          ]
+        },
+        {
+          "title": "5. Modifiche",
+          "paragraphs": [
+            "Se il sito inizierà a utilizzare strumenti di analisi o altri cookie, aggiornerò questa policy e chiederò il tuo consenso prima di attivarli."
+          ]
+        }
+      ]
     },
     "legalNotice": {
       "title": "Note legali",
-      "body": "Contenuto in attesa di pubblicazione."
+      "updated": "Ultimo aggiornamento: 05.11.2026",
+      "sections": [
+        {
+          "title": "1. Dati identificativi",
+          "paragraphs": [
+            "Ai sensi dell’articolo 10 della legge spagnola 34/2002 sui servizi della società dell’informazione e il commercio elettronico, si informa che questo sito web, marttelier.com, appartiene a:"
+          ],
+          "items": [
+            "Titolare: Marta Gallardo Albertu",
+            "NIF: 77039673T",
+            "Nome commerciale: Marttelier",
+            "Domicilio: Calle Asunción Parreño García, 03205 Elche (Alicante), Spagna",
+            "E-mail di contatto: <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>"
+          ]
+        },
+        {
+          "title": "2. Oggetto",
+          "paragraphs": [
+            "Questo sito presenta i servizi di consulenza SEO, traduzione e localizzazione e creazione di contenuti UGC di Marta Gallardo e consente di contattarla."
+          ]
+        },
+        {
+          "title": "3. Condizioni d’uso",
+          "paragraphs": [
+            "L’accesso al sito implica l’accettazione di queste note. L’utente si impegna a fare un uso lecito del sito e a non utilizzarlo per attività contrarie alla legge, alla buona fede o all’ordine pubblico."
+          ]
+        },
+        {
+          "title": "4. Proprietà intellettuale e industriale",
+          "paragraphs": [
+            "Testi, immagini, video, design e il nome Marttelier appartengono a Marta Gallardo Albertu o sono utilizzati con l’autorizzazione delle persone che vi compaiono o dei rispettivi titolari. Non ne è consentita la riproduzione, distribuzione o trasformazione senza previa autorizzazione scritta."
+          ]
+        },
+        {
+          "title": "5. Link a terzi",
+          "paragraphs": [
+            "Questo sito può contenere link a pagine esterne, come LinkedIn, Instagram o YouTube. Marta Gallardo non è responsabile dei loro contenuti né delle loro politiche."
+          ]
+        },
+        {
+          "title": "6. Responsabilità",
+          "paragraphs": [
+            "I contenuti hanno carattere informativo. Si cerca di mantenerli corretti e aggiornati, ma non si garantisce l’assenza di errori né la disponibilità continua del sito. Le informazioni del sito non costituiscono una promessa di risultati specifici."
+          ]
+        },
+        {
+          "title": "7. Protezione dei dati e cookie",
+          "paragraphs": [
+            "Il trattamento dei dati personali è spiegato nell’[privacy:informativa sulla privacy] e l’uso dei cookie nella [cookies:cookie policy]."
+          ]
+        },
+        {
+          "title": "8. Legge applicabile",
+          "paragraphs": [
+            "Queste note sono regolate dalla legge spagnola. Per qualsiasi controversia saranno competenti i giudici e i tribunali individuati in base alla normativa applicabile."
+          ]
+        }
+      ]
     }
   }
 }
