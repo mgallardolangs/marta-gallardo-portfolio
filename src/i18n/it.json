@@ -98,7 +98,7 @@
   },
   "footer": {
     "rights": "Tutti i diritti riservati",
-    "eyebrow": "Hai un progetto in mente?",
+    "eyebrow": "Pronto a far crescere il tuo progetto web?",
     "headline": "Parliamone.",
     "support": "Contenuti, localizzazione e strategia con uno sguardo editoriale chiaro.",
     "cta": "Contattami",
@@ -137,7 +137,7 @@
         "Italiano",
         "Inglese"
       ],
-      "title": "Chi sono: rigore tecnico, titolo ufficiale e creatività",
+      "title": "Rigore tecnico, titolo ufficiale e creatività",
       "description": "Sono Marta Gallardo, laureata in Traduzione e Interpretariato all’Università di Alicante e con una formazione in SEO. Unisco linguistica, strategia e contenuti per aiutare i brand a comunicare con chiarezza e a entrare in contatto con il proprio pubblico.",
       "cta": "Scopri di più su di me"
     },
@@ -471,12 +471,12 @@
     "trajectoryEyebrow": "PERCORSO",
     "hero": {
       "eyebrow": "Chi sono",
-      "title": "Chi sono: Marta Gallardo e la filosofia Marttelier",
+      "title": "Marta Gallardo e la filosofia Marttelier",
       "subtitle": "Il punto d’incontro tra linguistica, strategia e contenuti",
       "story": "Mi sono laureata in Traduzione e Interpretariato all’Università di Alicante e mi sono specializzata in SEO e strategia digitale. Unendo lingue, ricerca online e contenuti UGC, ho trovato un modo diretto per affiancare i progetti, senza intermediari. Mi interessa che ogni messaggio conservi la propria intenzione e raggiunga le persone giuste."
     },
     "principles": {
-      "eyebrow": "Chi sono",
+      "eyebrow": "marttelier",
       "title": "Principi e valori di lavoro di marttelier",
       "items": [
         "Trasparenza e onestà",
@@ -538,7 +538,9 @@
     "budget": {
       "eyebrow": "SEO",
       "title": "Tariffe e budget SEO",
-      "description": "Il budget dipende dallo stato del sito, dall’ambito e dal tipo di supporto. Raccontami gli obiettivi del progetto e preparerò una proposta su misura."
+      "description": "Il budget dipende dallo stato del sito, dall’ambito e dal tipo di supporto. Raccontami gli obiettivi del progetto e preparerò una proposta su misura.",
+      "highlight": "Un’analisi di base del tuo sito con tre risultati prioritari, più una chiamata gratuita di 30 minuti per conoscere il tuo progetto e commentare i risultati. Non include un report completo né l’applicazione dei miglioramenti; se decidi di continuare, lo definiamo nella proposta.",
+      "highlightTitle": "Offro una diagnosi iniziale gratuita"
     }
   },
   "translationServicePage": {
@@ -587,7 +589,7 @@
     },
     "arsenal": {
       "title": "Lingue, strumenti e competenze di traduzione",
-      "eyebrow": "02 · PROFILO E STRUMENTI",
+      "eyebrow": "PROFILO E STRUMENTI",
       "languagesTitle": "Lingue",
       "toolsTitle": "Strumenti",
       "skillsTitle": "Competenze"

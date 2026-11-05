@@ -98,7 +98,7 @@
   },
   "footer": {
     "rights": "Tous droits réservés",
-    "eyebrow": "Vous avez un projet en tête ?",
+    "eyebrow": "Prêt à faire grandir votre projet web ?",
     "headline": "Parlons-en.",
     "support": "Contenu, localisation et stratégie pensés avec un regard éditorial clair.",
     "cta": "Me contacter",
@@ -137,7 +137,7 @@
         "Allemand",
         "Italien"
       ],
-      "title": "À propos : rigueur technique, diplôme officiel et créativité",
+      "title": "Rigueur technique, diplôme officiel et créativité",
       "description": "Je suis Marta Gallardo, diplômée en traduction et interprétation de l’Université d’Alicante et formée au SEO. J’associe linguistique, stratégie et contenu pour aider les marques à communiquer clairement et à créer un lien avec leurs audiences.",
       "cta": "En savoir plus sur moi"
     },
@@ -471,12 +471,12 @@
     "trajectoryEyebrow": "PARCOURS",
     "hero": {
       "eyebrow": "À propos",
-      "title": "À propos : Marta Gallardo et la philosophie Marttelier",
+      "title": "Marta Gallardo et la philosophie Marttelier",
       "subtitle": "À la rencontre de la linguistique, de la stratégie et du contenu",
       "story": "J’ai obtenu un diplôme en traduction et interprétation à l’Université d’Alicante, puis je me suis spécialisée en SEO et en stratégie digitale. En réunissant les langues, la recherche en ligne et le contenu UGC, j’ai trouvé une manière d’accompagner les projets directement, sans intermédiaire d’agence. Je tiens à ce que chaque message conserve son intention et trouve les bonnes personnes."
     },
     "principles": {
-      "eyebrow": "À propos",
+      "eyebrow": "marttelier",
       "title": "Principes et valeurs de travail chez marttelier",
       "items": [
         "Transparence et honnêteté",
@@ -538,7 +538,9 @@
     "budget": {
       "eyebrow": "SEO",
       "title": "Tarifs et budget SEO",
-      "description": "Le budget dépend de l’état du site, du périmètre et du type d’accompagnement. Parlez-moi des objectifs du projet et je préparerai une proposition adaptée."
+      "description": "Le budget dépend de l’état du site, du périmètre et du type d’accompagnement. Parlez-moi des objectifs du projet et je préparerai une proposition adaptée.",
+      "highlight": "Une analyse de base de votre site avec trois constats prioritaires, plus un appel gratuit de 30 minutes pour découvrir votre projet et commenter ces résultats. Cela n’inclut ni rapport complet ni mise en œuvre des améliorations ; si vous décidez de continuer, nous le précisons dans la proposition.",
+      "highlightTitle": "Je propose un diagnostic initial gratuit"
     }
   },
   "translationServicePage": {
@@ -587,7 +589,7 @@
     },
     "arsenal": {
       "title": "Langues, outils et compétences en traduction",
-      "eyebrow": "02 · PROFIL ET OUTILS",
+      "eyebrow": "PROFIL ET OUTILS",
       "languagesTitle": "Langues",
       "toolsTitle": "Outils",
       "skillsTitle": "Compétences"

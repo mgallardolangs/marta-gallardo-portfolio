@@ -98,7 +98,7 @@
   },
   "footer": {
     "rights": "Tots els drets reservats",
-    "eyebrow": "Tens un projecte en ment?",
+    "eyebrow": "Preparat per a fer créixer el teu projecte web?",
     "headline": "Parlem-ne.",
     "support": "Contingut, localització i estratègia amb una mirada editorial clara.",
     "cta": "Contactar",
@@ -137,7 +137,7 @@
         "Italià",
         "Anglès"
       ],
-      "title": "Sobre mi: rigor tècnic, titulació oficial i creativitat",
+      "title": "Rigor tècnic, titulació oficial i creativitat",
       "description": "Soc Marta Gallardo, graduada en Traducció i Interpretació per la Universitat d’Alacant i amb formació en SEO. Unisc lingüística, estratègia i contingut per ajudar les marques a comunicar amb claredat i connectar amb les seues audiències.",
       "cta": "Coneix-me millor"
     },
@@ -471,12 +471,12 @@
     "trajectoryEyebrow": "TRAJECTÒRIA",
     "hero": {
       "eyebrow": "Sobre mi",
-      "title": "Sobre mi: Marta Gallardo i la filosofia Marttelier",
+      "title": "Marta Gallardo i la filosofia Marttelier",
       "subtitle": "El punt de trobada entre la lingüística, l’estratègia i el contingut",
       "story": "Em vaig graduar en Traducció i Interpretació per la Universitat d’Alacant i em vaig especialitzar en SEO i estratègia digital. En unir els idiomes, les cerques i el contingut UGC, vaig trobar una manera d’acompanyar projectes directament, sense agències pel mig. M’interessa que cada missatge conserve la seua intenció i arribe a les persones adequades."
     },
     "principles": {
-      "eyebrow": "Sobre mi",
+      "eyebrow": "marttelier",
       "title": "Principis i valors de treball a marttelier",
       "items": [
         "Transparència sense fum",
@@ -538,7 +538,9 @@
     "budget": {
       "eyebrow": "SEO",
       "title": "Tarifes i pressupost SEO",
-      "description": "El pressupost depén de l’estat del web, l’abast i el tipus d’acompanyament. Conta’m els objectius del projecte i prepararé una proposta ajustada."
+      "description": "El pressupost depén de l’estat del web, l’abast i el tipus d’acompanyament. Conta’m els objectius del projecte i prepararé una proposta ajustada.",
+      "highlight": "Una revisió bàsica del teu web amb tres troballes prioritzades, més una telefonada gratuïta de 30 minuts per a conéixer el teu projecte i comentar aquests resultats. No inclou un informe complet ni l’aplicació de les millores; si decideixes continuar, ho concretem en la proposta.",
+      "highlightTitle": "Oferisc un diagnòstic inicial gratuït"
     }
   },
   "translationServicePage": {
@@ -587,7 +589,7 @@
     },
     "arsenal": {
       "title": "Idiomes, eines i habilitats de traducció",
-      "eyebrow": "02 · PERFIL I EINES",
+      "eyebrow": "PERFIL I EINES",
       "languagesTitle": "Idiomes",
       "toolsTitle": "Eines",
       "skillsTitle": "Habilitats"

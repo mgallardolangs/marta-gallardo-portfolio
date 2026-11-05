@@ -392,7 +392,7 @@
   },
   "footer": {
     "rights": "Todos los derechos reservados",
-    "eyebrow": "¿Tienes un proyecto en mente?",
+    "eyebrow": "¿Preparado para hacer crecer tu proyecto web?",
     "headline": "Hablemos.",
     "support": "Diseñemos juntos una estrategia paso a paso para posicionar tu marca.",
     "cta": "Contactar",
@@ -476,7 +476,7 @@
       "story": "Me gradué en Traducción e Interpretación por la Universidad de Alicante y me especialicé en SEO y estrategia digital. Al unir los idiomas, la búsqueda y la creación de contenido, encontré una forma de acompañar proyectos de manera directa, sin agencias de por medio. Me interesa que cada mensaje conserve su intención y encuentre a las personas adecuadas."
     },
     "principles": {
-      "eyebrow": "Sobre mí",
+      "eyebrow": "marttelier",
       "title": "Principios y valores de trabajo en marttelier",
       "items": [
         "Transparencia sin humo",
@@ -538,7 +538,9 @@
     "budget": {
       "eyebrow": "SEO",
       "title": "Tarifas y Presupuesto de SEO",
-      "description": "\\nNo hay una tarifa única porque cada web parte de un punto distinto. El presupuesto depende del tamaño de la web, de su estado técnico, de los idiomas y mercados que quieras trabajar y de si necesitas una auditoría puntual o un acompañamiento continuo. \\nEl primer paso es contarme tu proyecto en el formulario: te respondo con una propuesta clara, con alcance y plazos, antes de empezar.\\nOfrezco un diagnóstico inicial gratuito: una revisión básica de tu web con tres hallazgos priorizados, más una llamada gratuita de 30 minutos para conocer tu proyecto y comentar esos resultados. No incluye un informe completo ni la aplicación de las mejoras; si decides continuar, lo concretamos en la propuesta.  \\n\\n"
+      "description": "\\nNo hay una tarifa única porque cada web parte de un punto distinto. El presupuesto depende del tamaño de la web, de su estado técnico, de los idiomas y mercados que quieras trabajar y de si necesitas una auditoría puntual o un acompañamiento continuo. \\nEl primer paso es contarme tu proyecto en el formulario: te respondo con una propuesta clara, con alcance y plazos, antes de empezar.",
+      "highlight": "Una revisión básica de tu web con tres hallazgos priorizados, más una llamada gratuita de 30 minutos para conocer tu proyecto y comentar esos resultados. No incluye un informe completo ni la aplicación de las mejoras; si decides continuar, lo concretamos en la propuesta.",
+      "highlightTitle": "Ofrezco un diagnóstico inicial gratuito"
     }
   },
   "translationServicePage": {
@@ -587,7 +589,7 @@
     },
     "arsenal": {
       "title": "Idiomas, herramientas y habilidades de traducción",
-      "eyebrow": "02 · PERFIL Y HERRAMIENTAS",
+      "eyebrow": "PERFIL Y HERRAMIENTAS",
       "languagesTitle": "Idiomas",
       "toolsTitle": "Herramientas",
       "skillsTitle": "Habilidades"

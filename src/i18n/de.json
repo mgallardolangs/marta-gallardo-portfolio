@@ -98,7 +98,7 @@
   },
   "footer": {
     "rights": "Alle Rechte vorbehalten",
-    "eyebrow": "Haben Sie ein Projekt im Kopf?",
+    "eyebrow": "Bereit, Ihr Webprojekt wachsen zu lassen?",
     "headline": "Lassen Sie uns sprechen.",
     "support": "Content, Lokalisierung und Strategie mit klarem editorischem Blick.",
     "cta": "Kontakt aufnehmen",
@@ -137,7 +137,7 @@
         "Italienisch",
         "Englisch"
       ],
-      "title": "Über mich: fachliche Sorgfalt, anerkannter Abschluss und Kreativität",
+      "title": "Fachliche Sorgfalt, anerkannter Abschluss und Kreativität",
       "description": "Ich bin Marta Gallardo, Absolventin der Übersetzungs- und Dolmetschwissenschaft an der Universität Alicante und im Bereich SEO weitergebildet. Ich verbinde Linguistik, Strategie und Inhalte, damit Marken klar kommunizieren und ihre Zielgruppen erreichen.",
       "cta": "Mehr über mich erfahren"
     },
@@ -471,12 +471,12 @@
     "trajectoryEyebrow": "WERDEGANG",
     "hero": {
       "eyebrow": "Über mich",
-      "title": "Über mich: Marta Gallardo und die Marttelier-Philosophie",
+      "title": "Marta Gallardo und die Marttelier-Philosophie",
       "subtitle": "Wo Linguistik, Strategie und Inhalte zusammenkommen",
       "story": "Ich habe Übersetzungs- und Dolmetschwissenschaft an der Universität Alicante studiert und mich anschließend auf SEO und digitale Strategie spezialisiert. Durch die Verbindung von Sprachen, Suche und UGC-Inhalten habe ich einen direkten Weg gefunden, Projekte ohne Agentur dazwischen zu begleiten. Mir ist wichtig, dass jede Botschaft ihre Absicht bewahrt und die passenden Menschen erreicht."
     },
     "principles": {
-      "eyebrow": "Über mich",
+      "eyebrow": "marttelier",
       "title": "Arbeitsprinzipien und Werte bei marttelier",
       "items": [
         "Ehrliche Transparenz",
@@ -538,7 +538,9 @@
     "budget": {
       "eyebrow": "SEO",
       "title": "SEO-Preise und Budget",
-      "description": "Das Budget hängt vom Zustand der Website, dem Umfang und der Art der Begleitung ab. Teilen Sie mir die Projektziele mit, und ich erstelle ein passendes Angebot."
+      "description": "Das Budget hängt vom Zustand der Website, dem Umfang und der Art der Begleitung ab. Teilen Sie mir die Projektziele mit, und ich erstelle ein passendes Angebot.",
+      "highlight": "Eine grundlegende Prüfung Ihrer Website mit drei priorisierten Erkenntnissen sowie ein kostenloses 30-minütiges Gespräch, um Ihr Projekt kennenzulernen und die Ergebnisse zu besprechen. Ein vollständiger Bericht oder die Umsetzung der Verbesserungen ist nicht enthalten; wenn Sie weitermachen möchten, legen wir das im Angebot fest.",
+      "highlightTitle": "Ich biete eine kostenlose Erstdiagnose an"
     }
   },
   "translationServicePage": {
@@ -587,7 +589,7 @@
     },
     "arsenal": {
       "title": "Sprachen, Tools und Übersetzungsfähigkeiten",
-      "eyebrow": "02 · PROFIL & TOOLS",
+      "eyebrow": "PROFIL & TOOLS",
       "languagesTitle": "Sprachen",
       "toolsTitle": "Tools",
       "skillsTitle": "Fähigkeiten"

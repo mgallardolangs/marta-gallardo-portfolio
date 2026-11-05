@@ -98,7 +98,7 @@
   },
   "footer": {
     "rights": "All rights reserved",
-    "eyebrow": "Do you have a project in mind?",
+    "eyebrow": "Ready to grow your web project?",
     "headline": "Let’s talk.",
     "support": "Content, localisation, and strategy shaped with a clear, editorial eye.",
     "cta": "Get in touch",
@@ -137,7 +137,7 @@
         "Italian",
         "English"
       ],
-      "title": "About me: technical rigour, formal qualifications and creativity",
+      "title": "Technical rigour, formal qualifications and creativity",
       "description": "I’m Marta Gallardo, a Translation and Interpreting graduate from the University of Alicante with SEO training. I bring linguistics, strategy and content together to help brands communicate clearly and connect with their audiences.",
       "cta": "Get to know me"
     },
@@ -471,12 +471,12 @@
     "trajectoryEyebrow": "EXPERIENCE",
     "hero": {
       "eyebrow": "About",
-      "title": "About me: Marta Gallardo and the Marttelier philosophy",
+      "title": "Marta Gallardo and the Marttelier philosophy",
       "subtitle": "Where linguistics, strategy and content come together",
       "story": "I graduated in Translation and Interpreting from the University of Alicante and went on to specialise in SEO and digital strategy. Bringing languages, search and UGC content together showed me how to support projects directly, without agencies in between. I want every message to retain its intention and reach the right people."
     },
     "principles": {
-      "eyebrow": "About",
+      "eyebrow": "marttelier",
       "title": "Marttelier working principles and values",
       "items": [
         "Honest, transparent communication",
@@ -538,7 +538,9 @@
     "budget": {
       "eyebrow": "SEO",
       "title": "SEO Rates & Budget",
-      "description": "The budget depends on the website’s current state, scope and type of support. Tell me about the project goals and I’ll prepare a tailored proposal."
+      "description": "The budget depends on the website’s current state, scope and type of support. Tell me about the project goals and I’ll prepare a tailored proposal.",
+      "highlight": "A basic review of your website with three prioritised findings, plus a free 30-minute call to get to know your project and discuss the results. It doesn’t include a full report or implementing the improvements; if you decide to continue, we’ll define that in the proposal.",
+      "highlightTitle": "I offer a free initial diagnosis"
     }
   },
   "translationServicePage": {
@@ -587,7 +589,7 @@
     },
     "arsenal": {
       "title": "Languages, tools & translation skills",
-      "eyebrow": "02 · PROFILE & TOOLS",
+      "eyebrow": "PROFILE & TOOLS",
       "languagesTitle": "Languages",
       "toolsTitle": "Tools",
       "skillsTitle": "Skills"

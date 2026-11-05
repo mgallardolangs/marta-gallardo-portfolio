@@ -141,7 +141,8 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'seo');
 
     <section class="px-6 py-16 md:py-20">
       <div class="site-container space-y-8">
-        <div class="max-w-3xl space-y-6">
+<div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:items-center lg:gap-16">
+          <div class="max-w-3xl space-y-6">
           <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.budget.eyebrow}</p>
           <TypedTitle
             as="h2"
@@ -150,6 +151,15 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'seo');
             class="font-heading text-4xl leading-none text-ink md:text-5xl"
           />
           <RichText text={page.budget.description} class="font-body text-base leading-8 text-ink-muted md:text-lg" />
+          </div>
+          {page.budget.highlight && (
+            <aside class="seo-budget-highlight space-y-4">
+              {page.budget.highlightTitle && (
+                <h3 class="font-heading text-2xl leading-tight text-ink md:text-3xl">{page.budget.highlightTitle}</h3>
+              )}
+              <RichText text={page.budget.highlight} class="font-body text-base leading-8 text-ink" />
+            </aside>
+          )}
         </div>
         <div class="site-text-cta-row">
           <a href={getLocalizedRoute('contact', lang)} class="site-text-cta">

@@ -80,10 +80,16 @@ const page = i.seoPage;
 
     <section class="px-6 py-16 md:py-20">
       <div class="site-container space-y-8">
-        <div class="max-w-3xl space-y-6">
+<div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:items-center lg:gap-16">
+          <div class="max-w-3xl space-y-6">
           <EditableText client:load i18nKey="seoPage.budget.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
           <EditableText client:load i18nKey="seoPage.budget.title" as="h2" className="font-heading text-4xl leading-none text-ink md:text-5xl" />
           <EditableText client:load i18nKey="seoPage.budget.description" as="div" className="font-body text-base leading-8 text-ink-muted md:text-lg" />
+          </div>
+          <aside class="seo-budget-highlight space-y-4">
+            <EditableText client:load i18nKey="seoPage.budget.highlightTitle" as="h3" className="font-heading text-2xl leading-tight text-ink md:text-3xl" />
+            <EditableText client:load i18nKey="seoPage.budget.highlight" as="div" className="font-body text-base leading-8 text-ink" />
+          </aside>
         </div>
         <div class="site-text-cta-row">
           <a href="/admin/contact" class="site-text-cta">
