@@ -103,7 +103,7 @@
     "rights": "Alle Rechte vorbehalten",
     "eyebrow": "Bereit, Ihr Webprojekt wachsen zu lassen?",
     "headline": "Lassen Sie uns sprechen.",
-    "support": "Content, Lokalisierung und Strategie mit klarem editorischem Blick.",
+    "support": "Sprechen wir über Ihre Ziele und entwickeln wir eine Schritt-für-Schritt-Strategie, um Ihre Marke zu positionieren.",
     "cta": "Kontakt aufnehmen",
     "brand": "MG",
     "location": "Elche, Spanien"
@@ -120,7 +120,7 @@
   "home": {
     "hero": {
       "kicker": "marttelier",
-      "description": "Ich verbessere die Sichtbarkeit und Conversion Ihres Unternehmens, damit Sie Menschen in jeder Sprache und auf jedem Markt erreichen.",
+      "description": "Ich sorge dafür, dass Ihr Projekt in mehreren Sprachen gefunden, verstanden und überzeugend wahrgenommen wird: technisches SEO-Audit, professionelle Übersetzung und Lokalisierung sowie UGC-Content, der auf Conversion ausgelegt ist.",
       "mainPhoto": "Hauptfoto",
       "scrollCue": "Scrollen zum Entdecken",
       "coverLabel": "Titel-Story",
@@ -141,7 +141,7 @@
         "Englisch"
       ],
       "title": "Fachliche Sorgfalt, anerkannter Abschluss und Kreativität",
-      "description": "Ich bin Marta Gallardo, Absolventin der Übersetzungs- und Dolmetschwissenschaft an der Universität Alicante und im Bereich SEO weitergebildet. Ich verbinde Linguistik, Strategie und Inhalte, damit Marken klar kommunizieren und ihre Zielgruppen erreichen.",
+      "description": "Hinter Marttelier steht Marta Gallardo. Als Absolventin des Studiengangs Übersetzen und Dolmetschen an der Universität Alicante und mit einer Weiterbildung in SEO und digitaler Strategie arbeite ich Hand in Hand mit Unternehmen und Marken, um einen soliden, mehrsprachigen und rentablen Online-Auftritt aufzubauen – ohne die Zwischenebenen einer Agentur.",
       "cta": "Mehr über mich erfahren"
     },
     "video": {
@@ -179,7 +179,7 @@
     },
     "visibility": {
       "title": "Sichtbarkeit, Sprachen & Conversion",
-      "text": "Als Übersetzerin und Content Creatorin arbeite ich mit Sprachen, Kulturen und Formaten, damit jede Botschaft ihre Absicht bewahrt und auf natürliche Weise ankommt. Ich verbinde Übersetzung, Lokalisierung und mehrsprachiges SEO mit UGC-Inhalten, um Marken eine klare, konsistente und kultursensible Kommunikation zu ermöglichen."
+      "text": "Mehr Traffic nützt nichts, wenn er nicht die richtigen Menschen erreicht. Deshalb arbeite ich als Übersetzerin und Content-Creatorin zwischen Sprachen, Kulturen und Formaten: Ich entwickle SEO-Strategien, die zur Realität des jeweiligen Projekts passen, und verbinde sie mit Übersetzung, Lokalisierung und UGC-Videos, damit jede Botschaft ihre Absicht behält, natürlich ankommt und auf den ersten Blick Vertrauen schafft."
     },
     "latestArticles": {
       "title": "Neueste Artikel zu SEO und digitalem Marketing"
@@ -319,30 +319,38 @@
     },
     "benefits": {
       "eyebrow": "UGC · KREATIVE LEITUNG",
-      "title": "Warum auf nutzergenerierte Inhalte setzen?",
-      "description": "UGC-Inhalte bieten eine nahbare visuelle Möglichkeit, eine Marke zu präsentieren. Sie können zeigen, wie sich ein Produkt oder eine Dienstleistung in Alltagssituationen einfügt, und dem Publikum mehr Kontext zur Einschätzung geben."
+      "title": "Warum auf UGC-Content setzen",
+      "description": "Viele Menschen vertrauen eher jemandem, der ein Produkt oder eine Dienstleistung im Alltag nutzt, als einer aufwendig produzierten Anzeige. UGC (nutzergenerierte Inhalte) zeigt Ihre Marke in realen Situationen, mit einer nahen Kamera und einem natürlichen Ton. Er eignet sich für Ihre Social-Media-Kanäle, Ihre Website und als bezahlte Anzeige und liefert Ihnen vielfältiges Material, um zu testen, welche Botschaft bei Ihrer Zielgruppe am besten funktioniert."
     },
     "process": {
-      "eyebrow": "UGC · KREATIVE LEITUNG",
+      "eyebrow": "Von der Idee bis zur Lieferung",
       "title": "Arbeitsprozess: von der Idee bis zum finalen Schnitt",
       "steps": [
         {
           "title": "Briefing",
-          "description": "Wir legen Ziel, Zielgruppe, Format, Kernbotschaften und Anforderungen gemeinsam fest."
+          "description": "Wir legen Ziel, Zielgruppe, Format, Kernbotschaften und Anforderungen fest.",
+          "items": [
+            "Nutzungsrechte, schriftlich vereinbart: Dauer und Veröffentlichungskanäle."
+          ]
         },
         {
           "title": "Ideenentwicklung",
-          "description": "Auf Grundlage des Briefings entwickle ich Konzept und Aufbau des Beitrags."
+          "description": "Ich forme aus dem Briefing ein Konzept und ein Skript bzw. eine Struktur für den Beitrag."
         },
         {
           "title": "Dreh",
-          "description": "Ich produziere das Material gemäß der vereinbarten Ausrichtung und achte auf Bildausschnitt, Rhythmus und Klarheit."
+          "description": "Ich produziere das Material nach dem vereinbarten Ansatz und achte auf Bildausschnitt, Rhythmus und Klarheit."
         },
         {
-          "title": "Finaler Schnitt",
-          "description": "Ich prüfe das Material und bereite den finalen Beitrag in den vereinbarten Formaten vor."
+          "title": "Schnitt",
+          "description": "Ich schneide das Material mit Untertiteln und Musik und bereite den Beitrag in den vereinbarten Formaten vor."
+        },
+        {
+          "title": "Lieferung und Korrekturschleifen",
+          "description": "Sie erhalten die Dateien in hoher Qualität innerhalb von 10 Werktagen, nachdem Sie das Skript freigegeben haben, und können bis zu 2 Korrekturrunden anfordern."
         }
-      ]
+      ],
+      "closing": "Haben Sie ein Produkt oder ein Erlebnis, das Sie zeigen möchten? Sagen Sie mir, was Sie suchen, und ich schlage Ihnen eine Idee vor."
     }
   },
   "translationPage": {
@@ -393,7 +401,7 @@
       "intro": "Praktische Erfahrung in echter Kommunikation, im direkten Kontakt mit Menschen und in der sprachlichen Anpassung für unterschiedliche Kontexte.",
       "cards": [
         {
-          "title": "E-Commerce-Übersetzung und Content-Management + Kundenservice auf Französisch",
+          "title": "Übersetzung und Verwaltung von E-Commerce-Inhalten + Kundenservice auf Französisch",
           "highlight": "Las Tijeras Mágicas",
           "text": "Tägliche Übersetzung von Produktdatenblättern (ES→FR/DE/IT), Katalogpflege und Betreuung französischsprachiger Kundschaft bei gleichbleibender Präzision und Markenton."
         },
@@ -410,9 +418,9 @@
       ]
     },
     "education": {
-      "intro": "Ein akademisches Fundament mit Fokus auf Sprachen, interkulturelle Kommunikation und Schreiben, gestärkt durch praktische Erfahrungen in internationalen Umfeldern.",
+      "intro": "Eine akademische Basis in Sprachen, interkultureller Kommunikation und Texten, gestärkt durch praktische Erfahrung in internationalen Umfeldern. Ergänzt durch eine aktuelle Weiterbildung in der Optimierung von Web- und Social-Media-Inhalten.",
       "studies": [
-        "Studium der Übersetzungs- und Dolmetschwissenschaft mit Schwerpunkt Französisch, Schreiben und Inhaltsanpassung.",
+        "Bachelorstudium (Grado) Übersetzen und Dolmetschen mit Schwerpunkt Französisch, Texten und Anpassung von Inhalten. Zweitsprachen: Deutsch und Italienisch. Ausbildung in literarischer, juristisch-wirtschaftlicher, technisch-wissenschaftlicher und audiovisueller Übersetzung.",
         "Sechsmonatiges Erasmus+ in Paris und tägliche Praxis in frankophonen Umgebungen.",
         "Kontinuierliche Weiterbildung in klarem Schreiben, Terminologie und der Optimierung digitaler Inhalte.",
         "Praktikum in juristischer Übersetzung FR→ES und Post-Editing an der Seite einer spezialisierten Übersetzerin."
@@ -468,7 +476,8 @@
     "skillGroups": {
       "translation": "Übersetzung & Lokalisierung",
       "seo": "SEO und Web-Inhalte"
-    }
+    },
+    "experienceTabStatement": "Praxis in internationalen Kontexten"
   },
   "aboutPage": {
     "trajectoryEyebrow": "WERDEGANG",
@@ -476,14 +485,14 @@
       "eyebrow": "Über mich",
       "title": "Marta Gallardo und die Marttelier-Philosophie",
       "subtitle": "Wo Linguistik, Strategie und Inhalte zusammenkommen",
-      "story": "Ich habe Übersetzungs- und Dolmetschwissenschaft an der Universität Alicante studiert und mich anschließend auf SEO und digitale Strategie spezialisiert. Durch die Verbindung von Sprachen, Suche und UGC-Inhalten habe ich einen direkten Weg gefunden, Projekte ohne Agentur dazwischen zu begleiten. Mir ist wichtig, dass jede Botschaft ihre Absicht bewahrt und die passenden Menschen erreicht."
+      "story": "Ich habe an der Universität Alicante Übersetzen und Dolmetschen studiert und mich in SEO und digitaler Strategie weitergebildet. Indem ich Sprachen, Suche und Content-Erstellung verbinde, habe ich einen Weg gefunden, Projekte direkt zu begleiten, ohne Agentur dazwischen. Mir ist wichtig, dass jede Botschaft ihre Absicht behält und die richtigen Menschen erreicht."
     },
     "principles": {
       "eyebrow": "marttelier",
-      "title": "Arbeitsprinzipien und Werte bei marttelier",
+      "title": "Arbeitsprinzipien und Werte",
       "items": [
         "Ehrliche Transparenz",
-        "100 % menschliche Prüfung",
+        "Menschliche Prüfung",
         "Fokus auf Conversion",
         "Gemeinsam wachsen"
       ]
@@ -498,8 +507,8 @@
       "eyebrow": "SEO-Positionierung",
       "title": "SEO- und internationales SEO-Angebot",
       "paragraphs": [
-        "In einem so wettbewerbsintensiven digitalen Umfeld ist eine Platzierung unter den ersten Google-Ergebnissen eine Frage der Strategie, nicht des Zufalls. Als Spezialistin für Suchmaschinenoptimierung helfe ich Ihnen, Ihre Website in einen aktiven Kanal zur Kundengewinnung zu verwandeln. Es geht nicht nur um mehr Besuche, sondern um qualifizierten Traffic: Menschen, die genau nach Ihrem Angebot suchen und bereit sind, zu kaufen oder eine Dienstleistung zu beauftragen.",
-        "Mit einem ganzheitlichen Ansatz analysiere ich Ihr Projekt und entwickle einen passenden Plan. Ich optimiere die technische Struktur Ihrer Website, verbessere die Relevanz Ihrer Inhalte und stärke Ihre digitale Autorität, damit Sie gegenüber Ihren Mitbewerbern an Positionen gewinnen. Ob Sie Ihre Marke im lokalen Markt festigen oder mit einer internationalen SEO-Strategie global expandieren möchten – mein Ziel ist, Ihr Unternehmen zur klaren Wahl für Ihre Zielgruppe zu machen."
+        "In den Google-Ergebnissen aufzutauchen ist keine Frage des Glücks, sondern der Strategie. Meine SEO-Dienstleistung macht Ihre Website zu einem Kanal, der Menschen anzieht, die bereits nach dem suchen, was Sie anbieten: nicht nur mehr Besuche, sondern Besuche mit echtem Interesse.",
+        "Ich analysiere den Ausgangspunkt Ihres Projekts und entwickle einen maßgeschneiderten SEO-Plan: Ich verbessere die technische Struktur, die Relevanz Ihrer Inhalte und die Autorität Ihrer Website. Ob Sie sich in Ihrem Heimatmarkt festigen oder mit internationalem SEO den Sprung in andere Länder wagen möchten – ich erkläre Ihnen jeden Schritt, und wir arbeiten mit klaren Prioritäten."
       ]
     },
     "services": {
@@ -524,15 +533,41 @@
       ]
     },
     "international": {
-      "eyebrow": "SEO",
+      "eyebrow": "Ihre Website, in jedem Markt",
       "translationLinkLabel": "Übersetzung",
       "title": "Spezialistin für internationales und mehrsprachiges SEO",
-      "description": "In jedem Markt wird anders gesucht. Neben der sprachlichen Anpassung lohnt es sich, die Suchintention und den kulturellen Kontext zu untersuchen, damit Inhalte in jedem Markt natürlich wirken."
+      "description": "Eine Website zu internationalisieren bedeutet nicht, ein Plugin für maschinelle Übersetzung zu installieren. Jeder Markt sucht anders, deshalb beginne ich damit, zu untersuchen, welche Begriffe die Nutzerinnen und Nutzer in jedem Land tatsächlich verwenden und mit welcher Absicht. Davon ausgehend passe ich die Inhalte an und richte technisch das Nötige ein, etwa hreflang-Tags, damit Google jede Version der passenden Zielgruppe anzeigt. Wenn Sie zusätzlich eine Übersetzung Ihrer Website benötigen, arbeiten wir sie in derselben Strategie aus, damit Sprache und SEO nicht getrennt laufen."
     },
     "why": {
       "eyebrow": "SEO",
       "title": "Warum mir als SEO-Beraterin vertrauen?",
-      "description": "Meine Ausbildung, die verwendeten Tools und die praktische Arbeit an meiner eigenen Website helfen mir, den Prozess und die Entscheidungen in jedem Projekt klar zu erläutern."
+      "description": "Im SEO reicht das, was vor einigen Jahren funktionierte, nicht mehr: Google verändert seine Systeme, und künstliche Intelligenz hat die Art zu suchen verändert. Mit mir zu arbeiten bedeutet, sich für eine transparente, direkte Dienstleistung ohne Zwischenstufen zu entscheiden. Mein Ansatz beruht auf vier Säulen:",
+      "items": [
+        "Aktuelle Weiterbildung. Privater Kurs in digitalem Marketing und SEO sowie laufende Weiterbildung in internationalem SEO und in Inhalten für Suchmaschinen.",
+        "Sicherer Umgang mit professionellen Tools. Ich arbeite mit Google Search Console, Google Business Profile, WordPress und Screaming Frog.",
+        "Ein eigenes Projekt als Labor. Diese Website ist der Ort, an dem ich jede Verbesserung anwende und teste, bevor ich sie Ihnen vorschlage.",
+        "Muttersprachlicher und globaler Ansatz. Meine Ausbildung in Übersetzung erlaubt es mir, auf Sprache und Suchverhalten in jedem Markt zu achten, in dem ich arbeite."
+      ],
+      "closing": "Ich bin keine große Agentur und möchte auch keine sein: Sie arbeiten direkt mit mir, und ich sage Ihnen von Anfang an, was ich leisten kann und was nicht.",
+      "stats": [
+        {
+          "value": "6",
+          "label": "Sprachen"
+        },
+        {
+          "value": "4",
+          "label": "Tools"
+        },
+        {
+          "value": "1:1",
+          "label": "ohne Agentur"
+        },
+        {
+          "value": "30 min",
+          "label": "kostenloses Gespräch"
+        }
+      ],
+      "ctaText": "Kostenlose Erstdiagnose mit drei priorisierten Erkenntnissen."
     },
     "arsenal": {
       "toolsTitle": "SEO-Tools",
@@ -553,30 +588,30 @@
       "description": "Ich passe die Inhalte Ihres Unternehmens mit semantischer Präzision und SEO-Fokus an neue Märkte an."
     },
     "localization": {
-      "eyebrow": "Übersetzung",
+      "eyebrow": "WEBSITE-LOKALISIERUNG",
       "title": "Lokalisierung von Websites und E-Commerce",
       "items": [
         {
           "id": "cultural-adaptation",
           "title": "Kulturelle Anpassung von Texten für internationale Märkte",
-          "description": "Ich passe Referenzen, Ton und Ausdrucksweisen an, damit die Botschaft im Zielmarkt natürlich wirkt und ihre Absicht bewahrt."
+          "description": "Ich passe Bezüge, Ton und Ausdrücke an, damit die Botschaft im Zielmarkt natürlich wirkt, ohne ihre Absicht zu verlieren."
         },
         {
           "id": "product-catalogues",
           "title": "Übersetzung von Katalogen und Produktseiten mit Conversion-Fokus",
-          "description": "Ich passe Kataloge und Produktseiten mit Blick auf Terminologie, Klarheit und die Informationen an, die das Verständnis eines Produkts erleichtern."
+          "description": "Eine Produktbeschreibung informiert nicht nur: Sie hilft bei der Kaufentscheidung. Ich übersetze Kataloge und Produktbeschreibungen von Online-Shops und achte dabei auf die technischen Merkmale, den Markenton und die Suchbegriffe, mit denen Kundinnen und Kunden in jeder Sprache suchen. Ich habe bereits Erfahrung darin, den Katalog eines E-Commerce zu übersetzen und zu betreuen, mit einem täglichen Aufkommen an Produktbeschreibungen."
         }
       ]
     },
     "multilingualSeo": {
-      "eyebrow": "Übersetzung",
+      "eyebrow": "SEO-ÜBERSETZUNG",
       "seoLinkLabel": "SEO",
-      "title": "Mehrsprachige SEO-Übersetzung (organischen Traffic ausbauen)",
-      "description": "SEO-Übersetzung beginnt mit den Suchanfragen in jeder Sprache und jedem Markt. Ich passe strategische Keywords an, damit ihre Absicht erhalten bleibt, ohne Natürlichkeit oder Markenkonsistenz einzubüßen."
+      "title": "Mehrsprachige SEO-Übersetzung: Inhalte, die auf das Suchverhalten jedes Marktes zugeschnitten sind",
+      "description": "SEO-Übersetzung geht von den Suchanfragen jeder Sprache aus, nicht vom Originaltext. Ich untersuche, wie die Nutzerinnen und Nutzer in jedem Markt suchen, und passe Keywords und Struktur so an, dass Absicht und Stimme Ihrer Marke erhalten bleiben. Wenn Ihr Projekt zusätzlich eine Strategie braucht, verbinde ich sie mit der Leistung internationales SEO."
     },
     "digitalContent": {
-      "eyebrow": "Übersetzung",
-      "title": "Professionelle Übersetzung digitaler Inhalte und Blogs",
+      "eyebrow": "DIGITALE INHALTE",
+      "title": "Übersetzung digitaler Inhalte: Blogs, Newsletter und Werbetexte",
       "items": [
         {
           "id": "editorial-content",

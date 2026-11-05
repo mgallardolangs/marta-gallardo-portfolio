@@ -103,7 +103,7 @@
     "rights": "Tots els drets reservats",
     "eyebrow": "Preparat per a fer créixer el teu projecte web?",
     "headline": "Parlem-ne.",
-    "support": "Contingut, localització i estratègia amb una mirada editorial clara.",
+    "support": "Parlem dels teus objectius i dissenyem una estratègia pas a pas per posicionar la teua marca.",
     "cta": "Contactar",
     "brand": "MG",
     "location": "Elx, Espanya"
@@ -120,7 +120,7 @@
   "home": {
     "hero": {
       "kicker": "marttelier",
-      "description": "Millore la visibilitat i la conversió del teu negoci perquè connectes amb persones reals, en qualsevol idioma i mercat.",
+      "description": "Faig que el teu projecte siga trobat, entés i triat en més llengües: auditoria SEO tècnica, traducció i localització professionals i contingut UGC pensat per convertir.",
       "mainPhoto": "Foto principal",
       "scrollCue": "Desplaça per descobrir",
       "coverLabel": "Portada editorial",
@@ -141,7 +141,7 @@
         "Anglès"
       ],
       "title": "Rigor tècnic, titulació oficial i creativitat",
-      "description": "Soc Marta Gallardo, graduada en Traducció i Interpretació per la Universitat d’Alacant i amb formació en SEO. Unisc lingüística, estratègia i contingut per ajudar les marques a comunicar amb claredat i connectar amb les seues audiències.",
+      "description": "Darrere de Marttelier hi ha Marta Gallardo. Graduada en Traducció i Interpretació per la Universitat d'Alacant i formada en SEO i estratègia digital, treballe colze a colze amb empreses i marques per construir una presència en línia sòlida, multilingüe i rendible, sense els passos intermedis d'una agència.",
       "cta": "Coneix-me millor"
     },
     "video": {
@@ -179,7 +179,7 @@
     },
     "visibility": {
       "title": "Visibilitat, idiomes i conversió",
-      "text": "Com a traductora i creadora de contingut, treballe entre idiomes, cultures i formats perquè cada missatge conserve la seua intenció i connecte de manera natural. Combine traducció, localització i SEO multilingüe amb contingut UGC per ajudar les marques a comunicar amb claredat, coherència i sensibilitat cultural."
+      "text": "Més trànsit no serveix de res si no arriba a les persones adequades. Per això, com a traductora i creadora de contingut, treballe entre llengües, cultures i formats: dissenye estratègies SEO adaptades a la realitat de cada projecte i les uneixo amb traducció, localització i vídeo UGC, perquè cada missatge mantinga la seua intenció, arribe de manera natural i genere confiança a primera vista."
     },
     "latestArticles": {
       "title": "Últims articles sobre SEO i màrqueting digital"
@@ -319,30 +319,38 @@
     },
     "benefits": {
       "eyebrow": "UGC · DIRECCIÓ CREATIVA",
-      "title": "Per què apostar pel contingut generat pels usuaris",
-      "description": "El contingut UGC permet presentar una marca des d’una experiència visual propera. Pot ajudar a mostrar com s’integra un producte o servei en situacions quotidianes i oferir a l’audiència més context per valorar-lo."
+      "title": "Per què apostar pel contingut UGC",
+      "description": "Moltes persones confien més en qui usa un producte o servei en el seu dia a dia que en una publicitat molt produïda. L'UGC (contingut generat per usuaris) mostra la teua marca en situacions reals, amb una càmera propera i un to natural. Serveix per a les teues xarxes, per al teu web i com a anunci de pagament, i et dona material variat per provar quin missatge funciona millor amb el teu públic."
     },
     "process": {
-      "eyebrow": "UGC · DIRECCIÓ CREATIVA",
+      "eyebrow": "De la idea al lliurament",
       "title": "Procés de treball: de la idea a l’edició final",
       "steps": [
         {
           "title": "Briefing",
-          "description": "Acordem l’objectiu, l’audiència, el format, els missatges clau i els requisits."
+          "description": "Acordem objectiu, públic, format, missatges clau i requisits.",
+          "items": [
+            "Drets d'ús acordats per escrit: durada i canals de publicació."
+          ]
         },
         {
           "title": "Desenvolupament de la idea",
-          "description": "Done forma al concepte i a l’estructura de la peça a partir del briefing."
+          "description": "Convertisc el briefing en un concepte i en un guió o estructura del contingut."
         },
         {
-          "title": "Enregistrament",
-          "description": "Produïsc el material seguint l’enfocament acordat i tenint cura de l’enquadrament, el ritme i la claredat."
+          "title": "Gravació",
+          "description": "Produïsc el material seguint l'enfocament acordat i cuidant enquadrament, ritme i claredat."
         },
         {
-          "title": "Edició final",
-          "description": "Revise el material i prepare la peça final en els formats acordats."
+          "title": "Edició",
+          "description": "Edite el material amb subtítols i música i preparo el contingut en els formats acordats."
+        },
+        {
+          "title": "Lliurament i revisions",
+          "description": "Reps els arxius en alta qualitat en un termini de 10 dies laborables des que aproves el guió i pots sol·licitar fins a 2 rondes de revisió."
         }
-      ]
+      ],
+      "closing": "Tens un producte o una experiència que vols mostrar? Explica'm què busques i et proposaré una idea."
     }
   },
   "translationPage": {
@@ -393,7 +401,7 @@
       "intro": "Experiència pràctica en comunicació real, contacte directe amb persones i adaptació lingüística per a contextos diversos.",
       "cards": [
         {
-          "title": "Traducció d’e-commerce i gestió de continguts + atenció al client en francés",
+          "title": "Traducció i gestió de contingut e-commerce + atenció al client en francès",
           "highlight": "Las Tijeras Mágicas",
           "text": "Traducció diària de fitxes de producte (ES→FR/DE/IT), gestió de catàlegs i atenció a clients francòfons, mantenint precisió i to de marca."
         },
@@ -410,9 +418,9 @@
       ]
     },
     "education": {
-      "intro": "Una base acadèmica centrada en llengües, comunicació intercultural i escriptura, reforçada per una immersió pràctica en entorns internacionals.",
+      "intro": "Una base acadèmica orientada a llengües, comunicació intercultural i escriptura, reforçada per una immersió pràctica en contextos internacionals. Complementada amb formació recent en optimització de contingut web i xarxes socials.",
       "studies": [
-        "Grau en Traducció i Interpretació, especialitzat en francès, redacció i adaptació de continguts.",
+        "Grau en Traducció i Interpretació, amb especialització en francès, escriptura i adaptació de contingut. Segones llengües: alemany i italià. Formació en traducció literària, juridicoeconòmica, tecnicocientífica i audiovisual.",
         "Erasmus+ de sis mesos a París i pràctica diària en entorns francòfons.",
         "Formació contínua en escriptura clara, terminologia i optimització de continguts digitals.",
         "Pràctiques de traducció jurídica FR→ES i postedició al costat d’una traductora especialitzada."
@@ -468,7 +476,8 @@
     "skillGroups": {
       "translation": "Traducció i localització",
       "seo": "SEO i contingut web"
-    }
+    },
+    "experienceTabStatement": "Pràctica real en contextos internacionals"
   },
   "aboutPage": {
     "trajectoryEyebrow": "TRAJECTÒRIA",
@@ -476,14 +485,14 @@
       "eyebrow": "Sobre mi",
       "title": "Marta Gallardo i la filosofia Marttelier",
       "subtitle": "El punt de trobada entre la lingüística, l’estratègia i el contingut",
-      "story": "Em vaig graduar en Traducció i Interpretació per la Universitat d’Alacant i em vaig especialitzar en SEO i estratègia digital. En unir els idiomes, les cerques i el contingut UGC, vaig trobar una manera d’acompanyar projectes directament, sense agències pel mig. M’interessa que cada missatge conserve la seua intenció i arribe a les persones adequades."
+      "story": "Em vaig graduar en Traducció i Interpretació per la Universitat d'Alacant i em vaig formar en SEO i estratègia digital. Unint llengües, recerca i creació de contingut he trobat una manera d'acompanyar projectes de forma directa, sense agències pel mig. M'interessa que cada missatge mantinga la seua intenció i arribe a les persones adequades."
     },
     "principles": {
       "eyebrow": "marttelier",
-      "title": "Principis i valors de treball a marttelier",
+      "title": "Principis i valors de treball",
       "items": [
         "Transparència sense fum",
-        "Revisió 100% humana",
+        "Revisió humana",
         "Enfocament en la conversió",
         "Creixement conjunt"
       ]
@@ -498,8 +507,8 @@
       "eyebrow": "Posicionament SEO",
       "title": "Servei de posicionament SEO i SEO internacional",
       "paragraphs": [
-        "En un entorn digital tan competitiu, aparéixer entre els primers resultats de Google no és qüestió de sort, sinó d’estratègia. Com a especialista en posicionament en cercadors, t’ajude a transformar la teua pàgina web en un canal actiu de captació de clients. No es tracta només d’aconseguir més visites, sinó d’atraure trànsit qualificat: persones que busquen exactament el que oferixes i que estan preparades per comprar o contractar.",
-        "Amb un enfocament integral, analitze l’estat del teu projecte per dissenyar un pla a la teua mida. Optimitze l’estructura tècnica de la teua web, millore la rellevància dels continguts i impulse la teua autoritat digital perquè puges posicions davant dels competidors. Tant si vols consolidar la marca al teu mercat més pròxim com obrir les portes a una expansió global amb una estratègia de SEO internacional, el meu objectiu és fer que el teu negoci siga l’opció indiscutible per a la teua audiència."
+        "Aparéixer a Google no és qüestió de sort, sinó d'estratègia. El meu servei de posicionament SEO converteix el teu web en un canal que atrau persones que ja busquen el que ofereixes: no només més visites, sinó visites amb un interés real.",
+        "Analitze el punt de partida del teu projecte i dissenye un pla de posicionament als cercadors a mesura: millore l'estructura tècnica, la rellevància dels teus continguts i l'autoritat del teu web. Tant si vols consolidar-te al teu mercat de referència com fer el salt a altres països amb SEO internacional, t'explique cada pas i treballem amb prioritats clares."
       ]
     },
     "services": {
@@ -524,15 +533,41 @@
       ]
     },
     "international": {
-      "eyebrow": "SEO",
+      "eyebrow": "El teu web, a cada mercat",
       "translationLinkLabel": "Traducció",
       "title": "Especialista en SEO internacional i multilingüe",
-      "description": "Cada mercat expressa les cerques de manera diferent. A més d’adaptar l’idioma, convé investigar la intenció de cerca i el context cultural perquè el contingut resulte natural a cada mercat."
+      "description": "Internacionalitzar un web no és instal·lar un connector de traducció automàtica. Cada mercat busca de manera diferent, per això part d'investigar quins termes usen realment els usuaris de cada país i amb quina intenció. A partir d'ací adapte el contingut i configure el que cal a nivell tècnic, com les etiquetes hreflang, perquè Google mostre cada versió al públic adequat. Si també necessites un servei de traducció de pàgines web, el treballem dins de la mateixa estratègia, de manera que llengua i posicionament no vagen per separat."
     },
     "why": {
       "eyebrow": "SEO",
       "title": "Per què confiar en mi com a consultora SEO?",
-      "description": "La meua formació, les eines que utilitze i el treball aplicat al meu propi web em permeten explicar amb claredat el procés i les decisions de cada projecte."
+      "description": "En SEO, el que funcionava fa uns anys ja no basta: Google canvia els seus sistemes i la intel·ligència artificial ha canviat la manera de cercar. Treballar amb mi és triar un servei transparent, directe i sense intermediaris. El meu enfocament es recolza en quatre pilars:",
+      "items": [
+        "Formació actualitzada. Curs privat de màrqueting digital i SEO, més formació contínua en SEO internacional i en contingut per a cercadors.",
+        "Domini d'eines professionals. Treballe amb Google Search Console, Google Business Profile, WordPress i Screaming Frog.",
+        "Un projecte propi com a laboratori. Aquest web és on aplique i prove cada millora abans de proposar-te-la.",
+        "Enfocament natiu i global. La meua formació en traducció em permet cuidar la llengua i les cerques de cada mercat en què treballe."
+      ],
+      "closing": "No sóc una gran agència ni vull ser-ho: treballes directament amb mi i et dic des del principi què puc fer i què no.",
+      "stats": [
+        {
+          "value": "6",
+          "label": "idiomes"
+        },
+        {
+          "value": "4",
+          "label": "eines"
+        },
+        {
+          "value": "1:1",
+          "label": "sense agència"
+        },
+        {
+          "value": "30 min",
+          "label": "trucada gratuïta"
+        }
+      ],
+      "ctaText": "Diagnòstic inicial gratuït amb tres troballes prioritzades."
     },
     "arsenal": {
       "toolsTitle": "Eines SEO",
@@ -553,30 +588,30 @@
       "description": "Adapte el contingut de la teua empresa a nous mercats amb precisió semàntica i enfocament SEO."
     },
     "localization": {
-      "eyebrow": "Traducció",
+      "eyebrow": "LOCALITZACIÓ WEB",
       "title": "Localització de pàgines web i comerç electrònic",
       "items": [
         {
           "id": "cultural-adaptation",
           "title": "Adaptació cultural de textos per a mercats internacionals",
-          "description": "Ajuste referències, to i expressions perquè el missatge resulte natural al mercat de destinació sense perdre la seua intenció."
+          "description": "Adapte referents, to i expressions perquè el missatge resulte natural al mercat de destinació sense perdre la seua intenció."
         },
         {
           "id": "product-catalogues",
           "title": "Traducció de catàlegs i fitxes de producte orientada a la conversió",
-          "description": "Adapte catàlegs i fitxes tenint en compte la terminologia, la claredat i la informació que ajuda a comprendre cada producte."
+          "description": "Una fitxa de producte no només informa: ajuda a decidir la compra. Tradueixo catàlegs i fitxes de producte de botigues en línia cuidant les característiques tècniques, el to de la marca i les paraules clau amb què el client busca en cada llengua. Tinc experiència prèvia en la traducció i la gestió del catàleg d'un e-commerce, amb un flux diari de fitxes."
         }
       ]
     },
     "multilingualSeo": {
-      "eyebrow": "Traducció",
+      "eyebrow": "TRADUCCIÓ SEO",
       "seoLinkLabel": "SEO",
-      "title": "Traducció SEO multilingüe (multiplica el trànsit orgànic)",
-      "description": "La traducció SEO parteix de les cerques de cada idioma i mercat. Adapte les paraules clau estratègiques per conservar-ne la intenció sense perdre naturalitat ni coherència de marca."
+      "title": "Traducció SEO multilingüe: contingut pensat per a com cerca cada mercat",
+      "description": "La traducció SEO parteix de les cerques de cada llengua, no del text original. Investigue com cerquen els usuaris de cada mercat i adapte paraules clau i estructura per preservar la intenció i la veu de la teua marca. Si el teu projecte també necessita una estratègia, la integre amb el servei de SEO internacional."
     },
     "digitalContent": {
-      "eyebrow": "Traducció",
-      "title": "Traducció professional de continguts digitals i blogs",
+      "eyebrow": "CONTINGUT DIGITAL",
+      "title": "Traducció de contingut digital: blogs, newsletters i textos de marca",
       "items": [
         {
           "id": "editorial-content",

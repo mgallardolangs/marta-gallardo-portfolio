@@ -103,7 +103,7 @@
     "rights": "Tutti i diritti riservati",
     "eyebrow": "Pronto a far crescere il tuo progetto web?",
     "headline": "Parliamone.",
-    "support": "Contenuti, localizzazione e strategia con uno sguardo editoriale chiaro.",
+    "support": "Parliamo dei tuoi obiettivi e definiamo una strategia passo dopo passo per posizionare il tuo brand.",
     "cta": "Contattami",
     "brand": "MG",
     "location": "Elche, Spagna"
@@ -120,7 +120,7 @@
   "home": {
     "hero": {
       "kicker": "marttelier",
-      "description": "Miglioro la visibilità e la conversione della tua attività per aiutarti a entrare in contatto con persone reali, in qualsiasi lingua e mercato.",
+      "description": "Faccio in modo che il tuo progetto venga trovato, capito e scelto in più lingue: audit SEO tecnico, traduzione e localizzazione professionali e contenuti UGC pensati per convertire.",
       "mainPhoto": "Foto principale",
       "scrollCue": "Scorri per scoprire",
       "coverLabel": "Copertina editoriale",
@@ -141,7 +141,7 @@
         "Inglese"
       ],
       "title": "Rigore tecnico, titolo ufficiale e creatività",
-      "description": "Sono Marta Gallardo, laureata in Traduzione e Interpretariato all’Università di Alicante e con una formazione in SEO. Unisco linguistica, strategia e contenuti per aiutare i brand a comunicare con chiarezza e a entrare in contatto con il proprio pubblico.",
+      "description": "Dietro Marttelier c'è Marta Gallardo. Laureata in Traduzione e Interpretazione all'Università di Alicante e formata in SEO e strategia digitale, lavoro fianco a fianco con aziende e brand per costruire una presenza online solida, multilingue e redditizia, senza i passaggi intermedi di un'agenzia.",
       "cta": "Scopri di più su di me"
     },
     "video": {
@@ -179,7 +179,7 @@
     },
     "visibility": {
       "title": "Visibilità, lingue e conversione",
-      "text": "Come traduttrice e creatrice di contenuti, lavoro tra lingue, culture e formati affinché ogni messaggio conservi la sua intenzione e crei una connessione naturale. Unisco traduzione, localizzazione e SEO multilingue ai contenuti UGC per aiutare i brand a comunicare con chiarezza, coerenza e sensibilità culturale."
+      "text": "Più traffico non serve a nulla se non raggiunge le persone giuste. Per questo, come traduttrice e creatrice di contenuti, lavoro tra lingue, culture e formati: progetto strategie SEO adatte alla realtà di ciascun progetto e le unisco a traduzione, localizzazione e video UGC, affinché ogni messaggio mantenga la sua intenzione, arrivi in modo naturale e generi fiducia al primo sguardo."
     },
     "latestArticles": {
       "title": "Ultimi articoli su SEO e marketing digitale"
@@ -319,30 +319,38 @@
     },
     "benefits": {
       "eyebrow": "UGC · DIREZIONE CREATIVA",
-      "title": "Perché puntare sui contenuti generati dagli utenti",
-      "description": "I contenuti UGC permettono di presentare un brand attraverso un’esperienza visiva vicina al pubblico. Possono mostrare come un prodotto o servizio si inserisce nelle situazioni quotidiane e offrire più contesto per valutarlo."
+      "title": "Perché puntare sui contenuti UGC",
+      "description": "Molte persone si fidano più di chi usa un prodotto o un servizio nella vita di tutti i giorni che di una pubblicità molto prodotta. L'UGC (contenuto generato dagli utenti) mostra il tuo brand in situazioni reali, con una camera vicina e un tono naturale. Serve per i tuoi social, per il tuo sito e come annuncio a pagamento, e ti dà materiale vario per provare quale messaggio funziona meglio con il tuo pubblico."
     },
     "process": {
-      "eyebrow": "UGC · DIREZIONE CREATIVA",
+      "eyebrow": "Dall'idea alla consegna",
       "title": "Processo di lavoro: dall’idea al montaggio finale",
       "steps": [
         {
           "title": "Briefing",
-          "description": "Definiamo obiettivo, pubblico, formato, messaggi chiave e requisiti."
+          "description": "Concordiamo obiettivo, pubblico, formato, messaggi chiave e requisiti.",
+          "items": [
+            "Diritti d'uso concordati per iscritto: durata e canali di pubblicazione."
+          ]
         },
         {
-          "title": "Sviluppo dell’idea",
-          "description": "A partire dal briefing, definisco il concept e la struttura del contenuto."
+          "title": "Sviluppo dell'idea",
+          "description": "Trasformo il briefing in un concept e in una sceneggiatura o struttura del contenuto."
         },
         {
           "title": "Riprese",
-          "description": "Realizzo il materiale seguendo l’impostazione concordata e curando inquadratura, ritmo e chiarezza."
+          "description": "Produco il materiale seguendo l'approccio concordato e curando inquadratura, ritmo e chiarezza."
         },
         {
-          "title": "Montaggio finale",
-          "description": "Rivedo il materiale e preparo il contenuto finale nei formati concordati."
+          "title": "Montaggio",
+          "description": "Monto il materiale con sottotitoli e musica e preparo il contenuto nei formati concordati."
+        },
+        {
+          "title": "Consegna e revisioni",
+          "description": "Ricevi i file in alta qualità entro 10 giorni lavorativi da quando approvi la sceneggiatura e puoi richiedere fino a 2 giri di revisione."
         }
-      ]
+      ],
+      "closing": "Hai un prodotto o un'esperienza che vuoi mostrare? Raccontami cosa cerchi e ti propongo un'idea."
     }
   },
   "translationPage": {
@@ -393,7 +401,7 @@
       "intro": "Esperienza concreta nella comunicazione reale, nel contatto diretto con le persone e nell’adattamento linguistico in contesti diversi.",
       "cards": [
         {
-          "title": "Traduzione e-commerce e gestione dei contenuti + assistenza clienti in francese",
+          "title": "Traduzione e gestione di contenuti e-commerce + assistenza clienti in francese",
           "highlight": "Las Tijeras Mágicas",
           "text": "Traduzione quotidiana di schede prodotto (ES→FR/DE/IT), gestione dei cataloghi e assistenza ai clienti francofoni, mantenendo precisione e tono di marca."
         },
@@ -410,9 +418,9 @@
       ]
     },
     "education": {
-      "intro": "Una base accademica incentrata su lingue, comunicazione interculturale e scrittura, rafforzata da un’immersione pratica in contesti internazionali.",
+      "intro": "Una base accademica orientata a lingue, comunicazione interculturale e scrittura, rafforzata da un'immersione pratica in contesti internazionali. Integrata da una formazione recente in ottimizzazione di contenuti web e social media.",
       "studies": [
-        "Laurea in Traduzione e Interpretariato, con specializzazione in francese, scrittura e adattamento dei contenuti.",
+        "Laurea (Grado) in Traduzione e Interpretazione, con specializzazione in francese, scrittura e adattamento di contenuti. Seconde lingue: tedesco e italiano. Formazione in traduzione letteraria, giuridico-economica, tecnico-scientifica e audiovisiva.",
         "Erasmus+ di sei mesi a Parigi e pratica quotidiana in contesti francofoni.",
         "Formazione continua in scrittura chiara, terminologia e ottimizzazione dei contenuti digitali.",
         "Tirocinio in traduzione giuridica FR→ES e post-editing accanto a una traduttrice specializzata."
@@ -468,7 +476,8 @@
     "skillGroups": {
       "translation": "Traduzione e localizzazione",
       "seo": "SEO e contenuti web"
-    }
+    },
+    "experienceTabStatement": "Pratica reale in contesti internazionali"
   },
   "aboutPage": {
     "trajectoryEyebrow": "PERCORSO",
@@ -476,14 +485,14 @@
       "eyebrow": "Chi sono",
       "title": "Marta Gallardo e la filosofia Marttelier",
       "subtitle": "Il punto d’incontro tra linguistica, strategia e contenuti",
-      "story": "Mi sono laureata in Traduzione e Interpretariato all’Università di Alicante e mi sono specializzata in SEO e strategia digitale. Unendo lingue, ricerca online e contenuti UGC, ho trovato un modo diretto per affiancare i progetti, senza intermediari. Mi interessa che ogni messaggio conservi la propria intenzione e raggiunga le persone giuste."
+      "story": "Mi sono laureata in Traduzione e Interpretazione all'Università di Alicante e mi sono formata in SEO e strategia digitale. Unendo lingue, ricerca e creazione di contenuti ho trovato un modo per accompagnare i progetti in modo diretto, senza agenzie di mezzo. Mi interessa che ogni messaggio mantenga la sua intenzione e raggiunga le persone giuste."
     },
     "principles": {
       "eyebrow": "marttelier",
-      "title": "Principi e valori di lavoro di marttelier",
+      "title": "Principi e valori di lavoro",
       "items": [
         "Trasparenza e onestà",
-        "Revisione 100% umana",
+        "Revisione umana",
         "Attenzione alla conversione",
         "Crescere insieme"
       ]
@@ -498,8 +507,8 @@
       "eyebrow": "Posizionamento SEO",
       "title": "Servizi di posizionamento SEO e SEO internazionale",
       "paragraphs": [
-        "In un ambiente digitale così competitivo, apparire tra i primi risultati di Google non è questione di fortuna, ma di strategia. Come specialista nel posizionamento sui motori di ricerca, ti aiuto a trasformare il tuo sito web in un canale attivo per acquisire clienti. Non si tratta solo di ottenere più visite, ma di attrarre traffico qualificato: persone che cercano esattamente ciò che offri e sono pronte ad acquistare o a richiedere un servizio.",
-        "Con un approccio completo, analizzo lo stato del tuo progetto per elaborare un piano su misura. Ottimizzo la struttura tecnica del sito, miglioro la rilevanza dei contenuti e rafforzo la tua autorevolezza digitale per aiutarti a salire nelle posizioni rispetto ai concorrenti. Che tu voglia consolidare il brand nel tuo mercato locale o aprirti a un’espansione globale con una strategia SEO internazionale, il mio obiettivo è rendere la tua attività la scelta più chiara per il tuo pubblico."
+        "Comparire su Google non è questione di fortuna, ma di strategia. Il mio servizio di posizionamento SEO trasforma il tuo sito in un canale che attrae persone che già cercano ciò che offri: non solo più visite, ma visite con un interesse reale.",
+        "Analizzo il punto di partenza del tuo progetto e progetto un piano di posizionamento sui motori di ricerca su misura: miglioro la struttura tecnica, la rilevanza dei tuoi contenuti e l'autorevolezza del tuo sito. Che tu voglia consolidarti nel tuo mercato di riferimento o fare il salto verso altri paesi con la SEO internazionale, ti spiego ogni passo e lavoriamo con priorità chiare."
       ]
     },
     "services": {
@@ -524,15 +533,41 @@
       ]
     },
     "international": {
-      "eyebrow": "SEO",
+      "eyebrow": "Il tuo sito, in ogni mercato",
       "translationLinkLabel": "Traduzione",
       "title": "Specialista in SEO internazionale e multilingue",
-      "description": "Ogni mercato formula le proprie ricerche in modo diverso. Oltre ad adattare la lingua, è utile analizzare l’intento di ricerca e il contesto culturale affinché i contenuti risultino naturali in ogni mercato."
+      "description": "Internazionalizzare un sito non significa installare un plugin di traduzione automatica. Ogni mercato cerca in modo diverso, perciò parto dall'indagare quali termini usano davvero gli utenti di ciascun paese e con quale intento. Da lì adatto i contenuti e configuro quanto serve a livello tecnico, come i tag hreflang, perché Google mostri ogni versione al pubblico giusto. Se ti serve anche un servizio di traduzione di siti web, lo lavoriamo all'interno della stessa strategia, così lingua e posizionamento non procedono separati."
     },
     "why": {
       "eyebrow": "SEO",
       "title": "Perché affidarti a me come consulente SEO?",
-      "description": "La mia formazione, gli strumenti che uso e il lavoro applicato al mio sito mi permettono di spiegare con chiarezza il processo e le decisioni di ogni progetto."
+      "description": "Nella SEO, ciò che funzionava qualche anno fa non basta più: Google cambia i suoi sistemi e l'intelligenza artificiale ha cambiato il modo di cercare. Lavorare con me significa scegliere un servizio trasparente, diretto e senza intermediari. Il mio approccio poggia su quattro pilastri:",
+      "items": [
+        "Formazione aggiornata. Corso privato di marketing digitale e SEO, più formazione continua in SEO internazionale e in contenuti per i motori di ricerca.",
+        "Padronanza di strumenti professionali. Lavoro con Google Search Console, Google Business Profile, WordPress e Screaming Frog.",
+        "Un progetto personale come laboratorio. Questo sito è il luogo in cui applico e provo ogni miglioramento prima di proportelo.",
+        "Approccio nativo e globale. La mia formazione in traduzione mi permette di curare la lingua e le ricerche di ogni mercato in cui lavoro."
+      ],
+      "closing": "Non sono una grande agenzia e non voglio esserlo: lavori direttamente con me e ti dico fin dall'inizio cosa posso fare e cosa no.",
+      "stats": [
+        {
+          "value": "6",
+          "label": "lingue"
+        },
+        {
+          "value": "4",
+          "label": "strumenti"
+        },
+        {
+          "value": "1:1",
+          "label": "senza agenzia"
+        },
+        {
+          "value": "30 min",
+          "label": "chiamata gratuita"
+        }
+      ],
+      "ctaText": "Diagnosi iniziale gratuita con tre risultati prioritari."
     },
     "arsenal": {
       "toolsTitle": "Strumenti SEO",
@@ -553,30 +588,30 @@
       "description": "Adatto i contenuti della tua azienda a nuovi mercati con precisione semantica e un approccio SEO."
     },
     "localization": {
-      "eyebrow": "Traduzione",
+      "eyebrow": "LOCALIZZAZIONE WEB",
       "title": "Localizzazione di siti web ed e-commerce",
       "items": [
         {
           "id": "cultural-adaptation",
           "title": "Adattamento culturale dei testi per i mercati internazionali",
-          "description": "Adatto riferimenti, tono ed espressioni affinché il messaggio risulti naturale nel mercato di destinazione senza perdere la propria intenzione."
+          "description": "Adatto riferimenti, tono ed espressioni perché il messaggio risulti naturale nel mercato di destinazione senza perdere la sua intenzione."
         },
         {
           "id": "product-catalogues",
           "title": "Traduzione di cataloghi e schede prodotto orientata alla conversione",
-          "description": "Adatto cataloghi e schede prodotto curando terminologia, chiarezza e informazioni che aiutano a comprendere ogni prodotto."
+          "description": "Una scheda prodotto non si limita a informare: aiuta a decidere l'acquisto. Traduco cataloghi e schede prodotto di negozi online curando le caratteristiche tecniche, il tono del brand e le parole chiave con cui il cliente cerca in ciascuna lingua. Ho già esperienza nella traduzione e nella gestione del catalogo di un e-commerce, con un flusso quotidiano di schede."
         }
       ]
     },
     "multilingualSeo": {
-      "eyebrow": "Traduzione",
+      "eyebrow": "TRADUZIONE SEO",
       "seoLinkLabel": "SEO",
-      "title": "Traduzione SEO multilingue (fai crescere il traffico organico)",
-      "description": "La traduzione SEO parte dalle ricerche effettuate in ogni lingua e mercato. Adatto le parole chiave strategiche per conservarne l’intento senza perdere naturalezza né coerenza di marca."
+      "title": "Traduzione SEO multilingue: contenuti pensati per come cerca ogni mercato",
+      "description": "La traduzione SEO parte dalle ricerche di ciascuna lingua, non dal testo originale. Indago come cercano gli utenti di ogni mercato e adatto parole chiave e struttura per preservare l'intenzione e la voce del tuo brand. Se il tuo progetto ha bisogno anche di una strategia, la integro con il servizio di SEO internazionale."
     },
     "digitalContent": {
-      "eyebrow": "Traduzione",
-      "title": "Traduzione professionale di contenuti digitali e blog",
+      "eyebrow": "CONTENUTI DIGITALI",
+      "title": "Traduzione di contenuti digitali: blog, newsletter e testi di marca",
       "items": [
         {
           "id": "editorial-content",

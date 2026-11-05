@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ScrollReveal from '../components/ScrollReveal';
 import TypedTitle from '../components/TypedTitle.astro';
 import UgcContactSheet from '../components/UgcContactSheet';
-import { getLangFromUrl, t } from '../i18n';
+import { getLangFromUrl, getLocalizedRoute, t } from '../i18n';
 import { getPageSeo, siteData } from '../lib/siteData';
 
 const lang = getLangFromUrl(Astro.url);
@@ -20,7 +20,7 @@ const pageSeo = getPageSeo(siteData, 'ugc', lang, {
   <div class="bg-paper">
     <section data-ugc-hero class="px-6 pt-20 pb-5 md:pt-24 md:pb-6">
       <div class="site-container">
-        <ScrollReveal client:visible className="max-w-6xl">
+        <ScrollReveal client:visible className="w-full">
           <p class="text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">
             {i.ugcPage.hero.eyebrow}
           </p>
@@ -31,9 +31,9 @@ const pageSeo = getPageSeo(siteData, 'ugc', lang, {
               trigger="load"
               class="block text-4xl leading-none text-ink md:text-6xl"
             />
-            <p class="text-balance text-lg font-semibold uppercase leading-[1.18] tracking-[0.13em] text-ink md:text-2xl lg:justify-self-end lg:text-right lg:text-3xl">
+            <h2 class="text-balance text-lg font-semibold uppercase leading-[1.18] tracking-[0.13em] text-ink md:text-2xl lg:justify-self-end lg:text-right lg:text-3xl">
               {i.ugcPage.contactSheet.headline}
-            </p>
+            </h2>
           </div>
         </ScrollReveal>
 
@@ -86,7 +86,7 @@ const pageSeo = getPageSeo(siteData, 'ugc', lang, {
         <div class="relative">
           <span class="absolute left-6 top-4 block h-[calc(100%-2rem)] w-px bg-ink/20 md:hidden" aria-hidden="true"></span>
           <span class="absolute left-10 right-10 top-8 hidden h-px bg-ink/20 md:block" aria-hidden="true"></span>
-          <div class="grid items-stretch gap-6 md:grid-cols-4">
+          <div class="grid items-stretch gap-6 md:grid-cols-5">
             {i.ugcPage.process.steps.map((step, index) => (
               <article class="group relative flex h-full flex-col pl-16 md:pl-0" data-ugc-process-step tabindex="0">
                 <span class="absolute left-0 top-0 flex h-12 w-12 items-center justify-center rounded-full border border-ink/24 bg-paper font-body text-sm font-semibold uppercase tracking-[0.16em] text-amaranth transition group-hover:-translate-y-1 group-hover:border-amaranth group-hover:bg-amaranth group-hover:text-ink group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth group-focus-visible:bg-amaranth group-focus-visible:text-ink md:relative md:mx-auto">
@@ -95,11 +95,26 @@ const pageSeo = getPageSeo(siteData, 'ugc', lang, {
                 <div class="border border-ink/18 px-5 py-6 transition group-hover:-translate-y-1 group-hover:border-amaranth/60 group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth/60 md:mt-6 md:min-h-[170px] md:flex-1">
                   <h3 class="font-heading text-2xl text-ink">{step.title}</h3>
                   <p class="mt-4 text-sm leading-7 text-ink-muted">{step.description}</p>
+                  {step.items && (
+                    <ul class="mt-3 list-disc space-y-1 pl-4 text-sm leading-7 text-ink-muted">
+                      {step.items.map((item) => <li>{item}</li>)}
+                    </ul>
+                  )}
                 </div>
               </article>
             ))}
           </div>
         </div>
+
+        {i.ugcPage.process.closing && (
+          <div class="flex flex-col gap-5 border-t border-ink/12 pt-8 md:flex-row md:items-center md:justify-between">
+            <p class="max-w-2xl font-body text-base leading-8 text-ink md:text-lg">{i.ugcPage.process.closing}</p>
+            <a href={getLocalizedRoute('contact', lang)} class="site-text-cta">
+              {i.footer.cta}
+              <span class="site-text-cta__arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
+        )}
       </div>
     </section>
   </div>
