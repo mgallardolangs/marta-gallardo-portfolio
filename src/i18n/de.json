@@ -636,7 +636,7 @@
   "legal": {
     "privacy": {
       "title": "Datenschutzerklärung",
-      "updated": "Zuletzt aktualisiert: 05.11.2026",
+      "updated": "Zuletzt aktualisiert: 06.11.2026",
       "sections": [
         {
           "title": "1. Verantwortliche",
@@ -683,11 +683,6 @@
               [
                 "Netlify",
                 "Hosting der Website und Empfang der Formulare",
-                "USA"
-              ],
-              [
-                "Google (Gmail)",
-                "E-Mail",
                 "USA"
               ],
               [

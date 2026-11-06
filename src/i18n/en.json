@@ -636,7 +636,7 @@
   "legal": {
     "privacy": {
       "title": "Privacy policy",
-      "updated": "Last updated: 05.11.2026",
+      "updated": "Last updated: 06.11.2026",
       "sections": [
         {
           "title": "1. Data controller",
@@ -683,11 +683,6 @@
               [
                 "Netlify",
                 "Website hosting and receiving form submissions",
-                "USA"
-              ],
-              [
-                "Google (Gmail)",
-                "Email",
                 "USA"
               ],
               [

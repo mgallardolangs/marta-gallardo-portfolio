@@ -636,7 +636,7 @@
   "legal": {
     "privacy": {
       "title": "Politique de confidentialité",
-      "updated": "Dernière mise à jour : 05.11.2026",
+      "updated": "Dernière mise à jour : 06.11.2026",
       "sections": [
         {
           "title": "1. Responsable du traitement",
@@ -683,11 +683,6 @@
               [
                 "Netlify",
                 "Hébergement du site et réception des formulaires",
-                "États-Unis"
-              ],
-              [
-                "Google (Gmail)",
-                "Messagerie électronique",
                 "États-Unis"
               ],
               [

@@ -636,7 +636,7 @@
   "legal": {
     "privacy": {
       "title": "Política de privacitat",
-      "updated": "Última actualització: 05.11.2026",
+      "updated": "Última actualització: 06.11.2026",
       "sections": [
         {
           "title": "1. Responsable del tractament",
@@ -683,11 +683,6 @@
               [
                 "Netlify",
                 "Allotjament del web i recepció dels formularis",
-                "EUA"
-              ],
-              [
-                "Google (Gmail)",
-                "Correu electrònic",
                 "EUA"
               ],
               [

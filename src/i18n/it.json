@@ -636,7 +636,7 @@
   "legal": {
     "privacy": {
       "title": "Informativa sulla privacy",
-      "updated": "Ultimo aggiornamento: 05.11.2026",
+      "updated": "Ultimo aggiornamento: 06.11.2026",
       "sections": [
         {
           "title": "1. Titolare del trattamento",
@@ -683,11 +683,6 @@
               [
                 "Netlify",
                 "Hosting del sito e ricezione dei moduli",
-                "USA"
-              ],
-              [
-                "Google (Gmail)",
-                "Posta elettronica",
                 "USA"
               ],
               [
