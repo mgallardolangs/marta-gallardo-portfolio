@@ -601,7 +601,7 @@ svg {
   position: relative;
   border: 1px solid rgb(6 4 3 / 0.12);
   border-left: 3px solid var(--color-amaranth);
-  background: #fff;
+  background: var(--color-white);
   padding: clamp(1.5rem, 3vw, 2.25rem);
   box-shadow: var(--shadow-amaranth), var(--shadow-ink);
   animation: seo-budget-float 6s ease-in-out infinite;

@@ -48,10 +48,17 @@ function assertContactFieldContract(source, prefix) {
   assert.doesNotMatch(companyTag, /\brequired\b/);
   assert.match(detailsTag, /\brequired\b/);
 
+  const privacyTag = source.match(new RegExp(`<input[^>]*id="${prefix}-privacy"[^>]*>`, 's'))?.[0] ?? '';
+  assert.match(source, new RegExp(`<label[^>]*for="${prefix}-privacy"`));
+  assert.match(privacyTag, /type="checkbox"/);
+  assert.match(privacyTag, /name="Privacy Consent"/);
+  assert.match(privacyTag, /\brequired\b/);
+  assert.doesNotMatch(privacyTag, /\bchecked\b/, 'the privacy checkbox must start unchecked');
+
   const formSource = extractForm(source, `${prefix}-contact`);
-  assert.equal(countMatches(formSource, /<label\b/g), 3, `${prefix} form should keep exactly three labels`);
-  assert.equal(countMatches(formSource, /<(?:input|textarea)\b/g), 4, `${prefix} form should keep exactly one hidden field plus three user fields`);
-  assert.equal(countMatches(formSource, /\brequired\b/g), 2, `${prefix} form should require only email and details`);
+  assert.equal(countMatches(formSource, /<label\b/g), 4, `${prefix} form should keep exactly four labels`);
+  assert.equal(countMatches(formSource, /<(?:input|textarea)\b/g), 5, `${prefix} form should keep one hidden field, three user fields and the privacy checkbox`);
+  assert.equal(countMatches(formSource, /(?<![-\w])required(?![-\w])/g), 3, `${prefix} form should require only email, details and privacy consent`);
 }
 
 test('all six locale files expose the new Contact tabs, field, and response key groups', async () => {

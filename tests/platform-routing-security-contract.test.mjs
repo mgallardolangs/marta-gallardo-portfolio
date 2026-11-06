@@ -34,11 +34,15 @@ test('Netlify serves unknown paths as 404s and retains only the approved www red
   assert.doesNotMatch(config, /to\s*=\s*"\/index\.html"/);
 });
 
-test('Netlify Identity login returns to the canonical admin route', async () => {
+test('Netlify Identity loads only in admin and email tokens return to the canonical admin route', async () => {
   const layout = await readProjectFile('src/layouts/BaseLayout.astro');
+  const adminLayout = await readProjectFile('src/layouts/AdminLayout.astro');
 
-  assert.match(layout, /document\.location\.href\s*=\s*"\/admin";/);
-  assert.doesNotMatch(layout, /document\.location\.href\s*=\s*"\/admin\/"/);
+  assert.doesNotMatch(layout, /identity\.netlify\.com/);
+  assert.match(adminLayout, /identity\.netlify\.com\/v1\/netlify-identity-widget\.js/);
+  assert.match(layout, /\(invite\|recovery\|confirmation\|email_change\)_token=/);
+  assert.match(layout, /location\.replace\("\/admin" \+ location\.hash\)/);
+  assert.doesNotMatch(layout, /"\/admin\/"/);
 });
 
 test('Netlify security headers retain HSTS and framing protection while CSP stays report-only', async () => {

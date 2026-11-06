@@ -197,11 +197,11 @@ test('desktop Home hero gives “Consultora SEO Freelance” enough width', asyn
 
   assert.match(
     desktopRules,
-    /\.home-hero__copy\s*\{[^}]*max-width:\s*48rem;[^}]*\}/s,
+    /\.home-hero__copy\s*\{[^}]*max-width:\s*none;[^}]*\}/s,
   );
   assert.match(
     desktopRules,
-    /\.home-hero__title\s*\{[^}]*max-width:\s*24ch;[^}]*font-size:\s*clamp\(2\.75rem,\s*4\.35vw,\s*4rem\);/s,
+    /\.home-hero__title\s*\{[^}]*max-width:\s*26ch;[^}]*font-size:\s*clamp\(2\.75rem,\s*4\.35vw,\s*4rem\);/s,
   );
 });
 

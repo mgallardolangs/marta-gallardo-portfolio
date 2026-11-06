@@ -16,11 +16,11 @@ const page = i.ugcPage;
   <div class="bg-paper">
     <section class="px-6 pt-20 pb-5 md:pt-24 md:pb-6">
       <div class="site-container">
-        <ScrollReveal client:visible className="max-w-6xl flex flex-col gap-6">
+        <ScrollReveal client:visible className="w-full flex flex-col gap-6">
           <EditableText client:load i18nKey="ugcPage.hero.eyebrow" as="p" className="text-xs font-semibold uppercase tracking-[0.34em] text-amaranth" />
           <div class="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-end">
             <EditableText client:load i18nKey="ugcPage.pageTitle" as="h1" className="block text-4xl leading-none text-ink md:text-6xl" />
-            <EditableText client:load i18nKey="ugcPage.contactSheet.headline" as="p" className="text-balance text-lg font-semibold uppercase leading-[1.18] tracking-[0.13em] text-ink md:text-2xl lg:justify-self-end lg:text-right lg:text-3xl" />
+            <EditableText client:load i18nKey="ugcPage.contactSheet.headline" as="h2" className="text-balance text-lg font-semibold uppercase leading-[1.18] tracking-[0.13em] text-ink md:text-2xl lg:justify-self-end lg:text-right lg:text-3xl" />
           </div>
         </ScrollReveal>
 
@@ -61,15 +61,20 @@ const page = i.ugcPage;
           <EditableText client:load i18nKey="ugcPage.process.title" as="h2" className="font-heading text-4xl leading-none text-ink md:text-5xl" />
         </div>
 
-        <div class="grid items-stretch gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <div class="grid items-stretch gap-6 md:grid-cols-2 xl:grid-cols-5">
           {i.ugcPage.process.steps.map((_step, index) => (
             <article class="group relative flex h-full flex-col border border-ink/18 px-5 py-6 transition hover:border-amaranth/60 focus-within:border-amaranth/60">
               <p class="font-body text-sm font-semibold uppercase tracking-[0.16em] text-amaranth">{`0${index + 1}`}</p>
               <EditableText client:load i18nKey={`ugcPage.process.steps.${index}.title`} as="h3" className="mt-5 font-heading text-2xl text-ink" />
               <EditableText client:load i18nKey={`ugcPage.process.steps.${index}.description`} as="div" className="mt-4 text-sm leading-7 text-ink-muted" />
+              {_step.items?.map((_item, itemIndex) => (
+                <EditableText client:load i18nKey={`ugcPage.process.steps.${index}.items.${itemIndex}`} as="p" className="mt-3 text-sm leading-7 text-ink-muted" />
+              ))}
             </article>
           ))}
         </div>
+
+        <EditableText client:load i18nKey="ugcPage.process.closing" as="p" className="max-w-2xl border-t border-ink/12 pt-8 font-body text-base leading-8 text-ink md:text-lg" />
       </div>
     </section>
 
