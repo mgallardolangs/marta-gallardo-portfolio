@@ -101,7 +101,7 @@ test('translation and SEO admin pages mount service-scoped arsenal editors', asy
 test('AdminTranslationArsenalEditor renders the public arsenal panels scoped to the current service', async () => {
   const source = await readSource('src/components/admin/AdminTranslationArsenalEditor.tsx');
 
-  assert.match(source, /className="border border-ink"\s+data-admin-arsenal-editor\s+data-arsenal-scope=\{scope\}/);
+  assert.match(source, /frame: 'border-ink'[\s\S]*className=\{`border \$\{tone\.frame\}`\}\s+data-admin-arsenal-editor\s+data-arsenal-scope=\{scope\}/);
   assert.match(source, /scope === 'translation' \? 'lg:grid-cols-3' : 'md:grid-cols-2'/);
   assert.match(source, /scope === 'translation' && \([\s\S]*data-admin-arsenal-panel="languages"/s);
   assert.match(source, /data-admin-arsenal-panel="languages"/);
@@ -117,14 +117,14 @@ test('AdminTranslationArsenalEditor renders the public arsenal panels scoped to 
   );
   assert.match(
     source,
-    /flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink/,
+    /tile: 'bg-ink text-paper hover:bg-amaranth hover:text-ink'[\s\S]*group relative flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 px-3 py-4 text-center transition \$\{tone\.tile\}/,
     'tool tiles should keep the exact dark square tile baseline classes',
   );
   assert.match(source, /grid grid-cols-3 gap-2/, 'tools panel should keep the approved three-column equal-cell grid');
   assert.match(source, /groupedSkills\[scope\]/, 'skills panel should contain only the current service group');
   assert.match(
     source,
-    /border border-ink\/12 px-3 py-2 text-\[0\.68rem\] uppercase tracking-\[0\.08em\] text-ink/,
+    /chip: 'border-ink\/12 text-ink'[\s\S]*border \$\{tone\.chip\} px-3 py-2 text-\[0\.68rem\] uppercase tracking-\[0\.08em\]/,
     'skill chips should keep the exact baseline chip classes',
   );
 });
@@ -139,7 +139,7 @@ test('AdminTranslationArsenalEditor keeps add controls scoped inside their own p
 
   assert.match(
     source,
-    /className="flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-2 border border-dashed/,
+    /className=\{`flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-2 border border-dashed \$\{tone\.add\}/,
     'the dashed add-tool tile should keep the same square footprint as the live tool tiles',
   );
 });

@@ -213,10 +213,10 @@ test('all six locale files add the correction-only translation display keys and 
   }
 });
 
-test('site arsenal skills keep the authored 4/6 translation-vs-seo split and grouped helper output', async () => {
+test('site arsenal skills keep the authored 5/6 translation-vs-seo split and grouped helper output', async () => {
   const site = await readJson('src/data/site.json');
 
-  assert.equal(site.arsenal.skills.length, 10, 'arsenal.skills should keep the ten authored translation and SEO records');
+  assert.equal(site.arsenal.skills.length, 11, 'arsenal.skills should keep the eleven authored translation and SEO records');
 
   const translationIds = site.arsenal.skills
     .filter((skill) => skill.group === 'translation')
@@ -231,11 +231,12 @@ test('site arsenal skills keep the authored 4/6 translation-vs-seo split and gro
     translationIds,
     [
       'proofreading-editing-style',
+      'skill-traduccion-directa-en-de-it-ca-es',
       'terminology-glossaries',
       'translation-content-adaptation',
       'website-localization',
     ].sort(),
-    'translation skill group should keep the approved four translation/localization skills',
+    'translation skill group should keep the approved five translation/localization skills',
   );
   assert.deepEqual(
     seoIds,
@@ -258,7 +259,7 @@ test('site arsenal skills keep the authored 4/6 translation-vs-seo split and gro
     ['seo', 'translation'],
     'arsenal helper should expose grouped skill columns instead of one flat list',
   );
-  assert.equal(columns.skillGroups.translation.length, 4, 'translation helper column should keep four skills');
+  assert.equal(columns.skillGroups.translation.length, 5, 'translation helper column should keep five skills');
   assert.equal(columns.skillGroups.seo.length, 6, 'seo helper column should keep six skills');
 });
 
@@ -372,7 +373,7 @@ test('public and admin service arsenals keep translation and SEO tools and skill
   assert.match(adminEditorSource, /getArsenalToolGroup\(item\)\s*===\s*scope/, 'admin editor should filter tools to the current page group');
   assert.match(adminEditorSource, /groupedSkills\[scope\]/, 'admin editor should filter skills to the current page group');
   assert.match(adminEditorSource, /scope === 'translation' \? 'lg:grid-cols-3' : 'md:grid-cols-2'/, 'admin panel layout should match the public page distribution');
-  assert.match(adminEditorSource, /group relative flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink/, 'admin editor should mirror the public square tool tiles');
+  assert.match(adminEditorSource, /tile: 'bg-ink text-paper hover:bg-amaranth hover:text-ink'[\s\S]*group relative flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 px-3 py-4 text-center transition \$\{tone\.tile\}/, 'admin editor should mirror the public square tool tiles');
 });
 
 test('About reuses the trajectory tabs without rendering the parked profile label', async (t) => {
@@ -475,7 +476,7 @@ test('tool editor reserves a dashed add tile in the scoped tool grid', async () 
 
   assert.match(
     toolsPanel,
-    /tools\.map\(\(\{ item: tool, index \}\) => \([\s\S]*data-collection-add="tools"[\s\S]*className="flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-2 border border-dashed/s,
+    /tools\.map\(\(\{ item: tool, index \}\) => \([\s\S]*data-collection-add=\"tools\"[\s\S]*className=\{`flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-2 border border-dashed/s,
     'tool editor should render a dashed same-size add tile inside the tool collection grid',
   );
 });

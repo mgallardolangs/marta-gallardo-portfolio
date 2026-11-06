@@ -4,10 +4,10 @@ import assert from 'node:assert/strict';
 import { toEmbedUrl, toHttpsEmbedUrl } from '../src/lib/videoEmbed.ts';
 
 test('toEmbedUrl normalizes YouTube links to the embed player', () => {
-  assert.equal(toEmbedUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ'), 'https://www.youtube.com/embed/dQw4w9WgXcQ');
-  assert.equal(toEmbedUrl('https://youtu.be/dQw4w9WgXcQ?t=42'), 'https://www.youtube.com/embed/dQw4w9WgXcQ');
-  assert.equal(toEmbedUrl('https://www.youtube.com/shorts/dQw4w9WgXcQ'), 'https://www.youtube.com/embed/dQw4w9WgXcQ');
-  assert.equal(toEmbedUrl('https://www.youtube.com/embed/dQw4w9WgXcQ'), 'https://www.youtube.com/embed/dQw4w9WgXcQ');
+  assert.equal(toEmbedUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ'), 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ');
+  assert.equal(toEmbedUrl('https://youtu.be/dQw4w9WgXcQ?t=42'), 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ');
+  assert.equal(toEmbedUrl('https://www.youtube.com/shorts/dQw4w9WgXcQ'), 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ');
+  assert.equal(toEmbedUrl('https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ'), 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ');
 });
 
 test('toEmbedUrl normalizes Vimeo links, including unlisted hashes', () => {
@@ -46,7 +46,7 @@ test('toHttpsEmbedUrl only returns normalized embeds that resolve to https', () 
   assert.equal(toHttpsEmbedUrl('https://example.com/embed/xyz'), 'https://example.com/embed/xyz');
   assert.equal(
     toHttpsEmbedUrl('http://www.youtube.com/watch?v=dQw4w9WgXcQ'),
-    'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ',
   );
   assert.equal(toHttpsEmbedUrl('http://example.com/embed/xyz'), null);
 });

@@ -104,7 +104,7 @@ test('translation arsenal source keeps equal thirds plus exact square tool tiles
   assert.match(adminEditorSource, /<div className="mt-5 grid grid-cols-3 gap-2" data-arsenal-items>/);
   assert.match(
     adminEditorSource,
-    /className="group relative flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink"/,
+    /tile: 'bg-ink text-paper hover:bg-amaranth hover:text-ink'[\s\S]*group relative flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 px-3 py-4 text-center transition \$\{tone\.tile\}/,
     'the integrated editor should mirror the public square tool tiles while adding its own hover affordances',
   );
   assert.match(
@@ -115,7 +115,7 @@ test('translation arsenal source keeps equal thirds plus exact square tool tiles
 
   assert.match(
     adminEditorSource,
-    /data-collection-add="tools"[\s\S]*className="flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-2 border border-dashed border-ink\/30/,
+    /add: 'border-ink\/30 text-ink-faint'[\s\S]*data-collection-add=\"tools\"[\s\S]*className=\{`flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-2 border border-dashed \$\{tone\.add\}/,
     'the dashed add-tool tile should use the same square footprint as the live tool tiles',
   );
 });

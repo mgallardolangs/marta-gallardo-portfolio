@@ -99,9 +99,10 @@ test('approved localized-copy sections share one complete schema in all locales'
     'id',
     'title',
   ]);
-  assert.deepEqual(Object.keys(es.ugcPage.process.steps[0]).sort(), ['description', 'title']);
+  assert.deepEqual(Object.keys(es.ugcPage.process.steps[0]).sort(), ['description', 'items', 'title']);
+  assert.deepEqual(Object.keys(es.ugcPage.process.steps[1]).sort(), ['description', 'title']);
   assert.equal(es.aboutPage.principles.items.length, 4);
-  assert.equal(es.ugcPage.process.steps.length, 4);
+  assert.equal(es.ugcPage.process.steps.length, 5);
 });
 
 test('Spanish localized copy matches the approved source text', async () => {
@@ -109,15 +110,15 @@ test('Spanish localized copy matches the approved source text', async () => {
 
   assert.equal(es.home.hero.kicker, 'marttelier');
   assert.equal(es.home.hero.title, 'Consultora SEO Freelance y Estrategia de Contenidos Digitales');
-  assert.equal(es.home.hero.description, 'Optimizo la visibilidad y conversión de tu negocio para que conectes con personas reales, en cualquier idioma y mercado.');
+  assert.equal(es.home.hero.description, 'Hago que tu proyecto se encuentre, se entienda y convenza en distintos idiomas: auditoría SEO técnica, traducción y localización profesional, y contenido UGC pensado para convertir.');
   assert.equal(es.home.hero.ctaDiagnosis, 'Solicitar diagnóstico SEO');
   assert.equal(es.home.hero.ctaServices, 'Ver servicios');
-  assert.equal(es.home.visibility.text, 'Como traductora y creadora de contenido, trabajo entre idiomas, culturas y formatos para que cada mensaje conserve su intención y conecte de forma natural. Combino traducción, localización y SEO multilingüe junto con contenido UGC para ayudar a marcas a comunicar con claridad, coherencia y sensibilidad cultural.');
+  assert.equal(es.home.visibility.text, 'Más tráfico no sirve de nada si no llega a las personas adecuadas. Por eso, como traductora y creadora de contenido, trabajo entre idiomas, culturas y formatos: diseño estrategias SEO adaptadas a la realidad de cada proyecto y las combino con traducción, localización y vídeos UGC, para que cada mensaje conserve su intención, conecte de forma natural y genere confianza desde el primer vistazo.');
   assert.equal(es.aboutPage.hero.title, 'Marta Gallardo  Filosofía Marttelier');
   assert.equal(es.seoPage.hero.paragraphs.length, 2);
   assert.equal(es.translationServicePage.arsenal.skillsTitle, 'Habilidades');
-  assert.equal(es.translationServicePage.arsenal.eyebrow, '02 · PERFIL Y HERRAMIENTAS');
+  assert.equal(es.translationServicePage.arsenal.eyebrow, 'PERFIL Y HERRAMIENTAS');
   assert.equal(es.seoPage.arsenal.skillsTitle, 'Habilidades SEO');
-  assert.equal(es.ugcPage.benefits.title, 'Por qué Apostar por el Contenido Generado por Usuarios');
+  assert.equal(es.ugcPage.benefits.title, 'Por qué Apostar por el Contenido UGC');
   assert.equal(es.ugcPage.pageTitle, 'Creadora de Contenido UGC para Marcas');
 });

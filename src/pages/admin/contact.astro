@@ -100,6 +100,14 @@ const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-
               <textarea id="ugc-details" name="Project Description" rows="4" required class={`${fieldClass} min-h-[7rem] resize-y`}></textarea>
             </div>
 
+            <label for="ugc-privacy" class="flex items-start gap-3 font-body text-sm leading-6 text-paper/80">
+              <input id="ugc-privacy" name="Privacy Consent" type="checkbox" value="accepted" required class="mt-1 h-4 w-4 shrink-0 accent-amaranth" />
+              <span class="space-y-1">
+                <EditableText client:load i18nKey="contact.privacyConsent" as="span" className="block" />
+                <EditableText client:load i18nKey="contact.privacyConsentLink" as="span" className="block text-paper underline underline-offset-4" />
+              </span>
+            </label>
+
             <div class="flex flex-col gap-3 border-t border-paper/14 pt-4 md:flex-row md:items-end md:justify-between">
               <EditableText client:load i18nKey="contact.responseNote" as="p" className="max-w-xl font-body text-[0.68rem] uppercase tracking-[0.22em] text-paper/58" />
               <div class="group/edit relative">
@@ -146,6 +154,14 @@ const successClass = 'contact-success hidden border-t border-paper/14 pt-8 text-
               <label for="seo-details" class={labelClass}><EditableText client:load i18nKey="contact.fields.seoDetails" as="span" className="" /></label>
               <textarea id="seo-details" name="Work Description" rows="4" required class={`${fieldClass} min-h-[7rem] resize-y`}></textarea>
             </div>
+
+            <label for="seo-privacy" class="flex items-start gap-3 font-body text-sm leading-6 text-paper/80">
+              <input id="seo-privacy" name="Privacy Consent" type="checkbox" value="accepted" required class="mt-1 h-4 w-4 shrink-0 accent-amaranth" />
+              <span class="space-y-1">
+                <EditableText client:load i18nKey="contact.privacyConsent" as="span" className="block" />
+                <EditableText client:load i18nKey="contact.privacyConsentLink" as="span" className="block text-paper underline underline-offset-4" />
+              </span>
+            </label>
 
             <div class="flex flex-col gap-3 border-t border-paper/14 pt-4 md:flex-row md:items-end md:justify-between">
               <EditableText client:load i18nKey="contact.responseNote" as="p" className="max-w-xl font-body text-[0.68rem] uppercase tracking-[0.22em] text-paper/58" />

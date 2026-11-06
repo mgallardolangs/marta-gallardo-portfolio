@@ -324,7 +324,7 @@ test('Phase 2 Spanish and localized copy match the approved content set', async 
 
   assert.equal(es.home.hero.kicker, 'marttelier');
   assert.equal(es.home.hero.title, 'Consultora SEO Freelance y Estrategia de Contenidos Digitales');
-  assert.equal(es.home.hero.description, 'Optimizo la visibilidad y conversión de tu negocio para que conectes con personas reales, en cualquier idioma y mercado.');
+  assert.equal(es.home.hero.description, 'Hago que tu proyecto se encuentre, se entienda y convenza en distintos idiomas: auditoría SEO técnica, traducción y localización profesional, y contenido UGC pensado para convertir.');
   assert.equal(es.home.hero.ctaDiagnosis, 'Solicitar diagnóstico SEO');
   assert.equal(es.home.hero.ctaServices, 'Ver servicios');
   assert.equal(es.home.services.items.seo, 'Consultoría y Auditoría SEO');
@@ -345,10 +345,10 @@ test('Phase 2 Spanish and localized copy match the approved content set', async 
   assert.equal(es.contact.subtitle, 'Cuéntame qué quieres crear, adaptar o posicionar. Te responderé con una propuesta clara para dar forma al proyecto.');
   assert.equal(es.translationPage.hero.title, 'Servicios de Traducción, SEO y Localización');
   assert.equal(es.translationPage.hero.text, 'Adapto contenidos para que suenen naturales, conecten con cada mercado y tengan más oportunidades de encontrarse. Traducción, localización y SEO multilingüe con una misma intención: que tu mensaje funcione, esté donde esté tu audiencia.');
-  assert.equal(es.translationPage.experience.cards[0].text, 'Traducción diaria de fichas de producto (ES→FR/DE/IT), gestión de catálogos y atención a clientes francófonos, manteniendo precisión y tono de marca.');
+  assert.equal(es.translationPage.experience.cards[0].text, 'Traducción diaria de fichas de producto (ES→FR/DE/IT/ES), gestión de catálogos y atención a clientes francófonos, manteniendo precisión y tono de marca.');
   assert.equal(es.translationPage.experience.cards[1].text, 'Traducción FR⇄ES de textos legales y posedición, con foco en precisión terminológica y coherencia.');
   assert.equal(es.translationPage.experience.cards[2].text, 'Trabajo y convivencia en Suiza en un entorno multicultural, reforzando adaptabilidad, empatía y fluidez comunicativa.');
-  assert.equal(es.translationPage.education.studies[0], 'Grado en Traducción e Interpretación, especializado en francés, redacción y adaptación de contenidos. Segundos idiomas: alemán e italiano.Formación básica especializada en traducción literaria, jurídico-económica, técnico-científica y audiovisual.');
+  assert.equal(es.translationPage.education.studies[0], 'Grado en Traducción e Interpretación, especializado en francés, redacción y adaptación de contenidos. Segundos idiomas: alemán e italiano. Formación en traducción literaria, jurídico-económica, técnico-científica y audiovisual.');
   assert.equal(es.translationPage.education.studies[1], 'Erasmus+ en París: práctica diaria en entornos francófonos.');
   assert.equal(es.translationPage.education.studies[2], 'Formación continua en escritura clara, terminología y optimización de contenidos digitales.');
   assert.equal(es.translationPage.education.studies[3], 'Curso privado de Marketing Digital y SEO.');
