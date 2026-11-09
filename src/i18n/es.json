@@ -154,6 +154,7 @@
   "ugcPage": {
     "pageDescription": "Portfolio profesional de UGC de Marta Gallardo con campañas editoriales conceptuales de viajes, idiomas y arte.",
     "pageTitle": "Creadora de Contenido UGC para Marcas",
+    "pageTitleAccent": "Marcas",
     "niches": {
       "travel": {
         "label": "Viajes",
@@ -287,6 +288,7 @@
     "benefits": {
       "eyebrow": "UGC · DIRECCIÓN CREATIVA",
       "title": "Por qué Apostar por el Contenido UGC",
+      "titleAccent": "Apostar",
       "description": "Muchas personas confían más en alguien que usa un producto o un servicio en su día a día que en un anuncio muy producido. El UGC (contenido generado por usuarios) muestra tu marca en situaciones reales, con una cámara cercana y un tono natural. Sirve para tus redes, para tu web y como anuncio pagado, y te da material variado para probar qué mensaje funciona mejor con tu audiencia."
     },
     "process": {
@@ -420,6 +422,7 @@
       "scrollCue": "Descubre cómo trabajo",
       "coverLabel": "Portada editorial",
       "title": "Consultora SEO Freelance y Estrategia de Contenidos Digitales",
+      "titleAccent": "Estrategia",
       "ctaDiagnosis": "Solicitar diagnóstico SEO",
       "ctaServices": "Ver servicios"
     },

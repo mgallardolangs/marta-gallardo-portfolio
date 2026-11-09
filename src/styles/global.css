@@ -2,22 +2,22 @@
 
 @theme {
   --color-paper: #FBF4EF;
-  --color-ink: #6B1E2E;
+  --color-ink: #4A1222;
   --color-amaranth: #F48FA1;
   --color-hazel: #7D5A45;
   --color-cream: var(--color-paper);
   --color-charcoal: var(--color-ink);
   --color-white: var(--color-paper);
-  --color-warm-gray: rgb(107 30 46 / 0.68);
-  --color-ink-muted: rgb(107 30 46 / 0.68);
-  --color-ink-faint: rgb(107 30 46 / 0.52);
+  --color-warm-gray: rgb(74 18 34 / 0.68);
+  --color-ink-muted: rgb(74 18 34 / 0.68);
+  --color-ink-faint: rgb(74 18 34 / 0.52);
 
   --shadow-amaranth: 0 18px 38px rgb(244 143 161 / 0.16);
-  --shadow-ink: 0 18px 54px rgb(107 30 46 / 0.08);
+  --shadow-ink: 0 18px 54px rgb(74 18 34 / 0.08);
 
   --font-heading: 'Instrument Sans', system-ui, sans-serif;
   --font-body: 'Instrument Sans', system-ui, sans-serif;
-  --font-accent: 'Instrument Serif', Georgia, serif;
+  --font-accent: 'Playfair Display', Georgia, serif;
 
   --spacing-128: 32rem;
 }
@@ -94,7 +94,7 @@ svg {
 }
 
 .section-shell {
-  border: 1px solid rgb(107 30 46 / 0.08);
+  border: 1px solid rgb(74 18 34 / 0.08);
   border-radius: 2rem;
   background: rgb(251 244 239 / 0.56);
   box-shadow: var(--shadow-ink);
@@ -249,7 +249,7 @@ svg {
 .home-hero {
   position: relative;
   overflow: hidden;
-  border-bottom: 1px solid rgb(107 30 46 / 0.1);
+  border-bottom: 1px solid rgb(74 18 34 / 0.1);
 }
 
 .home-hero__stage {
@@ -416,7 +416,7 @@ svg {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: rgb(107 30 46 / 0.08);
+  background: rgb(74 18 34 / 0.08);
   clip-path: inset(100% 0 0 0);
   animation: home-hero-portrait-reveal 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -600,7 +600,7 @@ svg {
 
 .seo-budget-highlight {
   position: relative;
-  border: 1px solid rgb(107 30 46 / 0.12);
+  border: 1px solid rgb(74 18 34 / 0.12);
   border-left: 3px solid var(--color-amaranth);
   background: var(--color-white);
   padding: clamp(1.5rem, 3vw, 2.25rem);
@@ -615,4 +615,18 @@ svg {
 
 @media (prefers-reduced-motion: reduce) {
   .seo-budget-highlight { animation: none; }
+}
+
+.accent-word {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  padding-inline: 0.05em;
+  color: var(--color-hazel);
+}
+
+.bg-ink .accent-word,
+.bg-charcoal .accent-word {
+  color: var(--color-amaranth);
 }

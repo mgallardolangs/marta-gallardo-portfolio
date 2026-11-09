@@ -125,6 +125,7 @@
       "scrollCue": "Scrollen zum Entdecken",
       "coverLabel": "Titel-Story",
       "title": "Freiberufliche SEO-Beratung & Strategie für digitale Inhalte",
+      "titleAccent": "Strategie",
       "ctaDiagnosis": "SEO-Analyse anfragen",
       "ctaServices": "Leistungen ansehen"
     },
@@ -197,6 +198,7 @@
     },
     "pageDescription": "Professionelles UGC-Portfolio von Marta Gallardo mit editorialen Konzeptkampagnen zu Reisen, Sprachen und Kunst.",
     "pageTitle": "UGC-Content-Creatorin für Marken",
+    "pageTitleAccent": "Marken",
     "nicheLabel": "Nische",
     "backToTop": "Zurück nach oben",
     "placeholder": "Platzhalter",
@@ -321,6 +323,7 @@
     "benefits": {
       "eyebrow": "UGC · KREATIVE LEITUNG",
       "title": "Warum auf UGC-Content setzen",
+      "titleAccent": "setzen",
       "description": "Viele Menschen vertrauen eher jemandem, der ein Produkt oder eine Dienstleistung im Alltag nutzt, als einer aufwendig produzierten Anzeige. UGC (nutzergenerierte Inhalte) zeigt Ihre Marke in realen Situationen, mit einer nahen Kamera und einem natürlichen Ton. Er eignet sich für Ihre Social-Media-Kanäle, Ihre Website und als bezahlte Anzeige und liefert Ihnen vielfältiges Material, um zu testen, welche Botschaft bei Ihrer Zielgruppe am besten funktioniert."
     },
     "process": {

@@ -37,7 +37,7 @@ export default function EditableOrbitCollection() {
           const previewAlt = getLocalizedOrbitText(item.alt, store.currentLang);
 
           return (
-            <article key={item.id} className="space-y-5 border border-black/10 bg-white p-5 shadow-[0_12px_32px_rgba(107, 30, 46,0.06)]">
+            <article key={item.id} className="space-y-5 border border-black/10 bg-white p-5 shadow-[0_12px_32px_rgba(74, 18, 34,0.06)]">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <p className="font-heading text-xl text-ink">{item.id}</p>

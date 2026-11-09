@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 const locales = ['es', 'en', 'fr', 'de', 'it', 'ca'];
 const legacyVisualTokenPattern = /\b(?:amaranth-soft|amaranth-mist|amaranth-ink|blush-[a-z0-9/-]+|rose-gold)\b|#fff(?:fff)?\b/i;
-const approvedOpaqueHexColors = new Set(['#fbf4ef', '#6b1e2e', '#f48fa1', '#7d5a45']);
+const approvedOpaqueHexColors = new Set(['#fbf4ef', '#4a1222', '#f48fa1', '#7d5a45']);
 const hexLiteralPattern = /#(?:[\da-f]{3}|[\da-f]{4}|[\da-f]{6}|[\da-f]{8})\b/gi;
 const sourceExtensions = new Set(['.astro', '.tsx', '.css', '.ts', '.js']);
 
@@ -76,7 +76,7 @@ test('strict palette cleanup removes legacy visual tokens and unapproved hex col
     assert.deepEqual(
       disallowedHexLiterals,
       [],
-      `${relativePath} should only keep approved opaque hex colors (#FBF4EF, #6B1E2E, #F48FA1, #7D5A45); transparent variants must use rgb()/rgba()/color-mix() instead`,
+      `${relativePath} should only keep approved opaque hex colors (#FBF4EF, #4A1222, #F48FA1, #7D5A45); transparent variants must use rgb()/rgba()/color-mix() instead`,
     );
   }
 
@@ -177,7 +177,7 @@ test('favicon keeps only a root svg with one ink MG text child', async () => {
   assert.equal(textNodes.length, 1, 'favicon should expose exactly one text node');
   assert.equal(textNodes[0]?.textContent, 'MG', 'favicon should render only the MG monogram');
   assert.match(rootTextChild, /^<text\b[^>]*>\s*MG\s*<\/text>$/i, 'favicon should keep MG as the lone direct svg child');
-  assert.match(textNodes[0]?.attributes ?? '', /\bfill=["']#6B1E2E["']/i, 'favicon should render the MG mark in ink (#6B1E2E)');
+  assert.match(textNodes[0]?.attributes ?? '', /\bfill=["']#4A1222["']/i, 'favicon should render the MG mark in ink (#4A1222)');
   assert.doesNotMatch(
     faviconSource,
     /<(?:style|defs|rect|circle|ellipse|path|polygon|polyline|line|image|use|foreignObject)\b/i,
@@ -187,7 +187,7 @@ test('favicon keeps only a root svg with one ink MG text child', async () => {
   assert.doesNotMatch(faviconSource, /\bstroke\b\s*(?:=|:)/i, 'favicon should not declare stroke paint');
   assert.deepEqual(
     [...new Set(paintValues)],
-    ['#6b1e2e'],
+    ['#4a1222'],
     'favicon should not introduce any fill or stroke colors beyond the ink MG mark',
   );
 });

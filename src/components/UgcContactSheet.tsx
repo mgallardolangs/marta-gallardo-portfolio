@@ -518,7 +518,7 @@ export default function UgcContactSheet({
             display: grid;
             height: 1.05rem;
             overflow: hidden;
-            color: rgb(107 30 46 / 0.8);
+            color: rgb(74 18 34 / 0.8);
             transition: color 0.2s ease;
           }
 

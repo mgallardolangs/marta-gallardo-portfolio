@@ -11,10 +11,10 @@ const distDir = path.join(rootDir, 'dist');
 const sourceExtensions = new Set(['.astro', '.tsx', '.css', '.ts', '.js']);
 const distExtensions = new Set(['.html', '.css', '.js']);
 const forbiddenLegacyPalettePattern = /\b(?:amaranth-(?:soft|mist|ink)|blush-[a-z0-9/-]+|rose-gold)\b|#fff(?:fff)?\b/i;
-const approvedOpaqueHexColors = new Set(['#fbf4ef', '#6b1e2e', '#f48fa1', '#7d5a45']);
+const approvedOpaqueHexColors = new Set(['#fbf4ef', '#4a1222', '#f48fa1', '#7d5a45']);
 const hexLiteralPattern = /#(?:[\da-f]{3}|[\da-f]{4}|[\da-f]{6}|[\da-f]{8})\b/gi;
 const rgbFunctionPattern = /rgba?\(\s*([^)]*)\)/gi;
-const approvedRgbTriplets = new Set(['251,244,239', '107,30,46', '244,143,161', '125,90,69']);
+const approvedRgbTriplets = new Set(['251,244,239', '74,18,34', '244,143,161', '125,90,69']);
 
 function decodeCssEscapes(source) {
   return source.replace(/\\([0-9a-fA-F]{1,6}\s?|.)/g, (_, escapedValue) => {
@@ -99,7 +99,7 @@ test('all src files drop legacy palette token names even when CSS escapes are de
     assert.deepEqual(
       disallowedHexLiterals,
       [],
-      `${relativePath} should only keep approved opaque hex colors (#FBF4EF, #6B1E2E, #F48FA1, #7D5A45)`,
+      `${relativePath} should only keep approved opaque hex colors (#FBF4EF, #4A1222, #F48FA1, #7D5A45)`,
     );
   }));
 });
@@ -164,10 +164,10 @@ test('theme color declarations reject backslash escapes and extra amaranth varia
 test('palette audit allows approved paper, ink, and amaranth triplets across comma, space, and underscore syntax', () => {
   const sampleSource = [
     'box-shadow: 0 0 0 rgb(251 244 239 / 0.52);',
-    'color: rgb(107 30 46 / 0.15);',
+    'color: rgb(74 18 34 / 0.15);',
     'background: rgb(244 143 161 / 0.35);',
     'border-color: rgba(244, 143, 161, 0.4);',
-    'shadow-[0_18px_40px_rgb(107_30_46_/_0.24)]',
+    'shadow-[0_18px_40px_rgb(74_18_34_/_0.24)]',
   ].join('\n');
 
   assert.deepEqual(

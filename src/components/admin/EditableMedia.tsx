@@ -116,7 +116,7 @@ export default function EditableMedia({
         className="absolute inset-0 z-10 flex items-center justify-center bg-ink/55 opacity-0 transition-opacity group-hover/media:opacity-100"
         onClick={openFilePicker}
       >
-        <span className="pointer-events-none border border-amaranth/20 bg-paper px-4 py-2 text-sm font-medium text-ink shadow-[0_18px_40px_rgb(107_30_46_/_0.24)]">
+        <span className="pointer-events-none border border-amaranth/20 bg-paper px-4 py-2 text-sm font-medium text-ink shadow-[0_18px_40px_rgb(74_18_34_/_0.24)]">
           {label}
         </span>
       </div>
