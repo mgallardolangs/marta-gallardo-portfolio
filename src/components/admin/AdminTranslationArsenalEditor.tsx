@@ -286,7 +286,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
           >
             Cancelar
           </button>
-          {addError && <p className="text-xs text-amaranth">{addError}</p>}
+          {addError && <p className="text-xs text-hazel">{addError}</p>}
         </div>
       </div>
     );
@@ -320,7 +320,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
             type="button"
             data-remove-item
             onClick={() => { store.removeEditableCollectionItem('languages', index); closeItemEditor(); }}
-            className="border border-amaranth/30 bg-paper px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-amaranth transition hover:bg-amaranth hover:text-ink"
+            className="border border-amaranth/30 bg-paper px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-hazel transition hover:bg-amaranth hover:text-ink"
           >
             Quitar
           </button>
@@ -368,7 +368,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
           </span>
         </label>
         {itemError && (
-          <p role="alert" data-item-editor-error className="text-xs text-amaranth">
+          <p role="alert" data-item-editor-error className="text-xs text-hazel">
             {itemError}
           </p>
         )}
@@ -380,7 +380,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
             type="button"
             data-remove-item
             onClick={() => { store.removeEditableCollectionItem('tools', index); closeItemEditor(); }}
-            className="border border-amaranth/30 bg-paper px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-amaranth transition hover:bg-amaranth hover:text-ink"
+            className="border border-amaranth/30 bg-paper px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-hazel transition hover:bg-amaranth hover:text-ink"
           >
             Quitar
           </button>
@@ -416,7 +416,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
             type="button"
             data-remove-item
             onClick={() => { store.removeEditableCollectionItem('skills', index); closeItemEditor(); }}
-            className="border border-amaranth/30 bg-paper px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-amaranth transition hover:bg-amaranth hover:text-ink"
+            className="border border-amaranth/30 bg-paper px-3 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-hazel transition hover:bg-amaranth hover:text-ink"
           >
             Quitar
           </button>
@@ -430,7 +430,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
       <div className={`grid gap-0 ${scope === 'translation' ? 'lg:grid-cols-3' : 'md:grid-cols-2'}`}>
         {scope === 'translation' && (
         <article className="border-b border-ink p-5 lg:border-b-0 lg:border-r" data-admin-arsenal-panel="languages">
-          <EditableText i18nKey={titleKeys.languages} as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth" />
+          <EditableText i18nKey={titleKeys.languages} as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-hazel" />
           <span className="mt-4 block h-px bg-ink/12"></span>
           <div className="mt-5" data-arsenal-items>
             {languages.map((language, index) => (
@@ -448,7 +448,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
                 onDragEnd={handleDragEnd}
               >
                 <p className="font-heading text-2xl text-ink">{localize(language.label, store.currentLang)}</p>
-                <p className="text-sm font-medium text-amaranth">{localize(language.level, store.currentLang)}</p>
+                <p className="text-sm font-medium text-hazel">{localize(language.level, store.currentLang)}</p>
 
                 <span data-drag-handle aria-hidden="true" className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 pl-1 text-xs text-ink-faint opacity-0 transition group-hover:opacity-100 group-focus-within:opacity-100">⠿</span>
                 <button
@@ -470,7 +470,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
             type="button"
             data-collection-add="languages"
             onClick={() => openAdd('languages')}
-            className="mt-4 flex w-full items-center justify-center gap-2 border border-dashed border-ink/30 px-3 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-ink-faint transition hover:border-amaranth hover:text-amaranth"
+            className="mt-4 flex w-full items-center justify-center gap-2 border border-dashed border-ink/30 px-3 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-ink-faint transition hover:border-amaranth hover:text-hazel"
           >
             + Añadir idioma
           </button>
@@ -482,7 +482,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
           className={`border-b ${tone.frame} p-5 ${scope === 'translation' ? 'lg:border-b-0 lg:border-r' : 'md:border-b-0 md:border-r'}`}
           data-admin-arsenal-panel="tools"
         >
-          <EditableText i18nKey={titleKeys.tools} as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth" />
+          <EditableText i18nKey={titleKeys.tools} as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-hazel" />
           <span className={`mt-4 block h-px ${tone.rule}`}></span>
           <div className="mt-5 grid grid-cols-3 gap-2" data-arsenal-items>
             {tools.map(({ item: tool, index }) => (
@@ -535,7 +535,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
               type="button"
               data-collection-add="tools"
               onClick={() => openAdd('tools')}
-              className={`flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-2 border border-dashed ${tone.add} px-3 py-4 text-center transition hover:border-amaranth hover:text-amaranth`}
+              className={`flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-2 border border-dashed ${tone.add} px-3 py-4 text-center transition hover:border-amaranth hover:text-hazel`}
             >
               <span className="text-2xl leading-none">+</span>
               <span className="text-[0.65rem] font-medium uppercase tracking-[0.12em]">Añadir herramienta</span>
@@ -547,7 +547,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
         </article>
 
         <article className="p-5" data-admin-arsenal-panel="skills">
-          <EditableText i18nKey={titleKeys.skills} as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth" />
+          <EditableText i18nKey={titleKeys.skills} as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-hazel" />
           <span className={`mt-4 block h-px ${tone.rule}`}></span>
           <div className="mt-5 flex flex-col gap-2" data-arsenal-items data-skill-group={scope}>
             {scopedSkills.map(({ item, index }) => (
@@ -583,7 +583,7 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
               type="button"
               data-collection-add={`skills-${scope}`}
               onClick={() => openAdd(scope)}
-              className={`border border-dashed ${tone.add} px-3 py-2 text-left text-[0.68rem] uppercase tracking-[0.08em] transition hover:border-amaranth hover:text-amaranth`}
+              className={`border border-dashed ${tone.add} px-3 py-2 text-left text-[0.68rem] uppercase tracking-[0.08em] transition hover:border-amaranth hover:text-hazel`}
             >
               + Añadir habilidad
             </button>

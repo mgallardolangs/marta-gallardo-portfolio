@@ -63,7 +63,7 @@ const archivePlaceholderIndex = String(latest ? 2 : 1).padStart(2, '0');
                 </div>
 
                 <div class="space-y-4">
-                  <a href={getLocalizedPath(`/blog/${latest.data.slug}`, lang)} class="block transition hover:text-amaranth">
+                  <a href={getLocalizedPath(`/blog/${latest.data.slug}`, lang)} class="block transition hover:text-hazel">
                     <h2 class="font-heading text-3xl leading-[0.94] text-ink md:text-[3.35rem]">{latest.data.title}</h2>
                   </a>
                   <p class="max-w-xl font-body text-base leading-8 text-ink-muted md:text-lg">{latest.data.description}</p>
@@ -100,7 +100,7 @@ const archivePlaceholderIndex = String(latest ? 2 : 1).padStart(2, '0');
 
                 <div class="grid gap-3 md:grid-cols-[minmax(0,1fr)_140px] md:items-start">
                   <div class="space-y-2">
-                    <a href={getLocalizedPath(`/blog/${post.data.slug}`, lang)} class="block transition hover:text-amaranth">
+                    <a href={getLocalizedPath(`/blog/${post.data.slug}`, lang)} class="block transition hover:text-hazel">
                       <h3 class="font-heading text-2xl leading-tight text-ink">{post.data.title}</h3>
                     </a>
                     <div class="flex flex-wrap items-center gap-3 text-sm text-ink-muted">

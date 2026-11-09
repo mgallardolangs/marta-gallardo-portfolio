@@ -25,7 +25,7 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'translation');
     <section class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
       <div class="site-container max-w-7xl">
         <ScrollReveal client:visible direction="right" className="flex flex-col gap-8">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-amaranth">{page.hero.eyebrow}</p>
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-hazel">{page.hero.eyebrow}</p>
           <TypedTitle
             as="h1"
             text={page.hero.title}
@@ -74,7 +74,7 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'translation');
     <section class="px-6 py-16 md:py-20">
       <div class="site-container grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
         <ScrollReveal client:visible direction="right" className="flex flex-col gap-6">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.multilingualSeo.eyebrow}</p>
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel">{page.multilingualSeo.eyebrow}</p>
           <TypedTitle
             as="h2"
             text={page.multilingualSeo.title}
@@ -121,7 +121,7 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'translation');
     <section class="px-6 py-16 md:py-20" data-translation-arsenal>
       <div class="site-container space-y-10">
         <div class="space-y-5">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.arsenal.eyebrow}</p>
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel">{page.arsenal.eyebrow}</p>
           <TypedTitle
             as="h2"
             text={page.arsenal.title}
@@ -132,20 +132,20 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'translation');
 
         <div class="grid gap-4 lg:grid-cols-3">
           <article class="border border-ink p-5" data-translation-panel="languages">
-            <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.languagesTitle}</p>
+            <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-hazel">{page.arsenal.languagesTitle}</p>
             <span class="mt-4 block h-px bg-ink/12"></span>
             <div class="mt-4">
               {arsenal.languages.map((language) => (
                 <div class="flex items-center justify-between gap-4 border-b border-ink/10 py-3 last:border-b-0">
                   <p class="font-heading text-xl text-ink">{language.label}</p>
-                  <p class="text-right font-body text-sm font-medium text-amaranth">{language.level}</p>
+                  <p class="text-right font-body text-sm font-medium text-hazel">{language.level}</p>
                 </div>
               ))}
             </div>
           </article>
 
           <article class="border border-ink p-5" data-translation-panel="tools">
-            <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.toolsTitle}</p>
+            <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-hazel">{page.arsenal.toolsTitle}</p>
             <span class="mt-4 block h-px bg-ink/12"></span>
             <div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
               {arsenal.tools.map((tool) => (
@@ -158,7 +158,7 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'translation');
           </article>
 
           <article class="border border-ink p-5" data-translation-panel="skills">
-            <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.skillsTitle}</p>
+            <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-hazel">{page.arsenal.skillsTitle}</p>
             <span class="mt-4 block h-px bg-ink/12"></span>
             <div class="mt-4 flex flex-col gap-2">
               {arsenal.skills.map((skill) => (

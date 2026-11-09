@@ -117,7 +117,7 @@ export default function NicheIcon({ niche, className = '' }: NicheIconProps) {
   return (
     <motion.div
       ref={ref}
-      className={`text-amaranth ${className}`}
+      className={`text-hazel ${className}`}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
       variants={scrollAnimations[niche]}

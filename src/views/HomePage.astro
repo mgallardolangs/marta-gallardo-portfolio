@@ -191,7 +191,7 @@ const homeServices = [
       <section class="bg-paper px-6 py-20 md:py-24">
         <div class="site-container space-y-12">
           <ScrollReveal client:visible direction="right" className="flex flex-col gap-6">
-            <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.blog.eyebrow}</p>
+            <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-hazel">{i.blog.eyebrow}</p>
             <TypedTitle
               as="h2"
               text={i.home.latestArticles.title}
@@ -225,7 +225,7 @@ const homeServices = [
                     <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-muted">
                       {String(index + 1).padStart(2, '0')} · {post.data.date.toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' })}
                     </p>
-                    <a href={getLocalizedPath(`/blog/${post.data.slug}`, lang)} class="transition hover:text-amaranth">
+                    <a href={getLocalizedPath(`/blog/${post.data.slug}`, lang)} class="transition hover:text-hazel">
                       <h3 class="font-heading text-2xl leading-tight text-ink md:text-3xl">{post.data.title}</h3>
                     </a>
                     <p class="flex-1 font-body text-sm leading-7 text-ink-muted">{post.data.description}</p>

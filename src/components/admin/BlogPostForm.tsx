@@ -13,7 +13,7 @@ import { useAdminStore } from './useAdminStore';
 
 const inputClass = 'w-full border border-black/10 bg-paper px-4 py-3 text-sm text-charcoal outline-none transition focus:border-amaranth';
 const labelClass = 'mb-2 block text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-warm-gray';
-const toolbarButtonClass = 'border border-black/10 px-3 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-ink transition hover:border-amaranth hover:text-amaranth';
+const toolbarButtonClass = 'border border-black/10 px-3 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-ink transition hover:border-amaranth hover:text-hazel';
 const tabButtonClass = (isActive: boolean) => `border border-b-0 px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.2em] transition ${isActive ? 'border-black bg-black text-paper' : 'border-black/10 bg-paper text-ink-muted hover:border-black/40 hover:text-ink'}`;
 
 const LOCALE_NATIVE_LABELS: Record<SupportedLang, string> = {
@@ -271,7 +271,7 @@ export default function BlogPostForm({ mode, visibleLocales: initialVisibleLocal
         )}
 
         {removeImage && !featuredImageState.previewUrl && (
-          <p className="md:col-span-2 text-xs text-amaranth">Se eliminará la imagen actual al guardar. <button type="button" onClick={() => setRemoveImage(false)} className="underline">Deshacer</button></p>
+          <p className="md:col-span-2 text-xs text-hazel">Se eliminará la imagen actual al guardar. <button type="button" onClick={() => setRemoveImage(false)} className="underline">Deshacer</button></p>
         )}
 
         <div className="md:col-span-2 space-y-4">
@@ -398,7 +398,7 @@ export default function BlogPostForm({ mode, visibleLocales: initialVisibleLocal
         </div>
       </div>
 
-      {error && <p className="border border-amaranth px-4 py-3 text-sm text-amaranth">{error}</p>}
+      {error && <p className="border border-amaranth px-4 py-3 text-sm text-hazel">{error}</p>}
       {successPath && (
         <p className="border border-black px-4 py-3 text-sm text-ink">
           {mode === 'edit' ? `Se actualizó ${successPath}.` : `Se creó ${successPath}.`} Publica el sitio para reconstruir el blog.

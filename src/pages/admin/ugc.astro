@@ -17,7 +17,7 @@ const page = i.ugcPage;
     <section class="px-6 pt-20 pb-5 md:pt-24 md:pb-6">
       <div class="site-container">
         <ScrollReveal client:visible className="w-full flex flex-col gap-6">
-          <EditableText client:load i18nKey="ugcPage.hero.eyebrow" as="p" className="text-xs font-semibold uppercase tracking-[0.34em] text-amaranth" />
+          <EditableText client:load i18nKey="ugcPage.hero.eyebrow" as="p" className="text-xs font-semibold uppercase tracking-[0.34em] text-hazel" />
           <div class="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-end">
             <EditableText client:load i18nKey="ugcPage.pageTitle" as="h1" className="block text-4xl leading-none text-ink md:text-6xl" />
             <EditableText client:load i18nKey="ugcPage.contactSheet.headline" as="h2" className="text-balance text-lg font-semibold uppercase leading-[1.18] tracking-[0.13em] text-ink md:text-2xl lg:justify-self-end lg:text-right lg:text-3xl" />
@@ -57,14 +57,14 @@ const page = i.ugcPage;
     <section class="px-6 py-16 md:py-20" data-admin-ugc-process>
       <div class="site-container space-y-10">
         <div class="max-w-3xl space-y-5">
-          <EditableText client:load i18nKey="ugcPage.process.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="ugcPage.process.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel" />
           <EditableText client:load i18nKey="ugcPage.process.title" as="h2" className="font-heading text-4xl leading-none text-ink md:text-5xl" />
         </div>
 
         <div class="grid items-stretch gap-6 md:grid-cols-2 xl:grid-cols-5">
           {i.ugcPage.process.steps.map((_step, index) => (
             <article class="group relative flex h-full flex-col border border-ink/18 px-5 py-6 transition hover:border-amaranth/60 focus-within:border-amaranth/60">
-              <p class="font-body text-sm font-semibold uppercase tracking-[0.16em] text-amaranth">{`0${index + 1}`}</p>
+              <p class="font-body text-sm font-semibold uppercase tracking-[0.16em] text-hazel">{`0${index + 1}`}</p>
               <EditableText client:load i18nKey={`ugcPage.process.steps.${index}.title`} as="h3" className="mt-5 font-heading text-2xl text-ink" />
               <EditableText client:load i18nKey={`ugcPage.process.steps.${index}.description`} as="div" className="mt-4 text-sm leading-7 text-ink-muted" />
               {_step.items?.map((_item, itemIndex) => (
@@ -81,7 +81,7 @@ const page = i.ugcPage;
     <section class="border-t border-ink/10 px-6 py-16">
       <div class="site-container space-y-10">
         <div class="max-w-3xl space-y-5">
-          <p class="text-xs font-semibold uppercase tracking-[0.32em] text-amaranth">Editor</p>
+          <p class="text-xs font-semibold uppercase tracking-[0.32em] text-hazel">Editor</p>
           <h2 class="text-3xl text-ink md:text-4xl">Portfolio UGC de 12 espacios fijos</h2>
           <p class="text-base leading-8 text-ink/68">
             Actualiza el contenido multimedia, las fichas y los textos localizados sin cambiar el orden de los espacios.

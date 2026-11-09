@@ -52,7 +52,7 @@ export default function EditableImage({ imageKey, className = '', alt = '', labe
       {src ? (
         <img src={src} alt={alt} className="h-full w-full object-cover" />
       ) : (
-        <div className="flex h-full w-full min-h-[3rem] items-center justify-center border border-dashed border-ink/10 bg-paper/80 text-2xl text-amaranth">
+        <div className="flex h-full w-full min-h-[3rem] items-center justify-center border border-dashed border-ink/10 bg-paper/80 text-2xl text-hazel">
           📷
         </div>
       )}
@@ -61,7 +61,7 @@ export default function EditableImage({ imageKey, className = '', alt = '', labe
         className="absolute inset-0 z-40 flex items-center justify-center bg-ink/55 opacity-0 transition-opacity group-hover/img:opacity-100 group-focus-within/img:opacity-100"
         onClick={openFilePicker}
       >
-        <span className="pointer-events-none rounded-full border border-amaranth/20 bg-paper px-4 py-2 text-sm font-medium text-ink shadow-[0_12px_30px_rgb(6_4_3_/_0.18)] transition-colors duration-200 group-hover/img:border-amaranth/50 group-hover/img:text-amaranth group-focus-within/img:border-amaranth/50 group-focus-within/img:text-amaranth">
+        <span className="pointer-events-none rounded-full border border-amaranth/20 bg-paper px-4 py-2 text-sm font-medium text-ink shadow-[0_12px_30px_rgb(107_30_46_/_0.18)] transition-colors duration-200 group-hover/img:border-amaranth/50 group-hover/img:text-hazel group-focus-within/img:border-amaranth/50 group-focus-within/img:text-hazel">
           {label}
         </span>
       </div>

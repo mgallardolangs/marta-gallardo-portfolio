@@ -252,7 +252,7 @@ export default function UgcContactSheet({
                   aria-pressed={isActive}
                   onClick={() => setFilter(currentFilter)}
                   className={`ugc-admin-filter group inline-flex items-center justify-center gap-1 overflow-hidden text-[0.65rem] font-semibold uppercase tracking-[0.18em] transition ${
-                    isActive ? 'text-amaranth' : 'text-ink'
+                    isActive ? 'text-hazel' : 'text-ink'
                   }`}
                 >
                   <span className="ugc-admin-filter__bracket ugc-admin-filter__bracket--left" aria-hidden="true">[</span>
@@ -269,12 +269,12 @@ export default function UgcContactSheet({
                   aria-pressed={isActive}
                   onClick={() => setFilter(currentFilter)}
                   className={`group inline-flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-[0.24em] transition ${
-                    isActive ? 'text-amaranth' : 'text-ink hover:text-amaranth'
+                    isActive ? 'text-hazel' : 'text-ink hover:text-hazel'
                   }`}
                 >
-                  <span className={`transition ${isActive ? 'text-amaranth' : 'text-ink/24 group-hover:text-amaranth'}`}>[</span>
+                  <span className={`transition ${isActive ? 'text-hazel' : 'text-ink/24 group-hover:text-hazel'}`}>[</span>
                   <span>{copy.filters[currentFilter]}</span>
-                  <span className={`transition ${isActive ? 'text-amaranth' : 'text-ink/24 group-hover:text-amaranth'}`}>]</span>
+                  <span className={`transition ${isActive ? 'text-hazel' : 'text-ink/24 group-hover:text-hazel'}`}>]</span>
                 </button>
               )
             );
@@ -406,14 +406,14 @@ export default function UgcContactSheet({
                   ref={closeButtonRef}
                   type="button"
                   onClick={closeDialog}
-                  className="absolute right-4 top-4 z-10 inline-flex items-center justify-center border border-paper/16 bg-paper px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink transition hover:border-amaranth hover:text-amaranth md:right-6 md:top-6"
+                  className="absolute right-4 top-4 z-10 inline-flex items-center justify-center border border-paper/16 bg-paper px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink transition hover:border-amaranth hover:text-hazel md:right-6 md:top-6"
                 >
                   {copy.close}
                 </button>
 
                 <div className="grid gap-6 lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)] lg:items-center">
                   <div className="order-1 space-y-4 lg:order-1">
-                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-amaranth">
+                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-hazel">
                     {categoryLabel(activeItem.category)} · {localize(activeItem.format, lang)}
                   </p>
                   <h2 className="text-3xl text-paper md:text-4xl">{localize(activeItem.title, lang)}</h2>
@@ -422,11 +422,11 @@ export default function UgcContactSheet({
                   </p>
                   <dl className="grid gap-3 text-sm text-paper/80">
                     <div className="space-y-1 border-t border-paper/12 pt-3">
-                      <dt className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{copy.formatLabel}</dt>
+                      <dt className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel">{copy.formatLabel}</dt>
                       <dd className="text-paper">{localize(activeItem.format, lang)}</dd>
                     </div>
                     <div className="space-y-1 border-t border-paper/12 pt-3">
-                      <dt className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{copy.pieceLabel}</dt>
+                      <dt className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel">{copy.pieceLabel}</dt>
                       <dd className="text-paper">{activeVisibleIndex + 1} / {visibleItems.length}</dd>
                     </div>
                   </dl>
@@ -480,7 +480,7 @@ export default function UgcContactSheet({
                   <button
                     type="button"
                     onClick={() => navigate('previous')}
-                    className="inline-flex h-12 w-12 items-center justify-center border border-paper/16 text-paper transition hover:border-amaranth hover:text-amaranth"
+                    className="inline-flex h-12 w-12 items-center justify-center border border-paper/16 text-paper transition hover:border-amaranth hover:text-hazel"
                     aria-label={copy.previous}
                   >
                     ↑
@@ -488,7 +488,7 @@ export default function UgcContactSheet({
                   <button
                     type="button"
                     onClick={() => navigate('next')}
-                    className="inline-flex h-12 w-12 items-center justify-center border border-paper/16 text-paper transition hover:border-amaranth hover:text-amaranth"
+                    className="inline-flex h-12 w-12 items-center justify-center border border-paper/16 text-paper transition hover:border-amaranth hover:text-hazel"
                     aria-label={copy.next}
                   >
                     ↓
@@ -508,7 +508,7 @@ export default function UgcContactSheet({
             display: grid;
             height: 1.05rem;
             overflow: hidden;
-            color: rgb(6 4 3 / 0.8);
+            color: rgb(107 30 46 / 0.8);
             transition: color 0.2s ease;
           }
 

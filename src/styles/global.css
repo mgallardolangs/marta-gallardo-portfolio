@@ -1,18 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #F4F5F1;
-  --color-ink: #060403;
-  --color-amaranth: #E83256;
+  --color-paper: #FBF4EF;
+  --color-ink: #6B1E2E;
+  --color-amaranth: #F48FA1;
+  --color-hazel: #7D5A45;
   --color-cream: var(--color-paper);
   --color-charcoal: var(--color-ink);
   --color-white: var(--color-paper);
-  --color-warm-gray: rgb(6 4 3 / 0.68);
-  --color-ink-muted: rgb(6 4 3 / 0.68);
-  --color-ink-faint: rgb(6 4 3 / 0.52);
+  --color-warm-gray: rgb(107 30 46 / 0.68);
+  --color-ink-muted: rgb(107 30 46 / 0.68);
+  --color-ink-faint: rgb(107 30 46 / 0.52);
 
-  --shadow-amaranth: 0 18px 38px rgb(232 50 86 / 0.16);
-  --shadow-ink: 0 18px 54px rgb(6 4 3 / 0.08);
+  --shadow-amaranth: 0 18px 38px rgb(244 143 161 / 0.16);
+  --shadow-ink: 0 18px 54px rgb(107 30 46 / 0.08);
 
   --font-heading: 'Instrument Sans', system-ui, sans-serif;
   --font-body: 'Instrument Sans', system-ui, sans-serif;
@@ -67,14 +68,14 @@ button:disabled {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-amaranth);
+  outline: 2px solid var(--color-hazel);
   outline-offset: 3px;
-  box-shadow: 0 0 0 2px rgb(244 245 241 / 0.92);
+  box-shadow: 0 0 0 2px rgb(251 244 239 / 0.92);
 }
 
 ::selection {
-  color: var(--color-paper);
-  background: rgb(232 50 86 / 0.9);
+  color: var(--color-ink);
+  background: rgb(244 143 161 / 0.9);
 }
 
 img,
@@ -93,9 +94,9 @@ svg {
 }
 
 .section-shell {
-  border: 1px solid rgb(6 4 3 / 0.08);
+  border: 1px solid rgb(107 30 46 / 0.08);
   border-radius: 2rem;
-  background: rgb(244 245 241 / 0.56);
+  background: rgb(251 244 239 / 0.56);
   box-shadow: var(--shadow-ink);
 }
 
@@ -104,7 +105,7 @@ svg {
 }
 
 .text-accent-ink {
-  color: var(--color-amaranth);
+  color: var(--color-hazel);
 }
 
 .site-text-cta-row {
@@ -134,7 +135,7 @@ svg {
 
 .site-text-cta:hover,
 .site-text-cta:focus-visible {
-  color: var(--color-amaranth);
+  color: var(--color-hazel);
 }
 
 .site-text-cta__arrow {
@@ -153,7 +154,7 @@ svg {
   align-items: center;
   gap: 0.5rem;
   padding-bottom: 0.35rem;
-  color: var(--color-amaranth);
+  color: var(--color-hazel);
   font-family: var(--font-body);
   font-size: 0.72rem;
   font-weight: 600;
@@ -208,7 +209,7 @@ svg {
   display: grid;
   height: 1.05rem;
   overflow: hidden;
-  color: rgb(244 245 241 / 0.58);
+  color: rgb(251 244 239 / 0.58);
   transition: color 0.2s ease;
 }
 
@@ -248,7 +249,7 @@ svg {
 .home-hero {
   position: relative;
   overflow: hidden;
-  border-bottom: 1px solid rgb(6 4 3 / 0.1);
+  border-bottom: 1px solid rgb(107 30 46 / 0.1);
 }
 
 .home-hero__stage {
@@ -270,7 +271,7 @@ svg {
   font-weight: 600;
   letter-spacing: 0.34em;
   text-transform: uppercase;
-  color: var(--color-amaranth);
+  color: var(--color-hazel);
 }
 
 .home-hero__title {
@@ -415,7 +416,7 @@ svg {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: rgb(6 4 3 / 0.08);
+  background: rgb(107 30 46 / 0.08);
   clip-path: inset(100% 0 0 0);
   animation: home-hero-portrait-reveal 1.05s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -492,7 +493,7 @@ svg {
   bottom: 1rem;
   left: 1rem;
   height: 1px;
-  background: rgb(244 245 241 / 0.9);
+  background: rgb(251 244 239 / 0.9);
   transform: scaleX(0);
   transform-origin: left;
   animation: home-hero-portrait-rule-draw 0.44s cubic-bezier(0.22, 1, 0.36, 1) 1.02s both;
@@ -599,7 +600,7 @@ svg {
 
 .seo-budget-highlight {
   position: relative;
-  border: 1px solid rgb(6 4 3 / 0.12);
+  border: 1px solid rgb(107 30 46 / 0.12);
   border-left: 3px solid var(--color-amaranth);
   background: var(--color-white);
   padding: clamp(1.5rem, 3vw, 2.25rem);

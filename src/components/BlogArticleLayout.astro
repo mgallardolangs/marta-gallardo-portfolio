@@ -93,7 +93,7 @@ const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+
           <BlogTableOfContents client:load headings={outline} title={i.blog.contentIndex} readTimeLabel={i.blog.readTime} readTime={readTime} />
 
           <div class="max-w-[650px]">
-            <div data-blog-prose class="prose prose-lg max-w-[650px] font-body text-ink prose-headings:font-heading prose-headings:text-ink prose-headings:font-normal prose-a:text-amaranth prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-black/20 prose-blockquote:text-ink-muted prose-strong:text-ink [&_h2]:scroll-mt-32 [&_h3]:scroll-mt-32">
+            <div data-blog-prose class="prose prose-lg max-w-[650px] font-body text-ink prose-headings:font-heading prose-headings:text-ink prose-headings:font-normal prose-a:text-hazel prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-black/20 prose-blockquote:text-ink-muted prose-strong:text-ink [&_h2]:scroll-mt-32 [&_h3]:scroll-mt-32">
               <slot />
             </div>
 
@@ -101,12 +101,12 @@ const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+
               <p class="text-accent-ink font-body text-[0.72rem] font-semibold uppercase tracking-[0.28em]">{i.blog.end}</p>
 
               {nextPost ? (
-                <a href={getLocalizedPath(`/blog/${nextPost.data.slug}`, lang)} class="mt-5 inline-flex flex-col gap-2 border-b border-black/10 pb-2 transition hover:border-amaranth hover:text-amaranth">
+                <a href={getLocalizedPath(`/blog/${nextPost.data.slug}`, lang)} class="mt-5 inline-flex flex-col gap-2 border-b border-black/10 pb-2 transition hover:border-amaranth hover:text-hazel">
                   <span class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-ink-faint">{i.blog.nextStory}</span>
                   <span class="font-heading text-2xl leading-tight text-ink">{nextPost.data.title}</span>
                 </a>
               ) : (
-                <a href={getLocalizedPath('/blog', lang)} class="mt-5 inline-flex items-center gap-3 border-b border-black/10 pb-2 font-body text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-ink transition hover:border-amaranth hover:text-amaranth">
+                <a href={getLocalizedPath('/blog', lang)} class="mt-5 inline-flex items-center gap-3 border-b border-black/10 pb-2 font-body text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-ink transition hover:border-amaranth hover:text-hazel">
                   <span aria-hidden="true">←</span>
                   {i.blog.backToList}
                 </a>
@@ -132,7 +132,7 @@ const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+
   [data-blog-prose] :global(h2)::before {
     content: counter(blog-h2, decimal-leading-zero) ' ';
     margin-right: 0.75rem;
-    color: rgb(232 50 86 / 0.96);
+    color: rgb(125 90 69 / 0.96);
     font-size: 0.82rem;
     letter-spacing: 0.24em;
     text-transform: uppercase;
@@ -145,7 +145,7 @@ const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+
   [data-blog-prose] :global(h3)::before {
     content: counter(blog-h2, decimal-leading-zero) '.' counter(blog-h3) ' ';
     margin-right: 0.7rem;
-    color: rgb(232 50 86 / 0.96);
+    color: rgb(125 90 69 / 0.96);
     font-size: 0.76rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;

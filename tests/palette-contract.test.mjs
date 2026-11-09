@@ -11,10 +11,10 @@ const distDir = path.join(rootDir, 'dist');
 const sourceExtensions = new Set(['.astro', '.tsx', '.css', '.ts', '.js']);
 const distExtensions = new Set(['.html', '.css', '.js']);
 const forbiddenLegacyPalettePattern = /\b(?:amaranth-(?:soft|mist|ink)|blush-[a-z0-9/-]+|rose-gold)\b|#fff(?:fff)?\b/i;
-const approvedOpaqueHexColors = new Set(['#f4f5f1', '#060403', '#e83256']);
+const approvedOpaqueHexColors = new Set(['#fbf4ef', '#6b1e2e', '#f48fa1', '#7d5a45']);
 const hexLiteralPattern = /#(?:[\da-f]{3}|[\da-f]{4}|[\da-f]{6}|[\da-f]{8})\b/gi;
 const rgbFunctionPattern = /rgba?\(\s*([^)]*)\)/gi;
-const approvedRgbTriplets = new Set(['244,245,241', '6,4,3', '232,50,86']);
+const approvedRgbTriplets = new Set(['251,244,239', '107,30,46', '244,143,161', '125,90,69']);
 
 function decodeCssEscapes(source) {
   return source.replace(/\\([0-9a-fA-F]{1,6}\s?|.)/g, (_, escapedValue) => {
@@ -99,7 +99,7 @@ test('all src files drop legacy palette token names even when CSS escapes are de
     assert.deepEqual(
       disallowedHexLiterals,
       [],
-      `${relativePath} should only keep approved opaque hex colors (#F4F5F1, #060403, #E83256)`,
+      `${relativePath} should only keep approved opaque hex colors (#FBF4EF, #6B1E2E, #F48FA1, #7D5A45)`,
     );
   }));
 });
@@ -117,13 +117,13 @@ test('EditableImage keeps strict paper ink amaranth tokens without regressing sv
   );
   assert.match(
     editableImageSource,
-    /border border-dashed border-ink\/10[^"]*bg-paper\/80[^"]*text-amaranth/,
+    /border border-dashed border-ink\/10[^"]*bg-paper\/80[^"]*text-hazel/,
     'EditableImage empty state should use paper with an amaranth icon',
   );
   assert.match(editableImageSource, /bg-ink\/55/, 'EditableImage overlay should use an ink alpha surface');
   assert.match(
     editableImageSource,
-    /border border-amaranth\/20 bg-paper px-4 py-2 text-sm font-medium text-ink[\s\S]*group-hover\/img:border-amaranth\/50[\s\S]*group-hover\/img:text-amaranth[\s\S]*group-focus-within\/img:border-amaranth\/50[\s\S]*group-focus-within\/img:text-amaranth/s,
+    /border border-amaranth\/20 bg-paper px-4 py-2 text-sm font-medium text-ink[\s\S]*group-hover\/img:border-amaranth\/50[\s\S]*group-hover\/img:text-hazel[\s\S]*group-focus-within\/img:border-amaranth\/50[\s\S]*group-focus-within\/img:text-hazel/s,
     'EditableImage action pill should keep a paper base with amaranth hover and focus accents',
   );
   assert.match(editableImageSource, /image\/svg\+xml/, 'EditableImage should still accept svg uploads');
@@ -163,11 +163,11 @@ test('theme color declarations reject backslash escapes and extra amaranth varia
 
 test('palette audit allows approved paper, ink, and amaranth triplets across comma, space, and underscore syntax', () => {
   const sampleSource = [
-    'box-shadow: 0 0 0 rgb(244 245 241 / 0.52);',
-    'color: rgb(6 4 3 / 0.15);',
-    'background: rgb(232 50 86 / 0.35);',
-    'border-color: rgba(232, 50, 86, 0.4);',
-    'shadow-[0_18px_40px_rgb(6_4_3_/_0.24)]',
+    'box-shadow: 0 0 0 rgb(251 244 239 / 0.52);',
+    'color: rgb(107 30 46 / 0.15);',
+    'background: rgb(244 143 161 / 0.35);',
+    'border-color: rgba(244, 143, 161, 0.4);',
+    'shadow-[0_18px_40px_rgb(107_30_46_/_0.24)]',
   ].join('\n');
 
   assert.deepEqual(

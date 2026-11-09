@@ -75,7 +75,7 @@ export default function AdminBlogList({ initialGroupsJson }: Props) {
       {notices.length > 0 && (
         <div className="space-y-2 border-b border-black/10 py-4">
           {notices.map((notice) => (
-            <p key={notice} className="font-body text-sm text-amaranth">{notice}</p>
+            <p key={notice} className="font-body text-sm text-hazel">{notice}</p>
           ))}
         </div>
       )}
@@ -100,13 +100,13 @@ export default function AdminBlogList({ initialGroupsJson }: Props) {
                   <span key={tag} className="text-accent-ink">{tag}</span>
                 ))}
               </div>
-              {rowError && <p className="font-body text-xs text-amaranth">{rowError}</p>}
+              {rowError && <p className="font-body text-xs text-hazel">{rowError}</p>}
             </div>
             <time className="font-body text-[0.72rem] uppercase tracking-[0.18em] text-ink-muted">
               {group.date ? new Date(group.date).toLocaleDateString('es', { year: 'numeric', month: 'short', day: 'numeric' }) : ''}
             </time>
             <div className="flex items-center gap-4 font-body text-[0.68rem] font-semibold uppercase tracking-[0.2em]">
-              <a href={`/admin/blog/edit/${group.translationKey}`} className="border-b border-black/10 pb-1 text-ink transition hover:border-amaranth hover:text-amaranth">Editar</a>
+              <a href={`/admin/blog/edit/${group.translationKey}`} className="border-b border-black/10 pb-1 text-ink transition hover:border-amaranth hover:text-hazel">Editar</a>
               {isDeleting ? (
                 <span className="text-ink-faint">Eliminando…</span>
               ) : (
@@ -114,7 +114,7 @@ export default function AdminBlogList({ initialGroupsJson }: Props) {
                   type="button"
                   onClick={() => void handleDelete(group)}
                   disabled={pendingKey !== ''}
-                  className="border-b border-black/10 pb-1 text-ink transition hover:border-amaranth hover:text-amaranth disabled:cursor-not-allowed disabled:opacity-50"
+                  className="border-b border-black/10 pb-1 text-ink transition hover:border-amaranth hover:text-hazel disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Eliminar
                 </button>
