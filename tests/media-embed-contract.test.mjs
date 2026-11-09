@@ -310,7 +310,7 @@ test('ugc focused dialog prioritizes valid embeds and preserves local poster pat
   );
   assert.match(
     ugcSource,
-    /\{item\.type === 'video' \? \(\s*<video[\s\S]*src=\{item\.src\}[\s\S]*poster=\{item\.poster \? netlifyImage\(item\.poster, \{ width: 600 \}\) : undefined\}[\s\S]*preload="metadata"/,
+    /item\.type === 'video' && VIDEO_SOURCE\.test\(item\.src\) \? \(\s*<video[\s\S]*src=\{item\.src\}[\s\S]*poster=\{item\.poster \? netlifyImage\(item\.poster, \{ width: 600 \}\) : undefined\}[\s\S]*preload="metadata"/,
   );
 
   assert.doesNotMatch(orbitSource, /toEmbedUrl|<iframe/);

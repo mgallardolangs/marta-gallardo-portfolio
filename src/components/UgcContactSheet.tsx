@@ -37,7 +37,8 @@ type Props = {
   adminPreview?: boolean;
 };
 
-const FILTERS: UgcFilter[] = ['all', 'travel', 'languages', 'art'];
+const FILTERS: UgcFilter[] = ['all', 'travel', 'languages', 'art', 'products'];
+const VIDEO_SOURCE = /\.(?:mp4|webm|mov|qt)(?:\?.*)?$/i;
 
 export default function UgcContactSheet({
   items: initialItems,
@@ -283,7 +284,8 @@ export default function UgcContactSheet({
 
         <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-3">
           {items.map((item, index) => {
-            const visibility = getUgcTileVisibility(item, filter);
+            const visibility = item.comingSoon ? 'blank' : getUgcTileVisibility(item, filter);
+            const isComingSoon = Boolean(item.comingSoon) && (filter === 'all' || item.category === filter);
             const isVisible = visibility === 'visible';
             const localizedLabel = localize(item.label, lang);
             const localizedAlt = localize(item.alt, lang);
@@ -344,7 +346,15 @@ export default function UgcContactSheet({
                   onPointerLeave={() => handlePreviewLeave(item)}
                   className={`group relative h-full w-full text-left ${isVisible ? '' : 'pointer-events-none'} bg-paper`}
                 >
-                  {item.type === 'video' ? (
+                  {item.comingSoon ? (
+                    <span
+                      className={`flex h-full w-full items-center justify-center border border-dashed border-ink/20 px-3 text-center text-[0.6rem] font-semibold uppercase tracking-[0.24em] text-ink/52 transition duration-300 ${
+                        isComingSoon ? 'opacity-100' : 'opacity-0'
+                      }`}
+                    >
+                      {localizedLabel}
+                    </span>
+                  ) : item.type === 'video' && VIDEO_SOURCE.test(item.src) ? (
                     <video
                       ref={(node) => {
                         previewVideoRefs.current[item.id] = node;
@@ -361,7 +371,7 @@ export default function UgcContactSheet({
                     />
                   ) : (
                     <img
-                      src={netlifyImage(item.src, { width: 600 })}
+                      src={netlifyImage(item.type === 'video' ? item.poster || item.src : item.src, { width: 600 })}
                       alt={localizedAlt}
                       loading="lazy"
                       className={`h-full w-full object-cover transition duration-300 ${
@@ -370,13 +380,13 @@ export default function UgcContactSheet({
                     />
                   )}
 
-                  <span
+                  {item.comingSoon ? null : <span
                     className={`absolute inset-x-3 bottom-3 inline-flex max-w-[calc(100%-1.5rem)] items-center justify-start bg-ink px-2 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.24em] text-paper transition ${
                       isVisible ? 'translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100' : 'opacity-0'
                     }`}
                   >
                     {localizedLabel}
-                  </span>
+                  </span>}
                 </button>
               </motion.div>
             );
@@ -413,7 +423,7 @@ export default function UgcContactSheet({
 
                 <div className="grid gap-6 lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)] lg:items-center">
                   <div className="order-1 space-y-4 lg:order-1">
-                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-hazel">
+                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-amaranth">
                     {categoryLabel(activeItem.category)} · {localize(activeItem.format, lang)}
                   </p>
                   <h2 className="text-3xl text-paper md:text-4xl">{localize(activeItem.title, lang)}</h2>
@@ -422,11 +432,11 @@ export default function UgcContactSheet({
                   </p>
                   <dl className="grid gap-3 text-sm text-paper/80">
                     <div className="space-y-1 border-t border-paper/12 pt-3">
-                      <dt className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel">{copy.formatLabel}</dt>
+                      <dt className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{copy.formatLabel}</dt>
                       <dd className="text-paper">{localize(activeItem.format, lang)}</dd>
                     </div>
                     <div className="space-y-1 border-t border-paper/12 pt-3">
-                      <dt className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel">{copy.pieceLabel}</dt>
+                      <dt className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{copy.pieceLabel}</dt>
                       <dd className="text-paper">{activeVisibleIndex + 1} / {visibleItems.length}</dd>
                     </div>
                   </dl>
@@ -480,7 +490,7 @@ export default function UgcContactSheet({
                   <button
                     type="button"
                     onClick={() => navigate('previous')}
-                    className="inline-flex h-12 w-12 items-center justify-center border border-paper/16 text-paper transition hover:border-amaranth hover:text-hazel"
+                    className="inline-flex h-12 w-12 items-center justify-center border border-paper/16 text-paper transition hover:border-amaranth hover:text-amaranth"
                     aria-label={copy.previous}
                   >
                     ↑
@@ -488,7 +498,7 @@ export default function UgcContactSheet({
                   <button
                     type="button"
                     onClick={() => navigate('next')}
-                    className="inline-flex h-12 w-12 items-center justify-center border border-paper/16 text-paper transition hover:border-amaranth hover:text-hazel"
+                    className="inline-flex h-12 w-12 items-center justify-center border border-paper/16 text-paper transition hover:border-amaranth hover:text-amaranth"
                     aria-label={copy.next}
                   >
                     ↓

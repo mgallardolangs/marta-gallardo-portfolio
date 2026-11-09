@@ -11,6 +11,72 @@
   status = 301
   force = true
 
+# Old URLs from before the localized service routes (Nov 2026). Permanent, no chains.
+[[redirects]]
+  from = "/ugc"
+  to = "/servicios/ugc"
+  status = 301
+
+[[redirects]]
+  from = "/translation-seo"
+  to = "/servicios/seo"
+  status = 301
+
+[[redirects]]
+  from = "/contact"
+  to = "/contacto"
+  status = 301
+
+[[redirects]]
+  from = "/en/ugc"
+  to = "/en/services/ugc"
+  status = 301
+
+[[redirects]]
+  from = "/en/translation-seo"
+  to = "/en/services/seo"
+  status = 301
+
+[[redirects]]
+  from = "/fr/ugc"
+  to = "/fr/services/ugc"
+  status = 301
+
+[[redirects]]
+  from = "/fr/translation-seo"
+  to = "/fr/services/seo"
+  status = 301
+
+[[redirects]]
+  from = "/de/ugc"
+  to = "/de/dienstleistungen/ugc"
+  status = 301
+
+[[redirects]]
+  from = "/de/translation-seo"
+  to = "/de/dienstleistungen/seo"
+  status = 301
+
+[[redirects]]
+  from = "/it/ugc"
+  to = "/it/servizi/ugc"
+  status = 301
+
+[[redirects]]
+  from = "/it/translation-seo"
+  to = "/it/servizi/seo"
+  status = 301
+
+[[redirects]]
+  from = "/ca/ugc"
+  to = "/ca/serveis/ugc"
+  status = 301
+
+[[redirects]]
+  from = "/ca/translation-seo"
+  to = "/ca/serveis/seo"
+  status = 301
+
 [[headers]]
   for = "/*"
   [headers.values]

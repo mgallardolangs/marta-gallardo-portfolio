@@ -307,9 +307,10 @@
       "headline": "DU CONTENU QUI TRANSFORME LES EXPÉRIENCES, LES LANGUES ET L’ART EN HISTOIRES VISUELLES.",
       "filters": {
         "all": "TOUT",
-        "travel": "VOYAGES",
-        "languages": "LANGUES",
-        "art": "ART"
+        "travel": "VOYAGES ET HÉBERGEMENT",
+        "languages": "LANGUES ET ÉDUCATION",
+        "art": "LOISIRS CRÉATIFS ET CRÉATIVITÉ",
+        "products": "PRODUITS ET STYLE DE VIE"
       },
       "close": "Fermer",
       "previous": "Précédent",

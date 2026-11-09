@@ -307,9 +307,10 @@
       "headline": "CONTENT THAT TURNS EXPERIENCES, LANGUAGES, AND ART INTO VISUAL STORIES.",
       "filters": {
         "all": "ALL",
-        "travel": "TRAVEL",
-        "languages": "LANGUAGES",
-        "art": "ART"
+        "travel": "TRAVEL AND ACCOMMODATION",
+        "languages": "LANGUAGES AND EDUCATION",
+        "art": "CRAFTS AND CREATIVITY",
+        "products": "PRODUCTS AND LIFESTYLE"
       },
       "close": "Close",
       "previous": "Previous",

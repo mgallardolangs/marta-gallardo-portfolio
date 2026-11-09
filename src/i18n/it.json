@@ -307,9 +307,10 @@
       "headline": "CONTENUTI CHE TRASFORMANO ESPERIENZE, LINGUE E ARTE IN STORIE VISIVE.",
       "filters": {
         "all": "TUTTO",
-        "travel": "VIAGGI",
-        "languages": "LINGUE",
-        "art": "ARTE"
+        "travel": "VIAGGI E ALLOGGI",
+        "languages": "LINGUE E FORMAZIONE",
+        "art": "DIY E CREATIVITÀ",
+        "products": "PRODOTTI E LIFESTYLE"
       },
       "close": "Chiudi",
       "previous": "Precedente",

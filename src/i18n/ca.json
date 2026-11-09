@@ -307,9 +307,10 @@
       "headline": "CONTINGUT QUE CONVERTEIX EXPERIÈNCIES, IDIOMES I ART EN HISTÒRIES VISUALS.",
       "filters": {
         "all": "TOT",
-        "travel": "VIATGES",
-        "languages": "IDIOMES",
-        "art": "ART"
+        "travel": "VIATGES I ALLOTJAMENT",
+        "languages": "LLENGÜES I EDUCACIÓ",
+        "art": "MANUALITATS I CREATIVITAT",
+        "products": "PRODUCTES I ESTIL DE VIDA"
       },
       "close": "Tanca",
       "previous": "Anterior",

@@ -273,9 +273,10 @@
       "headline": "CONTENIDO QUE CONVIERTE EXPERIENCIAS, IDIOMAS Y ARTE EN HISTORIAS VISUALES.",
       "filters": {
         "all": "TODO",
-        "travel": "VIAJES",
-        "languages": "IDIOMAS",
-        "art": "ARTE"
+        "travel": "VIAJES Y ALOJAMIENTO",
+        "languages": "IDIOMAS Y EDUCACIÓN",
+        "art": "MANUALIDADES Y CREATIVIDAD",
+        "products": "PRODUCTOS Y ESTILO DE VIDA"
       },
       "close": "Cerrar",
       "previous": "Anterior",

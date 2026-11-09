@@ -19,7 +19,8 @@ const UGC_IMAGE_SOURCE_PATTERN = /\.(?:jpe?g|png|webp|gif)(?:\?.*)?$/i;
 const UGC_VIDEO_SOURCE_PATTERN = /\.(?:mp4|webm|mov|qt)(?:\?.*)?$/i;
 
 export function filterUgcPortfolio(items: UgcPortfolioItem[], filter: UgcFilter) {
-  return filter === 'all' ? items : items.filter((item) => item.category === filter);
+  const published = items.filter((item) => !item.comingSoon);
+  return filter === 'all' ? published : published.filter((item) => item.category === filter);
 }
 
 export function getUgcTileVisibility(item: UgcPortfolioItem, filter: UgcFilter): UgcTileVisibility {

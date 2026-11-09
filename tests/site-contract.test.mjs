@@ -144,91 +144,43 @@ test('site data preserves the Phase 1 contract', async () => {
   });
 });
 
-test('site data preserves the existing 12-slot UGC editorial contact sheet dataset', async () => {
+test('site data keeps a 12-slot UGC contact sheet with published frames and coming-soon slots', async () => {
   const site = await readJson('src/data/site.json');
-  const categories = ['travel', 'languages', 'art'];
-  const expectedIds = [1, 2, 3, 4].flatMap((slot) => (
-    categories.map((category) => `ugc-${category}-${String(slot).padStart(2, '0')}`)
-  ));
+  const categories = ['travel', 'languages', 'art', 'products'];
 
   assert.ok(Array.isArray(site.ugcPortfolio), 'ugcPortfolio should be an array');
   assert.equal(site.ugcPortfolio.length, 12, 'ugcPortfolio should contain exactly 12 fixed slots');
   assertStableIds(site.ugcPortfolio, 'ugcPortfolio');
-  assert.deepEqual(
-    site.ugcPortfolio.map((item) => item.id),
-    expectedIds,
-    'ugcPortfolio should keep the approved stable slot IDs in the approved interleaved order',
-  );
-
-  assert.deepEqual(
-    Object.fromEntries(categories.map((category) => [
-      category,
-      site.ugcPortfolio.filter((item) => item.category === category).length,
-    ])),
-    { travel: 4, languages: 4, art: 4 },
-    'ugcPortfolio should keep exactly four items per existing category',
-  );
-
-  const expectedTypeCounts = {
-    travel: { image: 1, video: 3 },
-    languages: { image: 2, video: 2 },
-    art: { image: 2, video: 2 },
-  };
-
-  for (const category of categories) {
-    const categoryItems = site.ugcPortfolio.filter((item) => item.category === category);
-    const typeCounts = Object.fromEntries(['image', 'video'].map((type) => [
-      type,
-      categoryItems.filter((item) => item.type === type).length,
-    ]));
-
-    assert.deepEqual(
-      typeCounts,
-      expectedTypeCounts[category],
-      `${category} should preserve its current image and video mix`,
-    );
-  }
 
   site.ugcPortfolio.forEach((item, index) => {
-    assert.match(item.id, /^ugc-(travel|languages|art)-0[1-4]$/, `ugcPortfolio[${index}].id should use the approved stable slot format`);
-    assert.match(item.category, /^(travel|languages|art)$/, `ugcPortfolio[${index}].category should stay in the approved set`);
+    assert.ok(categories.includes(item.category), `ugcPortfolio[${index}].category should stay in the approved set`);
     assert.match(item.type, /^(image|video)$/, `ugcPortfolio[${index}].type should be image or video`);
-    assert.match(
-      item.src,
-      /^\/images\/ugc\/(?:mock-\d{2}\.(?:webp|mp4)|ugc-(?:travel|languages|art)-0[1-4]\.(?:png|webp|jpg))$/,
-      `ugcPortfolio[${index}].src should preserve an existing local asset path`,
-    );
     assertLocalizedText(item.label, `ugcPortfolio[${index}].label`);
     assertLocalizedText(item.title, `ugcPortfolio[${index}].title`);
+
+    if (item.comingSoon) {
+      assert.equal(item.src, '', `ugcPortfolio[${index}] coming-soon slots should not show any media`);
+      return;
+    }
+
     assertLocalizedText(item.description, `ugcPortfolio[${index}].description`);
     assertLocalizedText(item.format, `ugcPortfolio[${index}].format`);
     assertLocalizedText(item.alt, `ugcPortfolio[${index}].alt`);
-
     for (const locale of locales) {
-      assertMaxSentenceCount(
-        item.description[locale],
-        2,
-        `ugcPortfolio[${index}].description.${locale}`,
-      );
+      assertMaxSentenceCount(item.description[locale], 2, `ugcPortfolio[${index}].description.${locale}`);
     }
-
+    assert.match(item.src, /^\/images\/ugc\//, `ugcPortfolio[${index}] should keep a local preview asset`);
     if (item.type === 'video') {
-      assert.match(item.src, /^\/images\/ugc\//, `ugcPortfolio[${index}] videos should keep a local preview asset`);
-      assert.equal(typeof item.poster, 'string', `ugcPortfolio[${index}].poster should exist for videos`);
-      assert.match(
-        item.poster,
-        /^\/images\/ugc\/ugc-(?:travel|languages|art)-0[1-4]-poster\.(?:webp|jpe?g|png)$/,
-        `ugcPortfolio[${index}].poster should preserve its existing local poster path`,
-      );
-    } else {
-      assert.equal(item.poster, null, `ugcPortfolio[${index}].poster should stay null for images`);
-      assert.match(
-        item.src,
-        /^\/images\/ugc\/ugc-(?:travel|languages|art)-0[1-4]\.(?:png|webp|jpg)$/,
-        `ugcPortfolio[${index}] images should preserve their current local still-image source`,
-      );
+      assert.equal(typeof item.embedUrl, 'string', `ugcPortfolio[${index}] published videos should have an embed`);
+      assert.match(item.poster, /^\/images\/ugc\/[a-z0-9-]+-poster\.(?:webp|jpe?g|png)$/, `ugcPortfolio[${index}].poster should be a local poster`);
     }
   });
+
+  assert.ok(site.ugcPortfolio.some((item) => item.comingSoon), 'unpublished slots should be marked as coming soon');
+  assert.ok(
+    site.ugcPortfolio.filter((item) => !item.comingSoon).every((item) => !/mock-\d{2}/.test(`${item.src} ${item.poster ?? ''}`)),
+    'published frames should not use mock media',
+  );
 });
 
 test('UGC local mock media files exist in the approved slots and stay within size budgets', async () => {

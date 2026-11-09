@@ -45,9 +45,10 @@ export default function EditableUgcPortfolio() {
                       onChange={(event) => store.updateUgcPortfolioField(item.id, 'category', event.target.value)}
                       className="border border-ink/10 bg-paper px-3 py-2 text-sm text-ink"
                     >
-                      <option value="travel">Viajes</option>
-                      <option value="languages">Idiomas</option>
-                      <option value="art">Arte</option>
+                      <option value="travel">Viajes y alojamiento</option>
+                      <option value="languages">Idiomas y educación</option>
+                      <option value="art">Manualidades y creatividad</option>
+                      <option value="products">Productos y estilo de vida</option>
                     </select>
                   </label>
 

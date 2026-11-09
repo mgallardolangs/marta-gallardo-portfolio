@@ -307,9 +307,10 @@
       "headline": "INHALTE, DIE ERLEBNISSE, SPRACHEN UND KUNST IN VISUELLE GESCHICHTEN VERWANDELN.",
       "filters": {
         "all": "ALLE",
-        "travel": "REISEN",
-        "languages": "SPRACHEN",
-        "art": "KUNST"
+        "travel": "REISEN UND UNTERKÜNFTE",
+        "languages": "SPRACHEN UND BILDUNG",
+        "art": "DIY UND KREATIVITÄT",
+        "products": "PRODUKTE UND LIFESTYLE"
       },
       "close": "Schließen",
       "previous": "Zurück",
