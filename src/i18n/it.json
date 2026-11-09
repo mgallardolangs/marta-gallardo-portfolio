@@ -102,6 +102,7 @@
   "footer": {
     "rights": "Tutti i diritti riservati",
     "eyebrow": "Pronto a far crescere il tuo progetto web?",
+    "eyebrowAccent": "crescere",
     "headline": "Parliamone.",
     "support": "Parliamo dei tuoi obiettivi e definiamo una strategia passo dopo passo per posizionare il tuo brand.",
     "cta": "Contattami",
@@ -162,7 +163,7 @@
     },
     "orbit": {
       "kicker": "ARCHIVIO CREATIVO",
-      "title": "STORIE IN MOVIMENTO.",
+      "title": "La mia storia",
       "index": "MARTA GALLARDO · PORTFOLIO",
       "note": "CONTENUTI · LINGUE · VIAGGI · ARTE"
     },
@@ -494,6 +495,7 @@
     "hero": {
       "eyebrow": "Chi sono",
       "title": "Marta Gallardo e la filosofia Marttelier",
+      "titleAccent": "Marttelier",
       "subtitle": "Il punto d’incontro tra linguistica, strategia e contenuti",
       "story": "Mi sono laureata in Traduzione e Interpretazione all'Università di Alicante e mi sono formata in SEO e strategia digitale. Unendo lingue, ricerca e creazione di contenuti ho trovato un modo per accompagnare i progetti in modo diretto, senza agenzie di mezzo. Mi interessa che ogni messaggio mantenga la sua intenzione e raggiunga le persone giuste."
     },
@@ -517,6 +519,7 @@
     "hero": {
       "eyebrow": "Posizionamento SEO",
       "title": "Servizi di posizionamento SEO e SEO internazionale",
+      "titleAccent": "posizionamento SEO",
       "paragraphs": [
         "Comparire su Google non è questione di fortuna, ma di strategia. Il mio servizio di posizionamento SEO trasforma il tuo sito in un canale che attrae persone che già cercano ciò che offri: non solo più visite, ma visite con un interesse reale.",
         "Analizzo il punto di partenza del tuo progetto e progetto un piano di posizionamento sui motori di ricerca su misura: miglioro la struttura tecnica, la rilevanza dei tuoi contenuti e l'autorevolezza del tuo sito. Che tu voglia consolidarti nel tuo mercato di riferimento o fare il salto verso altri paesi con la SEO internazionale, ti spiego ogni passo e lavoriamo con priorità chiare."
@@ -600,6 +603,7 @@
     "hero": {
       "eyebrow": "Traduzione e localizzazione",
       "title": "Traduzione e localizzazione web professionale con approccio SEO",
+      "titleAccent": "localizzazione web",
       "description": "Adatto i contenuti della tua azienda a nuovi mercati con precisione semantica e un approccio SEO."
     },
     "localization": {

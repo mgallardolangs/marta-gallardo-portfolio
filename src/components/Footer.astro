@@ -31,6 +31,7 @@ const adminNavItems = [
   { key: 'blog', href: '/blog', label: i.nav.blog, i18nKey: 'nav.blog' },
   { key: 'contact', href: '/contact', label: i.nav.contact, i18nKey: 'nav.contact' },
 ];
+import { accentHtml } from '../lib/accentHtml';
 ---
 <footer class="footer-shell bg-ink text-paper">
   <div class="py-14 md:py-20">
@@ -40,7 +41,7 @@ const adminNavItems = [
           {adminMode ? (
             <EditableText client:load i18nKey="footer.eyebrow" as="p" className="font-body text-xs font-semibold uppercase tracking-[0.34em] text-paper" />
           ) : (
-            <p class="font-body text-xs font-semibold uppercase leading-[2.4] tracking-[0.34em] text-paper"><span class="bg-hazel px-2 py-1 [box-decoration-break:clone]">{i.footer.eyebrow}</span></p>
+            <p class="font-body text-xs font-semibold uppercase leading-[2.4] tracking-[0.34em] text-paper"><span class="footer-eyebrow bg-hazel px-2 py-1 [box-decoration-break:clone]" set:html={accentHtml(i.footer.eyebrow, i.footer.eyebrowAccent) ?? i.footer.eyebrow} /></p>
           )}
           {adminMode ? (
             <EditableText client:load i18nKey="footer.headline" as="h2" className="font-heading text-5xl uppercase leading-none text-white md:text-7xl" />

@@ -102,6 +102,7 @@
   "footer": {
     "rights": "All rights reserved",
     "eyebrow": "Ready to grow your web project?",
+    "eyebrowAccent": "grow",
     "headline": "Let’s talk.",
     "support": "Let's talk about your goals and design a step-by-step strategy to position your brand.",
     "cta": "Get in touch",
@@ -162,7 +163,7 @@
     },
     "orbit": {
       "kicker": "CREATIVE ARCHIVE",
-      "title": "My world",
+      "title": "My story",
       "index": "MARTA GALLARDO · PORTFOLIO",
       "note": "CONTENT · LANGUAGES · TRAVEL · ART"
     },
@@ -494,6 +495,7 @@
     "hero": {
       "eyebrow": "About",
       "title": "Marta Gallardo and the Marttelier philosophy",
+      "titleAccent": "Marttelier",
       "subtitle": "Where linguistics, strategy and content come together",
       "story": "I graduated in Translation and Interpreting from the University of Alicante and trained in SEO and digital strategy. By bringing together languages, search and content creation, I found a way to support projects directly, with no agency in between. I care that every message keeps its intent and finds the right people."
     },
@@ -517,6 +519,7 @@
     "hero": {
       "eyebrow": "SEO positioning",
       "title": "SEO & International SEO Services",
+      "titleAccent": "International SEO",
       "paragraphs": [
         "Showing up on Google isn't a matter of luck, it's a matter of strategy. My SEO service turns your website into a channel that attracts people already searching for what you offer: not just more visits, but visits with real interest.",
         "I analyze your project's starting point and design a search ranking plan tailored to you: I improve the technical structure, the relevance of your content and your site's authority. Whether you want to consolidate in your home market or take the leap into other countries with international SEO, I explain every step and we work with clear priorities."
@@ -600,6 +603,7 @@
     "hero": {
       "eyebrow": "Translation & localization",
       "title": "Professional Website Translation & Localization with an SEO Focus",
+      "titleAccent": "Localization",
       "description": "I adapt your company’s content for new markets with semantic precision and an SEO focus."
     },
     "localization": {

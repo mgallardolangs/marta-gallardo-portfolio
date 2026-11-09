@@ -97,7 +97,7 @@ import { accentHtml } from '../lib/accentHtml';
       <section id="home-services" class="scroll-mt-24 bg-hazel px-6 py-16 text-paper md:scroll-mt-28 md:py-20">
         <div class="site-container space-y-10">
           <ScrollReveal client:visible direction="right" className="flex flex-col gap-5 md:gap-6">
-            <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-paper/80">{i.nav.services}</p>
+            <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.nav.services}</p>
             <h2 class="font-heading text-4xl leading-none text-paper md:text-6xl" set:html={accentHtml(i.home.services.title, i.home.services.titleAccent) ?? i.home.services.title} />
           </ScrollReveal>
 
@@ -126,7 +126,7 @@ import { accentHtml } from '../lib/accentHtml';
           <ScrollReveal client:visible direction="right" className="flex flex-col gap-5 lg:col-start-1 lg:row-start-1 lg:self-start">
             <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.home.orbit.kicker}</p>
             <h2 class="max-w-[8ch] font-heading text-[2.8rem] leading-[0.9] tracking-[-0.08em] text-paper md:text-[4.25rem] xl:text-[5.5rem]">
-              {i.home.orbit.title}
+              <em class="accent-word">{i.home.orbit.title}</em>
             </h2>
           </ScrollReveal>
 

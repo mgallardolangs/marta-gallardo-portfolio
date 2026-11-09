@@ -102,6 +102,7 @@
   "footer": {
     "rights": "Tots els drets reservats",
     "eyebrow": "Preparat per a fer créixer el teu projecte web?",
+    "eyebrowAccent": "créixer",
     "headline": "Parlem-ne.",
     "support": "Parlem dels teus objectius i dissenyem una estratègia pas a pas per posicionar la teua marca.",
     "cta": "Contactar",
@@ -162,7 +163,7 @@
     },
     "orbit": {
       "kicker": "ARXIU CREATIU",
-      "title": "HISTÒRIES EN MOVIMENT.",
+      "title": "La meva història",
       "index": "MARTA GALLARDO · PORTFOLI",
       "note": "CONTINGUT · IDIOMES · VIATGES · ART"
     },
@@ -494,6 +495,7 @@
     "hero": {
       "eyebrow": "Sobre mi",
       "title": "Marta Gallardo i la filosofia Marttelier",
+      "titleAccent": "Marttelier",
       "subtitle": "El punt de trobada entre la lingüística, l’estratègia i el contingut",
       "story": "Em vaig graduar en Traducció i Interpretació per la Universitat d'Alacant i em vaig formar en SEO i estratègia digital. Unint llengües, recerca i creació de contingut he trobat una manera d'acompanyar projectes de forma directa, sense agències pel mig. M'interessa que cada missatge mantinga la seua intenció i arribe a les persones adequades."
     },
@@ -517,6 +519,7 @@
     "hero": {
       "eyebrow": "Posicionament SEO",
       "title": "Servei de posicionament SEO i SEO internacional",
+      "titleAccent": "posicionament SEO",
       "paragraphs": [
         "Aparéixer a Google no és qüestió de sort, sinó d'estratègia. El meu servei de posicionament SEO converteix el teu web en un canal que atrau persones que ja busquen el que ofereixes: no només més visites, sinó visites amb un interés real.",
         "Analitze el punt de partida del teu projecte i dissenye un pla de posicionament als cercadors a mesura: millore l'estructura tècnica, la rellevància dels teus continguts i l'autoritat del teu web. Tant si vols consolidar-te al teu mercat de referència com fer el salt a altres països amb SEO internacional, t'explique cada pas i treballem amb prioritats clares."
@@ -600,6 +603,7 @@
     "hero": {
       "eyebrow": "Traducció i localització",
       "title": "Traducció i localització web professional amb enfocament SEO",
+      "titleAccent": "localització web",
       "description": "Adapte el contingut de la teua empresa a nous mercats amb precisió semàntica i enfocament SEO."
     },
     "localization": {

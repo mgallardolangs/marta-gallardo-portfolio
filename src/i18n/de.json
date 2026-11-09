@@ -102,6 +102,7 @@
   "footer": {
     "rights": "Alle Rechte vorbehalten",
     "eyebrow": "Bereit, Ihr Webprojekt wachsen zu lassen?",
+    "eyebrowAccent": "wachsen",
     "headline": "Lassen Sie uns sprechen.",
     "support": "Sprechen wir über Ihre Ziele und entwickeln wir eine Schritt-für-Schritt-Strategie, um Ihre Marke zu positionieren.",
     "cta": "Kontakt aufnehmen",
@@ -162,7 +163,7 @@
     },
     "orbit": {
       "kicker": "KREATIVARCHIV",
-      "title": "GESCHICHTEN IN BEWEGUNG.",
+      "title": "Meine Geschichte",
       "index": "MARTA GALLARDO · PORTFOLIO",
       "note": "INHALTE · SPRACHEN · REISEN · KUNST"
     },
@@ -494,6 +495,7 @@
     "hero": {
       "eyebrow": "Über mich",
       "title": "Marta Gallardo und die Marttelier-Philosophie",
+      "titleAccent": "Marttelier",
       "subtitle": "Wo Linguistik, Strategie und Inhalte zusammenkommen",
       "story": "Ich habe an der Universität Alicante Übersetzen und Dolmetschen studiert und mich in SEO und digitaler Strategie weitergebildet. Indem ich Sprachen, Suche und Content-Erstellung verbinde, habe ich einen Weg gefunden, Projekte direkt zu begleiten, ohne Agentur dazwischen. Mir ist wichtig, dass jede Botschaft ihre Absicht behält und die richtigen Menschen erreicht."
     },
@@ -517,6 +519,7 @@
     "hero": {
       "eyebrow": "SEO-Positionierung",
       "title": "SEO- und internationales SEO-Angebot",
+      "titleAccent": "internationales SEO",
       "paragraphs": [
         "In den Google-Ergebnissen aufzutauchen ist keine Frage des Glücks, sondern der Strategie. Meine SEO-Dienstleistung macht Ihre Website zu einem Kanal, der Menschen anzieht, die bereits nach dem suchen, was Sie anbieten: nicht nur mehr Besuche, sondern Besuche mit echtem Interesse.",
         "Ich analysiere den Ausgangspunkt Ihres Projekts und entwickle einen maßgeschneiderten SEO-Plan: Ich verbessere die technische Struktur, die Relevanz Ihrer Inhalte und die Autorität Ihrer Website. Ob Sie sich in Ihrem Heimatmarkt festigen oder mit internationalem SEO den Sprung in andere Länder wagen möchten – ich erkläre Ihnen jeden Schritt, und wir arbeiten mit klaren Prioritäten."
@@ -600,6 +603,7 @@
     "hero": {
       "eyebrow": "Übersetzung und Lokalisierung",
       "title": "Professionelle Website-Übersetzung und Lokalisierung mit SEO-Fokus",
+      "titleAccent": "Lokalisierung",
       "description": "Ich passe die Inhalte Ihres Unternehmens mit semantischer Präzision und SEO-Fokus an neue Märkte an."
     },
     "localization": {

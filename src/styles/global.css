@@ -627,7 +627,17 @@ svg {
 }
 
 .bg-ink .accent-word,
-.bg-charcoal .accent-word,
-.bg-hazel .accent-word {
+.bg-charcoal .accent-word {
   color: var(--color-amaranth);
+}
+
+.bg-hazel .accent-word {
+  color: var(--color-ink);
+}
+
+.footer-eyebrow .accent-word {
+  color: var(--color-paper);
+  font-size: 1.6em;
+  letter-spacing: 0;
+  text-transform: none;
 }

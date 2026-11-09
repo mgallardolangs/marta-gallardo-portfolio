@@ -410,6 +410,7 @@
   "footer": {
     "rights": "Todos los derechos reservados",
     "eyebrow": "¿Preparado para hacer crecer tu proyecto web?",
+    "eyebrowAccent": "crecer",
     "headline": "Hablemos.",
     "support": "Hablemos de tus objetivos y diseñemos una estrategia paso a paso para posicionar tu marca.",
     "cta": "Contactar",
@@ -494,6 +495,7 @@
     "hero": {
       "eyebrow": "Sobre mí",
       "title": "Marta Gallardo  Filosofía Marttelier",
+      "titleAccent": "Marttelier",
       "subtitle": "El punto de encuentro entre la lingüística, la estrategia y el contenido",
       "story": "Me gradué en Traducción e Interpretación por la Universidad de Alicante y me formé en SEO y estrategia digital. Al unir los idiomas, la búsqueda y la creación de contenido, encontré una forma de acompañar proyectos de manera directa, sin agencias de por medio. Me interesa que cada mensaje conserve su intención y encuentre a las personas adecuadas."
     },
@@ -517,6 +519,7 @@
     "hero": {
       "eyebrow": "Posicionamiento SEO",
       "title": "Servicio de Posicionamiento SEO y SEO Internacional",
+      "titleAccent": "Posicionamiento SEO",
       "paragraphs": [
         "Aparecer en Google no es cuestión de suerte, sino de estrategia. Mi servicio de posicionamiento SEO convierte tu web en un canal que atrae a personas que ya buscan lo que ofreces: no solo más visitas, sino visitas con interés real.",
         "Analizo el punto de partida de tu proyecto y diseño un plan de posicionamiento en buscadores a tu medida: mejoro la estructura técnica, la relevancia de tus contenidos y la autoridad de tu web. Tanto si quieres consolidarte en tu mercado cercano como si quieres dar el salto a otros países con SEO internacional, te explico cada paso y trabajamos con prioridades claras."
@@ -600,6 +603,7 @@
     "hero": {
       "eyebrow": "Traducción y localización",
       "title": "Traducción y Localización Web Profesional con Enfoque SEO",
+      "titleAccent": "Localización Web",
       "description": "Adapto el contenido de tu empresa a nuevos mercados con precisión semántica y enfoque SEO."
     },
     "localization": {
