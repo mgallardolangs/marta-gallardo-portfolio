@@ -627,6 +627,7 @@ svg {
 }
 
 .bg-ink .accent-word,
-.bg-charcoal .accent-word {
+.bg-charcoal .accent-word,
+.bg-hazel .accent-word {
   color: var(--color-amaranth);
 }

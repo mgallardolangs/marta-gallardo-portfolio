@@ -28,6 +28,7 @@ const pageSeo = getPageSeo(siteData, 'ugc', lang, {
             <TypedTitle
               as="h1"
               text={i.ugcPage.pageTitle}
+
               accent={i.ugcPage.pageTitleAccent}
               trigger="load"
               class="block text-4xl leading-none text-ink md:text-6xl"
@@ -62,6 +63,7 @@ const pageSeo = getPageSeo(siteData, 'ugc', lang, {
           <TypedTitle
             as="h2"
             text={i.ugcPage.benefits.title}
+
             accent={i.ugcPage.benefits.titleAccent}
             trigger="visible"
             class="font-heading text-4xl leading-none text-paper md:text-5xl"
@@ -80,6 +82,8 @@ const pageSeo = getPageSeo(siteData, 'ugc', lang, {
           <TypedTitle
             as="h2"
             text={i.ugcPage.process.title}
+
+            accent={i.ugcPage.process.titleAccent}
             trigger="visible"
             class="font-heading text-4xl leading-none text-ink md:text-5xl"
           />

@@ -54,6 +54,8 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'translation');
           <TypedTitle
             as="h2"
             text={page.localization.title}
+
+            accent={page.localization.titleAccent}
             trigger="visible"
             class="font-heading text-4xl text-paper md:text-5xl"
           />
@@ -78,6 +80,8 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'translation');
           <TypedTitle
             as="h2"
             text={page.multilingualSeo.title}
+
+            accent={page.multilingualSeo.titleAccent}
             trigger="visible"
             class="font-heading text-4xl leading-none text-ink md:text-5xl"
           />
@@ -101,6 +105,8 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'translation');
           <TypedTitle
             as="h2"
             text={page.digitalContent.title}
+
+            accent={page.digitalContent.titleAccent}
             trigger="visible"
             class="font-heading text-4xl text-paper md:text-5xl"
           />
@@ -125,6 +131,8 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'translation');
           <TypedTitle
             as="h2"
             text={page.arsenal.title}
+
+            accent={page.arsenal.titleAccent}
             trigger="visible"
             class="font-heading text-4xl text-ink md:text-5xl"
           />
@@ -149,7 +157,7 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'translation');
             <span class="mt-4 block h-px bg-ink/12"></span>
             <div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
               {arsenal.tools.map((tool) => (
-                <div class="group flex aspect-square min-w-0 flex-col items-center justify-center gap-3 bg-ink px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink">
+                <div class="group flex aspect-square min-w-0 flex-col items-center justify-center gap-3 bg-hazel px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink">
                   <img src={tool.logoSrc} alt="" width="40" height="40" loading="lazy" decoding="async" class="h-10 w-10 object-contain" />
                   <p class="font-body text-[0.68rem] font-medium uppercase tracking-[0.1em]">{tool.label}</p>
                 </div>

@@ -8,25 +8,19 @@ interface Props {
   accent?: string;
 }
 
+import { accentHtml } from '../lib/accentHtml';
+
 const { as = 'h1', text, trigger = 'load', class: className = '', accent = '' } = Astro.props;
 const Tag = as;
 
-const escapeHtml = (value: string) => value
-  .replace(/&/g, '&amp;')
-  .replace(/</g, '&lt;')
-  .replace(/>/g, '&gt;')
-  .replace(/"/g, '&quot;');
-const accentIndex = accent ? text.indexOf(accent) : -1;
-const accentHtml = accentIndex >= 0
-  ? `${escapeHtml(text.slice(0, accentIndex))}<em class="accent-word">${escapeHtml(accent)}</em>${escapeHtml(text.slice(accentIndex + accent.length))}`
-  : undefined;
+const accentMarkup = accentHtml(text, accent);
 ---
 
-<Tag class={className} data-typed-title data-typed-trigger={trigger} data-typed-text={text} data-typed-html={accentHtml}>
+<Tag class={className} data-typed-title data-typed-trigger={trigger} data-typed-text={text} data-typed-html={accentMarkup}>
   <span class="sr-only">{text}</span>
   <span class="typed-title" aria-hidden="true">
-    {accentHtml
-      ? <span class="typed-title__reserve" set:html={accentHtml} />
+    {accentMarkup
+      ? <span class="typed-title__reserve" set:html={accentMarkup} />
       : <span class="typed-title__reserve">{text}</span>}
     <span class="typed-title__visual" data-typed-title-visual>{text}</span>
     <span class="typed-title__cursor" aria-hidden="true">_</span>

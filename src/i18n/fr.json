@@ -142,6 +142,7 @@
         "Italien"
       ],
       "title": "Rigueur technique, diplôme officiel et créativité",
+      "titleAccent": "créativité",
       "description": "Derrière Marttelier, il y a Marta Gallardo. Diplômée en Traduction et Interprétation de l'Université d'Alicante et formée au SEO et à la stratégie digitale, je travaille main dans la main avec des entreprises et des marques pour construire une présence en ligne solide, multilingue et rentable, sans les intermédiaires d'une agence.",
       "cta": "En savoir plus sur moi"
     },
@@ -167,6 +168,7 @@
     },
     "services": {
       "title": "Des solutions complètes pour développer votre marque",
+      "titleAccent": "développer",
       "items": {
         "seo": "Conseil et audit SEO",
         "translation": "Traduction et localisation de sites web",
@@ -180,10 +182,12 @@
     },
     "visibility": {
       "title": "Visibilité, langues et conversion",
+      "titleAccent": "conversion",
       "text": "Plus de trafic ne sert à rien s'il n'atteint pas les bonnes personnes. C'est pourquoi, en tant que traductrice et créatrice de contenu, je travaille entre les langues, les cultures et les formats : je conçois des stratégies SEO adaptées à la réalité de chaque projet et je les associe à la traduction, à la localisation et à des vidéos UGC, pour que chaque message garde son intention, trouve naturellement sa place et inspire confiance dès le premier regard."
     },
     "latestArticles": {
-      "title": "Derniers articles sur le SEO et le marketing digital"
+      "title": "Derniers articles sur le SEO et le marketing digital",
+      "titleAccent": "marketing digital"
     }
   },
   "ugcPage": {
@@ -329,6 +333,7 @@
     "process": {
       "eyebrow": "De l'idée à la livraison",
       "title": "Méthode de travail : de l’idée au montage final",
+      "titleAccent": "montage final",
       "steps": [
         {
           "title": "Brief",
@@ -472,6 +477,7 @@
     "servicesEyebrow": "01 · COMMENT JE PEUX VOUS AIDER",
     "arsenalEyebrow": "02 · PROFIL & OUTILS",
     "experienceSectionTitle": "Expérience et formation",
+    "experienceSectionTitleAccent": "formation",
     "experienceEyebrow": "03 · PARCOURS",
     "experienceStatement": "Base académique + pratique de terrain",
     "methodologyEyebrow": "04 · MÉTHODOLOGIE & INFOGRAPHIE",
@@ -494,6 +500,7 @@
     "principles": {
       "eyebrow": "marttelier",
       "title": "Principes et valeurs de travail",
+      "titleAccent": "valeurs",
       "items": [
         "Transparence et honnêteté",
         "Relecture humaine",
@@ -518,6 +525,7 @@
     "services": {
       "eyebrow": "SEO",
       "title": "Des services SEO adaptés à vos besoins",
+      "titleAccent": "adaptés à vos besoins",
       "items": [
         {
           "id": "audit",
@@ -540,11 +548,13 @@
       "eyebrow": "Votre site, sur chaque marché",
       "translationLinkLabel": "Traduction",
       "title": "Spécialiste du SEO international et multilingue",
+      "titleAccent": "multilingue",
       "description": "Internationaliser un site ne consiste pas à installer un plugin de traduction automatique. Chaque marché cherche différemment : je commence donc par identifier les termes que les internautes de chaque pays utilisent réellement, et avec quelle intention. Ensuite, j'adapte le contenu et je configure ce qu'il faut sur le plan technique, comme les balises hreflang, pour que Google présente chaque version à la bonne audience. Si vous avez aussi besoin d'un service de traduction de sites web, nous le traitons dans la même stratégie, afin que langue et référencement ne soient pas dissociés."
     },
     "why": {
       "eyebrow": "SEO",
       "title": "Pourquoi me faire confiance comme consultante SEO ?",
+      "titleAccent": "confiance",
       "description": "En SEO, ce qui fonctionnait il y a quelques années ne suffit plus : Google fait évoluer ses systèmes et l'intelligence artificielle a changé la façon de chercher. Travailler avec moi, c'est choisir un service transparent, direct et sans intermédiaire. Mon approche repose sur quatre piliers :",
       "items": [
         "Une formation à jour. Formation privée en marketing digital et SEO, complétée par une formation continue en SEO international et en contenus pour les moteurs de recherche.",
@@ -580,6 +590,7 @@
     "budget": {
       "eyebrow": "SEO",
       "title": "Tarifs et budget SEO",
+      "titleAccent": "budget",
       "description": "Le budget dépend de l’état du site, du périmètre et du type d’accompagnement. Parlez-moi des objectifs du projet et je préparerai une proposition adaptée.",
       "highlight": "Une analyse de base de votre site avec trois constats prioritaires, plus un appel gratuit de 30 minutes pour découvrir votre projet et commenter ces résultats. Cela n’inclut ni rapport complet ni mise en œuvre des améliorations ; si vous décidez de continuer, nous le précisons dans la proposition.",
       "highlightTitle": "Je propose un diagnostic initial gratuit"
@@ -594,6 +605,7 @@
     "localization": {
       "eyebrow": "LOCALISATION WEB",
       "title": "Localisation de sites web et de boutiques en ligne",
+      "titleAccent": "boutiques en ligne",
       "items": [
         {
           "id": "cultural-adaptation",
@@ -611,11 +623,13 @@
       "eyebrow": "TRADUCTION SEO",
       "seoLinkLabel": "SEO",
       "title": "Traduction SEO multilingue : des contenus pensés pour la façon de chercher de chaque marché",
+      "titleAccent": "chaque marché",
       "description": "La traduction SEO part des recherches propres à chaque langue, et non du texte d'origine. J'étudie comment les internautes de chaque marché cherchent et j'adapte les mots-clés et la structure pour préserver l'intention et la voix de votre marque. Si votre projet a aussi besoin d'une stratégie, je l'intègre au service de SEO international."
     },
     "digitalContent": {
       "eyebrow": "CONTENUS DIGITAUX",
       "title": "Traduction de contenus digitaux : blogs, newsletters et textes de marque",
+      "titleAccent": "newsletters",
       "items": [
         {
           "id": "editorial-content",
@@ -631,6 +645,7 @@
     },
     "arsenal": {
       "title": "Langues, outils et compétences en traduction",
+      "titleAccent": "compétences",
       "eyebrow": "PROFIL ET OUTILS",
       "languagesTitle": "Langues",
       "toolsTitle": "Outils",

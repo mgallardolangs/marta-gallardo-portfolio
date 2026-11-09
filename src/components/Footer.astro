@@ -40,7 +40,7 @@ const adminNavItems = [
           {adminMode ? (
             <EditableText client:load i18nKey="footer.eyebrow" as="p" className="font-body text-xs font-semibold uppercase tracking-[0.34em] text-paper" />
           ) : (
-            <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-paper">{i.footer.eyebrow}</p>
+            <p class="font-body text-xs font-semibold uppercase leading-[2.4] tracking-[0.34em] text-paper"><span class="bg-hazel px-2 py-1 [box-decoration-break:clone]">{i.footer.eyebrow}</span></p>
           )}
           {adminMode ? (
             <EditableText client:load i18nKey="footer.headline" as="h2" className="font-heading text-5xl uppercase leading-none text-white md:text-7xl" />

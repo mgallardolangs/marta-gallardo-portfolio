@@ -142,6 +142,7 @@
         "English"
       ],
       "title": "Technical rigour, formal qualifications and creativity",
+      "titleAccent": "creativity",
       "description": "Behind Marttelier is Marta Gallardo. With a degree in Translation and Interpreting from the University of Alicante and training in SEO and digital strategy, I work side by side with companies and brands to build a solid, multilingual and profitable online presence, without the extra layers of an agency.",
       "cta": "Get to know me"
     },
@@ -167,6 +168,7 @@
     },
     "services": {
       "title": "Complete solutions to grow your brand",
+      "titleAccent": "grow",
       "items": {
         "seo": "SEO Consulting & Audits",
         "translation": "Website Translation & Localization",
@@ -180,10 +182,12 @@
     },
     "visibility": {
       "title": "Visibility, Languages & Conversion",
+      "titleAccent": "Conversion",
       "text": "More traffic is worthless if it doesn't reach the right people. That's why, as a translator and content creator, I work across languages, cultures and formats: I design SEO strategies suited to each project and combine them with translation, localization and UGC video, so every message keeps its intent, connects naturally and builds trust at first glance."
     },
     "latestArticles": {
-      "title": "Latest articles on SEO and digital marketing"
+      "title": "Latest articles on SEO and digital marketing",
+      "titleAccent": "digital marketing"
     }
   },
   "ugcPage": {
@@ -329,6 +333,7 @@
     "process": {
       "eyebrow": "From idea to delivery",
       "title": "How I work: from the idea to the final edit",
+      "titleAccent": "final edit",
       "steps": [
         {
           "title": "Briefing",
@@ -472,6 +477,7 @@
     "servicesEyebrow": "01 · HOW I CAN HELP",
     "arsenalEyebrow": "02 · PROFILE & TOOLS",
     "experienceSectionTitle": "Experience & Education",
+    "experienceSectionTitleAccent": "Education",
     "experienceEyebrow": "03 · EXPERIENCE",
     "experienceStatement": "Academic grounding + real-world practice",
     "methodologyEyebrow": "04 · METHODOLOGY & INFOGRAPHICS",
@@ -494,6 +500,7 @@
     "principles": {
       "eyebrow": "marttelier",
       "title": "Working principles and values",
+      "titleAccent": "values",
       "items": [
         "Honest, transparent communication",
         "Human review",
@@ -518,6 +525,7 @@
     "services": {
       "eyebrow": "SEO",
       "title": "SEO services tailored to you",
+      "titleAccent": "tailored to you",
       "items": [
         {
           "id": "audit",
@@ -540,11 +548,13 @@
       "eyebrow": "Your website, in every market",
       "translationLinkLabel": "Translation",
       "title": "International & Multilingual SEO Specialist",
+      "titleAccent": "Multilingual",
       "description": "Taking a website international isn't about installing a machine-translation plugin. Every market searches differently, so I start by researching which terms users in each country actually use and with what intent. From there I adapt the content and set up what's needed on the technical side, such as hreflang tags, so Google shows each version to the right audience. If you also need a website translation service, we handle it within the same strategy so language and ranking don't go separate ways."
     },
     "why": {
       "eyebrow": "SEO",
       "title": "Why trust me as your SEO consultant?",
+      "titleAccent": "trust",
       "description": "In SEO, what worked a few years ago is no longer enough: Google changes its systems and artificial intelligence has changed the way people search. Working with me means choosing a transparent, direct service with no intermediaries. My approach stands on four pillars:",
       "items": [
         "Up-to-date training. Private course in digital marketing and SEO, plus ongoing training in international SEO and search-focused content.",
@@ -580,6 +590,7 @@
     "budget": {
       "eyebrow": "SEO",
       "title": "SEO Rates & Budget",
+      "titleAccent": "Budget",
       "description": "The budget depends on the website’s current state, scope and type of support. Tell me about the project goals and I’ll prepare a tailored proposal.",
       "highlight": "A basic review of your website with three prioritised findings, plus a free 30-minute call to get to know your project and discuss the results. It doesn’t include a full report or implementing the improvements; if you decide to continue, we’ll define that in the proposal.",
       "highlightTitle": "I offer a free initial diagnosis"
@@ -594,6 +605,7 @@
     "localization": {
       "eyebrow": "WEBSITE LOCALIZATION",
       "title": "Website & E-commerce Localization",
+      "titleAccent": "E-commerce",
       "items": [
         {
           "id": "cultural-adaptation",
@@ -611,11 +623,13 @@
       "eyebrow": "SEO TRANSLATION",
       "seoLinkLabel": "SEO",
       "title": "Multilingual SEO translation: content built around how each market searches",
+      "titleAccent": "each market",
       "description": "SEO translation starts from the searches in each language, not from the source text. I research how users in each market search and adapt keywords and structure to preserve your brand's intent and voice. If your project also needs a strategy, I integrate it with the international SEO service."
     },
     "digitalContent": {
       "eyebrow": "DIGITAL CONTENT",
       "title": "Digital content translation: blogs, newsletters and copy",
+      "titleAccent": "newsletters",
       "items": [
         {
           "id": "editorial-content",
@@ -631,6 +645,7 @@
     },
     "arsenal": {
       "title": "Languages, tools & translation skills",
+      "titleAccent": "skills",
       "eyebrow": "PROFILE & TOOLS",
       "languagesTitle": "Languages",
       "toolsTitle": "Tools",
