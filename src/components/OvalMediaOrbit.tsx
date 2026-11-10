@@ -359,7 +359,7 @@ export default function OvalMediaOrbit({
                   clearActiveTile();
                 }}
               >
-                <div className="relative h-full w-full overflow-hidden bg-white/95 shadow-[0_16px_40px_rgba(6,4,3,0.28)] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-amaranth">
+                <div className="relative h-full w-full overflow-hidden bg-white/95 shadow-[0_16px_40px_rgba(74, 18, 34,0.28)] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-hazel">
                   {isVideoItem(item) ? (
                     <video
                       ref={(element) => { videoRefs.current[item.id] = element; }}

@@ -15,7 +15,7 @@ test('public UGC hero keeps the denser approved two-column source contract', asy
   const source = await readSource('src/views/UgcPage.astro');
 
   assert.match(source, /<section data-ugc-hero class="px-6 pt-20 pb-5 md:pt-24 md:pb-6">/);
-  assert.match(source, /<p class="text-xs font-semibold uppercase tracking-\[0\.34em\] text-amaranth">\s*\{i\.ugcPage\.hero\.eyebrow\}\s*<\/p>/);
+  assert.match(source, /<p class="text-xs font-semibold uppercase tracking-\[0\.34em\] text-hazel">\s*\{i\.ugcPage\.hero\.eyebrow\}\s*<\/p>/);
   assert.match(
     source,
     /<div class="mt-5 grid gap-8 lg:grid-cols-\[minmax\(0,1\.2fr\)_minmax\(0,0\.8fr\)\] lg:items-end">[\s\S]*?<TypedTitle[\s\S]*?text=\{i\.ugcPage\.pageTitle\}[\s\S]*?class="block text-4xl leading-none text-ink md:text-6xl"[\s\S]*?<h2 class="text-balance text-lg font-semibold uppercase leading-\[1\.18\] tracking-\[0\.1[234]em\] text-ink md:text-2xl lg:justify-self-end lg:text-right lg:text-3xl">\s*\{i\.ugcPage\.contactSheet\.headline\}\s*<\/h2>[\s\S]*?<\/div>/s,

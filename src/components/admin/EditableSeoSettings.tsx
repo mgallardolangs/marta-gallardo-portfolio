@@ -31,7 +31,7 @@ export default function EditableSeoSettings() {
       <div className="space-y-4">
         {SEO_PAGE_KEYS.map((page) => (
           <fieldset key={page} className="border border-ink/10 bg-white p-4 md:p-5" data-admin-seo-page={page}>
-            <legend className="px-2 font-body text-xs font-semibold uppercase tracking-[0.28em] text-amaranth">
+            <legend className="px-2 font-body text-xs font-semibold uppercase tracking-[0.28em] text-hazel">
               {SEO_PAGE_LABELS[page]}
             </legend>
 

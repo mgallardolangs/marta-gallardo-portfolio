@@ -15,7 +15,7 @@ const page = i.seoPage;
     <section class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
       <div class="site-container max-w-7xl">
         <ScrollReveal client:visible direction="right" className="flex flex-col gap-8">
-          <EditableText client:load i18nKey="seoPage.hero.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-amaranth" />
+          <EditableText client:load i18nKey="seoPage.hero.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-hazel" />
           <EditableText client:load i18nKey="seoPage.hero.title" as="h1" className="max-w-[16ch] font-heading text-5xl leading-[0.96] tracking-[-0.04em] text-ink md:text-7xl" />
           {page.hero.paragraphs.map((_paragraph, index) => (
             <EditableText client:load i18nKey={`seoPage.hero.paragraphs.${index}`} as="div" className="max-w-5xl font-body text-base leading-8 text-ink-muted md:text-lg" />
@@ -50,7 +50,7 @@ const page = i.seoPage;
     <section class="px-6 py-16 md:py-20">
       <div class="site-container grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
         <ScrollReveal client:visible direction="right" className="flex flex-col gap-6">
-          <EditableText client:load i18nKey="seoPage.international.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="seoPage.international.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel" />
           <EditableText client:load i18nKey="seoPage.international.title" as="h2" className="font-heading text-4xl leading-none text-ink md:text-5xl" />
         </ScrollReveal>
         <ScrollReveal client:visible direction="left" className="flex flex-col gap-6">
@@ -82,7 +82,7 @@ const page = i.seoPage;
       <div class="site-container space-y-8">
 <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:items-center lg:gap-16">
           <div class="max-w-3xl space-y-6">
-          <EditableText client:load i18nKey="seoPage.budget.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth" />
+          <EditableText client:load i18nKey="seoPage.budget.eyebrow" as="p" className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel" />
           <EditableText client:load i18nKey="seoPage.budget.title" as="h2" className="font-heading text-4xl leading-none text-ink md:text-5xl" />
           <EditableText client:load i18nKey="seoPage.budget.description" as="div" className="font-body text-base leading-8 text-ink-muted md:text-lg" />
           </div>

@@ -31,6 +31,7 @@ const adminNavItems = [
   { key: 'blog', href: '/blog', label: i.nav.blog, i18nKey: 'nav.blog' },
   { key: 'contact', href: '/contact', label: i.nav.contact, i18nKey: 'nav.contact' },
 ];
+import { accentHtml } from '../lib/accentHtml';
 ---
 <footer class="footer-shell bg-ink text-paper">
   <div class="py-14 md:py-20">
@@ -40,7 +41,7 @@ const adminNavItems = [
           {adminMode ? (
             <EditableText client:load i18nKey="footer.eyebrow" as="p" className="font-body text-xs font-semibold uppercase tracking-[0.34em] text-paper" />
           ) : (
-            <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-paper">{i.footer.eyebrow}</p>
+            <p class="font-body text-xs font-semibold uppercase leading-[2.4] tracking-[0.34em] text-paper"><span class="footer-eyebrow bg-hazel px-2 py-1 [box-decoration-break:clone]" set:html={accentHtml(i.footer.eyebrow, i.footer.eyebrowAccent) ?? i.footer.eyebrow} /></p>
           )}
           {adminMode ? (
             <EditableText client:load i18nKey="footer.headline" as="h2" className="font-heading text-5xl uppercase leading-none text-white md:text-7xl" />
@@ -185,7 +186,7 @@ const adminNavItems = [
     align-items: center;
     justify-content: center;
     border-radius: 999px;
-    border: 1px solid rgb(232 50 86 / 0.45);
+    border: 1px solid rgb(244 143 161 / 0.45);
     background: var(--color-amaranth);
     padding: 0.95rem 1.5rem;
     color: var(--color-ink);
@@ -218,7 +219,7 @@ const adminNavItems = [
     display: block;
     height: 1rem;
     overflow: hidden;
-    color: rgb(244 245 241 / 0.72);
+    color: rgb(251 244 239 / 0.72);
   }
 
   .footer-nav-link__line > span {
@@ -256,7 +257,7 @@ const adminNavItems = [
     align-items: center;
     justify-content: center;
     border-radius: 999px;
-    border: 1px solid rgb(244 245 241 / 0.12);
+    border: 1px solid rgb(251 244 239 / 0.12);
     background: transparent;
     color: var(--color-paper);
     box-shadow: none;
@@ -278,9 +279,9 @@ const adminNavItems = [
   .footer-social:hover,
   .footer-social:focus-visible {
     transform: translateY(-3px);
-    background: rgb(244 245 241 / 0.06);
+    background: rgb(251 244 239 / 0.06);
     color: var(--color-amaranth);
-    box-shadow: 0 4px 0 rgb(232 50 86 / 0.25);
+    box-shadow: 0 4px 0 rgb(244 143 161 / 0.25);
   }
 
   @keyframes footer-reveal {

@@ -781,55 +781,55 @@
       "id": "ugc-travel-01",
       "category": "travel",
       "type": "video",
-      "src": "/images/ugc/mock-01.webp",
-      "poster": "/images/ugc/ugc-travel-01-poster.webp",
+      "src": "/images/ugc/ugc-travel-california-poster.jpg",
+      "poster": "/images/ugc/ugc-travel-california-poster.jpg",
+      "embedUrl": "<iframe width=\"384\" height=\"682\" src=\"https://www.youtube.com/embed/4pyLA2Gfb7g\" title=\"Viaje por California - recomendaciones\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
       "label": {
-        "es": "Road trip por California",
+        "es": "Viaje por California",
         "en": "California road trip",
-        "fr": "Californie road trip",
-        "de": "Morgennotiz",
-        "it": "Nota d’alba",
-        "ca": "Nota d’alba"
+        "fr": "Road trip en Californie",
+        "de": "Roadtrip durch Kalifornien",
+        "it": "Viaggio in California",
+        "ca": "Viatge per Califòrnia"
       },
       "title": {
-        "es": "Ruta de 10 días por California",
-        "en": "10-Day California Itinerary",
-        "fr": "Tour de 10 jours en Californie",
-        "de": "Ankunftsnotizen auf der Dachterrasse",
-        "it": "Appunti d’arrivo in terrazza",
-        "ca": "Apunts d’arribada al terrat"
+        "es": "Recomendaciones de viaje por California",
+        "en": "California travel recommendations",
+        "fr": "Recommandations de voyage en Californie",
+        "de": "Reisetipps für Kalifornien",
+        "it": "Consigli di viaggio in California",
+        "ca": "Recomanacions de viatge per Califòrnia"
       },
       "description": {
-        "es": "De San Francisco a Sacramento, pasando por Yosemite y Tahoe. Coche, naturaleza y amigas.",
-        "en": "From San Francisco to Sacramento, passing through Yosemite and Tahoe. A road trip, nature, and friends.",
-        "fr": "De San Francisco à Sacramento, en passant par Yosemite et Tahoe. La voiture, la nature et les copines.",
-        "de": "Konzeptionelles Still eines Hotelmorgens mit weichem Licht, Kaffee und Reiseessentials für den Tagesbeginn.",
-        "it": "Still concettuale di una mattina in hotel con luce soffusa, caffè ed essenziali da viaggio pronti per iniziare la giornata.",
-        "ca": "Maqueta conceptual d’un matí d’hotel amb llum suau, cafè i essencials de viatge a punt per començar el dia."
+        "es": "De San Francisco a Sacramento, pasando por Yosemite y Lake Tahoe: ruta en coche, naturaleza y planes con amigas.",
+        "en": "From San Francisco to Sacramento via Yosemite and Lake Tahoe: a road trip, nature and plans with friends.",
+        "fr": "De San Francisco à Sacramento en passant par Yosemite et le lac Tahoe : road trip, nature et sorties entre amies.",
+        "de": "Von San Francisco nach Sacramento über Yosemite und den Lake Tahoe: Roadtrip, Natur und Pläne mit Freundinnen.",
+        "it": "Da San Francisco a Sacramento passando per Yosemite e il lago Tahoe: viaggio in auto, natura e programmi con le amiche.",
+        "ca": "De San Francisco a Sacramento, passant per Yosemite i el llac Tahoe: ruta amb cotxe, natura i plans amb amigues."
       },
       "format": {
-        "es": "Video vertical",
+        "es": "Vídeo vertical",
         "en": "Vertical video",
-        "fr": "Vidéo vertical",
-        "de": "Standbild",
-        "it": "Immagine statica",
-        "ca": "Imatge fixa"
+        "fr": "Vidéo verticale",
+        "de": "Hochformat-Video",
+        "it": "Video verticale",
+        "ca": "Vídeo vertical"
       },
       "alt": {
-        "es": "San Francisco, Yosemite, Tahoe, Sacramento, Napa Valley.",
-        "en": "San Francisco, Yosemite, Tahoe, Sacramento, Napa Valley.",
-        "fr": "San Francisco, Yosemite, Tahoe, Sacramento, Napa Valley.",
-        "de": "Reisenotizbuch, Sonnenbrille und Kaffee auf einem Dachterrassentisch bei Sonnenaufgang.",
-        "it": "Taccuino di viaggio, occhiali da sole e caffè su un tavolo in terrazza all’alba.",
-        "ca": "Quadern de viatge, ulleres de sol i cafè sobre una taula de terrat a l’alba."
-      },
-      "embedUrl": "<iframe width=\"384\" height=\"682\" src=\"https://www.youtube-nocookie.com/embed/Ds1-fNV6q7g\" title=\"Viaje California\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>"
+        "es": "Paisajes de San Francisco, Yosemite y Lake Tahoe en un viaje por California.",
+        "en": "San Francisco, Yosemite and Lake Tahoe scenery on a California trip.",
+        "fr": "Paysages de San Francisco, Yosemite et du lac Tahoe lors d’un voyage en Californie.",
+        "de": "Landschaften von San Francisco, Yosemite und dem Lake Tahoe auf einer Kalifornienreise.",
+        "it": "Paesaggi di San Francisco, Yosemite e del lago Tahoe durante un viaggio in California.",
+        "ca": "Paisatges de San Francisco, Yosemite i el llac Tahoe en un viatge per Califòrnia."
+      }
     },
     {
       "id": "ugc-languages-01",
       "category": "languages",
       "type": "video",
-      "src": "/images/ugc/mock-02.mp4",
+      "src": "/images/ugc/ugc-languages-01-poster.jpg",
       "poster": "/images/ugc/ugc-languages-01-poster.jpg",
       "label": {
         "es": "LinkedIn · Marca personal",
@@ -876,471 +876,481 @@
     {
       "id": "ugc-art-01",
       "category": "art",
-      "type": "image",
-      "src": "/images/ugc/ugc-art-01.png",
-      "poster": null,
+      "type": "video",
+      "src": "/images/ugc/ugc-products-mondial-poster.jpg",
+      "poster": "/images/ugc/ugc-products-mondial-poster.jpg",
+      "embedUrl": "<iframe width=\"384\" height=\"682\" src=\"https://www.youtube.com/embed/yxqx6IMarYY\" title=\"Mondial Eco Bag\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
       "label": {
-        "es": "Estudio quieto",
-        "en": "Studio still",
-        "fr": "Studio immobile",
-        "de": "Stillleben im Studio",
-        "it": "Studio fermo",
-        "ca": "Estudi quiet"
+        "es": "Promo de producto",
+        "en": "Product promo",
+        "fr": "Promo produit",
+        "de": "Produktpromo",
+        "it": "Promo prodotto",
+        "ca": "Promo de producte"
       },
       "title": {
-        "es": "Materiales antes del primer trazo",
-        "en": "Materials before the first stroke",
-        "fr": "Matériaux avant le premier geste",
-        "de": "Materialien vor dem ersten Pinselstrich",
-        "it": "Materiali prima del primo tratto",
-        "ca": "Materials abans del primer traç"
+        "es": "Muestra de promo de producto: Mondial Eco Bag",
+        "en": "Product promo sample: Mondial Eco Bag",
+        "fr": "Exemple de promo produit : Mondial Eco Bag",
+        "de": "Beispiel für eine Produktpromo: Mondial Eco Bag",
+        "it": "Esempio di promo prodotto: Mondial Eco Bag",
+        "ca": "Mostra de promo de producte: Mondial Eco Bag"
       },
       "description": {
-        "es": "Imagen conceptual con pinceles, papel y pigmento ordenados como apertura tranquila de un estudio creativo.",
-        "en": "Concept still with brushes, paper, and pigment arranged as a calm opening frame for a creative studio.",
-        "fr": "Image conceptuelle avec pinceaux, papier et pigments disposés comme l’ouverture calme d’un studio créatif.",
-        "de": "Konzeptionelles Bild mit Pinseln, Papier und Pigmenten als ruhige Eröffnung eines Kreativstudios.",
-        "it": "Immagine concettuale con pennelli, carta e pigmenti disposti come apertura calma di uno studio creativo.",
-        "ca": "Imatge conceptual amb pinzells, paper i pigment disposats com l’obertura tranquil·la d’un estudi creatiu."
+        "es": "Crea el bolso de tu próximo look de invitada con Mondial Eco Bag. *Ejemplo de contenido UGC.",
+        "en": "Make the bag for your next wedding-guest look with Mondial Eco Bag. *Sample UGC content.",
+        "fr": "Créez le sac de votre prochaine tenue d’invitée avec Mondial Eco Bag. *Exemple de contenu UGC.",
+        "de": "Häkle die Tasche für deinen nächsten Gast-Look mit Mondial Eco Bag. *Beispiel für UGC-Content.",
+        "it": "Crea la borsa per il tuo prossimo look da invitata con Mondial Eco Bag. *Esempio di contenuto UGC.",
+        "ca": "Crea la bossa del teu pròxim look de convidada amb Mondial Eco Bag. *Exemple de contingut UGC."
       },
       "format": {
-        "es": "Imagen fija",
-        "en": "Still image",
-        "fr": "Image fixe",
-        "de": "Standbild",
-        "it": "Immagine statica",
-        "ca": "Imatge fixa"
+        "es": "Vídeo vertical",
+        "en": "Vertical video",
+        "fr": "Vidéo verticale",
+        "de": "Hochformat-Video",
+        "it": "Video verticale",
+        "ca": "Vídeo vertical"
       },
       "alt": {
-        "es": "Mesa de estudio con pinceles, papel texturizado y pequeños recipientes de pigmento.",
-        "en": "Studio table with brushes, textured paper, and small pigment dishes.",
-        "fr": "Table de studio avec pinceaux, papier texturé et petits récipients de pigments.",
-        "de": "Studiotisch mit Pinseln, strukturiertem Papier und kleinen Pigmentschalen.",
-        "it": "Tavolo da studio con pennelli, carta materica e piccoli contenitori di pigmento.",
-        "ca": "Taula d’estudi amb pinzells, paper texturitzat i petits recipients de pigment."
+        "es": "Bolso de crochet marrón tejido con el hilo Mondial Eco Bag.",
+        "en": "Brown crochet bag made with Mondial Eco Bag yarn.",
+        "fr": "Sac marron au crochet réalisé avec le fil Mondial Eco Bag.",
+        "de": "Braune Häkeltasche aus Mondial-Eco-Bag-Garn.",
+        "it": "Borsa marrone all’uncinetto realizzata con il filato Mondial Eco Bag.",
+        "ca": "Bossa marró de ganxet feta amb el fil Mondial Eco Bag."
       }
     },
     {
       "id": "ugc-travel-02",
       "category": "travel",
       "type": "video",
-      "src": "/images/ugc/mock-04.mp4",
-      "poster": "/images/ugc/ugc-travel-02-poster.png",
+      "src": "/images/ugc/ugc-travel-suiza-poster.jpg",
+      "poster": "/images/ugc/ugc-travel-suiza-poster.jpg",
+      "embedUrl": "<iframe width=\"384\" height=\"682\" src=\"https://www.youtube.com/embed/ZCM2eyDTZ08\" title=\"Maleta Suiza + recomendaciones ropa y zapatos\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
       "label": {
-        "es": "Paso de check-in",
-        "en": "Check-in motion",
-        "fr": "Passage check-in",
-        "de": "Check-in-Moment",
-        "it": "Passaggio check-in",
-        "ca": "Pas de check-in"
+        "es": "Maleta para Suiza",
+        "en": "Packing for Switzerland",
+        "fr": "Valise pour la Suisse",
+        "de": "Koffer für die Schweiz",
+        "it": "Valigia per la Svizzera",
+        "ca": "Maleta per a Suïssa"
       },
       "title": {
-        "es": "Recorrido por un lobby boutique",
-        "en": "Boutique lobby passage",
-        "fr": "Parcours dans un lobby boutique",
-        "de": "Gang durch eine Boutique-Lobby",
-        "it": "Percorso in una lobby boutique",
-        "ca": "Recorregut per un lobby boutique"
+        "es": "Ejemplo de publi ficticia: maleta y ropa de montaña",
+        "en": "Mock ad example: suitcase and hiking clothes",
+        "fr": "Exemple de pub fictive : valise et vêtements de randonnée",
+        "de": "Beispiel für fiktive Werbung: Koffer und Wanderkleidung",
+        "it": "Esempio di pubblicità fittizia: valigia e abbigliamento da trekking",
+        "ca": "Exemple de publi fictícia: maleta i roba de muntanya"
       },
       "description": {
-        "es": "Maqueta vertical que sigue una entrada tranquila al lobby y los primeros detalles de la habitación.",
-        "en": "Concept vertical mock following a quiet walk into the lobby and the first room details.",
-        "fr": "Maquette verticale qui suit une entrée calme dans le lobby et les premiers détails de la chambre.",
-        "de": "Vertikales Mockup, das einen ruhigen Weg in die Lobby und erste Zimmerdetails begleitet.",
-        "it": "Mockup verticale che segue un ingresso tranquillo nella lobby e i primi dettagli della stanza.",
-        "ca": "Maqueta vertical que segueix una entrada tranquil·la al lobby i els primers detalls de l’habitació."
+        "es": "Preparación de maleta para hacer senderismo en Suiza, con recomendaciones de ropa y calzado.",
+        "en": "Packing a suitcase for hiking in Switzerland, with clothing and footwear recommendations.",
+        "fr": "Préparation d’une valise pour randonner en Suisse, avec des recommandations de vêtements et de chaussures.",
+        "de": "Koffer packen fürs Wandern in der Schweiz, mit Empfehlungen für Kleidung und Schuhe.",
+        "it": "Preparazione della valigia per fare trekking in Svizzera, con consigli su abbigliamento e calzature.",
+        "ca": "Preparació de la maleta per fer senderisme a Suïssa, amb recomanacions de roba i calçat."
       },
       "format": {
         "es": "Vídeo vertical",
         "en": "Vertical video",
         "fr": "Vidéo verticale",
-        "de": "Vertikales Video",
+        "de": "Hochformat-Video",
         "it": "Video verticale",
         "ca": "Vídeo vertical"
       },
       "alt": {
-        "es": "Póster de vídeo vertical con una entrada cálida de hotel boutique.",
-        "en": "Vertical video poster showing a warm boutique hotel entrance.",
-        "fr": "Affiche vidéo verticale montrant une entrée chaleureuse d’hôtel boutique.",
-        "de": "Poster eines vertikalen Videos mit dem warmen Eingang eines Boutique-Hotels.",
-        "it": "Poster di video verticale con l’ingresso caldo di un hotel boutique.",
-        "ca": "Pòster de vídeo vertical amb l’entrada càlida d’un hotel boutique."
+        "es": "Maleta abierta con ropa y calzado de senderismo para un viaje a Suiza.",
+        "en": "Open suitcase with hiking clothes and footwear for a trip to Switzerland.",
+        "fr": "Valise ouverte avec vêtements et chaussures de randonnée pour un voyage en Suisse.",
+        "de": "Offener Koffer mit Wanderkleidung und -schuhen für eine Schweizreise.",
+        "it": "Valigia aperta con abbigliamento e scarpe da trekking per un viaggio in Svizzera.",
+        "ca": "Maleta oberta amb roba i calçat de senderisme per a un viatge a Suïssa."
       }
     },
     {
-      "id": "ugc-languages-02",
-      "category": "languages",
-      "type": "image",
-      "src": "/images/ugc/ugc-languages-02.png",
-      "poster": null,
-      "label": {
-        "es": "Mesa de estudio",
-        "en": "Study desk",
-        "fr": "Bureau d’étude",
-        "de": "Lerntisch",
-        "it": "Scrivania di studio",
-        "ca": "Taula d’estudi"
-      },
-      "title": {
-        "es": "Notas antes de clase",
-        "en": "Notes before class",
-        "fr": "Notes avant le cours",
-        "de": "Notizen vor dem Kurs",
-        "it": "Appunti prima della lezione",
-        "ca": "Apunts abans de classe"
-      },
-      "description": {
-        "es": "Composición fija de páginas anotadas, auriculares y rotuladores preparados para una práctica de idiomas.",
-        "en": "Still composition of annotated pages, headphones, and color markers prepared for language practice.",
-        "fr": "Composition fixe de pages annotées, d’écouteurs et de feutres préparés pour une pratique des langues.",
-        "de": "Stillleben mit beschrifteten Seiten, Kopfhörern und Markern für eine Sprachübung.",
-        "it": "Composizione fissa di pagine annotate, cuffie e pennarelli preparati per una pratica linguistica.",
-        "ca": "Composició fixa de pàgines anotades, auriculars i retoladors preparats per a una pràctica d’idiomes."
-      },
-      "format": {
-        "es": "Imagen fija",
-        "en": "Still image",
-        "fr": "Image fixe",
-        "de": "Standbild",
-        "it": "Immagine statica",
-        "ca": "Imatge fixa"
-      },
-      "alt": {
-        "es": "Escritorio con páginas subrayadas, auriculares y rotuladores de colores.",
-        "en": "Desk with highlighted pages, headphones, and colored markers.",
-        "fr": "Bureau avec pages surlignées, écouteurs et feutres colorés.",
-        "de": "Schreibtisch mit markierten Seiten, Kopfhörern und farbigen Markern.",
-        "it": "Scrivania con pagine evidenziate, cuffie e pennarelli colorati.",
-        "ca": "Escriptori amb pàgines subratllades, auriculars i retoladors de colors."
-      }
-    },
-    {
-      "id": "ugc-art-02",
-      "category": "art",
-      "type": "video",
-      "src": "/images/ugc/mock-06.mp4",
-      "poster": "/images/ugc/ugc-art-02-poster.png",
-      "label": {
-        "es": "Preparación de color",
-        "en": "Color setup",
-        "fr": "Préparation couleur",
-        "de": "Farbaufbau",
-        "it": "Preparazione del colore",
-        "ca": "Preparació del color"
-      },
-      "title": {
-        "es": "Acuarela en movimiento",
-        "en": "Watercolor setup in motion",
-        "fr": "Mise en place de l’aquarelle en mouvement",
-        "de": "Aquarellaufbau in Bewegung",
-        "it": "Preparazione dell’acquerello in movimento",
-        "ca": "Preparació de l’aquarel·la en moviment"
-      },
-      "description": {
-        "es": "Maqueta vertical que recorre agua, pigmento y textura justo antes de empezar a pintar.",
-        "en": "Concept vertical mock moving through water, pigment, and texture just before painting begins.",
-        "fr": "Maquette verticale qui traverse l’eau, le pigment et la texture juste avant le début de la peinture.",
-        "de": "Vertikales Mockup, das Wasser, Pigment und Textur kurz vor dem Malbeginn zeigt.",
-        "it": "Mockup verticale che attraversa acqua, pigmento e texture poco prima che inizi il dipinto.",
-        "ca": "Maqueta vertical que recorre aigua, pigment i textura just abans de començar a pintar."
-      },
-      "format": {
-        "es": "Vídeo vertical",
-        "en": "Vertical video",
-        "fr": "Vidéo verticale",
-        "de": "Vertikales Video",
-        "it": "Video verticale",
-        "ca": "Vídeo vertical"
-      },
-      "alt": {
-        "es": "Póster de vídeo vertical con pigmento y pinceles sobre una mesa clara.",
-        "en": "Vertical video poster with pigment and brushes on a light worktable.",
-        "fr": "Affiche vidéo verticale avec pigments et pinceaux sur une table claire.",
-        "de": "Poster eines vertikalen Videos mit Pigmenten und Pinseln auf einem hellen Tisch.",
-        "it": "Poster di video verticale con pigmenti e pennelli su un tavolo chiaro.",
-        "ca": "Pòster de vídeo vertical amb pigment i pinzells sobre una taula clara."
-      }
-    },
-    {
-      "id": "ugc-travel-03",
+      "id": "ugc-soon-05",
       "category": "travel",
       "type": "image",
-      "src": "/images/ugc/ugc-travel-03.png",
+      "src": "",
       "poster": null,
+      "comingSoon": true,
       "label": {
-        "es": "Equipaje corto",
-        "en": "Carry-on edit",
-        "fr": "Bagage léger",
-        "de": "Handgepäck-Edit",
-        "it": "Bagaglio essenziale",
-        "ca": "Equipatge curt"
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
       },
       "title": {
-        "es": "Detalle de equipaje para fin de semana",
-        "en": "Weekend carry-on detail",
-        "fr": "Détail de bagage pour le week-end",
-        "de": "Handgepäckdetail fürs Wochenende",
-        "it": "Dettaglio bagaglio per il weekend",
-        "ca": "Detall d’equipatge per al cap de setmana"
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
       },
       "description": {
-        "es": "Imagen editorial centrada en piezas compactas de viaje ordenadas para una escapada urbana breve.",
-        "en": "Editorial still focused on compact travel pieces arranged for a short city break.",
-        "fr": "Image éditoriale centrée sur des pièces de voyage compactes disposées pour une courte escapade urbaine.",
-        "de": "Editoriales Stillleben mit kompakten Reiseteilen für einen kurzen Städtetrip.",
-        "it": "Immagine editoriale incentrata su pezzi da viaggio compatti disposti per una breve fuga urbana.",
-        "ca": "Imatge editorial centrada en peces compactes de viatge disposades per a una escapada urbana breu."
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
       },
       "format": {
-        "es": "Imagen editorial",
-        "en": "Editorial still",
-        "fr": "Image éditoriale",
-        "de": "Editoriales Standbild",
-        "it": "Immagine editoriale",
-        "ca": "Imatge editorial"
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
       },
       "alt": {
-        "es": "Maleta abierta con ropa ligera, libreta y accesorios de viaje compactos.",
-        "en": "Open suitcase with light clothing, a notebook, and compact travel accessories.",
-        "fr": "Valise ouverte avec vêtements légers, carnet et accessoires de voyage compacts.",
-        "de": "Offener Koffer mit leichter Kleidung, Notizbuch und kompakten Reiseaccessoires.",
-        "it": "Valigia aperta con capi leggeri, taccuino e accessori da viaggio compatti.",
-        "ca": "Maleta oberta amb roba lleugera, llibreta i accessoris de viatge compactes."
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
       }
     },
     {
-      "id": "ugc-languages-03",
-      "category": "languages",
-      "type": "video",
-      "src": "/images/ugc/mock-08.mp4",
-      "poster": "/images/ugc/ugc-languages-03-poster.png",
-      "label": {
-        "es": "Ritmo de subtítulos",
-        "en": "Subtitle rhythm",
-        "fr": "Rythme des sous-titres",
-        "de": "Untertitel-Rhythmus",
-        "it": "Ritmo dei sottotitoli",
-        "ca": "Ritme dels subtítols"
-      },
-      "title": {
-        "es": "Demostración de timing para subtítulos",
-        "en": "Subtitle timing demo",
-        "fr": "Démo de timing des sous-titres",
-        "de": "Demo für Untertitel-Timing",
-        "it": "Demo del timing dei sottotitoli",
-        "ca": "Demostració de timing de subtítols"
-      },
-      "description": {
-        "es": "Maqueta vertical que muestra cómo voz, texto y pausas pueden mantenerse claros en pantallas pequeñas.",
-        "en": "Concept vertical mock showing how voice, text, and pauses can stay clear on smaller screens.",
-        "fr": "Maquette verticale montrant comment voix, texte et pauses peuvent rester clairs sur de petits écrans.",
-        "de": "Vertikales Mockup, das zeigt, wie Stimme, Text und Pausen auf kleinen Bildschirmen klar bleiben.",
-        "it": "Mockup verticale che mostra come voce, testo e pause possano restare chiari su schermi piccoli.",
-        "ca": "Maqueta vertical que mostra com veu, text i pauses poden mantenir-se clars en pantalles petites."
-      },
-      "format": {
-        "es": "Vídeo vertical",
-        "en": "Vertical video",
-        "fr": "Vidéo verticale",
-        "de": "Vertikales Video",
-        "it": "Video verticale",
-        "ca": "Vídeo vertical"
-      },
-      "alt": {
-        "es": "Póster de vídeo vertical con subtítulos y una interfaz limpia en movimiento.",
-        "en": "Vertical video poster with subtitles and a clean moving interface.",
-        "fr": "Affiche vidéo verticale avec sous-titres et interface claire en mouvement.",
-        "de": "Poster eines vertikalen Videos mit Untertiteln und einer klaren Oberfläche in Bewegung.",
-        "it": "Poster di video verticale con sottotitoli e un’interfaccia pulita in movimento.",
-        "ca": "Pòster de vídeo vertical amb subtítols i una interfície neta en moviment."
-      }
-    },
-    {
-      "id": "ugc-art-03",
+      "id": "ugc-soon-06",
       "category": "art",
       "type": "image",
-      "src": "/images/ugc/ugc-art-03.png",
+      "src": "",
       "poster": null,
+      "comingSoon": true,
       "label": {
-        "es": "Luz de galería",
-        "en": "Gallery light",
-        "fr": "Lumière de galerie",
-        "de": "Galerielicht",
-        "it": "Luce di galleria",
-        "ca": "Llum de galeria"
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
       },
       "title": {
-        "es": "Estudio de luz sobre obra enmarcada",
-        "en": "Light study on framed work",
-        "fr": "Étude de lumière sur œuvre encadrée",
-        "de": "Lichtstudie auf gerahmter Arbeit",
-        "it": "Studio di luce su opera incorniciata",
-        "ca": "Estudi de llum sobre obra emmarcada"
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
       },
       "description": {
-        "es": "Imagen fija de marcos, reflejos y líneas de sombra pensada para una atmósfera editorial serena.",
-        "en": "Still image of frames, reflections, and shadow lines arranged for a quiet editorial mood.",
-        "fr": "Image fixe de cadres, reflets et lignes d’ombre pensée pour une atmosphère éditoriale sereine.",
-        "de": "Stillbild von Rahmen, Reflexen und Schattenlinien für eine ruhige editoriale Stimmung.",
-        "it": "Immagine fissa di cornici, riflessi e linee d’ombra pensata per un’atmosfera editoriale calma.",
-        "ca": "Imatge fixa de marcs, reflexos i línies d’ombra pensada per a una atmosfera editorial serena."
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
       },
       "format": {
-        "es": "Imagen editorial",
-        "en": "Editorial still",
-        "fr": "Image éditoriale",
-        "de": "Editoriales Standbild",
-        "it": "Immagine editoriale",
-        "ca": "Imatge editorial"
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
       },
       "alt": {
-        "es": "Obra enmarcada con reflejos suaves y sombras diagonales en una pared clara.",
-        "en": "Framed work with soft reflections and diagonal shadows on a light wall.",
-        "fr": "Œuvre encadrée avec reflets doux et ombres diagonales sur un mur clair.",
-        "de": "Gerahmtes Werk mit weichen Reflexen und diagonalen Schatten auf einer hellen Wand.",
-        "it": "Opera incorniciata con riflessi morbidi e ombre diagonali su una parete chiara.",
-        "ca": "Obra emmarcada amb reflexos suaus i ombres diagonals sobre una paret clara."
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
       }
     },
     {
-      "id": "ugc-travel-04",
+      "id": "ugc-soon-07",
+      "category": "languages",
+      "type": "image",
+      "src": "",
+      "poster": null,
+      "comingSoon": true,
+      "label": {
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
+      },
+      "title": {
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
+      },
+      "description": {
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
+      },
+      "format": {
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
+      },
+      "alt": {
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
+      }
+    },
+    {
+      "id": "ugc-soon-08",
+      "category": "languages",
+      "type": "image",
+      "src": "",
+      "poster": null,
+      "comingSoon": true,
+      "label": {
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
+      },
+      "title": {
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
+      },
+      "description": {
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
+      },
+      "format": {
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
+      },
+      "alt": {
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
+      }
+    },
+    {
+      "id": "ugc-soon-09",
+      "category": "products",
+      "type": "image",
+      "src": "",
+      "poster": null,
+      "comingSoon": true,
+      "label": {
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
+      },
+      "title": {
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
+      },
+      "description": {
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
+      },
+      "format": {
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
+      },
+      "alt": {
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
+      }
+    },
+    {
+      "id": "ugc-soon-10",
+      "category": "products",
+      "type": "image",
+      "src": "",
+      "poster": null,
+      "comingSoon": true,
+      "label": {
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
+      },
+      "title": {
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
+      },
+      "description": {
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
+      },
+      "format": {
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
+      },
+      "alt": {
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
+      }
+    },
+    {
+      "id": "ugc-soon-11",
+      "category": "art",
+      "type": "image",
+      "src": "",
+      "poster": null,
+      "comingSoon": true,
+      "label": {
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
+      },
+      "title": {
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
+      },
+      "description": {
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
+      },
+      "format": {
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
+      },
+      "alt": {
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
+      }
+    },
+    {
+      "id": "ugc-soon-12",
       "category": "travel",
-      "type": "video",
-      "src": "/images/ugc/mock-10.mp4",
-      "poster": "/images/ugc/ugc-travel-04-poster.png",
-      "label": {
-        "es": "Ruta en ventana",
-        "en": "Window route",
-        "fr": "Route à la fenêtre",
-        "de": "Fensterroute",
-        "it": "Percorso al finestrino",
-        "ca": "Ruta en finestra"
-      },
-      "title": {
-        "es": "Trayecto visto desde el tren",
-        "en": "Train window route",
-        "fr": "Trajet vu depuis le train",
-        "de": "Strecke aus dem Zugfenster",
-        "it": "Percorso visto dal treno",
-        "ca": "Trajecte vist des del tren"
-      },
-      "description": {
-        "es": "Secuencia vertical conceptual con paisajes en movimiento y pequeños objetos que sugieren un día de traslado tranquilo.",
-        "en": "Concept vertical sequence with passing landscapes and small objects suggesting a calm transfer day.",
-        "fr": "Séquence verticale conceptuelle avec paysages en mouvement et petits objets qui suggèrent une journée de trajet paisible.",
-        "de": "Konzeptionelle vertikale Sequenz mit vorbeiziehenden Landschaften und kleinen Objekten für einen ruhigen Reisetag.",
-        "it": "Sequenza verticale concettuale con paesaggi in movimento e piccoli oggetti che suggeriscono una giornata di spostamento tranquilla.",
-        "ca": "Seqüència vertical conceptual amb paisatges en moviment i petits objectes que suggereixen un dia de trasllat tranquil."
-      },
-      "format": {
-        "es": "Vídeo vertical",
-        "en": "Vertical video",
-        "fr": "Vidéo verticale",
-        "de": "Vertikales Video",
-        "it": "Video verticale",
-        "ca": "Vídeo vertical"
-      },
-      "alt": {
-        "es": "Póster de vídeo vertical con paisaje visto desde una ventana de tren.",
-        "en": "Vertical video poster with scenery seen through a train window.",
-        "fr": "Affiche vidéo verticale avec paysage vu depuis une fenêtre de train.",
-        "de": "Poster eines vertikalen Videos mit Landschaft aus einem Zugfenster.",
-        "it": "Poster di video verticale con paesaggio visto da un finestrino del treno.",
-        "ca": "Pòster de vídeo vertical amb paisatge vist des d’una finestra de tren."
-      }
-    },
-    {
-      "id": "ugc-languages-04",
-      "category": "languages",
       "type": "image",
-      "src": "/images/ugc/ugc-languages-04.png",
+      "src": "",
       "poster": null,
+      "comingSoon": true,
       "label": {
-        "es": "Tarjetas de frase",
-        "en": "Phrase cards",
-        "fr": "Cartes de phrases",
-        "de": "Phrasenkarten",
-        "it": "Carte di frasi",
-        "ca": "Targetes de frases"
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
       },
       "title": {
-        "es": "Selección de tarjetas para practicar",
-        "en": "Phrase card selection",
-        "fr": "Sélection de cartes pour pratiquer",
-        "de": "Auswahl von Lernkarten",
-        "it": "Selezione di carte per esercitarsi",
-        "ca": "Selecció de targetes per practicar"
+        "es": "Próximamente…",
+        "en": "Coming soon…",
+        "fr": "Bientôt…",
+        "de": "Demnächst…",
+        "it": "Prossimamente…",
+        "ca": "Properament…"
       },
       "description": {
-        "es": "Imagen editorial de tarjetas, notas rápidas y pequeños recordatorios para una rutina de estudio sencilla.",
-        "en": "Editorial still of cards, quick notes, and small prompts arranged for a simple study routine.",
-        "fr": "Image éditoriale de cartes, notes rapides et petits repères disposés pour une routine d’étude simple.",
-        "de": "Editoriales Stillbild mit Karten, kurzen Notizen und kleinen Impulsen für eine einfache Lernroutine.",
-        "it": "Immagine editoriale di carte, appunti rapidi e piccoli promemoria disposti per una routine di studio semplice.",
-        "ca": "Imatge editorial de targetes, notes ràpides i petits recordatoris disposats per a una rutina d’estudi senzilla."
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
       },
       "format": {
-        "es": "Imagen editorial",
-        "en": "Editorial still",
-        "fr": "Image éditoriale",
-        "de": "Editoriales Standbild",
-        "it": "Immagine editoriale",
-        "ca": "Imatge editorial"
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
       },
       "alt": {
-        "es": "Tarjetas de vocabulario y notas breves ordenadas sobre una superficie clara.",
-        "en": "Vocabulary cards and short notes arranged on a light surface.",
-        "fr": "Cartes de vocabulaire et notes courtes disposées sur une surface claire.",
-        "de": "Vokabelkarten und kurze Notizen auf einer hellen Fläche angeordnet.",
-        "it": "Carte di vocabolario e note brevi disposte su una superficie chiara.",
-        "ca": "Targetes de vocabulari i notes breus disposades sobre una superfície clara."
-      }
-    },
-    {
-      "id": "ugc-art-04",
-      "category": "art",
-      "type": "video",
-      "src": "/images/ugc/mock-12.mp4",
-      "poster": "/images/ugc/ugc-art-04-poster.png",
-      "label": {
-        "es": "Detalle de marco",
-        "en": "Frame detail",
-        "fr": "Détail du cadre",
-        "de": "Rahmendetail",
-        "it": "Dettaglio cornice",
-        "ca": "Detall de marc"
-      },
-      "title": {
-        "es": "Secuencia de ajuste final",
-        "en": "Framing detail sequence",
-        "fr": "Séquence d’ajustement final",
-        "de": "Sequenz der finalen Anpassung",
-        "it": "Sequenza di regolazione finale",
-        "ca": "Seqüència d’ajust final"
-      },
-      "description": {
-        "es": "Maqueta vertical que sigue esquinas, reflejos del cristal y manos ajustando la pieza final.",
-        "en": "Concept vertical sequence following corners, glass reflections, and hands adjusting the final piece.",
-        "fr": "Maquette verticale qui suit les angles, les reflets du verre et des mains ajustant la pièce finale.",
-        "de": "Vertikale Konzeptsequenz mit Ecken, Glasreflexen und Händen beim Ausrichten des finalen Werks.",
-        "it": "Sequenza verticale concettuale che segue angoli, riflessi del vetro e mani che regolano il pezzo finale.",
-        "ca": "Maqueta vertical que segueix cantonades, reflexos del vidre i mans ajustant la peça final."
-      },
-      "format": {
-        "es": "Vídeo vertical",
-        "en": "Vertical video",
-        "fr": "Vidéo verticale",
-        "de": "Vertikales Video",
-        "it": "Video verticale",
-        "ca": "Vídeo vertical"
-      },
-      "alt": {
-        "es": "Póster de vídeo vertical con un marco claro y manos ajustando una obra.",
-        "en": "Vertical video poster with a light frame and hands adjusting an artwork.",
-        "fr": "Affiche vidéo verticale avec un cadre clair et des mains ajustant une œuvre.",
-        "de": "Poster eines vertikalen Videos mit hellem Rahmen und Händen beim Ausrichten eines Werks.",
-        "it": "Poster di video verticale con una cornice chiara e mani che regolano un’opera.",
-        "ca": "Pòster de vídeo vertical amb un marc clar i mans ajustant una obra."
+        "es": "",
+        "en": "",
+        "fr": "",
+        "de": "",
+        "it": "",
+        "ca": ""
       }
     }
   ],

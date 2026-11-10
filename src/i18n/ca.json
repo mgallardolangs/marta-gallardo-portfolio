@@ -102,6 +102,7 @@
   "footer": {
     "rights": "Tots els drets reservats",
     "eyebrow": "Preparat per a fer créixer el teu projecte web?",
+    "eyebrowAccent": "créixer",
     "headline": "Parlem-ne.",
     "support": "Parlem dels teus objectius i dissenyem una estratègia pas a pas per posicionar la teua marca.",
     "cta": "Contactar",
@@ -125,6 +126,7 @@
       "scrollCue": "Desplaça per descobrir",
       "coverLabel": "Portada editorial",
       "title": "Consultora SEO freelance i estratègia de continguts digitals",
+      "titleAccent": "estratègia",
       "ctaDiagnosis": "Sol·licita un diagnòstic SEO",
       "ctaServices": "Veure serveis"
     },
@@ -141,6 +143,7 @@
         "Anglès"
       ],
       "title": "Rigor tècnic, titulació oficial i creativitat",
+      "titleAccent": "creativitat",
       "description": "Darrere de Marttelier hi ha Marta Gallardo. Graduada en Traducció i Interpretació per la Universitat d'Alacant i formada en SEO i estratègia digital, treballe colze a colze amb empreses i marques per construir una presència en línia sòlida, multilingüe i rendible, sense els passos intermedis d'una agència.",
       "cta": "Coneix-me millor"
     },
@@ -160,12 +163,13 @@
     },
     "orbit": {
       "kicker": "ARXIU CREATIU",
-      "title": "HISTÒRIES EN MOVIMENT.",
+      "title": "La meva història",
       "index": "MARTA GALLARDO · PORTFOLI",
       "note": "CONTINGUT · IDIOMES · VIATGES · ART"
     },
     "services": {
       "title": "Solucions integrals per fer créixer la teua marca",
+      "titleAccent": "créixer",
       "items": {
         "seo": "Consultoria i auditoria SEO",
         "translation": "Traducció i localització web",
@@ -179,10 +183,12 @@
     },
     "visibility": {
       "title": "Visibilitat, idiomes i conversió",
+      "titleAccent": "conversió",
       "text": "Més trànsit no serveix de res si no arriba a les persones adequades. Per això, com a traductora i creadora de contingut, treballe entre llengües, cultures i formats: dissenye estratègies SEO adaptades a la realitat de cada projecte i les uneixo amb traducció, localització i vídeo UGC, perquè cada missatge mantinga la seua intenció, arribe de manera natural i genere confiança a primera vista."
     },
     "latestArticles": {
-      "title": "Últims articles sobre SEO i màrqueting digital"
+      "title": "Últims articles sobre SEO i màrqueting digital",
+      "titleAccent": "màrqueting digital"
     }
   },
   "ugcPage": {
@@ -197,6 +203,7 @@
     },
     "pageDescription": "Portfoli professional de UGC de Marta Gallardo amb campanyes editorials conceptuals de viatges, idiomes i art.",
     "pageTitle": "Creadora de contingut UGC per a marques",
+    "pageTitleAccent": "marques",
     "nicheLabel": "Nínxol",
     "backToTop": "Torna amunt",
     "placeholder": "Maqueta",
@@ -307,9 +314,10 @@
       "headline": "CONTINGUT QUE CONVERTEIX EXPERIÈNCIES, IDIOMES I ART EN HISTÒRIES VISUALS.",
       "filters": {
         "all": "TOT",
-        "travel": "VIATGES",
-        "languages": "IDIOMES",
-        "art": "ART"
+        "travel": "VIATGES I ALLOTJAMENT",
+        "languages": "LLENGÜES I EDUCACIÓ",
+        "art": "MANUALITATS I CREATIVITAT",
+        "products": "PRODUCTES I ESTIL DE VIDA"
       },
       "close": "Tanca",
       "previous": "Anterior",
@@ -320,11 +328,13 @@
     "benefits": {
       "eyebrow": "UGC · DIRECCIÓ CREATIVA",
       "title": "Per què apostar pel contingut UGC",
+      "titleAccent": "apostar",
       "description": "Moltes persones confien més en qui usa un producte o servei en el seu dia a dia que en una publicitat molt produïda. L'UGC (contingut generat per usuaris) mostra la teua marca en situacions reals, amb una càmera propera i un to natural. Serveix per a les teues xarxes, per al teu web i com a anunci de pagament, i et dona material variat per provar quin missatge funciona millor amb el teu públic."
     },
     "process": {
       "eyebrow": "De la idea al lliurament",
       "title": "Procés de treball: de la idea a l’edició final",
+      "titleAccent": "edició final",
       "steps": [
         {
           "title": "Briefing",
@@ -468,6 +478,7 @@
     "servicesEyebrow": "01 · COM ET PUC AJUDAR",
     "arsenalEyebrow": "02 · PERFIL I EINES",
     "experienceSectionTitle": "Experiència i formació",
+    "experienceSectionTitleAccent": "formació",
     "experienceEyebrow": "03 · TRAJECTÒRIA",
     "experienceStatement": "Base acadèmica + pràctica real",
     "methodologyEyebrow": "04 · METODOLOGIA I INFOGRAFIA",
@@ -484,12 +495,14 @@
     "hero": {
       "eyebrow": "Sobre mi",
       "title": "Marta Gallardo i la filosofia Marttelier",
+      "titleAccent": "Marttelier",
       "subtitle": "El punt de trobada entre la lingüística, l’estratègia i el contingut",
       "story": "Em vaig graduar en Traducció i Interpretació per la Universitat d'Alacant i em vaig formar en SEO i estratègia digital. Unint llengües, recerca i creació de contingut he trobat una manera d'acompanyar projectes de forma directa, sense agències pel mig. M'interessa que cada missatge mantinga la seua intenció i arribe a les persones adequades."
     },
     "principles": {
       "eyebrow": "marttelier",
       "title": "Principis i valors de treball",
+      "titleAccent": "valors",
       "items": [
         "Transparència sense fum",
         "Revisió humana",
@@ -506,6 +519,7 @@
     "hero": {
       "eyebrow": "Posicionament SEO",
       "title": "Servei de posicionament SEO i SEO internacional",
+      "titleAccent": "posicionament SEO",
       "paragraphs": [
         "Aparéixer a Google no és qüestió de sort, sinó d'estratègia. El meu servei de posicionament SEO converteix el teu web en un canal que atrau persones que ja busquen el que ofereixes: no només més visites, sinó visites amb un interés real.",
         "Analitze el punt de partida del teu projecte i dissenye un pla de posicionament als cercadors a mesura: millore l'estructura tècnica, la rellevància dels teus continguts i l'autoritat del teu web. Tant si vols consolidar-te al teu mercat de referència com fer el salt a altres països amb SEO internacional, t'explique cada pas i treballem amb prioritats clares."
@@ -514,6 +528,7 @@
     "services": {
       "eyebrow": "SEO",
       "title": "Serveis SEO a la teua mida",
+      "titleAccent": "a la teua mida",
       "items": [
         {
           "id": "audit",
@@ -536,11 +551,13 @@
       "eyebrow": "El teu web, a cada mercat",
       "translationLinkLabel": "Traducció",
       "title": "Especialista en SEO internacional i multilingüe",
+      "titleAccent": "multilingüe",
       "description": "Internacionalitzar un web no és instal·lar un connector de traducció automàtica. Cada mercat busca de manera diferent, per això part d'investigar quins termes usen realment els usuaris de cada país i amb quina intenció. A partir d'ací adapte el contingut i configure el que cal a nivell tècnic, com les etiquetes hreflang, perquè Google mostre cada versió al públic adequat. Si també necessites un servei de traducció de pàgines web, el treballem dins de la mateixa estratègia, de manera que llengua i posicionament no vagen per separat."
     },
     "why": {
       "eyebrow": "SEO",
       "title": "Per què confiar en mi com a consultora SEO?",
+      "titleAccent": "confiar",
       "description": "En SEO, el que funcionava fa uns anys ja no basta: Google canvia els seus sistemes i la intel·ligència artificial ha canviat la manera de cercar. Treballar amb mi és triar un servei transparent, directe i sense intermediaris. El meu enfocament es recolza en quatre pilars:",
       "items": [
         "Formació actualitzada. Curs privat de màrqueting digital i SEO, més formació contínua en SEO internacional i en contingut per a cercadors.",
@@ -576,6 +593,7 @@
     "budget": {
       "eyebrow": "SEO",
       "title": "Tarifes i pressupost SEO",
+      "titleAccent": "pressupost",
       "description": "El pressupost depén de l’estat del web, l’abast i el tipus d’acompanyament. Conta’m els objectius del projecte i prepararé una proposta ajustada.",
       "highlight": "Una revisió bàsica del teu web amb tres troballes prioritzades, més una telefonada gratuïta de 30 minuts per a conéixer el teu projecte i comentar aquests resultats. No inclou un informe complet ni l’aplicació de les millores; si decideixes continuar, ho concretem en la proposta.",
       "highlightTitle": "Oferisc un diagnòstic inicial gratuït"
@@ -585,11 +603,13 @@
     "hero": {
       "eyebrow": "Traducció i localització",
       "title": "Traducció i localització web professional amb enfocament SEO",
+      "titleAccent": "localització web",
       "description": "Adapte el contingut de la teua empresa a nous mercats amb precisió semàntica i enfocament SEO."
     },
     "localization": {
       "eyebrow": "LOCALITZACIÓ WEB",
       "title": "Localització de pàgines web i comerç electrònic",
+      "titleAccent": "comerç electrònic",
       "items": [
         {
           "id": "cultural-adaptation",
@@ -607,11 +627,13 @@
       "eyebrow": "TRADUCCIÓ SEO",
       "seoLinkLabel": "SEO",
       "title": "Traducció SEO multilingüe: contingut pensat per a com cerca cada mercat",
+      "titleAccent": "cada mercat",
       "description": "La traducció SEO parteix de les cerques de cada llengua, no del text original. Investigue com cerquen els usuaris de cada mercat i adapte paraules clau i estructura per preservar la intenció i la veu de la teua marca. Si el teu projecte també necessita una estratègia, la integre amb el servei de SEO internacional."
     },
     "digitalContent": {
       "eyebrow": "CONTINGUT DIGITAL",
       "title": "Traducció de contingut digital: blogs, newsletters i textos de marca",
+      "titleAccent": "newsletters",
       "items": [
         {
           "id": "editorial-content",
@@ -627,6 +649,7 @@
     },
     "arsenal": {
       "title": "Idiomes, eines i habilitats de traducció",
+      "titleAccent": "habilitats",
       "eyebrow": "PERFIL I EINES",
       "languagesTitle": "Idiomes",
       "toolsTitle": "Eines",
@@ -641,7 +664,7 @@
         {
           "title": "1. Responsable del tractament",
           "paragraphs": [
-            "Marta Gallardo Albertu, amb NIF 77039673T, domicili al carrer Asunción Parreño García, 03205 Elx (Alacant) i correu electrònic <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>. Exerceix la seua activitat amb el nom comercial Marttelier."
+            "Marta Gallardo Albertu, amb NIF 77039673T, domicili al carrer Asunción Parreño García, 03205 Elx (Alacant) i correu electrònic <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-hazel\">mstudio@marttelier.com</a>. Exerceix la seua activitat amb el nom comercial Marttelier."
           ]
         },
         {
@@ -699,7 +722,7 @@
         {
           "title": "7. Els teus drets",
           "paragraphs": [
-            "Pots demanar l’accés a les teues dades, la rectificació o supressió, oposar-te al tractament, limitar-lo o sol·licitar-ne la portabilitat escrivint a <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>. Pots retirar el teu consentiment en qualsevol moment. Si creus que no he tractat les teues dades correctament, pots presentar una reclamació davant l’Agència Espanyola de Protecció de Dades (aepd.es)."
+            "Pots demanar l’accés a les teues dades, la rectificació o supressió, oposar-te al tractament, limitar-lo o sol·licitar-ne la portabilitat escrivint a <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-hazel\">mstudio@marttelier.com</a>. Pots retirar el teu consentiment en qualsevol moment. Si creus que no he tractat les teues dades correctament, pots presentar una reclamació davant l’Agència Espanyola de Protecció de Dades (aepd.es)."
           ]
         },
         {
@@ -776,7 +799,7 @@
             "NIF: 77039673T",
             "Nom comercial: Marttelier",
             "Domicili: carrer Asunción Parreño García, 03205 Elx (Alacant)",
-            "Correu electrònic de contacte: <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>"
+            "Correu electrònic de contacte: <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-hazel\">mstudio@marttelier.com</a>"
           ]
         },
         {

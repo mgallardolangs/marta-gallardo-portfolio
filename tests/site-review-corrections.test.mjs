@@ -238,6 +238,6 @@ test('mobile navigation uses single labels, an opaque panel, and pink active sta
   assert.match(source, /querySelectorAll<HTMLAnchorElement>\('a\.mobile-nav-link, a\.language-chip'\)/);
   assert.match(
     source,
-    /\.mobile-nav-link:hover,[\s\S]*\.mobile-nav-link:active,[\s\S]*\.mobile-nav-link\[aria-current='page'\][\s\S]*color:\s*var\(--color-amaranth\);/s,
+    /\.mobile-nav-link:hover,[\s\S]*\.mobile-nav-link:active,[\s\S]*\.mobile-nav-link\[aria-current='page'\][\s\S]*color:\s*var\(--color-hazel\);/s,
   );
 });

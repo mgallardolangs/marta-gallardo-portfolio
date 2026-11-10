@@ -59,7 +59,7 @@ export default function AdminOrbitPreview({ lang }: Props) {
         return (
           <div
             key={item.id}
-            className="absolute left-1/2 top-1/2 h-[5.875rem] w-[4.625rem] overflow-hidden bg-white/95 shadow-[0_16px_40px_rgba(6,4,3,0.28)] md:h-[7.875rem] md:w-[6.125rem]"
+            className="absolute left-1/2 top-1/2 h-[5.875rem] w-[4.625rem] overflow-hidden bg-white/95 shadow-[0_16px_40px_rgba(74, 18, 34,0.28)] md:h-[7.875rem] md:w-[6.125rem]"
             style={{
               left: `${layout.leftPercent}%`,
               top: `${layout.topPercent}%`,

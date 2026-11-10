@@ -4,16 +4,24 @@ interface Props {
   text: string;
   trigger?: 'load' | 'visible';
   class?: string;
+  /** Word or phrase inside `text` set in the italic accent face once typing ends. */
+  accent?: string;
 }
 
-const { as = 'h1', text, trigger = 'load', class: className = '' } = Astro.props;
+import { accentHtml } from '../lib/accentHtml';
+
+const { as = 'h1', text, trigger = 'load', class: className = '', accent = '' } = Astro.props;
 const Tag = as;
+
+const accentMarkup = accentHtml(text, accent);
 ---
 
-<Tag class={className} data-typed-title data-typed-trigger={trigger} data-typed-text={text}>
+<Tag class={className} data-typed-title data-typed-trigger={trigger} data-typed-text={text} data-typed-html={accentMarkup}>
   <span class="sr-only">{text}</span>
   <span class="typed-title" aria-hidden="true">
-    <span class="typed-title__reserve">{text}</span>
+    {accentMarkup
+      ? <span class="typed-title__reserve" set:html={accentMarkup} />
+      : <span class="typed-title__reserve">{text}</span>}
     <span class="typed-title__visual" data-typed-title-visual>{text}</span>
     <span class="typed-title__cursor" aria-hidden="true">_</span>
   </span>

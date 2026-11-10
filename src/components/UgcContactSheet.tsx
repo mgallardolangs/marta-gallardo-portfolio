@@ -37,7 +37,8 @@ type Props = {
   adminPreview?: boolean;
 };
 
-const FILTERS: UgcFilter[] = ['all', 'travel', 'languages', 'art'];
+const FILTERS: UgcFilter[] = ['all', 'travel', 'languages', 'art', 'products'];
+const VIDEO_SOURCE = /\.(?:mp4|webm|mov|qt)(?:\?.*)?$/i;
 
 export default function UgcContactSheet({
   items: initialItems,
@@ -252,7 +253,7 @@ export default function UgcContactSheet({
                   aria-pressed={isActive}
                   onClick={() => setFilter(currentFilter)}
                   className={`ugc-admin-filter group inline-flex items-center justify-center gap-1 overflow-hidden text-[0.65rem] font-semibold uppercase tracking-[0.18em] transition ${
-                    isActive ? 'text-amaranth' : 'text-ink'
+                    isActive ? 'text-hazel' : 'text-ink'
                   }`}
                 >
                   <span className="ugc-admin-filter__bracket ugc-admin-filter__bracket--left" aria-hidden="true">[</span>
@@ -269,12 +270,12 @@ export default function UgcContactSheet({
                   aria-pressed={isActive}
                   onClick={() => setFilter(currentFilter)}
                   className={`group inline-flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-[0.24em] transition ${
-                    isActive ? 'text-amaranth' : 'text-ink hover:text-amaranth'
+                    isActive ? 'text-hazel' : 'text-ink hover:text-hazel'
                   }`}
                 >
-                  <span className={`transition ${isActive ? 'text-amaranth' : 'text-ink/24 group-hover:text-amaranth'}`}>[</span>
+                  <span className={`transition ${isActive ? 'text-hazel' : 'text-ink/24 group-hover:text-hazel'}`}>[</span>
                   <span>{copy.filters[currentFilter]}</span>
-                  <span className={`transition ${isActive ? 'text-amaranth' : 'text-ink/24 group-hover:text-amaranth'}`}>]</span>
+                  <span className={`transition ${isActive ? 'text-hazel' : 'text-ink/24 group-hover:text-hazel'}`}>]</span>
                 </button>
               )
             );
@@ -283,7 +284,8 @@ export default function UgcContactSheet({
 
         <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-3">
           {items.map((item, index) => {
-            const visibility = getUgcTileVisibility(item, filter);
+            const visibility = item.comingSoon ? 'blank' : getUgcTileVisibility(item, filter);
+            const isComingSoon = Boolean(item.comingSoon) && (filter === 'all' || item.category === filter);
             const isVisible = visibility === 'visible';
             const localizedLabel = localize(item.label, lang);
             const localizedAlt = localize(item.alt, lang);
@@ -344,7 +346,15 @@ export default function UgcContactSheet({
                   onPointerLeave={() => handlePreviewLeave(item)}
                   className={`group relative h-full w-full text-left ${isVisible ? '' : 'pointer-events-none'} bg-paper`}
                 >
-                  {item.type === 'video' ? (
+                  {item.comingSoon ? (
+                    <span
+                      className={`flex h-full w-full items-center justify-center border border-dashed border-ink/20 px-3 text-center text-[0.6rem] font-semibold uppercase tracking-[0.24em] text-ink/52 transition duration-300 ${
+                        isComingSoon ? 'opacity-100' : 'opacity-0'
+                      }`}
+                    >
+                      {localizedLabel}
+                    </span>
+                  ) : item.type === 'video' && VIDEO_SOURCE.test(item.src) ? (
                     <video
                       ref={(node) => {
                         previewVideoRefs.current[item.id] = node;
@@ -361,7 +371,7 @@ export default function UgcContactSheet({
                     />
                   ) : (
                     <img
-                      src={netlifyImage(item.src, { width: 600 })}
+                      src={netlifyImage(item.type === 'video' ? item.poster || item.src : item.src, { width: 600 })}
                       alt={localizedAlt}
                       loading="lazy"
                       className={`h-full w-full object-cover transition duration-300 ${
@@ -370,13 +380,13 @@ export default function UgcContactSheet({
                     />
                   )}
 
-                  <span
+                  {item.comingSoon ? null : <span
                     className={`absolute inset-x-3 bottom-3 inline-flex max-w-[calc(100%-1.5rem)] items-center justify-start bg-ink px-2 py-2 text-[0.58rem] font-semibold uppercase tracking-[0.24em] text-paper transition ${
                       isVisible ? 'translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100' : 'opacity-0'
                     }`}
                   >
                     {localizedLabel}
-                  </span>
+                  </span>}
                 </button>
               </motion.div>
             );
@@ -406,7 +416,7 @@ export default function UgcContactSheet({
                   ref={closeButtonRef}
                   type="button"
                   onClick={closeDialog}
-                  className="absolute right-4 top-4 z-10 inline-flex items-center justify-center border border-paper/16 bg-paper px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink transition hover:border-amaranth hover:text-amaranth md:right-6 md:top-6"
+                  className="absolute right-4 top-4 z-10 inline-flex items-center justify-center border border-paper/16 bg-paper px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink transition hover:border-amaranth hover:text-hazel md:right-6 md:top-6"
                 >
                   {copy.close}
                 </button>
@@ -508,7 +518,7 @@ export default function UgcContactSheet({
             display: grid;
             height: 1.05rem;
             overflow: hidden;
-            color: rgb(6 4 3 / 0.8);
+            color: rgb(74 18 34 / 0.8);
             transition: color 0.2s ease;
           }
 

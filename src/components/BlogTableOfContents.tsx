@@ -111,7 +111,7 @@ export default function BlogTableOfContents({ headings, title, readTimeLabel, re
                 href={`#${heading.id}`}
                 aria-current={isActive ? 'location' : undefined}
                 data-active={isActive ? 'true' : 'false'}
-                className={`border px-3 py-2 font-body text-[0.7rem] font-semibold uppercase tracking-[0.18em] transition ${isActive ? 'border-amaranth text-amaranth' : 'border-black/10 text-ink-muted hover:border-black hover:text-ink'}`}
+                className={`border px-3 py-2 font-body text-[0.7rem] font-semibold uppercase tracking-[0.18em] transition ${isActive ? 'border-amaranth text-hazel' : 'border-black/10 text-ink-muted hover:border-black hover:text-ink'}`}
               >
                 {heading.number} {heading.text}
               </a>
@@ -141,7 +141,7 @@ export default function BlogTableOfContents({ headings, title, readTimeLabel, re
                     href={`#${heading.id}`}
                     aria-current={activeId === heading.id ? 'location' : undefined}
                     data-active={isHeadingActive ? 'true' : 'false'}
-                    className={`flex gap-3 border-l pl-3 transition ${isHeadingActive ? 'border-amaranth text-amaranth' : 'border-black/10 text-ink hover:border-black hover:text-ink'}`}
+                    className={`flex gap-3 border-l pl-3 transition ${isHeadingActive ? 'border-amaranth text-hazel' : 'border-black/10 text-ink hover:border-black hover:text-ink'}`}
                   >
                     <span className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.2em]">{heading.number}</span>
                     <span className="font-body text-sm leading-6">{heading.text}</span>
@@ -157,7 +157,7 @@ export default function BlogTableOfContents({ headings, title, readTimeLabel, re
                               href={`#${child.id}`}
                               aria-current={isChildActive ? 'location' : undefined}
                               data-active={isChildActive ? 'true' : 'false'}
-                              className={`flex gap-3 border-l pl-3 transition ${isChildActive ? 'border-amaranth text-amaranth' : 'border-black/10 text-ink-muted hover:border-black hover:text-ink'}`}
+                              className={`flex gap-3 border-l pl-3 transition ${isChildActive ? 'border-amaranth text-hazel' : 'border-black/10 text-ink-muted hover:border-black hover:text-ink'}`}
                             >
                               <span className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.2em]">{child.number}</span>
                               <span className="font-body text-sm leading-6">{child.text}</span>

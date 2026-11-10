@@ -21,7 +21,7 @@ const page = i.legal[Astro.props.routeKey] as { title: string; updated: string; 
 // Paragraphs may reference the other legal pages as [privacy:label] or [cookies:label].
 const withLinks = (text: string) =>
   text.replace(/\[(privacy|cookies|legalNotice):([^\]]+)\]/g, (_match, route, label) =>
-    `<a href="${getLocalizedRoute(route, lang)}" class="text-ink underline underline-offset-4 hover:text-amaranth">${label}</a>`);
+    `<a href="${getLocalizedRoute(route, lang)}" class="text-ink underline underline-offset-4 hover:text-hazel">${label}</a>`);
 ---
 
 <BaseLayout title={`${page.title} | ${i.hero.name}`} description={page.title}>

@@ -21,13 +21,15 @@ const pageSeo = getPageSeo(siteData, 'ugc', lang, {
     <section data-ugc-hero class="px-6 pt-20 pb-5 md:pt-24 md:pb-6">
       <div class="site-container">
         <ScrollReveal client:visible className="w-full">
-          <p class="text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">
+          <p class="text-xs font-semibold uppercase tracking-[0.34em] text-hazel">
             {i.ugcPage.hero.eyebrow}
           </p>
           <div class="mt-5 grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-end">
             <TypedTitle
               as="h1"
               text={i.ugcPage.pageTitle}
+
+              accent={i.ugcPage.pageTitleAccent}
               trigger="load"
               class="block text-4xl leading-none text-ink md:text-6xl"
             />
@@ -61,6 +63,8 @@ const pageSeo = getPageSeo(siteData, 'ugc', lang, {
           <TypedTitle
             as="h2"
             text={i.ugcPage.benefits.title}
+
+            accent={i.ugcPage.benefits.titleAccent}
             trigger="visible"
             class="font-heading text-4xl leading-none text-paper md:text-5xl"
           />
@@ -74,10 +78,12 @@ const pageSeo = getPageSeo(siteData, 'ugc', lang, {
     <section class="px-6 py-16 md:py-20" data-ugc-process>
       <div class="site-container space-y-10">
         <div class="max-w-3xl space-y-5">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{i.ugcPage.process.eyebrow}</p>
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel">{i.ugcPage.process.eyebrow}</p>
           <TypedTitle
             as="h2"
             text={i.ugcPage.process.title}
+
+            accent={i.ugcPage.process.titleAccent}
             trigger="visible"
             class="font-heading text-4xl leading-none text-ink md:text-5xl"
           />
@@ -89,7 +95,7 @@ const pageSeo = getPageSeo(siteData, 'ugc', lang, {
           <div class="grid items-stretch gap-6 md:grid-cols-5">
             {i.ugcPage.process.steps.map((step, index) => (
               <article class="group relative flex h-full flex-col pl-16 md:pl-0" data-ugc-process-step tabindex="0">
-                <span class="absolute left-0 top-0 flex h-12 w-12 items-center justify-center rounded-full border border-ink/24 bg-paper font-body text-sm font-semibold uppercase tracking-[0.16em] text-amaranth transition group-hover:-translate-y-1 group-hover:border-amaranth group-hover:bg-amaranth group-hover:text-ink group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth group-focus-visible:bg-amaranth group-focus-visible:text-ink md:relative md:mx-auto">
+                <span class="absolute left-0 top-0 flex h-12 w-12 items-center justify-center rounded-full border border-ink/24 bg-paper font-body text-sm font-semibold uppercase tracking-[0.16em] text-hazel transition group-hover:-translate-y-1 group-hover:border-amaranth group-hover:bg-amaranth group-hover:text-ink group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth group-focus-visible:bg-amaranth group-focus-visible:text-ink md:relative md:mx-auto">
                   0{index + 1}
                 </span>
                 <div class="border border-ink/18 px-5 py-6 transition group-hover:-translate-y-1 group-hover:border-amaranth/60 group-focus-visible:-translate-y-1 group-focus-visible:border-amaranth/60 md:mt-6 md:min-h-[170px] md:flex-1">

@@ -3,11 +3,13 @@ export const VISUAL_SELECTOR = '[data-typed-title-visual]';
 
 export interface TypedTitleVisual {
   textContent: string | null;
+  innerHTML?: string;
 }
 
 export interface TypedTitleRoot {
   dataset: DOMStringMap & {
     typedText?: string;
+    typedHtml?: string;
     typedTrigger?: string;
     typedTitleComplete?: string;
   };
@@ -77,11 +79,20 @@ export const destroyController = (root: TypedTitleRoot, state: TypedTitleState) 
   delete root.dataset.typedTitleComplete;
 };
 
+const showAccent = (root: TypedTitleRoot) => {
+  const html = root.dataset.typedHtml;
+  const visual = root.querySelector(VISUAL_SELECTOR);
+  if (html && visual) {
+    visual.innerHTML = html;
+  }
+};
+
 const finishStatic = (root: TypedTitleRoot) => {
   const visual = root.querySelector(VISUAL_SELECTOR);
   if (visual) {
     visual.textContent = root.dataset.typedText ?? '';
   }
+  showAccent(root);
   root.dataset.typedTitleComplete = 'true';
 };
 
@@ -107,6 +118,7 @@ const startTyped = (root: TypedTitleRoot, options: InitTypedTitleOptions) => {
     text,
     trigger,
     onComplete: () => {
+      showAccent(root);
       root.dataset.typedTitleComplete = 'true';
     },
   });

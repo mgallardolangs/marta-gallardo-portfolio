@@ -538,9 +538,9 @@ test('EditableUgcPortfolio chrome, help text, and media controls are in Spanish'
   assert.match(source, /Editor del portfolio UGC/);
   assert.match(source, /Espacio \{index \+ 1\} de \{items\.length\}/);
   assert.match(source, />Categoría<\/span>/);
-  assert.match(source, />Viajes<\/option>/);
-  assert.match(source, />Idiomas<\/option>/);
-  assert.match(source, />Arte<\/option>/);
+  assert.match(source, />Viajes y alojamiento<\/option>/);
+  assert.match(source, />Idiomas y educación<\/option>/);
+  assert.match(source, />Manualidades y creatividad<\/option>/);
   assert.match(source, />Tipo<\/span>/);
   assert.match(source, /Espacio fijo/);
   assert.match(source, /item\.alt\.es\} póster/);

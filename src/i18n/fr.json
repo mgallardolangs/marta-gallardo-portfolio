@@ -102,6 +102,7 @@
   "footer": {
     "rights": "Tous droits réservés",
     "eyebrow": "Prêt à faire grandir votre projet web ?",
+    "eyebrowAccent": "grandir",
     "headline": "Parlons-en.",
     "support": "Parlons de vos objectifs et définissons une stratégie étape par étape pour positionner votre marque.",
     "cta": "Me contacter",
@@ -125,6 +126,7 @@
       "scrollCue": "Découvrez mon travaille",
       "coverLabel": "Couverture éditoriale",
       "title": "Consultante SEO freelance et stratégie de contenu digital",
+      "titleAccent": "stratégie",
       "ctaDiagnosis": "Demander un diagnostic SEO",
       "ctaServices": "Voir les services"
     },
@@ -141,6 +143,7 @@
         "Italien"
       ],
       "title": "Rigueur technique, diplôme officiel et créativité",
+      "titleAccent": "créativité",
       "description": "Derrière Marttelier, il y a Marta Gallardo. Diplômée en Traduction et Interprétation de l'Université d'Alicante et formée au SEO et à la stratégie digitale, je travaille main dans la main avec des entreprises et des marques pour construire une présence en ligne solide, multilingue et rentable, sans les intermédiaires d'une agence.",
       "cta": "En savoir plus sur moi"
     },
@@ -160,12 +163,13 @@
     },
     "orbit": {
       "kicker": "ARCHIVES CRÉATIVES",
-      "title": "Souvenirs",
+      "title": "Mon histoire",
       "index": "MARTA GALLARDO · PORTFOLIO",
       "note": "CONTENU · LANGUES · VOYAGES · ART"
     },
     "services": {
       "title": "Des solutions complètes pour développer votre marque",
+      "titleAccent": "développer",
       "items": {
         "seo": "Conseil et audit SEO",
         "translation": "Traduction et localisation de sites web",
@@ -179,10 +183,12 @@
     },
     "visibility": {
       "title": "Visibilité, langues et conversion",
+      "titleAccent": "conversion",
       "text": "Plus de trafic ne sert à rien s'il n'atteint pas les bonnes personnes. C'est pourquoi, en tant que traductrice et créatrice de contenu, je travaille entre les langues, les cultures et les formats : je conçois des stratégies SEO adaptées à la réalité de chaque projet et je les associe à la traduction, à la localisation et à des vidéos UGC, pour que chaque message garde son intention, trouve naturellement sa place et inspire confiance dès le premier regard."
     },
     "latestArticles": {
-      "title": "Derniers articles sur le SEO et le marketing digital"
+      "title": "Derniers articles sur le SEO et le marketing digital",
+      "titleAccent": "marketing digital"
     }
   },
   "ugcPage": {
@@ -197,6 +203,7 @@
     },
     "pageDescription": "Portfolio UGC professionnel de Marta Gallardo avec des campagnes éditoriales conceptuelles autour du voyage, des langues et de l’art.",
     "pageTitle": "Créatrice de contenu UGC pour les marques",
+    "pageTitleAccent": "marques",
     "nicheLabel": "Niche",
     "backToTop": "Retour en haut",
     "placeholder": "Maquette",
@@ -307,9 +314,10 @@
       "headline": "DU CONTENU QUI TRANSFORME LES EXPÉRIENCES, LES LANGUES ET L’ART EN HISTOIRES VISUELLES.",
       "filters": {
         "all": "TOUT",
-        "travel": "VOYAGES",
-        "languages": "LANGUES",
-        "art": "ART"
+        "travel": "VOYAGES ET HÉBERGEMENT",
+        "languages": "LANGUES ET ÉDUCATION",
+        "art": "LOISIRS CRÉATIFS ET CRÉATIVITÉ",
+        "products": "PRODUITS ET STYLE DE VIE"
       },
       "close": "Fermer",
       "previous": "Précédent",
@@ -320,11 +328,13 @@
     "benefits": {
       "eyebrow": "UGC · DIRECTION CRÉATIVE",
       "title": "Pourquoi miser sur le contenu UGC",
+      "titleAccent": "miser",
       "description": "Beaucoup de gens font davantage confiance à quelqu'un qui utilise un produit ou un service au quotidien qu'à une publicité très produite. L'UGC (contenu généré par les utilisateurs) montre votre marque dans des situations réelles, avec une caméra proche et un ton naturel. Il sert pour vos réseaux, pour votre site et comme publicité payante, et vous donne des contenus variés pour tester quel message fonctionne le mieux auprès de votre audience."
     },
     "process": {
       "eyebrow": "De l'idée à la livraison",
       "title": "Méthode de travail : de l’idée au montage final",
+      "titleAccent": "montage final",
       "steps": [
         {
           "title": "Brief",
@@ -468,6 +478,7 @@
     "servicesEyebrow": "01 · COMMENT JE PEUX VOUS AIDER",
     "arsenalEyebrow": "02 · PROFIL & OUTILS",
     "experienceSectionTitle": "Expérience et formation",
+    "experienceSectionTitleAccent": "formation",
     "experienceEyebrow": "03 · PARCOURS",
     "experienceStatement": "Base académique + pratique de terrain",
     "methodologyEyebrow": "04 · MÉTHODOLOGIE & INFOGRAPHIE",
@@ -484,12 +495,14 @@
     "hero": {
       "eyebrow": "À propos",
       "title": "Marta Gallardo et la philosophie Marttelier",
+      "titleAccent": "Marttelier",
       "subtitle": "À la rencontre de la linguistique, de la stratégie et du contenu",
       "story": "Je suis diplômée en Traduction et Interprétation de l'Université d'Alicante et je me suis formée au SEO et à la stratégie digitale. En réunissant les langues, la recherche et la création de contenu, j'ai trouvé une façon d'accompagner les projets directement, sans agence entre nous. Ce qui m'importe, c'est que chaque message garde son intention et trouve les bonnes personnes."
     },
     "principles": {
       "eyebrow": "marttelier",
       "title": "Principes et valeurs de travail",
+      "titleAccent": "valeurs",
       "items": [
         "Transparence et honnêteté",
         "Relecture humaine",
@@ -506,6 +519,7 @@
     "hero": {
       "eyebrow": "Référencement SEO",
       "title": "Services de référencement SEO et de SEO international",
+      "titleAccent": "référencement SEO",
       "paragraphs": [
         "Apparaître sur Google n'est pas une question de chance, mais de stratégie. Mon service de référencement SEO fait de votre site un canal qui attire des personnes qui cherchent déjà ce que vous proposez : pas seulement plus de visites, mais des visites qui comptent.",
         "J'analyse le point de départ de votre projet et je conçois un plan de référencement sur mesure : j'améliore la structure technique, la pertinence de vos contenus et l'autorité de votre site. Que vous souhaitiez vous consolider sur votre marché local ou franchir le pas vers d'autres pays grâce au SEO international, je vous explique chaque étape et nous travaillons avec des priorités claires."
@@ -514,6 +528,7 @@
     "services": {
       "eyebrow": "SEO",
       "title": "Des services SEO adaptés à vos besoins",
+      "titleAccent": "adaptés à vos besoins",
       "items": [
         {
           "id": "audit",
@@ -536,11 +551,13 @@
       "eyebrow": "Votre site, sur chaque marché",
       "translationLinkLabel": "Traduction",
       "title": "Spécialiste du SEO international et multilingue",
+      "titleAccent": "multilingue",
       "description": "Internationaliser un site ne consiste pas à installer un plugin de traduction automatique. Chaque marché cherche différemment : je commence donc par identifier les termes que les internautes de chaque pays utilisent réellement, et avec quelle intention. Ensuite, j'adapte le contenu et je configure ce qu'il faut sur le plan technique, comme les balises hreflang, pour que Google présente chaque version à la bonne audience. Si vous avez aussi besoin d'un service de traduction de sites web, nous le traitons dans la même stratégie, afin que langue et référencement ne soient pas dissociés."
     },
     "why": {
       "eyebrow": "SEO",
       "title": "Pourquoi me faire confiance comme consultante SEO ?",
+      "titleAccent": "confiance",
       "description": "En SEO, ce qui fonctionnait il y a quelques années ne suffit plus : Google fait évoluer ses systèmes et l'intelligence artificielle a changé la façon de chercher. Travailler avec moi, c'est choisir un service transparent, direct et sans intermédiaire. Mon approche repose sur quatre piliers :",
       "items": [
         "Une formation à jour. Formation privée en marketing digital et SEO, complétée par une formation continue en SEO international et en contenus pour les moteurs de recherche.",
@@ -576,6 +593,7 @@
     "budget": {
       "eyebrow": "SEO",
       "title": "Tarifs et budget SEO",
+      "titleAccent": "budget",
       "description": "Le budget dépend de l’état du site, du périmètre et du type d’accompagnement. Parlez-moi des objectifs du projet et je préparerai une proposition adaptée.",
       "highlight": "Une analyse de base de votre site avec trois constats prioritaires, plus un appel gratuit de 30 minutes pour découvrir votre projet et commenter ces résultats. Cela n’inclut ni rapport complet ni mise en œuvre des améliorations ; si vous décidez de continuer, nous le précisons dans la proposition.",
       "highlightTitle": "Je propose un diagnostic initial gratuit"
@@ -585,11 +603,13 @@
     "hero": {
       "eyebrow": "Traduction et localisation",
       "title": "Traduction et localisation professionnelles de sites web, avec une approche SEO",
+      "titleAccent": "localisation",
       "description": "J’adapte le contenu de votre entreprise à de nouveaux marchés avec précision sémantique et une approche SEO."
     },
     "localization": {
       "eyebrow": "LOCALISATION WEB",
       "title": "Localisation de sites web et de boutiques en ligne",
+      "titleAccent": "boutiques en ligne",
       "items": [
         {
           "id": "cultural-adaptation",
@@ -607,11 +627,13 @@
       "eyebrow": "TRADUCTION SEO",
       "seoLinkLabel": "SEO",
       "title": "Traduction SEO multilingue : des contenus pensés pour la façon de chercher de chaque marché",
+      "titleAccent": "chaque marché",
       "description": "La traduction SEO part des recherches propres à chaque langue, et non du texte d'origine. J'étudie comment les internautes de chaque marché cherchent et j'adapte les mots-clés et la structure pour préserver l'intention et la voix de votre marque. Si votre projet a aussi besoin d'une stratégie, je l'intègre au service de SEO international."
     },
     "digitalContent": {
       "eyebrow": "CONTENUS DIGITAUX",
       "title": "Traduction de contenus digitaux : blogs, newsletters et textes de marque",
+      "titleAccent": "newsletters",
       "items": [
         {
           "id": "editorial-content",
@@ -627,6 +649,7 @@
     },
     "arsenal": {
       "title": "Langues, outils et compétences en traduction",
+      "titleAccent": "compétences",
       "eyebrow": "PROFIL ET OUTILS",
       "languagesTitle": "Langues",
       "toolsTitle": "Outils",
@@ -641,7 +664,7 @@
         {
           "title": "1. Responsable du traitement",
           "paragraphs": [
-            "Marta Gallardo Albertu, NIF 77039673T, domiciliée Calle Asunción Parreño García, 03205 Elche (Alicante), Espagne, adresse e-mail <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>. Elle exerce son activité sous le nom commercial Marttelier."
+            "Marta Gallardo Albertu, NIF 77039673T, domiciliée Calle Asunción Parreño García, 03205 Elche (Alicante), Espagne, adresse e-mail <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-hazel\">mstudio@marttelier.com</a>. Elle exerce son activité sous le nom commercial Marttelier."
           ]
         },
         {
@@ -699,7 +722,7 @@
         {
           "title": "7. Vos droits",
           "paragraphs": [
-            "Vous pouvez demander l’accès à vos données, leur rectification ou leur effacement, vous opposer à leur traitement, le limiter ou demander leur portabilité en écrivant à <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>. Vous pouvez retirer votre consentement à tout moment. Si vous estimez que vos données n’ont pas été traitées correctement, vous pouvez introduire une réclamation auprès de l’Agence espagnole de protection des données (aepd.es)."
+            "Vous pouvez demander l’accès à vos données, leur rectification ou leur effacement, vous opposer à leur traitement, le limiter ou demander leur portabilité en écrivant à <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-hazel\">mstudio@marttelier.com</a>. Vous pouvez retirer votre consentement à tout moment. Si vous estimez que vos données n’ont pas été traitées correctement, vous pouvez introduire une réclamation auprès de l’Agence espagnole de protection des données (aepd.es)."
           ]
         },
         {
@@ -776,7 +799,7 @@
             "NIF : 77039673T",
             "Nom commercial : Marttelier",
             "Adresse : Calle Asunción Parreño García, 03205 Elche (Alicante), Espagne",
-            "E-mail de contact : <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-amaranth\">mstudio@marttelier.com</a>"
+            "E-mail de contact : <a href=\"mailto:mstudio@marttelier.com\" class=\"text-ink underline underline-offset-4 hover:text-hazel\">mstudio@marttelier.com</a>"
           ]
         },
         {

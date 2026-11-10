@@ -54,7 +54,7 @@ export default function EditableVideoEmbed({
           </button>
         </div>
       ) : hasValue ? (
-        <p className="text-[0.65rem] text-amaranth">Pega un enlace válido (http o https) o un código para incrustar.</p>
+        <p className="text-[0.65rem] text-hazel">Pega un enlace válido (http o https) o un código para incrustar.</p>
       ) : (
         <p className="text-[0.65rem] text-ink/52">Sin enlace se usa el archivo subido (MP4/WebM/MOV).</p>
       )}

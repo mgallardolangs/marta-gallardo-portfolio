@@ -49,7 +49,7 @@ test('all six locale files expose the exact UGC contact sheet copy keys', async 
     );
     assert.deepEqual(
       Object.keys(dictionary.ugcPage.contactSheet.filters),
-      ['all', 'travel', 'languages', 'art'],
+      ['all', 'travel', 'languages', 'art', 'products'],
       `${locale} should keep the exact approved contactSheet filter keys`,
     );
 
@@ -160,8 +160,8 @@ test('UgcContactSheet component locks fixed filters grid blank tiles hover previ
 
   assert.match(
     componentSource,
-    /\[\s*['"]all['"]\s*,\s*['"]travel['"]\s*,\s*['"]languages['"]\s*,\s*['"]art['"]\s*\]/,
-    'UgcContactSheet should keep the approved filter order All / Travel / Languages / Art',
+    /\[\s*['"]all['"]\s*,\s*['"]travel['"]\s*,\s*['"]languages['"]\s*,\s*['"]art['"]\s*,\s*['"]products['"]\s*\]/,
+    'UgcContactSheet should keep the approved filter order All / Travel / Languages / Art / Products',
   );
   assertMatchesAny(
     componentSource,

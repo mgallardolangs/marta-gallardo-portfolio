@@ -26,7 +26,7 @@ export type OrbitMedia = {
   label: LocalizedText;
 };
 
-export type UgcCategory = 'travel' | 'languages' | 'art';
+export type UgcCategory = 'travel' | 'languages' | 'art' | 'products';
 
 export type UgcPortfolioItem = {
   id: string;
@@ -35,6 +35,7 @@ export type UgcPortfolioItem = {
   src: string;
   embedUrl?: string | null;
   poster: string | null;
+  comingSoon?: boolean;
   label: LocalizedText;
   title: LocalizedText;
   description: LocalizedText;

@@ -19,7 +19,7 @@ export default function EditableUgcPortfolio() {
   return (
     <div className="space-y-6">
       <div className="space-y-2 border border-ink/10 bg-paper p-5">
-        <p className="text-xs font-semibold uppercase tracking-[0.32em] text-amaranth">Editor del portfolio UGC</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.32em] text-hazel">Editor del portfolio UGC</p>
         <p className="max-w-3xl text-sm leading-6 text-ink/68">
           Doce espacios fijos mantienen el orden aprobado del contact sheet. Edita aquí el contenido en ES / EN / FR; las actualizaciones en español también rellenan DE / IT / CA hasta que esos idiomas se revisen en el código.
         </p>
@@ -45,9 +45,10 @@ export default function EditableUgcPortfolio() {
                       onChange={(event) => store.updateUgcPortfolioField(item.id, 'category', event.target.value)}
                       className="border border-ink/10 bg-paper px-3 py-2 text-sm text-ink"
                     >
-                      <option value="travel">Viajes</option>
-                      <option value="languages">Idiomas</option>
-                      <option value="art">Arte</option>
+                      <option value="travel">Viajes y alojamiento</option>
+                      <option value="languages">Idiomas y educación</option>
+                      <option value="art">Manualidades y creatividad</option>
+                      <option value="products">Productos y estilo de vida</option>
                     </select>
                   </label>
 
@@ -87,7 +88,7 @@ export default function EditableUgcPortfolio() {
 
                     <div className="space-y-3">
                       <div className="rounded-sm border border-ink/10 bg-paper px-4 py-3 text-sm leading-6 text-ink/68">
-                        <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">Espacio fijo</p>
+                        <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel">Espacio fijo</p>
                         <p>El espacio se mantiene en su lugar aunque el filtro público lo oculte.</p>
                       </div>
 
@@ -113,20 +114,20 @@ export default function EditableUgcPortfolio() {
                           <button
                             type="button"
                             onClick={() => store.clearUgcPortfolioPoster(item.id)}
-                            className="inline-flex items-center justify-center border border-ink/12 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink transition hover:border-amaranth hover:text-amaranth"
+                            className="inline-flex items-center justify-center border border-ink/12 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink transition hover:border-amaranth hover:text-hazel"
                           >
                             Quitar póster
                           </button>
                         </div>
                       ) : item.poster ? (
                         <div className="space-y-3">
-                          <div className="rounded-sm border border-amaranth/24 bg-paper px-4 py-3 text-sm leading-6 text-amaranth">
+                          <div className="rounded-sm border border-amaranth/24 bg-paper px-4 py-3 text-sm leading-6 text-hazel">
                             Este espacio de imagen todavía tiene un póster obsoleto de un vídeo anterior. Quítalo para terminar el estado de imagen.
                           </div>
                           <button
                             type="button"
                             onClick={() => store.clearUgcPortfolioPoster(item.id)}
-                            className="inline-flex items-center justify-center border border-ink/12 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink transition hover:border-amaranth hover:text-amaranth"
+                            className="inline-flex items-center justify-center border border-ink/12 px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink transition hover:border-amaranth hover:text-hazel"
                           >
                             Quitar póster
                           </button>
@@ -144,7 +145,7 @@ export default function EditableUgcPortfolio() {
                 <div className="space-y-5">
                   {LOCALIZED_FIELDS.map((field) => (
                     <div key={field.key} className="space-y-3">
-                      <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">
+                      <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel">
                         {field.label}
                       </p>
                       <div className="grid gap-4 md:grid-cols-3">

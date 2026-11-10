@@ -132,7 +132,7 @@ const homeServices = [
           <EditableText client:load i18nKey="home.visibility.text" as="div" className="max-w-3xl font-body text-lg leading-8 text-ink-muted md:text-xl" />
         </ScrollReveal>
         <div class="border-t border-ink/10 pt-8">
-          <EditableText client:load i18nKey="home.about.languagesLabel" as="p" className="mb-5 font-body text-xs font-semibold uppercase tracking-[0.3em] text-amaranth" />
+          <EditableText client:load i18nKey="home.about.languagesLabel" as="p" className="mb-5 font-body text-xs font-semibold uppercase tracking-[0.3em] text-hazel" />
           <StaggerContainer client:visible className="flex flex-wrap gap-3" staggerDelay={0.08}>
             {i.home.about.languages.map((language, index) => (
               <StaggerItem className="inline-flex">
@@ -165,7 +165,7 @@ const homeServices = [
     <section class="bg-paper px-6 py-20 md:py-24">
       <div class="site-container space-y-12">
         <ScrollReveal client:visible direction="right" className="flex flex-col gap-6">
-          <EditableText client:load i18nKey="blog.eyebrow" as="p" className="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth" />
+          <EditableText client:load i18nKey="blog.eyebrow" as="p" className="font-body text-xs font-semibold uppercase tracking-[0.34em] text-hazel" />
           <EditableText client:load i18nKey="home.latestArticles.title" as="h2" className="font-heading text-4xl leading-none text-ink md:text-6xl" />
         </ScrollReveal>
         {latestPosts.length > 0 && (
@@ -193,7 +193,7 @@ const homeServices = [
                   <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-muted">
                     {String(index + 1).padStart(2, '0')} · {post.data.date.toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' })}
                   </p>
-                  <a href={`/admin/blog/edit/${post.data.translationKey}`} class="transition hover:text-amaranth">
+                  <a href={`/admin/blog/edit/${post.data.translationKey}`} class="transition hover:text-hazel">
                     <h3 class="font-heading text-2xl leading-tight text-ink md:text-3xl">{post.data.title}</h3>
                   </a>
                   <p class="flex-1 font-body text-sm leading-7 text-ink-muted">{post.data.description}</p>
@@ -202,7 +202,7 @@ const homeServices = [
             ))}
           </div>
         )}
-        <a href="/admin/blog" class="inline-flex items-center gap-3 border-b border-amaranth pb-2 font-body text-xs font-semibold uppercase tracking-[0.24em] text-ink transition hover:text-amaranth focus-visible:text-amaranth">
+        <a href="/admin/blog" class="inline-flex items-center gap-3 border-b border-amaranth pb-2 font-body text-xs font-semibold uppercase tracking-[0.24em] text-ink transition hover:text-hazel focus-visible:text-hazel">
           {i.blog.title}
           <span aria-hidden="true">↗</span>
         </a>
