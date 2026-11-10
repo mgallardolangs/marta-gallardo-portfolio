@@ -47,12 +47,12 @@
     "microsoft-office": "/images/tools/microsoft-office.svg",
     "google-workspace": "/images/tools/google-workspace.svg",
     "notion": "/images/tools/notion.svg",
-    "ai-tools": "/images/tools/ai-tools.svg",
     "wordpress": "/images/tools/wordpress.svg",
     "google-search-console": "/images/tools/google-search-console.svg",
     "google-business-profile": "/images/tools/google-business-profile.svg",
     "tool-claude": "/images/tools/tool-claude.svg",
-    "tool-capcut": "/images/tools/tool-capcut.svg"
+    "tool-capcut": "/images/tools/tool-capcut.svg",
+    "tool-omegat": "/images/tools/tool-omegat.svg"
   },
   "videoStickers": {
     "one": "/images/site/videoStickers-one.webp",
@@ -556,19 +556,6 @@
         }
       },
       {
-        "id": "ai-tools",
-        "group": "translation",
-        "logo": "/images/tools/ai-tools.svg",
-        "label": {
-          "es": "ChatGPT",
-          "en": "ChatGPT",
-          "fr": "ChatGPT",
-          "de": "KI-Tools (ChatGPT, Claude)",
-          "it": "Strumenti IA (ChatGPT, Claude)",
-          "ca": "Eines d’IA (ChatGPT, Claude)"
-        }
-      },
-      {
         "id": "tool-claude",
         "group": "translation",
         "logo": "/images/tools/tool-claude.svg",
@@ -582,6 +569,19 @@
         }
       },
       {
+        "id": "tool-omegat",
+        "group": "translation",
+        "logo": "/images/tools/tool-omegat.svg",
+        "label": {
+          "es": "OmegaT",
+          "en": "OmegaT",
+          "fr": "OmegaT",
+          "de": "OmegaT",
+          "it": "OmegaT",
+          "ca": "OmegaT"
+        }
+      },
+      {
         "id": "tool-capcut",
         "logo": "/images/tools/tool-capcut.svg",
         "label": {
@@ -591,19 +591,6 @@
           "de": "Capcut",
           "it": "Capcut",
           "ca": "Capcut"
-        }
-      },
-      {
-        "id": "wordpress",
-        "group": "seo",
-        "logo": "/images/tools/wordpress.svg",
-        "label": {
-          "es": "WordPress",
-          "en": "WordPress",
-          "fr": "WordPress",
-          "de": "WordPress",
-          "it": "WordPress",
-          "ca": "WordPress"
         }
       },
       {
