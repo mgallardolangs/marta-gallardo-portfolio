@@ -74,19 +74,15 @@ const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+
         </header>
       </ScrollReveal>
 
-      <ScrollReveal client:visible delay={0.08}>
-        <div class="mt-10">
-          {post.data.image ? (
+      {post.data.image && (
+        <ScrollReveal client:visible delay={0.08}>
+          <div class="mt-10">
             <div data-blog-feature-image class="mx-auto max-w-[850px] overflow-hidden border border-black/10">
               <img src={netlifyImage(post.data.image, { width: 1600 })} alt={post.data.title} width={1600} height={900} loading="eager" fetchpriority="high" decoding="async" class="aspect-[16/9] w-full object-cover" />
             </div>
-          ) : (
-            <div data-blog-feature-image class="mx-auto flex aspect-[16/9] max-w-[850px] items-center justify-center border border-black/10 bg-paper px-6 text-center text-accent-ink">
-              <span class="font-body text-xs font-semibold uppercase tracking-[0.28em]">{i.blog.end}</span>
-            </div>
-          )}
-        </div>
-      </ScrollReveal>
+          </div>
+        </ScrollReveal>
+      )}
 
       <ScrollReveal client:visible delay={0.14}>
         <div data-blog-article-body class="mx-auto mt-12 grid gap-10 lg:grid-cols-[190px_minmax(0,650px)] lg:justify-center lg:gap-12">
