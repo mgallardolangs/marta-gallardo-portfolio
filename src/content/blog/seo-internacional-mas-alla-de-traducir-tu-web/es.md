@@ -8,7 +8,7 @@ tags: ["SEO internacional", "SEO multilingüe", "traducción"]
 lang: "es"
 ---
 
-Soy traductora y estoy haciendo un curso de International SEO. Llevo tres lecciones y me quedan diez, pero ya me ha dejado una conclusión clara: antes de traducir una web a varios idiomas, hay que decidir en qué mercados tiene sentido estar. Te cuento lo que he entendido hasta ahora, por si tienes un negocio que quiere vender fuera y no sabes por dónde empezar.
+Soy traductora y estoy haciendo un curso de SEO internacional. Llevo tres lecciones y me quedan diez, pero ya me ha dejado una conclusión clara: antes de traducir una web a varios idiomas, hay que decidir en qué mercados tiene sentido estar. Te cuento lo que he entendido hasta ahora, por si tienes un negocio que quiere vender fuera y no sabes por dónde empezar.
 
 ## ¿Qué es el SEO internacional y por qué traducir no basta?
 
@@ -16,7 +16,7 @@ El SEO internacional consiste en preparar tu web para que los buscadores muestre
 
 ## País e idioma: las dos variables sobre las que gira todo
 
-Lo primero que me quedó claro es que hay dos variables y que no son lo mismo: el país y el idioma. Como traductora lo veo bien con el español, que se habla en muchos países, pero con costumbres, vocabulario y formas de buscar distintas en cada uno. Elegir un idioma no equivale a elegir un mercado.
+Lo primero que me quedó claro es que hay dos variables y que no son lo mismo: el país y el idioma. Como traductora lo veo bien con el español, que se habla en muchos países, pero con costumbres, vocabulario y formas de buscar distintos en cada uno. Elegir un idioma no equivale a elegir un mercado.
 
 Por eso el curso propone hacer un registro de países: a cuáles te conviene abrirte, en cuáles podrías obtener beneficios y qué facilidades o dificultades logísticas y legales tiene cada uno. El idioma es solo un dato más de esa lista.
 
