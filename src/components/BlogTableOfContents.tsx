@@ -111,7 +111,7 @@ export default function BlogTableOfContents({ headings, title, readTimeLabel, re
                 href={`#${heading.id}`}
                 aria-current={isActive ? 'location' : undefined}
                 data-active={isActive ? 'true' : 'false'}
-                className={`border px-3 py-2 font-body text-[0.7rem] font-semibold uppercase tracking-[0.18em] transition ${isActive ? 'border-amaranth text-hazel' : 'border-black/10 text-ink-muted hover:border-black hover:text-ink'}`}
+                className={`border px-3 py-2 font-body text-[0.7rem] font-semibold uppercase tracking-[0.18em] transition ${isActive ? 'border-ink bg-ink text-amaranth' : 'border-amaranth bg-amaranth text-ink hover:border-ink'}`}
               >
                 {heading.number} {heading.text}
               </a>
@@ -121,17 +121,17 @@ export default function BlogTableOfContents({ headings, title, readTimeLabel, re
       </nav>
 
       <aside className="hidden lg:block">
-        <nav aria-labelledby="blog-toc-title" className="sticky top-28 border-t border-black/10 pt-4">
+        <nav aria-labelledby="blog-toc-title" className="sticky top-28 bg-amaranth px-4 py-5 text-ink">
           <div className="mb-6 space-y-2">
-            <p id="blog-toc-title" className="font-body text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-accent-ink">
+            <p id="blog-toc-title" className="font-body text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-ink">
               {title}
             </p>
-            <p className="font-body text-[0.72rem] uppercase tracking-[0.18em] text-ink-faint">
+            <p className="font-body text-[0.72rem] uppercase tracking-[0.18em] text-ink/70">
               {readTimeLabel} · {String(readTime).padStart(2, '0')} min
             </p>
           </div>
 
-          <ol className="space-y-4">
+          <ol className="space-y-1">
             {entries.map((heading) => {
               const isHeadingActive = activeId === heading.id || heading.children.some((child) => child.id === activeId);
 
@@ -141,7 +141,7 @@ export default function BlogTableOfContents({ headings, title, readTimeLabel, re
                     href={`#${heading.id}`}
                     aria-current={activeId === heading.id ? 'location' : undefined}
                     data-active={isHeadingActive ? 'true' : 'false'}
-                    className={`flex gap-3 border-l pl-3 transition ${isHeadingActive ? 'border-amaranth text-hazel' : 'border-black/10 text-ink hover:border-black hover:text-ink'}`}
+                    className={`flex gap-3 px-3 py-2 transition ${isHeadingActive ? 'bg-ink font-semibold text-amaranth' : 'text-ink hover:bg-ink/10'}`}
                   >
                     <span className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.2em]">{heading.number}</span>
                     <span className="font-body text-sm leading-6">{heading.text}</span>
@@ -157,7 +157,7 @@ export default function BlogTableOfContents({ headings, title, readTimeLabel, re
                               href={`#${child.id}`}
                               aria-current={isChildActive ? 'location' : undefined}
                               data-active={isChildActive ? 'true' : 'false'}
-                              className={`flex gap-3 border-l pl-3 transition ${isChildActive ? 'border-amaranth text-hazel' : 'border-black/10 text-ink-muted hover:border-black hover:text-ink'}`}
+                              className={`flex gap-3 px-3 py-2 transition ${isChildActive ? 'bg-ink font-semibold text-amaranth' : 'text-ink hover:bg-ink/10'}`}
                             >
                               <span className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.2em]">{child.number}</span>
                               <span className="font-body text-sm leading-6">{child.text}</span>

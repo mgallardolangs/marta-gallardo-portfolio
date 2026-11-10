@@ -89,7 +89,7 @@ const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+
           <BlogTableOfContents client:load headings={outline} title={i.blog.contentIndex} readTimeLabel={i.blog.readTime} readTime={readTime} />
 
           <div class="max-w-[650px]">
-            <div data-blog-prose class="prose prose-lg max-w-[650px] font-body text-ink prose-headings:font-heading prose-headings:text-ink prose-headings:font-normal prose-a:text-hazel prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-black/20 prose-blockquote:text-ink-muted prose-strong:text-ink [&_h2]:scroll-mt-32 [&_h3]:scroll-mt-32">
+            <div data-blog-prose class="prose prose-lg max-w-[650px] font-body text-ink prose-headings:text-ink prose-a:text-hazel prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-black/20 prose-blockquote:text-ink-muted prose-strong:text-ink [&_h2]:scroll-mt-32 [&_h3]:scroll-mt-32">
               <slot />
             </div>
 
@@ -118,6 +118,62 @@ const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+
 <style>
   [data-blog-prose] {
     counter-reset: blog-h2;
+    font-size: 1.125rem;
+    line-height: 1.8;
+  }
+
+  [data-blog-prose] :global(p),
+  [data-blog-prose] :global(ul),
+  [data-blog-prose] :global(ol) {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+  }
+
+  [data-blog-prose] :global(ol) {
+    list-style: decimal;
+    padding-left: 1.4rem;
+  }
+
+  [data-blog-prose] :global(ul) {
+    list-style: disc;
+    padding-left: 1.4rem;
+  }
+
+  [data-blog-prose] :global(li) {
+    margin-block: 0.8rem;
+  }
+
+  [data-blog-prose] :global(li::marker) {
+    color: var(--color-hazel);
+    font-weight: 600;
+  }
+
+  [data-blog-prose] > :global(p:first-child) {
+    margin-bottom: 2.4rem;
+    font-family: var(--font-accent);
+    font-size: 1.45rem;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--color-hazel);
+  }
+
+  [data-blog-prose] :global(h2),
+  [data-blog-prose] :global(h3) {
+    margin-top: 3.4rem;
+    margin-bottom: 1.25rem;
+    font-family: var(--font-accent);
+    font-weight: 700;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  [data-blog-prose] :global(h2) {
+    font-size: 2rem;
+  }
+
+  [data-blog-prose] :global(h3) {
+    font-size: 1.5rem;
   }
 
   [data-blog-prose] :global(h2) {
@@ -127,8 +183,10 @@ const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+
 
   [data-blog-prose] :global(h2)::before {
     content: counter(blog-h2, decimal-leading-zero) ' ';
-    margin-right: 0.75rem;
+    display: block;
+    margin-bottom: 0.5rem;
     color: rgb(125 90 69 / 0.96);
+    font-family: var(--font-body);
     font-size: 0.82rem;
     letter-spacing: 0.24em;
     text-transform: uppercase;
