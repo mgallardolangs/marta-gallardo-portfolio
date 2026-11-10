@@ -89,7 +89,7 @@ const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+
           <BlogTableOfContents client:load headings={outline} title={i.blog.contentIndex} readTimeLabel={i.blog.readTime} readTime={readTime} />
 
           <div class="max-w-[650px]">
-            <div data-blog-prose class="prose prose-lg max-w-[650px] font-body text-ink prose-headings:text-ink prose-a:text-hazel prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-black/20 prose-blockquote:text-ink-muted prose-strong:text-ink [&_h2]:scroll-mt-32 [&_h3]:scroll-mt-32">
+            <div data-blog-prose class="prose prose-lg max-w-[650px] font-body text-ink prose-headings:text-ink prose-a:text-hazel prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-black/20 prose-blockquote:text-ink-muted [&_h2]:scroll-mt-32 [&_h3]:scroll-mt-32">
               <slot />
             </div>
 
@@ -141,6 +141,55 @@ const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+
 
   [data-blog-prose] :global(li) {
     margin-block: 0.8rem;
+  }
+
+  [data-blog-prose] :global(a) {
+    color: var(--color-hazel);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--color-amaranth);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+
+  [data-blog-prose] :global(strong) {
+    color: var(--color-amaranth);
+    font-weight: 700;
+  }
+
+  [data-blog-prose] :global(table) {
+    width: 100%;
+    margin-block: 0 2rem;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  [data-blog-prose] :global(thead th) {
+    padding: 0.85rem 1rem;
+    background: var(--color-ink);
+    color: var(--color-amaranth);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  [data-blog-prose] :global(tbody td) {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid rgb(74 18 34 / 0.14);
+    vertical-align: top;
+  }
+
+  [data-blog-prose] :global(tbody td:first-child) {
+    font-family: var(--font-accent);
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  [data-blog-prose] :global(tbody tr:nth-child(even)) {
+    background: rgb(244 143 161 / 0.12);
   }
 
   [data-blog-prose] :global(li::marker) {
