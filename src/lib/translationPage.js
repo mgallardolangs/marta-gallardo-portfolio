@@ -8,8 +8,6 @@ export const TOOL_LOGO_KEYS = {
   'google-business-profile': 'googleMyBusiness',
 };
 
-export const SEO_RESERVED_TOOL_LABELS = ['Ahrefs', 'SEMrush', 'Screaming Frog'];
-
 const LEGACY_TOOL_GROUPS = {
   'microsoft-office': 'translation',
   'google-workspace': 'translation',

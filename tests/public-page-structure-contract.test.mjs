@@ -65,21 +65,21 @@ test('public Translation page contains translation skills only while SEO skills 
   assert.ok(translationArsenal.skills.every((skill) => skill.group === 'translation'));
   assert.deepEqual(
     translationArsenal.tools.map((tool) => tool.id).sort(),
-    ['ai-tools', 'google-workspace', 'microsoft-office', 'notion', 'tool-claude'].sort(),
+    ['google-workspace', 'microsoft-office', 'notion', 'tool-claude', 'tool-omegat'].sort(),
   );
   assert.ok(seoArsenal.skills.length > 0);
   assert.ok(seoArsenal.skills.every((skill) => skill.group === 'seo'));
   assert.deepEqual(
     seoArsenal.tools.map((tool) => tool.id).sort(),
-    ['google-business-profile', 'google-search-console', 'wordpress'].sort(),
+    ['google-business-profile', 'google-search-console'].sort(),
   );
   assert.match(translationSource, /getTranslationArsenalColumns\(lang,\s*siteData,\s*'translation'\)/);
   assert.match(translationSource, /arsenal\.skills\.map/);
   assert.doesNotMatch(translationSource, /skillGroups\.seo|SEO Local|Keyword planner/);
   assert.match(seoSource, /getTranslationArsenalColumns\(lang,\s*siteData,\s*'seo'\)/);
   assert.match(seoSource, /arsenal\.skills\.map/);
-  assert.match(seoSource, /SEO_RESERVED_TOOL_LABELS\.map/);
-  assert.match(arsenalHelperSource, /SEO_RESERVED_TOOL_LABELS\s*=\s*\['Ahrefs',\s*'SEMrush',\s*'Screaming Frog'\]/);
+  assert.doesNotMatch(seoSource, /SEO_RESERVED_TOOL_LABELS/);
+  assert.doesNotMatch(arsenalHelperSource, /SEO_RESERVED_TOOL_LABELS/);
 });
 
 test('UGC page retains the contact sheet and adds the four-step approved process', async () => {

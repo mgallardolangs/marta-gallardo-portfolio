@@ -768,8 +768,8 @@
       "id": "ugc-travel-01",
       "category": "travel",
       "type": "video",
-      "src": "/images/ugc/ugc-travel-california-poster.jpg",
-      "poster": "/images/ugc/ugc-travel-california-poster.jpg",
+      "src": "/images/ugc/ugc-travel-california-poster.webp",
+      "poster": "/images/ugc/ugc-travel-california-poster.webp",
       "embedUrl": "<iframe width=\"384\" height=\"682\" src=\"https://www.youtube.com/embed/4pyLA2Gfb7g\" title=\"Viaje por California - recomendaciones\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
       "label": {
         "es": "Viaje por California",
@@ -864,8 +864,8 @@
       "id": "ugc-art-01",
       "category": "art",
       "type": "video",
-      "src": "/images/ugc/ugc-products-mondial-poster.jpg",
-      "poster": "/images/ugc/ugc-products-mondial-poster.jpg",
+      "src": "/images/ugc/ugc-art-mondial-poster.webp",
+      "poster": "/images/ugc/ugc-art-mondial-poster.webp",
       "embedUrl": "<iframe width=\"384\" height=\"682\" src=\"https://www.youtube.com/embed/yxqx6IMarYY\" title=\"Mondial Eco Bag\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
       "label": {
         "es": "Promo de producto",
@@ -912,8 +912,8 @@
       "id": "ugc-travel-02",
       "category": "travel",
       "type": "video",
-      "src": "/images/ugc/ugc-travel-suiza-poster.jpg",
-      "poster": "/images/ugc/ugc-travel-suiza-poster.jpg",
+      "src": "/images/ugc/ugc-travel-suiza-poster.webp",
+      "poster": "/images/ugc/ugc-travel-suiza-poster.webp",
       "embedUrl": "<iframe width=\"384\" height=\"682\" src=\"https://www.youtube.com/embed/ZCM2eyDTZ08\" title=\"Maleta Suiza + recomendaciones ropa y zapatos\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
       "label": {
         "es": "Maleta para Suiza",

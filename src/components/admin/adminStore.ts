@@ -1380,6 +1380,12 @@ export class AdminStore {
     const item = this.getMutableUgcPortfolio().find((candidate) => candidate.id === itemId);
     if (!item) return;
 
+    // Video frames play from their embed; an image dropped on them is the cover.
+    if (item.type === 'video' && file.type.startsWith('image/')) {
+      await this.setUgcPortfolioPoster(itemId, file);
+      return;
+    }
+
     const validationError = validateUgcMediaUpload(file, item.type);
     if (validationError) {
       throw new Error(validationError);

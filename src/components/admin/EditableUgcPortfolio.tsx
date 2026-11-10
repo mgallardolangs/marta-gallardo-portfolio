@@ -1,6 +1,7 @@
 import EditableMedia from './EditableMedia';
 import EditableVideoEmbed, { VIDEO_EMBED_LABEL } from './EditableVideoEmbed';
 import { useAdminStore } from './useAdminStore';
+import { toHttpsEmbedUrl } from '../../lib/videoEmbed';
 
 const EDITABLE_LANGS = ['es', 'en', 'fr'] as const;
 
@@ -27,6 +28,7 @@ export default function EditableUgcPortfolio() {
 
       <div className="space-y-5">
         {items.map((item, index) => {
+          const usesEmbedCover = item.type === 'video' && Boolean(toHttpsEmbedUrl(item.embedUrl));
           return (
             <article key={item.id} className="space-y-5 border border-ink/10 bg-paper p-5">
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink/10 pb-4">
@@ -70,11 +72,11 @@ export default function EditableUgcPortfolio() {
                 <div className="space-y-4">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <EditableMedia
-                      src={item.src}
-                      mediaType={item.type}
-                      acceptKind={item.type}
+                      src={usesEmbedCover ? item.poster ?? item.src : item.src}
+                      mediaType={usesEmbedCover ? 'image' : item.type}
+                      acceptKind={usesEmbedCover ? 'image' : item.type}
                       alt={item.alt.es}
-                      label={item.type === 'video' ? '🎬 Cambiar vídeo' : '📷 Cambiar imagen'}
+                      label={usesEmbedCover ? '🖼 Cambiar portada' : item.type === 'video' ? '🎬 Cambiar vídeo' : '📷 Cambiar imagen'}
                       emptyLabel={item.type === 'video' ? 'Sube un MP4 / WebM / MOV' : 'Sube un JPG / PNG / WebP / GIF'}
                       className="aspect-square border border-ink/10 bg-paper"
                       poster={item.poster}
