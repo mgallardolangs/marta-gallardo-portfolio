@@ -52,11 +52,8 @@ test('BlogArticleLayout keeps stable shared markers for the approved header, fea
   assert.match(headerBlock, /<h1\b/, 'the header marker should include the article title');
   assert.match(headerBlock, /post\.data\.description/, 'the header marker should include the article summary');
 
-  assert.match(layoutSource, /post\.data\.image\s*\?/, 'BlogArticleLayout should branch between featured-image and fallback states');
-  assert.ok(
-    countMatches(layoutSource, /data-blog-feature-image/g) >= 2,
-    'BlogArticleLayout should expose a stable featured-image marker in both image and fallback states',
-  );
+  assert.match(layoutSource, /post\.data\.image\s*&&/, 'BlogArticleLayout should render the featured image only when the post has one');
+  assert.equal(countMatches(layoutSource, /data-blog-feature-image/g), 1, 'posts without an image should not render an empty cover frame');
   const imageBlock = extractWindowAround(layoutSource, 'data-blog-feature-image', 'BlogArticleLayout featured-image block');
   assert.match(imageBlock, /<img\b/, 'the featured-image marker should render an image branch');
   assert.match(imageBlock, /aspect-\[16\/9\]/, 'the featured-image marker should keep the exact 16:9 landscape class');

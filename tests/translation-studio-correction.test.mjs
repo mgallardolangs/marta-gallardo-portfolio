@@ -362,8 +362,8 @@ test('public and admin service arsenals keep translation and SEO tools and skill
   assert.doesNotMatch(arsenalSection, /skillGroups\.seo|SEO Local|Keyword planner/, 'public Translation arsenal should not include SEO skills');
   assert.match(seoSource, /getTranslationArsenalColumns\(lang,\s*siteData,\s*'seo'\)/, 'the separate SEO page should filter its skills to SEO');
   assert.match(seoSource, /arsenal\.skills\.map/, 'the separate SEO page should display its SEO skills');
-  assert.match(seoSource, /SEO_RESERVED_TOOL_LABELS\.map/);
-  assert.match(arsenalHelperSource, /SEO_RESERVED_TOOL_LABELS\s*=\s*\['Ahrefs',\s*'SEMrush',\s*'Screaming Frog'\]/);
+  assert.doesNotMatch(seoSource, /SEO_RESERVED_TOOL_LABELS/);
+  assert.doesNotMatch(arsenalHelperSource, /SEO_RESERVED_TOOL_LABELS/);
   assert.match(adminSource, /import\s+AdminTranslationArsenalEditor\s+from\s+['"]..\/..\/components\/admin\/AdminTranslationArsenalEditor['"]/, 'admin translation page should import the shared arsenal editor');
   assert.match(adminSource, /<AdminTranslationArsenalEditor\s+client:load\s+scope="translation"\s*\/>/);
   assert.match(adminSeoSource, /<AdminTranslationArsenalEditor\s+client:load\s+scope="seo"\s*\/>/);

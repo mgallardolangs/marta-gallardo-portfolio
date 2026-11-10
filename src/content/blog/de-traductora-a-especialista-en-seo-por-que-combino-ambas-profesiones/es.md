@@ -17,7 +17,7 @@ Años después, en el instituto, esa curiosidad tomó otra forma. Fue con el lat
 
 ## Por qué di el salto al SEO
 
-Durante la carrera empecé a notar algo que no me gustaba admitir: el mercado en el que se habían formado muchos de mis profesores estaba dejando de existir, y el hueco para dedicarse solo a traducir era cada vez más pequeño. Aun así, seguí formándome a fondo — quise profundizar especialmente en ámbitos con lenguaje muy específico, y viví también la traducción desde fuera, mejorando mis idiomas sobre el terreno.
+Durante la carrera empecé a notar algo que no me gustaba admitir: el mercado en el que se habían formado muchos de mis profesores estaba dejando de existir, y el hueco para dedicarse solo a traducir era cada vez más pequeño. Aun así, seguí formándome a fondo —quise profundizar especialmente en ámbitos con lenguaje muy específico, y viví también la traducción desde fuera, mejorando mis idiomas sobre el terreno.
 
 Así que, en lugar de forzar un camino que cada vez tenía menos salida, empecé a buscar qué podía complementar lo que ya sabía hacer. Fue así como incorporé el SEO a mi trabajo: una manera de que el **contenido** no solo estuviera bien **traducido**, sino también **visible** para quien lo necesita.
 

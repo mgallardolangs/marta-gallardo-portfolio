@@ -238,9 +238,6 @@ test('arsenal DE/IT/CA labels stay localized instead of English placeholders', a
   );
 
   const toolsById = Object.fromEntries(site.arsenal.tools.map((tool) => [tool.id, tool]));
-  assert.equal(toolsById['ai-tools'].label.de, 'KI-Tools (ChatGPT, Claude)');
-  assert.equal(toolsById['ai-tools'].label.it, 'Strumenti IA (ChatGPT, Claude)');
-  assert.equal(toolsById['ai-tools'].label.ca, 'Eines d’IA (ChatGPT, Claude)');
   assert.equal(toolsById['google-business-profile'].label.de, 'Google Unternehmensprofil');
   assert.equal(toolsById['google-business-profile'].label.it, 'Profilo dell’attività su Google');
   assert.equal(toolsById['google-business-profile'].label.ca, 'Perfil d’empresa de Google');

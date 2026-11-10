@@ -7,7 +7,7 @@ import ServiceSwitcher from '../components/translation/ServiceSwitcher';
 import TypedTitle from '../components/TypedTitle.astro';
 import { getLangFromUrl, getLocalizedRoute, t } from '../i18n';
 import { getPageSeo, siteData } from '../lib/siteData';
-import { getTranslationArsenalColumns, SEO_RESERVED_TOOL_LABELS } from '../lib/translationPage.js';
+import { getTranslationArsenalColumns } from '../lib/translationPage.js';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
@@ -141,12 +141,6 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'seo');
                 <div class="group flex aspect-square min-w-0 flex-col items-center justify-center gap-3 bg-paper px-3 py-4 text-center text-ink transition hover:bg-amaranth">
                   <img src={tool.logoSrc} alt="" width="40" height="40" loading="lazy" decoding="async" class="h-10 w-10 object-contain" />
                   <p class="font-body text-[0.68rem] font-medium uppercase tracking-[0.1em]">{tool.label}</p>
-                </div>
-              ))}
-              {SEO_RESERVED_TOOL_LABELS.map((tool) => (
-                <div class="flex aspect-square min-w-0 flex-col items-center justify-center gap-3 border border-dashed border-paper/30 px-3 py-4 text-center text-paper/64">
-                  <span class="flex h-10 w-10 items-center justify-center border border-dashed border-paper/35 font-body text-[0.55rem] font-semibold uppercase tracking-[0.1em]">Logo</span>
-                  <p class="font-body text-[0.68rem] font-medium uppercase tracking-[0.1em]">{tool}</p>
                 </div>
               ))}
             </div>

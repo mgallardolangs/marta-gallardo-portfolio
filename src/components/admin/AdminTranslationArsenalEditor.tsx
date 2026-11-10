@@ -9,7 +9,7 @@ import {
 } from '../../lib/adminCollections.ts';
 import { localize } from '../../lib/siteData.ts';
 import type { LanguageItem, SkillGroup, SkillItem, ToolItem } from '../../lib/siteData.ts';
-import { getArsenalToolGroup, SEO_RESERVED_TOOL_LABELS } from '../../lib/translationPage.js';
+import { getArsenalToolGroup } from '../../lib/translationPage.js';
 import EditableText from './EditableText';
 import { useAdminStore } from './useAdminStore';
 
@@ -74,7 +74,6 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
   const tools = allTools
     .map((item, index) => ({ item, index }))
     .filter(({ item }) => getArsenalToolGroup(item) === scope);
-  const reservedTools = scope === 'seo' ? SEO_RESERVED_TOOL_LABELS : [];
   // The SEO section sits on a dark background, so its tones mirror the public page.
   const onDark = scope === 'seo';
   const tone = onDark
@@ -85,8 +84,6 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
         tileLabel: 'text-ink',
         handle: 'text-ink/60',
         editButton: 'bg-ink text-paper',
-        reserved: 'border-paper/30 text-paper/64',
-        reservedLogo: 'border-paper/35',
         add: 'border-paper/30 text-paper/64',
         chip: 'border-paper/18 text-paper',
         chipHandle: 'text-paper/60',
@@ -98,8 +95,6 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
         tileLabel: 'text-paper group-hover:text-ink',
         handle: 'text-paper/70',
         editButton: 'bg-paper text-ink',
-        reserved: 'border-ink/30 text-ink-faint',
-        reservedLogo: 'border-ink/35',
         add: 'border-ink/30 text-ink-faint',
         chip: 'border-ink/12 text-ink',
         chipHandle: 'text-ink-faint',
@@ -522,12 +517,6 @@ export default function AdminTranslationArsenalEditor({ scope }: EditorProps) {
                 >
                   ✎
                 </button>
-              </div>
-            ))}
-            {reservedTools.map((tool) => (
-              <div key={tool} className={`flex aspect-square w-full min-w-0 flex-col items-center justify-center gap-3 border border-dashed ${tone.reserved} px-3 py-4 text-center`}>
-                <span className={`flex h-10 w-10 items-center justify-center border border-dashed ${tone.reservedLogo} font-body text-[0.55rem] font-semibold uppercase tracking-[0.1em]`}>Logo</span>
-                <span className="text-[0.65rem] font-medium uppercase tracking-[0.12em]">{tool}</span>
               </div>
             ))}
 

@@ -142,11 +142,11 @@ test('translation and SEO admin arsenals show only the tools and skills in their
 
   assert.deepEqual(
     translation.tools.map(({ id }) => id).sort(),
-    ['ai-tools', 'google-workspace', 'microsoft-office', 'notion', 'tool-claude'].sort(),
+    ['google-workspace', 'microsoft-office', 'notion', 'tool-claude', 'tool-omegat'].sort(),
   );
   assert.deepEqual(
     seo.tools.map(({ id }) => id).sort(),
-    ['google-business-profile', 'google-search-console', 'wordpress'].sort(),
+    ['google-business-profile', 'google-search-console'].sort(),
   );
   assert.ok(translation.skills.every((skill) => skill.group === 'translation'));
   assert.ok(seo.skills.every((skill) => skill.group === 'seo'));

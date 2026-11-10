@@ -88,6 +88,9 @@ export function validateUgcMediaUpload(file: File, expectedKind: 'image' | 'vide
 
 export function validateUgcPortfolioItem(item: UgcPortfolioItem) {
   const errors: string[] = [];
+  // Coming-soon frames are intentionally empty placeholders.
+  if (item.comingSoon) return errors;
+
   const src = item.src.trim();
   const hasValidVideoEmbed = item.type === 'video' && toHttpsEmbedUrl(item.embedUrl) !== null;
 
