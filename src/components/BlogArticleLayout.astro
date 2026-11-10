@@ -150,11 +150,36 @@ const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+
     text-decoration-color: var(--color-amaranth);
     text-decoration-thickness: 2px;
     text-underline-offset: 0.2em;
+    background: linear-gradient(var(--color-amaranth), var(--color-amaranth)) no-repeat left bottom / 100% 0;
+    transition: background-size 0.25s ease, color 0.25s ease;
+  }
+
+  [data-blog-prose] :global(a:hover),
+  [data-blog-prose] :global(a:focus-visible) {
+    background-size: 100% 100%;
+    color: var(--color-ink);
+    text-decoration-color: var(--color-ink);
+  }
+
+  [data-blog-prose] :global(a[href^='http'])::after {
+    content: '↗';
+    margin-left: 0.15em;
+    font-size: 0.8em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-blog-prose] :global(a) {
+      transition: none;
+    }
   }
 
   [data-blog-prose] :global(strong) {
-    color: var(--color-amaranth);
+    padding-inline: 0.15em;
+    background: linear-gradient(transparent 45%, rgb(244 143 161 / 0.55) 45%);
+    color: var(--color-ink);
     font-weight: 700;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
   }
 
   [data-blog-prose] :global(table) {
