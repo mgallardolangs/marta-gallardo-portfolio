@@ -99,17 +99,17 @@ test('localized Blog article keeps its visible link labels and points only to cu
     es: ['/sobre-mi', '/contacto'],
     en: ['/en/about', '/en/contact'],
     fr: ['/fr/a-propos', '/fr/contact'],
-    de: ['/sobre-mi', '/contacto'],
-    it: ['/sobre-mi', '/contacto'],
-    ca: ['/sobre-mi', '/contacto'],
+    de: ['/de/ueber-mich', '/de/contact'],
+    it: ['/it/chi-sono', '/it/contact'],
+    ca: ['/ca/sobre-mi', '/ca/contact'],
   };
   const expectedLabels = {
     es: ['portfolio', 'contactarme'],
     en: ['portfolio', 'get in touch'],
     fr: ['portfolio', 'contacter'],
-    de: ['portfolio', 'contactarme'],
-    it: ['portfolio', 'contactarme'],
-    ca: ['portfolio', 'contactarme'],
+    de: ['Portfolio', 'kontaktieren Sie mich'],
+    it: ['portfolio', 'contattarmi'],
+    ca: ['portfolio', 'contactar-me'],
   };
 
   for (const locale of Object.keys(expectedLinks)) {

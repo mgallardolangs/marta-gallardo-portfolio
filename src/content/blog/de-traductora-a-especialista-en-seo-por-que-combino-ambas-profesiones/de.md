@@ -1,34 +1,34 @@
 ---
 slug: "de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
 translationKey: "de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
-title: "De traductora a especialista SEO"
-description: "Traductora de formación, hoy combino idiomas y SEO para ayudar a marcas a crecer en varios mercados. Te cuento mi camino y por qué lo hago."
+title: "Von der Übersetzerin zur SEO-Spezialistin"
+description: "Ich bin ausgebildete Übersetzerin und verbinde heute Sprachen und SEO, damit Marken in mehreren Märkten wachsen. Mein Weg und warum ich ihn gehe."
 date: "2026-09-07"
 image: "/images/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones.webp"
-tags: ["traducción", "traductora SEO", "idiomas"]
+tags: ["Übersetzung", "SEO-Übersetzerin", "Sprachen"]
 lang: "de"
 ---
 
-## El origen de mi vocación por los idiomas y la Traducción
+## Wie meine Leidenschaft für Sprachen und das Übersetzen begann
 
-Mi relación con los idiomas empezó mucho antes de la universidad. De pequeña tuve un ejemplo muy cercano de lo que significaba moverse entre lenguas y culturas, y esa fue mi primera inspiración: entendí, sin saberlo aún con palabras, que **hablar otros idiomas te daba acceso a mundos** que de otra forma quedaban fuera de tu alcance.
+Meine Beziehung zu Sprachen begann lange vor dem Studium. Schon als Kind hatte ich ein sehr nahes Vorbild dafür, was es bedeutet, sich zwischen Sprachen und Kulturen zu bewegen, und das war meine erste Inspiration: Ich verstand, ohne es schon in Worte fassen zu können, dass **andere Sprachen zu sprechen einem Zugang zu Welten verschafft**, die einem sonst verschlossen bleiben.
 
-Años después, en el instituto, esa curiosidad tomó otra forma. Fue con el latín y el griego cuando descubrí que lo que de verdad me apasionaba no era solo hablar otros idiomas, sino **entender cómo funcionan** por dentro: su lógica, su estructura, su mecánica. Fue entonces cuando decidí que quería dedicarme profesionalmente a lo que de verdad me apasionaba, y ese algo era la Traducción.
+Jahre später, in der Schule, nahm diese Neugier eine andere Form an. Mit Latein und Griechisch entdeckte ich, dass mich nicht nur das Sprechen anderer Sprachen begeisterte, sondern vor allem, **zu verstehen, wie sie funktionieren**: ihre Logik, ihr Aufbau, ihre Mechanik. Damals beschloss ich, beruflich das zu tun, was mich wirklich begeisterte – und das war das Übersetzen.
 
-## Por qué di el salto al SEO
+## Warum ich den Schritt zu SEO gewagt habe
 
-Durante la carrera empecé a notar algo que no me gustaba admitir: el mercado en el que se habían formado muchos de mis profesores estaba dejando de existir, y el hueco para dedicarse solo a traducir era cada vez más pequeño. Aun así, seguí formándome a fondo — quise profundizar especialmente en ámbitos con lenguaje muy específico, y viví también la traducción desde fuera, mejorando mis idiomas sobre el terreno.
+Während des Studiums fiel mir etwas auf, das ich nicht gern zugab: Der Markt, auf dem viele meiner Dozentinnen und Dozenten ausgebildet worden waren, verschwand allmählich, und der Platz für Menschen, die ausschließlich übersetzen, wurde immer kleiner. Trotzdem bildete ich mich gründlich weiter – ich wollte mich besonders in Fachgebieten mit sehr spezifischer Sprache vertiefen, und ich erlebte das Übersetzen auch im Ausland, wo ich meine Sprachkenntnisse vor Ort verbesserte.
 
-Así que, en lugar de forzar un camino que cada vez tenía menos salida, empecé a buscar qué podía complementar lo que ya sabía hacer. Fue así como incorporé el SEO a mi trabajo: una manera de que el **contenido** no solo estuviera bien **traducido**, sino también **visible** para quien lo necesita.
+Anstatt also einen Weg zu erzwingen, der immer weniger Perspektiven bot, suchte ich nach etwas, das ergänzt, was ich bereits konnte. So kam SEO in meine Arbeit: als Möglichkeit, dass **Inhalte** nicht nur gut **übersetzt** sind, sondern auch für die Menschen **sichtbar**, die sie brauchen.
 
-## Traducción + SEO: una combinación poco común
+## Übersetzung + SEO: eine seltene Kombination
 
-Aquí es donde la cosa se pone interesante. El **SEO multilingüe** —posicionar contenido en varios idiomas sin que pierda calidad ni naturalidad— es un terreno que muy pocos perfiles cubren bien. Es fácil encontrar traductores que no saben de SEO, y fácil encontrar especialistas en SEO que traducen con herramientas automáticas sin cuidar el matiz cultural o lingüístico. Es mucho más raro encontrar a alguien que domine ambas cosas a la vez.
+Hier wird es spannend. **Mehrsprachige SEO** – Inhalte in mehreren Sprachen zu positionieren, ohne dass sie an Qualität oder Natürlichkeit verlieren – ist ein Bereich, den nur sehr wenige Profile gut abdecken. Übersetzerinnen und Übersetzer ohne SEO-Kenntnisse findet man leicht, ebenso SEO-Fachleute, die mit maschinellen Tools übersetzen, ohne auf kulturelle oder sprachliche Nuancen zu achten. Viel seltener ist jemand, der beides gleichzeitig beherrscht.
 
-Esta combinación tiene sentido sobre todo para **negocios** que venden o quieren vender en varios países: marcas que se **internacionalizan**, tiendas online con catálogo en varios idiomas, empresas que necesitan que su contenido no solo esté traducido, sino que funcione en cada mercado.
+Diese Kombination ist vor allem für **Unternehmen** sinnvoll, die in mehreren Ländern verkaufen oder verkaufen möchten: Marken, die sich **internationalisieren**, Onlineshops mit Katalogen in mehreren Sprachen und Firmen, deren Inhalte nicht nur übersetzt sein, sondern in jedem Markt funktionieren müssen.
 
-## Qué puedes esperar de este blog
+## Was Sie in diesem Blog erwartet
 
-Este espacio va a ser el reflejo de esa combinación: hablaré de idiomas, de SEO, y de todo lo que hay en el cruce entre ambos. Si tienes un negocio que quiere crecer más allá de tu idioma nativo, o simplemente te interesa este mundo, este es tu sitio.
+Dieser Blog wird genau diese Kombination widerspiegeln: Ich schreibe über Sprachen, über SEO und über alles, was an der Schnittstelle zwischen beiden liegt. Wenn Sie ein Unternehmen führen, das über Ihre Muttersprache hinaus wachsen möchte, oder wenn Sie sich einfach für dieses Thema interessieren, sind Sie hier richtig.
 
-Si quieres saber más sobre cómo trabajo, puedes echar un vistazo a mi [portfolio](https://marttelier.com/sobre-mi) o [contactarme](https://marttelier.com/contacto) directamente.
+Wenn Sie mehr darüber erfahren möchten, wie ich arbeite, werfen Sie gern einen Blick auf mein [Portfolio](https://marttelier.com/de/ueber-mich) oder [kontaktieren Sie mich](https://marttelier.com/de/contact) direkt.

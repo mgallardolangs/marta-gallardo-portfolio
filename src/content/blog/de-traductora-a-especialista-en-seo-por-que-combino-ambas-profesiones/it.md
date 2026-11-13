@@ -1,34 +1,34 @@
 ---
 slug: "de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
 translationKey: "de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
-title: "De traductora a especialista SEO"
-description: "Traductora de formación, hoy combino idiomas y SEO para ayudar a marcas a crecer en varios mercados. Te cuento mi camino y por qué lo hago."
+title: "Da traduttrice a specialista SEO"
+description: "Traduttrice di formazione, oggi unisco lingue e SEO per aiutare i brand a crescere in più mercati. Ti racconto il mio percorso e perché lo faccio."
 date: "2026-09-07"
 image: "/images/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones.webp"
-tags: ["traducción", "traductora SEO", "idiomas"]
+tags: ["traduzione", "traduttrice SEO", "lingue"]
 lang: "it"
 ---
 
-## El origen de mi vocación por los idiomas y la Traducción
+## L'origine della mia passione per le lingue e la traduzione
 
-Mi relación con los idiomas empezó mucho antes de la universidad. De pequeña tuve un ejemplo muy cercano de lo que significaba moverse entre lenguas y culturas, y esa fue mi primera inspiración: entendí, sin saberlo aún con palabras, que **hablar otros idiomas te daba acceso a mundos** que de otra forma quedaban fuera de tu alcance.
+Il mio rapporto con le lingue è iniziato molto prima dell'università. Da piccola avevo un esempio molto vicino di cosa significasse muoversi tra lingue e culture, e quella è stata la mia prima ispirazione: ho capito, senza ancora saperlo dire a parole, che **parlare altre lingue ti apriva le porte di mondi** che altrimenti sarebbero rimasti fuori dalla tua portata.
 
-Años después, en el instituto, esa curiosidad tomó otra forma. Fue con el latín y el griego cuando descubrí que lo que de verdad me apasionaba no era solo hablar otros idiomas, sino **entender cómo funcionan** por dentro: su lógica, su estructura, su mecánica. Fue entonces cuando decidí que quería dedicarme profesionalmente a lo que de verdad me apasionaba, y ese algo era la Traducción.
+Anni dopo, al liceo, quella curiosità ha preso un'altra forma. È stato con il latino e il greco che ho scoperto che ciò che mi appassionava davvero non era solo parlare altre lingue, ma **capire come funzionano** dall'interno: la loro logica, la loro struttura, il loro meccanismo. È stato allora che ho deciso di dedicarmi professionalmente a ciò che mi appassionava davvero, e quella cosa era la traduzione.
 
-## Por qué di el salto al SEO
+## Perché ho fatto il salto verso la SEO
 
-Durante la carrera empecé a notar algo que no me gustaba admitir: el mercado en el que se habían formado muchos de mis profesores estaba dejando de existir, y el hueco para dedicarse solo a traducir era cada vez más pequeño. Aun así, seguí formándome a fondo — quise profundizar especialmente en ámbitos con lenguaje muy específico, y viví también la traducción desde fuera, mejorando mis idiomas sobre el terreno.
+Durante gli studi ho iniziato a notare qualcosa che non mi piaceva ammettere: il mercato in cui si erano formati molti dei miei docenti stava scomparendo, e lo spazio per chi si dedica solo alla traduzione era sempre più ridotto. Nonostante ciò, ho continuato a formarmi a fondo: ho voluto approfondire soprattutto ambiti con un linguaggio molto specifico, e ho vissuto la traduzione anche all'estero, migliorando le mie lingue sul campo.
 
-Así que, en lugar de forzar un camino que cada vez tenía menos salida, empecé a buscar qué podía complementar lo que ya sabía hacer. Fue así como incorporé el SEO a mi trabajo: una manera de que el **contenido** no solo estuviera bien **traducido**, sino también **visible** para quien lo necesita.
+Così, invece di forzare un percorso che offriva sempre meno sbocchi, ho cominciato a cercare qualcosa che potesse completare ciò che sapevo già fare. È così che ho integrato la SEO nel mio lavoro: un modo perché i **contenuti** non fossero solo ben **tradotti**, ma anche **visibili** a chi ne ha bisogno.
 
-## Traducción + SEO: una combinación poco común
+## Traduzione + SEO: una combinazione poco comune
 
-Aquí es donde la cosa se pone interesante. El **SEO multilingüe** —posicionar contenido en varios idiomas sin que pierda calidad ni naturalidad— es un terreno que muy pocos perfiles cubren bien. Es fácil encontrar traductores que no saben de SEO, y fácil encontrar especialistas en SEO que traducen con herramientas automáticas sin cuidar el matiz cultural o lingüístico. Es mucho más raro encontrar a alguien que domine ambas cosas a la vez.
+Qui le cose si fanno interessanti. La **SEO multilingue**, cioè posizionare contenuti in più lingue senza che perdano qualità o naturalezza, è un terreno che pochissimi profili coprono bene. È facile trovare traduttori che non sanno nulla di SEO, ed è facile trovare specialisti SEO che traducono con strumenti automatici senza curare le sfumature culturali o linguistiche. È molto più raro trovare qualcuno che padroneggi entrambe le cose allo stesso tempo.
 
-Esta combinación tiene sentido sobre todo para **negocios** que venden o quieren vender en varios países: marcas que se **internacionalizan**, tiendas online con catálogo en varios idiomas, empresas que necesitan que su contenido no solo esté traducido, sino que funcione en cada mercado.
+Questa combinazione ha senso soprattutto per le **aziende** che vendono o vogliono vendere in più Paesi: brand che si **internazionalizzano**, negozi online con cataloghi in più lingue, imprese che hanno bisogno che i loro contenuti non siano solo tradotti, ma funzionino in ogni mercato.
 
-## Qué puedes esperar de este blog
+## Cosa puoi aspettarti da questo blog
 
-Este espacio va a ser el reflejo de esa combinación: hablaré de idiomas, de SEO, y de todo lo que hay en el cruce entre ambos. Si tienes un negocio que quiere crecer más allá de tu idioma nativo, o simplemente te interesa este mundo, este es tu sitio.
+Questo spazio sarà il riflesso di questa combinazione: parlerò di lingue, di SEO e di tutto ciò che sta all'incrocio tra le due. Se hai un'attività che vuole crescere oltre la tua lingua madre, o se semplicemente ti interessa questo mondo, sei nel posto giusto.
 
-Si quieres saber más sobre cómo trabajo, puedes echar un vistazo a mi [portfolio](https://marttelier.com/sobre-mi) o [contactarme](https://marttelier.com/contacto) directamente.
+Se vuoi saperne di più su come lavoro, puoi dare un'occhiata al mio [portfolio](https://marttelier.com/it/chi-sono) o [contattarmi](https://marttelier.com/it/contact) direttamente.
