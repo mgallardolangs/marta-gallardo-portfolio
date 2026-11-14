@@ -58,7 +58,7 @@ Fix (13/11/2026):
 - [x] Netlify Edge Function `netlify/edge-functions/trailing-slash.js`: any URL ending in `/` (except the root `/`) returns a 301 to the no-slash version, keeping query parameters. It skips static files (`/_astro/*`, `/images/*`, favicon, robots, sitemap).
   - Why not a rule in `netlify.toml`: Netlify treats `/fr/` and `/fr` as the same path in its redirect rules, so a rule from `/fr/` to `/fr` would loop.
 - [x] Tests in `tests/trailing-slash-edge.test.mjs` (redirects, root and canonical URLs untouched, assets excluded). The existing routing tests don't need changes, because `netlify.toml` is unchanged.
-- [ ] After pushing, check on the Netlify Deploy Preview with `curl` that `/fr/`, `/fr/contact/`, `/servicios/seo/` and `/en/blog/` return 301 and that `/` and `/fr` return 200. (Edge Functions can't be tested with the local dev server.)
+- [x] (14/11/2026, PR #44) Checked on the Netlify Deploy Preview with `curl` that `/fr/`, `/fr/contact/`, `/servicios/seo/` and `/en/blog/` return 301 and that `/` and `/fr` return 200. (Edge Functions can't be tested with the local dev server.)
 
 ## How it was checked
 
