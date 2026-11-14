@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { localizedRoutes } from '../src/lib/localizedRoutes.js';
+import { legacyRedirects } from '../src/lib/legacyRedirects.js';
 
 const netlifyToml = await readFile(new URL('../netlify.toml', import.meta.url), 'utf8');
 const redirects = [...netlifyToml.matchAll(/\[\[redirects\]\]\s*from = "([^"]+)"\s*to = "([^"]+)"\s*status = (\d+)/g)]
@@ -31,5 +32,15 @@ test('legacy redirects never chain into another redirect', () => {
   for (const { from, to } of redirects) {
     assert.notEqual(from, to, `${from} should not redirect to itself`);
     assert.ok(!sources.has(to), `${from} -> ${to} should not chain into another redirect`);
+  }
+});
+
+test('netlify.toml and the shared legacy map (used by the trailing-slash edge function) stay in sync', () => {
+  const tomlLegacy = Object.fromEntries(
+    redirects.filter((redirect) => redirect.from.startsWith('/')).map(({ from, to }) => [from, to]),
+  );
+  assert.deepEqual(tomlLegacy, { ...legacyRedirects });
+  for (const to of Object.values(legacyRedirects)) {
+    assert.ok(!(to in legacyRedirects), `${to} should be a final URL, not another legacy one`);
   }
 });
