@@ -59,6 +59,7 @@ Fix (14/11/2026): each language now has a URL based on its own title.
 - [x] The admin keeps each language's slug when you edit a post. New posts created from the admin still get the Spanish slug in every language; that can be changed later in each file.
 - [x] Tests: `tests/blog-translated-slugs.test.mjs` and updated blog tests (382 passing).
 - [ ] Marta reviews the new URLs.
+- [x] Sitemap `<lastmod>` for blog posts and blog indexes (date of the last commit to each post file), so Google knows what changed (`src/lib/sitemapLastmod.mjs`).
 - [x] (14/11/2026) Checked on the Deploy Preview: old URLs return 301 to the new ones, new URLs return 200.
 
 ## 3. Trailing-slash URLs don't redirect (confirmed)
