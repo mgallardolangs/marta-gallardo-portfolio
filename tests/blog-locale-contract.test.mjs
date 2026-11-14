@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { translatorPostSlugs } from './fixtures/blog-slugs.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -223,7 +224,7 @@ test('build emits all six locale routes for the existing localized article', asy
   }
 
   await Promise.all(
-    locales.map((locale) => access(distBlogPostPath(locale, migratedPostSlug))),
+    locales.map((locale) => access(distBlogPostPath(locale, translatorPostSlugs[locale]))),
   );
 });
 
@@ -252,13 +253,13 @@ test('built localized article advertises all six built locale alternates', async
     alternateEntries,
     [
       { hreflang: 'es', href: `https://marttelier.com/blog/${migratedPostSlug}` },
-      { hreflang: 'en', href: `https://marttelier.com/en/blog/${migratedPostSlug}` },
-      { hreflang: 'fr', href: `https://marttelier.com/fr/blog/${migratedPostSlug}` },
-      { hreflang: 'de', href: `https://marttelier.com/de/blog/${migratedPostSlug}` },
-      { hreflang: 'it', href: `https://marttelier.com/it/blog/${migratedPostSlug}` },
-      { hreflang: 'ca', href: `https://marttelier.com/ca/blog/${migratedPostSlug}` },
+      { hreflang: 'en', href: `https://marttelier.com/en/blog/${translatorPostSlugs.en}` },
+      { hreflang: 'fr', href: `https://marttelier.com/fr/blog/${translatorPostSlugs.fr}` },
+      { hreflang: 'de', href: `https://marttelier.com/de/blog/${translatorPostSlugs.de}` },
+      { hreflang: 'it', href: `https://marttelier.com/it/blog/${translatorPostSlugs.it}` },
+      { hreflang: 'ca', href: `https://marttelier.com/ca/blog/${translatorPostSlugs.ca}` },
       { hreflang: 'x-default', href: `https://marttelier.com/blog/${migratedPostSlug}` },
     ],
-    'every locale Markdown sibling should keep its existing shared public slug',
+    'every locale Markdown sibling should advertise its own translated public slug',
   );
 });

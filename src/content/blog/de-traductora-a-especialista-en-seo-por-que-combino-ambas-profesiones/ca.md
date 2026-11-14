@@ -1,5 +1,5 @@
 ---
-slug: "de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
+slug: "de-traductora-a-especialista-seo"
 translationKey: "de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
 title: "De traductora a especialista SEO"
 description: "Traductora de formació, avui combino idiomes i SEO per ajudar marques a créixer en diversos mercats. T'explico el meu camí i per què ho faig."

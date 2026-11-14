@@ -331,7 +331,8 @@ test('every logical blog post is represented by six locale Markdown files sharin
     const langs = group.map((entry) => entry.lang).sort();
     assert.deepEqual(langs, [...SIX_LOCALES].sort(), `logical post "${translationKey}" should cover all six supported locales exactly once`);
 
-    assert.equal(new Set(group.map((entry) => entry.slug)).size, 1, `logical post "${translationKey}" should share one slug across all locale files`);
+    assert.equal(new Set(group.map((entry) => entry.slug)).size, 6, `logical post "${translationKey}" should give every locale its own translated slug`);
+    assert.equal(group.find((entry) => entry.lang === 'es').slug, translationKey, `logical post "${translationKey}" should keep the Spanish slug equal to its translationKey`);
     assert.equal(new Set(group.map((entry) => entry.date)).size, 1, `logical post "${translationKey}" should share one date across all locale files`);
     assert.equal(new Set(group.map((entry) => entry.image ?? '')).size, 1, `logical post "${translationKey}" should share one featured image across all locale files`);
     assert.equal(new Set(group.map((entry) => entry.path)).size, 6, `logical post "${translationKey}" locale files should each live at a unique repository path`);
@@ -346,7 +347,7 @@ test('the current Blog article keeps its existing shared slug and six localized 
   for (const file of files) {
     const markdown = await readFile(file.absolutePath, 'utf8');
     const frontmatter = parseFrontmatter(markdown);
-    if (frontmatter.slug === currentSlug) {
+    if (frontmatter.translationKey === currentSlug) {
       articleLocales.push({ ...frontmatter, path: file.relativePath, markdown });
     }
   }
@@ -361,7 +362,8 @@ test('the current Blog article keeps its existing shared slug and six localized 
   for (const lang of SIX_LOCALES) {
     const entry = articleLocales.find((candidate) => candidate.lang === lang);
     assert.ok(entry, `the current article should keep a ${lang} locale file`);
-    assert.equal(entry.slug, currentSlug, `${lang} should keep the existing public slug`);
+    if (lang === 'es') assert.equal(entry.slug, currentSlug, 'es should keep the existing public slug');
+    else assert.notEqual(entry.slug, currentSlug, `${lang} should use its own translated slug`);
     assert.equal(entry.translationKey, currentSlug, `${lang} should keep the existing article translation key`);
   }
 });

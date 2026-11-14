@@ -36,11 +36,30 @@ The service pages, by contrast, have translated URLs (`/en/services/seo`, `/de/d
 
 Cause: the frontmatter `slug` field is the same in every language file, and the blog uses it to build the URL and to link the versions together.
 
-To do:
-- [ ] Separate the "post identifier" (to link versions, `translationKey`, which already exists) from each language's slug.
-- [ ] Write a translated slug for each version (to be confirmed by Marta).
-- [ ] Redirect (301) the old Spanish-slug URLs to the new ones.
-- [ ] Check hreflang, sitemap, language switcher and internal links.
+Fix (14/11/2026): each language now has a URL based on its own title.
+
+| Post | Language | New URL |
+|---|---|---|
+| SEO internacional | es | `/blog/seo-internacional-mas-alla-de-traducir-tu-web` (unchanged) |
+| | en | `/en/blog/international-seo-beyond-translating-your-website` |
+| | fr | `/fr/blog/seo-international-au-dela-de-la-traduction-de-votre-site` |
+| | de | `/de/blog/internationale-seo-mehr-als-nur-uebersetzung-ihrer-website` |
+| | it | `/it/blog/seo-internazionale-oltre-la-traduzione-del-tuo-sito` |
+| | ca | `/ca/blog/seo-internacional-mes-enlla-de-traduir-el-teu-web` |
+| De traductora a especialista SEO | es | `/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones` (unchanged) |
+| | en | `/en/blog/from-translator-to-seo-specialist` |
+| | fr | `/fr/blog/de-traductrice-a-specialiste-seo` |
+| | de | `/de/blog/von-der-uebersetzerin-zur-seo-spezialistin` |
+| | it | `/it/blog/da-traduttrice-a-specialista-seo` |
+| | ca | `/ca/blog/de-traductora-a-especialista-seo` |
+
+- [x] Each language file has its own `slug`; versions stay linked by `translationKey` (the folder name). The Spanish URLs don't change.
+- [x] 301 from every old Spanish-slug URL to the new one (`netlify.toml`).
+- [x] hreflang, sitemap, language switcher and "next post" links use the new URLs (checked in the build).
+- [x] The admin keeps each language's slug when you edit a post. New posts created from the admin still get the Spanish slug in every language; that can be changed later in each file.
+- [x] Tests: `tests/blog-translated-slugs.test.mjs` and updated blog tests (382 passing).
+- [ ] Marta reviews the new URLs.
+- [ ] Check on the Deploy Preview that the old URLs return 301.
 
 ## 3. Trailing-slash URLs don't redirect (confirmed)
 

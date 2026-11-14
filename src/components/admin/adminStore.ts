@@ -1807,8 +1807,13 @@ export class AdminStore {
         ? submittedTranslation
         : existingTranslation ?? esTranslation) as BlogLocaleTranslation;
 
+      // Each non-Spanish locale keeps its own translated URL slug (e.g. /en/blog/from-translator-…);
+      // the shared `slug` only names the folder and the Spanish URL.
+      const existingLocaleSlug = existingTranslation?.slug?.trim() ?? '';
+      const localeSlug = locale !== 'es' && /^[a-z0-9]+(-[a-z0-9]+)*$/.test(existingLocaleSlug) ? existingLocaleSlug : slug;
+
       const markdown = buildBlogLocaleMarkdown({
-        slug,
+        slug: localeSlug,
         translationKey: sharedTranslationKey || slug,
         title: translation.title,
         description: translation.description,

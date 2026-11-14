@@ -1,5 +1,5 @@
 ---
-slug: "de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
+slug: "von-der-uebersetzerin-zur-seo-spezialistin"
 translationKey: "de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
 title: "Von der Übersetzerin zur SEO-Spezialistin"
 description: "Ich bin ausgebildete Übersetzerin und verbinde heute Sprachen und SEO, damit Marken in mehreren Märkten wachsen. Mein Weg und warum ich ihn gehe."
