@@ -11,9 +11,25 @@ test('trailing-slash edge function 301-redirects slashed paths to the canonical 
     ['/fr/contact/', '/fr/contact'],
     ['/servicios/seo/', '/servicios/seo'],
     ['/en/blog/', '/en/blog'],
-    ['/de/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones/', '/de/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones'],
+    ['/de/blog/internationale-seo-mehr-als-nur-uebersetzung-ihrer-website/', '/de/blog/internationale-seo-mehr-als-nur-uebersetzung-ihrer-website'],
     ['/fr//', '/fr'],
     ['/en/blog/?page=2', '/en/blog?page=2'],
+  ]) {
+    const response = await run(from);
+    assert.ok(response, `${from} should redirect`);
+    assert.equal(response.status, 301, `${from} should be a permanent redirect`);
+    assert.equal(response.headers.get('location'), `https://marttelier.com${to}`);
+  }
+});
+
+test('trailing-slash edge function sends slashed legacy URLs straight to their final URL in one hop', async () => {
+  for (const [from, to] of [
+    ['/en/ugc/', '/en/services/ugc'],
+    ['/de/ugc/', '/de/dienstleistungen/ugc'],
+    ['/translation-seo/', '/servicios/seo'],
+    ['/contact/', '/contacto'],
+    ['/fr/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones/', '/fr/blog/de-traductrice-a-specialiste-seo'],
+    ['/en/ugc/?ref=linkedin', '/en/services/ugc?ref=linkedin'],
   ]) {
     const response = await run(from);
     assert.ok(response, `${from} should redirect`);
