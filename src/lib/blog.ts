@@ -112,6 +112,9 @@ export function groupBlogPostsForAdmin<Post extends BlogPostLike>(posts: readonl
       locales: {},
     };
 
+    // Locales may have translated URL slugs; the admin row's slug is the Spanish one,
+    // which also names the post's folder in src/content/blog.
+    if (post.data.lang === 'es') group.slug = getBlogPostSlug(post);
     group.locales[post.data.lang] = post;
     groups.set(translationKey, group);
   }

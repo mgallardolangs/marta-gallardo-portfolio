@@ -4,6 +4,9 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
+import { getBlogLastmodMap } from './src/lib/sitemapLastmod.mjs';
+
+const blogLastmod = getBlogLastmodMap('https://marttelier.com');
 
 // https://astro.build/config
 export default defineConfig({
@@ -19,6 +22,11 @@ export default defineConfig({
     react(),
     sitemap({
       filter: (page) => !page.includes('/admin'),
+      serialize(item) {
+        const lastmod = blogLastmod.get(item.url.replace(/\/$/, ''));
+        if (lastmod) item.lastmod = lastmod.toISOString();
+        return item;
+      },
     }),
   ],
   i18n: {

@@ -1,5 +1,5 @@
 ---
-slug: "de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
+slug: "de-traductrice-a-specialiste-seo"
 translationKey: "de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
 title: "De traductrice à spécialiste SEO"
 description: "Je combine traduction et SEO pour aider les marques à conquérir de nouveaux marchés. Découvrez comment mon parcours m’a menée au référencement multilingue."

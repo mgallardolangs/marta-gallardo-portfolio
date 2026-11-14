@@ -1,5 +1,5 @@
 ---
-slug: "seo-internacional-mas-alla-de-traducir-tu-web"
+slug: "seo-internazionale-oltre-la-traduzione-del-tuo-sito"
 translationKey: "seo-internacional-mas-alla-de-traducir-tu-web"
 title: "SEO internazionale: oltre la traduzione del tuo sito"
 description: "Sto imparando la SEO internazionale da traduttrice. Ecco perché scegliere bene i mercati conta più che tradurre in molte lingue."

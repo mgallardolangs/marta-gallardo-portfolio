@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { access, readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { translatorPostSlugs } from './fixtures/blog-slugs.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -460,8 +461,8 @@ test('built public and admin HTML keep SEO/noindex classes, local media referenc
   assert.ok(!sitemapRoutePaths.has('/admin/blog/new'), 'sitemap should exclude the inline admin new-post route');
   for (const locale of ['en', 'fr', 'de', 'it', 'ca']) {
     assert.ok(
-      sitemapRoutePaths.has(`/${locale}${articleSlug}`),
-      `sitemap should include the built ${locale} fallback article route now that every locale is migrated`,
+      sitemapRoutePaths.has(`/${locale}/blog/${translatorPostSlugs[locale]}`),
+      `sitemap should include the built ${locale} article route at its translated slug`,
     );
   }
 });

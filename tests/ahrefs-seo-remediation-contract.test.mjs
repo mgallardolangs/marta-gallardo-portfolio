@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { translatorPostSlugs } from './fixtures/blog-slugs.mjs';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const locales = ['es', 'en', 'fr', 'de', 'it', 'ca'];
@@ -196,7 +197,7 @@ test('CHECK_DIST: targeted SEO titles and descriptions render the concise source
     expectedPages.push({
       path: locale === 'es'
         ? `dist/blog/${articleSlug}.html`
-        : `dist/${locale}/blog/${articleSlug}.html`,
+        : `dist/${locale}/blog/${translatorPostSlugs[locale]}.html`,
       title: `${readFrontmatterValue(source, 'title')} — ${dictionary.hero.name}`,
       description: readFrontmatterValue(source, 'description'),
       maxTitleLength: 60,

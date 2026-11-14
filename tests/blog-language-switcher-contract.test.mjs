@@ -4,6 +4,7 @@ import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { getLocalizedPath } from '../src/lib/localizedRoutes.js';
+import { translatorPostSlugs } from './fixtures/blog-slugs.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -127,7 +128,7 @@ test('built article header only links to the public-picker locales, keeping DE/I
   for (const locale of ['en', 'fr']) {
     assert.match(
       html,
-      new RegExp(`href="/${locale}/blog/${spanishOnlySlug}"`),
+      new RegExp(`href="/${locale}/blog/${translatorPostSlugs[locale]}"`),
       `${locale} is a public-picker locale and its built article route should appear in the header`,
     );
   }
@@ -135,7 +136,7 @@ test('built article header only links to the public-picker locales, keeping DE/I
   for (const locale of ['de', 'it', 'ca']) {
     assert.doesNotMatch(
       html,
-      new RegExp(`href="/${locale}/blog/${spanishOnlySlug}"`),
+      new RegExp(`href="/${locale}/blog/${translatorPostSlugs[locale]}"`),
       `${locale} stays hidden from the public picker even though its fallback article route is built`,
     );
   }
