@@ -6,12 +6,11 @@ import react from '@astrojs/react';
 import tailwindcss from '@tailwindcss/vite';
 import { getBlogLastmodMap } from './src/lib/sitemapLastmod.mjs';
 
-const site = 'https://marttelier.com';
-const blogLastmod = getBlogLastmodMap(site);
+const blogLastmod = getBlogLastmodMap('https://marttelier.com');
 
 // https://astro.build/config
 export default defineConfig({
-  site,
+  site: 'https://marttelier.com',
   trailingSlash: 'never',
   image: {
     domains: ['img.youtube.com'],

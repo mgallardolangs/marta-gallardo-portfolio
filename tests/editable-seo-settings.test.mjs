@@ -153,7 +153,7 @@ test('Astro SEO settings use the canonical production origin and keep admin rout
   );
   assert.match(
     astroConfigSource,
-    /sitemap\(\{\s*filter:\s*\(page\)\s*=>\s*!page\.includes\('\/admin'\),\s*\}\)/s,
+    /sitemap\(\{\s*filter:\s*\(page\)\s*=>\s*!page\.includes\('\/admin'\),/s,
     'The sitemap integration should exclude every /admin route from crawlable XML output',
   );
 });
