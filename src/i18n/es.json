@@ -339,7 +339,8 @@
     "contentIndex": "Índice",
     "readTime": "de lectura",
     "nextStory": "Siguiente historia",
-    "end": "Fin del artículo"
+    "end": "Fin del artículo",
+    "relatedTitle": "Artículos relacionados"
   },
   "nav": {
     "home": "Inicio",

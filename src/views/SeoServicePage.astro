@@ -4,6 +4,7 @@ import GsapPageRuntime from '../components/GsapPageRuntime.astro';
 import RichText from '../components/RichText.astro';
 import ScrollReveal from '../components/ScrollReveal';
 import ServiceSwitcher from '../components/translation/ServiceSwitcher';
+import RelatedArticles from '../components/RelatedArticles.astro';
 import TypedTitle from '../components/TypedTitle.astro';
 import { getLangFromUrl, getLocalizedRoute, t } from '../i18n';
 import { getPageSeo, siteData } from '../lib/siteData';
@@ -191,5 +192,7 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'seo');
         </div>
       </div>
     </section>
+
+    <RelatedArticles lang={lang} routeKey="seo" />
   </div>
 </BaseLayout>

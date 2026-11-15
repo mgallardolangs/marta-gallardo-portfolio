@@ -1,0 +1,45 @@
+---
+import { getCollection } from 'astro:content';
+import { getLocalizedPath, t, type Lang } from '../i18n';
+import { getRelatedArticles } from '../lib/relatedArticles.js';
+
+interface Props {
+  lang: Lang;
+  routeKey: 'seo' | 'translation' | 'about';
+}
+
+const { lang, routeKey } = Astro.props;
+const i = t(lang);
+const posts = getRelatedArticles(await getCollection('blog'), routeKey, lang);
+---
+
+{posts.length > 0 && (
+  <section class="border-t border-ink/10 px-6 py-16 md:py-20" data-related-articles={routeKey}>
+    <div class="site-container space-y-10">
+      <div class="space-y-4">
+        <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel">{i.blog.eyebrow}</p>
+        <h2 class="font-heading text-4xl leading-none text-ink md:text-5xl">{i.blog.relatedTitle}</h2>
+      </div>
+      <div class="grid gap-6 md:grid-cols-2">
+        {posts.map((post) => {
+          const href = getLocalizedPath(`/blog/${post.data.slug}`, lang);
+          return (
+            <article class="group flex h-full flex-col gap-4 border-t border-ink/20 pt-5">
+              <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-muted">
+                {post.data.date.toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+              <a href={href} class="transition hover:text-hazel">
+                <h3 class="font-heading text-2xl leading-tight text-ink md:text-3xl">{post.data.title}</h3>
+              </a>
+              <p class="flex-1 font-body text-sm leading-7 text-ink-muted">{post.data.description}</p>
+              <a href={href} class="blog-read-more">
+                {i.blog.readMore}
+                <span class="blog-read-more__arrow" aria-hidden="true">→</span>
+              </a>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+)}
