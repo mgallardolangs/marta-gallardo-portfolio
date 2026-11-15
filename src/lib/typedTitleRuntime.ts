@@ -1,16 +1,21 @@
 export const ROOT_SELECTOR = '[data-typed-title]';
 export const VISUAL_SELECTOR = '[data-typed-title-visual]';
+/**
+ * Attribute the animation is typed into. The visual layer paints it with CSS generated
+ * content, so the typed letters never become text inside the heading: the heading keeps
+ * a single copy of its text, which is what search engines and screen readers read.
+ */
+export const TYPED_VISIBLE_ATTRIBUTE = 'data-typed-visible';
 
 export interface TypedTitleVisual {
-  textContent: string | null;
-  innerHTML?: string;
+  setAttribute(name: string, value: string): void;
 }
 
 export interface TypedTitleRoot {
   dataset: DOMStringMap & {
     typedText?: string;
-    typedHtml?: string;
     typedTrigger?: string;
+    typedTitleState?: string;
     typedTitleComplete?: string;
   };
   querySelector(selector: string): TypedTitleVisual | null;
@@ -71,28 +76,14 @@ export const destroyController = (root: TypedTitleRoot, state: TypedTitleState) 
   controller?.typed?.destroy();
   state.controllers.delete(root);
 
-  const text = root.dataset.typedText ?? '';
-  const visual = root.querySelector(VISUAL_SELECTOR);
-  if (visual) {
-    visual.textContent = text;
-  }
+  root.querySelector(VISUAL_SELECTOR)?.setAttribute(TYPED_VISIBLE_ATTRIBUTE, '');
+  delete root.dataset.typedTitleState;
   delete root.dataset.typedTitleComplete;
 };
 
-const showAccent = (root: TypedTitleRoot) => {
-  const html = root.dataset.typedHtml;
-  const visual = root.querySelector(VISUAL_SELECTOR);
-  if (html && visual) {
-    visual.innerHTML = html;
-  }
-};
-
-const finishStatic = (root: TypedTitleRoot) => {
-  const visual = root.querySelector(VISUAL_SELECTOR);
-  if (visual) {
-    visual.textContent = root.dataset.typedText ?? '';
-  }
-  showAccent(root);
+/** The heading's own text (with its accent word) shows again once typing is over. */
+const markComplete = (root: TypedTitleRoot) => {
+  delete root.dataset.typedTitleState;
   root.dataset.typedTitleComplete = 'true';
 };
 
@@ -108,19 +99,17 @@ const startTyped = (root: TypedTitleRoot, options: InitTypedTitleOptions) => {
   const trigger = root.dataset.typedTrigger === 'visible' ? 'visible' : 'load';
 
   if (!visual || !text) {
-    root.dataset.typedTitleComplete = 'true';
+    markComplete(root);
     return;
   }
 
-  visual.textContent = '';
+  visual.setAttribute(TYPED_VISIBLE_ATTRIBUTE, '');
+  root.dataset.typedTitleState = 'typing';
 
   const typed = options.createTyped(root, visual, {
     text,
     trigger,
-    onComplete: () => {
-      showAccent(root);
-      root.dataset.typedTitleComplete = 'true';
-    },
+    onComplete: () => markComplete(root),
   });
 
   options.state.controllers.set(root, { ...existing, typed });
@@ -132,7 +121,7 @@ const initTypedTitleRoot = (root: TypedTitleRoot, options: InitTypedTitleOptions
   }
 
   if (options.mediaMatches) {
-    finishStatic(root);
+    markComplete(root);
     return;
   }
 

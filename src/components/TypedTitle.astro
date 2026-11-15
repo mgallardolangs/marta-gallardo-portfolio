@@ -16,14 +16,21 @@ const Tag = as;
 const accentMarkup = accentHtml(text, accent);
 ---
 
-<Tag class={className} data-typed-title data-typed-trigger={trigger} data-typed-text={text} data-typed-html={accentMarkup}>
-  <span class="sr-only">{text}</span>
-  <span class="typed-title" aria-hidden="true">
+<!--
+  The heading holds its text exactly once: the reserve span. Search engines and screen
+  readers read that copy. The typing animation is painted from an attribute through
+  CSS generated content (::before), and so is the cursor, so neither adds text to the
+  heading. While typing, the reserve stays in place (it sizes the grid cell) but is
+  painted transparent; before the script runs, without JavaScript, under reduced motion
+  and once typing ends, the reserve is what shows, accent word included.
+-->
+<Tag class={className} data-typed-title data-typed-trigger={trigger} data-typed-text={text}>
+  <span class="typed-title">
     {accentMarkup
       ? <span class="typed-title__reserve" set:html={accentMarkup} />
       : <span class="typed-title__reserve">{text}</span>}
-    <span class="typed-title__visual" data-typed-title-visual>{text}</span>
-    <span class="typed-title__cursor" aria-hidden="true">_</span>
+    <span class="typed-title__visual" data-typed-title-visual data-typed-visible="" aria-hidden="true"></span>
+    <span class="typed-title__cursor" aria-hidden="true"></span>
   </span>
 </Tag>
 
@@ -40,13 +47,26 @@ const accentMarkup = accentHtml(text, accent);
     white-space: pre-wrap;
   }
 
-  .typed-title__reserve {
-    visibility: hidden;
-    pointer-events: none;
+  .typed-title__visual {
+    display: none;
+    min-width: 1ch;
   }
 
-  .typed-title__visual {
-    min-width: 1ch;
+  .typed-title__visual::before {
+    content: attr(data-typed-visible);
+  }
+
+  [data-typed-title-state='typing'] .typed-title__visual {
+    display: block;
+  }
+
+  [data-typed-title-state='typing'] .typed-title__reserve,
+  [data-typed-title-state='typing'] .typed-title__reserve :global(*) {
+    color: transparent;
+  }
+
+  .typed-title__cursor::before {
+    content: '_';
   }
 
   .typed-title__cursor {
@@ -75,6 +95,7 @@ const accentMarkup = accentHtml(text, accent);
 <script>
   import Typed from 'typed.js';
   import {
+    TYPED_VISIBLE_ATTRIBUTE,
     createTypedTitleState,
     initAllTypedTitles,
     resetAllTypedTitles,
@@ -100,6 +121,7 @@ const accentMarkup = accentHtml(text, accent);
         new Typed(element as Element, {
           strings: [text],
           contentType: 'null',
+          attr: TYPED_VISIBLE_ATTRIBUTE,
           typeSpeed: trigger === 'visible' ? 32 : 42,
           startDelay: trigger === 'visible' ? 0 : 160,
           autoInsertCss: false,
