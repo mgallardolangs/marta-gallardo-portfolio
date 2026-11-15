@@ -129,7 +129,8 @@ test('TypedTitle keeps the underscore cursor as component-owned markup instead o
     readSource('src/styles/global.css'),
   ]);
 
-  assert.match(typedTitleSource, /<span class="typed-title__cursor" aria-hidden="true">_<\/span>/);
+  assert.match(typedTitleSource, /<span class="typed-title__cursor" aria-hidden="true"><\/span>/);
+  assert.match(typedTitleSource, /\.typed-title__cursor::before\s*\{\s*content:\s*'_';\s*\}/);
   assert.match(typedTitleSource, /showCursor:\s*false/);
   assert.doesNotMatch(typedTitleSource, /cursorChar:/);
   assert.match(
