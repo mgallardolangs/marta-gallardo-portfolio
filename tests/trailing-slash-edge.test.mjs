@@ -11,7 +11,7 @@ test('trailing-slash edge function 301-redirects slashed paths to the canonical 
     ['/fr/contact/', '/fr/contact'],
     ['/servicios/seo/', '/servicios/seo'],
     ['/en/blog/', '/en/blog'],
-    ['/de/blog/internationale-seo-mehr-als-nur-uebersetzung-ihrer-website/', '/de/blog/internationale-seo-mehr-als-nur-uebersetzung-ihrer-website'],
+    ['/en/blog/international-seo-beyond-translating-your-website/', '/en/blog/international-seo-beyond-translating-your-website'],
     ['/fr//', '/fr'],
     ['/en/blog/?page=2', '/en/blog?page=2'],
   ]) {
@@ -25,7 +25,12 @@ test('trailing-slash edge function 301-redirects slashed paths to the canonical 
 test('trailing-slash edge function sends slashed legacy URLs straight to their final URL in one hop', async () => {
   for (const [from, to] of [
     ['/en/ugc/', '/en/services/ugc'],
-    ['/de/ugc/', '/de/dienstleistungen/ugc'],
+    ['/de/ugc/', '/en/services/ugc'],
+    ['/de/', '/en'],
+    ['/ca/', '/'],
+    ['/it/servizi/seo/', '/en/services/seo'],
+    ['/de/blog/internationale-seo-mehr-als-nur-uebersetzung-ihrer-website/', '/en/blog/international-seo-beyond-translating-your-website'],
+    ['/ca/blog/de-traductora-a-especialista-seo/', '/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones'],
     ['/translation-seo/', '/servicios/seo'],
     ['/contact/', '/contacto'],
     ['/fr/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones/', '/fr/blog/de-traductrice-a-specialiste-seo'],

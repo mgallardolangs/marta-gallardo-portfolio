@@ -8,6 +8,7 @@ import ca from './ca.json';
 import {
   getLocalizedPath,
   getLocalizedRoute,
+  publishedLocales,
   resolvePublicRouteKey,
   stripLocaleFromPath,
 } from '../lib/localizedRoutes.js';
@@ -16,7 +17,8 @@ export const languages = { es, en, fr, de, it, ca } as const;
 export type Lang = keyof typeof languages;
 export const defaultLang: Lang = 'es';
 export const langNames: Record<Lang, string> = { es: 'ES', en: 'EN', fr: 'FR', de: 'DE', it: 'IT', ca: 'CA' };
-export const visibleLangs: Lang[] = ['es', 'en', 'fr', 'de', 'it', 'ca'];
+/** Published locales only: hreflang and alternate links never point at an unpublished one. */
+export const visibleLangs: Lang[] = publishedLocales as Lang[];
 export { getLocalizedPath, getLocalizedRoute, resolvePublicRouteKey, stripLocaleFromPath };
 
 export function t(lang: Lang = defaultLang) {

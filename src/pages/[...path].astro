@@ -4,7 +4,7 @@ import SeoServicePage from '../views/SeoServicePage.astro';
 import TranslationServicePage from '../views/TranslationServicePage.astro';
 import UgcPage from '../views/UgcPage.astro';
 import LegalPage from '../views/LegalPage.astro';
-import { localizedRoutes } from '../lib/localizedRoutes.js';
+import { isPublishedLocale, localizedRoutes } from '../lib/localizedRoutes.js';
 
 const pageViews = {
   about: AboutPage,
@@ -19,10 +19,12 @@ const pageViews = {
 export function getStaticPaths() {
   const routeKeys = ['about', 'seo', 'translation', 'ugc', 'privacy', 'cookies', 'legalNotice'] as const;
   return routeKeys.flatMap((routeKey) => (
-    Object.values(localizedRoutes[routeKey]).map((routePath) => ({
-      params: { path: routePath.replace(/^\/+/, '') },
-      props: { routeKey },
-    }))
+    Object.entries(localizedRoutes[routeKey])
+      .filter(([locale]) => isPublishedLocale(locale))
+      .map(([, routePath]) => ({
+        params: { path: routePath.replace(/^\/+/, '') },
+        props: { routeKey },
+      }))
   ));
 }
 

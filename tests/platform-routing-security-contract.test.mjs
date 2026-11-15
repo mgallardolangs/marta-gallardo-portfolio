@@ -27,7 +27,7 @@ test('Netlify serves unknown paths as 404s and retains only the approved www red
   const hostRules = redirectRules.filter((rule) => /from\s*=\s*"https?:/.test(rule));
   assert.equal(hostRules.length, 1, 'only the www host redirect should match on host');
   assert.ok(
-    redirectRules.filter((rule) => !hostRules.includes(rule)).every((rule) => /from\s*=\s*"\/[^"*:]+"\s*to\s*=\s*"\/[^"]+"\s*status\s*=\s*301/.test(rule)),
+    redirectRules.filter((rule) => !hostRules.includes(rule)).every((rule) => /from\s*=\s*"\/[^"*:]+"\s*to\s*=\s*"\/[^"]*"\s*status\s*=\s*301/.test(rule)),
     'every other redirect should be an exact legacy path with a permanent 301',
   );
   assert.match(redirectRules[0], /from\s*=\s*"https:\/\/www\.marttelier\.com\/\*"/);

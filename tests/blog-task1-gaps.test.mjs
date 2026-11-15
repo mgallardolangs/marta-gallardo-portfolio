@@ -10,9 +10,9 @@ const articlePagesByLocale = {
   es: 'src/pages/blog/[slug].astro',
   en: 'src/pages/en/blog/[slug].astro',
   fr: 'src/pages/fr/blog/[slug].astro',
-  de: 'src/pages/de/blog/[slug].astro',
-  it: 'src/pages/it/blog/[slug].astro',
-  ca: 'src/pages/ca/blog/[slug].astro',
+  de: 'src/pages/_de/blog/[slug].astro',
+  it: 'src/pages/_it/blog/[slug].astro',
+  ca: 'src/pages/_ca/blog/[slug].astro',
 };
 
 async function readSource(relativePath) {

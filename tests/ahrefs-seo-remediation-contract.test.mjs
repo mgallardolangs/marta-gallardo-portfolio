@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isPublishedLocale, publishedLocales } from '../src/lib/localizedRoutes.js';
 import { translatorPostSlugs } from './fixtures/blog-slugs.mjs';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -12,9 +13,9 @@ const homeRoutes = {
   es: 'src/pages/index.astro',
   en: 'src/pages/en/index.astro',
   fr: 'src/pages/fr/index.astro',
-  de: 'src/pages/de/index.astro',
-  it: 'src/pages/it/index.astro',
-  ca: 'src/pages/ca/index.astro',
+  de: 'src/pages/_de/index.astro',
+  it: 'src/pages/_it/index.astro',
+  ca: 'src/pages/_ca/index.astro',
 };
 
 test('every localized homepage passes its locale explicitly to HomePage', async () => {
@@ -89,7 +90,7 @@ test('Ahrefs-flagged page descriptions and titles stay concise', async () => {
 
   assert.ok(site.seo.translation.title.de.length <= 60, 'German translation title should be at most 60 characters');
 
-  for (const locale of locales) {
+  for (const locale of locales.filter(isPublishedLocale)) {
     const source = await readFile(
       path.join(rootDir, 'src/content/blog', articleSlug, `${locale}.md`),
       'utf8',
@@ -111,7 +112,7 @@ test('CHECK_DIST: localized homepages render their locale and copy in the genera
   }
 
   const site = await readJson('src/data/site.json');
-  for (const locale of locales) {
+  for (const locale of locales.filter(isPublishedLocale)) {
     const relativePath = locale === 'es' ? 'dist/index.html' : `dist/${locale}.html`;
     const html = await readFile(path.join(rootDir, relativePath), 'utf8');
     const dictionary = await readJson(`src/i18n/${locale}.json`);
@@ -139,7 +140,7 @@ test('CHECK_DIST: targeted SEO titles and descriptions render the concise source
   const site = await readJson('src/data/site.json');
   const expectedPages = [];
 
-  for (const locale of locales) {
+  for (const locale of locales.filter(isPublishedLocale)) {
     const dictionary = await readJson(`src/i18n/${locale}.json`);
     const blogPath = locale === 'es' ? 'dist/blog.html' : `dist/${locale}/blog.html`;
     expectedPages.push({
@@ -188,7 +189,7 @@ test('CHECK_DIST: targeted SEO titles and descriptions render the concise source
     },
   );
 
-  for (const locale of locales) {
+  for (const locale of locales.filter(isPublishedLocale)) {
     const source = await readFile(
       path.join(rootDir, 'src/content/blog', articleSlug, `${locale}.md`),
       'utf8',
@@ -204,7 +205,9 @@ test('CHECK_DIST: targeted SEO titles and descriptions render the concise source
     });
   }
 
-  for (const expected of expectedPages) {
+  // German, Italian and Catalan pages are not built (they redirect), so only published pages are checked.
+  const builtPages = expectedPages.filter(({ path: distPath }) => !/^dist\/(de|it|ca)[/.]/.test(distPath));
+  for (const expected of builtPages) {
     const html = await readFile(path.join(rootDir, expected.path), 'utf8');
     const title = html.match(/<title>(.*?)<\/title>/s)?.[1];
     const description = html.match(/<meta name="description" content="([^"]*)"/)?.[1];

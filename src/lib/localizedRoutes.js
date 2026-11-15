@@ -83,6 +83,18 @@ export const localizedRoutes = {
 
 const locales = ['es', 'en', 'fr', 'de', 'it', 'ca'];
 const routeKeys = Object.keys(localizedRoutes);
+
+/**
+ * Locales the public site builds, links, lists in hreflang and in the sitemap.
+ * German, Italian and Catalan keep their routes and translations in the repo but are
+ * not published until they can be maintained (decision of 15/11/2026). Each of their
+ * URLs redirects (301) to the same page in the fallback locale below.
+ * To publish one again: add it here, rename src/pages/_<locale> back to src/pages/<locale>
+ * and its redirects disappear from src/lib/legacyRedirects.js on their own.
+ */
+export const publishedLocales = ['es', 'en', 'fr'];
+export const unpublishedLocaleFallback = { de: 'en', it: 'en', ca: 'es' };
+export const isPublishedLocale = (locale) => publishedLocales.includes(locale);
 const routeAliases = new Map([
   ['/ugc', 'ugc'],
   ['/contact', 'contact'],

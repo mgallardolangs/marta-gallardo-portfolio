@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { isPublishedLocale, publishedLocales } from '../src/lib/localizedRoutes.js';
 import { translatorPostSlugs } from './fixtures/blog-slugs.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -13,9 +14,9 @@ const articlePagesByLocale = {
   es: 'src/pages/blog/[slug].astro',
   en: 'src/pages/en/blog/[slug].astro',
   fr: 'src/pages/fr/blog/[slug].astro',
-  de: 'src/pages/de/blog/[slug].astro',
-  it: 'src/pages/it/blog/[slug].astro',
-  ca: 'src/pages/ca/blog/[slug].astro',
+  de: 'src/pages/_de/blog/[slug].astro',
+  it: 'src/pages/_it/blog/[slug].astro',
+  ca: 'src/pages/_ca/blog/[slug].astro',
 };
 const migratedPostSlug = 'de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones';
 
@@ -217,29 +218,35 @@ test('blog index and localized slug pages stay wired to exact locale scoping', a
   }
 });
 
-test('build emits all six locale routes for the existing localized article', async (t) => {
+test('build emits the published locale routes for the existing localized article and no unpublished ones', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built blog paths.');
     return;
   }
 
   await Promise.all(
-    locales.map((locale) => access(distBlogPostPath(locale, translatorPostSlugs[locale]))),
+    locales.filter(isPublishedLocale).map((locale) => access(distBlogPostPath(locale, translatorPostSlugs[locale]))),
   );
+  for (const locale of locales.filter((locale) => !isPublishedLocale(locale))) {
+    await assert.rejects(access(distBlogPostPath(locale, translatorPostSlugs[locale])), `${locale} article should not be built`);
+  }
 });
 
-test('all five non-ES localized blog index routes build', async (t) => {
+test('the published non-ES blog index routes build and the unpublished ones do not', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built localized blog index routes.');
     return;
   }
 
   await Promise.all(
-    nonSpanishLocales.map((locale) => access(path.join(rootDir, 'dist', locale, 'blog.html'))),
+    nonSpanishLocales.filter(isPublishedLocale).map((locale) => access(path.join(rootDir, 'dist', locale, 'blog.html'))),
   );
+  for (const locale of nonSpanishLocales.filter((locale) => !isPublishedLocale(locale))) {
+    await assert.rejects(access(path.join(rootDir, 'dist', locale, 'blog.html')), `${locale} blog index should not be built`);
+  }
 });
 
-test('built localized article advertises all six built locale alternates', async (t) => {
+test('built localized article advertises the published locale alternates', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built blog SEO alternates.');
     return;
@@ -255,11 +262,8 @@ test('built localized article advertises all six built locale alternates', async
       { hreflang: 'es', href: `https://marttelier.com/blog/${migratedPostSlug}` },
       { hreflang: 'en', href: `https://marttelier.com/en/blog/${translatorPostSlugs.en}` },
       { hreflang: 'fr', href: `https://marttelier.com/fr/blog/${translatorPostSlugs.fr}` },
-      { hreflang: 'de', href: `https://marttelier.com/de/blog/${translatorPostSlugs.de}` },
-      { hreflang: 'it', href: `https://marttelier.com/it/blog/${translatorPostSlugs.it}` },
-      { hreflang: 'ca', href: `https://marttelier.com/ca/blog/${translatorPostSlugs.ca}` },
       { hreflang: 'x-default', href: `https://marttelier.com/blog/${migratedPostSlug}` },
     ],
-    'every locale Markdown sibling should advertise its own translated public slug',
+    'every published locale sibling should advertise its own translated public slug',
   );
 });
