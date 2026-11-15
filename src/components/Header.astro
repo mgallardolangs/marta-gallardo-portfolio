@@ -1,6 +1,7 @@
 ---
 import { getLocalizedPath, getLocalizedRoute, langNames, resolvePublicRouteKey, t, type Lang } from '../i18n';
 import { resolveHeaderLanguageLinks } from '../lib/headerLanguageLinks';
+import { isPublishedLocale } from '../lib/localizedRoutes.js';
 import { getPublicLanguagePicker, siteData } from '../lib/siteData';
 import AdminTextMirror from './admin/AdminTextMirror';
 
@@ -16,7 +17,11 @@ const pathname = Astro.url.pathname;
 const currentRoute = resolvePublicRouteKey(pathname);
 const adminPath = pathname.replace(/^\/admin(?=\/|$)/, '') || '/';
 const navPath = (path: string) => (adminMode ? `/admin${path === '/' ? '' : path}` : getLocalizedPath(path, lang));
-const publicLanguagePicker = getPublicLanguagePicker(siteData);
+// The admin may tick any locale in the picker, but the public header only links
+// published ones: the others are not built and redirect elsewhere.
+const publicLanguagePicker = adminMode
+  ? getPublicLanguagePicker(siteData)
+  : getPublicLanguagePicker(siteData).filter(isPublishedLocale);
 const languagePickerPath = currentRoute ? pathname : getLocalizedRoute('home', lang);
 const availableLanguages = resolveHeaderLanguageLinks({
   path: languagePickerPath,

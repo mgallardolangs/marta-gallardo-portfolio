@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isPublishedLocale, publishedLocales } from '../src/lib/localizedRoutes.js';
 
 import { getTranslationArsenalColumns } from '../src/lib/translationPage.js';
 import { createEditableCollectionItem } from '../src/lib/adminCollections.ts';
@@ -288,7 +289,7 @@ test('public Translation hero keeps the contact link compact while its underline
     return;
   }
 
-  for (const locale of locales) {
+  for (const locale of locales.filter(isPublishedLocale)) {
     const relativePath = {
       es: 'dist/servicios/traduccion.html',
       en: 'dist/en/services/translation.html',
@@ -393,7 +394,7 @@ test('About reuses the trajectory tabs without rendering the parked profile labe
     return;
   }
 
-  for (const locale of locales) {
+  for (const locale of locales.filter(isPublishedLocale)) {
     const relativePath = {
       es: 'dist/sobre-mi.html',
       en: 'dist/en/about.html',

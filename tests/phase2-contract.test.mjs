@@ -12,21 +12,21 @@ const wrapperSpecs = [
   ['src/pages/index.astro', '../views/HomePage.astro', 'HomePage', 'lang="es"'],
   ['src/pages/en/index.astro', '../../views/HomePage.astro', 'HomePage', 'lang="en"'],
   ['src/pages/fr/index.astro', '../../views/HomePage.astro', 'HomePage', 'lang="fr"'],
-  ['src/pages/de/index.astro', '../../views/HomePage.astro', 'HomePage', 'lang="de"'],
-  ['src/pages/it/index.astro', '../../views/HomePage.astro', 'HomePage', 'lang="it"'],
-  ['src/pages/ca/index.astro', '../../views/HomePage.astro', 'HomePage', 'lang="ca"'],
+  ['src/pages/_de/index.astro', '../../views/HomePage.astro', 'HomePage', 'lang="de"'],
+  ['src/pages/_it/index.astro', '../../views/HomePage.astro', 'HomePage', 'lang="it"'],
+  ['src/pages/_ca/index.astro', '../../views/HomePage.astro', 'HomePage', 'lang="ca"'],
   ['src/pages/contacto.astro', '../views/ContactPage.astro', 'ContactPage'],
   ['src/pages/en/contact.astro', '../../views/ContactPage.astro', 'ContactPage'],
   ['src/pages/fr/contact.astro', '../../views/ContactPage.astro', 'ContactPage'],
-  ['src/pages/de/contact.astro', '../../views/ContactPage.astro', 'ContactPage'],
-  ['src/pages/it/contact.astro', '../../views/ContactPage.astro', 'ContactPage'],
-  ['src/pages/ca/contact.astro', '../../views/ContactPage.astro', 'ContactPage'],
+  ['src/pages/_de/contact.astro', '../../views/ContactPage.astro', 'ContactPage'],
+  ['src/pages/_it/contact.astro', '../../views/ContactPage.astro', 'ContactPage'],
+  ['src/pages/_ca/contact.astro', '../../views/ContactPage.astro', 'ContactPage'],
   ['src/pages/blog/index.astro', '../../views/BlogIndexPage.astro', 'BlogIndexPage'],
   ['src/pages/en/blog/index.astro', '../../../views/BlogIndexPage.astro', 'BlogIndexPage'],
   ['src/pages/fr/blog/index.astro', '../../../views/BlogIndexPage.astro', 'BlogIndexPage'],
-  ['src/pages/de/blog/index.astro', '../../../views/BlogIndexPage.astro', 'BlogIndexPage'],
-  ['src/pages/it/blog/index.astro', '../../../views/BlogIndexPage.astro', 'BlogIndexPage'],
-  ['src/pages/ca/blog/index.astro', '../../../views/BlogIndexPage.astro', 'BlogIndexPage'],
+  ['src/pages/_de/blog/index.astro', '../../../views/BlogIndexPage.astro', 'BlogIndexPage'],
+  ['src/pages/_it/blog/index.astro', '../../../views/BlogIndexPage.astro', 'BlogIndexPage'],
+  ['src/pages/_ca/blog/index.astro', '../../../views/BlogIndexPage.astro', 'BlogIndexPage'],
 ];
 
 const sharedViews = [
@@ -53,9 +53,9 @@ const articlePages = [
   'src/pages/blog/[slug].astro',
   'src/pages/en/blog/[slug].astro',
   'src/pages/fr/blog/[slug].astro',
-  'src/pages/de/blog/[slug].astro',
-  'src/pages/it/blog/[slug].astro',
-  'src/pages/ca/blog/[slug].astro',
+  'src/pages/_de/blog/[slug].astro',
+  'src/pages/_it/blog/[slug].astro',
+  'src/pages/_ca/blog/[slug].astro',
 ];
 
 const noSpacerShells = [

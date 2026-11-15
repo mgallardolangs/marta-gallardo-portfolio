@@ -290,21 +290,12 @@ test('built HTML pages keep the GSAP page marker scoped to Home and service rout
     'dist/index.html',
     'dist/en.html',
     'dist/fr.html',
-    'dist/de.html',
-    'dist/it.html',
-    'dist/ca.html',
     'dist/servicios/seo.html',
     'dist/en/services/seo.html',
     'dist/fr/services/seo.html',
-    'dist/de/dienstleistungen/seo.html',
-    'dist/it/servizi/seo.html',
-    'dist/ca/serveis/seo.html',
     'dist/servicios/traduccion.html',
     'dist/en/services/translation.html',
     'dist/fr/services/traduction.html',
-    'dist/de/dienstleistungen/uebersetzung.html',
-    'dist/it/servizi/traduzione.html',
-    'dist/ca/serveis/traduccio.html',
   ]);
 
   for (const htmlFile of htmlFiles) {

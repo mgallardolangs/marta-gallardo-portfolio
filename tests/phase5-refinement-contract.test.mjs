@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { access, readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { isPublishedLocale, publishedLocales } from '../src/lib/localizedRoutes.js';
 import { translatorPostSlugs } from './fixtures/blog-slugs.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -172,7 +173,7 @@ test('navigation exposes all six locales and header source restores focus when m
     readSource('src/i18n/index.ts'),
   ]);
 
-  assert.match(i18nSource, /export const visibleLangs: Lang\[] = \['es', 'en', 'fr', 'de', 'it', 'ca'\];/);
+  assert.match(i18nSource, /export const visibleLangs: Lang\[] = publishedLocales as Lang\[];/, 'hreflang and alternate links only list published locales');
   assert.match(
     headerSource,
     /import\s+\{\s*closeActiveHeaderOverlay,\s*createHeaderOverlayState,\s*getFocusTrapTarget,\s*toggleLanguageMenu,\s*toggleMobileMenu\s*\}\s+from\s+['"]\.\.\/lib\/headerOverlayState\.js['"];/,
@@ -401,7 +402,7 @@ test('built public and admin HTML keep SEO/noindex classes, local media referenc
       assert.match(html, /<link rel="canonical" href="https:\/\/marttelier\.com/);
       assert.match(html, /<link rel="alternate" hreflang="x-default"/);
       if (!isBlogDetailRoute(routePath)) {
-        assert.equal(alternateLinks.length, 7, `${routePath} should keep all locale alternates plus x-default`);
+        assert.equal(alternateLinks.length, publishedLocales.length + 1, `${routePath} should list the published locale alternates plus x-default`);
       }
       assert.doesNotMatch(html, /noindex/);
       assert.equal(
@@ -460,9 +461,14 @@ test('built public and admin HTML keep SEO/noindex classes, local media referenc
   assert.ok(sitemapRoutePaths.has(articleSlug), 'sitemap should include the built Spanish article route');
   assert.ok(!sitemapRoutePaths.has('/admin/blog/new'), 'sitemap should exclude the inline admin new-post route');
   for (const locale of ['en', 'fr', 'de', 'it', 'ca']) {
-    assert.ok(
-      sitemapRoutePaths.has(`/${locale}/blog/${translatorPostSlugs[locale]}`),
-      `sitemap should include the built ${locale} article route at its translated slug`,
-    );
+    const articleRoute = `/${locale}/blog/${translatorPostSlugs[locale]}`;
+    if (isPublishedLocale(locale)) {
+      assert.ok(sitemapRoutePaths.has(articleRoute), `sitemap should include the built ${locale} article route at its translated slug`);
+    } else {
+      assert.ok(!sitemapRoutePaths.has(articleRoute), `${locale} is not published, so its article must stay out of the sitemap`);
+    }
+  }
+  for (const routePath of sitemapRoutePaths) {
+    assert.doesNotMatch(routePath, /^\/(de|it|ca)(\/|$)/, `${routePath} belongs to an unpublished locale and must not be in the sitemap`);
   }
 });

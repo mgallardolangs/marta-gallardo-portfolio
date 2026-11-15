@@ -54,8 +54,8 @@ test('site data defaults the public picker to ES EN FR while SEO keeps all six l
   assert.doesNotMatch(headerSource, /import\s+\{[^}]*\bvisibleLangs\b[^}]*\}\s+from\s+['"]\.\.\/i18n['"]/, 'Header should not import the public picker directly from src/i18n visibleLangs');
   assert.match(headerSource, /\bgetPublicLanguagePicker\b/, 'Header should derive public picker locales from site data');
   assert.match(headerSource, /visibleLangs:\s*publicLanguagePicker/, 'Header should pass the site-managed public picker into the shared resolver');
-  assert.match(seoHeadSource, /\bvisibleLangs\b/, 'SeoHead should keep all six locales for hreflang generation');
-  assert.match(i18nSource, /export const visibleLangs: Lang\[] = \['es', 'en', 'fr', 'de', 'it', 'ca'\];/);
+  assert.match(seoHeadSource, /\bvisibleLangs\b/, 'SeoHead should build hreflang from the published locales');
+  assert.match(i18nSource, /export const visibleLangs: Lang\[] = publishedLocales as Lang\[];/, 'hreflang and alternate links only list published locales');
 });
 
 test('header language helper filters mapped article locales and preserves normal page fallbacks', async () => {
@@ -137,12 +137,12 @@ test('built article header only links to the public-picker locales, keeping DE/I
     assert.doesNotMatch(
       html,
       new RegExp(`href="/${locale}/blog/${translatorPostSlugs[locale]}"`),
-      `${locale} stays hidden from the public picker even though its fallback article route is built`,
+      `${locale} is not published and must not appear in the header`,
     );
   }
 });
 
-test('built home header exposes only the public picker while DE IT CA routes and hreflang stay built', async (t) => {
+test('built home header exposes only the public picker and DE IT CA are neither built nor in hreflang', async (t) => {
   if (process.env.CHECK_DIST !== '1') {
     t.skip('Set CHECK_DIST=1 after npm run build to verify built home language switcher links.');
     return;
@@ -160,17 +160,17 @@ test('built home header exposes only the public picker while DE IT CA routes and
   for (const hiddenLocale of ['de', 'it', 'ca']) {
     assert.ok(!desktopPickerHrefs.includes(`/${hiddenLocale}`), `${hiddenLocale} should stay hidden from the desktop public picker until re-enabled`);
     assert.ok(!mobilePickerHrefs.includes(`/${hiddenLocale}`), `${hiddenLocale} should stay hidden from the mobile public picker until re-enabled`);
-    assert.match(
+    assert.doesNotMatch(
       html,
-      new RegExp(`<link rel="alternate" hreflang="${hiddenLocale}" href="https://marttelier\\.com/${hiddenLocale}"`),
-      `${hiddenLocale} hreflang should remain available for SEO`,
+      new RegExp(`<link rel="alternate" hreflang="${hiddenLocale}"`),
+      `${hiddenLocale} is not published, so hreflang must not point at it`,
     );
-    await access(path.join(rootDir, 'dist', `${hiddenLocale}.html`));
+    await assert.rejects(access(path.join(rootDir, 'dist', `${hiddenLocale}.html`)), `${hiddenLocale} home should not be built`);
   }
 
   assert.equal(
     countMatches(html, /<link rel="alternate" hreflang="(?:es|en|fr|de|it|ca|x-default)"/g),
-    seoLangs.length + 1,
-    'home SEO alternates should still include all six locales plus x-default',
+    publicPickerLangs.length + 1,
+    'home SEO alternates list the published locales plus x-default',
   );
 });

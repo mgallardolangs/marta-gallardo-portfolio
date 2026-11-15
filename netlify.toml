@@ -11,7 +11,16 @@
   status = 301
   force = true
 
-# Old URLs from before the localized service routes (Nov 2026). Permanent, no chains.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Strict-Transport-Security = "max-age=31536000"
+    X-Frame-Options = "DENY"
+    Content-Security-Policy-Report-Only = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://identity.netlify.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com https://www.instagram.com https://www.canva.com"
+
+# URLs that no longer serve a page -> the page that replaces them, in one hop.
+# Generated from src/lib/legacyRedirects.js (old service URLs, old blog slugs and the
+# unpublished de/it/ca pages); tests/legacy-redirects.test.mjs keeps both in sync.
 [[redirects]]
   from = "/ugc"
   to = "/servicios/ugc"
@@ -49,42 +58,34 @@
 
 [[redirects]]
   from = "/de/ugc"
-  to = "/de/dienstleistungen/ugc"
+  to = "/en/services/ugc"
   status = 301
 
 [[redirects]]
   from = "/de/translation-seo"
-  to = "/de/dienstleistungen/seo"
+  to = "/en/services/seo"
   status = 301
 
 [[redirects]]
   from = "/it/ugc"
-  to = "/it/servizi/ugc"
+  to = "/en/services/ugc"
   status = 301
 
 [[redirects]]
   from = "/it/translation-seo"
-  to = "/it/servizi/seo"
+  to = "/en/services/seo"
   status = 301
 
 [[redirects]]
   from = "/ca/ugc"
-  to = "/ca/serveis/ugc"
+  to = "/servicios/ugc"
   status = 301
 
 [[redirects]]
   from = "/ca/translation-seo"
-  to = "/ca/serveis/seo"
+  to = "/servicios/seo"
   status = 301
 
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Strict-Transport-Security = "max-age=31536000"
-    X-Frame-Options = "DENY"
-    Content-Security-Policy-Report-Only = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://identity.netlify.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https:; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com https://www.instagram.com https://www.canva.com"
-
-# Blog posts: old Spanish slugs in other languages -> translated slugs (SEO review 11/11/2026)
 [[redirects]]
   from = "/en/blog/seo-internacional-mas-alla-de-traducir-tu-web"
   to = "/en/blog/international-seo-beyond-translating-your-website"
@@ -97,17 +98,17 @@
 
 [[redirects]]
   from = "/de/blog/seo-internacional-mas-alla-de-traducir-tu-web"
-  to = "/de/blog/internationale-seo-mehr-als-nur-uebersetzung-ihrer-website"
+  to = "/en/blog/international-seo-beyond-translating-your-website"
   status = 301
 
 [[redirects]]
   from = "/it/blog/seo-internacional-mas-alla-de-traducir-tu-web"
-  to = "/it/blog/seo-internazionale-oltre-la-traduzione-del-tuo-sito"
+  to = "/en/blog/international-seo-beyond-translating-your-website"
   status = 301
 
 [[redirects]]
   from = "/ca/blog/seo-internacional-mas-alla-de-traducir-tu-web"
-  to = "/ca/blog/seo-internacional-mes-enlla-de-traduir-el-teu-web"
+  to = "/blog/seo-internacional-mas-alla-de-traducir-tu-web"
   status = 301
 
 [[redirects]]
@@ -122,15 +123,195 @@
 
 [[redirects]]
   from = "/de/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
-  to = "/de/blog/von-der-uebersetzerin-zur-seo-spezialistin"
+  to = "/en/blog/from-translator-to-seo-specialist"
   status = 301
 
 [[redirects]]
   from = "/it/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
-  to = "/it/blog/da-traduttrice-a-specialista-seo"
+  to = "/en/blog/from-translator-to-seo-specialist"
   status = 301
 
 [[redirects]]
   from = "/ca/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
-  to = "/ca/blog/de-traductora-a-especialista-seo"
+  to = "/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
+  status = 301
+
+[[redirects]]
+  from = "/de"
+  to = "/en"
+  status = 301
+
+[[redirects]]
+  from = "/de/ueber-mich"
+  to = "/en/about"
+  status = 301
+
+[[redirects]]
+  from = "/de/dienstleistungen/seo"
+  to = "/en/services/seo"
+  status = 301
+
+[[redirects]]
+  from = "/de/dienstleistungen/uebersetzung"
+  to = "/en/services/translation"
+  status = 301
+
+[[redirects]]
+  from = "/de/dienstleistungen/ugc"
+  to = "/en/services/ugc"
+  status = 301
+
+[[redirects]]
+  from = "/de/blog"
+  to = "/en/blog"
+  status = 301
+
+[[redirects]]
+  from = "/de/contact"
+  to = "/en/contact"
+  status = 301
+
+[[redirects]]
+  from = "/de/datenschutz"
+  to = "/en/privacy-policy"
+  status = 301
+
+[[redirects]]
+  from = "/de/cookie-richtlinie"
+  to = "/en/cookie-policy"
+  status = 301
+
+[[redirects]]
+  from = "/de/impressum"
+  to = "/en/legal-notice"
+  status = 301
+
+[[redirects]]
+  from = "/de/blog/internationale-seo-mehr-als-nur-uebersetzung-ihrer-website"
+  to = "/en/blog/international-seo-beyond-translating-your-website"
+  status = 301
+
+[[redirects]]
+  from = "/de/blog/von-der-uebersetzerin-zur-seo-spezialistin"
+  to = "/en/blog/from-translator-to-seo-specialist"
+  status = 301
+
+[[redirects]]
+  from = "/it"
+  to = "/en"
+  status = 301
+
+[[redirects]]
+  from = "/it/chi-sono"
+  to = "/en/about"
+  status = 301
+
+[[redirects]]
+  from = "/it/servizi/seo"
+  to = "/en/services/seo"
+  status = 301
+
+[[redirects]]
+  from = "/it/servizi/traduzione"
+  to = "/en/services/translation"
+  status = 301
+
+[[redirects]]
+  from = "/it/servizi/ugc"
+  to = "/en/services/ugc"
+  status = 301
+
+[[redirects]]
+  from = "/it/blog"
+  to = "/en/blog"
+  status = 301
+
+[[redirects]]
+  from = "/it/contact"
+  to = "/en/contact"
+  status = 301
+
+[[redirects]]
+  from = "/it/privacy-policy"
+  to = "/en/privacy-policy"
+  status = 301
+
+[[redirects]]
+  from = "/it/cookie-policy"
+  to = "/en/cookie-policy"
+  status = 301
+
+[[redirects]]
+  from = "/it/note-legali"
+  to = "/en/legal-notice"
+  status = 301
+
+[[redirects]]
+  from = "/it/blog/seo-internazionale-oltre-la-traduzione-del-tuo-sito"
+  to = "/en/blog/international-seo-beyond-translating-your-website"
+  status = 301
+
+[[redirects]]
+  from = "/it/blog/da-traduttrice-a-specialista-seo"
+  to = "/en/blog/from-translator-to-seo-specialist"
+  status = 301
+
+[[redirects]]
+  from = "/ca"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/ca/sobre-mi"
+  to = "/sobre-mi"
+  status = 301
+
+[[redirects]]
+  from = "/ca/serveis/seo"
+  to = "/servicios/seo"
+  status = 301
+
+[[redirects]]
+  from = "/ca/serveis/traduccio"
+  to = "/servicios/traduccion"
+  status = 301
+
+[[redirects]]
+  from = "/ca/serveis/ugc"
+  to = "/servicios/ugc"
+  status = 301
+
+[[redirects]]
+  from = "/ca/blog"
+  to = "/blog"
+  status = 301
+
+[[redirects]]
+  from = "/ca/contact"
+  to = "/contacto"
+  status = 301
+
+[[redirects]]
+  from = "/ca/politica-de-privacitat"
+  to = "/politica-de-privacidad"
+  status = 301
+
+[[redirects]]
+  from = "/ca/politica-de-galetes"
+  to = "/politica-de-cookies"
+  status = 301
+
+[[redirects]]
+  from = "/ca/avis-legal"
+  to = "/aviso-legal"
+  status = 301
+
+[[redirects]]
+  from = "/ca/blog/seo-internacional-mes-enlla-de-traduir-el-teu-web"
+  to = "/blog/seo-internacional-mas-alla-de-traducir-tu-web"
+  status = 301
+
+[[redirects]]
+  from = "/ca/blog/de-traductora-a-especialista-seo"
+  to = "/blog/de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones"
   status = 301
