@@ -36,9 +36,9 @@ Otra idea que me llevo es que el SEO internacional necesita presupuesto. Hace fa
 
 Como los recursos suelen ser limitados, la recomendación es **centrarse en menos mercados, pero mejor elegidos**. Me parece un enfoque realista para cualquier negocio que empieza a expandirse: comenzar por pocos países con sentido y ampliar desde ahí cuando funcionen.
 
-## Lo que me queda por aprender
+## La continuación de esta serie
 
-Me quedan diez lecciones y quiero ir contando lo que aprenda en este blog, en una serie sobre SEO internacional vista desde la traducción. Si hay algún tema que te interese, escríbeme.
+**Actualización:** ya he terminado el curso. En [Traducción SEO: cómo traducir tu web sin perder posicionamiento](/blog/traduccion-seo) te cuento lo que aprendí en el resto de lecciones: la estructura de las URL, el hreflang, el contenido localizado y el seguimiento. Si hay algún tema que te interese para esta serie, escríbeme.
 
 ## Resumen
 

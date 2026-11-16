@@ -36,9 +36,9 @@ Another idea I'm taking away is that international SEO needs a budget. You need 
 
 Since resources are usually limited, the recommendation is to **focus on fewer markets, but choose them better**. I think this is a realistic approach for any business that is starting to expand: begin with a few countries that make sense and grow from there once they are working.
 
-## What I Still Have to Learn
+## The Next Part of This Series
 
-I have ten lessons left and I want to share what I learn on this blog, in a series about international SEO seen through the eyes of a translator. If there is a topic you'd like me to cover, write to me.
+**Update:** I've now finished the course. In [SEO Translation: How to Translate Your Website Without Losing Rankings](/en/blog/seo-translation) I share what I learned in the remaining lessons: URL structure, hreflang, localized content and monitoring. If there is a topic you'd like me to cover in this series, write to me.
 
 ## Summary
 

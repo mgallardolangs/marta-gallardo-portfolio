@@ -3,7 +3,7 @@ slug: "traduccion-seo"
 translationKey: "traduccion-seo"
 title: "Traducción SEO: cómo traducir tu web sin perder posicionamiento"
 description: "He terminado el curso de SEO internacional de Semrush. Te cuento qué hace falta para traducir tu web sin perder posicionamiento en Google."
-date: "2026-11-20"
+date: "2026-11-17"
 tags: ["traducción SEO", "SEO internacional", "hreflang", "localización"]
 lang: "es"
 ---

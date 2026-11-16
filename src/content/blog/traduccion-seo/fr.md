@@ -3,7 +3,7 @@ slug: "traduction-seo"
 translationKey: "traduccion-seo"
 title: "Traduction SEO : traduire votre site sans perdre son référencement"
 description: "J'ai terminé la formation SEO international de Semrush. Voici ce qu'il faut pour traduire votre site sans perdre votre référencement sur Google."
-date: "2026-11-20"
+date: "2026-11-17"
 tags: ["traduction SEO", "SEO international", "hreflang", "localisation"]
 lang: "fr"
 ---
