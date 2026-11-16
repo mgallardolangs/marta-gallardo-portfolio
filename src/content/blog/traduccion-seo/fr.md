@@ -10,6 +10,11 @@ lang: "fr"
 
 La semaine dernière, je vous racontais que je suivais la formation SEO international de Semrush Academy, animée par Aleyda Solis. Je l'ai terminée et j'ai obtenu la certification. Si je devais résumer ses treize leçons en une phrase, ce serait celle-ci : **la traduction SEO ne consiste pas à traduire les textes mot à mot, mais à faire en sorte que chaque version de votre site se positionne sur son propre marché : que Google sache quelle version afficher dans chaque pays et que chacune reprenne les mots que l'on y recherche vraiment**.
 
+<figure>
+  <img src="/images/blog/certificado-seo-internacional-semrush.webp" alt="Certificat de la formation International SEO de Semrush Academy au nom de Marta Gallardo Albertu, signé par Aleyda Solis" width="1200" height="848" loading="lazy" decoding="async" />
+  <figcaption>Mon certificat de la formation SEO international de Semrush Academy.</figcaption>
+</figure>
+
 Dans la [première partie de cette série](/fr/blog/seo-international-au-dela-de-la-traduction-de-votre-site), j'ai parlé du choix des marchés. Aujourd'hui, je m'intéresse à la suite : ce qu'il faut pour traduire votre site sans perdre son référencement. Il y a quatre éléments : la structure des URL, le hreflang, le contenu localisé et le suivi.
 
 ## Qu'est-ce que la traduction SEO ?

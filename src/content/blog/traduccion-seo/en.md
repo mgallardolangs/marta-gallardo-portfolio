@@ -10,6 +10,11 @@ lang: "en"
 
 Last week I told you I was taking the International SEO course from Semrush Academy, taught by Aleyda Solis. I've now finished it and earned the certificate. If I had to sum up its thirteen lessons, it would be this: **SEO translation isn't about translating your text word for word. It's about getting each language version of your website to rank in its own market: Google needs to know which version to show in each country, and each version needs to use the words people actually search for there**.
 
+<figure>
+  <img src="/images/blog/certificado-seo-internacional-semrush.webp" alt="Semrush Academy International SEO certificate awarded to Marta Gallardo Albertu, signed by Aleyda Solis" width="1200" height="848" loading="lazy" decoding="async" />
+  <figcaption>My International SEO certificate from Semrush Academy.</figcaption>
+</figure>
+
 In the [first part of this series](/en/blog/international-seo-beyond-translating-your-website) I talked about how to choose your markets. Today I'm covering what comes next: what it takes to translate your website without losing rankings. There are four pieces: URL structure, hreflang, localized content and monitoring.
 
 ## What is SEO translation?
