@@ -6,11 +6,11 @@
 export const relatedArticlesByRoute = {
   seo: [
     'seo-internacional-mas-alla-de-traducir-tu-web',
-    'de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones',
+    'traduccion-seo',
   ],
   translation: [
+    'traduccion-seo',
     'de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones',
-    'seo-internacional-mas-alla-de-traducir-tu-web',
   ],
   about: ['de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones'],
 };

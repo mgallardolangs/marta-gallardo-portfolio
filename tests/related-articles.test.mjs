@@ -20,22 +20,21 @@ test('every related article key is a post folder in src/content/blog', async () 
 
 test('getRelatedArticles keeps the configured order, the page language and the limit', () => {
   const post = (translationKey, lang) => ({ data: { translationKey, lang, slug: `${translationKey}-${lang}` } });
+  const [first, second] = relatedArticlesByRoute.translation;
   const posts = [
-    post('seo-internacional-mas-alla-de-traducir-tu-web', 'es'),
-    post('seo-internacional-mas-alla-de-traducir-tu-web', 'en'),
-    post('de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones', 'es'),
+    post(second, 'es'),
+    post(first, 'es'),
+    post(first, 'en'),
   ];
 
   assert.deepEqual(
     getRelatedArticles(posts, 'translation', 'es').map((p) => p.data.slug),
-    [
-      'de-traductora-a-especialista-en-seo-por-que-combino-ambas-profesiones-es',
-      'seo-internacional-mas-alla-de-traducir-tu-web-es',
-    ],
+    [`${first}-es`, `${second}-es`],
+    'posts come in the configured order, not in collection order',
   );
   assert.deepEqual(
     getRelatedArticles(posts, 'translation', 'en').map((p) => p.data.slug),
-    ['seo-internacional-mas-alla-de-traducir-tu-web-en'],
+    [`${first}-en`],
     'a post without a translation in the page language is skipped',
   );
   assert.deepEqual(getRelatedArticles(posts, 'ugc', 'es'), [], 'pages without related posts render nothing');
