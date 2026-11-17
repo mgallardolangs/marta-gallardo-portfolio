@@ -61,6 +61,12 @@ export const blogPostPaths = {
     it: '/it/blog/da-traduttrice-a-specialista-seo',
     ca: '/ca/blog/de-traductora-a-especialista-seo',
   },
+  // Written after de/it/ca stopped being published: no German, Italian or Catalan version.
+  'traduccion-seo': {
+    es: '/blog/traduccion-seo',
+    en: '/en/blog/seo-translation',
+    fr: '/fr/blog/traduction-seo',
+  },
 };
 
 // German, Italian and Catalan are not published (15/11/2026): each of their pages
@@ -68,7 +74,9 @@ export const blogPostPaths = {
 const unpublishedLocaleRedirects = Object.fromEntries(
   Object.entries(unpublishedLocaleFallback).flatMap(([locale, fallback]) => [
     ...Object.values(localizedRoutes).map((routes) => [routes[locale], routes[fallback]]),
-    ...Object.values(blogPostPaths).map((paths) => [paths[locale], paths[fallback]]),
+    ...Object.values(blogPostPaths)
+      .filter((paths) => paths[locale])
+      .map((paths) => [paths[locale], paths[fallback]]),
   ]),
 );
 

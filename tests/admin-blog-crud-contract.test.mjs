@@ -303,7 +303,7 @@ test('the blog content schema requires a shared slug and translationKey on every
   );
 });
 
-test('every logical blog post is represented by six locale Markdown files sharing slug/translationKey/date/image at unique repository paths', async () => {
+test('every logical blog post has at least the published locales, sharing translationKey/date/image with its own slug per locale', async () => {
   const files = await listBlogMarkdownFiles();
   assert.ok(files.length > 0, 'src/content/blog should contain locale Markdown files for the multilingual model');
 
@@ -326,16 +326,22 @@ test('every logical blog post is represented by six locale Markdown files sharin
   assert.ok(groups.size > 0, 'at least one logical post group should exist');
 
   for (const [translationKey, group] of groups) {
-    assert.equal(group.length, 6, `logical post "${translationKey}" should have exactly six locale Markdown files`);
+    // German, Italian and Catalan are not published since 15/11/2026, so new posts
+    // only need the published locales; older posts keep their de/it/ca files.
+    const langs = group.map((entry) => entry.lang);
+    assert.equal(new Set(langs).size, langs.length, `logical post "${translationKey}" should have each locale at most once`);
+    for (const lang of VISIBLE_LOCALES) {
+      assert.ok(langs.includes(lang), `logical post "${translationKey}" should have a ${lang} Markdown file`);
+    }
+    for (const lang of langs) {
+      assert.ok(SIX_LOCALES.includes(lang), `logical post "${translationKey}" uses an unsupported locale ${lang}`);
+    }
 
-    const langs = group.map((entry) => entry.lang).sort();
-    assert.deepEqual(langs, [...SIX_LOCALES].sort(), `logical post "${translationKey}" should cover all six supported locales exactly once`);
-
-    assert.equal(new Set(group.map((entry) => entry.slug)).size, 6, `logical post "${translationKey}" should give every locale its own translated slug`);
+    assert.equal(new Set(group.map((entry) => entry.slug)).size, group.length, `logical post "${translationKey}" should give every locale its own translated slug`);
     assert.equal(group.find((entry) => entry.lang === 'es').slug, translationKey, `logical post "${translationKey}" should keep the Spanish slug equal to its translationKey`);
     assert.equal(new Set(group.map((entry) => entry.date)).size, 1, `logical post "${translationKey}" should share one date across all locale files`);
     assert.equal(new Set(group.map((entry) => entry.image ?? '')).size, 1, `logical post "${translationKey}" should share one featured image across all locale files`);
-    assert.equal(new Set(group.map((entry) => entry.path)).size, 6, `logical post "${translationKey}" locale files should each live at a unique repository path`);
+    assert.equal(new Set(group.map((entry) => entry.path)).size, group.length, `logical post "${translationKey}" locale files should each live at a unique repository path`);
   }
 });
 

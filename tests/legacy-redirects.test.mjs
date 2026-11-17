@@ -62,6 +62,7 @@ test('every page of an unpublished locale redirects in one hop to the same page 
       assert.equal(rule.status, 301);
     }
     for (const paths of Object.values(blogPostPaths)) {
+      if (!paths[locale]) continue; // post written after de/it/ca stopped being published
       const rule = redirects.find((redirect) => redirect.from === paths[locale]);
       assert.ok(rule, `${paths[locale]} should redirect`);
       assert.equal(rule.to, paths[fallback]);
