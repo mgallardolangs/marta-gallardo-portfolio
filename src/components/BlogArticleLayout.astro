@@ -129,6 +129,24 @@ const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+
     margin-bottom: 1.5rem;
   }
 
+  [data-blog-prose] :global(figure) {
+    margin: 0 0 2rem;
+  }
+
+  [data-blog-prose] :global(figure img) {
+    width: 100%;
+    height: auto;
+    margin: 0;
+  }
+
+  [data-blog-prose] :global(figcaption) {
+    margin-top: 0.6rem;
+    color: var(--color-ink-muted, inherit);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+
   [data-blog-prose] :global(ol) {
     list-style: decimal;
     padding-left: 1.4rem;
