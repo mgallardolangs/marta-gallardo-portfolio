@@ -404,7 +404,8 @@ test('built public and admin HTML keep SEO/noindex classes, local media referenc
       if (!isBlogDetailRoute(routePath)) {
         assert.equal(alternateLinks.length, publishedLocales.length + 1, `${routePath} should list the published locale alternates plus x-default`);
       }
-      assert.doesNotMatch(html, /noindex/);
+      // The robots meta tag, not the whole page: an article can mention the word noindex in its text.
+      assert.doesNotMatch(html, /<meta name="robots" content="[^"]*noindex/, `${routePath} should be indexable`);
       assert.equal(
         normalizeRoutePath(new URL(getCanonicalUrlFromHtml(html) ?? 'https://marttelier.com/').pathname),
         routePath,

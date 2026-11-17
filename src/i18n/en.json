@@ -71,7 +71,8 @@
     "contentIndex": "Contents",
     "readTime": "read time",
     "nextStory": "Next story",
-    "end": "End of article"
+    "end": "End of article",
+    "relatedTitle": "Related articles"
   },
   "contact": {
     "title": "Let's collaborate",

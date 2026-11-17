@@ -4,6 +4,7 @@ import ClickToLoadYouTube from '../components/ClickToLoadYouTube.astro';
 import ExperienceTabs from '../components/translation/ExperienceTabs';
 import RichText from '../components/RichText.astro';
 import ScrollReveal from '../components/ScrollReveal';
+import RelatedArticles from '../components/RelatedArticles.astro';
 import TypedTitle from '../components/TypedTitle.astro';
 import { getLangFromUrl, t } from '../i18n';
 import { getPageSeo, siteData } from '../lib/siteData';
@@ -108,5 +109,7 @@ const pageSeo = getPageSeo(siteData, 'about', lang, {
         </ScrollReveal>
       </div>
     </section>
+
+    <RelatedArticles lang={lang} routeKey="about" />
   </div>
 </BaseLayout>
