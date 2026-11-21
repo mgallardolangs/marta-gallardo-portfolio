@@ -19,10 +19,28 @@ const pageSeo = getPageSeo(siteData, 'seo', lang, {
   description: { [lang]: pageDescription },
 });
 const arsenal = getTranslationArsenalColumns(lang, siteData, 'seo');
+// Local SEO signal for Elche, the province of Alicante and the Costa Blanca (no street address: Marta works from home).
+const serviceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: `Marttelier · ${siteData.person.name}`,
+  url: new URL(getLocalizedRoute('seo', lang), Astro.site ?? Astro.url).toString(),
+  description: pageSeo.description,
+  serviceType: ['SEO local', 'SEO internacional', 'Auditoría SEO', 'Consultoría SEO'],
+  address: { '@type': 'PostalAddress', addressLocality: 'Elche', addressRegion: 'Alicante', addressCountry: 'ES' },
+  areaServed: [
+    { '@type': 'City', name: 'Elche' },
+    { '@type': 'AdministrativeArea', name: 'Provincia de Alicante' },
+    { '@type': 'Place', name: 'Costa Blanca' },
+  ],
+  availableLanguage: ['es', 'en', 'fr'],
+  founder: { '@type': 'Person', name: siteData.person.name },
+};
 ---
 
 <BaseLayout title={pageSeo.title} description={pageSeo.description}>
   <GsapPageRuntime />
+  <script type="application/ld+json" set:html={JSON.stringify(serviceJsonLd)} />
   <div class="bg-paper" data-seo-service-page>
     <section class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
       <div class="site-container max-w-7xl">
