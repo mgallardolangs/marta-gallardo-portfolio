@@ -13,6 +13,7 @@ import MotionRuntime from '../components/MotionRuntime.astro';
 import SeoHead from '../components/SeoHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import CookieConsent from '../components/CookieConsent.astro';
 import { getLangFromUrl, t, type Lang } from '../i18n';
 
 interface Props {
@@ -65,6 +66,7 @@ const {
     <slot />
   </main>
   <Footer lang={lang} />
+  <CookieConsent lang={lang} />
   <script is:inline>
     // Netlify Identity emails link to the site root; the widget only loads in /admin.
     if (/(invite|recovery|confirmation|email_change)_token=/.test(location.hash)) {

@@ -660,7 +660,7 @@
   "legal": {
     "privacy": {
       "title": "Politique de confidentialité",
-      "updated": "Dernière mise à jour : 06.11.2026",
+      "updated": "Dernière mise à jour : 23.11.2026",
       "sections": [
         {
           "title": "1. Responsable du traitement",
@@ -671,7 +671,7 @@
         {
           "title": "2. Données collectées",
           "paragraphs": [
-            "Celles que vous m’envoyez via les formulaires de contact de marttelier.com : votre adresse e-mail, le nom de votre entreprise (facultatif) et la description de votre projet, ainsi que toute autre information que vous choisissez d’inclure dans votre message. Je ne collecte pas de données de navigation à des fins d’analyse."
+            "Celles que vous m’envoyez via les formulaires de contact de marttelier.com : votre adresse e-mail, le nom de votre entreprise (facultatif) et la description de votre projet, ainsi que toute autre information que vous choisissez d’inclure dans votre message. Si vous acceptez les cookies d’analyse, Google Analytics collecte aussi des données de navigation agrégées (pages vues, pays et type d’appareil) ; voir la [cookies:politique de cookies]."
           ]
         },
         {
@@ -683,7 +683,8 @@
         {
           "title": "4. Base juridique",
           "paragraphs": [
-            "Votre consentement, que vous donnez en cochant la case et en envoyant le formulaire (article 6.1.a du RGPD), et l’exécution de mesures précontractuelles prises à votre demande (article 6.1.b)."
+            "Votre consentement, que vous donnez en cochant la case et en envoyant le formulaire (article 6.1.a du RGPD), et l’exécution de mesures précontractuelles prises à votre demande (article 6.1.b).",
+            "L’analyse d’audience repose sur votre consentement donné dans l’avis sur les cookies, que vous pouvez retirer à tout moment depuis « Paramètres des cookies »."
           ]
         },
         {
@@ -713,6 +714,11 @@
                 "Infomaniak",
                 "Messagerie du domaine marttelier.com",
                 "Suisse"
+              ],
+              [
+                "Google (Google Analytics)",
+                "Statistiques de visites, uniquement si vous acceptez les cookies",
+                "États-Unis"
               ]
             ]
           },
@@ -736,7 +742,7 @@
     },
     "cookies": {
       "title": "Politique de cookies",
-      "updated": "Dernière mise à jour : 05.11.2026",
+      "updated": "Dernière mise à jour : 23.11.2026",
       "sections": [
         {
           "title": "1. Qu’est-ce qu’un cookie ?",
@@ -747,8 +753,25 @@
         {
           "title": "2. Cookies utilisés par ce site",
           "paragraphs": [
-            "marttelier.com n’utilise pas de cookies d’analyse, de publicité ni de suivi. Il n’installe pas non plus de cookies propres pour mémoriser vos préférences."
-          ]
+            "Si vous acceptez dans l’avis sur les cookies, le site utilise Google Analytics 4 pour mesurer de façon agrégée combien de personnes le visitent, depuis quel pays et quel appareil, et quelles pages elles lisent. Je n’utilise pas de cookies publicitaires. Si vous refusez ou ne choisissez pas, Google Analytics n’est pas chargé.",
+            "Votre choix est enregistré dans votre navigateur (dans le stockage local, pas dans un cookie) pour ne pas vous le redemander."
+          ],
+          "table": {
+            "head": [
+              "Origine",
+              "Finalité",
+              "Activation",
+              "Responsable"
+            ],
+            "rows": [
+              [
+                "Google Analytics (_ga, _ga_*)",
+                "Mesurer les visites de façon agrégée. Durée : jusqu’à 2 ans",
+                "Uniquement si vous acceptez",
+                "Google"
+              ]
+            ]
+          }
         },
         {
           "title": "3. Contenus tiers",
@@ -775,13 +798,13 @@
         {
           "title": "4. Comment les désactiver",
           "paragraphs": [
-            "Vous pouvez supprimer ou bloquer les cookies dans les paramètres de votre navigateur. Dans ce cas, certaines vidéos pourraient ne pas se lire."
+            "Vous pouvez modifier votre choix à tout moment avec « Paramètres des cookies », en bas de chaque page. Vous pouvez aussi supprimer ou bloquer les cookies dans les paramètres de votre navigateur ; dans ce cas, certaines vidéos pourraient ne pas se lire."
           ]
         },
         {
           "title": "5. Modifications",
           "paragraphs": [
-            "Si le site commence à utiliser des outils d’analyse ou d’autres cookies, je mettrai à jour cette politique et je vous demanderai votre consentement avant de les activer."
+            "Si le site commence à utiliser d’autres cookies, je mettrai à jour cette politique et je vous demanderai votre consentement avant de les activer."
           ]
         }
       ]
@@ -847,5 +870,13 @@
         }
       ]
     }
+  },
+  "consent": {
+    "title": "Avis sur les cookies",
+    "text": "J’utilise Google Analytics pour savoir combien de personnes visitent le site et quelles pages elles lisent. Il ne s’active que si vous acceptez.",
+    "policy": "Politique de cookies",
+    "accept": "Accepter",
+    "reject": "Refuser",
+    "manage": "Paramètres des cookies"
   }
 }

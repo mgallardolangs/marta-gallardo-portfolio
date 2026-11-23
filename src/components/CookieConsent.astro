@@ -1,0 +1,105 @@
+---
+// Cookie banner: Google Analytics loads only after the visitor clicks «Aceptar».
+// The choice is kept in localStorage (mt-consent) and can be changed from the footer link.
+import { t, getLocalizedRoute, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const copy = (t(lang) as any).consent ?? (t('en') as any).consent;
+const GA_ID = 'G-BSM1G1R1MJ';
+---
+<div
+  id="mt-consent"
+  role="region"
+  aria-label={copy.title}
+  hidden
+  class="fixed inset-x-4 bottom-4 z-[60] mx-auto max-w-xl rounded-2xl bg-ink p-4 text-paper shadow-[0_18px_54px_rgb(74_18_34_/_0.35)] md:p-6"
+>
+  <p class="text-[13px] leading-relaxed md:text-sm">
+    {copy.text}{' '}
+    <a href={getLocalizedRoute('cookies', lang)} class="underline underline-offset-4 hover:text-amaranth">{copy.policy}</a>
+  </p>
+  <div class="mt-3 flex flex-wrap gap-2 md:mt-4 md:gap-3">
+    <button type="button" data-consent="denied" class="min-w-[8rem] flex-1 rounded-full border border-paper/60 px-4 py-2 text-sm font-semibold transition hover:bg-paper/10">
+      {copy.reject}
+    </button>
+    <button type="button" data-consent="granted" class="min-w-[8rem] flex-1 rounded-full bg-paper px-4 py-2 text-sm font-semibold text-ink transition hover:bg-amaranth">
+      {copy.accept}
+    </button>
+  </div>
+</div>
+
+<script is:inline define:vars={{ GA_ID }}>
+  (function () {
+    // With view transitions this script runs again on every page: set up once, then only refresh the banner.
+    if (window.__mtConsent) {
+      window.__mtConsent.sync();
+      return;
+    }
+    var KEY = 'mt-consent';
+    var loaded = false;
+    var read = function () {
+      try { return localStorage.getItem(KEY); } catch (e) { return null; }
+    };
+    var write = function (v) {
+      try { localStorage.setItem(KEY, v); } catch (e) {}
+    };
+    var loadAnalytics = function () {
+      window['ga-disable-' + GA_ID] = false;
+      if (loaded) return;
+      loaded = true;
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', GA_ID);
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+      document.head.appendChild(s);
+    };
+    var stopAnalytics = function () {
+      window['ga-disable-' + GA_ID] = true;
+      document.cookie.split(';').forEach(function (c) {
+        var name = c.split('=')[0].trim();
+        if (name.indexOf('_ga') === 0) {
+          document.cookie = name + '=; Max-Age=0; path=/; domain=.' + location.hostname.replace(/^www\./, '');
+          document.cookie = name + '=; Max-Age=0; path=/';
+        }
+      });
+    };
+    var sync = function () {
+      var el = document.getElementById('mt-consent');
+      if (!el) return;
+      var v = read();
+      el.hidden = v === 'granted' || v === 'denied';
+    };
+    window.__mtConsent = { sync: sync };
+    document.addEventListener('click', function (e) {
+      var target = e.target instanceof Element ? e.target : null;
+      if (!target) return;
+      var choice = target.closest('[data-consent]');
+      if (choice) {
+        var v = choice.getAttribute('data-consent');
+        write(v);
+        if (v === 'granted') loadAnalytics(); else stopAnalytics();
+        sync();
+        return;
+      }
+      if (target.closest('[data-consent-open]')) {
+        e.preventDefault();
+        var el = document.getElementById('mt-consent');
+        if (el) {
+          el.hidden = false;
+          var first = el.querySelector('button');
+          if (first) first.focus();
+        }
+      }
+    });
+    document.addEventListener('astro:page-load', sync);
+    if (read() === 'granted') loadAnalytics();
+    sync();
+  })();
+</script>
