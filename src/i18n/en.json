@@ -660,7 +660,7 @@
   "legal": {
     "privacy": {
       "title": "Privacy policy",
-      "updated": "Last updated: 06.11.2026",
+      "updated": "Last updated: 23.11.2026",
       "sections": [
         {
           "title": "1. Data controller",
@@ -671,7 +671,7 @@
         {
           "title": "2. What data I collect",
           "paragraphs": [
-            "The data you send me through the contact forms on marttelier.com: your email address, your company name (optional) and your project description, plus any other information you choose to include in your message. I do not collect browsing data for analytics purposes."
+            "The data you send me through the contact forms on marttelier.com: your email address, your company name (optional) and your project description, plus any other information you choose to include in your message. If you accept analytics cookies, Google Analytics also collects aggregated browsing data (pages viewed, country and device type); see the [cookies:cookie policy]."
           ]
         },
         {
@@ -683,7 +683,8 @@
         {
           "title": "4. Legal basis",
           "paragraphs": [
-            "Your consent, which you give by ticking the box and submitting the form (Article 6(1)(a) GDPR), and taking the pre-contractual steps you request (Article 6(1)(b))."
+            "Your consent, which you give by ticking the box and submitting the form (Article 6(1)(a) GDPR), and taking the pre-contractual steps you request (Article 6(1)(b)).",
+            "Analytics is based on your consent in the cookie notice, which you can withdraw at any time from “Cookie settings”."
           ]
         },
         {
@@ -713,6 +714,11 @@
                 "Infomaniak",
                 "Email for the marttelier.com domain",
                 "Switzerland"
+              ],
+              [
+                "Google (Google Analytics)",
+                "Visit statistics, only if you accept cookies",
+                "USA"
               ]
             ]
           },
@@ -736,7 +742,7 @@
     },
     "cookies": {
       "title": "Cookie policy",
-      "updated": "Last updated: 05.11.2026",
+      "updated": "Last updated: 23.11.2026",
       "sections": [
         {
           "title": "1. What cookies are",
@@ -747,8 +753,25 @@
         {
           "title": "2. What this website uses",
           "paragraphs": [
-            "marttelier.com does not use analytics, advertising or tracking cookies. Nor does it set its own cookies to remember your preferences."
-          ]
+            "If you accept in the cookie notice, the website uses Google Analytics 4 to measure, in aggregate, how many people visit it, from which country and device, and which pages they read. I do not use advertising cookies. If you reject or do not choose, Google Analytics is not loaded.",
+            "Your choice is saved in your browser (in local storage, not in a cookie) so you are not asked again."
+          ],
+          "table": {
+            "head": [
+              "Source",
+              "Purpose",
+              "When it is activated",
+              "Owner"
+            ],
+            "rows": [
+              [
+                "Google Analytics (_ga, _ga_*)",
+                "Measuring visits in aggregate. Duration: up to 2 years",
+                "Only if you accept",
+                "Google"
+              ]
+            ]
+          }
         },
         {
           "title": "3. Third-party content",
@@ -775,13 +798,13 @@
         {
           "title": "4. How to disable them",
           "paragraphs": [
-            "You can delete or block cookies in your browser settings. If you do, some videos may not play."
+            "You can change your choice at any time with “Cookie settings” at the bottom of every page. You can also delete or block cookies in your browser settings; if you do, some videos may not play."
           ]
         },
         {
           "title": "5. Changes",
           "paragraphs": [
-            "If the website starts using analytics or other cookies, I will update this policy and ask for your consent before enabling them."
+            "If the website starts using other cookies, I will update this policy and ask for your consent before enabling them."
           ]
         }
       ]
@@ -847,5 +870,13 @@
         }
       ]
     }
+  },
+  "consent": {
+    "title": "Cookie notice",
+    "text": "I use Google Analytics to see how many people visit the site and which pages they read. It only turns on if you accept.",
+    "policy": "Cookie policy",
+    "accept": "Accept",
+    "reject": "Reject",
+    "manage": "Cookie settings"
   }
 }

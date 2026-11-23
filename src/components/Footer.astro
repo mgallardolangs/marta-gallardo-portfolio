@@ -139,6 +139,9 @@ import { accentHtml } from '../lib/accentHtml';
                 {i.legal[route].title}
               </a>
             ))}
+            <button type="button" data-consent-open class="text-white/60 underline-offset-4 transition hover:text-paper hover:underline">
+              {(i as any).consent?.manage ?? 'Cookies'}
+            </button>
           </nav>
         </div>
       </div>

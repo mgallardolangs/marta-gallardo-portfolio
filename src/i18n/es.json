@@ -660,7 +660,7 @@
   "legal": {
     "privacy": {
       "title": "Política de privacidad",
-      "updated": "Última actualización: 06.11.2026",
+      "updated": "Última actualización: 23.11.2026",
       "sections": [
         {
           "title": "1. Responsable del tratamiento",
@@ -671,7 +671,7 @@
         {
           "title": "2. Qué datos recojo",
           "paragraphs": [
-            "Los que me envías a través de los formularios de contacto de marttelier.com: tu correo electrónico, el nombre de tu empresa (opcional) y la descripción de tu proyecto, además de cualquier dato que decidas incluir en el mensaje. No recojo datos de navegación con fines de analítica."
+            "Los que me envías a través de los formularios de contacto de marttelier.com: tu correo electrónico, el nombre de tu empresa (opcional) y la descripción de tu proyecto, además de cualquier dato que decidas incluir en el mensaje. Si aceptas las cookies de analítica, Google Analytics recoge además datos de navegación de forma agregada (páginas vistas, país y tipo de dispositivo); lo explico en la [cookies:política de cookies]."
           ]
         },
         {
@@ -683,7 +683,8 @@
         {
           "title": "4. Base jurídica",
           "paragraphs": [
-            "Tu consentimiento, que otorgas al marcar la casilla y enviar el formulario (artículo 6.1.a del RGPD), y la aplicación de medidas precontractuales que me solicitas (artículo 6.1.b)."
+            "Tu consentimiento, que otorgas al marcar la casilla y enviar el formulario (artículo 6.1.a del RGPD), y la aplicación de medidas precontractuales que me solicitas (artículo 6.1.b).",
+            "La analítica se basa en tu consentimiento en el aviso de cookies, que puedes retirar en cualquier momento desde «Configurar cookies»."
           ]
         },
         {
@@ -713,6 +714,11 @@
                 "Infomaniak",
                 "Correo del dominio marttelier.com",
                 "Suiza"
+              ],
+              [
+                "Google (Google Analytics)",
+                "Estadísticas de visitas, solo si aceptas las cookies",
+                "EE. UU."
               ]
             ]
           },
@@ -736,7 +742,7 @@
     },
     "cookies": {
       "title": "Política de cookies",
-      "updated": "Última actualización: 05.11.2026",
+      "updated": "Última actualización: 23.11.2026",
       "sections": [
         {
           "title": "1. Qué son las cookies",
@@ -747,8 +753,25 @@
         {
           "title": "2. Qué usa esta web",
           "paragraphs": [
-            "marttelier.com no utiliza cookies de analítica, de publicidad ni de seguimiento. Tampoco instala cookies propias para recordar tus preferencias."
-          ]
+            "Si aceptas en el aviso de cookies, la web usa Google Analytics 4 para medir de forma agregada cuántas personas la visitan, desde qué país y dispositivo, y qué páginas leen. No uso cookies de publicidad. Si rechazas o no eliges, Google Analytics no se carga.",
+            "Tu elección se guarda en tu navegador (en el almacenamiento local, no en una cookie) para no volver a preguntarte."
+          ],
+          "table": {
+            "head": [
+              "Origen",
+              "Finalidad",
+              "Cuándo se activa",
+              "Titular"
+            ],
+            "rows": [
+              [
+                "Google Analytics (_ga, _ga_*)",
+                "Medir las visitas de forma agregada. Duración: hasta 2 años",
+                "Solo si aceptas",
+                "Google"
+              ]
+            ]
+          }
         },
         {
           "title": "3. Contenido de terceros",
@@ -775,13 +798,13 @@
         {
           "title": "4. Cómo desactivarlas",
           "paragraphs": [
-            "Puedes borrar o bloquear las cookies desde la configuración de tu navegador. Si lo haces, algunos vídeos podrían no reproducirse."
+            "Puedes cambiar tu elección cuando quieras en «Configurar cookies», al pie de cada página. También puedes borrar o bloquear las cookies desde la configuración de tu navegador; si lo haces, algunos vídeos podrían no reproducirse."
           ]
         },
         {
           "title": "5. Cambios",
           "paragraphs": [
-            "Si la web empieza a usar analítica u otras cookies, actualizaré esta política y pediré tu consentimiento antes de activarlas."
+            "Si la web empieza a usar otras cookies, actualizaré esta política y pediré tu consentimiento antes de activarlas."
           ]
         }
       ]
@@ -847,5 +870,13 @@
         }
       ]
     }
+  },
+  "consent": {
+    "title": "Aviso de cookies",
+    "text": "Uso Google Analytics para saber cuántas personas visitan la web y qué páginas leen. Solo se activa si aceptas.",
+    "policy": "Política de cookies",
+    "accept": "Aceptar",
+    "reject": "Rechazar",
+    "manage": "Configurar cookies"
   }
 }

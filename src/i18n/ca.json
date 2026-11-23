@@ -660,7 +660,7 @@
   "legal": {
     "privacy": {
       "title": "Política de privacitat",
-      "updated": "Última actualització: 06.11.2026",
+      "updated": "Última actualització: 23.11.2026",
       "sections": [
         {
           "title": "1. Responsable del tractament",
@@ -671,7 +671,7 @@
         {
           "title": "2. Quines dades recopile",
           "paragraphs": [
-            "Les que m’envies a través dels formularis de contacte de marttelier.com: el teu correu electrònic, el nom de la teua empresa (opcional) i la descripció del teu projecte, a més de qualsevol dada que decidisques incloure en el missatge. No recopile dades de navegació amb finalitats d’analítica."
+            "Les que m’envies a través dels formularis de contacte de marttelier.com: el teu correu electrònic, el nom de la teua empresa (opcional) i la descripció del teu projecte, a més de qualsevol dada que decidisques incloure en el missatge. Si acceptes les galetes d’analítica, Google Analytics recopila a més dades de navegació agregades (pàgines vistes, país i tipus de dispositiu); ho explique en la [cookies:política de galetes]."
           ]
         },
         {
@@ -683,7 +683,8 @@
         {
           "title": "4. Base jurídica",
           "paragraphs": [
-            "El teu consentiment, que atorgues en marcar la casella i enviar el formulari (article 6.1.a del RGPD), i l’aplicació de mesures precontractuals que em sol·licites (article 6.1.b)."
+            "El teu consentiment, que atorgues en marcar la casella i enviar el formulari (article 6.1.a del RGPD), i l’aplicació de mesures precontractuals que em sol·licites (article 6.1.b).",
+            "L’analítica es basa en el teu consentiment en l’avís de galetes, que pots retirar en qualsevol moment des de «Configurar galetes»."
           ]
         },
         {
@@ -713,6 +714,11 @@
                 "Infomaniak",
                 "Correu del domini marttelier.com",
                 "Suïssa"
+              ],
+              [
+                "Google (Google Analytics)",
+                "Estadístiques de visites, només si acceptes les galetes",
+                "EUA"
               ]
             ]
           },
@@ -736,7 +742,7 @@
     },
     "cookies": {
       "title": "Política de galetes",
-      "updated": "Última actualització: 05.11.2026",
+      "updated": "Última actualització: 23.11.2026",
       "sections": [
         {
           "title": "1. Què són les galetes",
@@ -747,8 +753,25 @@
         {
           "title": "2. Què utilitza aquest web",
           "paragraphs": [
-            "marttelier.com no utilitza galetes d’analítica, de publicitat ni de seguiment. Tampoc instal·la galetes pròpies per a recordar les teues preferències."
-          ]
+            "Si acceptes en l’avís de galetes, la web utilitza Google Analytics 4 per a mesurar de manera agregada quantes persones la visiten, des de quin país i dispositiu, i quines pàgines llegeixen. No utilitze galetes de publicitat. Si rebutges o no tries, Google Analytics no es carrega.",
+            "La teua elecció es guarda en el navegador (en l’emmagatzematge local, no en una galeta) per a no tornar a preguntar-te-la."
+          ],
+          "table": {
+            "head": [
+              "Origen",
+              "Finalitat",
+              "Quan s’activa",
+              "Titular"
+            ],
+            "rows": [
+              [
+                "Google Analytics (_ga, _ga_*)",
+                "Mesurar les visites de manera agregada. Durada: fins a 2 anys",
+                "Només si acceptes",
+                "Google"
+              ]
+            ]
+          }
         },
         {
           "title": "3. Contingut de tercers",
@@ -775,13 +798,13 @@
         {
           "title": "4. Com desactivar-les",
           "paragraphs": [
-            "Pots esborrar o bloquejar les galetes des de la configuració del teu navegador. Si ho fas, és possible que alguns vídeos no es reproduïsquen."
+            "Pots canviar la teua elecció quan vulgues en «Configurar galetes», al peu de cada pàgina. També pots esborrar o bloquejar les galetes des de la configuració del navegador; si ho fas, alguns vídeos podrien no reproduir-se."
           ]
         },
         {
           "title": "5. Canvis",
           "paragraphs": [
-            "Si el web comença a utilitzar analítica o altres galetes, actualitzaré aquesta política i demanaré el teu consentiment abans d’activar-les."
+            "Si la web comença a utilitzar altres galetes, actualitzaré aquesta política i et demanaré el consentiment abans d’activar-les."
           ]
         }
       ]
@@ -847,5 +870,13 @@
         }
       ]
     }
+  },
+  "consent": {
+    "title": "Avís de galetes",
+    "text": "Utilitze Google Analytics per a saber quantes persones visiten la web i quines pàgines llegeixen. Només s’activa si acceptes.",
+    "policy": "Política de galetes",
+    "accept": "Acceptar",
+    "reject": "Rebutjar",
+    "manage": "Configurar galetes"
   }
 }

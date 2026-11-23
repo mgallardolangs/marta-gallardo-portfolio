@@ -660,7 +660,7 @@
   "legal": {
     "privacy": {
       "title": "Datenschutzerklärung",
-      "updated": "Zuletzt aktualisiert: 06.11.2026",
+      "updated": "Zuletzt aktualisiert: 23.11.2026",
       "sections": [
         {
           "title": "1. Verantwortliche",
@@ -671,7 +671,7 @@
         {
           "title": "2. Welche Daten ich erhebe",
           "paragraphs": [
-            "Die Daten, die Sie mir über die Kontaktformulare auf marttelier.com senden: Ihre E-Mail-Adresse, den Namen Ihres Unternehmens (optional) und die Beschreibung Ihres Projekts sowie alle weiteren Angaben, die Sie in Ihre Nachricht aufnehmen. Ich erhebe keine Nutzungsdaten zu Analysezwecken."
+            "Die Daten, die Sie mir über die Kontaktformulare auf marttelier.com senden: Ihre E-Mail-Adresse, den Namen Ihres Unternehmens (optional) und die Beschreibung Ihres Projekts sowie alle weiteren Angaben, die Sie in Ihre Nachricht aufnehmen. Wenn Sie Analyse-Cookies akzeptieren, erhebt Google Analytics außerdem zusammengefasste Nutzungsdaten (aufgerufene Seiten, Land und Gerätetyp); siehe [cookies:Cookie-Richtlinie]."
           ]
         },
         {
@@ -683,7 +683,8 @@
         {
           "title": "4. Rechtsgrundlage",
           "paragraphs": [
-            "Ihre Einwilligung, die Sie durch Ankreuzen des Kästchens und Absenden des Formulars erteilen (Art. 6 Abs. 1 lit. a DSGVO), sowie die Durchführung vorvertraglicher Maßnahmen auf Ihre Anfrage (Art. 6 Abs. 1 lit. b DSGVO)."
+            "Ihre Einwilligung, die Sie durch Ankreuzen des Kästchens und Absenden des Formulars erteilen (Art. 6 Abs. 1 lit. a DSGVO), sowie die Durchführung vorvertraglicher Maßnahmen auf Ihre Anfrage (Art. 6 Abs. 1 lit. b DSGVO).",
+            "Die Analyse beruht auf Ihrer Einwilligung im Cookie-Hinweis, die Sie jederzeit über „Cookie-Einstellungen“ widerrufen können."
           ]
         },
         {
@@ -713,6 +714,11 @@
                 "Infomaniak",
                 "E-Mail der Domain marttelier.com",
                 "Schweiz"
+              ],
+              [
+                "Google (Google Analytics)",
+                "Besuchsstatistiken, nur mit Ihrer Zustimmung zu Cookies",
+                "USA"
               ]
             ]
           },
@@ -736,7 +742,7 @@
     },
     "cookies": {
       "title": "Cookie-Richtlinie",
-      "updated": "Zuletzt aktualisiert: 05.11.2026",
+      "updated": "Zuletzt aktualisiert: 23.11.2026",
       "sections": [
         {
           "title": "1. Was sind Cookies?",
@@ -747,8 +753,25 @@
         {
           "title": "2. Was diese Website verwendet",
           "paragraphs": [
-            "marttelier.com verwendet keine Analyse-, Werbe- oder Tracking-Cookies. Es werden auch keine eigenen Cookies gesetzt, um Ihre Einstellungen zu speichern."
-          ]
+            "Wenn Sie im Cookie-Hinweis zustimmen, verwendet die Website Google Analytics 4, um in zusammengefasster Form zu messen, wie viele Menschen sie besuchen, aus welchem Land und mit welchem Gerät, und welche Seiten sie lesen. Ich verwende keine Werbe-Cookies. Wenn Sie ablehnen oder keine Wahl treffen, wird Google Analytics nicht geladen.",
+            "Ihre Wahl wird in Ihrem Browser gespeichert (im lokalen Speicher, nicht in einem Cookie), damit Sie nicht erneut gefragt werden."
+          ],
+          "table": {
+            "head": [
+              "Herkunft",
+              "Zweck",
+              "Wann aktiviert",
+              "Inhaber"
+            ],
+            "rows": [
+              [
+                "Google Analytics (_ga, _ga_*)",
+                "Besuche in zusammengefasster Form messen. Dauer: bis zu 2 Jahre",
+                "Nur mit Ihrer Zustimmung",
+                "Google"
+              ]
+            ]
+          }
         },
         {
           "title": "3. Inhalte Dritter",
@@ -775,13 +798,13 @@
         {
           "title": "4. So deaktivieren Sie sie",
           "paragraphs": [
-            "Sie können Cookies in den Einstellungen Ihres Browsers löschen oder blockieren. In diesem Fall lassen sich einige Videos möglicherweise nicht abspielen."
+            "Sie können Ihre Wahl jederzeit über „Cookie-Einstellungen“ unten auf jeder Seite ändern. Sie können Cookies auch in den Einstellungen Ihres Browsers löschen oder blockieren; dann werden einige Videos möglicherweise nicht abgespielt."
           ]
         },
         {
           "title": "5. Änderungen",
           "paragraphs": [
-            "Sollte die Website künftig Analyse- oder andere Cookies verwenden, werde ich diese Richtlinie aktualisieren und vor der Aktivierung Ihre Einwilligung einholen."
+            "Wenn die Website weitere Cookies verwendet, aktualisiere ich diese Richtlinie und bitte vorher um Ihre Zustimmung."
           ]
         }
       ]
@@ -847,5 +870,13 @@
         }
       ]
     }
+  },
+  "consent": {
+    "title": "Cookie-Hinweis",
+    "text": "Ich nutze Google Analytics, um zu sehen, wie viele Menschen die Website besuchen und welche Seiten sie lesen. Es wird nur aktiviert, wenn Sie zustimmen.",
+    "policy": "Cookie-Richtlinie",
+    "accept": "Akzeptieren",
+    "reject": "Ablehnen",
+    "manage": "Cookie-Einstellungen"
   }
 }
