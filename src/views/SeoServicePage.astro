@@ -23,7 +23,8 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'seo');
 const serviceJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
-  name: `Marttelier · ${siteData.person.name}`,
+  name: 'Marttelier',
+  alternateName: siteData.person.name,
   url: new URL(getLocalizedRoute('seo', lang), Astro.site ?? Astro.url).toString(),
   description: pageSeo.description,
   serviceType: ['SEO local', 'SEO internacional', 'Auditoría SEO', 'Consultoría SEO'],

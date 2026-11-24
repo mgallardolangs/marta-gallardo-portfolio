@@ -433,7 +433,12 @@ test('blog article frontend keeps frontmatter metadata and does not opt into edi
   );
   assert.match(
     blogArticleLayoutSource,
-    /<BaseLayout[\s\S]*title=\{`\$\{post\.data\.title\} — \$\{i\.hero\.name\}`\}[\s\S]*description=\{post\.data\.description\}[\s\S]*image=\{post\.data\.image\}/,
+    /const pageTitle = post\.data\.seoTitle \?\? \(brandedTitle\.length <= 60 \? brandedTitle : post\.data\.title\);/,
+    'BlogArticleLayout should build the <title> from frontmatter: seoTitle first, then the title with the brand only when it fits in 60 characters',
+  );
+  assert.match(
+    blogArticleLayoutSource,
+    /<BaseLayout[\s\S]*title=\{pageTitle\}[\s\S]*description=\{post\.data\.description\}[\s\S]*image=\{post\.data\.image\}/,
     'BlogArticleLayout should keep title, description, and image sourced from post frontmatter fields',
   );
   assert.match(

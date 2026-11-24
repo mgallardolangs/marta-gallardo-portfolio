@@ -1,0 +1,9 @@
+---
+// Renders one or more schema.org objects as JSON-LD script tags.
+interface Props {
+  data: object | object[];
+}
+
+const items = [Astro.props.data].flat();
+---
+{items.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}

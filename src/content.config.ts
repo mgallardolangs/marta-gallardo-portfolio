@@ -15,6 +15,8 @@ const blog = defineCollection({
     slug: z.string(),
     translationKey: z.string(),
     title: z.string(),
+    // Optional <title> for search results when the visible title is too long (keep it under 60 characters).
+    seoTitle: z.string().optional(),
     description: z.string(),
     date: z.coerce.date(),
     image: z.string().optional(),

@@ -34,10 +34,20 @@ const homeServices = [
   { route: 'ugc', title: i.home.services.items.ugc, description: i.home.services.descriptions.ugc },
 ];
 import { accentHtml } from '../lib/accentHtml';
+import { professionalServiceJsonLd } from '../lib/structuredData';
+import JsonLd from '../components/JsonLd.astro';
+const serviceJsonLd = professionalServiceJsonLd({
+  site: Astro.site ?? Astro.url,
+  lang,
+  path: getLocalizedPath('/', lang),
+  description: pageSeo.description,
+  serviceType: ['Consultoría SEO', 'SEO local', 'SEO internacional', 'Traducción SEO', 'Localización web'],
+});
 ---
 
 <BaseLayout lang={lang} title={pageSeo.title} description={pageSeo.description}>
   <GsapPageRuntime />
+  <JsonLd data={serviceJsonLd} />
   <div class="overflow-x-hidden bg-paper">
       <!-- home-hero:start -->
       <section data-home-hero class="home-hero bg-paper px-6 pt-20 pb-16 md:pt-24 md:pb-20">
