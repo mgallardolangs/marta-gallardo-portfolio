@@ -101,6 +101,17 @@ const personJsonLd = {
     'User Generated Content (UGC)',
   ],
 };
+const siteName = 'Marttelier';
+// Google takes the site name shown in results from WebSite data on the home page.
+const websiteJsonLd = pagePath === '/'
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: siteName,
+      alternateName: ['marttelier', siteData.person.name],
+      url: absolute('/').toString(),
+    }
+  : null;
 ---
 <link rel="canonical" href={canonical.toString()} />
 <link rel="sitemap" href="/sitemap-index.xml" />
@@ -117,7 +128,7 @@ const personJsonLd = {
 <link rel="alternate" hreflang="x-default" href={xDefaultHref} />
 
 <meta property="og:type" content="website" />
-<meta property="og:site_name" content={siteData.person.name} />
+<meta property="og:site_name" content={siteName} />
 <meta property="og:locale" content={lang} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
@@ -130,3 +141,4 @@ const personJsonLd = {
 <meta name="twitter:image" content={socialImage.toString()} />
 
 <script type="application/ld+json" set:html={JSON.stringify(personJsonLd)} />
+{websiteJsonLd && <script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />}
