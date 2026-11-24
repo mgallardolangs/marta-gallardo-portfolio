@@ -72,7 +72,8 @@
     "readTime": "read time",
     "nextStory": "Next story",
     "end": "End of article",
-    "relatedTitle": "Related articles"
+    "relatedTitle": "Related articles",
+    "metaTitle": "SEO & SEO Translation Blog | Marttelier"
   },
   "contact": {
     "title": "Let's collaborate",
@@ -126,8 +127,8 @@
       "mainPhoto": "Main Photo",
       "scrollCue": "Discover how I work",
       "coverLabel": "Cover Story",
-      "title": "Freelance SEO Consultant & Digital Content Strategist",
-      "titleAccent": "Strategist",
+      "title": "SEO Consultant & SEO Translation That Gets You Found",
+      "titleAccent": "That Gets You Found",
       "ctaDiagnosis": "Request an SEO assessment",
       "ctaServices": "View services"
     },
@@ -495,7 +496,7 @@
     "trajectoryEyebrow": "EXPERIENCE",
     "hero": {
       "eyebrow": "About",
-      "title": "Marta Gallardo and the Marttelier philosophy",
+      "title": "Marta Gallardo, the translator & SEO consultant behind Marttelier",
       "titleAccent": "Marttelier",
       "subtitle": "Where linguistics, strategy and content come together",
       "story": "I graduated in Translation and Interpreting from the University of Alicante and trained in SEO and digital strategy. By bringing together languages, search and content creation, I found a way to support projects directly, with no agency in between. I care that every message keeps its intent and finds the right people."
