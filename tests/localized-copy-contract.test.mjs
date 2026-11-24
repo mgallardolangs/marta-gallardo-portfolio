@@ -109,12 +109,12 @@ test('Spanish localized copy matches the approved source text', async () => {
   const es = await readLocale('es');
 
   assert.equal(es.home.hero.kicker, 'marttelier');
-  assert.equal(es.home.hero.title, 'Consultora SEO Freelance y Estrategia de Contenidos Digitales');
+  assert.equal(es.home.hero.title, 'Consultora SEO y traducción SEO para que te encuentren');
   assert.equal(es.home.hero.description, 'Hago que tu proyecto se encuentre, se entienda y convenza en distintos idiomas: auditoría SEO técnica, traducción y localización profesional, y contenido UGC pensado para convertir.');
   assert.equal(es.home.hero.ctaDiagnosis, 'Solicitar diagnóstico SEO');
   assert.equal(es.home.hero.ctaServices, 'Ver servicios');
   assert.equal(es.home.visibility.text, 'Más tráfico no sirve de nada si no llega a las personas adecuadas. Por eso, como traductora y creadora de contenido, trabajo entre idiomas, culturas y formatos: diseño estrategias SEO adaptadas a la realidad de cada proyecto y las combino con traducción, localización y vídeos UGC, para que cada mensaje conserve su intención, conecte de forma natural y genere confianza desde el primer vistazo.');
-  assert.equal(es.aboutPage.hero.title, 'Marta Gallardo  Filosofía Marttelier');
+  assert.equal(es.aboutPage.hero.title, 'Marta Gallardo, la traductora y consultora SEO detrás de Marttelier');
   assert.equal(es.seoPage.hero.paragraphs.length, 2);
   assert.equal(es.translationServicePage.arsenal.skillsTitle, 'Habilidades');
   assert.equal(es.translationServicePage.arsenal.eyebrow, 'PERFIL Y HERRAMIENTAS');

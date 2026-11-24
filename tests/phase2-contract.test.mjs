@@ -323,7 +323,7 @@ test('Phase 2 Spanish and localized copy match the approved content set', async 
   const [es, en, fr, de, it, ca] = await Promise.all(locales.map((locale) => readJson(`src/i18n/${locale}.json`)));
 
   assert.equal(es.home.hero.kicker, 'marttelier');
-  assert.equal(es.home.hero.title, 'Consultora SEO Freelance y Estrategia de Contenidos Digitales');
+  assert.equal(es.home.hero.title, 'Consultora SEO y traducción SEO para que te encuentren');
   assert.equal(es.home.hero.description, 'Hago que tu proyecto se encuentre, se entienda y convenza en distintos idiomas: auditoría SEO técnica, traducción y localización profesional, y contenido UGC pensado para convertir.');
   assert.equal(es.home.hero.ctaDiagnosis, 'Solicitar diagnóstico SEO');
   assert.equal(es.home.hero.ctaServices, 'Ver servicios');
