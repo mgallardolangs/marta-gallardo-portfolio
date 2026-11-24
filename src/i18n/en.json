@@ -924,6 +924,7 @@
   "legal": {
     "privacy": {
       "title": "Privacy policy",
+      "description": "How Marttelier (Marta Gallardo, Elche, Spain) handles your personal data when you use the contact form or email: purpose, retention and your rights.",
       "updated": "Last updated: 23.11.2026",
       "sections": [
         {
@@ -1006,6 +1007,7 @@
     },
     "cookies": {
       "title": "Cookie policy",
+      "description": "Which cookies marttelier.com uses, what each one does (Google Analytics only if you accept it) and how to change your choice.",
       "updated": "Last updated: 23.11.2026",
       "sections": [
         {
@@ -1075,6 +1077,7 @@
     },
     "legalNotice": {
       "title": "Legal notice",
+      "description": "Owner details for marttelier.com, run by Marta Gallardo, SEO consultant and translator in Elche, Spain, and the terms of use of the site.",
       "updated": "Last updated: 05.11.2026",
       "sections": [
         {

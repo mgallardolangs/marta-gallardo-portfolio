@@ -47,10 +47,10 @@ function getSvgTextNodes(source) {
   }));
 }
 
-function getSvgRootOnlyTextChild(source) {
-  const rootMatch = source.match(/^\s*<svg\b[^>]*>\s*(<text\b[^>]*>[\s\S]*?<\/text>)\s*<\/svg>\s*$/i);
-  assert.ok(rootMatch, 'favicon should keep a root <svg> with exactly one <text> child and no sibling elements');
-  return rootMatch[1] ?? '';
+function getSvgRootCircleAndTextChildren(source) {
+  const rootMatch = source.match(/^\s*<svg\b[^>]*>\s*(<circle\b[^>]*\/>)\s*(<text\b[^>]*>[\s\S]*?<\/text>)\s*<\/svg>\s*$/i);
+  assert.ok(rootMatch, 'favicon should keep a root <svg> with exactly one <circle> then one <text> child and no other elements');
+  return { circle: rootMatch[1] ?? '', text: rootMatch[2] ?? '' };
 }
 
 function getSvgPaintValues(source) {
@@ -168,9 +168,9 @@ test('Home keeps the approved full-width ink orbit wrapper contract instead of t
   );
 });
 
-test('favicon keeps only a root svg with one ink MG text child', async () => {
+test('favicon keeps a round ink badge with one paper MG text child', async () => {
   const faviconSource = await readSource('public/favicon.svg');
-  const rootTextChild = getSvgRootOnlyTextChild(faviconSource);
+  const { circle, text } = getSvgRootCircleAndTextChildren(faviconSource);
   const textNodes = getSvgTextNodes(faviconSource);
   const paintValues = getSvgPaintValues(faviconSource)
     .filter((value) => !/^(?:none|transparent)$/i.test(value))
@@ -178,19 +178,20 @@ test('favicon keeps only a root svg with one ink MG text child', async () => {
 
   assert.equal(textNodes.length, 1, 'favicon should expose exactly one text node');
   assert.equal(textNodes[0]?.textContent, 'MG', 'favicon should render only the MG monogram');
-  assert.match(rootTextChild, /^<text\b[^>]*>\s*MG\s*<\/text>$/i, 'favicon should keep MG as the lone direct svg child');
-  assert.match(textNodes[0]?.attributes ?? '', /\bfill=["']#4A1222["']/i, 'favicon should render the MG mark in ink (#4A1222)');
+  assert.match(text, /^<text\b[^>]*>\s*MG\s*<\/text>$/i, 'favicon should keep MG as the only text child');
+  assert.match(circle, /\bfill=["']#4A1222["']/i, 'favicon badge should be ink (#4A1222)');
+  assert.match(textNodes[0]?.attributes ?? '', /\bfill=["']#FBF4EF["']/i, 'favicon MG mark should be paper (#FBF4EF) on the ink badge');
   assert.doesNotMatch(
     faviconSource,
-    /<(?:style|defs|rect|circle|ellipse|path|polygon|polyline|line|image|use|foreignObject)\b/i,
-    'favicon should not include styles, defs, shapes, image/use nodes, or foreignObject content',
+    /<(?:style|defs|rect|ellipse|path|polygon|polyline|line|image|use|foreignObject)\b/i,
+    'favicon should not include styles, defs, other shapes, image/use nodes, or foreignObject content',
   );
   assert.doesNotMatch(faviconSource, /\bbackground(?:-color)?\b\s*(?:=|:)/i, 'favicon should not declare a background');
   assert.doesNotMatch(faviconSource, /\bstroke\b\s*(?:=|:)/i, 'favicon should not declare stroke paint');
   assert.deepEqual(
-    [...new Set(paintValues)],
-    ['#4a1222'],
-    'favicon should not introduce any fill or stroke colors beyond the ink MG mark',
+    [...new Set(paintValues)].sort(),
+    ['#4a1222', '#fbf4ef'],
+    'favicon should only use the ink badge and paper MG colors',
   );
 });
 

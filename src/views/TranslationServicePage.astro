@@ -11,6 +11,8 @@ import { accentHtml } from '../lib/accentHtml';
 import { getLangFromUrl, getLocalizedRoute, t } from '../i18n';
 import { getPageSeo, siteData } from '../lib/siteData';
 import { getTranslationArsenalColumns } from '../lib/translationPage.js';
+import { professionalServiceJsonLd } from '../lib/structuredData';
+import JsonLd from '../components/JsonLd.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
@@ -27,10 +29,18 @@ const levelWidth = (level: string) => {
   if (/nativ|native|matern|madre|muttersprach/i.test(level)) return 100;
   return 80;
 };
+const serviceJsonLd = professionalServiceJsonLd({
+  site: Astro.site ?? Astro.url,
+  lang,
+  path: getLocalizedRoute('translation', lang),
+  description: pageSeo.description,
+  serviceType: ['Traducción SEO', 'Localización web', 'Traducción profesional'],
+});
 ---
 
 <BaseLayout title={pageSeo.title} description={pageSeo.description}>
   <GsapPageRuntime />
+  <JsonLd data={serviceJsonLd} />
   <div class="bg-paper service-page--pink" data-translation-service-page>
     <section data-service-hero class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
       <div class="site-container service-hero">
