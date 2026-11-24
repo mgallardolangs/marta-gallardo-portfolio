@@ -124,7 +124,7 @@ test('page gutters, home hero type and public text stacks use the revised readin
   assert.match(styles, /\.home-hero__title\s*\{[^}]*padding-bottom:\s*0\.16em;/s);
   assert.match(styles, /max-width:\s*18ch/);
   assert.match(styles, /@media \(max-width: 480px\)[\s\S]*\.home-hero__cta\s*\{[^}]*font-size:\s*0\.62rem;[^}]*letter-spacing:\s*0\.12em;/);
-  assert.match(homeSource, /className="flex flex-col gap-8 md:gap-10"/);
+  assert.match(homeSource, /class="home-hero__intro flex flex-col gap-8 md:gap-10"/);
   assert.match(aboutSource, /className="flex flex-col gap-8"/);
   assert.match(seoSource, /className="flex flex-col gap-8"/);
   assert.match(translationSource, /className="flex flex-col gap-8"/);

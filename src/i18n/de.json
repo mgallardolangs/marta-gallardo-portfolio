@@ -123,14 +123,18 @@
   "home": {
     "hero": {
       "kicker": "marttelier",
-      "description": "Ich sorge dafür, dass Ihr Projekt in mehreren Sprachen gefunden, verstanden und überzeugend wahrgenommen wird: technisches SEO-Audit, professionelle Übersetzung und Lokalisierung sowie UGC-Content, der auf Conversion ausgelegt ist.",
+      "description": "Ich bin Marta Gallardo, **SEO-Beraterin**, Übersetzerin und UGC-Creatorin aus Elche, Spanien. Ich sorge dafür, dass Ihr Projekt in mehreren Sprachen gefunden, verstanden und gewählt wird: mit **technischen SEO-Audits**, **lokalem und internationalem SEO**, **SEO-Übersetzung** und UGC-Videos, die konvertieren.",
       "mainPhoto": "Hauptfoto",
       "scrollCue": "Scrollen zum Entdecken",
       "coverLabel": "Titel-Story",
-      "title": "Freiberufliche SEO-Beratung & Strategie für digitale Inhalte",
-      "titleAccent": "Strategie",
+      "title": "SEO-Beraterin und Übersetzerin, damit Ihre Website in jeder Sprache rankt",
+      "titleAccent": "in jeder Sprache",
       "ctaDiagnosis": "SEO-Analyse anfragen",
-      "ctaServices": "Leistungen ansehen"
+      "ctaServices": "Leistungen ansehen",
+      "photos": {
+        "languages": "Flaggen verschiedener Länder über dem Flussufer von Porto",
+        "travel": "Flugzeugflügel bei Sonnenuntergang durch das Fenster gesehen"
+      }
     },
     "about": {
       "eyebrow": "Über mich",
@@ -147,7 +151,24 @@
       "title": "Fachliche Sorgfalt, anerkannter Abschluss und Kreativität",
       "titleAccent": "Kreativität",
       "description": "Hinter Marttelier steht Marta Gallardo. Als Absolventin des Studiengangs Übersetzen und Dolmetschen an der Universität Alicante und mit einer Weiterbildung in SEO und digitaler Strategie arbeite ich Hand in Hand mit Unternehmen und Marken, um einen soliden, mehrsprachigen und rentablen Online-Auftritt aufzubauen – ohne die Zwischenebenen einer Agentur.",
-      "cta": "Mehr über mich erfahren"
+      "cta": "Mehr über mich erfahren",
+      "passport": {
+        "label": "Beruflicher Reisepass · Marta Gallardo",
+        "degreeLabel": "Offizieller Abschluss",
+        "degree": "Studium Übersetzen und Dolmetschen · Universität Alicante",
+        "seoLabel": "SEO-Weiterbildung",
+        "cover": "Beruflicher Reisepass",
+        "surnameLabel": "Nachname",
+        "surname": "Gallardo",
+        "nameLabel": "Vorname",
+        "name": "Marta",
+        "professionLabel": "Beruf",
+        "profession": "Übersetzerin und SEO-Beraterin",
+        "seoItems": [
+          "Internationales SEO · Semrush-Zertifikat",
+          "Privatkurs SEO und digitales Marketing · Freelancer y Nómada Digital"
+        ]
+      }
     },
     "video": {
       "eyebrow": "Markenidentität",
@@ -186,7 +207,22 @@
     "visibility": {
       "title": "Sichtbarkeit, Sprachen & Conversion",
       "titleAccent": "Conversion",
-      "text": "Mehr Traffic nützt nichts, wenn er nicht die richtigen Menschen erreicht. Deshalb arbeite ich als Übersetzerin und Content-Creatorin zwischen Sprachen, Kulturen und Formaten: Ich entwickle SEO-Strategien, die zur Realität des jeweiligen Projekts passen, und verbinde sie mit Übersetzung, Lokalisierung und UGC-Videos, damit jede Botschaft ihre Absicht behält, natürlich ankommt und auf den ersten Blick Vertrauen schafft."
+      "text": "Mehr Traffic nützt nichts, wenn er nicht die richtigen Menschen erreicht. Deshalb arbeite ich als Übersetzerin und Content-Creatorin zwischen Sprachen, Kulturen und Formaten: Ich entwickle SEO-Strategien, die zur Realität des jeweiligen Projekts passen, und verbinde sie mit Übersetzung, Lokalisierung und UGC-Videos, damit jede Botschaft ihre Absicht behält, natürlich ankommt und auf den ersten Blick Vertrauen schafft.",
+      "steps": [
+        {
+          "title": "Kostenlose Analyse",
+          "text": "Ich prüfe Ihre Website und nenne Ihnen drei priorisierte Ergebnisse, mit einem 30-minütigen Gespräch dazu."
+        },
+        {
+          "title": "Maßgeschneidertes Angebot",
+          "text": "Ich erkläre, was ich tun würde, in welcher Reihenfolge und mit einem klaren Angebot vor dem Start."
+        },
+        {
+          "title": "Umsetzung und Ergebnisse",
+          "text": "Ich kümmere mich um SEO, Übersetzung oder Inhalte und zeige Ihnen die Fortschritte mit echten Daten."
+        }
+      ],
+      "stepsTitle": "So arbeiten wir"
     },
     "latestArticles": {
       "title": "Neueste Artikel zu SEO und digitalem Marketing",

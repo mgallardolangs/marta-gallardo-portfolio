@@ -96,8 +96,9 @@ test('typed cursor and shared reveal motion use the stronger alignment and timin
 });
 
 test('orbit hover playback exposes a helper for immediate pause and resume while public home shifts only the live orbit wrapper', async () => {
+  // The orbit carousel moved from Home to About on 24/11/2026 (clay redesign); its contract now lives there.
   const [homeSource, adminHomeSource, orbitSource, orbitMedia] = await Promise.all([
-    readSource('src/views/HomePage.astro'),
+    readSource('src/views/AboutPage.astro'),
     readSource('src/pages/admin/index.astro'),
     readSource('src/components/OvalMediaOrbit.tsx'),
     import('../src/lib/orbitMedia.ts'),

@@ -109,8 +109,8 @@ test('Spanish localized copy matches the approved source text', async () => {
   const es = await readLocale('es');
 
   assert.equal(es.home.hero.kicker, 'marttelier');
-  assert.equal(es.home.hero.title, 'Consultora SEO y traducción SEO para que te encuentren');
-  assert.equal(es.home.hero.description, 'Hago que tu proyecto se encuentre, se entienda y convenza en distintos idiomas: auditoría SEO técnica, traducción y localización profesional, y contenido UGC pensado para convertir.');
+  assert.equal(es.home.hero.title, 'Consultora SEO y traductora para que tu web se posicione en cualquier idioma');
+  assert.equal(es.home.hero.description, 'Soy Marta Gallardo, **consultora SEO**, traductora y creadora UGC desde Elche. Hago que tu proyecto se encuentre, se entienda y convenza en varios idiomas con **auditoría SEO técnica**, **SEO local e internacional**, **traducción SEO** y vídeos UGC pensados para convertir.');
   assert.equal(es.home.hero.ctaDiagnosis, 'Solicitar diagnóstico SEO');
   assert.equal(es.home.hero.ctaServices, 'Ver servicios');
   assert.equal(es.home.visibility.text, 'Más tráfico no sirve de nada si no llega a las personas adecuadas. Por eso, como traductora y creadora de contenido, trabajo entre idiomas, culturas y formatos: diseño estrategias SEO adaptadas a la realidad de cada proyecto y las combino con traducción, localización y vídeos UGC, para que cada mensaje conserve su intención, conecte de forma natural y genere confianza desde el primer vistazo.');

@@ -544,8 +544,9 @@ test('admin Translation page contains the current editable localization and digi
 });
 
 test('existing Home and UGC stable markers stay untouched by the translation correction work', async () => {
+  // The orbit carousel moved from Home to About on 24/11/2026 (clay redesign); its contract now lives there.
   const [homeSource, ugcSource] = await Promise.all([
-    readSource('src/views/HomePage.astro'),
+    readSource('src/views/AboutPage.astro'),
     readSource('src/views/UgcPage.astro'),
   ]);
 

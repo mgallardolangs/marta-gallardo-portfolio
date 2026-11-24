@@ -410,8 +410,9 @@ test('site orbit data keeps all fifteen existing local image assets', async () =
 });
 
 test('homepage and admin keep the approved orbit wiring while StoryMap files disappear', async () => {
+  // The orbit carousel moved from Home to About on 24/11/2026 (clay redesign); its contract now lives there.
   const [homeSource, adminSource, orbitSource] = await Promise.all([
-    readSource('src/views/HomePage.astro'),
+    readSource('src/views/AboutPage.astro'),
     readSource('src/pages/admin/index.astro'),
     readSource('src/components/OvalMediaOrbit.tsx'),
   ]);

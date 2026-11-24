@@ -40,7 +40,7 @@ const sharedViews = [
 ];
 
 const typedViewSpecs = [
-  ['src/views/HomePage.astro', /text=\{i\.home\.hero\.title\}/, 2],
+  ['src/views/HomePage.astro', /text=\{i\.home\.latestArticles\.title\}/, 1],
   ['src/views/AboutPage.astro', /text=\{page\.hero\.title\}/, 3],
   ['src/views/SeoServicePage.astro', /text=\{page\.hero\.title\}/, 5],
   ['src/views/TranslationServicePage.astro', /text=\{page\.hero\.title\}/, 5],
@@ -323,8 +323,8 @@ test('Phase 2 Spanish and localized copy match the approved content set', async 
   const [es, en, fr, de, it, ca] = await Promise.all(locales.map((locale) => readJson(`src/i18n/${locale}.json`)));
 
   assert.equal(es.home.hero.kicker, 'marttelier');
-  assert.equal(es.home.hero.title, 'Consultora SEO y traducción SEO para que te encuentren');
-  assert.equal(es.home.hero.description, 'Hago que tu proyecto se encuentre, se entienda y convenza en distintos idiomas: auditoría SEO técnica, traducción y localización profesional, y contenido UGC pensado para convertir.');
+  assert.equal(es.home.hero.title, 'Consultora SEO y traductora para que tu web se posicione en cualquier idioma');
+  assert.equal(es.home.hero.description, 'Soy Marta Gallardo, **consultora SEO**, traductora y creadora UGC desde Elche. Hago que tu proyecto se encuentre, se entienda y convenza en varios idiomas con **auditoría SEO técnica**, **SEO local e internacional**, **traducción SEO** y vídeos UGC pensados para convertir.');
   assert.equal(es.home.hero.ctaDiagnosis, 'Solicitar diagnóstico SEO');
   assert.equal(es.home.hero.ctaServices, 'Ver servicios');
   assert.equal(es.home.services.items.seo, 'Consultoría y Auditoría SEO');

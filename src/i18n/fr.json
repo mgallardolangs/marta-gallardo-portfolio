@@ -123,14 +123,18 @@
   "home": {
     "hero": {
       "kicker": "marttelier",
-      "description": "Je fais en sorte que votre projet soit trouvé, compris et convaincant dans plusieurs langues : audit SEO technique, traduction et localisation professionnelles, et contenu UGC pensé pour convertir.",
+      "description": "Je suis Marta Gallardo, **consultante SEO**, traductrice et créatrice UGC basée à Elche, en Espagne. Je fais en sorte que votre projet soit trouvé, compris et convaincant dans plusieurs langues grâce à l’**audit SEO technique**, au **SEO local et international**, à la **traduction SEO** et à des vidéos UGC pensées pour convertir.",
       "mainPhoto": "Photo principale",
       "scrollCue": "Découvrez mon travaille",
       "coverLabel": "Couverture éditoriale",
-      "title": "Consultante SEO et traduction SEO pour qu’on vous trouve",
-      "titleAccent": "pour qu’on vous trouve",
+      "title": "Consultante SEO et traductrice pour que votre site se positionne dans toutes les langues",
+      "titleAccent": "dans toutes les langues",
       "ctaDiagnosis": "Demander un diagnostic SEO",
-      "ctaServices": "Voir les services"
+      "ctaServices": "Voir les services",
+      "photos": {
+        "languages": "Drapeaux de plusieurs pays flottant au-dessus des quais de Porto",
+        "travel": "Aile d’avion au coucher du soleil vue depuis le hublot"
+      }
     },
     "about": {
       "eyebrow": "À propos",
@@ -147,7 +151,24 @@
       "title": "Rigueur technique, diplôme officiel et créativité",
       "titleAccent": "créativité",
       "description": "Derrière Marttelier, il y a Marta Gallardo. Diplômée en Traduction et Interprétation de l'Université d'Alicante et formée au SEO et à la stratégie digitale, je travaille main dans la main avec des entreprises et des marques pour construire une présence en ligne solide, multilingue et rentable, sans les intermédiaires d'une agence.",
-      "cta": "En savoir plus sur moi"
+      "cta": "En savoir plus sur moi",
+      "passport": {
+        "label": "Passeport professionnel · Marta Gallardo",
+        "degreeLabel": "Diplôme officiel",
+        "degree": "Licence en traduction et interprétation · Université d’Alicante",
+        "seoLabel": "Formation SEO",
+        "cover": "Passeport professionnel",
+        "surnameLabel": "Nom",
+        "surname": "Gallardo",
+        "nameLabel": "Prénom",
+        "name": "Marta",
+        "professionLabel": "Profession",
+        "profession": "Traductrice et consultante SEO",
+        "seoItems": [
+          "SEO international · certificat Semrush",
+          "Formation privée en SEO et marketing digital · Freelancer y Nómada Digital"
+        ]
+      }
     },
     "video": {
       "eyebrow": "Marque personnelle",
@@ -186,7 +207,22 @@
     "visibility": {
       "title": "Visibilité, langues et conversion",
       "titleAccent": "conversion",
-      "text": "Plus de trafic ne sert à rien s'il n'atteint pas les bonnes personnes. C'est pourquoi, en tant que traductrice et créatrice de contenu, je travaille entre les langues, les cultures et les formats : je conçois des stratégies SEO adaptées à la réalité de chaque projet et je les associe à la traduction, à la localisation et à des vidéos UGC, pour que chaque message garde son intention, trouve naturellement sa place et inspire confiance dès le premier regard."
+      "text": "Plus de trafic ne sert à rien s'il n'atteint pas les bonnes personnes. C'est pourquoi, en tant que traductrice et créatrice de contenu, je travaille entre les langues, les cultures et les formats : je conçois des stratégies SEO adaptées à la réalité de chaque projet et je les associe à la traduction, à la localisation et à des vidéos UGC, pour que chaque message garde son intention, trouve naturellement sa place et inspire confiance dès le premier regard.",
+      "steps": [
+        {
+          "title": "Diagnostic gratuit",
+          "text": "J’analyse votre site et vous donne trois constats prioritaires, avec un appel de 30 minutes pour en parler."
+        },
+        {
+          "title": "Proposition sur mesure",
+          "text": "Je vous explique ce que je ferais, dans quel ordre et avec un devis clair avant de commencer."
+        },
+        {
+          "title": "Travail et résultats",
+          "text": "Je m’occupe du SEO, de la traduction ou du contenu et je vous montre les progrès avec des données réelles."
+        }
+      ],
+      "stepsTitle": "Comment nous travaillons"
     },
     "latestArticles": {
       "title": "Derniers articles sur le SEO et le marketing digital",

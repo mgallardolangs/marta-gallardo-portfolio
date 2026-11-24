@@ -286,7 +286,7 @@ test('public media surfaces keep eager hero loading, click-gated About video, la
     readSource('src/components/VideoGallery.tsx'),
   ]);
 
-  assert.match(homeSource, /<HomeHeroPortrait>/);
+  assert.match(homeSource, /<HomeHeroPortrait\b/);
   assert.match(homeSource, /siteData\.heroMainPhoto/);
   assert.doesNotMatch(homeSource, /brandVideoEmbedUrl|instagramScreenshot/);
   assert.match(aboutSource, /<ClickToLoadYouTube/);

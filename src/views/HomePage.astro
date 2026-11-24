@@ -3,10 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import ScrollReveal from '../components/ScrollReveal';
 import RichText from '../components/RichText.astro';
-import OvalMediaOrbit from '../components/OvalMediaOrbit';
 import GsapPageRuntime from '../components/GsapPageRuntime.astro';
-import StaggerContainer, { StaggerItem } from '../components/StaggerContainer';
 import HomeHeroPortrait from '../components/HomeHeroPortrait.astro';
+import ClayWordmark from '../components/ClayWordmark.astro';
 import TypedTitle from '../components/TypedTitle.astro';
 import { getLangFromUrl, getLocalizedPath, getLocalizedRoute, t, type Lang } from '../i18n';
 import { getPageSeo, siteData } from '../lib/siteData';
@@ -29,9 +28,10 @@ const localizedPosts = scopeBlogPostsToLocale(await getCollection('blog'), lang)
 const { latest, archive } = getLatestAndArchive(localizedPosts);
 const latestPosts = latest ? [latest, ...archive].slice(0, 3) : archive.slice(0, 3);
 const homeServices = [
-  { route: 'seo', title: i.home.services.items.seo, description: i.home.services.descriptions.seo },
-  { route: 'translation', title: i.home.services.items.translation, description: i.home.services.descriptions.translation },
-  { route: 'ugc', title: i.home.services.items.ugc, description: i.home.services.descriptions.ugc },
+  // Each service keeps its brand colour (DESIGN.md): SEO burgundy, translation hazel, UGC strawberry.
+  { route: 'seo', title: i.home.services.items.seo, description: i.home.services.descriptions.seo, card: 'clay-card--ink', token: 'clay-token--paper', icon: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M8 10.5h5M10.5 8v5"/>' },
+  { route: 'translation', title: i.home.services.items.translation, description: i.home.services.descriptions.translation, card: 'clay-card--paper', token: 'clay-token--hazel', icon: '<path d="M4 5h9v7H8l-4 3z"/><path d="M11 12v2h5l4 3v-9h-7"/>' },
+  { route: 'ugc', title: i.home.services.items.ugc, description: i.home.services.descriptions.ugc, card: 'clay-card--amaranth', token: '', icon: '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 5h2M10.5 10.5v4l3.5-2z"/>' },
 ];
 import { accentHtml } from '../lib/accentHtml';
 ---
@@ -43,142 +43,66 @@ import { accentHtml } from '../lib/accentHtml';
       <section data-home-hero class="home-hero bg-paper px-6 pt-20 pb-16 md:pt-24 md:pb-20">
         <div class="site-container home-hero__stage">
           <div class="home-hero__copy">
-            <StaggerContainer client:visible className="flex flex-col gap-8 md:gap-10" staggerDelay={0.1}>
+            <!-- CSS-only entrance: the heading is painted on first render (LCP), no React needed for the hero -->
+            <div class="home-hero__intro flex flex-col gap-8 md:gap-10">
               <div class="home-hero__clip">
-                <StaggerItem>
-                  <p class="home-hero__kicker">{i.home.hero.kicker}</p>
-                </StaggerItem>
+                <h1 class="home-hero__title" set:html={accentHtml(i.home.hero.title, i.home.hero.titleAccent) ?? i.home.hero.title} />
               </div>
 
               <div class="home-hero__clip">
-                <StaggerItem>
-                  <TypedTitle as="h1" text={i.home.hero.title} accent={i.home.hero.titleAccent} trigger="load" class="home-hero__title" />
-                </StaggerItem>
+                <RichText text={i.home.hero.description} class="home-hero__description" />
               </div>
 
               <div class="home-hero__clip">
-                <StaggerItem>
-                  <RichText text={i.home.hero.description} class="home-hero__description" />
-                </StaggerItem>
+                <div class="home-hero__actions">
+                  <a href={getLocalizedRoute('contact', lang)} class="home-hero__cta home-hero__cta--primary">
+                    <span class="home-hero__cta-label">{i.home.hero.ctaDiagnosis}</span>
+                  </a>
+                  <a href="#home-services" data-home-services-cta class="home-hero__cta home-hero__cta--secondary">
+                    <span class="home-hero__cta-label">{i.home.hero.ctaServices}</span>
+                  </a>
+                </div>
               </div>
-
-              <div class="home-hero__clip">
-                <StaggerItem>
-                  <div class="home-hero__actions">
-                    <a href={getLocalizedRoute('contact', lang)} class="home-hero__cta home-hero__cta--primary">
-                      <span class="home-hero__cta-label">{i.home.hero.ctaDiagnosis}</span>
-                    </a>
-                    <a href="#home-services" data-home-services-cta class="home-hero__cta home-hero__cta--secondary">
-                      <span class="home-hero__cta-label">{i.home.hero.ctaServices}</span>
-                    </a>
-                  </div>
-                </StaggerItem>
-              </div>
-            </StaggerContainer>
+            </div>
           </div>
 
-          <ScrollReveal client:visible direction="none" className="home-hero__portrait-shell">
-            <HomeHeroPortrait>
+          <div class="home-hero__portrait-shell">
+            {/* 3D clay render + CSS tilt: fixed size (no layout shift), loads after the heading and the portrait */}
+            {siteData.heroLogo3d ? (
+              <p class="home-hero__logo3d" data-logo-tilt>
+                <img src={siteData.heroLogo3d} alt={i.home.hero.kicker} width={720} height={136} loading="eager" fetchpriority="low" decoding="async" />
+              </p>
+            ) : (
+              <ClayWordmark as="p" class="home-hero__logo" label={i.home.hero.kicker} />
+            )}
+            <HomeHeroPortrait
+              fan={[
+                { src: '/images/site/nicho-idiomas.webp', alt: i.home.hero.photos.languages },
+                { src: '/images/site/nicho-viajes.webp', alt: i.home.hero.photos.travel },
+              ]}
+            >
               <img
-                src={netlifyImage(siteData.heroMainPhoto, { width: 1200 })}
+                src={netlifyImage(siteData.heroCutoutPhoto ?? siteData.heroMainPhoto, { width: 548 })}
                 alt={i.hero.name}
-                width={1200}
-                height={1600}
+                width={548}
+                height={1000}
+                sizes="(min-width: 1024px) 300px, 55vw"
                 loading="eager"
                 fetchpriority="high"
                 decoding="async"
               />
             </HomeHeroPortrait>
-          </ScrollReveal>
+          </div>
         </div>
       </section>
       <!-- home-hero:end -->
 
-      <section id="home-services" class="scroll-mt-24 bg-hazel px-6 py-16 text-paper md:scroll-mt-28 md:py-20">
-        <div class="site-container space-y-10">
-          <ScrollReveal client:visible direction="right" className="flex flex-col gap-5 md:gap-6">
-            <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.nav.services}</p>
-            <h2 class="font-heading text-4xl leading-none text-paper md:text-6xl" set:html={accentHtml(i.home.services.title, i.home.services.titleAccent) ?? i.home.services.title} />
-          </ScrollReveal>
-
-          <div class="border-t border-paper/18">
-            {homeServices.map((service, index) => (
-              <a
-                href={getLocalizedRoute(service.route, lang)}
-                class="group flex items-start justify-between gap-5 border-b border-paper/18 py-5 md:py-7"
-              >
-                <div class="flex min-w-0 items-start gap-4 md:gap-6">
-                  <span class="pt-1 font-body text-[0.68rem] font-semibold tracking-[0.24em] text-paper/80">{`0${index + 1}`}</span>
-                  <div class="min-w-0">
-                    <h3 class="font-heading text-2xl font-normal leading-tight decoration-amaranth decoration-2 underline-offset-8 group-hover:underline group-focus-visible:underline md:text-4xl">{service.title}</h3>
-                    <p class="mt-2 max-w-3xl font-body text-sm leading-7 text-paper/85 md:text-base md:leading-8">{service.description}</p>
-                  </div>
-                </div>
-                <span class="mt-1 shrink-0 font-body text-xl text-paper transition-transform group-hover:translate-x-1 group-focus-visible:translate-x-1" aria-hidden="true">↗</span>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section data-home-orbit class="home-orbit bg-ink px-6 py-16 text-paper md:py-24">
-        <div class="site-container grid gap-8 lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)_minmax(0,12rem)] lg:grid-rows-[auto_1fr_auto] lg:items-center xl:grid-cols-[minmax(0,21rem)_minmax(0,1fr)_minmax(0,14rem)]">
-          <ScrollReveal client:visible direction="right" className="flex flex-col gap-5 lg:col-start-1 lg:row-start-1 lg:self-start">
-            <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.home.orbit.kicker}</p>
-            <h2 class="max-w-[8ch] font-heading text-[2.8rem] leading-[0.9] tracking-[-0.08em] text-paper md:text-[4.25rem] xl:text-[5.5rem]">
-              <em class="accent-word">{i.home.orbit.title}</em>
-            </h2>
-          </ScrollReveal>
-
-          <ScrollReveal client:visible direction="left" className="order-3 lg:col-start-1 lg:row-start-3 lg:order-none lg:self-end">
-            <p class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.34em] text-white/60 md:text-xs">
-              {i.home.orbit.note}
-            </p>
-          </ScrollReveal>
-
-          <ScrollReveal client:visible direction="left" className="order-2 lg:col-start-3 lg:row-start-1 lg:order-none lg:justify-self-end lg:self-start">
-            <p class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.34em] text-white/60 md:text-xs">
-              {i.home.orbit.index}
-            </p>
-          </ScrollReveal>
-
-          <div class="order-4 min-w-0 w-full lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:order-none lg:translate-x-6">
-            <OvalMediaOrbit client:visible items={siteData.orbitMedia} lang={lang} />
-          </div>
-        </div>
-      </section>
-
-      <section class="bg-paper px-6 py-20 md:py-24">
-        <div class="site-container space-y-14">
-          <ScrollReveal client:visible direction="right" className="flex flex-col gap-8">
-            <div class="w-16 border-t border-amaranth"></div>
-            <h2 class="font-heading text-4xl leading-none text-ink md:text-6xl" set:html={accentHtml(i.home.visibility.title, i.home.visibility.titleAccent) ?? i.home.visibility.title} />
-            <RichText text={i.home.visibility.text} class="max-w-3xl font-body text-lg leading-8 text-ink-muted md:text-xl" />
-          </ScrollReveal>
-
-          <ScrollReveal client:visible>
-            <div class="border-t border-black/10 pt-8">
-              <p class="text-accent-ink mb-4 font-body text-xs font-semibold uppercase tracking-[0.3em]">{i.home.about.languagesLabel}</p>
-              <StaggerContainer client:visible className="flex flex-wrap gap-3" staggerDelay={0.08}>
-                {i.home.about.languages.map((language) => (
-                  <StaggerItem className="inline-flex">
-                    <span class="border border-black/10 bg-paper px-4 py-2 text-sm text-ink">{language}</span>
-                  </StaggerItem>
-                ))}
-              </StaggerContainer>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      <section class="bg-ink px-6 py-20 text-paper md:py-24">
-        <div class="site-container grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+      <section data-home-authority class="bg-ink px-6 py-20 text-paper md:py-24">
+        <div class="site-container grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-16">
           <ScrollReveal client:visible direction="right" className="flex flex-col gap-7">
             <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.home.about.eyebrow}</p>
             <h2 class="font-heading text-4xl leading-none text-paper md:text-6xl" set:html={accentHtml(i.home.about.title, i.home.about.titleAccent) ?? i.home.about.title} />
-          </ScrollReveal>
-          <ScrollReveal client:visible direction="left" className="flex flex-col gap-8 lg:justify-self-end">
-            <RichText text={i.home.about.description} class="max-w-3xl font-body text-lg leading-8 text-white/76 md:text-xl" />
+            <RichText text={i.home.about.description} class="max-w-2xl font-body text-lg leading-8 text-paper/80" />
             <div class="site-text-cta-row">
               <a href={getLocalizedRoute('about', lang)} class="site-text-cta">
                 {i.home.about.cta}
@@ -186,11 +110,119 @@ import { accentHtml } from '../lib/accentHtml';
               </a>
             </div>
           </ScrollReveal>
+
+          <ScrollReveal client:visible direction="left">
+            <!-- A passport booklet: burgundy cover on the left, data page on the right (stacks on phones) -->
+            <div class="home-passport">
+              <div class="home-passport__cover" aria-hidden="true">
+                <span class="home-passport__cover-title">{i.home.about.passport.cover}</span>
+                <span class="home-passport__emblem">MG</span>
+                <span class="home-passport__cover-brand">marttelier</span>
+              </div>
+              <div class="home-passport__page">
+                <p class="home-passport__label">{i.home.about.passport.label}</p>
+                <div class="home-passport__id">
+                  <img
+                    src={netlifyImage(siteData.heroMainPhoto, { width: 200 })}
+                    alt=""
+                    width={200}
+                    height={250}
+                    loading="lazy"
+                    decoding="async"
+                    class="home-passport__photo"
+                  />
+                  <dl class="home-passport__fields">
+                    <div><dt>{i.home.about.passport.surnameLabel}</dt><dd>{i.home.about.passport.surname}</dd></div>
+                    <div><dt>{i.home.about.passport.nameLabel}</dt><dd>{i.home.about.passport.name}</dd></div>
+                    <div><dt>{i.home.about.passport.professionLabel}</dt><dd>{i.home.about.passport.profession}</dd></div>
+                  </dl>
+                </div>
+                <dl class="home-passport__rows">
+                  <div>
+                    <dt>{i.home.about.passport.degreeLabel}</dt>
+                    <dd>{i.home.about.passport.degree}</dd>
+                  </div>
+                  <div>
+                    <dt>{i.home.about.passport.seoLabel}</dt>
+                    <dd>
+                      <ul class="home-passport__list" role="list">
+                        {i.home.about.passport.seoItems.map((item) => <li>{item}</li>)}
+                      </ul>
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>{i.home.about.languagesLabel}</dt>
+                    <dd>
+                      <ul class="home-passport__stamps" role="list">
+                        {i.home.about.languages.map((language, index) => (
+                          <li class="home-passport__stamp" style={`--tilt: ${[-8, 5, -4, 9, -6, 4][index % 6]}deg`}>{language}</li>
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
+                </dl>
+                <p class="home-passport__mrz" aria-hidden="true">P&lt;MTLGALLARDO&lt;&lt;MARTA&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br />SEO&lt;TRADUCCION&lt;UGC&lt;&lt;ES&lt;EN&lt;FR&lt;&lt;&lt;&lt;</p>
+              </div>
+            </div>
+          </ScrollReveal>
         </div>
       </section>
 
+      <section id="home-services" class="home-services scroll-mt-24 bg-clay px-6 py-16 md:scroll-mt-28 md:py-24">
+        <div class="site-container flex flex-col gap-10 md:gap-14">
+          <ScrollReveal client:visible direction="right" className="flex flex-col gap-5 md:gap-6">
+            <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-hazel">{i.nav.services}</p>
+            <h2 class="home-services__title font-heading text-4xl leading-none text-ink md:text-5xl xl:text-6xl" set:html={accentHtml(i.home.services.title, i.home.services.titleAccent) ?? i.home.services.title} />
+          </ScrollReveal>
+
+          <div class="home-services__grid">
+            {homeServices.map((service, index) => (
+              <a href={getLocalizedRoute(service.route, lang)} class:list={['clay-card home-services__card', service.card]}>
+                <span class:list={['clay-token', service.token]} aria-hidden="true">
+                  <svg viewBox="0 0 24 24" set:html={service.icon} />
+                </span>
+                <h3 class="font-heading font-semibold">{service.title}</h3>
+                <p class="font-body">{service.description}</p>
+                <span class="home-services__arrow" aria-hidden="true">↗</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
       <section class="bg-paper px-6 py-20 md:py-24">
-        <div class="site-container space-y-12">
+        <div class="site-container grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:gap-16">
+          <ScrollReveal client:visible direction="right" className="flex flex-col gap-8">
+            <div class="w-16 border-t-2 border-amaranth"></div>
+            <h2 class="font-heading text-4xl leading-none text-ink md:text-6xl" set:html={accentHtml(i.home.visibility.title, i.home.visibility.titleAccent) ?? i.home.visibility.title} />
+            <RichText text={i.home.visibility.text} class="max-w-2xl font-body text-lg leading-8 text-ink-muted" />
+          </ScrollReveal>
+
+          <ScrollReveal client:visible direction="left">
+            <div class="flex flex-col gap-6">
+            <h3 class="font-body text-xs font-semibold uppercase tracking-[0.3em] text-hazel">{i.home.visibility.stepsTitle}</h3>
+            <ol class="home-steps" role="list">
+              {i.home.visibility.steps.map((step, index) => (
+                <li class="home-step">
+                  <span class:list={['home-step__num clay-token', ['clay-token', 'clay-token--hazel', 'clay-token--amaranth'][index]]} aria-hidden="true">{index + 1}</span>
+                  <div>
+                    <h3 class="font-heading font-semibold text-ink">{step.title}</h3>
+                    <p class="font-body">{step.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <a href={getLocalizedRoute('contact', lang)} class="home-hero__cta home-hero__cta--primary home-steps__cta">
+              <span class="home-hero__cta-label">{i.home.hero.ctaDiagnosis}</span>
+            </a>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      <section class="bg-clay px-6 py-20 md:py-24">
+        <div class="site-container flex flex-col gap-10 md:gap-14">
           <ScrollReveal client:visible direction="right" className="flex flex-col gap-6">
             <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-hazel">{i.blog.eyebrow}</p>
             <TypedTitle
@@ -206,8 +238,8 @@ import { accentHtml } from '../lib/accentHtml';
           {latestPosts.length > 0 && (
             <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {latestPosts.map((post, index) => (
-                <article class="group flex h-full flex-col border-t border-ink/20 pt-5">
-                  <a href={getLocalizedPath(`/blog/${post.data.slug}`, lang)} class="mb-5 block overflow-hidden border border-ink/10 bg-ink/5">
+                <article class="group clay-card clay-card--paper home-post-card h-full">
+                  <a href={getLocalizedPath(`/blog/${post.data.slug}`, lang)} class="home-post-card__media" tabindex="-1" aria-hidden="true">
                     {post.data.image ? (
                       <img
                         src={netlifyImage(post.data.image, { width: 720 })}
@@ -224,7 +256,7 @@ import { accentHtml } from '../lib/accentHtml';
                       </div>
                     )}
                   </a>
-                  <div class="flex flex-1 flex-col gap-4">
+                  <div class="home-post-card__body">
                     <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-muted">
                       {String(index + 1).padStart(2, '0')} · {post.data.date.toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' })}
                     </p>
@@ -244,4 +276,27 @@ import { accentHtml } from '../lib/accentHtml';
         </div>
       </section>
     </div>
+  <script>
+    // Tilt the 3D logo towards the pointer: only transforms, throttled to one update per frame.
+    const tilt = document.querySelector<HTMLElement>('[data-logo-tilt]');
+    const hero = document.querySelector<HTMLElement>('[data-home-hero]');
+    if (tilt && hero && matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches) {
+      let frame = 0;
+      hero.addEventListener('pointermove', (event) => {
+        if (frame) return;
+        frame = requestAnimationFrame(() => {
+          frame = 0;
+          const box = tilt.getBoundingClientRect();
+          const x = (event.clientX - (box.left + box.width / 2)) / window.innerWidth;
+          const y = (event.clientY - (box.top + box.height / 2)) / window.innerHeight;
+          tilt.style.setProperty('--ry', `${(x * 28).toFixed(2)}deg`);
+          tilt.style.setProperty('--rx', `${(-y * 22).toFixed(2)}deg`);
+        });
+      });
+      hero.addEventListener('pointerleave', () => {
+        tilt.style.setProperty('--ry', '0deg');
+        tilt.style.setProperty('--rx', '0deg');
+      });
+    }
+  </script>
 </BaseLayout>

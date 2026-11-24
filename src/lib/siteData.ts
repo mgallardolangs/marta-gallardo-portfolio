@@ -69,6 +69,10 @@ export type SkillItem = {
 
 export type SiteData = {
   heroMainPhoto: string;
+  /** Portrait without background for the clay hero (24/11/2026). */
+  heroCutoutPhoto?: string;
+  /** Clay 3D logo render (transparent WebP) shown in the home hero with a mouse tilt; empty = CSS wordmark. */
+  heroLogo3d?: string;
   galleryCutouts: Record<string, string>;
   videoPlaceholderOrEmbedUrl: string;
   ugcHeaderImage: string;

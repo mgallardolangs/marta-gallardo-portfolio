@@ -422,14 +422,18 @@
   "home": {
     "hero": {
       "kicker": "marttelier",
-      "description": "Hago que tu proyecto se encuentre, se entienda y convenza en distintos idiomas: auditoría SEO técnica, traducción y localización profesional, y contenido UGC pensado para convertir.",
+      "description": "Soy Marta Gallardo, **consultora SEO**, traductora y creadora UGC desde Elche. Hago que tu proyecto se encuentre, se entienda y convenza en varios idiomas con **auditoría SEO técnica**, **SEO local e internacional**, **traducción SEO** y vídeos UGC pensados para convertir.",
       "mainPhoto": "Foto principal",
       "scrollCue": "Descubre cómo trabajo",
       "coverLabel": "Portada editorial",
-      "title": "Consultora SEO y traducción SEO para que te encuentren",
-      "titleAccent": "para que te encuentren",
+      "title": "Consultora SEO y traductora para que tu web se posicione en cualquier idioma",
+      "titleAccent": "en cualquier idioma",
       "ctaDiagnosis": "Solicitar diagnóstico SEO",
-      "ctaServices": "Ver servicios"
+      "ctaServices": "Ver servicios",
+      "photos": {
+        "languages": "Banderas de distintos países ondeando sobre la ribera de Oporto",
+        "travel": "Ala de avión al atardecer vista desde la ventanilla"
+      }
     },
     "about": {
       "eyebrow": "Sobre mí",
@@ -446,7 +450,24 @@
       "title": "Rigor técnico, titulación oficial y creatividad",
       "titleAccent": "creatividad",
       "description": "Detrás de Marttelier está Marta Gallardo. Como graduada en Traducción e Interpretación por la Universidad de Alicante y formada en SEO y estrategia digital, trabajo mano a mano con empresas y marcas para construir una presencia online sólida, multilingüe y rentable, eliminando capas intermedias de agencias.",
-      "cta": "Conoce mi trayectoria completa"
+      "cta": "Conoce mi trayectoria completa",
+      "passport": {
+        "label": "Pasaporte profesional · Marta Gallardo",
+        "degreeLabel": "Titulación oficial",
+        "degree": "Grado en Traducción e Interpretación · Universidad de Alicante",
+        "seoLabel": "Formación SEO",
+        "cover": "Pasaporte profesional",
+        "surnameLabel": "Apellidos",
+        "surname": "Gallardo",
+        "nameLabel": "Nombre",
+        "name": "Marta",
+        "professionLabel": "Profesión",
+        "profession": "Traductora y consultora SEO",
+        "seoItems": [
+          "SEO internacional · certificado de Semrush",
+          "Curso privado de SEO y marketing digital · Freelancer y Nómada Digital"
+        ]
+      }
     },
     "video": {
       "eyebrow": "MARCA PERSONAL",
@@ -485,7 +506,22 @@
     "visibility": {
       "title": "Visibilidad, Idiomas y Conversión",
       "titleAccent": "Conversión",
-      "text": "Más tráfico no sirve de nada si no llega a las personas adecuadas. Por eso, como traductora y creadora de contenido, trabajo entre idiomas, culturas y formatos: diseño estrategias SEO adaptadas a la realidad de cada proyecto y las combino con traducción, localización y vídeos UGC, para que cada mensaje conserve su intención, conecte de forma natural y genere confianza desde el primer vistazo."
+      "text": "Más tráfico no sirve de nada si no llega a las personas adecuadas. Por eso, como traductora y creadora de contenido, trabajo entre idiomas, culturas y formatos: diseño estrategias SEO adaptadas a la realidad de cada proyecto y las combino con traducción, localización y vídeos UGC, para que cada mensaje conserve su intención, conecte de forma natural y genere confianza desde el primer vistazo.",
+      "steps": [
+        {
+          "title": "Diagnóstico gratuito",
+          "text": "Reviso tu web y te doy tres hallazgos priorizados, con una llamada de 30 minutos para comentarlos."
+        },
+        {
+          "title": "Propuesta a medida",
+          "text": "Te explico qué haría, en qué orden y con un presupuesto claro antes de empezar."
+        },
+        {
+          "title": "Trabajo y resultados",
+          "text": "Me encargo del SEO, la traducción o el contenido y te enseño los avances con datos reales."
+        }
+      ],
+      "stepsTitle": "Cómo trabajamos"
     },
     "latestArticles": {
       "title": "Últimos artículos sobre SEO y Marketing Digital",

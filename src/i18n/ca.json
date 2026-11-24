@@ -123,14 +123,18 @@
   "home": {
     "hero": {
       "kicker": "marttelier",
-      "description": "Faig que el teu projecte siga trobat, entés i triat en més llengües: auditoria SEO tècnica, traducció i localització professionals i contingut UGC pensat per convertir.",
+      "description": "Soc la Marta Gallardo, **consultora SEO**, traductora i creadora UGC des d'Elx. Faig que el teu projecte es trobi, s'entengui i convenci en diversos idiomes amb **auditoria SEO tècnica**, **SEO local i internacional**, **traducció SEO** i vídeos UGC pensats per convertir.",
       "mainPhoto": "Foto principal",
       "scrollCue": "Desplaça per descobrir",
       "coverLabel": "Portada editorial",
-      "title": "Consultora SEO freelance i estratègia de continguts digitals",
-      "titleAccent": "estratègia",
+      "title": "Consultora SEO i traductora perquè la teva web es posicioni en qualsevol idioma",
+      "titleAccent": "en qualsevol idioma",
       "ctaDiagnosis": "Sol·licita un diagnòstic SEO",
-      "ctaServices": "Veure serveis"
+      "ctaServices": "Veure serveis",
+      "photos": {
+        "languages": "Banderes de diferents països onejant sobre la ribera de Porto",
+        "travel": "Ala d’avió a la posta de sol vista des de la finestreta"
+      }
     },
     "about": {
       "eyebrow": "Sobre mi",
@@ -147,7 +151,24 @@
       "title": "Rigor tècnic, titulació oficial i creativitat",
       "titleAccent": "creativitat",
       "description": "Darrere de Marttelier hi ha Marta Gallardo. Graduada en Traducció i Interpretació per la Universitat d'Alacant i formada en SEO i estratègia digital, treballe colze a colze amb empreses i marques per construir una presència en línia sòlida, multilingüe i rendible, sense els passos intermedis d'una agència.",
-      "cta": "Coneix-me millor"
+      "cta": "Coneix-me millor",
+      "passport": {
+        "label": "Passaport professional · Marta Gallardo",
+        "degreeLabel": "Titulació oficial",
+        "degree": "Grau en Traducció i Interpretació · Universitat d’Alacant",
+        "seoLabel": "Formació SEO",
+        "cover": "Passaport professional",
+        "surnameLabel": "Cognoms",
+        "surname": "Gallardo",
+        "nameLabel": "Nom",
+        "name": "Marta",
+        "professionLabel": "Professió",
+        "profession": "Traductora i consultora SEO",
+        "seoItems": [
+          "SEO internacional · certificat de Semrush",
+          "Curs privat de SEO i màrqueting digital · Freelancer y Nómada Digital"
+        ]
+      }
     },
     "video": {
       "eyebrow": "Identitat de marca",
@@ -186,7 +207,22 @@
     "visibility": {
       "title": "Visibilitat, idiomes i conversió",
       "titleAccent": "conversió",
-      "text": "Més trànsit no serveix de res si no arriba a les persones adequades. Per això, com a traductora i creadora de contingut, treballe entre llengües, cultures i formats: dissenye estratègies SEO adaptades a la realitat de cada projecte i les uneixo amb traducció, localització i vídeo UGC, perquè cada missatge mantinga la seua intenció, arribe de manera natural i genere confiança a primera vista."
+      "text": "Més trànsit no serveix de res si no arriba a les persones adequades. Per això, com a traductora i creadora de contingut, treballe entre llengües, cultures i formats: dissenye estratègies SEO adaptades a la realitat de cada projecte i les uneixo amb traducció, localització i vídeo UGC, perquè cada missatge mantinga la seua intenció, arribe de manera natural i genere confiança a primera vista.",
+      "steps": [
+        {
+          "title": "Diagnòstic gratuït",
+          "text": "Reviso la teva web i et dono tres troballes prioritzades, amb una trucada de 30 minuts per comentar-les."
+        },
+        {
+          "title": "Proposta a mida",
+          "text": "T’explico què faria, en quin ordre i amb un pressupost clar abans de començar."
+        },
+        {
+          "title": "Treball i resultats",
+          "text": "M’encarrego del SEO, la traducció o el contingut i et mostro els avenços amb dades reals."
+        }
+      ],
+      "stepsTitle": "Com treballem"
     },
     "latestArticles": {
       "title": "Últims articles sobre SEO i màrqueting digital",

@@ -1,0 +1,29 @@
+---
+/**
+ * The approved logo («mar» + italic «tt» + «elier») with the clay finish drawn in CSS:
+ * real text with layered shadows, so it costs no image request and stays sharp at any size.
+ * `mono` renders the MG monogram as a clay token instead.
+ */
+interface Props {
+  variant?: 'wordmark' | 'mono';
+  /** Accessible name; the visible letters are decorative splits of the same word. */
+  label?: string;
+  class?: string;
+  as?: 'span' | 'p';
+}
+
+const { variant = 'wordmark', label = 'marttelier', class: className = '', as = 'span' } = Astro.props;
+const Tag = as;
+// An empty label means the parent (e.g. a link) already names it: hide it from assistive tech.
+const a11y = label ? { 'aria-label': label, role: 'img' } : { 'aria-hidden': 'true' };
+---
+
+{variant === 'mono' ? (
+  <Tag class={`clay-mono ${className}`.trim()} {...a11y}>
+    <span aria-hidden="true">MG</span>
+  </Tag>
+) : (
+  <Tag class={`clay-wordmark ${className}`.trim()} {...a11y}>
+    <span aria-hidden="true">mar<em>tt</em>elier</span>
+  </Tag>
+)}

@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ClickToLoadYouTube from '../components/ClickToLoadYouTube.astro';
 import ExperienceTabs from '../components/translation/ExperienceTabs';
+import OvalMediaOrbit from '../components/OvalMediaOrbit';
 import RichText from '../components/RichText.astro';
 import ScrollReveal from '../components/ScrollReveal';
 import RelatedArticles from '../components/RelatedArticles.astro';
@@ -107,6 +108,34 @@ const pageSeo = getPageSeo(siteData, 'about', lang, {
           <h3 class="font-heading text-3xl leading-tight text-ink md:text-4xl">{page.work.title}</h3>
           <RichText text={page.work.description} class="max-w-2xl font-body text-base leading-8 text-ink-muted md:text-lg" />
         </ScrollReveal>
+      </div>
+    </section>
+
+    <!-- Carousel moved here from the home page (24/11/2026): it tells Marta's story, which belongs on About -->
+    <section data-home-orbit class="home-orbit bg-ink px-6 py-16 text-paper md:py-24">
+      <div class="site-container grid gap-8 lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)_minmax(0,12rem)] lg:grid-rows-[auto_1fr_auto] lg:items-center xl:grid-cols-[minmax(0,21rem)_minmax(0,1fr)_minmax(0,14rem)]">
+        <ScrollReveal client:visible direction="right" className="flex flex-col gap-5 lg:col-start-1 lg:row-start-1 lg:self-start">
+          <p class="font-body text-xs font-semibold uppercase tracking-[0.34em] text-amaranth">{i.home.orbit.kicker}</p>
+          <h2 class="max-w-[8ch] font-heading text-[2.8rem] leading-[0.9] tracking-[-0.08em] text-paper md:text-[4.25rem] xl:text-[5.5rem]">
+            <em class="accent-word">{i.home.orbit.title}</em>
+          </h2>
+        </ScrollReveal>
+
+        <ScrollReveal client:visible direction="left" className="order-3 lg:col-start-1 lg:row-start-3 lg:order-none lg:self-end">
+          <p class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.34em] text-white/60 md:text-xs">
+            {i.home.orbit.note}
+          </p>
+        </ScrollReveal>
+
+        <ScrollReveal client:visible direction="left" className="order-2 lg:col-start-3 lg:row-start-1 lg:order-none lg:justify-self-end lg:self-start">
+          <p class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.34em] text-white/60 md:text-xs">
+            {i.home.orbit.index}
+          </p>
+        </ScrollReveal>
+
+        <div class="order-4 min-w-0 w-full lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:order-none lg:translate-x-6">
+          <OvalMediaOrbit client:visible items={siteData.orbitMedia} lang={lang} />
+        </div>
       </div>
     </section>
 

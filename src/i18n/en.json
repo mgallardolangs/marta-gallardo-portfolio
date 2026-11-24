@@ -123,14 +123,18 @@
   "home": {
     "hero": {
       "kicker": "marttelier",
-      "description": "I make sure your project is found, understood and chosen in several languages: technical SEO audits, professional translation and localization, and UGC content built to convert.",
+      "description": "I'm Marta Gallardo, an **SEO consultant**, translator and UGC creator based in Elche, Spain. I help your project get found, understood and chosen in several languages with **technical SEO audits**, **local and international SEO**, **SEO translation** and UGC videos made to convert.",
       "mainPhoto": "Main Photo",
       "scrollCue": "Discover how I work",
       "coverLabel": "Cover Story",
-      "title": "SEO Consultant & SEO Translation That Gets You Found",
-      "titleAccent": "That Gets You Found",
+      "title": "SEO consultant and translator so your website ranks in any language",
+      "titleAccent": "in any language",
       "ctaDiagnosis": "Request an SEO assessment",
-      "ctaServices": "View services"
+      "ctaServices": "View services",
+      "photos": {
+        "languages": "Flags from different countries flying over the Porto riverside",
+        "travel": "Plane wing at sunset seen through the window"
+      }
     },
     "about": {
       "eyebrow": "About",
@@ -147,7 +151,24 @@
       "title": "Technical rigour, formal qualifications and creativity",
       "titleAccent": "creativity",
       "description": "Behind Marttelier is Marta Gallardo. With a degree in Translation and Interpreting from the University of Alicante and training in SEO and digital strategy, I work side by side with companies and brands to build a solid, multilingual and profitable online presence, without the extra layers of an agency.",
-      "cta": "Get to know me"
+      "cta": "Get to know me",
+      "passport": {
+        "label": "Professional passport · Marta Gallardo",
+        "degreeLabel": "Official degree",
+        "degree": "Degree in Translation and Interpreting · University of Alicante",
+        "seoLabel": "SEO training",
+        "cover": "Professional passport",
+        "surnameLabel": "Surname",
+        "surname": "Gallardo",
+        "nameLabel": "Given name",
+        "name": "Marta",
+        "professionLabel": "Profession",
+        "profession": "Translator and SEO consultant",
+        "seoItems": [
+          "International SEO · Semrush certificate",
+          "Private SEO and digital marketing course · Freelancer y Nómada Digital"
+        ]
+      }
     },
     "video": {
       "eyebrow": "PERSONAL BRAND",
@@ -186,7 +207,22 @@
     "visibility": {
       "title": "Visibility, Languages & Conversion",
       "titleAccent": "Conversion",
-      "text": "More traffic is worthless if it doesn't reach the right people. That's why, as a translator and content creator, I work across languages, cultures and formats: I design SEO strategies suited to each project and combine them with translation, localization and UGC video, so every message keeps its intent, connects naturally and builds trust at first glance."
+      "text": "More traffic is worthless if it doesn't reach the right people. That's why, as a translator and content creator, I work across languages, cultures and formats: I design SEO strategies suited to each project and combine them with translation, localization and UGC video, so every message keeps its intent, connects naturally and builds trust at first glance.",
+      "steps": [
+        {
+          "title": "Free diagnosis",
+          "text": "I review your website and give you three prioritised findings, with a 30-minute call to go through them."
+        },
+        {
+          "title": "Tailored proposal",
+          "text": "I explain what I would do, in what order and with a clear quote before we start."
+        },
+        {
+          "title": "Work and results",
+          "text": "I handle the SEO, translation or content and show you the progress with real data."
+        }
+      ],
+      "stepsTitle": "How we work"
     },
     "latestArticles": {
       "title": "Latest articles on SEO and digital marketing",

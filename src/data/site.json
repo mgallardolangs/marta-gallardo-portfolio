@@ -1,5 +1,7 @@
 {
   "heroMainPhoto": "/images/site/img_5587.webp",
+  "heroCutoutPhoto": "/images/site/hero-cutout.webp",
+  "heroLogo3d": "/images/site/logo-3d-clay.webp",
   "galleryCutouts": {
     "shotOne": "/images/site/about-me-world.webp",
     "shotTwo": "/images/site/sticker-passport.webp",

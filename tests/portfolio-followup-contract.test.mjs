@@ -177,10 +177,11 @@ test('mobile orbit uses portrait geometry with enough room for every tile', () =
 });
 
 test('mobile orbit switches to portrait layout and keeps its home grid item shrinkable', async () => {
+  // The orbit carousel moved from Home to About on 24/11/2026 (clay redesign); its contract now lives there.
   const [orbit, adminPreview, home, adminHome] = await Promise.all([
     readSource('src/components/OvalMediaOrbit.tsx'),
     readSource('src/components/admin/AdminOrbitPreview.tsx'),
-    readSource('src/views/HomePage.astro'),
+    readSource('src/views/AboutPage.astro'),
     readSource('src/pages/admin/index.astro'),
   ]);
 
