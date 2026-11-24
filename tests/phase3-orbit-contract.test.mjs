@@ -410,8 +410,9 @@ test('site orbit data keeps all fifteen existing local image assets', async () =
 });
 
 test('homepage and admin keep the approved orbit wiring while StoryMap files disappear', async () => {
+  // The orbit carousel moved from Home to About on 24/11/2026 (clay redesign); its contract now lives there.
   const [homeSource, adminSource, orbitSource] = await Promise.all([
-    readSource('src/views/HomePage.astro'),
+    readSource('src/views/AboutPage.astro'),
     readSource('src/pages/admin/index.astro'),
     readSource('src/components/OvalMediaOrbit.tsx'),
   ]);
@@ -493,7 +494,9 @@ test('homepage and admin keep the approved orbit wiring while StoryMap files dis
   assert.doesNotMatch(orbitSource, /role=\{href \? undefined : 'group'\}/, 'non-interactive mock orbit tiles should not add extra group semantics');
   assert.doesNotMatch(orbitSource, /ui\.previous|ui\.next|aria-roledescription="carousel"|aria-label=\{ui\.(?:previous|next)\}/);
   assert.doesNotMatch(orbitSource, /\bprevious\s*:\s*['"]|\bnext\s*:\s*['"]/);
-  assert.doesNotMatch(orbitSource, /<button\b/i, 'orbit component source should not ship button controls anywhere');
+  // 24/11/2026: the only buttons allowed are the opt-in photo viewer (About), never previous/next carousel controls.
+  assert.equal((orbitSource.match(/<button\b/gi) ?? []).length, 2, 'orbit source should only ship the viewer open and close buttons');
+  assert.match(orbitSource, /viewer && !previewMode && !isVideoItem\(item\) \?/);
   assert.doesNotMatch(orbitSource, /\baria-pressed=|\btoggleVideoSound\b|enableAudio|audioBlocked|mute:/, 'orbit component should remove the old visible video sound toggle UI');
 
   await assert.rejects(access(path.join(rootDir, 'src/components/StoryMap.tsx')));

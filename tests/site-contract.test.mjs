@@ -252,9 +252,10 @@ test('arsenal DE/IT/CA labels stay localized instead of English placeholders', a
   assert.equal(skillsById['terminology-glossaries'].label.de, 'Terminologierecherche und Glossarmanagement');
   assert.equal(skillsById['terminology-glossaries'].label.it, 'Ricerca terminologica e gestione dei glossari');
   assert.equal(skillsById['terminology-glossaries'].label.ca, 'Recerca terminològica i gestió de glossaris');
-  assert.equal(skillsById['keyword-planning'].label.de, 'Keyword-Planung');
-  assert.equal(skillsById['keyword-planning'].label.it, 'Pianificazione delle parole chiave');
-  assert.equal(skillsById['keyword-planning'].label.ca, 'Planificació de paraules clau');
+  // 24/11/2026: the SEO skills were redone from the SEO brochure (keyword-planning became keyword research)
+  assert.equal(skillsById['skill-seo-keyword-research'].label.de, 'Keyword-Recherche');
+  assert.equal(skillsById['skill-seo-keyword-research'].label.it, 'Ricerca delle parole chiave');
+  assert.equal(skillsById['skill-seo-keyword-research'].label.ca, 'Recerca de paraules clau');
 });
 
 test('code-managed DE/IT/CA translation pages use approved localized hero titles', async () => {

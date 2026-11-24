@@ -124,13 +124,13 @@ test('page gutters, home hero type and public text stacks use the revised readin
   assert.match(styles, /\.home-hero__title\s*\{[^}]*padding-bottom:\s*0\.16em;/s);
   assert.match(styles, /max-width:\s*18ch/);
   assert.match(styles, /@media \(max-width: 480px\)[\s\S]*\.home-hero__cta\s*\{[^}]*font-size:\s*0\.62rem;[^}]*letter-spacing:\s*0\.12em;/);
-  assert.match(homeSource, /className="flex flex-col gap-8 md:gap-10"/);
-  assert.match(aboutSource, /className="flex flex-col gap-8"/);
-  assert.match(seoSource, /className="flex flex-col gap-8"/);
-  assert.match(translationSource, /className="flex flex-col gap-8"/);
+  assert.match(homeSource, /class="home-hero__intro flex flex-col gap-8 md:gap-10"/);
+  assert.match(aboutSource, /class="about-hero__copy flex flex-col gap-8"/);
+  assert.match(seoSource, /class="flex flex-col gap-8"/);
+  assert.match(translationSource, /class="flex flex-col gap-8"/);
   assert.match(ugcSource, /className="flex flex-col gap-6"/);
-  assert.match(translationSource, /site-container max-w-7xl/);
-  assert.match(translationSource, /max-w-5xl font-body text-lg leading-8/);
+  assert.match(translationSource, /site-container service-hero/);
+  assert.match(translationSource, /max-w-3xl font-body text-lg leading-8/);
 });
 
 test('animated Astro slot stacks use flex gaps so spacing applies between slotted children', async () => {
@@ -169,8 +169,9 @@ test('homepage and service CTAs keep text-only hit areas beside a full-width acc
   ]);
   const sourcesAndCounts = [
     [home, 1, 'Home'],
-    [seo, 3, 'SEO'],
-    [translation, 2, 'Translation'],
+    // 24/11/2026 clay redesign: hero and closing CTAs are clay pill buttons; only in-text links stay text CTAs.
+    [seo, 1, 'SEO'],
+    [translation, 1, 'Translation'],
     [adminHome, 1, 'admin Home'],
     [adminSeo, 3, 'admin SEO'],
     [adminTranslation, 2, 'admin Translation'],

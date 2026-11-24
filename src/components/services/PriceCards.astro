@@ -1,0 +1,51 @@
+---
+/** Three clay price cards with "from" prices from the brochures; the middle one is marked as recommended. */
+interface Tier {
+  name: string;
+  price: string;
+  unit: string;
+  items: string[];
+}
+
+interface Props {
+  tiers: Tier[];
+  fromLabel: string;
+  recommendedLabel: string;
+  note: string;
+  extra?: string;
+  ctaLabel: string;
+  ctaHref: string;
+  /** Which card is highlighted as recommended (the brochures recommend the middle one). */
+  recommendedIndex?: number;
+}
+
+const { tiers, fromLabel, recommendedLabel, note, extra, ctaLabel, ctaHref, recommendedIndex = 1 } = Astro.props;
+---
+
+<div class="flex flex-col gap-8">
+  <ul class="price-cards" role="list">
+    {tiers.map((tier, index) => (
+      <li class:list={['clay-card price-card', index === recommendedIndex ? 'price-card--recommended clay-card--ink' : 'clay-card--paper']}>
+        {index === recommendedIndex && <span class="price-card__badge">{recommendedLabel}</span>}
+        <h3 class="price-card__name">{tier.name}</h3>
+        <p class="price-card__price">
+          <span class="price-card__from">{fromLabel}</span>
+          <strong>{tier.price}</strong>
+          <span class="price-card__unit">{tier.unit}</span>
+        </p>
+        <ul class="price-card__items" role="list">
+          {tier.items.map((item) => <li>{item}</li>)}
+        </ul>
+      </li>
+    ))}
+  </ul>
+  <div class="price-cards__foot">
+    <div class="flex flex-col gap-2">
+      {extra && <p class="font-body text-base leading-7 text-ink">{extra}</p>}
+      <p class="font-body text-sm leading-6 text-ink-muted">{note}</p>
+    </div>
+    <a href={ctaHref} class="home-hero__cta home-hero__cta--primary price-cards__cta">
+      <span class="home-hero__cta-label">{ctaLabel}</span>
+    </a>
+  </div>
+</div>

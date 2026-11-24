@@ -1,4 +1,5 @@
 ---
+import ClayWordmark from './ClayWordmark.astro';
 import { getLocalizedPath, getLocalizedRoute, langNames, resolvePublicRouteKey, t, type Lang } from '../i18n';
 import { resolveHeaderLanguageLinks } from '../lib/headerLanguageLinks';
 import { isPublishedLocale } from '../lib/localizedRoutes.js';
@@ -73,8 +74,9 @@ const publicHref = (route: string) => getLocalizedRoute(route, lang);
   data-admin={adminMode ? 'true' : 'false'}
 >
   <div class="site-header__shell mx-auto flex w-full max-w-7xl items-center justify-between text-ink">
-    <a href={navPath('/')} class="site-header__brand inline-flex items-center gap-2 text-base font-semibold tracking-[0.36em] text-ink transition hover:text-hazel">
-      <span class="font-heading text-lg">MG</span>
+    <a href={navPath('/')} class="site-header__brand inline-flex items-center gap-2.5 text-ink transition hover:-translate-y-px" aria-label="Marttelier">
+      <ClayWordmark variant="mono" label="" />
+      <ClayWordmark class="hidden sm:inline-block" label="" />
     </a>
 
     <div class="hidden items-center gap-6 md:ml-auto md:flex">
@@ -231,7 +233,7 @@ const publicHref = (route: string) => getLocalizedRoute(route, lang);
   <div class="mobile-panel" id="site-mobile-panel" data-mobile-panel hidden>
     <div class="mobile-panel__content">
       <div class="flex items-center justify-between border-b border-ink/8 pb-4">
-        <span class="font-heading text-xl tracking-[0.28em]">MG</span>
+        <ClayWordmark label="Marttelier" />
         <button type="button" class="social-control" data-menu-close aria-label={i.nav.closeMenu}>
           <span class="sr-only">{i.nav.closeMenu}</span>
           <svg viewBox="0 0 24 24" class="h-4 w-4 stroke-current" fill="none" aria-hidden="true">

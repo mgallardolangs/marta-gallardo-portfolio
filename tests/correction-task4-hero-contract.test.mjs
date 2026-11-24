@@ -47,14 +47,19 @@ test('public hero matches the approved Checkpoint 1 source markers and CTA struc
     /<section\b(?=[^>]*\bdata-home-hero\b)(?=[^>]*\bclass=["'][^"']*\bhome-hero\b[^"']*\bbg-paper\b[^"']*["'])[^>]*>/,
   );
   assert.match(homeSource, /import HomeHeroPortrait from '\.\.\/components\/HomeHeroPortrait\.astro';/);
-  assert.match(heroSection, /<TypedTitle\b[^>]*\btext=\{i\.home\.hero\.title\}[^>]*\bclass="[^"]*\bhome-hero__title\b[^"]*"/);
+  // Static h1 (painted on first render for LCP); the accent words get a CSS write-in instead of typing.
+  assert.match(heroSection, /<h1 class="home-hero__title" set:html=\{accentHtml\(i\.home\.hero\.title, i\.home\.hero\.titleAccent\)/);
+  assert.equal(heroSection.match(/<h1\b/g)?.length, 1);
+  assert.doesNotMatch(heroSection, /StaggerContainer|StaggerItem/);
+  // Nothing in the hero may be server-rendered at opacity 0 waiting for React (it delays LCP).
+  assert.doesNotMatch(heroSection, /<ScrollReveal\b/);
   assert.match(heroSection, /i\.home\.hero\.kicker/);
   assert.match(heroSection, /i\.home\.hero\.description/);
   assert.match(heroSection, /href=\{getLocalizedRoute\('contact',\s*lang\)\}/);
   assert.match(heroSection, /href="#home-services"/);
   assert.match(
     heroSection,
-    /<HomeHeroPortrait>\s*<img[^>]*src=\{netlifyImage\(siteData\.heroMainPhoto[^>]*?\)\}[^>]*alt=\{i\.hero\.name\}[^>]*width=\{1200\}[^>]*height=\{1600\}[^>]*loading="eager"[^>]*fetchpriority="high"[^>]*decoding="async"[^>]*\/>\s*<\/HomeHeroPortrait>/s,
+    /<HomeHeroPortrait\b[^>]*>\s*<img[^>]*src=\{netlifyImage\(siteData\.heroCutoutPhoto \?\? siteData\.heroMainPhoto[^>]*?\)\}[^>]*alt=\{i\.hero\.name\}[^>]*width=\{548\}[^>]*height=\{1000\}[^>]*loading="eager"[^>]*fetchpriority="high"[^>]*decoding="async"[^>]*\/>\s*<\/HomeHeroPortrait>/s,
   );
   assert.doesNotMatch(heroSection, /home-hero__portrait-image/);
   assert.equal(
@@ -67,7 +72,6 @@ test('public hero matches the approved Checkpoint 1 source markers and CTA struc
     1,
     'public hero should include the secondary services-scroll action',
   );
-  assert.doesNotMatch(heroSection, /rounded-full|rounded-\[/);
 });
 
 
@@ -83,22 +87,24 @@ test('portrait component replaces the old abstract visual with a slotted media f
     'HomeHeroAbstractVisual.astro should be deleted after the portrait refactor',
   );
 
+  // Clay redesign (24/11/2026, DESIGN.md): the photo sits in a clay arch with clay balls and stickers.
   assert.match(portraitSource, /data-home-hero-portrait/);
   assert.match(portraitSource, /<slot \/>/);
-  assert.match(portraitSource, /home-hero__portrait-corner--top-left/);
-  assert.match(portraitSource, /home-hero__portrait-corner--top-right/);
-  assert.match(portraitSource, /home-hero__portrait-corner--bottom-right/);
-  assert.match(portraitSource, /home-hero__portrait-corner--bottom-left/);
-  assert.match(portraitSource, /home-hero__portrait-rule/);
+  assert.doesNotMatch(portraitSource, /home-hero__arch|home-hero__ball|home-hero__sticker/); // only the three photos (24/11/2026)
+  assert.match(portraitSource, /home-hero__fan--left/);
   assert.match(
     globalCssSource,
-    /\.home-hero__portrait\s*\{[^}]*max-width:\s*400px;[^}]*aspect-ratio:\s*4\s*\/\s*5;[^}]*margin-inline:\s*auto;[^}]*\}/s,
+    /\.home-hero__portrait\s*\{[^}]*max-width:\s*540px;[^}]*aspect-ratio:\s*5\s*\/\s*4\.25;[^}]*margin-inline:\s*auto;[^}]*\}/s,
   );
-  assert.match(globalCssSource, /\.home-hero__portrait-media\s*\{[^}]*clip-path:/s);
-  assert.match(globalCssSource, /\.home-hero__portrait-media img\s*\{[^}]*object-fit:\s*cover;[^}]*transition:[^}]*transform 0\.42s ease,[^}]*filter 0\.42s ease;[^}]*\}/s);
+  // The LCP photo must never be hidden by an entrance animation.
+  assert.doesNotMatch(globalCssSource, /\.home-hero__portrait-media\s*\{[^}]*(?:clip-path|animation|opacity:\s*0)/s);
   assert.match(
     globalCssSource,
-    /\.home-hero__portrait:hover\s+\.home-hero__portrait-media img,\s*\.home-hero__portrait:focus-within\s+\.home-hero__portrait-media img\s*\{[^}]*transform:\s*scale\(1\.055\);[^}]*\}/s,
+    /\.home-hero__portrait-media img\s*\{[^}]*display:\s*block;[^}]*width:\s*100%;[^}]*height:\s*100%;[^}]*object-fit:\s*contain;[^}]*\}/s,
+  );
+  assert.match(
+    globalCssSource,
+    /\.home-hero__portrait:hover\s+\.home-hero__portrait-media img,\s*\.home-hero__portrait:focus-within\s+\.home-hero__portrait-media img\s*\{[^}]*transform:\s*scale\(1\.03\);[^}]*\}/s,
   );
   assert.doesNotMatch(globalCssSource, /\.home-hero__portrait-image\b/);
   assert.doesNotMatch(globalCssSource, /home-hero__oval|home-hero__frame|home-hero__mark/);

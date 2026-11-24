@@ -1,0 +1,25 @@
+---
+/** Numbered clay steps (same look as "Cómo trabajamos" on the home page). */
+interface Props {
+  title: string;
+  steps: { title: string; text: string }[];
+}
+
+const { title, steps } = Astro.props;
+const tokens = ['clay-token', 'clay-token clay-token--hazel', 'clay-token clay-token--amaranth', 'clay-token'];
+---
+
+<div class="flex flex-col gap-6">
+  <h3 class="font-body text-xs font-semibold uppercase tracking-[0.3em] text-hazel">{title}</h3>
+  <ol class="home-steps" role="list">
+    {steps.map((step, index) => (
+      <li class="home-step">
+        <span class:list={['home-step__num', tokens[index % tokens.length]]} aria-hidden="true">{index + 1}</span>
+        <div>
+          <h4 class="font-heading text-lg font-semibold text-ink">{step.title}</h4>
+          <p class="font-body">{step.text}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</div>

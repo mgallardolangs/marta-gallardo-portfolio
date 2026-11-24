@@ -40,7 +40,8 @@ test('public Home no longer contains the personal video stickers; About owns the
   ]);
 
   assert.doesNotMatch(homeSource, /siteData\.videoStickers|brandVideoEmbedUrl|instagramScreenshot/);
-  assert.match(aboutSource, /<ClickToLoadYouTube[\s\S]*src=\{siteData\.brandVideoEmbedUrl\}/);
+  // 24/11/2026: the vertical reel is retired from About; a horizontal video comes later and keeps the same click-to-load facade.
+  assert.match(aboutSource, /\{siteData\.aboutVideoEmbedUrl \? \([\s\S]*<ClickToLoadYouTube[\s\S]*src=\{siteData\.aboutVideoEmbedUrl\}[\s\S]*orientation="horizontal"/);
   assert.doesNotMatch(aboutSource, /instagramScreenshot/);
 });
 

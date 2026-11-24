@@ -18,7 +18,7 @@ test('public UGC hero keeps the denser approved two-column source contract', asy
   assert.match(source, /<p class="text-xs font-semibold uppercase tracking-\[0\.34em\] text-hazel">\s*\{i\.ugcPage\.hero\.eyebrow\}\s*<\/p>/);
   assert.match(
     source,
-    /<div class="mt-5 grid gap-8 lg:grid-cols-\[minmax\(0,1\.2fr\)_minmax\(0,0\.8fr\)\] lg:items-end">[\s\S]*?<TypedTitle[\s\S]*?text=\{i\.ugcPage\.pageTitle\}[\s\S]*?class="block text-4xl leading-none text-ink md:text-6xl"[\s\S]*?<h2 class="text-balance text-lg font-semibold uppercase leading-\[1\.18\] tracking-\[0\.1[234]em\] text-ink md:text-2xl lg:justify-self-end lg:text-right lg:text-3xl">\s*\{i\.ugcPage\.contactSheet\.headline\}\s*<\/h2>[\s\S]*?<\/div>/s,
+    /<div class="mt-5 grid gap-8 lg:grid-cols-\[minmax\(0,1\.2fr\)_minmax\(0,0\.8fr\)\] lg:items-end">[\s\S]*?<h1 class="block text-4xl leading-none text-ink md:text-6xl" set:html=\{accentHtml\(i\.ugcPage\.pageTitle[\s\S]*?<h2 class="text-balance text-lg font-semibold uppercase leading-\[1\.18\] tracking-\[0\.1[234]em\] text-ink md:text-2xl lg:justify-self-end lg:text-right lg:text-3xl">\s*\{i\.ugcPage\.contactSheet\.headline\}\s*<\/h2>[\s\S]*?<\/div>/s,
   );
   assert.match(source, /<div class="mt-5 overflow-hidden" aria-hidden="true">/);
   assert.doesNotMatch(source, /pt-28|md:pt-32|pb-8|md:pb-10/);

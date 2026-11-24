@@ -286,14 +286,15 @@ test('contact desk polish keeps one header divider, one response note per panel,
 });
 
 test('contact switcher work leaves the approved Home, UGC, and Translation markers untouched', async () => {
-  const [homeSource, ugcSource, translationSource] = await Promise.all([
+  const [homeSource, aboutSource, ugcSource, translationSource] = await Promise.all([
     readSource('src/views/HomePage.astro'),
+    readSource('src/views/AboutPage.astro'),
     readSource('src/views/UgcPage.astro'),
     readSource('src/views/TranslationSeoPage.astro'),
   ]);
 
   assert.match(homeSource, /data-home-hero/);
-  assert.match(homeSource, /data-home-orbit/);
+  assert.match(aboutSource, /data-home-orbit/); // carousel moved to About (24/11/2026)
   assert.match(ugcSource, /data-ugc-hero/);
   assert.match(ugcSource, /<UgcContactSheet/);
   assert.match(translationSource, /data-translation-page/);

@@ -1,4 +1,5 @@
 ---
+import ClayWordmark from './ClayWordmark.astro';
 import { getLocalizedPath, getLocalizedRoute, t, type Lang } from '../i18n';
 import { siteData } from '../lib/siteData';
 import EditableText from './admin/EditableText';
@@ -41,7 +42,7 @@ import { accentHtml } from '../lib/accentHtml';
           {adminMode ? (
             <EditableText client:load i18nKey="footer.eyebrow" as="p" className="font-body text-xs font-semibold uppercase tracking-[0.34em] text-paper" />
           ) : (
-            <p class="font-body text-xs font-semibold uppercase leading-[2.4] tracking-[0.34em] text-paper"><span class="footer-eyebrow bg-hazel px-2 py-1 [box-decoration-break:clone]" set:html={accentHtml(i.footer.eyebrow, i.footer.eyebrowAccent) ?? i.footer.eyebrow} /></p>
+            <p class="footer-eyebrow-line font-body text-paper"><span class="footer-eyebrow" set:html={accentHtml(i.footer.eyebrow, i.footer.eyebrowAccent) ?? i.footer.eyebrow} /></p>
           )}
           {adminMode ? (
             <EditableText client:load i18nKey="footer.headline" as="h2" className="font-heading text-5xl uppercase leading-none text-white md:text-7xl" />
@@ -120,7 +121,10 @@ import { accentHtml } from '../lib/accentHtml';
           {adminMode ? (
             <EditableText client:load i18nKey="footer.brand" as="span" className="font-heading text-base uppercase tracking-[0.34em] text-white" />
           ) : (
-            <span class="font-heading text-base uppercase tracking-[0.34em] text-white">{i.footer.brand}</span>
+            <a href={getLocalizedRoute('home', lang)} class="inline-flex items-center gap-3" aria-label="Marttelier">
+              <ClayWordmark variant="mono" label="" />
+              <ClayWordmark class="clay-wordmark--light text-2xl" label={i.footer.brand} />
+            </a>
           )}
           {adminMode ? (
             <div class="flex flex-wrap items-center gap-x-1 gap-y-1">

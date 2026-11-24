@@ -8,6 +8,9 @@ import '@fontsource/playfair-display/500-italic.css';
 import '@fontsource/playfair-display/700.css';
 import '@fontsource/playfair-display/700-italic.css';
 import '../styles/global.css';
+// Same files the @fontsource CSS uses, so the preload and the stylesheet share one download.
+import sansRegularUrl from '@fontsource/instrument-sans/files/instrument-sans-latin-400-normal.woff2?url';
+import accentItalicUrl from '@fontsource/playfair-display/files/playfair-display-latin-500-italic.woff2?url';
 import { ClientRouter } from 'astro:transitions';
 import MotionRuntime from '../components/MotionRuntime.astro';
 import SeoHead from '../components/SeoHead.astro';
@@ -43,6 +46,8 @@ const {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preload" href={sansRegularUrl} as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href={accentItalicUrl} as="font" type="font/woff2" crossorigin />
   <meta name="generator" content={Astro.generator} />
   <meta name="description" content={description} />
   <title>{title}</title>

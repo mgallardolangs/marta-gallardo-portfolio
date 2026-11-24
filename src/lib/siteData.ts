@@ -24,6 +24,10 @@ export type OrbitMedia = {
   href?: string | null;
   alt: LocalizedText;
   label: LocalizedText;
+  /** Optional larger file for the About photo viewer (the tile uses `src`). */
+  large?: string | null;
+  /** Optional caption for the photo viewer; falls back to `alt`. */
+  caption?: LocalizedText;
 };
 
 export type UgcCategory = 'travel' | 'languages' | 'art' | 'products';
@@ -69,6 +73,12 @@ export type SkillItem = {
 
 export type SiteData = {
   heroMainPhoto: string;
+  /** Portrait without background for the clay hero (24/11/2026). */
+  heroCutoutPhoto?: string;
+  /** Clay 3D logo render (transparent WebP) shown in the home hero with a mouse tilt; empty = CSS wordmark. */
+  heroLogo3d?: string;
+  /** Horizontal About video (YouTube). Empty = no video; it only loads after the visitor presses play. */
+  aboutVideoEmbedUrl?: string;
   galleryCutouts: Record<string, string>;
   videoPlaceholderOrEmbedUrl: string;
   ugcHeaderImage: string;

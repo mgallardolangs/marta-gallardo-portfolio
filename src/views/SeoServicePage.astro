@@ -6,6 +6,9 @@ import ScrollReveal from '../components/ScrollReveal';
 import ServiceSwitcher from '../components/translation/ServiceSwitcher';
 import RelatedArticles from '../components/RelatedArticles.astro';
 import TypedTitle from '../components/TypedTitle.astro';
+import ServiceGlance from '../components/services/ServiceGlance.astro';
+import ServiceSteps from '../components/services/ServiceSteps.astro';
+import { accentHtml } from '../lib/accentHtml';
 import { getLangFromUrl, getLocalizedRoute, t } from '../i18n';
 import { getPageSeo, siteData } from '../lib/siteData';
 import { getTranslationArsenalColumns } from '../lib/translationPage.js';
@@ -19,6 +22,12 @@ const pageSeo = getPageSeo(siteData, 'seo', lang, {
   description: { [lang]: pageDescription },
 });
 const arsenal = getTranslationArsenalColumns(lang, siteData, 'seo');
+// SEO skills come from site data (editable in the admin); each has a category that groups them under a heading
+const skillCategories: Record<string, string> = page.arsenal.skillCategories ?? {};
+const skillGroups = [
+  ...Object.entries(skillCategories).map(([key, title]) => ({ title, skills: arsenal.skills.filter((skill) => skill.category === key) })),
+  { title: '', skills: arsenal.skills.filter((skill) => !skill.category || !(skill.category in skillCategories)) },
+].filter((group) => group.skills.length > 0);
 // Local SEO signal for Elche, the province of Alicante and the Costa Blanca (no street address: Marta works from home).
 const serviceJsonLd = {
   '@context': 'https://schema.org',
@@ -43,32 +52,32 @@ const serviceJsonLd = {
   <GsapPageRuntime />
   <script type="application/ld+json" set:html={JSON.stringify(serviceJsonLd)} />
   <div class="bg-paper" data-seo-service-page>
-    <section class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
-      <div class="site-container max-w-7xl">
-        <ScrollReveal client:visible direction="right" className="flex flex-col gap-8">
+    <section data-service-hero class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
+      <div class="site-container service-hero">
+        <!-- Static heading (no typing effect) so it paints on first render (LCP) -->
+        <div class="flex flex-col gap-8">
           <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-hazel">{page.hero.eyebrow}</p>
-          <TypedTitle
-            as="h1"
-            text={page.hero.title}
-            accent={page.hero.titleAccent}
-            trigger="load"
-            class="max-w-[16ch] font-heading text-5xl leading-[0.92] tracking-[-0.04em] text-ink md:text-7xl"
-          />
+          <h1 class="max-w-[16ch] font-heading text-5xl leading-[0.95] tracking-[-0.04em] text-ink md:text-7xl" set:html={accentHtml(page.hero.title, page.hero.titleAccent) ?? page.hero.title} />
           {page.hero.paragraphs.map((paragraph) => (
-            <RichText text={paragraph} class="max-w-4xl font-body text-base leading-8 text-ink-muted md:text-lg" />
+            <RichText text={paragraph} class="max-w-3xl font-body text-base leading-8 text-ink-muted md:text-lg" />
           ))}
-          <div class="site-text-cta-row">
-            <a href={getLocalizedRoute('contact', lang)} class="site-text-cta">
-              {i.footer.cta}
-              <span class="site-text-cta__arrow" aria-hidden="true">↗</span>
+        </div>
+        <div class="service-hero__side">
+          <ServiceGlance title={page.glanceTitle} items={page.glance} tone="ink" />
+          <div class="service-hero__actions">
+            <a href={getLocalizedRoute('contact', lang)} class="home-hero__cta home-hero__cta--primary">
+              <span class="home-hero__cta-label">{i.home.hero.ctaDiagnosis}</span>
+            </a>
+            <a href="#seo-services" class="home-hero__cta home-hero__cta--secondary">
+              <span class="home-hero__cta-label">{i.home.hero.ctaServices}</span>
             </a>
           </div>
-        </ScrollReveal>
+        </div>
       </div>
     </section>
 
-    <section class="bg-ink px-6 py-16 text-paper md:py-20">
-      <div class="site-container space-y-10">
+    <section id="seo-services" class="scroll-mt-24 bg-ink px-6 py-16 text-paper md:py-20">
+      <div class="site-container flex flex-col gap-10">
         <div class="space-y-5">
           <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.services.eyebrow}</p>
           <TypedTitle
@@ -80,16 +89,20 @@ const serviceJsonLd = {
             class="font-heading text-4xl text-paper md:text-5xl"
           />
         </div>
+        <div class="service-panel">
         <ServiceSwitcher
           client:load
           title={page.services.title}
           items={page.services.items.map((service) => ({
             id: service.id,
             name: service.title,
-            headline: service.title,
+            kicker: service.kicker,
+            headline: service.headline ?? service.title,
             description: service.description,
+            points: service.points,
           }))}
         />
+        </div>
       </div>
     </section>
 
@@ -115,6 +128,35 @@ const serviceJsonLd = {
             </a>
           </div>
         </ScrollReveal>
+        <div class="seo-markets lg:col-span-2" data-seo-markets>
+          <p class="seo-markets__title">{page.international.marketsTitle}</p>
+          <ul class="seo-markets__grid" role="list">
+            {page.international.markets.map((market, index) => (
+              <li class:list={['clay-card seo-market', index === 0 ? 'clay-card--paper' : index === 1 ? 'clay-card--ink' : 'seo-market--amaranth']} lang={market.code.toLowerCase()}>
+                <p class="seo-market__head"><span class="seo-market__code">{market.code}</span><span>{market.name}</span></p>
+                {index > 0 ? (
+                  <p class="seo-market__literal"><span>{page.international.literalLabel}</span><s>{market.literal}</s></p>
+                ) : (
+                  <p class="seo-market__literal"><span>{page.international.originLabel}</span></p>
+                )}
+                <p class="seo-market__search"><span class="seo-market__icon" aria-hidden="true"></span>{market.query}</p>
+                {index > 0 && <p class="seo-market__real">✓ {page.international.realLabel}</p>}
+              </li>
+            ))}
+          </ul>
+          <p class="seo-markets__note">{page.international.marketsNote}</p>
+          <ol class="seo-pillars" role="list">
+            {page.international.pillars.map((pillar, index) => (
+              <li class="seo-pillar">
+                <span class:list={['home-step__num', ['clay-token', 'clay-token clay-token--hazel', 'clay-token clay-token--amaranth'][index % 3]]} aria-hidden="true">{index + 1}</span>
+                <div>
+                  <h3 class="font-heading text-lg font-semibold text-ink">{pillar.title}</h3>
+                  <p class="font-body text-sm leading-6 text-ink-muted">{pillar.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
 
@@ -137,41 +179,50 @@ const serviceJsonLd = {
           <div class="space-y-6">
             <dl class="grid grid-cols-2 gap-3 md:grid-cols-4">
               {page.why.stats.map((stat) => (
-                <div class="flex flex-col items-center justify-center gap-2 bg-hazel px-4 py-6 text-center">
-                  <dt class="order-2 font-body text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-paper/85">{stat.label}</dt>
-                  <dd class="order-1 whitespace-nowrap font-heading text-3xl leading-none text-paper md:text-5xl">{stat.value}</dd>
+                <div class="service-stat">
+                  <dt class="service-stat__label">{stat.label}</dt>
+                  <dd class="service-stat__value">{stat.value}</dd>
                 </div>
               ))}
             </dl>
             <div class="flex flex-col gap-4 border-t border-paper/18 pt-6 md:flex-row md:items-center md:justify-between">
               <p class="font-body text-base leading-7 text-paper/80 md:text-lg">{page.why.ctaText}</p>
-              <a href={getLocalizedRoute('contact', lang)} class="inline-flex shrink-0 items-center justify-center rounded-full bg-amaranth px-6 py-3 font-body text-[0.75rem] font-bold uppercase tracking-[0.22em] text-ink transition hover:-translate-y-0.5 hover:bg-paper">
+              <a href={getLocalizedRoute('contact', lang)} class="service-cta-light">
                 {i.home.hero.ctaDiagnosis}
               </a>
             </div>
           </div>
         )}
 
-        <div class="grid gap-0 border border-paper/18 md:grid-cols-2">
-          <article class="border-b border-paper/18 p-5 md:border-b-0 md:border-r">
+        <div class="service-arsenal">
+          <article class="service-arsenal__panel">
             <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.toolsTitle}</p>
             <span class="mt-4 block h-px bg-paper/18"></span>
-            <div class="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <div class="service-tools-grid">
               {arsenal.tools.map((tool) => (
-                <div class="group flex aspect-square min-w-0 flex-col items-center justify-center gap-3 bg-paper px-3 py-4 text-center text-ink transition hover:bg-amaranth">
-                  <img src={tool.logoSrc} alt="" width="40" height="40" loading="lazy" decoding="async" class="h-10 w-10 object-contain" />
+                <div class="service-tool">
+                  {tool.logoSrc ? (
+                    <img src={tool.logoSrc} alt="" width="40" height="40" loading="lazy" decoding="async" class="h-10 w-10 object-contain" />
+                  ) : (
+                    <span class="service-tool__mono" aria-hidden="true">{tool.label.replace(/^Google\s+/, '').slice(0, 2)}</span>
+                  )}
                   <p class="font-body text-[0.68rem] font-medium uppercase tracking-[0.1em]">{tool.label}</p>
                 </div>
               ))}
             </div>
           </article>
 
-          <article class="p-5">
+          <article class="service-arsenal__panel service-arsenal__panel--skills">
             <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-amaranth">{page.arsenal.skillsTitle}</p>
             <span class="mt-4 block h-px bg-paper/18"></span>
-            <div class="mt-5 flex flex-col gap-2">
-              {arsenal.skills.map((skill) => (
-                <span class="border border-paper/18 px-3 py-3 font-body text-[0.68rem] uppercase tracking-[0.08em] text-paper">{skill.label}</span>
+            <div class="service-skill-groups">
+              {skillGroups.map((group) => (
+                <div class="service-skill-group">
+                  {group.title && <h3 class="service-skill-group__title">{group.title}</h3>}
+                  <ul class="flex flex-wrap gap-2" role="list">
+                    {group.skills.map((skill) => <li class="service-chip">{skill.label}</li>)}
+                  </ul>
+                </div>
               ))}
             </div>
           </article>
@@ -179,10 +230,9 @@ const serviceJsonLd = {
       </div>
     </section>
 
-    <section class="px-6 py-16 md:py-20">
-      <div class="site-container space-y-8">
-<div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:items-center lg:gap-16">
-          <div class="max-w-3xl space-y-6">
+    <section class="bg-clay px-6 py-16 md:py-20" data-seo-budget>
+      <div class="site-container seo-closing">
+        <div class="seo-closing__intro">
           <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel">{page.budget.eyebrow}</p>
           <TypedTitle
             as="h2"
@@ -192,22 +242,21 @@ const serviceJsonLd = {
             trigger="visible"
             class="font-heading text-4xl leading-none text-ink md:text-5xl"
           />
-          <RichText text={page.budget.description} class="font-body text-base leading-8 text-ink-muted md:text-lg" />
-          </div>
-          {page.budget.highlight && (
-            <aside class="seo-budget-highlight space-y-4">
-              {page.budget.highlightTitle && (
-                <h3 class="font-heading text-2xl leading-tight text-ink md:text-3xl">{page.budget.highlightTitle}</h3>
-              )}
-              <RichText text={page.budget.highlight} class="font-body text-base leading-8 text-ink" />
-            </aside>
-          )}
+          <RichText text={page.budget.description} class="font-body text-base leading-8 text-ink-muted" />
         </div>
-        <div class="site-text-cta-row">
-          <a href={getLocalizedRoute('contact', lang)} class="site-text-cta">
-            {i.footer.cta}
-            <span class="site-text-cta__arrow" aria-hidden="true">↗</span>
-          </a>
+        {page.budget.highlight && (
+          <aside class="seo-budget-highlight seo-closing__offer">
+            {page.budget.highlightTitle && (
+              <h3 class="font-heading text-2xl leading-tight text-ink">{page.budget.highlightTitle}</h3>
+            )}
+            <RichText text={page.budget.highlight} class="font-body text-sm leading-7 text-ink" />
+            <a href={getLocalizedRoute('contact', lang)} class="home-hero__cta home-hero__cta--primary service-final-cta">
+              <span class="home-hero__cta-label">{i.home.hero.ctaDiagnosis}</span>
+            </a>
+          </aside>
+        )}
+        <div class="seo-closing__steps">
+          <ServiceSteps title={i.home.visibility.stepsTitle} steps={i.home.visibility.steps} />
         </div>
       </div>
     </section>

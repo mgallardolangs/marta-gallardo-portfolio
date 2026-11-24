@@ -85,8 +85,9 @@ test('all six locale files replace home orbit descriptions with the approved fou
 });
 
 test('public and admin orbit sections render kicker title index note only, with note replacing the old description block', async () => {
+  // The orbit carousel moved from Home to About on 24/11/2026 (clay redesign); its contract now lives there.
   const [homeSource, adminHomeSource] = await Promise.all([
-    readSource('src/views/HomePage.astro'),
+    readSource('src/views/AboutPage.astro'),
     readSource('src/pages/admin/index.astro'),
   ]);
 
@@ -123,29 +124,24 @@ test('portrait refactor deletes the abstract hero visual and replaces it with th
   assert.doesNotMatch(homeSource, /HomeHeroAbstractVisual/);
   assert.doesNotMatch(adminHomeSource, /HomeHeroAbstractVisual/);
 
+  // Clay redesign (24/11/2026, DESIGN.md): the photo sits in a clay arch with clay balls and stickers.
   assert.match(portraitSource, /data-home-hero-portrait/);
   assert.match(portraitSource, /<slot \/>/);
-  assert.match(portraitSource, /home-hero__portrait-corner--top-left/);
-  assert.match(portraitSource, /home-hero__portrait-corner--top-right/);
-  assert.match(portraitSource, /home-hero__portrait-corner--bottom-right/);
-  assert.match(portraitSource, /home-hero__portrait-corner--bottom-left/);
-  assert.match(portraitSource, /home-hero__portrait-rule/);
+  assert.doesNotMatch(portraitSource, /home-hero__arch|home-hero__ball|home-hero__sticker/); // only the three photos (24/11/2026)
+  assert.match(portraitSource, /home-hero__fan--left/);
   assert.match(
     globalCssSource,
-    /\.home-hero__portrait\s*\{[^}]*max-width:\s*400px;[^}]*aspect-ratio:\s*4\s*\/\s*5;[^}]*margin-inline:\s*auto;[^}]*\}/s,
+    /\.home-hero__portrait\s*\{[^}]*max-width:\s*540px;[^}]*aspect-ratio:\s*5\s*\/\s*4\.25;[^}]*margin-inline:\s*auto;[^}]*\}/s,
   );
-  assert.match(globalCssSource, /\.home-hero__portrait-media\s*\{[^}]*clip-path:\s*inset\(100% 0 0 0\);[^}]*animation:\s*home-hero-portrait-reveal 1\.05s/s);
+  // The LCP photo must never be hidden by an entrance animation.
+  assert.doesNotMatch(globalCssSource, /\.home-hero__portrait-media\s*\{[^}]*(?:clip-path|animation|opacity:\s*0)/s);
   assert.match(
     globalCssSource,
-    /\.home-hero__portrait-media img\s*\{[^}]*display:\s*block;[^}]*width:\s*100%;[^}]*height:\s*100%;[^}]*object-fit:\s*cover;[^}]*transition:[^}]*transform 0\.42s ease,[^}]*filter 0\.42s ease;[^}]*\}/s,
+    /\.home-hero__portrait-media img\s*\{[^}]*display:\s*block;[^}]*width:\s*100%;[^}]*height:\s*100%;[^}]*object-fit:\s*contain;[^}]*\}/s,
   );
-  assert.match(globalCssSource, /\.home-hero__portrait-corner\s*\{[^}]*width:\s*28px;[^}]*height:\s*28px;[^}]*\}/s);
-  assert.match(globalCssSource, /\.home-hero__portrait-corner--top-left\s*\{[^}]*animation-delay:\s*0\.62s;[^}]*\}/s);
-  assert.match(globalCssSource, /\.home-hero__portrait-corner--bottom-left\s*\{[^}]*animation-delay:\s*0\.92s;[^}]*\}/s);
-  assert.match(globalCssSource, /\.home-hero__portrait-rule\s*\{[^}]*animation:\s*home-hero-portrait-rule-draw [^;]* 1\.02s both;[^}]*\}/s);
   assert.match(
     globalCssSource,
-    /\.home-hero__portrait:hover\s+\.home-hero__portrait-media img,\s*\.home-hero__portrait:focus-within\s+\.home-hero__portrait-media img\s*\{[^}]*transform:\s*scale\(1\.055\);[^}]*filter:\s*saturate\(1\.04\) contrast\(1\.03\);[^}]*\}/s,
+    /\.home-hero__portrait:hover\s+\.home-hero__portrait-media img,\s*\.home-hero__portrait:focus-within\s+\.home-hero__portrait-media img\s*\{[^}]*transform:\s*scale\(1\.03\);[^}]*\}/s,
   );
   assert.doesNotMatch(globalCssSource, /\.home-hero__portrait-image\b/);
 });
@@ -159,7 +155,7 @@ test('public and admin heroes wire the approved portrait media with eager public
   assert.match(homeSource, /import HomeHeroPortrait from '\.\.\/components\/HomeHeroPortrait\.astro';/);
   assert.match(
     homeSource,
-    /<HomeHeroPortrait>\s*<img[^>]*src=\{netlifyImage\(siteData\.heroMainPhoto[^>]*?\)\}[^>]*alt=\{i\.hero\.name\}[^>]*width=\{1200\}[^>]*height=\{1600\}[^>]*loading="eager"[^>]*fetchpriority="high"[^>]*decoding="async"[^>]*\/>\s*<\/HomeHeroPortrait>/s,
+    /<HomeHeroPortrait\b[^>]*>\s*<img[^>]*src=\{netlifyImage\(siteData\.heroCutoutPhoto \?\? siteData\.heroMainPhoto[^>]*?\)\}[^>]*alt=\{i\.hero\.name\}[^>]*width=\{548\}[^>]*height=\{1000\}[^>]*loading="eager"[^>]*fetchpriority="high"[^>]*decoding="async"[^>]*\/>\s*<\/HomeHeroPortrait>/s,
   );
   assert.doesNotMatch(homeSource, /home-hero__portrait-image/);
 

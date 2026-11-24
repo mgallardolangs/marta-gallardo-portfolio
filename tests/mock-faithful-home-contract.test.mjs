@@ -143,7 +143,8 @@ test('TypedTitle keeps the underscore cursor as component-owned markup instead o
 });
 
 test('Home keeps the approved full-width ink orbit wrapper contract instead of the old about side-by-side layout', async () => {
-  const homeSource = await readSource('src/views/HomePage.astro');
+  // The orbit carousel moved from Home to About on 24/11/2026 (clay redesign); its contract now lives there.
+  const homeSource = await readSource('src/views/AboutPage.astro');
 
   assert.match(
     homeSource,

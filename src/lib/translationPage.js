@@ -55,6 +55,7 @@ function localizeSkill(skill, lang) {
   return {
     id: skill.id,
     group: skill.group,
+    category: skill.category,
     label: localize(skill.label, lang),
   };
 }

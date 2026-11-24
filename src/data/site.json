@@ -1,5 +1,7 @@
 {
   "heroMainPhoto": "/images/site/img_5587.webp",
+  "heroCutoutPhoto": "/images/site/hero-cutout.webp",
+  "heroLogo3d": "/images/site/logo-3d-clay.webp",
   "galleryCutouts": {
     "shotOne": "/images/site/about-me-world.webp",
     "shotTwo": "/images/site/sticker-passport.webp",
@@ -43,6 +45,7 @@
   "aboutPhotos": [],
   "brandVideo": "",
   "brandVideoEmbedUrl": "<iframe width=\"384\" height=\"682\" src=\"https://www.youtube-nocookie.com/embed/OVvqlQAIeMM\" title=\"Video presentacion\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+  "aboutVideoEmbedUrl": "",
   "toolLogos": {
     "microsoft-office": "/images/tools/microsoft-office.svg",
     "google-workspace": "/images/tools/google-workspace.svg",
@@ -81,7 +84,8 @@
         "de": "Editorial-Porträt von Marta Gallardo für das Portfolio-Cover",
         "it": "Ritratto editoriale di Marta Gallardo per la copertina del portfolio",
         "ca": "Retrat editorial de Marta Gallardo per a la portada del portfoli"
-      }
+      },
+      "large": "/images/orbit-large/hero-editorial.webp"
     },
     {
       "id": "world-cutout",
@@ -103,7 +107,8 @@
         "de": "Kartenausschnitt zur Darstellung von Martas internationalem Weg",
         "it": "Ritaglio con mappa per raccontare il percorso internazionale di Marta",
         "ca": "Retall amb mapa per presentar el recorregut internacional de Marta"
-      }
+      },
+      "large": "/images/orbit-large/world-cutout.webp"
     },
     {
       "id": "passport-sticker",
@@ -125,7 +130,8 @@
         "de": "Reisepass-Sticker für Reise- und Lifestyle-Kampagnen",
         "it": "Sticker passaporto che rappresenta viaggi e campagne lifestyle",
         "ca": "Adhesiu de passaport que representa viatges i campanyes lifestyle"
-      }
+      },
+      "large": "/images/orbit-large/passport-sticker.webp"
     },
     {
       "id": "art-sticker",
@@ -147,7 +153,8 @@
         "de": "Kunst-Sticker für visuelle und kreative Kampagnen",
         "it": "Sticker artistico per campagne visive e creative",
         "ca": "Adhesiu artístic per a campanyes visuals i creatives"
-      }
+      },
+      "large": "/images/orbit-large/art-sticker.webp"
     },
     {
       "id": "crochet-sticker",
@@ -169,7 +176,8 @@
         "de": "Häkel-Sticker für Craft- und Lifestyle-Inhalte",
         "it": "Sticker all’uncinetto per contenuti artigianali e lifestyle",
         "ca": "Adhesiu de ganxet per a contingut artesanal i lifestyle"
-      }
+      },
+      "large": "/images/orbit-large/crochet-sticker.webp"
     },
     {
       "id": "mountain-sticker",
@@ -191,7 +199,8 @@
         "de": "Berg-Sticker für Reise- und Ausflugskampagnen",
         "it": "Sticker montagna per campagne travel e weekend",
         "ca": "Adhesiu de muntanya per a campanyes de viatges i escapades"
-      }
+      },
+      "large": "/images/orbit-large/mountain-sticker.webp"
     },
     {
       "id": "instagram-proof",
@@ -213,7 +222,8 @@
         "de": "Instagram-Screenshot von marttelier als Nachweis der Markenpräsenz",
         "it": "Screenshot Instagram di marttelier come prova della presenza del brand",
         "ca": "Captura d’Instagram de marttelier com a mostra de presència de marca"
-      }
+      },
+      "large": "/images/orbit-large/instagram-proof.webp"
     },
     {
       "id": "travel-niche",
@@ -235,7 +245,8 @@
         "de": "Bild für die Reise-Kategorie im UGC-Portfolio",
         "it": "Immagine di supporto per la categoria viaggi del portfolio UGC",
         "ca": "Imatge de suport per a la categoria de viatges del portfoli UGC"
-      }
+      },
+      "large": "/images/orbit-large/travel-niche.webp"
     },
     {
       "id": "languages-niche",
@@ -257,7 +268,8 @@
         "de": "Bild für Sprach- und Kommunikationskampagnen",
         "it": "Immagine di supporto per campagne su lingue e comunicazione",
         "ca": "Imatge de suport per a campanyes d’idiomes i comunicació"
-      }
+      },
+      "large": "/images/orbit-large/languages-niche.webp"
     },
     {
       "id": "art-niche",
@@ -279,7 +291,8 @@
         "de": "Bild für visuelle Kampagnen im Kunstbereich",
         "it": "Immagine di supporto per campagne visive nel settore artistico",
         "ca": "Imatge de suport per a campanyes visuals del nínxol artístic"
-      }
+      },
+      "large": "/images/orbit-large/art-niche.webp"
     },
     {
       "id": "placeholder-travel-story",
@@ -301,7 +314,8 @@
         "de": "Gebrandeter Platzhalter für einen noch unveröffentlichten Reise-Case",
         "it": "Placeholder grafico per un caso travel ancora da pubblicare",
         "ca": "Placeholder gràfic per a un cas de viatge encara per publicar"
-      }
+      },
+      "large": "/images/orbit-large/glacier-point.webp"
     },
     {
       "id": "placeholder-language-case",
@@ -323,7 +337,8 @@
         "de": "Gebrandeter Platzhalter für ein kommendes mehrsprachiges Projekt",
         "it": "Placeholder grafico per un prossimo progetto multilingue",
         "ca": "Placeholder gràfic per a un proper projecte multilingüe"
-      }
+      },
+      "large": "/images/orbit-large/trabajo-multilingue.webp"
     },
     {
       "id": "placeholder-editorial-drop",
@@ -345,7 +360,8 @@
         "de": "Gebrandeter Platzhalter für ein neues Editorial im Portfolio",
         "it": "Placeholder grafico per una nuova pièce editoriale del portfolio",
         "ca": "Placeholder gràfic per a una nova peça editorial del portfoli"
-      }
+      },
+      "large": "/images/orbit-large/placeholder-editorial-drop.webp"
     },
     {
       "id": "placeholder-profile-note",
@@ -367,7 +383,8 @@
         "de": "Gebrandeter Platzhalter mit der visuellen Identität von Marta Gallardo",
         "it": "Placeholder grafico con l’identità visiva di Marta Gallardo",
         "ca": "Placeholder gràfic amb la identitat visual de Marta Gallardo"
-      }
+      },
+      "large": "/images/orbit-large/placeholder-profile-note.webp"
     },
     {
       "id": "placeholder-collaboration",
@@ -389,7 +406,8 @@
         "de": "Gebrandeter Platzhalter für eine zukünftige Markenkooperation",
         "it": "Placeholder grafico per una futura collaborazione con un brand",
         "ca": "Placeholder gràfic per a una futura col·laboració amb una marca"
-      }
+      },
+      "large": "/images/orbit-large/placeholder-collaboration.webp"
     }
   ],
   "arsenal": {
@@ -611,12 +629,64 @@
         "group": "seo",
         "logo": "/images/tools/google-business-profile.svg",
         "label": {
-          "es": "Google My Business",
+          "es": "Google Business Profile",
           "en": "Google Business Profile",
           "fr": "Google Business Profile",
           "de": "Google Unternehmensprofil",
           "it": "Profilo dell’attività su Google",
           "ca": "Perfil d’empresa de Google"
+        }
+      },
+      {
+        "id": "google-analytics",
+        "group": "seo",
+        "logo": "/images/tools/google-analytics.svg",
+        "label": {
+          "es": "Google Analytics 4",
+          "en": "Google Analytics 4",
+          "fr": "Google Analytics 4",
+          "de": "Google Analytics 4",
+          "it": "Google Analytics 4",
+          "ca": "Google Analytics 4"
+        }
+      },
+      {
+        "id": "semrush",
+        "group": "seo",
+        "logo": "/images/tools/semrush.svg",
+        "label": {
+          "es": "Semrush",
+          "en": "Semrush",
+          "fr": "Semrush",
+          "de": "Semrush",
+          "it": "Semrush",
+          "ca": "Semrush"
+        }
+      },
+      {
+        "id": "screaming-frog",
+        "group": "seo",
+        "logo": "/images/tools/screaming-frog.svg",
+        "label": {
+          "es": "Screaming Frog",
+          "en": "Screaming Frog",
+          "fr": "Screaming Frog",
+          "de": "Screaming Frog",
+          "it": "Screaming Frog",
+          "ca": "Screaming Frog"
+        }
+      },
+      {
+        "id": "pagespeed-insights",
+        "group": "seo",
+        "logo": "/images/tools/pagespeed-insights.svg",
+        "label": {
+          "es": "PageSpeed Insights",
+          "en": "PageSpeed Insights",
+          "fr": "PageSpeed Insights",
+          "de": "PageSpeed Insights",
+          "it": "PageSpeed Insights",
+          "ca": "PageSpeed Insights"
         }
       }
     ],
@@ -682,75 +752,159 @@
         "group": "translation"
       },
       {
-        "id": "local-seo",
-        "label": {
-          "es": "SEO Local",
-          "en": "Local SEO",
-          "fr": "SEO local",
-          "de": "Lokales SEO",
-          "it": "SEO locale",
-          "ca": "SEO local"
-        },
-        "group": "seo"
-      },
-      {
-        "id": "content-optimization",
-        "label": {
-          "es": "Optimización de contenido para buscadores",
-          "en": "Multilingual SEO",
-          "fr": "SEO Multilingue",
-          "de": "Suchmaschinenoptimierung für Inhalte",
-          "it": "Ottimizzazione dei contenuti per i motori di ricerca",
-          "ca": "Optimització de contingut per a cercadors"
-        },
-        "group": "seo"
-      },
-      {
-        "id": "keyword-planning",
-        "label": {
-          "es": "Keyword planner",
-          "en": "Keyword planner",
-          "fr": "Keyword planner",
-          "de": "Keyword-Planung",
-          "it": "Pianificazione delle parole chiave",
-          "ca": "Planificació de paraules clau"
-        },
-        "group": "seo"
-      },
-      {
-        "id": "copywriting",
-        "label": {
-          "es": "Copywriting",
-          "en": "Copywriting",
-          "fr": "Copywriting",
-          "de": "Copywriting",
-          "it": "Copywriting",
-          "ca": "Copywriting"
-        },
-        "group": "seo"
-      },
-      {
-        "id": "skill-interlinking",
+        "id": "skill-seo-crawling-and-indexing",
         "group": "seo",
+        "category": "technical",
         "label": {
-          "es": "INTERLINKING",
-          "en": "INTERLINKING",
-          "fr": "INTERLINKING",
-          "de": "INTERLINKING",
-          "it": "INTERLINKING",
-          "ca": "INTERLINKING"
+          "es": "Rastreo e indexación",
+          "en": "Crawling and indexing",
+          "fr": "Exploration et indexation",
+          "de": "Crawling und Indexierung",
+          "it": "Scansione e indicizzazione",
+          "ca": "Rastreig i indexació"
         }
       },
       {
-        "id": "skill-arquitectura-web",
+        "id": "skill-seo-speed-and-mobile",
         "group": "seo",
+        "category": "technical",
         "label": {
-          "es": "ARQUITECTURA WEB",
-          "en": "SEO STRUCTURE",
-          "fr": "ARCHITECTURE SEO",
-          "de": "ARQUITECTURA WEB",
-          "it": "ARQUITECTURA WEB",
-          "ca": "ARQUITECTURA WEB"
+          "es": "Velocidad y versión móvil",
+          "en": "Speed and mobile",
+          "fr": "Vitesse et mobile",
+          "de": "Geschwindigkeit und Mobilversion",
+          "it": "Velocità e versione mobile",
+          "ca": "Velocitat i versió mòbil"
+        }
+      },
+      {
+        "id": "skill-seo-structured-data",
+        "group": "seo",
+        "category": "technical",
+        "label": {
+          "es": "Datos estructurados",
+          "en": "Structured data",
+          "fr": "Données structurées",
+          "de": "Strukturierte Daten",
+          "it": "Dati strutturati",
+          "ca": "Dades estructurades"
+        }
+      },
+      {
+        "id": "skill-seo-site-architecture-and-internal-linking",
+        "group": "seo",
+        "category": "technical",
+        "label": {
+          "es": "Arquitectura web y enlazado interno",
+          "en": "Site architecture and internal linking",
+          "fr": "Architecture et maillage interne",
+          "de": "Website-Architektur und interne Verlinkung",
+          "it": "Architettura del sito e link interni",
+          "ca": "Arquitectura web i enllaçat intern"
+        }
+      },
+      {
+        "id": "skill-seo-keyword-research",
+        "group": "seo",
+        "category": "content",
+        "label": {
+          "es": "Investigación de palabras clave",
+          "en": "Keyword research",
+          "fr": "Recherche de mots-clés",
+          "de": "Keyword-Recherche",
+          "it": "Ricerca delle parole chiave",
+          "ca": "Recerca de paraules clau"
+        }
+      },
+      {
+        "id": "skill-seo-on-page-optimization",
+        "group": "seo",
+        "category": "content",
+        "label": {
+          "es": "Optimización on-page",
+          "en": "On-page optimization",
+          "fr": "Optimisation on-page",
+          "de": "OnPage-Optimierung",
+          "it": "Ottimizzazione on-page",
+          "ca": "Optimització on-page"
+        }
+      },
+      {
+        "id": "skill-seo-content-clusters",
+        "group": "seo",
+        "category": "content",
+        "label": {
+          "es": "Clústeres de contenido",
+          "en": "Content clusters",
+          "fr": "Clusters de contenu",
+          "de": "Content-Cluster",
+          "it": "Cluster di contenuti",
+          "ca": "Clústers de contingut"
+        }
+      },
+      {
+        "id": "skill-seo-seo-copywriting",
+        "group": "seo",
+        "category": "content",
+        "label": {
+          "es": "Copywriting SEO",
+          "en": "SEO copywriting",
+          "fr": "Rédaction SEO",
+          "de": "SEO-Texte",
+          "it": "Copywriting SEO",
+          "ca": "Redacció SEO"
+        }
+      },
+      {
+        "id": "skill-seo-google-business-profile-and-reviews",
+        "group": "seo",
+        "category": "local",
+        "label": {
+          "es": "Google Business Profile y reseñas",
+          "en": "Google Business Profile and reviews",
+          "fr": "Fiche Google et avis",
+          "de": "Google-Unternehmensprofil und Bewertungen",
+          "it": "Profilo dell’attività su Google e recensioni",
+          "ca": "Perfil d’empresa de Google i ressenyes"
+        }
+      },
+      {
+        "id": "skill-seo-hreflang-and-multilingual-sites",
+        "group": "seo",
+        "category": "local",
+        "label": {
+          "es": "Hreflang y webs multilingües",
+          "en": "Hreflang and multilingual sites",
+          "fr": "Hreflang et sites multilingues",
+          "de": "Hreflang und mehrsprachige Websites",
+          "it": "Hreflang e siti multilingue",
+          "ca": "Hreflang i webs multilingües"
+        }
+      },
+      {
+        "id": "skill-seo-localized-keywords",
+        "group": "seo",
+        "category": "local",
+        "label": {
+          "es": "Palabras clave localizadas",
+          "en": "Localized keywords",
+          "fr": "Mots-clés localisés",
+          "de": "Lokalisierte Keywords",
+          "it": "Parole chiave localizzate",
+          "ca": "Paraules clau localitzades"
+        }
+      },
+      {
+        "id": "skill-seo-visibility-in-ai-chatgpt-gemini",
+        "group": "seo",
+        "category": "local",
+        "label": {
+          "es": "Visibilidad en la IA (ChatGPT, Gemini)",
+          "en": "Visibility in AI (ChatGPT, Gemini)",
+          "fr": "Visibilité dans l’IA (ChatGPT, Gemini)",
+          "de": "Sichtbarkeit in KI (ChatGPT, Gemini)",
+          "it": "Visibilità nell’IA (ChatGPT, Gemini)",
+          "ca": "Visibilitat en la IA (ChatGPT, Gemini)"
         }
       }
     ]

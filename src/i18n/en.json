@@ -123,14 +123,18 @@
   "home": {
     "hero": {
       "kicker": "marttelier",
-      "description": "I make sure your project is found, understood and chosen in several languages: technical SEO audits, professional translation and localization, and UGC content built to convert.",
+      "description": "I'm Marta Gallardo, an **SEO consultant**, translator and UGC creator based in Elche, Spain. I help your project get found, understood and chosen in several languages with **technical SEO audits**, **local and international SEO**, **SEO translation** and UGC videos made to convert.",
       "mainPhoto": "Main Photo",
       "scrollCue": "Discover how I work",
       "coverLabel": "Cover Story",
-      "title": "SEO Consultant & SEO Translation That Gets You Found",
-      "titleAccent": "That Gets You Found",
+      "title": "SEO consultant and translator so your website ranks in any language",
+      "titleAccent": "in any language",
       "ctaDiagnosis": "Request an SEO assessment",
-      "ctaServices": "View services"
+      "ctaServices": "View services",
+      "photos": {
+        "languages": "Flags from different countries flying over the Porto riverside",
+        "travel": "Plane wing at sunset seen through the window"
+      }
     },
     "about": {
       "eyebrow": "About",
@@ -147,7 +151,24 @@
       "title": "Technical rigour, formal qualifications and creativity",
       "titleAccent": "creativity",
       "description": "Behind Marttelier is Marta Gallardo. With a degree in Translation and Interpreting from the University of Alicante and training in SEO and digital strategy, I work side by side with companies and brands to build a solid, multilingual and profitable online presence, without the extra layers of an agency.",
-      "cta": "Get to know me"
+      "cta": "Get to know me",
+      "passport": {
+        "label": "Professional passport · Marta Gallardo",
+        "degreeLabel": "Official degree",
+        "degree": "Degree in Translation and Interpreting · University of Alicante",
+        "seoLabel": "SEO training",
+        "cover": "Professional passport",
+        "surnameLabel": "Surname",
+        "surname": "Gallardo",
+        "nameLabel": "Given name",
+        "name": "Marta",
+        "professionLabel": "Profession",
+        "profession": "Translator and SEO consultant",
+        "seoItems": [
+          "International SEO · Semrush certificate",
+          "Private SEO and digital marketing course · Freelancer y Nómada Digital"
+        ]
+      }
     },
     "video": {
       "eyebrow": "PERSONAL BRAND",
@@ -186,7 +207,22 @@
     "visibility": {
       "title": "Visibility, Languages & Conversion",
       "titleAccent": "Conversion",
-      "text": "More traffic is worthless if it doesn't reach the right people. That's why, as a translator and content creator, I work across languages, cultures and formats: I design SEO strategies suited to each project and combine them with translation, localization and UGC video, so every message keeps its intent, connects naturally and builds trust at first glance."
+      "text": "More traffic is worthless if it doesn't reach the right people. That's why, as a translator and content creator, I work across languages, cultures and formats: I design SEO strategies suited to each project and combine them with translation, localization and UGC video, so every message keeps its intent, connects naturally and builds trust at first glance.",
+      "steps": [
+        {
+          "title": "Free diagnosis",
+          "text": "I review your website and give you three prioritised findings, with a 30-minute call to go through them."
+        },
+        {
+          "title": "Tailored proposal",
+          "text": "I explain what I would do, in what order and with a clear quote before we start."
+        },
+        {
+          "title": "Work and results",
+          "text": "I handle the SEO, translation or content and show you the progress with real data."
+        }
+      ],
+      "stepsTitle": "How we work"
     },
     "latestArticles": {
       "title": "Latest articles on SEO and digital marketing",
@@ -363,6 +399,50 @@
         }
       ],
       "closing": "Do you have a product or an experience you want to show? Tell me what you're after and I'll suggest an idea."
+    },
+    "languagesStrip": {
+      "title": "One video, ready for three markets",
+      "text": "I film, subtitle and, if you need it, narrate in **Spanish, English and French**: one production for three audiences."
+    },
+    "pricing": {
+      "title": "Rates",
+      "from": "From",
+      "recommended": "Recommended",
+      "note": "Prices exclude VAT. You get a fixed quote before we start.",
+      "included": "Always included: organic use on your brand’s social media for 6 months, 2 rounds of changes and delivery within 10 working days of approving the script. Extra: use in ads, raw footage, and English or French subtitles (+€20 per video and language).",
+      "cta": "Ask for a quote",
+      "tiers": [
+        {
+          "name": "1 video",
+          "price": "€100",
+          "unit": "per video",
+          "items": [
+            "15–30 seconds, script based on your brief",
+            "1 opening hook",
+            "Spanish subtitles"
+          ]
+        },
+        {
+          "name": "Pack of 3 videos",
+          "price": "€270",
+          "unit": "€90 per video",
+          "items": [
+            "Script based on your brief",
+            "2 hooks per video to test which works",
+            "Spanish subtitles"
+          ]
+        },
+        {
+          "name": "Campaign",
+          "price": "€490",
+          "unit": "one-off payment",
+          "items": [
+            "5 videos with scripts based on your brief",
+            "Spanish subtitles",
+            "10 product photos"
+          ]
+        }
+      ]
     }
   },
   "translationPage": {
@@ -499,7 +579,7 @@
       "title": "Marta Gallardo, the translator & SEO consultant behind Marttelier",
       "titleAccent": "Marttelier",
       "subtitle": "Where linguistics, strategy and content come together",
-      "story": "I graduated in Translation and Interpreting from the University of Alicante and trained in SEO and digital strategy. By bringing together languages, search and content creation, I found a way to support projects directly, with no agency in between. I care that every message keeps its intent and finds the right people."
+      "story": "I graduated in **Translation and Interpreting from the University of Alicante** and trained in **SEO and digital strategy**. By bringing together languages, search and content creation, I found a way to support projects directly, **with no agency in between**. I care that every message keeps its intent and finds the right people."
     },
     "principles": {
       "eyebrow": "marttelier",
@@ -510,12 +590,24 @@
         "Human review",
         "A focus on conversion",
         "Growing together"
+      ],
+      "details": [
+        "I show you real data, including what doesn't work. No promises of a first position.",
+        "Every text and translation goes through my own eyes before it's published, even when I use tools.",
+        "I'm not just after visits: I want the people who arrive to write, call or buy.",
+        "Direct contact, no agency layers. We learn together what works in your market."
       ]
     },
     "work": {
       "title": "How do I work with brands and digital projects?",
       "description": "I provide close, direct support: we agree on goals, priorities and next steps, and I keep communication clear throughout the project."
-    }
+    },
+    "gallery": {
+      "hint": "Tap a photo to see it larger",
+      "open": "View photo",
+      "close": "Close"
+    },
+    "videoSoon": "Introduction video · coming soon"
   },
   "seoPage": {
     "hero": {
@@ -524,7 +616,7 @@
       "titleAccent": "International SEO",
       "paragraphs": [
         "Showing up on Google isn't a matter of luck, it's a matter of strategy. My SEO service turns your website into a channel that attracts people already searching for what you offer: not just more visits, but visits with real interest.",
-        "I analyze your project's starting point and design a search ranking plan tailored to you: I improve the technical structure, the relevance of your content and your site's authority. I work from Elche, Spain: in person with businesses in Elche and online with the rest of the province of Alicante, the Costa Blanca and other countries. Whether you want to be found in your own town or take the leap into other countries with international SEO, I explain every step and we work with clear priorities."
+        "I analyze your site's starting point and design a plan tailored to you: I improve the technical structure, the relevance of your content and your domain's authority. I explain every step and we work with clear priorities."
       ]
     },
     "services": {
@@ -535,17 +627,41 @@
         {
           "id": "audit",
           "title": "Professional SEO Audit",
-          "description": "Before taking action, I review the starting point: technical SEO, indexability, site structure and on-page content. The audit prioritizes findings to guide the next steps."
+          "description": "I start with a free 30-minute mini audit: I review your website, your Google Business Profile and whether you show up when someone asks ChatGPT or Gemini about your sector, and I show you the 3 most important problems. If you need to go deeper, the full audit covers the whole site and ends with a prioritized plan.",
+          "kicker": "The first step",
+          "headline": "Find out what's wrong and what to fix first",
+          "points": [
+            "Technical SEO: crawling, indexing and mobile speed",
+            "Structure, internal linking and on-page content",
+            "A prioritized plan and 1 hour to walk you through it",
+            "Ideal before a redesign or if someone can apply the changes"
+          ]
         },
         {
           "id": "consulting",
           "title": "SEO Consulting & Digital Strategy",
-          "description": "Monthly or project-based support to set priorities, review progress and adjust the strategy for businesses and self-employed professionals."
+          "description": "An audit tells you what's wrong; consulting tells you what to do and in what order. The groundwork is the same in all three options: what changes is how much I support you and who applies the changes. After the first 3 months you can continue with a monthly plan.",
+          "kicker": "A plan and someone beside you",
+          "headline": "Choose how much support you want",
+          "points": [
+            "Plan: I give you the action plan and you apply it",
+            "Plan + support: one consultation a month for 3 months and I review what you apply",
+            "Plan + implementation: I apply the changes and explain them every month",
+            "One-off consultation for a specific question: a redesign, a domain change, a blog"
+          ]
         },
         {
           "id": "local",
           "title": "Local SEO in Elche and the Costa Blanca",
-          "description": "Optimization of your Google Business Profile and Google Maps presence to help local customers find your business. I mainly work with businesses in Elche, Alicante and the Costa Blanca that serve international customers, so tourists and residents can find you in their own language."
+          "description": "If your business serves customers in a specific area, showing up on the map and in local searches matters as much as having a good website. I mainly work with businesses in Elche, Alicante and the Costa Blanca that welcome international customers, so tourists and residents searching in other languages can find you too.",
+          "kicker": "For businesses with local customers",
+          "headline": "Get found on the map, in English and French too",
+          "points": [
+            "Optimized Google Business Profile, also in other languages",
+            "Reviews: how to ask for them and reply in Spanish, English and French",
+            "Service and area pages, with consistent details on your site and directories",
+            "Tracking calls, clicks and visits from day one"
+          ]
         }
       ]
     },
@@ -554,7 +670,46 @@
       "translationLinkLabel": "Translation",
       "title": "International & Multilingual SEO Specialist",
       "titleAccent": "Multilingual",
-      "description": "Taking a website international isn't about installing a machine-translation plugin. Every market searches differently, so I start by researching which terms users in each country actually use and with what intent. From there I adapt the content and set up what's needed on the technical side, such as hreflang tags, so Google shows each version to the right audience. If you also need a website translation service, we handle it within the same strategy so language and ranking don't go separate ways."
+      "description": "Taking a website international isn't about installing a machine-translation plugin. Every market searches differently, so I start by researching which terms users in each country actually use and with what intent. From there I adapt the content and set up what's needed on the technical side, such as hreflang tags, so Google shows each version to the right audience. If you also need a website translation service, we handle it within the same strategy so language and ranking don't go separate ways.",
+      "marketsTitle": "One search, three markets",
+      "originLabel": "Original",
+      "literalLabel": "Literal translation",
+      "realLabel": "What people really search",
+      "marketsNote": "Example: that's why I research the keywords of each language instead of translating them.",
+      "markets": [
+        {
+          "code": "ES",
+          "name": "Español",
+          "query": "piso en alquiler Alicante",
+          "literal": "piso en alquiler Alicante"
+        },
+        {
+          "code": "EN",
+          "name": "English",
+          "query": "flat to rent Alicante",
+          "literal": "apartment in rent Alicante"
+        },
+        {
+          "code": "FR",
+          "name": "Français",
+          "query": "location appartement Alicante",
+          "literal": "appartement en location Alicante"
+        }
+      ],
+      "pillars": [
+        {
+          "title": "Searches in each market",
+          "text": "What people type and why, country by country."
+        },
+        {
+          "title": "Localized content",
+          "text": "Titles, copy and Google profile adapted, not translated."
+        },
+        {
+          "title": "Hreflang and structure",
+          "text": "So Google shows each person their own version."
+        }
+      ]
     },
     "why": {
       "eyebrow": "SEO",
@@ -570,12 +725,8 @@
       "closing": "I'm not a big agency and I don't want to be: you work with me directly, and I tell you from the start what I can and can't do.",
       "stats": [
         {
-          "value": "6",
-          "label": "languages"
-        },
-        {
-          "value": "4",
-          "label": "tools"
+          "value": "3",
+          "label": "languages: ES · EN · FR"
         },
         {
           "value": "1:1",
@@ -583,14 +734,23 @@
         },
         {
           "value": "30 min",
-          "label": "free call"
+          "label": "free mini audit"
+        },
+        {
+          "value": "24 h",
+          "label": "to get your proposal"
         }
       ],
       "ctaText": "Free initial diagnosis with three prioritized findings."
     },
     "arsenal": {
       "toolsTitle": "SEO tools",
-      "skillsTitle": "SEO skills"
+      "skillsTitle": "SEO skills",
+      "skillCategories": {
+        "technical": "Technical SEO",
+        "content": "Content",
+        "local": "Local and international"
+      }
     },
     "budget": {
       "eyebrow": "SEO",
@@ -599,14 +759,21 @@
       "description": "The budget depends on the website’s current state, scope and type of support. Tell me about the project goals and I’ll prepare a tailored proposal.",
       "highlight": "A basic review of your website with three prioritised findings, plus a free 30-minute call to get to know your project and discuss the results. It doesn’t include a full report or implementing the improvements; if you decide to continue, we’ll define that in the proposal.",
       "highlightTitle": "I offer a free initial diagnosis"
-    }
+    },
+    "glance": [
+      "In person in Elche; online across Alicante, the Costa Blanca and other countries",
+      "Local and international SEO in Spanish, English and French",
+      "Free 30-minute mini audit"
+    ],
+    "glanceTitle": "At a glance"
   },
   "translationServicePage": {
     "hero": {
       "eyebrow": "Translation & localization",
       "title": "Professional Website Translation & Localization with an SEO Focus",
       "titleAccent": "Localization",
-      "description": "I adapt your company’s content for new markets with semantic precision and an SEO focus."
+      "description": "I adapt your company’s content for new markets with semantic precision and an SEO focus.",
+      "intro2": "I translate websites, online shops and digital content, taking care of your brand's voice and the keywords people use to find you in each language."
     },
     "localization": {
       "eyebrow": "WEBSITE LOCALIZATION",
@@ -656,6 +823,102 @@
       "languagesTitle": "Languages",
       "toolsTitle": "Tools",
       "skillsTitle": "Skills"
+    },
+    "glance": [
+      "French ⇄ Spanish",
+      "English → Spanish",
+      "German → Spanish",
+      "Italian → Spanish",
+      "Catalan/Valencian → Spanish"
+    ],
+    "glanceTitle": "Language pairs",
+    "process": {
+      "title": "How we work",
+      "steps": [
+        {
+          "title": "Tell me about your project",
+          "text": "Your goals, where the text lives (website, shop or platform) and the texts in an editable document."
+        },
+        {
+          "title": "Quote within 48 h",
+          "text": "At the latest, with a fixed price and delivery date."
+        },
+        {
+          "title": "I translate and review",
+          "text": "I translate and then review every text carefully before delivering it."
+        },
+        {
+          "title": "Delivery and your review",
+          "text": "You review the translation and I apply one round of changes, included."
+        }
+      ]
+    },
+    "pricing": {
+      "title": "Rates",
+      "from": "From",
+      "recommended": "Recommended",
+      "note": "Prices exclude VAT. You get a fixed quote before we start.",
+      "example": "Example: a 3,000-word website costs €240 with Translation, €300 with SEO translation and €390 ready to publish.",
+      "cta": "Ask for a quote",
+      "tiers": [
+        {
+          "name": "Translation",
+          "price": "€0.08",
+          "unit": "per word",
+          "items": [
+            "Translation and localisation, not word for word",
+            "Final review before delivery",
+            "You upload it to your site"
+          ]
+        },
+        {
+          "name": "SEO translation",
+          "price": "€0.10",
+          "unit": "per word",
+          "items": [
+            "Everything in Translation",
+            "Real keywords for each language",
+            "Titles, descriptions and URLs for Google",
+            "Image alt texts"
+          ]
+        },
+        {
+          "name": "Website ready to publish",
+          "price": "€0.10",
+          "unit": "per word + €90 for the upload",
+          "items": [
+            "Everything in SEO translation",
+            "I upload it to WordPress or Shopify",
+            "I check every language links to the others (hreflang)"
+          ]
+        }
+      ]
+    },
+    "whatTranslate": {
+      "eyebrow": "What I translate",
+      "title": "Websites, e-commerce and digital content",
+      "titleAccent": "digital content"
+    },
+    "seoCompare": {
+      "title": "Translation vs SEO translation: what changes",
+      "source": "Original text · French",
+      "sourceText": "robes de soirée femme",
+      "plain": "Translation",
+      "seo": "SEO translation",
+      "plainText": "vestidos de noche para mujer",
+      "seoText": "vestidos de fiesta mujer",
+      "plainNote": "Correct, but nobody searches for it",
+      "seoNote": "What people actually type into Google",
+      "plainPoints": [
+        "Faithful to the original meaning",
+        "Natural, no literal calques",
+        "Final review before delivery"
+      ],
+      "seoPoints": [
+        "Everything in Translation",
+        "Real keywords for each language",
+        "Titles, descriptions, URLs and alt text"
+      ]
     }
   },
   "legal": {

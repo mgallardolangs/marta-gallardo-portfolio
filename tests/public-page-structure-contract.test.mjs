@@ -15,14 +15,14 @@ async function readJson(relativePath) {
   return JSON.parse(await readSource(relativePath));
 }
 
-test('Home sections follow hero, services, orbit, visibility, About and latest posts', async () => {
+test('Home sections follow hero, authority, services, visibility and latest posts', async () => {
   const source = await readSource('src/views/HomePage.astro');
   const sectionOrder = [
+    // 24/11/2026: authority (studies + languages passport) moves up; the orbit carousel moved to About.
     'data-home-hero',
-    'id="home-services"',
-    'data-home-orbit',
-    'home.visibility.title',
     'home.about.title',
+    'id="home-services"',
+    'home.visibility.title',
     'home.latestArticles.title',
   ];
   const positions = sectionOrder.map((marker) => source.indexOf(marker));
@@ -31,8 +31,10 @@ test('Home sections follow hero, services, orbit, visibility, About and latest p
   assert.deepEqual([...positions].sort((first, second) => first - second), positions, 'Home sections should be in approved order');
   assert.match(source, /home-hero__cta--primary[\s\S]*i\.home\.hero\.ctaDiagnosis/);
   assert.match(source, /href="#home-services"[\s\S]*i\.home\.hero\.ctaServices/);
-  assert.match(source, /<h3 class="font-heading text-2xl font-normal/);
+  assert.match(source, /class:list=\{\['clay-card home-services__card'/);
   assert.doesNotMatch(source, /brandVideoEmbedUrl|instagramScreenshot/);
+  assert.doesNotMatch(source, /data-home-orbit|OvalMediaOrbit/);
+  assert.match(source, /home-passport/);
 });
 
 test('About keeps the personal video in a click-to-load facade and reuses the trajectory tabs', async () => {
@@ -71,13 +73,15 @@ test('public Translation page contains translation skills only while SEO skills 
   assert.ok(seoArsenal.skills.every((skill) => skill.group === 'seo'));
   assert.deepEqual(
     seoArsenal.tools.map((tool) => tool.id).sort(),
-    ['google-business-profile', 'google-search-console'].sort(),
+    // 24/11/2026: the SEO page shows the tools Marta really uses (GSC, GA4, Business Profile, Semrush, Screaming Frog, PageSpeed)
+    ['google-analytics', 'google-business-profile', 'google-search-console', 'pagespeed-insights', 'screaming-frog', 'semrush'].sort(),
   );
   assert.match(translationSource, /getTranslationArsenalColumns\(lang,\s*siteData,\s*'translation'\)/);
   assert.match(translationSource, /arsenal\.skills\.map/);
   assert.doesNotMatch(translationSource, /skillGroups\.seo|SEO Local|Keyword planner/);
   assert.match(seoSource, /getTranslationArsenalColumns\(lang,\s*siteData,\s*'seo'\)/);
-  assert.match(seoSource, /arsenal\.skills\.map/);
+  // 24/11/2026: SEO skills are grouped by category, so the page filters arsenal.skills instead of one flat map
+  assert.match(seoSource, /arsenal\.skills\.(map|filter)/);
   assert.doesNotMatch(seoSource, /SEO_RESERVED_TOOL_LABELS/);
   assert.doesNotMatch(arsenalHelperSource, /SEO_RESERVED_TOOL_LABELS/);
 });

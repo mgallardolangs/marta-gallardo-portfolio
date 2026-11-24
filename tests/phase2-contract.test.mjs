@@ -40,11 +40,13 @@ const sharedViews = [
 ];
 
 const typedViewSpecs = [
-  ['src/views/HomePage.astro', /text=\{i\.home\.hero\.title\}/, 2],
-  ['src/views/AboutPage.astro', /text=\{page\.hero\.title\}/, 3],
-  ['src/views/SeoServicePage.astro', /text=\{page\.hero\.title\}/, 5],
-  ['src/views/TranslationServicePage.astro', /text=\{page\.hero\.title\}/, 5],
-  ['src/views/UgcPage.astro', /text=\{i\.ugcPage\.pageTitle\}/, 3],
+  ['src/views/HomePage.astro', /text=\{i\.home\.latestArticles\.title\}/, 1],
+  ['src/views/AboutPage.astro', /accentHtml\(page\.hero\.title, page\.hero\.titleAccent\)/, 1], // static h1 and values heading since 24/11/2026; only the trajectory heading types
+  // 24/11/2026: service page h1s are static (LCP); section headings below the fold keep typing.
+  ['src/views/SeoServicePage.astro', /accentHtml\(page\.hero\.title, page\.hero\.titleAccent\)/, 4],
+  // 24/11/2026: Translation sections 2-4 became 'Qué traduzco' + 'Traducción vs traducción SEO' (3 section headings)
+  ['src/views/TranslationServicePage.astro', /accentHtml\(page\.hero\.title, page\.hero\.titleAccent\)/, 3],
+  ['src/views/UgcPage.astro', /accentHtml\(i\.ugcPage\.pageTitle, i\.ugcPage\.pageTitleAccent\)/, 2],
   ['src/views/BlogIndexPage.astro', /text=\{i\.blog\.title\}/, 1],
   ['src/views/ContactPage.astro', /text=\{i\.contact\.title\}/, 1],
 ];
@@ -323,8 +325,8 @@ test('Phase 2 Spanish and localized copy match the approved content set', async 
   const [es, en, fr, de, it, ca] = await Promise.all(locales.map((locale) => readJson(`src/i18n/${locale}.json`)));
 
   assert.equal(es.home.hero.kicker, 'marttelier');
-  assert.equal(es.home.hero.title, 'Consultora SEO y traducción SEO para que te encuentren');
-  assert.equal(es.home.hero.description, 'Hago que tu proyecto se encuentre, se entienda y convenza en distintos idiomas: auditoría SEO técnica, traducción y localización profesional, y contenido UGC pensado para convertir.');
+  assert.equal(es.home.hero.title, 'Consultora SEO y traductora para que tu web se posicione en cualquier idioma');
+  assert.equal(es.home.hero.description, 'Soy Marta Gallardo, **consultora SEO**, traductora y creadora UGC desde Elche. Hago que tu proyecto se encuentre, se entienda y convenza en varios idiomas con **auditoría SEO técnica**, **SEO local e internacional**, **traducción SEO** y vídeos UGC pensados para convertir.');
   assert.equal(es.home.hero.ctaDiagnosis, 'Solicitar diagnóstico SEO');
   assert.equal(es.home.hero.ctaServices, 'Ver servicios');
   assert.equal(es.home.services.items.seo, 'Consultoría y Auditoría SEO');

@@ -1,18 +1,35 @@
 ---
-interface Props {
-  class?: string;
+import { netlifyImage } from '../lib/netlifyImage';
+
+interface FanPhoto {
+  src: string;
+  alt: string;
 }
 
-const { class: className = '' } = Astro.props;
+interface Props {
+  class?: string;
+  /** Two photos fanned out behind the portrait: [left, right]. */
+  fan?: [FanPhoto, FanPhoto];
+}
+
+const { class: className = '', fan } = Astro.props;
 ---
 
 <div class={`home-hero__portrait ${className}`.trim()} data-home-hero-portrait>
+  {fan && fan.map((photo, index) => (
+    <figure class:list={['home-hero__fan', index === 0 ? 'home-hero__fan--left' : 'home-hero__fan--right']}>
+      <img
+        src={netlifyImage(photo.src, { width: 480 })}
+        alt={photo.alt}
+        width={480}
+        height={640}
+        loading="eager"
+        fetchpriority="low"
+        decoding="async"
+      />
+    </figure>
+  ))}
   <div class="home-hero__portrait-media" data-home-hero-portrait-media>
     <slot />
   </div>
-  <span class="home-hero__portrait-corner home-hero__portrait-corner--top-left" aria-hidden="true"></span>
-  <span class="home-hero__portrait-corner home-hero__portrait-corner--top-right" aria-hidden="true"></span>
-  <span class="home-hero__portrait-corner home-hero__portrait-corner--bottom-right" aria-hidden="true"></span>
-  <span class="home-hero__portrait-corner home-hero__portrait-corner--bottom-left" aria-hidden="true"></span>
-  <span class="home-hero__portrait-rule" aria-hidden="true"></span>
 </div>

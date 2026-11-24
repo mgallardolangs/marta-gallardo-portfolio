@@ -146,7 +146,8 @@ test('translation and SEO admin arsenals show only the tools and skills in their
   );
   assert.deepEqual(
     seo.tools.map(({ id }) => id).sort(),
-    ['google-business-profile', 'google-search-console'].sort(),
+    // 24/11/2026: the SEO page shows the tools Marta really uses (GSC, GA4, Business Profile, Semrush, Screaming Frog, PageSpeed)
+    ['google-analytics', 'google-business-profile', 'google-search-console', 'pagespeed-insights', 'screaming-frog', 'semrush'].sort(),
   );
   assert.ok(translation.skills.every((skill) => skill.group === 'translation'));
   assert.ok(seo.skills.every((skill) => skill.group === 'seo'));
@@ -177,10 +178,11 @@ test('mobile orbit uses portrait geometry with enough room for every tile', () =
 });
 
 test('mobile orbit switches to portrait layout and keeps its home grid item shrinkable', async () => {
+  // The orbit carousel moved from Home to About on 24/11/2026 (clay redesign); its contract now lives there.
   const [orbit, adminPreview, home, adminHome] = await Promise.all([
     readSource('src/components/OvalMediaOrbit.tsx'),
     readSource('src/components/admin/AdminOrbitPreview.tsx'),
-    readSource('src/views/HomePage.astro'),
+    readSource('src/views/AboutPage.astro'),
     readSource('src/pages/admin/index.astro'),
   ]);
 
