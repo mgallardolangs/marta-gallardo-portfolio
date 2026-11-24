@@ -331,7 +331,8 @@ test('about page uses the click-to-load HTTPS-only public brand video', async ()
     readSource('src/components/ClickToLoadYouTube.astro'),
   ]);
 
-  assert.match(aboutSource, /<ClickToLoadYouTube[\s\S]*src=\{siteData\.brandVideoEmbedUrl\}/);
+  // 24/11/2026: the vertical reel is retired from About; a horizontal video comes later and keeps the same click-to-load facade.
+  assert.match(aboutSource, /\{siteData\.aboutVideoEmbedUrl \? \([\s\S]*<ClickToLoadYouTube[\s\S]*src=\{siteData\.aboutVideoEmbedUrl\}[\s\S]*orientation="horizontal"/);
   assert.match(videoSource, /import \{ toHttpsEmbedUrl \} from '\.\.\/lib\/videoEmbed';/);
   assert.match(videoSource, /const embedUrl = toHttpsEmbedUrl\(src\);/);
   assert.match(videoSource, /embedUrl\.protocol !== 'https:'/);

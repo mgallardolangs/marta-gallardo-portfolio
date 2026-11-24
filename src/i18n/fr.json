@@ -535,7 +535,7 @@
       "title": "Marta Gallardo, la traductrice et consultante SEO derrière Marttelier",
       "titleAccent": "Marttelier",
       "subtitle": "À la rencontre de la linguistique, de la stratégie et du contenu",
-      "story": "Je suis diplômée en Traduction et Interprétation de l'Université d'Alicante et je me suis formée au SEO et à la stratégie digitale. En réunissant les langues, la recherche et la création de contenu, j'ai trouvé une façon d'accompagner les projets directement, sans agence entre nous. Ce qui m'importe, c'est que chaque message garde son intention et trouve les bonnes personnes."
+      "story": "Je suis diplômée en **Traduction et Interprétation de l'Université d'Alicante** et je me suis formée au **SEO et à la stratégie digitale**. En réunissant les langues, la recherche et la création de contenu, j'ai trouvé une façon d'accompagner les projets directement, **sans agence entre nous**. Ce qui m'importe, c'est que chaque message garde son intention et trouve les bonnes personnes."
     },
     "principles": {
       "eyebrow": "marttelier",
@@ -546,12 +546,24 @@
         "Relecture humaine",
         "Priorité à la conversion",
         "Grandir ensemble"
+      ],
+      "details": [
+        "Je vous montre des données réelles, y compris ce qui ne fonctionne pas. Aucune promesse de première position.",
+        "Chaque texte et chaque traduction passe sous mes yeux avant publication, même quand j’utilise des outils.",
+        "Je ne cherche pas seulement des visites : je veux que ceux qui arrivent vous écrivent, vous appellent ou achètent.",
+        "Un contact direct, sans intermédiaires d’agence. Nous apprenons ensemble ce qui fonctionne sur votre marché."
       ]
     },
     "work": {
       "title": "Comment travailler avec les marques et les projets numériques ?",
       "description": "Je propose un accompagnement proche et direct : nous définissons les objectifs, les priorités et les prochaines étapes, et je veille à communiquer clairement tout au long du projet."
-    }
+    },
+    "gallery": {
+      "hint": "Touchez une photo pour l’agrandir",
+      "open": "Voir la photo",
+      "close": "Fermer"
+    },
+    "videoSoon": "Vidéo de présentation · bientôt"
   },
   "seoPage": {
     "hero": {

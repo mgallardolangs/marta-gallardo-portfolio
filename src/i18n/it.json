@@ -535,7 +535,7 @@
       "title": "Marta Gallardo e la filosofia Marttelier",
       "titleAccent": "Marttelier",
       "subtitle": "Il punto d’incontro tra linguistica, strategia e contenuti",
-      "story": "Mi sono laureata in Traduzione e Interpretazione all'Università di Alicante e mi sono formata in SEO e strategia digitale. Unendo lingue, ricerca e creazione di contenuti ho trovato un modo per accompagnare i progetti in modo diretto, senza agenzie di mezzo. Mi interessa che ogni messaggio mantenga la sua intenzione e raggiunga le persone giuste."
+      "story": "Mi sono laureata in **Traduzione e Interpretazione all'Università di Alicante** e mi sono formata in **SEO e strategia digitale**. Unendo lingue, ricerca e creazione di contenuti ho trovato un modo per accompagnare i progetti in modo diretto, **senza agenzie di mezzo**. Mi interessa che ogni messaggio mantenga la sua intenzione e raggiunga le persone giuste."
     },
     "principles": {
       "eyebrow": "marttelier",
@@ -546,12 +546,24 @@
         "Revisione umana",
         "Attenzione alla conversione",
         "Crescere insieme"
+      ],
+      "details": [
+        "Ti mostro dati reali, anche quello che non funziona. Nessuna promessa di prima posizione.",
+        "Ogni testo e ogni traduzione passa sotto i miei occhi prima di essere pubblicato, anche quando uso strumenti.",
+        "Non cerco solo visite: voglio che chi arriva ti scriva, ti chiami o compri.",
+        "Contatto diretto, senza livelli di agenzia. Impariamo insieme cosa funziona nel tuo mercato."
       ]
     },
     "work": {
       "title": "Come lavoro con brand e progetti digitali?",
       "description": "Offro un supporto diretto e costante: concordiamo obiettivi, priorità e prossimi passi, e mantengo una comunicazione chiara durante tutto il progetto."
-    }
+    },
+    "gallery": {
+      "hint": "Tocca una foto per vederla in grande",
+      "open": "Vedi foto",
+      "close": "Chiudi"
+    },
+    "videoSoon": "Video di presentazione · in arrivo"
   },
   "seoPage": {
     "hero": {

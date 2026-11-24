@@ -6,9 +6,12 @@ interface Props {
   src: string;
   title: string;
   playLabel: string;
+  /** 'vertical' (9:16, the brand reel) or 'horizontal' (16:9). Same rules either way: only the poster loads until play. */
+  orientation?: 'vertical' | 'horizontal';
 }
 
-const { src, title, playLabel } = Astro.props;
+const { src, title, playLabel, orientation = 'vertical' } = Astro.props;
+const horizontal = orientation === 'horizontal';
 const embedUrl = toHttpsEmbedUrl(src);
 
 if (!embedUrl) {
@@ -22,7 +25,7 @@ const posterUrl = videoId
   : null;
 ---
 
-<div class="relative mx-auto aspect-[9/16] w-full max-w-[22rem] overflow-hidden border border-white/12 bg-ink" data-youtube-facade>
+<div class:list={["relative mx-auto w-full overflow-hidden border border-white/12 bg-ink", horizontal ? "aspect-video rounded-[1.5rem]" : "aspect-[9/16] max-w-[22rem]"]} data-youtube-facade>
   <button
     type="button"
     class="group absolute inset-0 flex h-full w-full items-center justify-center overflow-hidden bg-ink text-paper focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hazel"
@@ -32,7 +35,7 @@ const posterUrl = videoId
     aria-label={playLabel}
   >
     {posterUrl ? (
-      <img src={posterUrl} alt="" width="480" height="854" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover opacity-85 transition duration-300 group-hover:opacity-100" />
+      <img src={posterUrl} alt="" width={horizontal ? 480 : 480} height={horizontal ? 270 : 854} loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover opacity-85 transition duration-300 group-hover:opacity-100" />
     ) : (
       <span class="absolute inset-0 flex items-center justify-center px-8 font-heading text-3xl text-paper">{title}</span>
     )}

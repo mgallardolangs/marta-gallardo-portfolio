@@ -45,6 +45,7 @@
   "aboutPhotos": [],
   "brandVideo": "",
   "brandVideoEmbedUrl": "<iframe width=\"384\" height=\"682\" src=\"https://www.youtube-nocookie.com/embed/OVvqlQAIeMM\" title=\"Video presentacion\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+  "aboutVideoEmbedUrl": "",
   "toolLogos": {
     "microsoft-office": "/images/tools/microsoft-office.svg",
     "google-workspace": "/images/tools/google-workspace.svg",
@@ -83,7 +84,8 @@
         "de": "Editorial-Porträt von Marta Gallardo für das Portfolio-Cover",
         "it": "Ritratto editoriale di Marta Gallardo per la copertina del portfolio",
         "ca": "Retrat editorial de Marta Gallardo per a la portada del portfoli"
-      }
+      },
+      "large": "/images/orbit-large/hero-editorial.webp"
     },
     {
       "id": "world-cutout",
@@ -105,7 +107,8 @@
         "de": "Kartenausschnitt zur Darstellung von Martas internationalem Weg",
         "it": "Ritaglio con mappa per raccontare il percorso internazionale di Marta",
         "ca": "Retall amb mapa per presentar el recorregut internacional de Marta"
-      }
+      },
+      "large": "/images/orbit-large/world-cutout.webp"
     },
     {
       "id": "passport-sticker",
@@ -127,7 +130,8 @@
         "de": "Reisepass-Sticker für Reise- und Lifestyle-Kampagnen",
         "it": "Sticker passaporto che rappresenta viaggi e campagne lifestyle",
         "ca": "Adhesiu de passaport que representa viatges i campanyes lifestyle"
-      }
+      },
+      "large": "/images/orbit-large/passport-sticker.webp"
     },
     {
       "id": "art-sticker",
@@ -149,7 +153,8 @@
         "de": "Kunst-Sticker für visuelle und kreative Kampagnen",
         "it": "Sticker artistico per campagne visive e creative",
         "ca": "Adhesiu artístic per a campanyes visuals i creatives"
-      }
+      },
+      "large": "/images/orbit-large/art-sticker.webp"
     },
     {
       "id": "crochet-sticker",
@@ -171,7 +176,8 @@
         "de": "Häkel-Sticker für Craft- und Lifestyle-Inhalte",
         "it": "Sticker all’uncinetto per contenuti artigianali e lifestyle",
         "ca": "Adhesiu de ganxet per a contingut artesanal i lifestyle"
-      }
+      },
+      "large": "/images/orbit-large/crochet-sticker.webp"
     },
     {
       "id": "mountain-sticker",
@@ -193,7 +199,8 @@
         "de": "Berg-Sticker für Reise- und Ausflugskampagnen",
         "it": "Sticker montagna per campagne travel e weekend",
         "ca": "Adhesiu de muntanya per a campanyes de viatges i escapades"
-      }
+      },
+      "large": "/images/orbit-large/mountain-sticker.webp"
     },
     {
       "id": "instagram-proof",
@@ -215,7 +222,8 @@
         "de": "Instagram-Screenshot von marttelier als Nachweis der Markenpräsenz",
         "it": "Screenshot Instagram di marttelier come prova della presenza del brand",
         "ca": "Captura d’Instagram de marttelier com a mostra de presència de marca"
-      }
+      },
+      "large": "/images/orbit-large/instagram-proof.webp"
     },
     {
       "id": "travel-niche",
@@ -237,7 +245,8 @@
         "de": "Bild für die Reise-Kategorie im UGC-Portfolio",
         "it": "Immagine di supporto per la categoria viaggi del portfolio UGC",
         "ca": "Imatge de suport per a la categoria de viatges del portfoli UGC"
-      }
+      },
+      "large": "/images/orbit-large/travel-niche.webp"
     },
     {
       "id": "languages-niche",
@@ -259,7 +268,8 @@
         "de": "Bild für Sprach- und Kommunikationskampagnen",
         "it": "Immagine di supporto per campagne su lingue e comunicazione",
         "ca": "Imatge de suport per a campanyes d’idiomes i comunicació"
-      }
+      },
+      "large": "/images/orbit-large/languages-niche.webp"
     },
     {
       "id": "art-niche",
@@ -281,7 +291,8 @@
         "de": "Bild für visuelle Kampagnen im Kunstbereich",
         "it": "Immagine di supporto per campagne visive nel settore artistico",
         "ca": "Imatge de suport per a campanyes visuals del nínxol artístic"
-      }
+      },
+      "large": "/images/orbit-large/art-niche.webp"
     },
     {
       "id": "placeholder-travel-story",
@@ -303,7 +314,8 @@
         "de": "Gebrandeter Platzhalter für einen noch unveröffentlichten Reise-Case",
         "it": "Placeholder grafico per un caso travel ancora da pubblicare",
         "ca": "Placeholder gràfic per a un cas de viatge encara per publicar"
-      }
+      },
+      "large": "/images/orbit-large/glacier-point.webp"
     },
     {
       "id": "placeholder-language-case",
@@ -325,7 +337,8 @@
         "de": "Gebrandeter Platzhalter für ein kommendes mehrsprachiges Projekt",
         "it": "Placeholder grafico per un prossimo progetto multilingue",
         "ca": "Placeholder gràfic per a un proper projecte multilingüe"
-      }
+      },
+      "large": "/images/orbit-large/trabajo-multilingue.webp"
     },
     {
       "id": "placeholder-editorial-drop",
@@ -347,7 +360,8 @@
         "de": "Gebrandeter Platzhalter für ein neues Editorial im Portfolio",
         "it": "Placeholder grafico per una nuova pièce editoriale del portfolio",
         "ca": "Placeholder gràfic per a una nova peça editorial del portfoli"
-      }
+      },
+      "large": "/images/orbit-large/placeholder-editorial-drop.webp"
     },
     {
       "id": "placeholder-profile-note",
@@ -369,7 +383,8 @@
         "de": "Gebrandeter Platzhalter mit der visuellen Identität von Marta Gallardo",
         "it": "Placeholder grafico con l’identità visiva di Marta Gallardo",
         "ca": "Placeholder gràfic amb la identitat visual de Marta Gallardo"
-      }
+      },
+      "large": "/images/orbit-large/placeholder-profile-note.webp"
     },
     {
       "id": "placeholder-collaboration",
@@ -391,7 +406,8 @@
         "de": "Gebrandeter Platzhalter für eine zukünftige Markenkooperation",
         "it": "Placeholder grafico per una futura collaborazione con un brand",
         "ca": "Placeholder gràfic per a una futura col·laboració amb una marca"
-      }
+      },
+      "large": "/images/orbit-large/placeholder-collaboration.webp"
     }
   ],
   "arsenal": {

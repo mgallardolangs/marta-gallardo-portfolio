@@ -535,7 +535,7 @@
       "title": "Marta Gallardo und die Marttelier-Philosophie",
       "titleAccent": "Marttelier",
       "subtitle": "Wo Linguistik, Strategie und Inhalte zusammenkommen",
-      "story": "Ich habe an der Universität Alicante Übersetzen und Dolmetschen studiert und mich in SEO und digitaler Strategie weitergebildet. Indem ich Sprachen, Suche und Content-Erstellung verbinde, habe ich einen Weg gefunden, Projekte direkt zu begleiten, ohne Agentur dazwischen. Mir ist wichtig, dass jede Botschaft ihre Absicht behält und die richtigen Menschen erreicht."
+      "story": "Ich habe an der Universität Alicante **Übersetzen und Dolmetschen** studiert und mich in **SEO und digitaler Strategie** weitergebildet. Indem ich Sprachen, Suche und Content-Erstellung verbinde, habe ich einen Weg gefunden, Projekte direkt zu begleiten, **ohne Agentur dazwischen**. Mir ist wichtig, dass jede Botschaft ihre Absicht behält und die richtigen Menschen erreicht."
     },
     "principles": {
       "eyebrow": "marttelier",
@@ -546,12 +546,24 @@
         "Menschliche Prüfung",
         "Fokus auf Conversion",
         "Gemeinsam wachsen"
+      ],
+      "details": [
+        "Ich zeige Ihnen echte Daten, auch das, was nicht funktioniert. Keine Versprechen auf Platz eins.",
+        "Jeder Text und jede Übersetzung geht vor der Veröffentlichung durch meine Hände, auch wenn ich Tools nutze.",
+        "Mir geht es nicht nur um Besuche: Wer ankommt, soll Ihnen schreiben, Sie anrufen oder kaufen.",
+        "Direkter Kontakt ohne Agenturschichten. Gemeinsam lernen wir, was in Ihrem Markt funktioniert."
       ]
     },
     "work": {
       "title": "Wie arbeite ich mit Marken und digitalen Projekten?",
       "description": "Ich begleite Projekte persönlich und direkt: Wir vereinbaren Ziele, Prioritäten und nächste Schritte, und ich kommuniziere während des gesamten Projekts klar."
-    }
+    },
+    "gallery": {
+      "hint": "Tippen Sie auf ein Foto, um es groß zu sehen",
+      "open": "Foto ansehen",
+      "close": "Schließen"
+    },
+    "videoSoon": "Vorstellungsvideo · bald verfügbar"
   },
   "seoPage": {
     "hero": {

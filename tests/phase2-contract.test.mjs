@@ -41,7 +41,7 @@ const sharedViews = [
 
 const typedViewSpecs = [
   ['src/views/HomePage.astro', /text=\{i\.home\.latestArticles\.title\}/, 1],
-  ['src/views/AboutPage.astro', /text=\{page\.hero\.title\}/, 3],
+  ['src/views/AboutPage.astro', /accentHtml\(page\.hero\.title, page\.hero\.titleAccent\)/, 1], // static h1 and values heading since 24/11/2026; only the trajectory heading types
   ['src/views/SeoServicePage.astro', /text=\{page\.hero\.title\}/, 5],
   ['src/views/TranslationServicePage.astro', /text=\{page\.hero\.title\}/, 5],
   ['src/views/UgcPage.astro', /text=\{i\.ugcPage\.pageTitle\}/, 3],

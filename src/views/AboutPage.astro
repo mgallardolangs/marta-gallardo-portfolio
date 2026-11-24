@@ -7,7 +7,8 @@ import RichText from '../components/RichText.astro';
 import ScrollReveal from '../components/ScrollReveal';
 import RelatedArticles from '../components/RelatedArticles.astro';
 import TypedTitle from '../components/TypedTitle.astro';
-import { getLangFromUrl, t } from '../i18n';
+import { getLangFromUrl, getLocalizedRoute, t } from '../i18n';
+import { accentHtml } from '../lib/accentHtml';
 import { getPageSeo, siteData } from '../lib/siteData';
 
 const lang = getLangFromUrl(Astro.url);
@@ -17,34 +18,46 @@ const pageSeo = getPageSeo(siteData, 'about', lang, {
   title: { [lang]: page.hero.title },
   description: { [lang]: page.hero.story },
 });
+// Values as clay cards: icon + colour per value (transparency, human review, conversion, growing together)
+const valueIcons = [
+  '<path d="M2.5 12s3.5-6.5 9.5-6.5S21.5 12 21.5 12s-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+  '<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/>',
+  '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+  '<path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/>',
+];
+const valueTokens = ['', 'clay-token--hazel', 'clay-token--amaranth', 'clay-token--hazel'];
 ---
 
 <BaseLayout title={pageSeo.title} description={pageSeo.description}>
   <div class="bg-paper">
-    <section class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
-      <div class="site-container grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
-        <ScrollReveal client:visible direction="right" className="flex flex-col gap-8">
+    <section data-about-hero class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
+      <div class="site-container grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-16">
+        <!-- Static heading (no typing effect) so it paints on first render (LCP) -->
+        <div class="about-hero__copy flex flex-col gap-8">
           <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-hazel">{page.hero.eyebrow}</p>
-          <TypedTitle
-            as="h1"
-            text={page.hero.title}
-            accent={page.hero.titleAccent}
-            trigger="load"
-            class="max-w-[13ch] font-heading text-5xl leading-[0.92] tracking-[-0.04em] text-ink md:text-7xl"
-          />
+          <h1 class="max-w-[16ch] font-heading text-5xl leading-[0.95] tracking-[-0.04em] text-ink md:text-6xl" set:html={accentHtml(page.hero.title, page.hero.titleAccent) ?? page.hero.title} />
           <h2 class="font-heading text-2xl leading-tight text-ink md:text-3xl">{page.hero.subtitle}</h2>
-          <RichText text={page.hero.story} class="max-w-2xl font-body text-base leading-8 text-ink-muted md:text-lg" />
-        </ScrollReveal>
+          <RichText text={page.hero.story} class="about-hero__story max-w-2xl font-body text-base leading-8 text-ink-muted md:text-lg" />
+        </div>
 
-        <ScrollReveal client:visible direction="left" className="flex flex-col gap-5">
+        <!-- 16:9 video card: only a self-hosted poster and a play button until the visitor presses play (no YouTube cookies before) -->
+        <div class="about-video flex flex-col gap-4">
           <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-hazel">{i.home.video.eyebrow}</p>
-          <ClickToLoadYouTube
-            src={siteData.brandVideoEmbedUrl}
-            title={i.home.video.title}
-            playLabel={i.home.video.playLabel}
-          />
+          {siteData.aboutVideoEmbedUrl ? (
+            <ClickToLoadYouTube
+              src={siteData.aboutVideoEmbedUrl}
+              title={i.home.video.title}
+              playLabel={i.home.video.playLabel}
+              orientation="horizontal"
+            />
+          ) : (
+            <div class="about-video__frame" role="img" aria-label={page.videoSoon}>
+              <span class="about-video__play" aria-hidden="true">▶</span>
+              <span class="about-video__soon">{page.videoSoon}</span>
+            </div>
+          )}
           <p class="max-w-xl font-body text-sm leading-7 text-ink-muted md:text-base">{i.home.video.description}</p>
-        </ScrollReveal>
+        </div>
       </div>
     </section>
 
@@ -83,31 +96,23 @@ const pageSeo = getPageSeo(siteData, 'about', lang, {
       </div>
     </section>
 
-    <section class="px-6 py-16 md:py-20">
-      <div class="site-container grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+    <section data-about-values class="bg-clay px-6 py-16 md:py-24">
+      <div class="site-container flex flex-col gap-10 md:gap-14">
         <ScrollReveal client:visible direction="right" className="flex flex-col gap-5">
           <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel">{page.principles.eyebrow}</p>
-          <TypedTitle
-            as="h2"
-            text={page.principles.title}
-
-            accent={page.principles.titleAccent}
-            trigger="visible"
-            class="font-heading text-4xl leading-none text-ink md:text-5xl"
-          />
-          <div class="flex flex-wrap gap-2">
-            {page.principles.items.map((principle) => (
-              <span class="border border-ink/16 px-3 py-2 font-body text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-ink">
-                {principle}
+          <h2 class="font-heading text-4xl leading-none text-ink md:text-5xl" set:html={accentHtml(page.principles.title, page.principles.titleAccent) ?? page.principles.title} />
+        </ScrollReveal>
+        <ul class="about-values" role="list">
+          {page.principles.items.map((principle, index) => (
+            <li class="clay-card clay-card--paper about-value">
+              <span class:list={['clay-token', valueTokens[index % valueTokens.length]]} aria-hidden="true">
+                <svg viewBox="0 0 24 24" set:html={valueIcons[index % valueIcons.length]} />
               </span>
-            ))}
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal client:visible direction="left" className="flex flex-col gap-5 border-t border-ink/16 pt-6 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
-          <h3 class="font-heading text-3xl leading-tight text-ink md:text-4xl">{page.work.title}</h3>
-          <RichText text={page.work.description} class="max-w-2xl font-body text-base leading-8 text-ink-muted md:text-lg" />
-        </ScrollReveal>
+              <h3 class="font-heading font-semibold">{principle}</h3>
+              <p class="font-body">{page.principles.details[index]}</p>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
 
@@ -125,6 +130,7 @@ const pageSeo = getPageSeo(siteData, 'about', lang, {
           <p class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.34em] text-white/60 md:text-xs">
             {i.home.orbit.note}
           </p>
+          <p class="mt-3 font-body text-sm text-amaranth">{page.gallery.hint}</p>
         </ScrollReveal>
 
         <ScrollReveal client:visible direction="left" className="order-2 lg:col-start-3 lg:row-start-1 lg:order-none lg:justify-self-end lg:self-start">
@@ -134,7 +140,19 @@ const pageSeo = getPageSeo(siteData, 'about', lang, {
         </ScrollReveal>
 
         <div class="order-4 min-w-0 w-full lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:order-none lg:translate-x-6">
-          <OvalMediaOrbit client:visible items={siteData.orbitMedia} lang={lang} />
+          <OvalMediaOrbit client:visible items={siteData.orbitMedia} lang={lang} viewer={{ open: page.gallery.open, close: page.gallery.close }} />
+        </div>
+      </div>
+    </section>
+
+    <section data-about-closing class="bg-paper px-6 py-16 md:py-24">
+      <div class="site-container">
+        <div class="about-closing clay-card">
+          <h2 class="font-heading text-3xl leading-tight text-ink md:text-5xl">{page.work.title}</h2>
+          <RichText text={page.work.description} class="max-w-2xl font-body text-base leading-8 text-ink-muted md:text-lg" />
+          <a href={getLocalizedRoute('contact', lang)} class="home-hero__cta home-hero__cta--primary about-closing__cta">
+            <span class="home-hero__cta-label">{i.home.hero.ctaDiagnosis}</span>
+          </a>
         </div>
       </div>
     </section>

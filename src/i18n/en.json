@@ -535,7 +535,7 @@
       "title": "Marta Gallardo, the translator & SEO consultant behind Marttelier",
       "titleAccent": "Marttelier",
       "subtitle": "Where linguistics, strategy and content come together",
-      "story": "I graduated in Translation and Interpreting from the University of Alicante and trained in SEO and digital strategy. By bringing together languages, search and content creation, I found a way to support projects directly, with no agency in between. I care that every message keeps its intent and finds the right people."
+      "story": "I graduated in **Translation and Interpreting from the University of Alicante** and trained in **SEO and digital strategy**. By bringing together languages, search and content creation, I found a way to support projects directly, **with no agency in between**. I care that every message keeps its intent and finds the right people."
     },
     "principles": {
       "eyebrow": "marttelier",
@@ -546,12 +546,24 @@
         "Human review",
         "A focus on conversion",
         "Growing together"
+      ],
+      "details": [
+        "I show you real data, including what doesn't work. No promises of a first position.",
+        "Every text and translation goes through my own eyes before it's published, even when I use tools.",
+        "I'm not just after visits: I want the people who arrive to write, call or buy.",
+        "Direct contact, no agency layers. We learn together what works in your market."
       ]
     },
     "work": {
       "title": "How do I work with brands and digital projects?",
       "description": "I provide close, direct support: we agree on goals, priorities and next steps, and I keep communication clear throughout the project."
-    }
+    },
+    "gallery": {
+      "hint": "Tap a photo to see it larger",
+      "open": "View photo",
+      "close": "Close"
+    },
+    "videoSoon": "Introduction video · coming soon"
   },
   "seoPage": {
     "hero": {

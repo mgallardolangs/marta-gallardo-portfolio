@@ -26,6 +26,8 @@ interface Props {
   className?: string;
   ariaLabel?: string;
   previewMode?: boolean;
+  /** Labels for the photo viewer (tap a tile to see it large with its caption). Omit to keep tiles non-clickable. */
+  viewer?: { open: string; close: string };
 }
 
 function isVideoItem(item: OrbitMedia) {
@@ -55,7 +57,15 @@ export default function OvalMediaOrbit({
   className = '',
   ariaLabel = 'Featured orbit media',
   previewMode = false,
+  viewer,
 }: Props) {
+  // Photo viewer: the large image is only requested when a visitor opens it, so it costs nothing on page load.
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
+  const [viewerItem, setViewerItem] = useState<OrbitMedia | null>(null);
+  const openViewer = (item: OrbitMedia) => {
+    setViewerItem(item);
+    requestAnimationFrame(() => dialogRef.current?.showModal());
+  };
   const regionRef = useRef<HTMLDivElement | null>(null);
   const tileRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
@@ -390,6 +400,13 @@ export default function OvalMediaOrbit({
                     <a href={href} aria-label={label} className="absolute inset-0 z-10">
                       <span className="sr-only">{label}</span>
                     </a>
+                  ) : viewer && !previewMode && !isVideoItem(item) ? (
+                    <button
+                      type="button"
+                      onClick={() => openViewer(item)}
+                      aria-label={`${viewer.open}: ${label}`}
+                      className="absolute inset-0 z-10 cursor-zoom-in"
+                    />
                   ) : (
                     <div className="absolute inset-0 z-10" />
                   )}
@@ -399,6 +416,30 @@ export default function OvalMediaOrbit({
           })}
         </div>
       </div>
+      {viewer && (
+        <dialog
+          ref={dialogRef}
+          className="orbit-viewer"
+          onClose={() => setViewerItem(null)}
+          onClick={(event) => { if (event.target === event.currentTarget) dialogRef.current?.close(); }}
+        >
+          {viewerItem && (
+            <figure className="orbit-viewer__figure">
+              <img
+                src={netlifyImage(viewerItem.large ?? viewerItem.src, { width: 1200 })}
+                alt={getLocalizedOrbitText(viewerItem.alt, lang)}
+                className="orbit-viewer__image"
+                decoding="async"
+              />
+              <figcaption className="orbit-viewer__caption">
+                <strong>{getLocalizedOrbitText(viewerItem.label, lang)}</strong>
+                <span>{getLocalizedOrbitText(viewerItem.caption ?? viewerItem.alt, lang)}</span>
+              </figcaption>
+              <button type="button" className="orbit-viewer__close" onClick={() => dialogRef.current?.close()} aria-label={viewer.close}>×</button>
+            </figure>
+          )}
+        </dialog>
+      )}
     </div>
   );
 }

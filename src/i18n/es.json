@@ -535,7 +535,7 @@
       "title": "Marta Gallardo, la traductora y consultora SEO detrás de Marttelier",
       "titleAccent": "Marttelier",
       "subtitle": "El punto de encuentro entre la lingüística, la estrategia y el contenido",
-      "story": "Me gradué en Traducción e Interpretación por la Universidad de Alicante y me formé en SEO y estrategia digital. Al unir los idiomas, la búsqueda y la creación de contenido, encontré una forma de acompañar proyectos de manera directa, sin agencias de por medio. Me interesa que cada mensaje conserve su intención y encuentre a las personas adecuadas."
+      "story": "Me gradué en **Traducción e Interpretación por la Universidad de Alicante** y me formé en **SEO y estrategia digital**. Al unir los idiomas, la búsqueda y la creación de contenido, encontré una forma de acompañar proyectos de manera directa, **sin agencias de por medio**. Me interesa que cada mensaje conserve su intención y encuentre a las personas adecuadas."
     },
     "principles": {
       "eyebrow": "marttelier",
@@ -546,12 +546,24 @@
         "Revisión humana",
         "Enfoque en conversión",
         "Crecimiento conjunto"
+      ],
+      "details": [
+        "Te enseño datos reales, también lo que no funciona. Nada de promesas de primera posición.",
+        "Cada texto y cada traducción pasa por mis ojos antes de publicarse, aunque use herramientas.",
+        "No busco solo visitas: busco que quien llegue te escriba, te llame o te compre.",
+        "Trato directo, sin capas de agencia. Aprendemos juntos qué funciona en tu mercado."
       ]
     },
     "work": {
       "title": "¿Cómo trabajo con marcas y proyectos digitales?",
       "description": "Trabajo con un acompañamiento cercano y directo: acordamos objetivos, prioridades y pasos a seguir. Mantengo una comunicación clara y personal durante la colaboración."
-    }
+    },
+    "gallery": {
+      "hint": "Toca una foto para verla en grande",
+      "open": "Ver foto",
+      "close": "Cerrar"
+    },
+    "videoSoon": "Vídeo de presentación · muy pronto"
   },
   "seoPage": {
     "hero": {

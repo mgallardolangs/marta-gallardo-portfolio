@@ -535,7 +535,7 @@
       "title": "Marta Gallardo i la filosofia Marttelier",
       "titleAccent": "Marttelier",
       "subtitle": "El punt de trobada entre la lingüística, l’estratègia i el contingut",
-      "story": "Em vaig graduar en Traducció i Interpretació per la Universitat d'Alacant i em vaig formar en SEO i estratègia digital. Unint llengües, recerca i creació de contingut he trobat una manera d'acompanyar projectes de forma directa, sense agències pel mig. M'interessa que cada missatge mantinga la seua intenció i arribe a les persones adequades."
+      "story": "Em vaig graduar en **Traducció i Interpretació per la Universitat d'Alacant** i em vaig formar en **SEO i estratègia digital**. Unint llengües, recerca i creació de contingut he trobat una manera d'acompanyar projectes de forma directa, **sense agències pel mig**. M'interessa que cada missatge mantinga la seua intenció i arribe a les persones adequades."
     },
     "principles": {
       "eyebrow": "marttelier",
@@ -546,12 +546,24 @@
         "Revisió humana",
         "Enfocament en la conversió",
         "Creixement conjunt"
+      ],
+      "details": [
+        "Et mostre dades reals, també el que no funciona. Res de promeses de primera posició.",
+        "Cada text i cada traducció passa pels meus ulls abans de publicar-se, encara que use eines.",
+        "No busque només visites: busque que qui arribe t’escriga, et telefone o et compre.",
+        "Tracte directe, sense capes d’agència. Aprenem junts què funciona al teu mercat."
       ]
     },
     "work": {
       "title": "Com treballe amb marques i projectes digitals?",
       "description": "Oferisc un acompanyament proper i directe: acordem objectius, prioritats i passos següents, i mantinc una comunicació clara durant el projecte."
-    }
+    },
+    "gallery": {
+      "hint": "Toca una foto per veure-la en gran",
+      "open": "Veure la foto",
+      "close": "Tanca"
+    },
+    "videoSoon": "Vídeo de presentació · molt aviat"
   },
   "seoPage": {
     "hero": {
