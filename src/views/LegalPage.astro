@@ -16,7 +16,7 @@ interface LegalSection {
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
-const page = i.legal[Astro.props.routeKey] as { title: string; updated: string; sections: LegalSection[] };
+const page = i.legal[Astro.props.routeKey] as { title: string; description: string; updated: string; sections: LegalSection[] };
 
 // Paragraphs may reference the other legal pages as [privacy:label] or [cookies:label].
 const withLinks = (text: string) =>
@@ -24,7 +24,7 @@ const withLinks = (text: string) =>
     `<a href="${getLocalizedRoute(route, lang)}" class="text-ink underline underline-offset-4 hover:text-hazel">${label}</a>`);
 ---
 
-<BaseLayout title={`${page.title} | ${i.hero.name}`} description={page.title}>
+<BaseLayout title={`${page.title} | ${i.hero.name}`} description={page.description}>
   <div class="bg-paper">
     <section class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
       <div class="site-container max-w-3xl space-y-10">

@@ -661,6 +661,7 @@
   "legal": {
     "privacy": {
       "title": "Política de privacitat",
+      "description": "Com tracta Marttelier (Marta Gallardo, Elx) les teues dades personals quan escrius pel formulari o per correu: finalitat, terminis i els teus drets.",
       "updated": "Última actualització: 23.11.2026",
       "sections": [
         {
@@ -743,6 +744,7 @@
     },
     "cookies": {
       "title": "Política de galetes",
+      "description": "Quines galetes fa servir marttelier.com, per a què serveix cadascuna (Google Analytics només si l’acceptes) i com canviar la teua elecció.",
       "updated": "Última actualització: 23.11.2026",
       "sections": [
         {
@@ -812,6 +814,7 @@
     },
     "legalNotice": {
       "title": "Avís legal",
+      "description": "Dades de la titular de marttelier.com, Marta Gallardo, consultora SEO i traductora a Elx, i condicions d’ús del web.",
       "updated": "Última actualització: 05.11.2026",
       "sections": [
         {

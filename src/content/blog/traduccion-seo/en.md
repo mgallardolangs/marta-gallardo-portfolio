@@ -2,6 +2,7 @@
 slug: "seo-translation"
 translationKey: "traduccion-seo"
 title: "SEO Translation: How to Translate Your Website Without Losing Rankings"
+seoTitle: "SEO Translation: Translate Your Site Without Losing Rankings"
 description: "I've finished Semrush's International SEO course. Here's what it takes to translate your website without losing your Google rankings."
 date: "2026-11-17"
 tags: ["SEO translation", "international SEO", "hreflang", "localization"]

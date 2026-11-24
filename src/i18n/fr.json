@@ -661,6 +661,7 @@
   "legal": {
     "privacy": {
       "title": "Politique de confidentialité",
+      "description": "Comment Marttelier (Marta Gallardo, Elche) traite vos données personnelles via le formulaire ou par e-mail : finalité, conservation et vos droits.",
       "updated": "Dernière mise à jour : 23.11.2026",
       "sections": [
         {
@@ -743,6 +744,7 @@
     },
     "cookies": {
       "title": "Politique de cookies",
+      "description": "Les cookies utilisés sur marttelier.com, le rôle de chacun (Google Analytics seulement si vous l’acceptez) et comment modifier votre choix.",
       "updated": "Dernière mise à jour : 23.11.2026",
       "sections": [
         {
@@ -812,6 +814,7 @@
     },
     "legalNotice": {
       "title": "Mentions légales",
+      "description": "Informations sur la titulaire de marttelier.com, Marta Gallardo, consultante SEO et traductrice à Elche, et conditions d’utilisation du site.",
       "updated": "Dernière mise à jour : 05.11.2026",
       "sections": [
         {

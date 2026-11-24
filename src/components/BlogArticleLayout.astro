@@ -6,6 +6,8 @@ import { getLocalizedPath, t } from '../i18n';
 import { getAdjacentLocalePost } from '../lib/blog';
 import { buildBlogOutline, type BlogHeadingLike } from '../lib/blogOutline';
 import { netlifyImage } from '../lib/netlifyImage';
+import { blogPostingJsonLd } from '../lib/structuredData';
+import JsonLd from './JsonLd.astro';
 
 type BlogPost = {
   id: string;
@@ -13,6 +15,7 @@ type BlogPost = {
   data: {
     slug: string;
     title: string;
+    seoTitle?: string;
     description: string;
     date: Date;
     image?: string;
@@ -34,15 +37,30 @@ const i = t(lang);
 const outline = buildBlogOutline(headings ?? []);
 const nextPost = getAdjacentLocalePost(posts, post);
 const archiveHref = getLocalizedPath('/blog', lang);
+// Search results cut titles at about 60 characters: add the brand only when it fits.
+const brandedTitle = `${post.data.title} | Marttelier`;
+const pageTitle = post.data.seoTitle ?? (brandedTitle.length <= 60 ? brandedTitle : post.data.title);
+const articleJsonLd = blogPostingJsonLd({
+  site: Astro.site ?? Astro.url,
+  lang,
+  url: Astro.url.pathname.replace(/\.html$/, ''),
+  title: post.data.title,
+  description: post.data.description,
+  date: post.data.date,
+  image: post.data.image,
+  tags: post.data.tags,
+  blogName: i.blog.title,
+});
 const readTime = Math.max(1, Math.ceil(String(post.body ?? '').trim().split(/\s+/).filter(Boolean).length / 180));
 ---
 
 <BaseLayout
-  title={`${post.data.title} — ${i.hero.name}`}
+  title={pageTitle}
   description={post.data.description}
   image={post.data.image}
   alternateLinks={alternateLinks}
 >
+  <JsonLd data={articleJsonLd} />
   <article data-blog-article class="bg-paper">
     <div class="mx-auto max-w-6xl px-6 pb-16 pt-28 md:pb-20 md:pt-32">
       <ScrollReveal client:visible>

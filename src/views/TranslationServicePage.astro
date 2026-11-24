@@ -9,6 +9,8 @@ import TypedTitle from '../components/TypedTitle.astro';
 import { getLangFromUrl, getLocalizedRoute, t } from '../i18n';
 import { getPageSeo, siteData } from '../lib/siteData';
 import { getTranslationArsenalColumns } from '../lib/translationPage.js';
+import { professionalServiceJsonLd } from '../lib/structuredData';
+import JsonLd from '../components/JsonLd.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const i = t(lang);
@@ -18,10 +20,18 @@ const pageSeo = getPageSeo(siteData, 'translation', lang, {
   description: { [lang]: page.hero.description },
 });
 const arsenal = getTranslationArsenalColumns(lang, siteData, 'translation');
+const serviceJsonLd = professionalServiceJsonLd({
+  site: Astro.site ?? Astro.url,
+  lang,
+  path: getLocalizedRoute('translation', lang),
+  description: pageSeo.description,
+  serviceType: ['Traducción SEO', 'Localización web', 'Traducción profesional'],
+});
 ---
 
 <BaseLayout title={pageSeo.title} description={pageSeo.description}>
   <GsapPageRuntime />
+  <JsonLd data={serviceJsonLd} />
   <div class="bg-paper" data-translation-service-page>
     <section class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
       <div class="site-container max-w-7xl">
