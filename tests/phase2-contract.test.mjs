@@ -42,9 +42,11 @@ const sharedViews = [
 const typedViewSpecs = [
   ['src/views/HomePage.astro', /text=\{i\.home\.latestArticles\.title\}/, 1],
   ['src/views/AboutPage.astro', /accentHtml\(page\.hero\.title, page\.hero\.titleAccent\)/, 1], // static h1 and values heading since 24/11/2026; only the trajectory heading types
-  ['src/views/SeoServicePage.astro', /text=\{page\.hero\.title\}/, 5],
-  ['src/views/TranslationServicePage.astro', /text=\{page\.hero\.title\}/, 5],
-  ['src/views/UgcPage.astro', /text=\{i\.ugcPage\.pageTitle\}/, 3],
+  // 24/11/2026: service page h1s are static (LCP); section headings below the fold keep typing.
+  ['src/views/SeoServicePage.astro', /accentHtml\(page\.hero\.title, page\.hero\.titleAccent\)/, 4],
+  // 24/11/2026: Translation sections 2-4 became 'Qué traduzco' + 'Traducción vs traducción SEO' (3 section headings)
+  ['src/views/TranslationServicePage.astro', /accentHtml\(page\.hero\.title, page\.hero\.titleAccent\)/, 3],
+  ['src/views/UgcPage.astro', /accentHtml\(i\.ugcPage\.pageTitle, i\.ugcPage\.pageTitleAccent\)/, 2],
   ['src/views/BlogIndexPage.astro', /text=\{i\.blog\.title\}/, 1],
   ['src/views/ContactPage.astro', /text=\{i\.contact\.title\}/, 1],
 ];

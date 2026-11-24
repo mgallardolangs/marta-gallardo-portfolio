@@ -399,6 +399,50 @@
         }
       ],
       "closing": "Vous avez un produit ou une expérience à mettre en avant ? Dites-moi ce que vous cherchez et je vous propose une idée."
+    },
+    "languagesStrip": {
+      "title": "Une même vidéo, prête pour trois marchés",
+      "text": "Je filme, je sous-titre et, si besoin, je fais la voix en **espagnol, anglais et français** : une seule production pour trois publics."
+    },
+    "pricing": {
+      "title": "Tarifs",
+      "from": "À partir de",
+      "recommended": "Recommandé",
+      "note": "Prix hors TVA. Vous recevez un devis fixe avant de commencer.",
+      "included": "Toujours inclus : utilisation organique sur les réseaux de votre marque pendant 6 mois, 2 séries de modifications et livraison en 10 jours ouvrés après validation du script. En supplément : utilisation publicitaire, rushes et sous-titres en anglais ou en français (+20 € par vidéo et par langue).",
+      "cta": "Demander un devis",
+      "tiers": [
+        {
+          "name": "1 vidéo",
+          "price": "100 €",
+          "unit": "par vidéo",
+          "items": [
+            "15–30 secondes, script à partir de votre brief",
+            "1 accroche",
+            "Sous-titres en espagnol"
+          ]
+        },
+        {
+          "name": "Pack de 3 vidéos",
+          "price": "270 €",
+          "unit": "90 € par vidéo",
+          "items": [
+            "Script à partir de votre brief",
+            "2 accroches par vidéo pour tester",
+            "Sous-titres en espagnol"
+          ]
+        },
+        {
+          "name": "Campagne",
+          "price": "490 €",
+          "unit": "paiement unique",
+          "items": [
+            "5 vidéos avec script à partir de votre brief",
+            "Sous-titres en espagnol",
+            "10 photos du produit"
+          ]
+        }
+      ]
     }
   },
   "translationPage": {
@@ -572,7 +616,7 @@
       "titleAccent": "référencement SEO",
       "paragraphs": [
         "Apparaître sur Google n'est pas une question de chance, mais de stratégie. Mon service de référencement SEO fait de votre site un canal qui attire des personnes qui cherchent déjà ce que vous proposez : pas seulement plus de visites, mais des visites qui comptent.",
-        "J'analyse le point de départ de votre projet et je conçois un plan de référencement sur mesure : j'améliore la structure technique, la pertinence de vos contenus et l'autorité de votre site. Je travaille depuis Elche, en Espagne : en personne avec les entreprises d’Elche et à distance avec le reste de la province d’Alicante, la Costa Blanca et d’autres pays. Que vous souhaitiez être trouvé dans votre ville ou franchir le pas vers d'autres pays grâce au SEO international, je vous explique chaque étape et nous travaillons avec des priorités claires."
+        "J'analyse le point de départ de votre site et je conçois un plan sur mesure : j'améliore la structure technique, la pertinence de vos contenus et l'autorité de votre domaine. Je vous explique chaque étape et nous travaillons avec des priorités claires."
       ]
     },
     "services": {
@@ -583,17 +627,41 @@
         {
           "id": "audit",
           "title": "Audit SEO professionnel",
-          "description": "Avant d’agir, j’examine la situation de départ : SEO technique, indexabilité, structure du site et contenu on-page. L’audit hiérarchise les constats pour guider les prochaines étapes."
+          "description": "Je commence par un mini-audit gratuit de 30 minutes : j’analyse votre site, votre fiche Google et votre présence quand quelqu’un interroge ChatGPT ou Gemini sur votre secteur, et je vous montre les 3 problèmes les plus importants. Pour aller plus loin, l’audit complet couvre tout le site et se termine par un plan priorisé.",
+          "kicker": "La première étape",
+          "headline": "Savoir ce qui ne va pas et quoi corriger en premier",
+          "points": [
+            "SEO technique : exploration, indexation et vitesse sur mobile",
+            "Structure, maillage interne et contenu on-page",
+            "Un plan priorisé et 1 heure pour vous le présenter",
+            "Idéal avant une refonte ou si quelqu’un peut appliquer les changements"
+          ]
         },
         {
           "id": "consulting",
           "title": "Conseil SEO et stratégie digitale",
-          "description": "Un accompagnement mensuel ou par projet pour définir les priorités, suivre les avancées et ajuster la stratégie des entreprises et des indépendants."
+          "description": "Un audit vous dit ce qui ne va pas ; le conseil vous dit quoi faire et dans quel ordre. Le travail de base est le même dans les trois options : ce qui change, c’est mon niveau d’accompagnement et qui applique les changements. Après les 3 premiers mois, vous pouvez continuer avec un forfait mensuel.",
+          "kicker": "Un plan et quelqu’un à vos côtés",
+          "headline": "Choisissez le niveau d’accompagnement",
+          "points": [
+            "Plan : je vous donne le plan d’action et vous l’appliquez",
+            "Plan + accompagnement : un rendez-vous par mois pendant 3 mois et je vérifie ce que vous appliquez",
+            "Plan + mise en œuvre : j’applique les changements et je vous les explique chaque mois",
+            "Consultation ponctuelle pour une question précise : refonte, changement de domaine, blog"
+          ]
         },
         {
           "id": "local",
           "title": "Référencement SEO local à Elche et sur la Costa Blanca",
-          "description": "Optimisation de la fiche Google Business Profile et de la présence sur Google Maps pour aider les clients de proximité à trouver votre activité. Je travaille surtout avec des entreprises d’Elche, d’Alicante et de la Costa Blanca qui accueillent une clientèle étrangère, pour que touristes et résidents vous trouvent dans leur langue."
+          "description": "Si votre entreprise sert des clients d’une zone précise, apparaître sur la carte et dans les recherches locales compte autant qu’un bon site. Je travaille surtout avec des entreprises d’Elche, d’Alicante et de la Costa Blanca qui accueillent une clientèle étrangère, pour que les touristes et résidents qui cherchent dans d’autres langues vous trouvent aussi.",
+          "kicker": "Pour les entreprises avec une clientèle locale",
+          "headline": "Être trouvé sur la carte, aussi en anglais et en français",
+          "points": [
+            "Fiche Google optimisée, aussi dans d’autres langues",
+            "Avis : comment les demander et y répondre en espagnol, anglais et français",
+            "Pages de services et de zone, avec des informations cohérentes sur le site et les annuaires",
+            "Suivi des appels, clics et visites dès le premier jour"
+          ]
         }
       ]
     },
@@ -602,7 +670,46 @@
       "translationLinkLabel": "Traduction",
       "title": "Spécialiste du SEO international et multilingue",
       "titleAccent": "multilingue",
-      "description": "Internationaliser un site ne consiste pas à installer un plugin de traduction automatique. Chaque marché cherche différemment : je commence donc par identifier les termes que les internautes de chaque pays utilisent réellement, et avec quelle intention. Ensuite, j'adapte le contenu et je configure ce qu'il faut sur le plan technique, comme les balises hreflang, pour que Google présente chaque version à la bonne audience. Si vous avez aussi besoin d'un service de traduction de sites web, nous le traitons dans la même stratégie, afin que langue et référencement ne soient pas dissociés."
+      "description": "Internationaliser un site ne consiste pas à installer un plugin de traduction automatique. Chaque marché cherche différemment : je commence donc par identifier les termes que les internautes de chaque pays utilisent réellement, et avec quelle intention. Ensuite, j'adapte le contenu et je configure ce qu'il faut sur le plan technique, comme les balises hreflang, pour que Google présente chaque version à la bonne audience. Si vous avez aussi besoin d'un service de traduction de sites web, nous le traitons dans la même stratégie, afin que langue et référencement ne soient pas dissociés.",
+      "marketsTitle": "Une même recherche, trois marchés",
+      "originLabel": "Original",
+      "literalLabel": "Traduction littérale",
+      "realLabel": "Ce que l’on recherche vraiment",
+      "marketsNote": "Exemple : c’est pourquoi je recherche les mots-clés de chaque langue au lieu de les traduire.",
+      "markets": [
+        {
+          "code": "ES",
+          "name": "Español",
+          "query": "piso en alquiler Alicante",
+          "literal": "piso en alquiler Alicante"
+        },
+        {
+          "code": "EN",
+          "name": "English",
+          "query": "flat to rent Alicante",
+          "literal": "apartment in rent Alicante"
+        },
+        {
+          "code": "FR",
+          "name": "Français",
+          "query": "location appartement Alicante",
+          "literal": "appartement en location Alicante"
+        }
+      ],
+      "pillars": [
+        {
+          "title": "Les recherches de chaque marché",
+          "text": "Ce que les gens tapent et pourquoi, pays par pays."
+        },
+        {
+          "title": "Contenu localisé",
+          "text": "Titres, textes et fiche Google adaptés, pas traduits."
+        },
+        {
+          "title": "Hreflang et structure",
+          "text": "Pour que Google montre à chacun sa version."
+        }
+      ]
     },
     "why": {
       "eyebrow": "SEO",
@@ -618,12 +725,8 @@
       "closing": "Je ne suis pas une grande agence et je ne souhaite pas l'être : vous travaillez directement avec moi et je vous dis dès le départ ce que je peux faire et ce que je ne peux pas faire.",
       "stats": [
         {
-          "value": "6",
-          "label": "langues"
-        },
-        {
-          "value": "4",
-          "label": "outils"
+          "value": "3",
+          "label": "langues : ES · EN · FR"
         },
         {
           "value": "1:1",
@@ -631,14 +734,23 @@
         },
         {
           "value": "30 min",
-          "label": "appel gratuit"
+          "label": "mini-audit offert"
+        },
+        {
+          "value": "24 h",
+          "label": "pour recevoir votre proposition"
         }
       ],
       "ctaText": "Diagnostic initial gratuit avec trois constats prioritaires."
     },
     "arsenal": {
       "toolsTitle": "Outils SEO",
-      "skillsTitle": "Compétences SEO"
+      "skillsTitle": "Compétences SEO",
+      "skillCategories": {
+        "technical": "SEO technique",
+        "content": "Contenu",
+        "local": "Local et international"
+      }
     },
     "budget": {
       "eyebrow": "SEO",
@@ -647,14 +759,21 @@
       "description": "Le budget dépend de l’état du site, du périmètre et du type d’accompagnement. Parlez-moi des objectifs du projet et je préparerai une proposition adaptée.",
       "highlight": "Une analyse de base de votre site avec trois constats prioritaires, plus un appel gratuit de 30 minutes pour découvrir votre projet et commenter ces résultats. Cela n’inclut ni rapport complet ni mise en œuvre des améliorations ; si vous décidez de continuer, nous le précisons dans la proposition.",
       "highlightTitle": "Je propose un diagnostic initial gratuit"
-    }
+    },
+    "glance": [
+      "En personne à Elche ; à distance dans la province d’Alicante, sur la Costa Blanca et dans d’autres pays",
+      "SEO local et international en espagnol, anglais et français",
+      "Mini-audit de 30 minutes offert"
+    ],
+    "glanceTitle": "En bref"
   },
   "translationServicePage": {
     "hero": {
       "eyebrow": "Traduction et localisation",
       "title": "Traduction et localisation professionnelles de sites web, avec une approche SEO",
       "titleAccent": "localisation",
-      "description": "J’adapte le contenu de votre entreprise à de nouveaux marchés avec précision sémantique et une approche SEO."
+      "description": "J’adapte le contenu de votre entreprise à de nouveaux marchés avec précision sémantique et une approche SEO.",
+      "intro2": "Je traduis des sites web, des boutiques en ligne et des contenus numériques en respectant la voix de votre marque et les mots-clés avec lesquels on vous cherche dans chaque langue."
     },
     "localization": {
       "eyebrow": "LOCALISATION WEB",
@@ -704,6 +823,102 @@
       "languagesTitle": "Langues",
       "toolsTitle": "Outils",
       "skillsTitle": "Compétences"
+    },
+    "glance": [
+      "Français ⇄ Espagnol",
+      "Anglais → Espagnol",
+      "Allemand → Espagnol",
+      "Italien → Espagnol",
+      "Catalan/valencien → Espagnol"
+    ],
+    "glanceTitle": "Combinaisons de langues",
+    "process": {
+      "title": "Comment nous travaillons",
+      "steps": [
+        {
+          "title": "Vous me présentez votre projet",
+          "text": "Vos objectifs, l’emplacement du texte (site, boutique ou plateforme) et les textes dans un document modifiable."
+        },
+        {
+          "title": "Devis sous 48 h",
+          "text": "Au plus tard, avec un prix fixe et une date de livraison."
+        },
+        {
+          "title": "Je traduis et je relis",
+          "text": "Je traduis puis je relis chaque texte avec soin avant de vous le livrer."
+        },
+        {
+          "title": "Livraison et votre relecture",
+          "text": "Vous relisez la traduction et j’applique une série de modifications incluse."
+        }
+      ]
+    },
+    "pricing": {
+      "title": "Tarifs",
+      "from": "À partir de",
+      "recommended": "Recommandé",
+      "note": "Prix hors TVA. Vous recevez un devis fixe avant de commencer.",
+      "example": "Exemple : un site de 3 000 mots coûte 240 € en Traduction, 300 € en Traduction SEO et 390 € prêt à publier.",
+      "cta": "Demander un devis",
+      "tiers": [
+        {
+          "name": "Traduction",
+          "price": "0,08 €",
+          "unit": "par mot",
+          "items": [
+            "Traduction et localisation, pas mot à mot",
+            "Relecture finale avant livraison",
+            "Vous la mettez en ligne"
+          ]
+        },
+        {
+          "name": "Traduction SEO",
+          "price": "0,10 €",
+          "unit": "par mot",
+          "items": [
+            "Tout ce qu’inclut Traduction",
+            "Les vrais mots-clés de chaque langue",
+            "Titres, descriptions et URL pour Google",
+            "Textes alternatifs des images"
+          ]
+        },
+        {
+          "name": "Site prêt à publier",
+          "price": "0,10 €",
+          "unit": "par mot + 90 € pour la mise en ligne",
+          "items": [
+            "Tout ce qu’inclut Traduction SEO",
+            "Je la mets en ligne sur WordPress ou Shopify",
+            "Je vérifie que chaque langue renvoie aux autres (hreflang)"
+          ]
+        }
+      ]
+    },
+    "whatTranslate": {
+      "eyebrow": "Ce que je traduis",
+      "title": "Sites web, e-commerce et contenus numériques",
+      "titleAccent": "contenus numériques"
+    },
+    "seoCompare": {
+      "title": "Traduction et traduction SEO : ce qui change",
+      "source": "Texte original · français",
+      "sourceText": "robes de soirée femme",
+      "plain": "Traduction",
+      "seo": "Traduction SEO",
+      "plainText": "vestidos de noche para mujer",
+      "seoText": "vestidos de fiesta mujer",
+      "plainNote": "Correcte, mais personne ne la cherche",
+      "seoNote": "Ce que les gens tapent sur Google",
+      "plainPoints": [
+        "Fidèle au sens de l’original",
+        "Naturelle, sans calques",
+        "Relecture finale avant livraison"
+      ],
+      "seoPoints": [
+        "Tout ce qu’inclut la traduction",
+        "Les vrais mots-clés de chaque langue",
+        "Titres, descriptions, URL et textes alternatifs"
+      ]
     }
   },
   "legal": {

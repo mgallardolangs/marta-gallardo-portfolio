@@ -399,6 +399,50 @@
         }
       ],
       "closing": "Haben Sie ein Produkt oder ein Erlebnis, das Sie zeigen möchten? Sagen Sie mir, was Sie suchen, und ich schlage Ihnen eine Idee vor."
+    },
+    "languagesStrip": {
+      "title": "Ein Video, bereit für drei Märkte",
+      "text": "Ich filme, untertitle und spreche bei Bedarf auf **Spanisch, Englisch und Französisch**: eine Produktion für drei Zielgruppen."
+    },
+    "pricing": {
+      "title": "Preise",
+      "from": "Ab",
+      "recommended": "Empfohlen",
+      "note": "Preise zzgl. MwSt. Sie erhalten vorab ein Festpreisangebot.",
+      "included": "Immer inklusive: organische Nutzung auf den Social-Media-Kanälen Ihrer Marke für 6 Monate, 2 Korrekturrunden und Lieferung innerhalb von 10 Werktagen nach Freigabe des Skripts. Gegen Aufpreis: Nutzung in Anzeigen, Rohmaterial und englische oder französische Untertitel (+20 € pro Video und Sprache).",
+      "cta": "Angebot anfragen",
+      "tiers": [
+        {
+          "name": "1 Video",
+          "price": "100 €",
+          "unit": "pro Video",
+          "items": [
+            "15–30 Sekunden, Skript nach Ihrem Briefing",
+            "1 Einstiegshook",
+            "Spanische Untertitel"
+          ]
+        },
+        {
+          "name": "Paket mit 3 Videos",
+          "price": "270 €",
+          "unit": "90 € pro Video",
+          "items": [
+            "Skript nach Ihrem Briefing",
+            "2 Hooks pro Video zum Testen",
+            "Spanische Untertitel"
+          ]
+        },
+        {
+          "name": "Kampagne",
+          "price": "490 €",
+          "unit": "Einmalzahlung",
+          "items": [
+            "5 Videos mit Skript nach Ihrem Briefing",
+            "Spanische Untertitel",
+            "10 Produktfotos"
+          ]
+        }
+      ]
     }
   },
   "translationPage": {
@@ -572,7 +616,7 @@
       "titleAccent": "internationales SEO",
       "paragraphs": [
         "In den Google-Ergebnissen aufzutauchen ist keine Frage des Glücks, sondern der Strategie. Meine SEO-Dienstleistung macht Ihre Website zu einem Kanal, der Menschen anzieht, die bereits nach dem suchen, was Sie anbieten: nicht nur mehr Besuche, sondern Besuche mit echtem Interesse.",
-        "Ich analysiere den Ausgangspunkt Ihres Projekts und entwickle einen maßgeschneiderten SEO-Plan: Ich verbessere die technische Struktur, die Relevanz Ihrer Inhalte und die Autorität Ihrer Website. Ob Sie sich in Ihrem Heimatmarkt festigen oder mit internationalem SEO den Sprung in andere Länder wagen möchten – ich erkläre Ihnen jeden Schritt, und wir arbeiten mit klaren Prioritäten."
+        "Ich analysiere den Ausgangspunkt Ihrer Website und entwickle einen maßgeschneiderten Plan: Ich verbessere die technische Struktur, die Relevanz Ihrer Inhalte und die Autorität Ihrer Domain. Ich erkläre Ihnen jeden Schritt, und wir arbeiten mit klaren Prioritäten."
       ]
     },
     "services": {
@@ -583,17 +627,41 @@
         {
           "id": "audit",
           "title": "Professionelles SEO-Audit",
-          "description": "Bevor ich Maßnahmen ergreife, prüfe ich den Ausgangspunkt: technisches SEO, Indexierbarkeit, Website-Struktur und Onpage-Inhalte. Das Audit priorisiert die Ergebnisse und gibt die nächsten Schritte vor."
+          "description": "Ich beginne mit einem kostenlosen 30-Minuten-Mini-Audit: Ich prüfe Ihre Website, Ihr Google-Unternehmensprofil und ob Sie erscheinen, wenn jemand ChatGPT oder Gemini nach Ihrer Branche fragt, und zeige Ihnen die 3 wichtigsten Probleme. Das vollständige Audit analysiert die ganze Website und endet mit einem priorisierten Plan.",
+          "kicker": "Der erste Schritt",
+          "headline": "Wissen, was nicht funktioniert und was zuerst zu tun ist",
+          "points": [
+            "Technisches SEO: Crawling, Indexierung und mobile Geschwindigkeit",
+            "Struktur, interne Verlinkung und OnPage-Inhalte",
+            "Priorisierter Plan und 1 Stunde Präsentation",
+            "Ideal vor einem Relaunch oder wenn jemand die Änderungen umsetzt"
+          ]
         },
         {
           "id": "consulting",
           "title": "SEO-Beratung & digitale Strategie",
-          "description": "Monatliche oder projektbezogene Begleitung, um Prioritäten festzulegen, Fortschritte zu prüfen und die Strategie von Unternehmen und Selbstständigen anzupassen."
+          "description": "Ein Audit zeigt, was nicht funktioniert; die Beratung zeigt, was in welcher Reihenfolge zu tun ist. Die Grundlage ist in allen drei Optionen gleich: Es ändert sich, wie sehr ich Sie begleite und wer die Änderungen umsetzt. Nach den ersten 3 Monaten können Sie monatlich weitermachen.",
+          "kicker": "Ein Plan und Begleitung",
+          "headline": "Wählen Sie, wie viel Begleitung Sie möchten",
+          "points": [
+            "Plan: Sie erhalten den Aktionsplan und setzen ihn selbst um",
+            "Plan + Begleitung: eine Beratung pro Monat über 3 Monate und Prüfung Ihrer Umsetzung",
+            "Plan + Umsetzung: Ich setze die Änderungen um und erkläre sie monatlich",
+            "Einzelberatung für eine konkrete Frage: Relaunch, Domainwechsel, Blog"
+          ]
         },
         {
           "id": "local",
           "title": "Lokale SEO-Positionierung",
-          "description": "Optimierung des Google Business Profile-Eintrags und der Präsenz auf Google Maps, damit Kundinnen und Kunden aus der Umgebung Ihr Unternehmen leichter finden."
+          "description": "Wenn Ihr Unternehmen Kunden in einer bestimmten Region bedient, ist die Sichtbarkeit auf der Karte und in lokalen Suchen so wichtig wie eine gute Website. Ich arbeite vor allem mit Unternehmen in Elche, Alicante und an der Costa Blanca, die internationale Kunden empfangen.",
+          "kicker": "Für Unternehmen mit Kunden vor Ort",
+          "headline": "Auf der Karte gefunden werden, auch auf Englisch und Französisch",
+          "points": [
+            "Optimiertes Google-Unternehmensprofil, auch in anderen Sprachen",
+            "Bewertungen: anfragen und beantworten auf Spanisch, Englisch und Französisch",
+            "Leistungs- und Regionsseiten mit einheitlichen Daten",
+            "Messung von Anrufen, Klicks und Besuchen ab dem ersten Tag"
+          ]
         }
       ]
     },
@@ -602,7 +670,46 @@
       "translationLinkLabel": "Übersetzung",
       "title": "Spezialistin für internationales und mehrsprachiges SEO",
       "titleAccent": "mehrsprachiges",
-      "description": "Eine Website zu internationalisieren bedeutet nicht, ein Plugin für maschinelle Übersetzung zu installieren. Jeder Markt sucht anders, deshalb beginne ich damit, zu untersuchen, welche Begriffe die Nutzerinnen und Nutzer in jedem Land tatsächlich verwenden und mit welcher Absicht. Davon ausgehend passe ich die Inhalte an und richte technisch das Nötige ein, etwa hreflang-Tags, damit Google jede Version der passenden Zielgruppe anzeigt. Wenn Sie zusätzlich eine Übersetzung Ihrer Website benötigen, arbeiten wir sie in derselben Strategie aus, damit Sprache und SEO nicht getrennt laufen."
+      "description": "Eine Website zu internationalisieren bedeutet nicht, ein Plugin für maschinelle Übersetzung zu installieren. Jeder Markt sucht anders, deshalb beginne ich damit, zu untersuchen, welche Begriffe die Nutzerinnen und Nutzer in jedem Land tatsächlich verwenden und mit welcher Absicht. Davon ausgehend passe ich die Inhalte an und richte technisch das Nötige ein, etwa hreflang-Tags, damit Google jede Version der passenden Zielgruppe anzeigt. Wenn Sie zusätzlich eine Übersetzung Ihrer Website benötigen, arbeiten wir sie in derselben Strategie aus, damit Sprache und SEO nicht getrennt laufen.",
+      "marketsTitle": "Eine Suche, drei Märkte",
+      "originLabel": "Original",
+      "literalLabel": "Wörtliche Übersetzung",
+      "realLabel": "Was wirklich gesucht wird",
+      "marketsNote": "Beispiel: Deshalb recherchiere ich die Keywords jeder Sprache, statt sie zu übersetzen.",
+      "markets": [
+        {
+          "code": "ES",
+          "name": "Español",
+          "query": "piso en alquiler Alicante",
+          "literal": "piso en alquiler Alicante"
+        },
+        {
+          "code": "EN",
+          "name": "English",
+          "query": "flat to rent Alicante",
+          "literal": "apartment in rent Alicante"
+        },
+        {
+          "code": "FR",
+          "name": "Français",
+          "query": "location appartement Alicante",
+          "literal": "appartement en location Alicante"
+        }
+      ],
+      "pillars": [
+        {
+          "title": "Suchen in jedem Markt",
+          "text": "Was die Menschen eingeben und warum, Land für Land."
+        },
+        {
+          "title": "Lokalisierte Inhalte",
+          "text": "Titel, Texte und Google-Profil angepasst, nicht übersetzt."
+        },
+        {
+          "title": "Hreflang und Struktur",
+          "text": "Damit Google jeder Person ihre Version zeigt."
+        }
+      ]
     },
     "why": {
       "eyebrow": "SEO",
@@ -618,12 +725,8 @@
       "closing": "Ich bin keine große Agentur und möchte auch keine sein: Sie arbeiten direkt mit mir, und ich sage Ihnen von Anfang an, was ich leisten kann und was nicht.",
       "stats": [
         {
-          "value": "6",
-          "label": "Sprachen"
-        },
-        {
-          "value": "4",
-          "label": "Tools"
+          "value": "3",
+          "label": "Sprachen: ES · EN · FR"
         },
         {
           "value": "1:1",
@@ -631,14 +734,23 @@
         },
         {
           "value": "30 min",
-          "label": "kostenloses Gespräch"
+          "label": "kostenloses Mini-Audit"
+        },
+        {
+          "value": "24 h",
+          "label": "bis zu Ihrem Angebot"
         }
       ],
       "ctaText": "Kostenlose Erstdiagnose mit drei priorisierten Erkenntnissen."
     },
     "arsenal": {
       "toolsTitle": "SEO-Tools",
-      "skillsTitle": "SEO-Fähigkeiten"
+      "skillsTitle": "SEO-Fähigkeiten",
+      "skillCategories": {
+        "technical": "Technisches SEO",
+        "content": "Inhalte",
+        "local": "Lokal und international"
+      }
     },
     "budget": {
       "eyebrow": "SEO",
@@ -647,14 +759,21 @@
       "description": "Das Budget hängt vom Zustand der Website, dem Umfang und der Art der Begleitung ab. Teilen Sie mir die Projektziele mit, und ich erstelle ein passendes Angebot.",
       "highlight": "Eine grundlegende Prüfung Ihrer Website mit drei priorisierten Erkenntnissen sowie ein kostenloses 30-minütiges Gespräch, um Ihr Projekt kennenzulernen und die Ergebnisse zu besprechen. Ein vollständiger Bericht oder die Umsetzung der Verbesserungen ist nicht enthalten; wenn Sie weitermachen möchten, legen wir das im Angebot fest.",
       "highlightTitle": "Ich biete eine kostenlose Erstdiagnose an"
-    }
+    },
+    "glance": [
+      "Persönlich in Elche; online in Alicante, an der Costa Blanca und in anderen Ländern",
+      "Lokales und internationales SEO auf Spanisch, Englisch und Französisch",
+      "Kostenloses 30-Minuten-Mini-Audit"
+    ],
+    "glanceTitle": "Auf einen Blick"
   },
   "translationServicePage": {
     "hero": {
       "eyebrow": "Übersetzung und Lokalisierung",
       "title": "Professionelle Website-Übersetzung und Lokalisierung mit SEO-Fokus",
       "titleAccent": "Lokalisierung",
-      "description": "Ich passe die Inhalte Ihres Unternehmens mit semantischer Präzision und SEO-Fokus an neue Märkte an."
+      "description": "Ich passe die Inhalte Ihres Unternehmens mit semantischer Präzision und SEO-Fokus an neue Märkte an.",
+      "intro2": "Ich übersetze Websites, Onlineshops und digitale Inhalte und achte dabei auf die Stimme Ihrer Marke und die Suchbegriffe in jeder Sprache."
     },
     "localization": {
       "eyebrow": "WEBSITE-LOKALISIERUNG",
@@ -704,6 +823,102 @@
       "languagesTitle": "Sprachen",
       "toolsTitle": "Tools",
       "skillsTitle": "Fähigkeiten"
+    },
+    "glance": [
+      "Französisch ⇄ Spanisch",
+      "Englisch → Spanisch",
+      "Deutsch → Spanisch",
+      "Italienisch → Spanisch",
+      "Katalanisch/Valencianisch → Spanisch"
+    ],
+    "glanceTitle": "Sprachkombinationen",
+    "process": {
+      "title": "So arbeiten wir",
+      "steps": [
+        {
+          "title": "Sie erzählen mir von Ihrem Projekt",
+          "text": "Ihre Ziele, wo der Text liegt (Website, Shop oder Plattform) und die Texte in einem bearbeitbaren Dokument."
+        },
+        {
+          "title": "Angebot in 48 Std.",
+          "text": "Spätestens, mit Festpreis und Liefertermin."
+        },
+        {
+          "title": "Ich übersetze und prüfe",
+          "text": "Ich übersetze und prüfe danach jeden Text sorgfältig vor der Lieferung."
+        },
+        {
+          "title": "Lieferung und Ihre Prüfung",
+          "text": "Sie prüfen die Übersetzung und ich setze eine Korrekturrunde inklusive um."
+        }
+      ]
+    },
+    "pricing": {
+      "title": "Preise",
+      "from": "Ab",
+      "recommended": "Empfohlen",
+      "note": "Preise zzgl. MwSt. Sie erhalten vorab ein Festpreisangebot.",
+      "example": "Beispiel: Eine Website mit 3.000 Wörtern kostet 240 € mit Übersetzung, 300 € mit SEO-Übersetzung und 390 € startklar.",
+      "cta": "Angebot anfragen",
+      "tiers": [
+        {
+          "name": "Übersetzung",
+          "price": "0,08 €",
+          "unit": "pro Wort",
+          "items": [
+            "Übersetzung und Lokalisierung, nicht Wort für Wort",
+            "Abschließende Prüfung vor der Lieferung",
+            "Sie laden sie selbst hoch"
+          ]
+        },
+        {
+          "name": "SEO-Übersetzung",
+          "price": "0,10 €",
+          "unit": "pro Wort",
+          "items": [
+            "Alles aus Übersetzung",
+            "Echte Keywords für jede Sprache",
+            "Titel, Beschreibungen und URLs für Google",
+            "Alt-Texte der Bilder"
+          ]
+        },
+        {
+          "name": "Website startklar",
+          "price": "0,10 €",
+          "unit": "pro Wort + 90 € für das Hochladen",
+          "items": [
+            "Alles aus SEO-Übersetzung",
+            "Ich lade sie in WordPress oder Shopify hoch",
+            "Ich prüfe, dass jede Sprache auf die anderen verweist (hreflang)"
+          ]
+        }
+      ]
+    },
+    "whatTranslate": {
+      "eyebrow": "Was ich übersetze",
+      "title": "Websites, E-Commerce und digitale Inhalte",
+      "titleAccent": "digitale Inhalte"
+    },
+    "seoCompare": {
+      "title": "Übersetzung und SEO-Übersetzung: der Unterschied",
+      "source": "Originaltext · Französisch",
+      "sourceText": "robes de soirée femme",
+      "plain": "Übersetzung",
+      "seo": "SEO-Übersetzung",
+      "plainText": "vestidos de noche para mujer",
+      "seoText": "vestidos de fiesta mujer",
+      "plainNote": "Korrekt, aber niemand sucht so",
+      "seoNote": "Was Menschen bei Google eingeben",
+      "plainPoints": [
+        "Sinngetreu zum Original",
+        "Natürlich, ohne Lehnübersetzungen",
+        "Abschließende Prüfung vor der Lieferung"
+      ],
+      "seoPoints": [
+        "Alles aus der Übersetzung",
+        "Echte Keywords jeder Sprache",
+        "Titel, Beschreibungen, URLs und Alt-Texte"
+      ]
     }
   },
   "legal": {

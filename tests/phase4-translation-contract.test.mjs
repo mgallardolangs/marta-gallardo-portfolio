@@ -241,8 +241,8 @@ test('experience tablist aria label is localized in all six translation dictiona
 test('public Translation page mounts its two client-side service switchers without page-global listeners', async () => {
   const source = await readSource('src/views/TranslationServicePage.astro');
 
-  assert.equal((source.match(/<ServiceSwitcher\b/g) ?? []).length, 2);
-  assert.match(source, /<ServiceSwitcher\s+client:load/);
+  // 24/11/2026: the two switchers became static clay cards (what I translate) and a comparison, so no client island remains
+  assert.equal((source.match(/<ServiceSwitcher\b/g) ?? []).length, 0);
   assert.doesNotMatch(source, /astro:page-load|astro:before-preparation/);
 });
 
@@ -411,7 +411,7 @@ test('translation page motion cancels in-flight mounts when route cleanup runs b
 test('public Translation view keeps only translation-specific service and arsenal sections', async () => {
   const source = await readSource('src/views/TranslationServicePage.astro');
 
-  assert.match(source, /<ServiceSwitcher/);
+  assert.match(source, /page\.localization\.items\.map/); // 24/11/2026: cards instead of the switcher
   assert.doesNotMatch(source, /<ExperienceTabs|methodology|whyChooseMe/);
   assert.match(source, /getTranslationArsenalColumns\(lang,\s*siteData,\s*'translation'\)/);
   assert.match(source, /arsenal\.skills\.map/);

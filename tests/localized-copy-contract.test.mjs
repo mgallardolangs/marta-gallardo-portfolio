@@ -88,7 +88,8 @@ test('approved localized-copy sections share one complete schema in all locales'
     'editorial-content',
     'technical-localization',
   ]);
-  assert.deepEqual(Object.keys(es.seoPage.services.items[0]).sort(), ['description', 'id', 'title']);
+  // 24/11/2026: SEO tabs carry the brochure content (kicker, headline, points) under the same simple tab names
+  assert.deepEqual(Object.keys(es.seoPage.services.items[0]).sort(), ['description', 'headline', 'id', 'kicker', 'points', 'title']);
   assert.deepEqual(Object.keys(es.translationServicePage.localization.items[0]).sort(), [
     'description',
     'id',

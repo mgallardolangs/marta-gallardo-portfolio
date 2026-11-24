@@ -217,7 +217,8 @@ test('all six locale files add the correction-only translation display keys and 
 test('site arsenal skills keep the authored 5/6 translation-vs-seo split and grouped helper output', async () => {
   const site = await readJson('src/data/site.json');
 
-  assert.equal(site.arsenal.skills.length, 11, 'arsenal.skills should keep the eleven authored translation and SEO records');
+  // 24/11/2026: SEO skills redone from Marta's SEO brochure: 12 skills in three categories (technical, content, local)
+  assert.equal(site.arsenal.skills.length, 17, 'arsenal.skills should keep 5 translation and 12 SEO records');
 
   const translationIds = site.arsenal.skills
     .filter((skill) => skill.group === 'translation')
@@ -239,18 +240,8 @@ test('site arsenal skills keep the authored 5/6 translation-vs-seo split and gro
     ].sort(),
     'translation skill group should keep the approved five translation/localization skills',
   );
-  assert.deepEqual(
-    seoIds,
-    [
-      'content-optimization',
-      'copywriting',
-      'keyword-planning',
-      'local-seo',
-      'skill-arquitectura-web',
-      'skill-interlinking',
-    ].sort(),
-    'seo skill group should keep the six authored SEO/web-content skills',
-  );
+  assert.equal(seoIds.length, 12, 'seo skill group should keep the twelve SEO skills from the brochure');
+  assert.ok(site.arsenal.skills.filter((skill) => skill.group === 'seo').every((skill) => ['technical', 'content', 'local'].includes(skill.category)), 'every SEO skill has a category');
 
   const columns = getTranslationArsenalColumns('es', site);
   assert.equal(columns.languages.length, 6, 'arsenal helper should keep six language rows');
@@ -261,7 +252,7 @@ test('site arsenal skills keep the authored 5/6 translation-vs-seo split and gro
     'arsenal helper should expose grouped skill columns instead of one flat list',
   );
   assert.equal(columns.skillGroups.translation.length, 5, 'translation helper column should keep five skills');
-  assert.equal(columns.skillGroups.seo.length, 6, 'seo helper column should keep six skills');
+  assert.equal(columns.skillGroups.seo.length, 12, 'seo helper column should keep twelve skills');
 });
 
 test('public Translation hero keeps the contact link compact while its underline spans the content row', async (t) => {
@@ -275,8 +266,9 @@ test('public Translation hero keeps the contact link compact while its underline
   assert.doesNotMatch(source, /page\.heroMark/, 'public translation hero should stop rendering the vertical hero mark');
   assert.doesNotMatch(source, /data-translation-cta="portfolio"/, 'public translation hero should stop rendering the parked portfolio CTA anchor');
   assert.match(contactCta, /href=\{getLocalizedRoute\('contact', lang\)\}/, 'public translation hero should keep the localized contact CTA anchor');
-  assert.match(contactCta, /class="site-text-cta"/);
-  assert.match(source, /<div class="site-text-cta-row">[\s\S]*data-translation-cta="contact"/);
+  // 24/11/2026: the hero contact link became the clay primary button (same as Home).
+  assert.match(contactCta, /class="home-hero__cta home-hero__cta--primary"/);
+  assert.match(source, /<div class="service-hero__actions">[\s\S]*data-translation-cta="contact"/);
   assert.match(styles, /\.site-text-cta\s*\{[^}]*width:\s*fit-content;[^}]*flex:\s*0 0 auto;/s);
   assert.match(styles, /\.site-text-cta-row\s*\{[^}]*border-bottom:\s*1px solid var\(--color-amaranth\);/s);
   assert.doesNotMatch(heroWindow, /bg-\[radial-gradient/i, 'public translation hero should not restore the radial gradient');
@@ -362,7 +354,8 @@ test('public and admin service arsenals keep translation and SEO tools and skill
   assert.match(arsenalSection, /arsenal\.skills\.map/, 'public Translation arsenal should render individual skill tags');
   assert.doesNotMatch(arsenalSection, /skillGroups\.seo|SEO Local|Keyword planner/, 'public Translation arsenal should not include SEO skills');
   assert.match(seoSource, /getTranslationArsenalColumns\(lang,\s*siteData,\s*'seo'\)/, 'the separate SEO page should filter its skills to SEO');
-  assert.match(seoSource, /arsenal\.skills\.map/, 'the separate SEO page should display its SEO skills');
+  // 24/11/2026: SEO skills are grouped by category (filter per group)
+  assert.match(seoSource, /arsenal\.skills\.(map|filter)/, 'the separate SEO page should display its SEO skills');
   assert.doesNotMatch(seoSource, /SEO_RESERVED_TOOL_LABELS/);
   assert.doesNotMatch(arsenalHelperSource, /SEO_RESERVED_TOOL_LABELS/);
   assert.match(adminSource, /import\s+AdminTranslationArsenalEditor\s+from\s+['"]..\/..\/components\/admin\/AdminTranslationArsenalEditor['"]/, 'admin translation page should import the shared arsenal editor');

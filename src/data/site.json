@@ -629,12 +629,64 @@
         "group": "seo",
         "logo": "/images/tools/google-business-profile.svg",
         "label": {
-          "es": "Google My Business",
+          "es": "Google Business Profile",
           "en": "Google Business Profile",
           "fr": "Google Business Profile",
           "de": "Google Unternehmensprofil",
           "it": "Profilo dell’attività su Google",
           "ca": "Perfil d’empresa de Google"
+        }
+      },
+      {
+        "id": "google-analytics",
+        "group": "seo",
+        "logo": "/images/tools/google-analytics.svg",
+        "label": {
+          "es": "Google Analytics 4",
+          "en": "Google Analytics 4",
+          "fr": "Google Analytics 4",
+          "de": "Google Analytics 4",
+          "it": "Google Analytics 4",
+          "ca": "Google Analytics 4"
+        }
+      },
+      {
+        "id": "semrush",
+        "group": "seo",
+        "logo": "/images/tools/semrush.svg",
+        "label": {
+          "es": "Semrush",
+          "en": "Semrush",
+          "fr": "Semrush",
+          "de": "Semrush",
+          "it": "Semrush",
+          "ca": "Semrush"
+        }
+      },
+      {
+        "id": "screaming-frog",
+        "group": "seo",
+        "logo": "/images/tools/screaming-frog.svg",
+        "label": {
+          "es": "Screaming Frog",
+          "en": "Screaming Frog",
+          "fr": "Screaming Frog",
+          "de": "Screaming Frog",
+          "it": "Screaming Frog",
+          "ca": "Screaming Frog"
+        }
+      },
+      {
+        "id": "pagespeed-insights",
+        "group": "seo",
+        "logo": "/images/tools/pagespeed-insights.svg",
+        "label": {
+          "es": "PageSpeed Insights",
+          "en": "PageSpeed Insights",
+          "fr": "PageSpeed Insights",
+          "de": "PageSpeed Insights",
+          "it": "PageSpeed Insights",
+          "ca": "PageSpeed Insights"
         }
       }
     ],
@@ -700,75 +752,159 @@
         "group": "translation"
       },
       {
-        "id": "local-seo",
-        "label": {
-          "es": "SEO Local",
-          "en": "Local SEO",
-          "fr": "SEO local",
-          "de": "Lokales SEO",
-          "it": "SEO locale",
-          "ca": "SEO local"
-        },
-        "group": "seo"
-      },
-      {
-        "id": "content-optimization",
-        "label": {
-          "es": "Optimización de contenido para buscadores",
-          "en": "Multilingual SEO",
-          "fr": "SEO Multilingue",
-          "de": "Suchmaschinenoptimierung für Inhalte",
-          "it": "Ottimizzazione dei contenuti per i motori di ricerca",
-          "ca": "Optimització de contingut per a cercadors"
-        },
-        "group": "seo"
-      },
-      {
-        "id": "keyword-planning",
-        "label": {
-          "es": "Keyword planner",
-          "en": "Keyword planner",
-          "fr": "Keyword planner",
-          "de": "Keyword-Planung",
-          "it": "Pianificazione delle parole chiave",
-          "ca": "Planificació de paraules clau"
-        },
-        "group": "seo"
-      },
-      {
-        "id": "copywriting",
-        "label": {
-          "es": "Copywriting",
-          "en": "Copywriting",
-          "fr": "Copywriting",
-          "de": "Copywriting",
-          "it": "Copywriting",
-          "ca": "Copywriting"
-        },
-        "group": "seo"
-      },
-      {
-        "id": "skill-interlinking",
+        "id": "skill-seo-crawling-and-indexing",
         "group": "seo",
+        "category": "technical",
         "label": {
-          "es": "INTERLINKING",
-          "en": "INTERLINKING",
-          "fr": "INTERLINKING",
-          "de": "INTERLINKING",
-          "it": "INTERLINKING",
-          "ca": "INTERLINKING"
+          "es": "Rastreo e indexación",
+          "en": "Crawling and indexing",
+          "fr": "Exploration et indexation",
+          "de": "Crawling und Indexierung",
+          "it": "Scansione e indicizzazione",
+          "ca": "Rastreig i indexació"
         }
       },
       {
-        "id": "skill-arquitectura-web",
+        "id": "skill-seo-speed-and-mobile",
         "group": "seo",
+        "category": "technical",
         "label": {
-          "es": "ARQUITECTURA WEB",
-          "en": "SEO STRUCTURE",
-          "fr": "ARCHITECTURE SEO",
-          "de": "ARQUITECTURA WEB",
-          "it": "ARQUITECTURA WEB",
-          "ca": "ARQUITECTURA WEB"
+          "es": "Velocidad y versión móvil",
+          "en": "Speed and mobile",
+          "fr": "Vitesse et mobile",
+          "de": "Geschwindigkeit und Mobilversion",
+          "it": "Velocità e versione mobile",
+          "ca": "Velocitat i versió mòbil"
+        }
+      },
+      {
+        "id": "skill-seo-structured-data",
+        "group": "seo",
+        "category": "technical",
+        "label": {
+          "es": "Datos estructurados",
+          "en": "Structured data",
+          "fr": "Données structurées",
+          "de": "Strukturierte Daten",
+          "it": "Dati strutturati",
+          "ca": "Dades estructurades"
+        }
+      },
+      {
+        "id": "skill-seo-site-architecture-and-internal-linking",
+        "group": "seo",
+        "category": "technical",
+        "label": {
+          "es": "Arquitectura web y enlazado interno",
+          "en": "Site architecture and internal linking",
+          "fr": "Architecture et maillage interne",
+          "de": "Website-Architektur und interne Verlinkung",
+          "it": "Architettura del sito e link interni",
+          "ca": "Arquitectura web i enllaçat intern"
+        }
+      },
+      {
+        "id": "skill-seo-keyword-research",
+        "group": "seo",
+        "category": "content",
+        "label": {
+          "es": "Investigación de palabras clave",
+          "en": "Keyword research",
+          "fr": "Recherche de mots-clés",
+          "de": "Keyword-Recherche",
+          "it": "Ricerca delle parole chiave",
+          "ca": "Recerca de paraules clau"
+        }
+      },
+      {
+        "id": "skill-seo-on-page-optimization",
+        "group": "seo",
+        "category": "content",
+        "label": {
+          "es": "Optimización on-page",
+          "en": "On-page optimization",
+          "fr": "Optimisation on-page",
+          "de": "OnPage-Optimierung",
+          "it": "Ottimizzazione on-page",
+          "ca": "Optimització on-page"
+        }
+      },
+      {
+        "id": "skill-seo-content-clusters",
+        "group": "seo",
+        "category": "content",
+        "label": {
+          "es": "Clústeres de contenido",
+          "en": "Content clusters",
+          "fr": "Clusters de contenu",
+          "de": "Content-Cluster",
+          "it": "Cluster di contenuti",
+          "ca": "Clústers de contingut"
+        }
+      },
+      {
+        "id": "skill-seo-seo-copywriting",
+        "group": "seo",
+        "category": "content",
+        "label": {
+          "es": "Copywriting SEO",
+          "en": "SEO copywriting",
+          "fr": "Rédaction SEO",
+          "de": "SEO-Texte",
+          "it": "Copywriting SEO",
+          "ca": "Redacció SEO"
+        }
+      },
+      {
+        "id": "skill-seo-google-business-profile-and-reviews",
+        "group": "seo",
+        "category": "local",
+        "label": {
+          "es": "Google Business Profile y reseñas",
+          "en": "Google Business Profile and reviews",
+          "fr": "Fiche Google et avis",
+          "de": "Google-Unternehmensprofil und Bewertungen",
+          "it": "Profilo dell’attività su Google e recensioni",
+          "ca": "Perfil d’empresa de Google i ressenyes"
+        }
+      },
+      {
+        "id": "skill-seo-hreflang-and-multilingual-sites",
+        "group": "seo",
+        "category": "local",
+        "label": {
+          "es": "Hreflang y webs multilingües",
+          "en": "Hreflang and multilingual sites",
+          "fr": "Hreflang et sites multilingues",
+          "de": "Hreflang und mehrsprachige Websites",
+          "it": "Hreflang e siti multilingue",
+          "ca": "Hreflang i webs multilingües"
+        }
+      },
+      {
+        "id": "skill-seo-localized-keywords",
+        "group": "seo",
+        "category": "local",
+        "label": {
+          "es": "Palabras clave localizadas",
+          "en": "Localized keywords",
+          "fr": "Mots-clés localisés",
+          "de": "Lokalisierte Keywords",
+          "it": "Parole chiave localizzate",
+          "ca": "Paraules clau localitzades"
+        }
+      },
+      {
+        "id": "skill-seo-visibility-in-ai-chatgpt-gemini",
+        "group": "seo",
+        "category": "local",
+        "label": {
+          "es": "Visibilidad en la IA (ChatGPT, Gemini)",
+          "en": "Visibility in AI (ChatGPT, Gemini)",
+          "fr": "Visibilité dans l’IA (ChatGPT, Gemini)",
+          "de": "Sichtbarkeit in KI (ChatGPT, Gemini)",
+          "it": "Visibilità nell’IA (ChatGPT, Gemini)",
+          "ca": "Visibilitat en la IA (ChatGPT, Gemini)"
         }
       }
     ]

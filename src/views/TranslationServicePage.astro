@@ -2,10 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import GsapPageRuntime from '../components/GsapPageRuntime.astro';
 import RichText from '../components/RichText.astro';
-import ScrollReveal from '../components/ScrollReveal';
-import ServiceSwitcher from '../components/translation/ServiceSwitcher';
 import RelatedArticles from '../components/RelatedArticles.astro';
 import TypedTitle from '../components/TypedTitle.astro';
+import ServiceGlance from '../components/services/ServiceGlance.astro';
+import ServiceSteps from '../components/services/ServiceSteps.astro';
+import PriceCards from '../components/services/PriceCards.astro';
+import { accentHtml } from '../lib/accentHtml';
 import { getLangFromUrl, getLocalizedRoute, t } from '../i18n';
 import { getPageSeo, siteData } from '../lib/siteData';
 import { getTranslationArsenalColumns } from '../lib/translationPage.js';
@@ -18,116 +20,118 @@ const pageSeo = getPageSeo(siteData, 'translation', lang, {
   description: { [lang]: page.hero.description },
 });
 const arsenal = getTranslationArsenalColumns(lang, siteData, 'translation');
+// Language level → bar width (CEFR where given; native and "advanced" labels in any language)
+const levelWidth = (level: string) => {
+  const cefr = level.match(/\b(C2|C1|B2|B1|A2|A1)\b/)?.[1];
+  if (cefr) return ({ C2: 95, C1: 85, B2: 70, B1: 55, A2: 35, A1: 20 } as Record<string, number>)[cefr];
+  if (/nativ|native|matern|madre|muttersprach/i.test(level)) return 100;
+  return 80;
+};
 ---
 
 <BaseLayout title={pageSeo.title} description={pageSeo.description}>
   <GsapPageRuntime />
-  <div class="bg-paper" data-translation-service-page>
-    <section class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
-      <div class="site-container max-w-7xl">
-        <ScrollReveal client:visible direction="right" className="flex flex-col gap-8">
+  <div class="bg-paper service-page--pink" data-translation-service-page>
+    <section data-service-hero class="px-6 pb-16 pt-28 md:pb-20 md:pt-32">
+      <div class="site-container service-hero">
+        <!-- Static heading (no typing effect) so it paints on first render (LCP) -->
+        <div class="flex flex-col gap-8">
           <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-hazel">{page.hero.eyebrow}</p>
-          <TypedTitle
-            as="h1"
-            text={page.hero.title}
-            accent={page.hero.titleAccent}
-            trigger="load"
-            class="max-w-[18ch] font-heading text-5xl leading-[0.96] tracking-[-0.04em] text-ink md:text-7xl"
-          />
-          <RichText text={page.hero.description} class="max-w-5xl font-body text-lg leading-8 text-ink-muted" />
-          <div class="site-text-cta-row">
-            <a
-              href={getLocalizedRoute('contact', lang)}
-              data-translation-cta="contact"
-              class="site-text-cta"
-            >
-              {i.translationPage.hero.ctaSecondary}
-              <span class="site-text-cta__arrow" aria-hidden="true">↗</span>
+          <h1 class="max-w-[18ch] font-heading text-5xl leading-[0.96] tracking-[-0.04em] text-ink md:text-7xl" set:html={accentHtml(page.hero.title, page.hero.titleAccent) ?? page.hero.title} />
+          <RichText text={page.hero.description} class="max-w-3xl font-body text-lg leading-8 text-ink-muted" />
+          <RichText text={page.hero.intro2} class="max-w-3xl font-body text-base leading-8 text-ink-muted md:text-lg" />
+        </div>
+        <div class="service-hero__side">
+          <ServiceGlance title={page.glanceTitle} items={page.glance} tone="amaranth" />
+          <div class="service-hero__actions">
+            <a href={getLocalizedRoute('contact', lang)} data-translation-cta="contact" class="home-hero__cta home-hero__cta--primary">
+              <span class="home-hero__cta-label">{i.translationPage.hero.ctaSecondary}</span>
+            </a>
+            <a href="#translation-prices" class="home-hero__cta home-hero__cta--secondary">
+              <span class="home-hero__cta-label">{page.pricing.title}</span>
             </a>
           </div>
-        </ScrollReveal>
+        </div>
       </div>
     </section>
 
-    <section class="bg-ink px-6 py-16 text-paper md:py-20">
-      <div class="site-container space-y-10">
+    <section class="bg-amaranth px-6 py-16 text-ink md:py-20" data-translation-what>
+      <div class="site-container flex flex-col gap-10">
         <div class="space-y-5">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.localization.eyebrow}</p>
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink/70">{page.whatTranslate.eyebrow}</p>
           <TypedTitle
             as="h2"
-            text={page.localization.title}
+            text={page.whatTranslate.title}
 
-            accent={page.localization.titleAccent}
+            accent={page.whatTranslate.titleAccent}
             trigger="visible"
-            class="font-heading text-4xl text-paper md:text-5xl"
+            class="font-heading text-4xl text-ink md:text-5xl"
           />
         </div>
-        <ServiceSwitcher
-          client:load
-          title={page.localization.title}
-          items={page.localization.items.map((service) => ({
-            id: service.id,
-            name: service.title,
-            headline: service.title,
-            description: service.description,
-          }))}
-        />
+        <ul class="translate-cards" role="list">
+          {page.localization.items.map((card, index) => (
+            <li class="clay-card clay-card--paper translate-card">
+              <span class:list={['home-step__num', index % 2 ? 'clay-token clay-token--amaranth' : 'clay-token']} aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+              <p class="translate-card__tag">{page.localization.eyebrow}</p>
+              <h3 class="font-heading text-xl font-semibold leading-tight text-ink">{card.title}</h3>
+              <p class="font-body text-sm leading-7 text-ink-muted">{card.description}</p>
+            </li>
+          ))}
+          {page.digitalContent.items.map((card, index) => (
+            <li class="clay-card clay-card--paper translate-card">
+              <span class:list={['home-step__num', index % 2 ? 'clay-token clay-token--amaranth' : 'clay-token']} aria-hidden="true">{String(page.localization.items.length + index + 1).padStart(2, '0')}</span>
+              <p class="translate-card__tag">{page.digitalContent.eyebrow}</p>
+              <h3 class="font-heading text-xl font-semibold leading-tight text-ink">{card.title}</h3>
+              <p class="font-body text-sm leading-7 text-ink-muted">{card.description}</p>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
 
-    <section class="px-6 py-16 md:py-20">
-      <div class="site-container grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-        <ScrollReveal client:visible direction="right" className="flex flex-col gap-6">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel">{page.multilingualSeo.eyebrow}</p>
+    <section class="bg-ink px-6 py-16 text-paper md:py-20" data-translation-seo-compare>
+      <div class="site-container grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
+        <div class="flex flex-col gap-6">
+          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.multilingualSeo.eyebrow}</p>
           <TypedTitle
             as="h2"
             text={page.multilingualSeo.title}
 
             accent={page.multilingualSeo.titleAccent}
             trigger="visible"
-            class="font-heading text-4xl leading-none text-ink md:text-5xl"
+            class="font-heading text-4xl leading-none text-paper md:text-5xl"
           />
-        </ScrollReveal>
-        <ScrollReveal client:visible direction="left" className="flex flex-col gap-6">
-          <RichText text={page.multilingualSeo.description} class="max-w-3xl font-body text-base leading-8 text-ink-muted md:text-lg" />
+          <RichText text={page.multilingualSeo.description} class="font-body text-base leading-8 text-paper/75 md:text-lg" />
           <div class="site-text-cta-row">
             <a href={getLocalizedRoute('seo', lang)} class="site-text-cta">
               {page.multilingualSeo.seoLinkLabel}
               <span class="site-text-cta__arrow" aria-hidden="true">↗</span>
             </a>
           </div>
-        </ScrollReveal>
-      </div>
-    </section>
-
-    <section class="bg-ink px-6 py-16 text-paper md:py-20">
-      <div class="site-container space-y-10">
-        <div class="space-y-5">
-          <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-amaranth">{page.digitalContent.eyebrow}</p>
-          <TypedTitle
-            as="h2"
-            text={page.digitalContent.title}
-
-            accent={page.digitalContent.titleAccent}
-            trigger="visible"
-            class="font-heading text-4xl text-paper md:text-5xl"
-          />
         </div>
-        <ServiceSwitcher
-          client:load
-          title={page.digitalContent.title}
-          items={page.digitalContent.items.map((service) => ({
-            id: service.id,
-            name: service.title,
-            headline: service.title,
-            description: service.description,
-          }))}
-        />
+        <div class="seo-compare">
+          <p class="seo-compare__title">{page.seoCompare.title}</p>
+          <p class="seo-compare__source"><span>{page.seoCompare.source}</span><strong lang="fr">{page.seoCompare.sourceText}</strong></p>
+          <div class="seo-compare__grid">
+            <div class="clay-card clay-card--paper seo-compare__card">
+              <p class="seo-compare__label">{page.seoCompare.plain}</p>
+              <p class="seo-market__search" lang="es"><span class="seo-market__icon" aria-hidden="true"></span>{page.seoCompare.plainText}</p>
+              <p class="seo-compare__note">{page.seoCompare.plainNote}</p>
+              <ul class="seo-compare__points" role="list">{page.seoCompare.plainPoints.map((point) => <li>{point}</li>)}</ul>
+            </div>
+            <div class="clay-card seo-market--amaranth seo-compare__card">
+              <p class="seo-compare__label">{page.seoCompare.seo}</p>
+              <p class="seo-market__search" lang="es"><span class="seo-market__icon" aria-hidden="true"></span>{page.seoCompare.seoText}</p>
+              <p class="seo-compare__note">✓ {page.seoCompare.seoNote}</p>
+              <ul class="seo-compare__points" role="list">{page.seoCompare.seoPoints.map((point) => <li>{point}</li>)}</ul>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
     <section class="px-6 py-16 md:py-20" data-translation-arsenal>
-      <div class="site-container space-y-10">
+      <div class="site-container flex flex-col gap-10">
         <div class="space-y-5">
           <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel">{page.arsenal.eyebrow}</p>
           <TypedTitle
@@ -141,25 +145,25 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'translation');
         </div>
 
         <div class="grid gap-4 lg:grid-cols-3">
-          <article class="border border-ink p-5" data-translation-panel="languages">
+          <article class="clay-card clay-card--paper" data-translation-panel="languages">
             <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-hazel">{page.arsenal.languagesTitle}</p>
             <span class="mt-4 block h-px bg-ink/12"></span>
-            <div class="mt-4">
+            <ul class="lang-levels mt-4" role="list">
               {arsenal.languages.map((language) => (
-                <div class="flex items-center justify-between gap-4 border-b border-ink/10 py-3 last:border-b-0">
-                  <p class="font-heading text-xl text-ink">{language.label}</p>
-                  <p class="text-right font-body text-sm font-medium text-hazel">{language.level}</p>
-                </div>
+                <li class="lang-level">
+                  <p class="lang-level__row"><span class="font-heading text-ink">{language.label}</span><span>{language.level}</span></p>
+                  <span class="lang-level__bar" aria-hidden="true"><span style={`--level: ${levelWidth(language.level)}%`}></span></span>
+                </li>
               ))}
-            </div>
+            </ul>
           </article>
 
-          <article class="border border-ink p-5" data-translation-panel="tools">
+          <article class="clay-card clay-card--paper" data-translation-panel="tools">
             <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-hazel">{page.arsenal.toolsTitle}</p>
             <span class="mt-4 block h-px bg-ink/12"></span>
             <div class="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
               {arsenal.tools.map((tool) => (
-                <div class="group flex aspect-square min-w-0 flex-col items-center justify-center gap-3 bg-hazel px-3 py-4 text-center text-paper transition hover:bg-amaranth hover:text-ink">
+                <div class="service-tool">
                   <img src={tool.logoSrc} alt="" width="40" height="40" loading="lazy" decoding="async" class="h-10 w-10 object-contain" />
                   <p class="font-body text-[0.68rem] font-medium uppercase tracking-[0.1em]">{tool.label}</p>
                 </div>
@@ -167,17 +171,35 @@ const arsenal = getTranslationArsenalColumns(lang, siteData, 'translation');
             </div>
           </article>
 
-          <article class="border border-ink p-5" data-translation-panel="skills">
+          <article class="clay-card clay-card--paper" data-translation-panel="skills">
             <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.26em] text-hazel">{page.arsenal.skillsTitle}</p>
             <span class="mt-4 block h-px bg-ink/12"></span>
-            <div class="mt-4 flex flex-col gap-2">
+            <div class="mt-4 flex flex-wrap gap-2">
               {arsenal.skills.map((skill) => (
-                <span class="border border-ink/16 px-3 py-3 font-body text-[0.68rem] uppercase tracking-[0.08em] text-ink" data-translation-skill>
+                <span class="service-chip service-chip--light" data-translation-skill>
                   {skill.label}
                 </span>
               ))}
             </div>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="translation-prices" class="scroll-mt-24 bg-clay px-6 py-16 md:py-24" data-translation-pricing>
+      <div class="site-container flex flex-col gap-14">
+        <ServiceSteps title={page.process.title} steps={page.process.steps} />
+        <div class="flex flex-col gap-8">
+          <h2 class="font-heading text-4xl leading-none text-ink md:text-5xl">{page.pricing.title}</h2>
+          <PriceCards
+            tiers={page.pricing.tiers}
+            fromLabel={page.pricing.from}
+            recommendedLabel={page.pricing.recommended}
+            note={page.pricing.note}
+            extra={page.pricing.example}
+            ctaLabel={page.pricing.cta}
+            ctaHref={getLocalizedRoute('contact', lang)}
+          />
         </div>
       </div>
     </section>

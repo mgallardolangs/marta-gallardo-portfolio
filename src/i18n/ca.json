@@ -399,6 +399,50 @@
         }
       ],
       "closing": "Tens un producte o una experiència que vols mostrar? Explica'm què busques i et proposaré una idea."
+    },
+    "languagesStrip": {
+      "title": "Un mateix vídeo, llest per a tres mercats",
+      "text": "Gravo, subtitulo i, si cal, narro en **castellà, anglès i francès**: una sola producció per a tres públics."
+    },
+    "pricing": {
+      "title": "Tarifes",
+      "from": "Des de",
+      "recommended": "Recomanada",
+      "note": "Preus sense IVA. T’envio el pressupost tancat abans de començar.",
+      "included": "Inclòs sempre: ús orgànic a les xarxes de la teva marca durant 6 mesos, 2 rondes de canvis i lliurament en 10 dies laborables des que aproves el guió. A part: ús en anuncis, material en brut i subtítols en anglès o francès (+20 € per vídeo i idioma).",
+      "cta": "Demanar pressupost",
+      "tiers": [
+        {
+          "name": "1 vídeo",
+          "price": "100 €",
+          "unit": "per vídeo",
+          "items": [
+            "15–30 segons, guió a partir del teu briefing",
+            "1 ganxo inicial",
+            "Subtítols en castellà"
+          ]
+        },
+        {
+          "name": "Pack de 3 vídeos",
+          "price": "270 €",
+          "unit": "90 € per vídeo",
+          "items": [
+            "Guió a partir del teu briefing",
+            "2 ganxos per vídeo per provar",
+            "Subtítols en castellà"
+          ]
+        },
+        {
+          "name": "Campanya",
+          "price": "490 €",
+          "unit": "pagament únic",
+          "items": [
+            "5 vídeos amb guió a partir del teu briefing",
+            "Subtítols en castellà",
+            "10 fotos del producte"
+          ]
+        }
+      ]
     }
   },
   "translationPage": {
@@ -572,7 +616,7 @@
       "titleAccent": "posicionament SEO",
       "paragraphs": [
         "Aparéixer a Google no és qüestió de sort, sinó d'estratègia. El meu servei de posicionament SEO converteix el teu web en un canal que atrau persones que ja busquen el que ofereixes: no només més visites, sinó visites amb un interés real.",
-        "Analitze el punt de partida del teu projecte i dissenye un pla de posicionament als cercadors a mesura: millore l'estructura tècnica, la rellevància dels teus continguts i l'autoritat del teu web. Tant si vols consolidar-te al teu mercat de referència com fer el salt a altres països amb SEO internacional, t'explique cada pas i treballem amb prioritats clares."
+        "Analitze el punt de partida del teu web i dissenye un pla a mesura: millore l'estructura tècnica, la rellevància dels teus continguts i l'autoritat del teu domini. T'explique cada pas i treballem amb prioritats clares."
       ]
     },
     "services": {
@@ -583,17 +627,41 @@
         {
           "id": "audit",
           "title": "Auditoria SEO professional",
-          "description": "Abans d’actuar, revise el punt de partida: SEO tècnic, indexabilitat, estructura i contingut on-page. L’auditoria ordena les troballes per prioritat i orienta els passos següents."
+          "description": "Comence amb una miniauditoria gratuïta de 30 minuts: revise el teu web, la teua fitxa de Google i si apareixes quan algú pregunta pel teu sector a ChatGPT o a Gemini, i et mostre els 3 problemes més importants. L’auditoria completa analitza tot el web i acaba amb un pla ordenat per prioritats.",
+          "kicker": "El primer pas",
+          "headline": "Saber què falla i què cal arreglar primer",
+          "points": [
+            "SEO tècnic: rastreig, indexació i velocitat al mòbil",
+            "Estructura, enllaçat intern i contingut on-page",
+            "Pla prioritzat i 1 hora per presentar-te’l",
+            "Ideal abans d’un redisseny o si tens qui aplique els canvis"
+          ]
         },
         {
           "id": "consulting",
           "title": "Consultoria SEO i estratègia digital",
-          "description": "Acompanyament mensual o per projecte per definir prioritats, revisar avanços i ajustar l’estratègia d’empreses i professionals autònoms."
+          "description": "Una auditoria et diu què falla; la consultoria et diu què fer i en quin ordre. El treball de base és el mateix en les tres opcions: canvia quant t’acompanye i qui aplica els canvis. Després dels 3 primers mesos pots continuar amb una quota mensual.",
+          "kicker": "Un pla i algú al teu costat",
+          "headline": "Tria quant t’acompanye",
+          "points": [
+            "Pla: et done el pla d’acció i l’apliques tu",
+            "Pla + acompanyament: una consultoria al mes durant 3 mesos i revise el que apliques",
+            "Pla + implementació: aplique jo els canvis i te’ls explique cada mes",
+            "Consultoria solta per a un dubte concret: un redisseny, un canvi de domini, un blog"
+          ]
         },
         {
           "id": "local",
           "title": "Posicionament SEO local",
-          "description": "Optimització de la fitxa de Google Business Profile i de la presència a Google Maps perquè els clients de la zona puguen trobar el negoci."
+          "description": "Si el teu negoci atén clients d’una zona concreta, aparéixer al mapa i a les cerques locals és tan important com tindre un bon web. Treballe sobretot amb negocis d’Elx, Alacant i la Costa Blanca que reben clients estrangers.",
+          "kicker": "Per a negocis amb clients a la zona",
+          "headline": "Que et troben al mapa, també en anglès i francès",
+          "points": [
+            "Fitxa de Google optimitzada, també en altres idiomes",
+            "Ressenyes: com demanar-les i respondre-les en castellà, anglès i francès",
+            "Pàgines de servei i de zona, amb dades coherents al web i als directoris",
+            "Mesura de trucades, clics i visites des del primer dia"
+          ]
         }
       ]
     },
@@ -602,7 +670,46 @@
       "translationLinkLabel": "Traducció",
       "title": "Especialista en SEO internacional i multilingüe",
       "titleAccent": "multilingüe",
-      "description": "Internacionalitzar un web no és instal·lar un connector de traducció automàtica. Cada mercat busca de manera diferent, per això part d'investigar quins termes usen realment els usuaris de cada país i amb quina intenció. A partir d'ací adapte el contingut i configure el que cal a nivell tècnic, com les etiquetes hreflang, perquè Google mostre cada versió al públic adequat. Si també necessites un servei de traducció de pàgines web, el treballem dins de la mateixa estratègia, de manera que llengua i posicionament no vagen per separat."
+      "description": "Internacionalitzar un web no és instal·lar un connector de traducció automàtica. Cada mercat busca de manera diferent, per això part d'investigar quins termes usen realment els usuaris de cada país i amb quina intenció. A partir d'ací adapte el contingut i configure el que cal a nivell tècnic, com les etiquetes hreflang, perquè Google mostre cada versió al públic adequat. Si també necessites un servei de traducció de pàgines web, el treballem dins de la mateixa estratègia, de manera que llengua i posicionament no vagen per separat.",
+      "marketsTitle": "Una mateixa cerca, tres mercats",
+      "originLabel": "Original",
+      "literalLabel": "Traducció literal",
+      "realLabel": "El que es busca de veritat",
+      "marketsNote": "Exemple: per això investigue les paraules clau de cada idioma en lloc de traduir-les.",
+      "markets": [
+        {
+          "code": "ES",
+          "name": "Español",
+          "query": "piso en alquiler Alicante",
+          "literal": "piso en alquiler Alicante"
+        },
+        {
+          "code": "EN",
+          "name": "English",
+          "query": "flat to rent Alicante",
+          "literal": "apartment in rent Alicante"
+        },
+        {
+          "code": "FR",
+          "name": "Français",
+          "query": "location appartement Alicante",
+          "literal": "appartement en location Alicante"
+        }
+      ],
+      "pillars": [
+        {
+          "title": "Cerques de cada mercat",
+          "text": "Què escriuen i amb quina intenció, país per país."
+        },
+        {
+          "title": "Contingut localitzat",
+          "text": "Títols, textos i fitxa de Google adaptats, no traduïts."
+        },
+        {
+          "title": "Hreflang i estructura",
+          "text": "Perquè Google mostre a cada persona la seua versió."
+        }
+      ]
     },
     "why": {
       "eyebrow": "SEO",
@@ -618,12 +725,8 @@
       "closing": "No sóc una gran agència ni vull ser-ho: treballes directament amb mi i et dic des del principi què puc fer i què no.",
       "stats": [
         {
-          "value": "6",
-          "label": "idiomes"
-        },
-        {
-          "value": "4",
-          "label": "eines"
+          "value": "3",
+          "label": "idiomes: ES · EN · FR"
         },
         {
           "value": "1:1",
@@ -631,14 +734,23 @@
         },
         {
           "value": "30 min",
-          "label": "trucada gratuïta"
+          "label": "miniauditoria gratuïta"
+        },
+        {
+          "value": "24 h",
+          "label": "per rebre la proposta"
         }
       ],
       "ctaText": "Diagnòstic inicial gratuït amb tres troballes prioritzades."
     },
     "arsenal": {
       "toolsTitle": "Eines SEO",
-      "skillsTitle": "Habilitats SEO"
+      "skillsTitle": "Habilitats SEO",
+      "skillCategories": {
+        "technical": "SEO tècnic",
+        "content": "Contingut",
+        "local": "Local i internacional"
+      }
     },
     "budget": {
       "eyebrow": "SEO",
@@ -647,14 +759,21 @@
       "description": "El pressupost depén de l’estat del web, l’abast i el tipus d’acompanyament. Conta’m els objectius del projecte i prepararé una proposta ajustada.",
       "highlight": "Una revisió bàsica del teu web amb tres troballes prioritzades, més una telefonada gratuïta de 30 minuts per a conéixer el teu projecte i comentar aquests resultats. No inclou un informe complet ni l’aplicació de les millores; si decideixes continuar, ho concretem en la proposta.",
       "highlightTitle": "Oferisc un diagnòstic inicial gratuït"
-    }
+    },
+    "glance": [
+      "En persona a Elx; en línia a Alacant, la Costa Blanca i altres països",
+      "SEO local i internacional en castellà, anglès i francès",
+      "Miniauditoria de 30 minuts, gratuïta"
+    ],
+    "glanceTitle": "D’un cop d’ull"
   },
   "translationServicePage": {
     "hero": {
       "eyebrow": "Traducció i localització",
       "title": "Traducció i localització web professional amb enfocament SEO",
       "titleAccent": "localització web",
-      "description": "Adapte el contingut de la teua empresa a nous mercats amb precisió semàntica i enfocament SEO."
+      "description": "Adapte el contingut de la teua empresa a nous mercats amb precisió semàntica i enfocament SEO.",
+      "intro2": "Tradueixo webs, botigues en línia i continguts digitals cuidant la veu de la teua marca i les paraules clau amb què et busquen en cada idioma."
     },
     "localization": {
       "eyebrow": "LOCALITZACIÓ WEB",
@@ -704,6 +823,102 @@
       "languagesTitle": "Idiomes",
       "toolsTitle": "Eines",
       "skillsTitle": "Habilitats"
+    },
+    "glance": [
+      "Francès ⇄ Castellà",
+      "Anglès → Castellà",
+      "Alemany → Castellà",
+      "Italià → Castellà",
+      "Català/valencià → Castellà"
+    ],
+    "glanceTitle": "Combinacions d'idiomes",
+    "process": {
+      "title": "Com treballem",
+      "steps": [
+        {
+          "title": "M’expliques el teu projecte",
+          "text": "Els teus objectius, on és el text (web, botiga o plataforma) i els textos en un document editable."
+        },
+        {
+          "title": "Pressupost en 48 h",
+          "text": "Com a màxim, amb el preu tancat i el termini de lliurament."
+        },
+        {
+          "title": "Tradueixo i reviso",
+          "text": "Tradueixo i després revise cada text amb calma abans de lliurar-te’l."
+        },
+        {
+          "title": "Lliurament i la teua revisió",
+          "text": "Revises la traducció i aplique una ronda de canvis inclosa."
+        }
+      ]
+    },
+    "pricing": {
+      "title": "Tarifes",
+      "from": "Des de",
+      "recommended": "Recomanada",
+      "note": "Preus sense IVA. T’envio el pressupost tancat abans de començar.",
+      "example": "Exemple: una web de 3.000 paraules costa 240 € amb Traducció, 300 € amb Traducció SEO i 390 € llesta per publicar.",
+      "cta": "Demanar pressupost",
+      "tiers": [
+        {
+          "name": "Traducció",
+          "price": "0,08 €",
+          "unit": "per paraula",
+          "items": [
+            "Traducció i localització, no paraula per paraula",
+            "Revisió final abans de lliurar",
+            "La puges tu a la web"
+          ]
+        },
+        {
+          "name": "Traducció SEO",
+          "price": "0,10 €",
+          "unit": "per paraula",
+          "items": [
+            "Tot el que inclou Traducció",
+            "Paraules clau reals de cada idioma",
+            "Títols, descripcions i URL per a Google",
+            "Textos alternatius de les imatges"
+          ]
+        },
+        {
+          "name": "Web llesta per publicar",
+          "price": "0,10 €",
+          "unit": "per paraula + 90 € per la pujada",
+          "items": [
+            "Tot el que inclou Traducció SEO",
+            "La pujo jo a WordPress o Shopify",
+            "Comprovo que cada idioma enllaci bé amb els altres (hreflang)"
+          ]
+        }
+      ]
+    },
+    "whatTranslate": {
+      "eyebrow": "Què tradueixo",
+      "title": "Webs, comerç electrònic i continguts digitals",
+      "titleAccent": "continguts digitals"
+    },
+    "seoCompare": {
+      "title": "Traducció i traducció SEO: què canvia",
+      "source": "Text original · francès",
+      "sourceText": "robes de soirée femme",
+      "plain": "Traducció",
+      "seo": "Traducció SEO",
+      "plainText": "vestidos de noche para mujer",
+      "seoText": "vestidos de fiesta mujer",
+      "plainNote": "Correcta, però ningú la busca així",
+      "seoNote": "El que escriu la gent a Google",
+      "plainPoints": [
+        "Fidel al sentit de l’original",
+        "Natural, sense calcs",
+        "Revisió final abans de lliurar"
+      ],
+      "seoPoints": [
+        "Tot el de la traducció",
+        "Paraules clau reals de cada idioma",
+        "Títols, descripcions, URL i textos alternatius"
+      ]
     }
   },
   "legal": {

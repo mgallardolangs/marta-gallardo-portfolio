@@ -1,0 +1,22 @@
+---
+/** "At a glance" clay card for service page heroes: three short facts with a check. */
+interface Props {
+  title: string;
+  items: string[];
+  tone?: 'ink' | 'hazel' | 'amaranth';
+}
+
+const { title, items, tone = 'ink' } = Astro.props;
+---
+
+<aside class:list={['clay-card service-glance', `service-glance--${tone}`]}>
+  <p class="service-glance__title">{title}</p>
+  <ul class="service-glance__list" role="list">
+    {items.map((item) => (
+      <li>
+        <span class="service-glance__check" aria-hidden="true">✓</span>
+        <span>{item}</span>
+      </li>
+    ))}
+  </ul>
+</aside>

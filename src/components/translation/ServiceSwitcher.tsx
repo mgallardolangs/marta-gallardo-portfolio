@@ -13,6 +13,10 @@ type ServiceItem = {
   name: string;
   headline: string;
   description: string;
+  /** Short line above the headline; falls back to the tab name */
+  kicker?: string;
+  /** What the service includes (from the brochure) */
+  points?: string[];
 };
 
 interface Props {
@@ -194,9 +198,14 @@ export default function ServiceSwitcher({ items, title = '' }: Props) {
                 className="flex min-h-[20rem] items-center"
               >
                 <div className="max-w-2xl space-y-5">
-                  <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-paper/60">{item.name}</p>
+                  <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-amaranth">{item.kicker ?? item.name}</p>
                   <h3 className="font-heading text-4xl leading-[0.96] text-paper md:text-5xl">{item.headline}</h3>
                   <p className="text-base leading-8 text-paper/74 md:text-lg">{item.description}</p>
+                  {item.points && item.points.length > 0 && (
+                    <ul className="service-points" role="list">
+                      {item.points.map((point) => <li key={point}>{point}</li>)}
+                    </ul>
+                  )}
                 </div>
               </div>
             );
@@ -236,9 +245,14 @@ export default function ServiceSwitcher({ items, title = '' }: Props) {
                 aria-hidden={!isActive}
                 className="space-y-4 pt-4"
               >
-                <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-paper/60">{item.name}</p>
+                <p className="font-body text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-amaranth">{item.kicker ?? item.name}</p>
                 <h3 className="font-heading text-3xl leading-[0.98] text-paper">{item.headline}</h3>
                 <p className="text-base leading-7 text-paper/76">{item.description}</p>
+                {item.points && item.points.length > 0 && (
+                  <ul className="service-points" role="list">
+                    {item.points.map((point) => <li key={point}>{point}</li>)}
+                  </ul>
+                )}
               </div>
             </div>
           );

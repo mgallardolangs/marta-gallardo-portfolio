@@ -146,7 +146,8 @@ test('translation and SEO admin arsenals show only the tools and skills in their
   );
   assert.deepEqual(
     seo.tools.map(({ id }) => id).sort(),
-    ['google-business-profile', 'google-search-console'].sort(),
+    // 24/11/2026: the SEO page shows the tools Marta really uses (GSC, GA4, Business Profile, Semrush, Screaming Frog, PageSpeed)
+    ['google-analytics', 'google-business-profile', 'google-search-console', 'pagespeed-insights', 'screaming-frog', 'semrush'].sort(),
   );
   assert.ok(translation.skills.every((skill) => skill.group === 'translation'));
   assert.ok(seo.skills.every((skill) => skill.group === 'seo'));

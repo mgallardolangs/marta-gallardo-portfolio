@@ -322,6 +322,50 @@
         }
       ],
       "closing": "Si tienes un producto o una experiencia que quieras enseñar, cuéntame qué buscas y te propongo una idea."
+    },
+    "languagesStrip": {
+      "title": "Un mismo vídeo, listo para tres mercados",
+      "text": "Grabo, subtitulo y, si lo necesitas, narro en **español, inglés y francés**: una sola producción para tres públicos."
+    },
+    "pricing": {
+      "title": "Tarifas",
+      "from": "Desde",
+      "recommended": "Recomendada",
+      "note": "Precios sin IVA. Te envío el presupuesto cerrado antes de empezar.",
+      "included": "Incluido siempre: uso orgánico en las redes de tu marca durante 6 meses, 2 rondas de cambios y entrega en 10 días laborables desde que apruebas el guion. Aparte: uso en anuncios, material en bruto y subtítulos en inglés o francés (+20 € por vídeo e idioma).",
+      "cta": "Pedir presupuesto",
+      "tiers": [
+        {
+          "name": "1 vídeo",
+          "price": "100 €",
+          "unit": "por vídeo",
+          "items": [
+            "15–30 segundos, guion a partir de tu briefing",
+            "1 gancho inicial",
+            "Subtítulos en español"
+          ]
+        },
+        {
+          "name": "Pack de 3 vídeos",
+          "price": "270 €",
+          "unit": "90 € por vídeo",
+          "items": [
+            "Guion a partir de tu briefing",
+            "2 ganchos por vídeo, para probar cuál funciona",
+            "Subtítulos en español"
+          ]
+        },
+        {
+          "name": "Campaña",
+          "price": "490 €",
+          "unit": "pago único",
+          "items": [
+            "5 vídeos con guion a partir de tu briefing",
+            "Subtítulos en español",
+            "10 fotos del producto"
+          ]
+        }
+      ]
     }
   },
   "blog": {
@@ -572,7 +616,7 @@
       "titleAccent": "Posicionamiento SEO",
       "paragraphs": [
         "Aparecer en Google no es cuestión de suerte, sino de estrategia. Mi servicio de posicionamiento SEO convierte tu web en un canal que atrae a personas que ya buscan lo que ofreces: no solo más visitas, sino visitas con interés real.",
-        "Analizo el punto de partida de tu proyecto y diseño un plan de posicionamiento en buscadores a tu medida: mejoro la estructura técnica, la relevancia de tus contenidos y la autoridad de tu web. Trabajo desde Elche: en persona con negocios de Elche y en línea con el resto de la provincia de Alicante, la Costa Blanca y otros países. Tanto si quieres que te encuentren en tu ciudad como si quieres dar el salto a otros países con SEO internacional, te explico cada paso y trabajamos con prioridades claras."
+        "Analizo el punto de partida de tu web y diseño un plan a tu medida: mejoro la estructura técnica, la relevancia de tus contenidos y la autoridad de tu dominio. Te explico cada paso y trabajamos con prioridades claras."
       ]
     },
     "services": {
@@ -583,17 +627,41 @@
         {
           "id": "audit",
           "title": "Auditoría SEO Profesional",
-          "description": "Antes de actuar, analizo el punto de partida: SEO técnico (rastreo e indexación), estructura y enlazado interno, y contenido on-page. Recibes un informe ordenado por prioridad: qué falla, por qué afecta a tu visibilidad y qué corregir primero."
+          "description": "Empiezo con una mini auditoría gratuita de 30 minutos: reviso tu web, tu ficha de Google y si apareces cuando alguien pregunta por tu sector a ChatGPT o a Gemini, y te enseño los 3 problemas más importantes. Si necesitas ir a fondo, la auditoría completa analiza toda la web y termina en un plan ordenado por prioridades.",
+          "kicker": "El primer paso",
+          "headline": "Saber qué falla y qué arreglar primero",
+          "points": [
+            "SEO técnico: rastreo, indexación y velocidad en el móvil",
+            "Estructura, enlazado interno y contenido on-page",
+            "Plan priorizado y 1 hora para presentártelo",
+            "Ideal antes de un rediseño o si tienes quien aplique los cambios"
+          ]
         },
         {
           "id": "consulting",
           "title": "Consultoría SEO y Estrategia Digital",
-          "description": "Una auditoría te dice qué falla; la consultoría te dice qué hacer y en qué orden. Definimos juntos qué búsquedas te interesan, qué páginas conviene crear o mejorar y cómo repartir el trabajo según tus recursos. Te explico cada decisión con claridad para que entiendas el plan y puedas seguirlo."
+          "description": "Una auditoría te dice qué falla; la consultoría te dice qué hacer y en qué orden. El trabajo de base es el mismo en las tres opciones: cambia cuánto te acompaño y quién aplica los cambios. Después de los 3 primeros meses puedes seguir con una cuota mensual.",
+          "kicker": "Un plan y alguien a tu lado",
+          "headline": "Elige cuánto te acompaño",
+          "points": [
+            "Plan: te doy el plan de acción y lo aplicas tú",
+            "Plan + acompañamiento: una consultoría al mes durante 3 meses y reviso lo que aplicas",
+            "Plan + implementación: aplico yo los cambios y te los explico cada mes",
+            "Consultoría suelta para una duda concreta: un rediseño, un cambio de dominio, un blog"
+          ]
         },
         {
           "id": "local",
           "title": "Posicionamiento SEO Local en Elche y la Costa Blanca",
-          "description": "Si tu negocio atiende a clientes de una zona concreta, aparecer en las búsquedas locales es tan importante como tener una buena web. Trabajo sobre todo con negocios de Elche, Alicante y la Costa Blanca que reciben a clientes extranjeros, para que también te encuentren los turistas y residentes que buscan en inglés o en francés. Reviso y optimizo tu ficha de Google Business Profile, trabajo palabras clave con intención local y compruebo que los datos de tu negocio (nombre, dirección, teléfono, horarios y servicios) sean coherentes en tu web y en tus perfiles."
+          "description": "Si tu negocio atiende a clientes de una zona concreta, aparecer en el mapa y en las búsquedas locales es tan importante como tener una buena web. Trabajo sobre todo con negocios de Elche, Alicante y la Costa Blanca que reciben a clientes extranjeros, para que también te encuentren los turistas y residentes que buscan en otros idiomas.",
+          "kicker": "Para negocios con clientes en la zona",
+          "headline": "Que te encuentren en el mapa, también en inglés y francés",
+          "points": [
+            "Ficha de Google optimizada, también en otros idiomas",
+            "Reseñas: cómo pedirlas y responderlas en español, inglés y francés",
+            "Páginas de servicio y de zona, con datos coherentes en la web y los directorios",
+            "Medición de llamadas, clics y visitas desde el primer día"
+          ]
         }
       ]
     },
@@ -602,7 +670,46 @@
       "title": "Especialista en SEO Internacional y Multilingüe",
       "titleAccent": "Multilingüe",
       "description": "Internacionalizar una web no consiste en instalar un plugin de traducción automática. Cada mercado busca de una forma distinta, así que empiezo investigando qué términos usan realmente los usuarios de cada país y con qué intención. A partir de ahí adapto el contenido y configuro lo necesario a nivel técnico, como las etiquetas hreflang, para que Google muestre cada versión a la audiencia que le corresponde. Si además necesitas un servicio de traducción de páginas web, lo trabajamos desde la misma estrategia para que idioma y posicionamiento no vayan por separado.",
-      "translationLinkLabel": "Traducción"
+      "translationLinkLabel": "Traducción",
+      "marketsTitle": "Una misma búsqueda, tres mercados",
+      "originLabel": "Original",
+      "literalLabel": "Traducción literal",
+      "realLabel": "Lo que se busca de verdad",
+      "marketsNote": "Ejemplo: por eso investigo las palabras clave de cada idioma en lugar de traducirlas.",
+      "markets": [
+        {
+          "code": "ES",
+          "name": "Español",
+          "query": "piso en alquiler Alicante",
+          "literal": "piso en alquiler Alicante"
+        },
+        {
+          "code": "EN",
+          "name": "English",
+          "query": "flat to rent Alicante",
+          "literal": "apartment in rent Alicante"
+        },
+        {
+          "code": "FR",
+          "name": "Français",
+          "query": "location appartement Alicante",
+          "literal": "appartement en location Alicante"
+        }
+      ],
+      "pillars": [
+        {
+          "title": "Búsquedas de cada mercado",
+          "text": "Qué escriben y con qué intención, país por país."
+        },
+        {
+          "title": "Contenido localizado",
+          "text": "Títulos, textos y ficha de Google adaptados, no traducidos."
+        },
+        {
+          "title": "Hreflang y estructura",
+          "text": "Para que Google enseñe a cada persona su versión."
+        }
+      ]
     },
     "why": {
       "eyebrow": "SEO",
@@ -618,12 +725,8 @@
       "closing": "No soy una agencia grande ni quiero serlo: trabajas conmigo directamente y te digo desde el principio qué puedo hacer y qué no.",
       "stats": [
         {
-          "value": "6",
-          "label": "idiomas"
-        },
-        {
-          "value": "4",
-          "label": "herramientas"
+          "value": "3",
+          "label": "idiomas: ES · EN · FR"
         },
         {
           "value": "1:1",
@@ -631,14 +734,23 @@
         },
         {
           "value": "30 min",
-          "label": "llamada gratis"
+          "label": "mini auditoría gratis"
+        },
+        {
+          "value": "24 h",
+          "label": "para recibir tu propuesta"
         }
       ],
       "ctaText": "Diagnóstico inicial gratuito con tres hallazgos priorizados."
     },
     "arsenal": {
       "toolsTitle": "Herramientas SEO",
-      "skillsTitle": "Habilidades SEO"
+      "skillsTitle": "Habilidades SEO",
+      "skillCategories": {
+        "technical": "SEO técnico",
+        "content": "Contenido",
+        "local": "Local e internacional"
+      }
     },
     "budget": {
       "eyebrow": "SEO",
@@ -647,14 +759,21 @@
       "description": "\\nNo hay una tarifa única porque cada web parte de un punto distinto. El presupuesto depende del tamaño de la web, de su estado técnico, de los idiomas y mercados que quieras trabajar y de si necesitas una auditoría puntual o un acompañamiento continuo. \\nEl primer paso es contarme tu proyecto en el formulario: te respondo con una propuesta clara, con alcance y plazos, antes de empezar.",
       "highlight": "Una revisión básica de tu web con tres hallazgos priorizados, más una llamada gratuita de 30 minutos para conocer tu proyecto y comentar esos resultados. No incluye un informe completo ni la aplicación de las mejoras; si decides continuar, lo concretamos en la propuesta.",
       "highlightTitle": "Ofrezco un diagnóstico inicial gratuito"
-    }
+    },
+    "glance": [
+      "En persona en Elche; en línea en Alicante, la Costa Blanca y otros países",
+      "SEO local e internacional en español, inglés y francés",
+      "Mini auditoría de 30 minutos, gratis"
+    ],
+    "glanceTitle": "De un vistazo"
   },
   "translationServicePage": {
     "hero": {
       "eyebrow": "Traducción y localización",
       "title": "Traducción y Localización Web Profesional con Enfoque SEO",
       "titleAccent": "Localización Web",
-      "description": "Adapto el contenido de tu empresa a nuevos mercados con precisión semántica y enfoque SEO."
+      "description": "Adapto el contenido de tu empresa a nuevos mercados con precisión semántica y enfoque SEO.",
+      "intro2": "Traduzco webs, tiendas online y contenidos digitales cuidando la voz de tu marca y las palabras clave con las que te buscan en cada idioma."
     },
     "localization": {
       "eyebrow": "LOCALIZACIÓN WEB",
@@ -704,6 +823,102 @@
       "languagesTitle": "Idiomas",
       "toolsTitle": "Herramientas",
       "skillsTitle": "Habilidades"
+    },
+    "glance": [
+      "Francés ⇄ Español",
+      "Inglés → Español",
+      "Alemán → Español",
+      "Italiano → Español",
+      "Catalán/valenciano → Español"
+    ],
+    "glanceTitle": "Combinaciones de idiomas",
+    "process": {
+      "title": "Cómo trabajamos",
+      "steps": [
+        {
+          "title": "Me cuentas tu proyecto",
+          "text": "Tus objetivos, dónde está el texto (web, tienda o plataforma) y los textos en un documento editable."
+        },
+        {
+          "title": "Presupuesto en 48 h",
+          "text": "Como máximo, con el precio cerrado y el plazo de entrega."
+        },
+        {
+          "title": "Traduzco y reviso",
+          "text": "Traduzco y después reviso cada texto con calma antes de entregártelo."
+        },
+        {
+          "title": "Entrega y tu revisión",
+          "text": "Revisas la traducción y aplico una ronda de cambios incluida."
+        }
+      ]
+    },
+    "pricing": {
+      "title": "Tarifas",
+      "from": "Desde",
+      "recommended": "Recomendada",
+      "note": "Precios sin IVA. Te envío el presupuesto cerrado antes de empezar.",
+      "example": "Ejemplo: una web de 3.000 palabras cuesta 240 € con Traducción, 300 € con Traducción SEO y 390 € lista para publicar.",
+      "cta": "Pedir presupuesto",
+      "tiers": [
+        {
+          "name": "Traducción",
+          "price": "0,08 €",
+          "unit": "por palabra",
+          "items": [
+            "Traducción y localización, no palabra por palabra",
+            "Revisión final antes de entregar",
+            "Lo subes tú a la web"
+          ]
+        },
+        {
+          "name": "Traducción SEO",
+          "price": "0,10 €",
+          "unit": "por palabra",
+          "items": [
+            "Todo lo de Traducción",
+            "Palabras clave reales de cada idioma",
+            "Títulos, descripciones y URL para Google",
+            "Textos alternativos de las imágenes"
+          ]
+        },
+        {
+          "name": "Web lista para publicar",
+          "price": "0,10 €",
+          "unit": "por palabra + 90 € por la subida",
+          "items": [
+            "Todo lo de Traducción SEO",
+            "La subo yo a WordPress o Shopify",
+            "Reviso que cada idioma enlace bien con los demás (hreflang)"
+          ]
+        }
+      ]
+    },
+    "whatTranslate": {
+      "eyebrow": "Qué traduzco",
+      "title": "Webs, e-commerce y contenidos digitales",
+      "titleAccent": "contenidos digitales"
+    },
+    "seoCompare": {
+      "title": "Traducción y traducción SEO: qué cambia",
+      "source": "Texto original · francés",
+      "sourceText": "robes de soirée femme",
+      "plain": "Traducción",
+      "seo": "Traducción SEO",
+      "plainText": "vestidos de noche para mujer",
+      "seoText": "vestidos de fiesta mujer",
+      "plainNote": "Correcta, pero nadie la busca así",
+      "seoNote": "Lo que escribe la gente en Google",
+      "plainPoints": [
+        "Fiel al sentido del original",
+        "Natural, sin calcos",
+        "Revisión final antes de entregar"
+      ],
+      "seoPoints": [
+        "Todo lo de la traducción",
+        "Palabras clave reales de cada idioma",
+        "Títulos, descripciones, URL y textos alternativos"
+      ]
     }
   },
   "legal": {

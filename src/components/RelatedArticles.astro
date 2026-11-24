@@ -14,8 +14,8 @@ const posts = getRelatedArticles(await getCollection('blog'), routeKey, lang);
 ---
 
 {posts.length > 0 && (
-  <section class="border-t border-ink/10 px-6 py-16 md:py-20" data-related-articles={routeKey}>
-    <div class="site-container space-y-10">
+  <section class="px-6 py-16 md:py-20" data-related-articles={routeKey}>
+    <div class="site-container flex flex-col gap-10">
       <div class="space-y-4">
         <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-hazel">{i.blog.eyebrow}</p>
         <h2 class="font-heading text-4xl leading-none text-ink md:text-5xl">{i.blog.relatedTitle}</h2>
@@ -24,7 +24,7 @@ const posts = getRelatedArticles(await getCollection('blog'), routeKey, lang);
         {posts.map((post) => {
           const href = getLocalizedPath(`/blog/${post.data.slug}`, lang);
           return (
-            <article class="group flex h-full flex-col gap-4 border-t border-ink/20 pt-5">
+            <article class="group clay-card clay-card--paper related-card h-full">
               <p class="font-body text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-ink-muted">
                 {post.data.date.toLocaleDateString(lang, { year: 'numeric', month: 'long', day: 'numeric' })}
               </p>
